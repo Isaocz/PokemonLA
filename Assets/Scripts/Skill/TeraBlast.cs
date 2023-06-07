@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 public class TeraBlast : Skill
 {
     private LineRenderer lineRenderer;
+    
     private void Awake()
     {
         lineRenderer = GetComponentInChildren<LineRenderer>();
@@ -41,6 +42,8 @@ public class TeraBlast : Skill
     {
         //检测射线击中的对象
         RaycastHit2D hitinfo = Physics2D.Raycast(transform.position ,transform.right);
+        //RaycastHit2D hitinfoTop = Physics2D.Raycast(transform.position, transform.right);
+        //RaycastHit2D hitinfoBottom = Physics2D.Raycast(transform.position, transform.right);
         if (hitinfo)
         {
             //如果击中敌方宝可梦，则造成伤害

@@ -18,9 +18,12 @@ public class XszControler : PlayerControler
     public Skill Blizzard;
     public Skill TakeDown;
     public Skill TeraBlast;
+    public Skill AncientPower;
 
     public Skill Growl;
     public Skill SandAttack;
+    //Ã¿‰√¿∫Û
+    public Skill Splash;
     
 
     // Start is called before the first frame update
@@ -35,7 +38,7 @@ public class XszControler : PlayerControler
 
         Skill01 = Tackle;
         Skill02 = MudSlup;
-        Skill03 = SandAttack;
+        Skill03 = Splash;
         Skill04 = TeraBlast;
 
         skillBar01.GetSkill(Skill01);

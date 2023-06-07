@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SandAttack : Skill
+public class Splash : Skill
 {
-    List<Empty> Empties = new List<Empty>();
     // Start is called before the first frame update
     void Start()
     {
