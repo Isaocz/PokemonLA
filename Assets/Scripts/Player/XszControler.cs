@@ -18,9 +18,12 @@ public class XszControler : PlayerControler
     public Skill Blizzard;
     public Skill TakeDown;
     public Skill TeraBlast;
+    public Skill AncientPower;
 
     public Skill Growl;
     public Skill SandAttack;
+    //Ã¿‰√¿∫Û
+    public Skill Splash;
     
 
     // Start is called before the first frame update
@@ -34,14 +37,11 @@ public class XszControler : PlayerControler
         InstanceSkillList();
         InstanceNewSkillPanel();
 
+        Skill01 = Tackle;
+        Skill02 = MudSlup;
+        Skill03 = Splash;
+        Skill04 = TeraBlast;
 
-        if (!isNeedInherit)
-        {
-            Skill01 = Tackle;
-            Skill02 = MudSlup;
-            //Skill03 = Growl;
-            //Skill04 = SandAttack;
-        }
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);
         skillBar03.GetSkill(Skill03);

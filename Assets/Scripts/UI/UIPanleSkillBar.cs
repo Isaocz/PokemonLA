@@ -38,7 +38,6 @@ public class UIPanleSkillBar : MonoBehaviour
 
     public void GetSkill_Panle(Skill TargetSkill)
     {
-
         InstanceSkillBar();
         PanelSkill = TargetSkill;
 

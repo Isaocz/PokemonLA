@@ -853,7 +853,6 @@ public class PlayerControler : Pokemon
 
 
 
-
     //声明一个函数，调用时结束表示正在使用技能，无法移动的状态
     public void SkillNow()
     {

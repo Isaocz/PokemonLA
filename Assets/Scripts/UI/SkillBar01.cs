@@ -30,7 +30,6 @@ public class SkillBar01 : MonoBehaviour
 
     public void GetSkill(Skill targetskill )
     {
-        Debug.Log(targetskill);
         if (targetskill == null) { Mask.transform.parent.GetComponent<Image>().color = Type.TypeColor[0]; }
         else
         {

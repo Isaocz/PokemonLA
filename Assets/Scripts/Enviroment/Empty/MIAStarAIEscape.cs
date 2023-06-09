@@ -47,7 +47,6 @@ public class MIAStarAIEscape : MonoBehaviour
 
     public void Update()
     {
-
         speed = 7*ParentEmpty.speed;
         if (!isCanNotMove && !ParentEmpty.isBorn && !ParentEmpty.isDie && !ParentEmpty.isHit && !ParentEmpty.isSilence && !ParentEmpty.isEmptyFrozenDone)
         {
