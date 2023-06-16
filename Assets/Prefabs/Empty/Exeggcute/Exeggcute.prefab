@@ -50,23 +50,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 311cbdb9623921841813701d1dcadbcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NormalMaterial: {fileID: 0}
-  FrozenMaterial: {fileID: 0}
-  SpeedDownMaterial: {fileID: 0}
-  ToxicMaterial: {fileID: 0}
+  NormalMaterial: {fileID: 2100000, guid: b3561bc8940b4354bb645b4ec8b64fd3, type: 2}
+  FrozenMaterial: {fileID: 2100000, guid: 5621402ffca87244a96d4dd5a467a62c, type: 2}
+  SpeedDownMaterial: {fileID: 2100000, guid: a29ae9cd7deb811449a0e250d0e533b2, type: 2}
+  ToxicMaterial: {fileID: 2100000, guid: 296f83a3541c1b24485906af3dff32b2, type: 2}
   ParalysisMaterial: {fileID: 0}
   BurnMaterial: {fileID: 0}
   SleepMaterial: {fileID: 0}
-  FearMaterial: {fileID: 0}
-  FrozenResistance: 0
-  ToxicResistance: 0
-  ParalysisResistance: 0
-  BurnResistance: 0
-  SleepResistance: 0
-  OtherStateResistance: 0
+  FearMaterial: {fileID: 2100000, guid: 9d22d74762a5c0148a4cb1ecfaa4e840, type: 2}
+  FrozenResistance: 1
+  ToxicResistance: 1
+  ParalysisResistance: 1
+  BurnResistance: 1
+  SleepResistance: 1
+  OtherStateResistance: 1
   TimeStateInvincible: 0
   animator: {fileID: 0}
-  playerUIState: {fileID: 0}
+  playerUIState: {fileID: 276790373401246536}
   speed: 0
   isEmptyFrozenDone: 0
   isFearDone: 0
@@ -89,26 +89,26 @@ MonoBehaviour:
   isSleepDone: 0
   isSleepStart: 0
   SleepPointFloat: 0
-  Knock: 0
+  Knock: 5
   EmptyHp: 0
   Emptylevel: 0
   isBorn: 0
   uIHealth: {fileID: 4466485395827798996}
-  EmptyType01: 0
-  EmptyType02: 0
-  HpEmptyPoint: 0
-  AtkEmptyPoint: 0
-  SpAEmptyPoint: 0
-  DefEmptyPoint: 0
-  SpdEmptyPoint: 0
-  SpeedEmptyPoint: 0
-  TimeInvincible: 0
+  EmptyType01: 12
+  EmptyType02: 14
+  HpEmptyPoint: 60
+  AtkEmptyPoint: 40
+  SpAEmptyPoint: 80
+  DefEmptyPoint: 60
+  SpdEmptyPoint: 45
+  SpeedEmptyPoint: 40
+  TimeInvincible: 0.8
   isInvincible: 0
   isDie: 0
   isHit: 0
   Exp: 0
-  BaseExp: 0
-  HWP: {x: 0, y: 0}
+  BaseExp: 65
+  HWP: {x: 1, y: 1}
   player: {fileID: 0}
   rigidbody2D: {fileID: 0}
   isSilence: 0
@@ -147,7 +147,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.15}
+  m_Offset: {x: 0, y: 0.39}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -158,7 +158,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.06, y: 0.65}
+  m_Size: {x: 1.51, y: 0.92}
   m_EdgeRadius: 0
 --- !u!95 &6331161809774201222
 Animator:
@@ -383,6 +383,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7202884177668870445, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
   m_PrefabInstance: {fileID: 1234302257089037204}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &276790373401246536 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1366354562257352924, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
+  m_PrefabInstance: {fileID: 1234302257089037204}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21cfa8ba11c643c4f958cdb5f1ccde6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4466485395827798996 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3232805603349393472, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}

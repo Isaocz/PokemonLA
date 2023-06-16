@@ -16,8 +16,8 @@ public class Gastly : Empty
     void Start()
     {
         speed = 0f;
-        EmptyType01 = 8;
-        EmptyType02 = 4;
+        EmptyType01 = Type.TypeEnum.Ghost;
+        EmptyType02 = Type.TypeEnum.Poison;
         player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
         Emptylevel = SetLevel(player.Level, 30);
         EmptyHpForLevel(Emptylevel);

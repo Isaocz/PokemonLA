@@ -44,7 +44,7 @@ public class poochyena : Empty
 
         player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
         Emptylevel = SetLevel(player.Level,30);
-        EmptyType01 = 17;
+        EmptyType01 = Type.TypeEnum.Dark;
         EmptyType02 = 0;
         
         EmptyHpForLevel(Emptylevel);
