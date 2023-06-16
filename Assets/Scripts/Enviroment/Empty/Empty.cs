@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class EnumMultiAttribute : PropertyAttribute { }
 public class Empty : Pokemon
 {
     //攻击到玩家时造成的击退值声明4个变量，一个代表对玩家造成的伤害，一个代表击退值，一个表示移动的距离,一个表示移动速度，一个表示初始血量
@@ -20,8 +21,10 @@ public class Empty : Pokemon
 
     //声明两个整形变量，表示敌人的两个属性
     [Header("属性")]
-    public int EmptyType01;
-    public int EmptyType02;
+    [EnumMultiAttribute]
+    public Type.TypeEnum EmptyType01;
+    //public int EmptyType01;
+    public Type.TypeEnum EmptyType02;
 
     [Header("种族值")]
     //声明六个整形数据，表示角色的六项种族值,以及六项当前能力值
@@ -185,7 +188,7 @@ public class Empty : Pokemon
             {
                 if (SkillType != 19)
                 {
-                    EmptyHp -= (int)((Dmage + SpDmage) * (Type.TYPE[SkillType][EmptyType01]) * Type.TYPE[SkillType][EmptyType02]);
+                    EmptyHp -= (int)((Dmage + SpDmage) * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]);
                 }
                 else
                 {
@@ -197,7 +200,7 @@ public class Empty : Pokemon
                 EmptyHp = Mathf.Clamp(EmptyHp - (int)(Dmage + SpDmage), 0, maxHP);
             }
 
-            Debug.Log((int)((Dmage + SpDmage) * (Type.TYPE[SkillType][EmptyType01]) * (Type.TYPE[SkillType][EmptyType02])));
+            Debug.Log((int)((Dmage + SpDmage) * (Type.TYPE[SkillType][(int)EmptyType01]) * (Type.TYPE[SkillType][(int)EmptyType02])));
             if ((int)Dmage + (int)SpDmage > 0)
             {
                 animator.SetTrigger("Hit");

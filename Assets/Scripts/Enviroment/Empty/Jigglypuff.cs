@@ -26,8 +26,8 @@ public class Jigglypuff : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = 18;
-        EmptyType02 = 1;
+        EmptyType01 = Type.TypeEnum.Fairy;
+        EmptyType02 = Type.TypeEnum.Normal;
         player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
         Emptylevel = SetLevel(player.Level, 30);
         EmptyHpForLevel(Emptylevel);

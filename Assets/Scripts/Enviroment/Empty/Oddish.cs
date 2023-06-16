@@ -18,8 +18,8 @@ public class Oddish : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = 4;
-        EmptyType02 = 12;
+        EmptyType01 = Type.TypeEnum.Poison;
+        EmptyType02 = Type.TypeEnum.Grass;
         player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
         Emptylevel = SetLevel(player.Level, 30);
         EmptyHpForLevel(Emptylevel);
