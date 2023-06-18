@@ -18,7 +18,7 @@ public class WurmpleMove : Empty
     void Start()
     {
         speed = 2.4f;
-        EmptyType01 = 7;
+        EmptyType01 = Type.TypeEnum.Bug;
         EmptyType02 = 0;
         player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
         Emptylevel = SetLevel(player.Level,20);

@@ -5,7 +5,28 @@ using UnityEngine;
 public class Type : MonoBehaviour
 {
     // Start is called before the first frame update
-
+    public enum TypeEnum
+    {
+        No,
+        Normal,
+        Fighting,
+        Flying,
+        Poison,
+        Ground,
+        Rock,
+        Bug,
+        Ghost,
+        Steel,
+        Fire,
+        Water,
+        Grass,
+        Electric,
+        Psychic,
+        Ice,
+        Dragon,
+        Dark,
+        Fairy,
+    }
 
     //type[行][列] 用行属性攻击列属性时的补正
     public static float[][] TYPE =new float[][]{ new float[] { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f },  //  无0
@@ -49,7 +70,7 @@ public class Type : MonoBehaviour
                                           new float[] { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f }}; //  属性穿透19
 
 
-public static Vector4[] TypeColor = {
+    public static Vector4[] TypeColor = {
         new Vector4(0,0,0,0.5882353f),                                    //无  00
         new Vector4(0.7176471f, 0.6901961f, 0.6666667f, 0.5882353f),      //普通01
         new Vector4(0.4433962f, 0.2580442f, 0.08993414f, 0.7803922f),     //格斗02
@@ -93,7 +114,7 @@ public static Vector4[] TypeColor = {
         new Vector4(0.823f,0.87f,0.95f,0.5882353f) };        //妖精18     
 
     public static string[] TypeChineseName = {
-    "无","普通","格斗","飞行","毒","地面","岩石","虫","幽灵","钢","火","水","草","电","超能","冰","龙","恶","妖精"};
-}
+        "无","普通","格斗","飞行","毒","地面","岩石","虫","幽灵","钢","火","水","草","电","超能","冰","龙","恶","妖精"};
+    }
 
 

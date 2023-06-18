@@ -372,7 +372,7 @@ public class Pokemon : MonoBehaviour
     public void EmptyToxicDone(float ToxicPoint)
     {
         Empty EmptyObj = GetComponent<Empty>();
-        if (!isToxicDef && EmptyObj.EmptyType01 != 4 && EmptyObj.EmptyType01 != 9 && EmptyObj.EmptyType02 != 4 && EmptyObj.EmptyType02 != 9 && !isToxicDone)
+        if (!isToxicDef && EmptyObj.EmptyType01 != Type.TypeEnum.Poison && EmptyObj.EmptyType01 != Type.TypeEnum.Steel && EmptyObj.EmptyType02 != Type.TypeEnum.Poison && EmptyObj.EmptyType02 != Type.TypeEnum.Steel && !isToxicDone)
         {
             ToxicPointFloat += ToxicPoint * ToxicResistance;
             if (!isToxicStart && ToxicPointFloat < 1)
