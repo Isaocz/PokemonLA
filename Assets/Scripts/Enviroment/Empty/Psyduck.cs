@@ -15,7 +15,7 @@ public class Psyduck : Empty
     void Start()
     {
         speed = 0f;
-        EmptyType01 = 11;
+        EmptyType01 = Type.TypeEnum.Water;
         EmptyType02 = 0;
         player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
         Emptylevel = SetLevel(player.Level,30);

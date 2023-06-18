@@ -46,7 +46,7 @@ public class Snorlax : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = 1;
+        EmptyType01 = Type.TypeEnum.Normal;
         EmptyType02 = 0;
         player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
         Emptylevel = SetLevel(player.Level, 30);

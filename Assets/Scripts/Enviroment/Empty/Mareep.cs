@@ -21,7 +21,7 @@ public class Mareep : Empty
     void Start()
     {
 
-        EmptyType01 = 13;
+        EmptyType01 = Type.TypeEnum.Electric;
         EmptyType02 = 0;
         player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
         Emptylevel = SetLevel(player.Level, 30);

@@ -21,7 +21,7 @@ public class LmcMove : Empty
 
         //---（对于所有敌人子类）---，初始化敌人移动速度，属性
         speed = 2.0f;
-        EmptyType01 = 7;
+        EmptyType01 = Type.TypeEnum.Bug;
         EmptyType02 = 0;
 
         //---（对于所有敌人子类）---，获取玩家

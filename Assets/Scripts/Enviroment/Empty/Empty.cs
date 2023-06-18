@@ -2,24 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class EnumMultiAttribute : PropertyAttribute { }
 public class Empty : Pokemon
 {
     //攻击到玩家时造成的击退值声明4个变量，一个代表对玩家造成的伤害，一个代表击退值，一个表示移动的距离,一个表示移动速度，一个表示初始血量
     public float Knock;
     //敌人的当前血量和最大血量
+    [Tooltip("当前HP")]
     public int EmptyHp;
     protected int maxHP;
     //敌人的等级
+    [Tooltip("等级")]
     public int Emptylevel;
-    //敌人是否正处于出生动画中，如果正在出生不会行动
+    [Tooltip("敌人是否正处于出生动画中，如果正在出生不会行动")]
     public bool isBorn;
-    //敌人的血条ui
+    [Tooltip("ui：血条")]
     public EmptyHpBar uIHealth;
 
     //声明两个整形变量，表示敌人的两个属性
-    public int EmptyType01;
-    public int EmptyType02;
+    [Header("属性")]
+    [EnumMultiAttribute]
+    public Type.TypeEnum EmptyType01;
+    //public int EmptyType01;
+    public Type.TypeEnum EmptyType02;
 
+    [Header("种族值")]
     //声明六个整形数据，表示角色的六项种族值,以及六项当前能力值
     public int HpEmptyPoint;
     public int AtkEmptyPoint;
@@ -28,6 +35,7 @@ public class Empty : Pokemon
     public int SpdEmptyPoint;
     public int SpeedEmptyPoint;
 
+    //能力值
     public int AtkAbilityPoint { get { return AtkAbility; } set { AtkAbility = value; } }
     int AtkAbility;
     public int SpAAbilityPoint { get { return SpAAbility; } set { SpAAbility = value; } }
@@ -177,7 +185,7 @@ public class Empty : Pokemon
             {
                 if (SkillType != 19)
                 {
-                    EmptyHp -= (int)((Dmage + SpDmage) * (Type.TYPE[SkillType][EmptyType01]) * (Type.TYPE[SkillType][EmptyType02]) * typeDef);
+                    EmptyHp -= (int)((Dmage + SpDmage) * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]);
                 }
                 else
                 {
@@ -189,7 +197,7 @@ public class Empty : Pokemon
                 EmptyHp = Mathf.Clamp(EmptyHp - (int)(Dmage + SpDmage), 0, maxHP);
             }
 
-            Debug.Log(((Dmage + SpDmage) * (Type.TYPE[SkillType][EmptyType01]) * (Type.TYPE[SkillType][EmptyType02])) * typeDef);
+            Debug.Log((int)((Dmage + SpDmage) * (Type.TYPE[SkillType][(int)EmptyType01]) * (Type.TYPE[SkillType][(int)EmptyType02])));
             if ((int)Dmage + (int)SpDmage > 0)
             {
                 animator.SetTrigger("Hit");
