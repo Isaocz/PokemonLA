@@ -40,10 +40,13 @@ public class Empty : Pokemon
     int SpeedAbility;
 
 
-    //---（此项在未来会修改，有可能被取消）---声明一个浮点型变量代表无敌时间，一个浮点型变量作为无敌时间计时器，一个布尔型变量判断是否无敌
-    public float TimeInvincible;
-    float InvincileTimer = 0.0f;
-    public bool isInvincible = false;
+
+    /// <summary>
+    /// 敌人对于某一属性的抗性，关于属性的Index请参考Type.cs
+    /// </summary>
+    public int[] TypeDef = new int[20] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+
 
     //敌人摧毁时的时间
     public delegate void EmptyEvent();
@@ -83,6 +86,15 @@ public class Empty : Pokemon
     /// 敌人是否是boss
     /// </summary>
     public bool isBoos;
+
+
+    /// <summary>
+    /// 敌人被打死后掉落的道具
+    /// </summary>
+    public GameObject DropItem;
+
+    //表示敌人是否处于被白雾【精通】击中
+    public bool isMistPlus;
 
 
 
@@ -147,21 +159,6 @@ public class Empty : Pokemon
 
 
 
-    /// <summary>
-    /// ---（该项会被修改）---，敌人处于无敌时间的计时器
-    /// </summary>
-    protected void InvincibleUpdate()
-    {
-        if (isInvincible)
-        {
-            InvincileTimer -= Time.deltaTime;
-            if (InvincileTimer <= 0)
-            {
-                isInvincible = false;
-            }
-        }
-    }
-
 
 
 
@@ -175,16 +172,16 @@ public class Empty : Pokemon
     /// <param name="SkillType">伤害属性（数字参考Type.cs）</param>
     public void EmptyHpChange(float  Dmage , float SpDmage , int SkillType)
     {
-        if (!isInvincible) {
+        float typeDef = (TypeDef[SkillType] < 0 ? (Mathf.Pow(1.2f, -TypeDef[SkillType])) : 1) * (TypeDef[SkillType] > 0 ? (Mathf.Pow(0.8f, TypeDef[SkillType])) : 1);
             if (Dmage + SpDmage >= 0)
             {
                 if (SkillType != 19)
                 {
-                    EmptyHp -= (int)((Dmage + SpDmage) * (Type.TYPE[SkillType][EmptyType01]) * Type.TYPE[SkillType][EmptyType02]);
+                    EmptyHp -= (int)((Dmage + SpDmage) * (Type.TYPE[SkillType][EmptyType01]) * (Type.TYPE[SkillType][EmptyType02]) * typeDef);
                 }
                 else
                 {
-                    EmptyHp -= (int)(Dmage + SpDmage);
+                    EmptyHp -= (int)((Dmage + SpDmage) * typeDef);
                 }
             }
             else
@@ -192,7 +189,7 @@ public class Empty : Pokemon
                 EmptyHp = Mathf.Clamp(EmptyHp - (int)(Dmage + SpDmage), 0, maxHP);
             }
 
-            Debug.Log((int)((Dmage + SpDmage) * (Type.TYPE[SkillType][EmptyType01]) * (Type.TYPE[SkillType][EmptyType02])));
+            Debug.Log(((Dmage + SpDmage) * (Type.TYPE[SkillType][EmptyType01]) * (Type.TYPE[SkillType][EmptyType02])) * typeDef);
             if ((int)Dmage + (int)SpDmage > 0)
             {
                 animator.SetTrigger("Hit");
@@ -204,9 +201,6 @@ public class Empty : Pokemon
                 uIHealth.Per = (float)EmptyHp / (float)maxHP;
                 uIHealth.ChangeHpUp();
             }
-            isInvincible = true;
-            InvincileTimer = TimeInvincible;
-        }
     }
     //====================敌人血量改变======================
 
@@ -318,7 +312,10 @@ public class Empty : Pokemon
     /// </summary>
     public void EmptyDestroy()
     {
-
+        if(DropItem != null)
+        {
+            Instantiate(DropItem ,transform.position , Quaternion.identity , transform.parent);
+        }
         Destroy(gameObject);
     }
 

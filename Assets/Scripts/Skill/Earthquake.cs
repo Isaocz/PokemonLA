@@ -38,12 +38,26 @@ public class Earthquake : Skill
     }
 
     private void OnTriggerStay2D(Collider2D other)
-    {
-            if (other.tag == "Empty")
+    {       
+        if (other.tag == "Empty")      
+        {       
+            Empty target = other.GetComponent<Empty>();
+            HitAndKo(target);  
+            if(SkillFrom == 2)
             {
-                Empty target = other.GetComponent<Empty>();
-                HitAndKo(target);
+                
             }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        SoftMud softMud = other.GetComponent<SoftMud>();
+        if (SkillFrom == 2 && softMud != null && !softMud.isBeUsed)
+        {
+            Instantiate(gameObject, other.transform.position, Quaternion.identity);
+            softMud.isBeUsed = true;
+        }
     }
 
 }

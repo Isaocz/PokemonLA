@@ -11,6 +11,11 @@ public class Endure : Skill
     {
         ParentPlayer = gameObject.transform.parent.GetComponent<PlayerControler>();
         ParentPlayer.EndureStart();
+        if (SkillFrom == 2)
+        {
+            player.playerData.DefBounsAlways++;
+            player.playerData.SpDBounsAlways++;
+        }
     }
 
     void Update()
@@ -21,5 +26,10 @@ public class Endure : Skill
     private void OnDestroy()
     {
         ParentPlayer.EndureOver();
+        if (SkillFrom == 2)
+        {
+            player.playerData.DefBounsAlways--;
+            player.playerData.SpDBounsAlways--;
+        }
     }
 }

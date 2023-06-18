@@ -65,7 +65,6 @@ public class LmcMove : Empty
             //每帧检测敌人是否中毒
             if (isToxicDone) { EmptyToxic(); }
         }
-        InvincibleUpdate();
     }
 
     private void FixedUpdate()

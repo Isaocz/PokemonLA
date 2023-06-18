@@ -48,6 +48,13 @@ public class IceShard : Skill
             Empty target = other.GetComponent<Empty>();
             HitAndKo(target);
             animator.SetTrigger("Break");
+            if (SkillFrom == 2 && target.isEmptyFrozenDone) {
+                Debug.Log(transform.rotation.eulerAngles);
+                if (transform.rotation.eulerAngles != new Vector3(0, 0, 0)) Instantiate(gameObject,transform.position,Quaternion.Euler(new Vector3(0,0,0)));
+                if (transform.rotation.eulerAngles != new Vector3(0, 0, 90)) Instantiate(gameObject,transform.position,Quaternion.Euler(new Vector3(0,0,90)));
+                if (transform.rotation.eulerAngles != new Vector3(0, 0, 180)) Instantiate(gameObject,transform.position,Quaternion.Euler(new Vector3(0,0,180)));
+                if (transform.rotation.eulerAngles != new Vector3(0, 0, 270)) Instantiate(gameObject,transform.position,Quaternion.Euler(new Vector3(0,0,270))); 
+            }
             isCanNotMove = true;
             IceShardPS.Stop();
         }

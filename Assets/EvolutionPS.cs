@@ -19,6 +19,7 @@ public class EvolutionPS : MonoBehaviour
         if (EvolutionPSTimer >= 0.5)
         {
             text.transform.parent.parent.gameObject.SetActive(false);
+            UISkillButton.Instance.isEscEnable = true;
         }
         if (EvolutionPSTimer >= 1.5)
         {

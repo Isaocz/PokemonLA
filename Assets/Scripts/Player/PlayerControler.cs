@@ -10,6 +10,8 @@ public class PlayerControler : Pokemon
 
     public string PlayerNameChinese;
     public Sprite PlayerHead;
+    //0小体型 1中体型 2大体形
+    public int PlayerBodySize;
 
     //声明一个目前角色的进化型,一个布尔变量表示该宝可梦是否来自于进化
     public PlayerControler EvolutionPlayer;
@@ -31,6 +33,7 @@ public class PlayerControler : Pokemon
     public delegate void ComeInANewRoom(PlayerControler player);
     public ComeInANewRoom ComeInANewRoomEvent;
 
+
     public delegate void ClearThisRoom(PlayerControler player);
     public ClearThisRoom ClearThisRoomEvent;
 
@@ -38,7 +41,7 @@ public class PlayerControler : Pokemon
     public UpdataPassiveItem UpdataPassiveItemEvent;
 
     //声明一个二维向量表示朝向最初朝向右边,另一个表示位移量,
-    Vector2 look = new Vector2(0, -1);
+    public Vector2 look = new Vector2(0, -1);
     Vector2 move;
     Vector2 Direction;
 
@@ -66,6 +69,27 @@ public class PlayerControler : Pokemon
         set { nowStone = value; }
     }
     int nowStone;
+
+    public int HeartScale
+    {
+        get { return nowHeartScale; }
+        set { nowHeartScale = value; }
+    }
+    int nowHeartScale;
+
+    public int PPUp
+    {
+        get { return nowPPUp; }
+        set { nowPPUp = value; }
+    }
+    int nowPPUp;
+
+    public int SeedofMastery
+    {
+        get { return nowSeedofMastery; }
+        set { nowSeedofMastery = value; }
+    }
+    int nowSeedofMastery;
 
     //声明一个整形表示当前等级最大经验值，一个整形变量表示等级，以及一个经验值表，一个整形变量现在经验值,以及一个整型变量代表现在经验值以用于其他函数
     protected int[] Exp;
@@ -169,9 +193,9 @@ public class PlayerControler : Pokemon
 
 
     //声明一个数组型变量，用来储存角色学习新招式的等级,以及一个整形变量检测当前等级是否习得技能
-    protected int[] GetSkillLevel;
+    public int GetSkillLevel;
+    int StartLevel;
     int levelChecker = 0;
-    public List<Skill> SkillList = new List<Skill>();
     public UIPanelGwtNewSkill uIPanelGwtNewSkill;
 
 
@@ -189,25 +213,34 @@ public class PlayerControler : Pokemon
     public bool isSpaceItemCanBeUse;
 
     public PlayerData playerData;
+    public PlayerSkillList playerSkillList;
+    public SubSkillList playerSubSkillList;
 
     PlayerControler ThisPlayer;
 
     public int NatureIndex;
+
+    public bool isCanNotMove;
+    public bool isInvincibleAlways;
 
     bool isDie;
 
     //初始化玩家的必要函数
     protected void Instance()
     {
+        
         //当前最大生命值等于一级时的最大生命值
         //当前生命值等于最大生命值
         //初始化当前血量和最大血量的文字UI
         playerData = GetComponent<PlayerData>();
+        playerSkillList = GetComponent<PlayerSkillList>();
+        playerSubSkillList = GetComponent<SubSkillList>();
 
         //获得小山猪的刚体组件和动画组件
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         maxEx = Exp[Level-1];
+        StartLevel = Level;
 
         skillBar01.player = gameObject.GetComponent<PlayerControler>();
         skillBar02.player = gameObject.GetComponent<PlayerControler>();
@@ -240,7 +273,15 @@ public class PlayerControler : Pokemon
         uIPanelGwtNewSkill.PokemonNameChinese = PlayerNameChinese;
     }
 
+    public void TeraTypeJORChange(int TeraType)
+    {
+        PlayerTeraTypeJOR = TeraType;
 
+        if (Skill01 != null && Skill01.GetComponent<TeraBlast>() != null) { Skill01.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar01.GetSkill(Skill01); }
+        if (Skill02 != null && Skill02.GetComponent<TeraBlast>() != null) { Skill02.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar02.GetSkill(Skill02); }
+        if (Skill03 != null && Skill03.GetComponent<TeraBlast>() != null) { Skill03.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar03.GetSkill(Skill03); }
+        if (Skill04 != null && Skill04.GetComponent<TeraBlast>() != null) { Skill04.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar04.GetSkill(Skill04); }
+    }
 
     // Update is called once per frame
     protected void UpdatePlayer()
@@ -248,8 +289,8 @@ public class PlayerControler : Pokemon
         if (!isDie)
         {
             //每帧获取一次十字键的按键信息
-            horizontal = Input.GetAxis("Horizontal");
-            vertical = Input.GetAxis("Vertical");
+            horizontal = Input.GetAxis("Horizontal") * (isConfusionDone ? -1 : 1);
+            vertical = Input.GetAxis("Vertical") * (isConfusionDone ? -1 : 1) ;
 
 
             //每帧检测一次当前是否为无敌状态，如果是，则计时器计时，如果计时器时间小于0，则变为不无敌状态
@@ -381,6 +422,7 @@ public class PlayerControler : Pokemon
                     ComeInANewRoomEvent(this);
                     isComeInANewRoomEvent = true;
                 }
+                ConfusionRemove();
                 CheckStateInInputNewRoom();
                 isSpaceItemCanBeUse = false;
                 if (NewRoomTimer >= 1.2f)
@@ -434,7 +476,7 @@ public class PlayerControler : Pokemon
         
         if (!isStrengthAndTeraTypeBeRestore)
         {
-            PlayerTeraTypeJOR = 0;
+            TeraTypeJORChange(0);
             playerData.RestoreJORSata();
             isStrengthAndTeraTypeBeRestore = true;
         }
@@ -468,7 +510,7 @@ public class PlayerControler : Pokemon
     protected void FixedUpdatePlayer()
     {
         //2D向量position等于刚体组件的坐标,之后让position的xy坐标加上十字键x速度x单位时间，最后让刚体的位置等于position
-        if (!isDie && !isSkill && !isTP)
+        if (!isDie && !isSkill && !isTP && !isCanNotMove)
         {
             position = rigidbody2D.position;
             position.x = position.x + horizontal * speed * Time.deltaTime;
@@ -512,6 +554,16 @@ public class PlayerControler : Pokemon
         EvoAnimaObj.GetComponent<EvolutionPS>().ChangeText(PlayerNameChinese , EvolutionPlayer.PlayerNameChinese);
     }
 
+    protected void EvolutionStart()
+    {
+        EvoAnimaObj = Instantiate(EvolutionAnimation, transform.position + Vector3.up * 0.5f, Quaternion.identity);
+        UISkillButton.Instance.isEscEnable = false;
+        animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+        Time.timeScale = 0;
+        animator.SetTrigger("Evolution");
+        isEvolution = true;
+    }
+
     public void Evolution()
     {
         PlayerControler e =  Instantiate(EvolutionPlayer , transform.position , Quaternion.identity);
@@ -528,14 +580,52 @@ public class PlayerControler : Pokemon
         e.Stone = Stone;
         e.Money = Money;
         e.Level = Level;
+        e.LevelForSkill = LevelForSkill;
+        e.NowRoom = NowRoom;
+        e.InANewRoom = InANewRoom;
         UnityEditorInternal.ComponentUtility.CopyComponent(playerData);
         UnityEditorInternal.ComponentUtility.PasteComponentValues(e.GetComponent<PlayerData>());
+        UnityEditorInternal.ComponentUtility.CopyComponent(playerSubSkillList);
+        UnityEditorInternal.ComponentUtility.PasteComponentValues(e.GetComponent<SubSkillList>());
+
+        GameObject EBaby = e.transform.GetChild(5).gameObject;
+        if (transform.GetChild(5).GetChild(0).childCount > 0)
+        {
+            foreach (Transform baby in transform.GetChild(5).GetChild(0))
+            {
+                Instantiate(baby, baby.transform.position, Quaternion.identity, EBaby.transform.GetChild(0));
+            }
+        }
+        if (transform.GetChild(5).GetChild(1).childCount > 0)
+        {
+            foreach (Transform baby in transform.GetChild(5).GetChild(1))
+            {
+                Instantiate(baby, baby.transform.position, Quaternion.identity, EBaby.transform.GetChild(1));
+            }
+        }
+
         e.spaceItem = spaceItem;
         e.NatureIndex = NatureIndex;
         e.Hp = (e.Level + 10 + (int)(((float)Level * e.HpPlayerPoint * 2) / 100.0f)) - (maxHp - Hp);
         Destroy(gameObject);
     }
 
+    public void AddASubSkill(SubSkill sub)
+    {
+        if (!playerSubSkillList.SubSList.Contains(sub))
+        {
+            playerSubSkillList.SubSList.Add(sub);
+        }
+    }
+
+    public void RemoveASubSkill(SubSkill sub)
+    {
+        Debug.Log(sub);
+        if (playerSubSkillList.SubSList.Contains(sub))
+        {
+            playerSubSkillList.SubSList.Remove(sub);
+        }
+    }
 
     public void RefreshSkillCD()
     {
@@ -589,7 +679,7 @@ public class PlayerControler : Pokemon
         else
         {
             //如果无敌结束，不无敌的话变为不无敌状态，无敌时间计时器时间设置为无敌时间
-            if (isInvincible)
+            if (isInvincible || isInvincibleAlways)
             {
                 return;
             }
@@ -654,6 +744,27 @@ public class PlayerControler : Pokemon
         UIMoneyBar.Instance._Stone += ChangePoint;
         UIMoneyBar.Instance.StoneChange();
 
+    }
+
+    public void ChangeHearsScale(int ChangePoint)
+    {
+
+        //改变心之鳞片数，上限为99，下限为0，
+        nowHeartScale = Mathf.Clamp(nowHeartScale + ChangePoint, 0, 99);
+    }
+
+    public void ChangePPUp(int ChangePoint)
+    {
+
+        //改变PP提升数，上限为99，下限为0，
+        nowPPUp = Mathf.Clamp(nowPPUp + ChangePoint, 0, 99);
+    }
+
+    public void ChangeMSeed(int ChangePoint)
+    {
+
+        //改变精通种子数，上限为99，下限为0，
+        nowSeedofMastery = Mathf.Clamp(nowSeedofMastery + ChangePoint, 0, 99);
     }
 
 
@@ -789,8 +900,6 @@ public class PlayerControler : Pokemon
             UIHealthBar.Instance.Per = (float)nowHp / (float)maxHp;
             UIHealthBar.Instance.ChangeHpUp();
         }
-        
-        
     }
 
 
@@ -798,28 +907,25 @@ public class PlayerControler : Pokemon
 
     public void LearnNewSkill()
     {
-        if (LevelForSkill == GetSkillLevel[levelChecker])
+        if ((LevelForSkill-StartLevel) % GetSkillLevel == 0 && LevelForSkill != StartLevel)
         {
-            if (levelChecker < SkillList.Count)
+            if (playerSkillList.SkillLearnList.Count > 0)
             {
-                if (Skill01 == null || Skill02 == null || Skill03 == null || Skill04 == null)
-                {
-                    uIPanelGwtNewSkill.NewSkillPanzelJump(SkillList[levelChecker]);
-                }
-                else
-                {
-                    uIPanelGwtNewSkill.NewSkillPanzelJump(SkillList[levelChecker]);
-                    Debug.Log(SkillList[levelChecker]);
-                }
+                uIPanelGwtNewSkill.SelectSkill(playerSkillList.RandomLearnASkill(LevelForSkill), playerSkillList.RandomLearnASkill(LevelForSkill), playerSkillList.RandomLearnASkill(LevelForSkill));
             }
             else { Debug.Log("Error : SkillList OverFlow"); }
             levelChecker++;
         }
     }
 
+    public void LearnNewSkillByOtherWay( Skill LearnSkill )
+    {
+        uIPanelGwtNewSkill.NewSkillPanzelJump(LearnSkill , false);
+    }
 
 
-    public void GetNewSkill(Skill NewSkill , int SkillNumber)
+
+    public void GetNewSkill(Skill NewSkill ,Skill OldSkill , int SkillNumber , bool isLearnSkill)
     {
         switch (SkillNumber)
         {
@@ -848,6 +954,7 @@ public class PlayerControler : Pokemon
                 SkillPanel.StaticSkillPanel.transform.GetChild(9).GetComponent<UIPanleSkillBar>().GetSkill_Panle(NewSkill);
                 break;
         }
+        playerSkillList.RemoveSkillInList(NewSkill, OldSkill);
     }
 
 
@@ -915,24 +1022,25 @@ public class PlayerControler : Pokemon
         Skill skillObj = null;
         if (!Skill01.isNotDirection) {
             if (Direction.Equals(new Vector2(1, 0))) {
-                skillObj = Instantiate(Skill01, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 0), Skill01.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill01, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill01.DirctionDistance), Quaternion.Euler(0, 0, 0), Skill01.isNotMoveWithPlayer ? null : transform);
             } else if (Direction.Equals(new Vector2(-1, 0)))
             {
-                skillObj = Instantiate(Skill01, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 180), Skill01.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill01, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill01.DirctionDistance), Quaternion.Euler(0, 0, 180), Skill01.isNotMoveWithPlayer ? null : transform);
             }
             else if (Direction.Equals(new Vector2(0, 1)))
             {
-                skillObj = Instantiate(Skill01, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 90), Skill01.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill01, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill01.DirctionDistance), Quaternion.Euler(0, 0, 90), Skill01.isNotMoveWithPlayer ? null : transform);
             }
             else if (Direction.Equals(new Vector2(0, -1)))
             {
-                skillObj = Instantiate(Skill01, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 270), Skill01.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill01, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill01.DirctionDistance), Quaternion.Euler(0, 0, 270), Skill01.isNotMoveWithPlayer ? null : transform);
             }
         }
         else
         {
             skillObj = Instantiate(Skill01, rigidbody2D.position, Quaternion.identity, Skill01.isNotMoveWithPlayer ? null : transform);
         }
+        playerSubSkillList.CallSubSkill(Skill01);
         skillObj.player = this;
     }
 
@@ -942,25 +1050,26 @@ public class PlayerControler : Pokemon
         if (!Skill02.isNotDirection) {
             if (Direction.Equals(new Vector2(1, 0)))
             {
-                skillObj = Instantiate(Skill02, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 0), Skill02.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill02, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill02.DirctionDistance), Quaternion.Euler(0, 0, 0), Skill02.isNotMoveWithPlayer ? null : transform);
             }
             else if (Direction.Equals(new Vector2(-1, 0)))
             {
-                skillObj = Instantiate(Skill02, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 180), Skill02.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill02, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill02.DirctionDistance), Quaternion.Euler(0, 0, 180), Skill02.isNotMoveWithPlayer ? null : transform);
             }
             else if (Direction.Equals(new Vector2(0, 1)))
             {
-                skillObj = Instantiate(Skill02, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 90), Skill02.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill02, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill02.DirctionDistance), Quaternion.Euler(0, 0, 90), Skill02.isNotMoveWithPlayer ? null : transform);
             }
             else if (Direction.Equals(new Vector2(0, -1)))
             {
-                skillObj = Instantiate(Skill02, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 270), Skill02.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill02, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill02.DirctionDistance), Quaternion.Euler(0, 0, 270), Skill02.isNotMoveWithPlayer ? null : transform);
             }
         }
         else
         {
             skillObj = Instantiate(Skill02, rigidbody2D.position, Quaternion.identity, Skill02.isNotMoveWithPlayer?null:transform);
         }
+        playerSubSkillList.CallSubSkill(Skill02);
         skillObj.player = this;
     }
 
@@ -971,25 +1080,26 @@ public class PlayerControler : Pokemon
         {
             if (Direction.Equals(new Vector2(1, 0)))
             {
-                skillObj = Instantiate(Skill03, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 0), Skill03.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill03, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill03.DirctionDistance), Quaternion.Euler(0, 0, 0), Skill03.isNotMoveWithPlayer ? null : transform);
             }
             else if (Direction.Equals(new Vector2(-1, 0)))
             {
-                skillObj = Instantiate(Skill03, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 180), Skill03.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill03, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill03.DirctionDistance), Quaternion.Euler(0, 0, 180), Skill03.isNotMoveWithPlayer ? null : transform);
             }
             else if (Direction.Equals(new Vector2(0, 1)))
             {
-                skillObj = Instantiate(Skill03, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 90), Skill03.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill03, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill03.DirctionDistance), Quaternion.Euler(0, 0, 90), Skill03.isNotMoveWithPlayer ? null : transform);
             }
             else if (Direction.Equals(new Vector2(0, -1)))
             {
-                skillObj = Instantiate(Skill03, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 270), Skill03.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill03, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill03.DirctionDistance), Quaternion.Euler(0, 0, 270), Skill03.isNotMoveWithPlayer ? null : transform);
             }
         }
         else
         {
             skillObj = Instantiate(Skill03, rigidbody2D.position, Quaternion.identity, Skill03.isNotMoveWithPlayer ? null : transform);
         }
+        playerSubSkillList.CallSubSkill(Skill03);
         skillObj.player = this;
     }
 
@@ -1000,25 +1110,26 @@ public class PlayerControler : Pokemon
         {
             if (Direction.Equals(new Vector2(1, 0)))
             {
-                skillObj = Instantiate(Skill04, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 0), Skill04.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill04, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill04.DirctionDistance), Quaternion.Euler(0, 0, 0), Skill04.isNotMoveWithPlayer ? null : transform);
             }
             else if (Direction.Equals(new Vector2(-1, 0)))
             {
-                skillObj = Instantiate(Skill04, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 180), Skill04.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill04, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill04.DirctionDistance), Quaternion.Euler(0, 0, 180), Skill04.isNotMoveWithPlayer ? null : transform);
             }
             else if (Direction.Equals(new Vector2(0, 1)))
             {
-                skillObj = Instantiate(Skill04, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 90), Skill04.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill04, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill04.DirctionDistance), Quaternion.Euler(0, 0, 90), Skill04.isNotMoveWithPlayer ? null : transform);
             }
             else if (Direction.Equals(new Vector2(0, -1)))
             {
-                skillObj = Instantiate(Skill04, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * 1), Quaternion.Euler(0, 0, 270), Skill04.isNotMoveWithPlayer ? null : transform);
+                skillObj = Instantiate(Skill04, rigidbody2D.position + (Vector2.up * 0.4f) + (Direction * Skill04.DirctionDistance), Quaternion.Euler(0, 0, 270), Skill04.isNotMoveWithPlayer ? null : transform);
             }
         }
         else
         {
             skillObj = Instantiate(Skill04, rigidbody2D.position, Quaternion.identity, Skill04.isNotMoveWithPlayer ? null : transform);
         }
+        playerSubSkillList.CallSubSkill(Skill04);
         skillObj.player = this;
     }
 

@@ -101,7 +101,6 @@ public class Mareep : Empty
         {
             Escape();
         }
-        InvincibleUpdate();
     }
 
     void Escape()

@@ -7,20 +7,25 @@ public class PiloswineControler : PlayerControler
 
     public Skill Tackle;
     public Skill MudSlup;
-    public Skill PowderSnow;
-    public Skill Flail;
-    public Skill IceShard;
-    public Skill Endure;
-    public Skill Mist;
-    public Skill IcyWind;
-    public Skill Earthquake;
-    public Skill Amnesia;
-    public Skill Blizzard;
-    public Skill TakeDown;
-    public Skill TeraBlast;
-
-    public Skill Growl;
-    public Skill SandAttack;
+    //public Skill PowderSnow;
+    //public Skill Flail;
+    //public Skill IceShard;
+    //public Skill Endure;
+    //public Skill Mist;
+    //public Skill IcyWind;
+    //public Skill Earthquake;
+    //public Skill Amnesia;
+    //public Skill Blizzard;
+    //public Skill TakeDown;
+    public Skill IceFang;
+    //需要修改
+    //public Skill TeraBlast;
+    public Skill AncientPower;
+    //伊布
+    //public Skill Growl;
+    //public Skill SandAttack;
+    //甜冷美后
+    //public Skill Splash;
 
 
     // Start is called before the first frame update
@@ -31,7 +36,6 @@ public class PiloswineControler : PlayerControler
 
 
         Instance();
-        InstanceSkillList();
         InstanceNewSkillPanel();
 
     
@@ -56,21 +60,20 @@ public class PiloswineControler : PlayerControler
 
 
 
-        GetSkillLevel = new int[] { 4, 5, 6, 20, 23, 25, 10000 };
+        //GetSkillLevel = new int[] {  8, 20, 23, 25, 10000 };
+
+        Invoke("LearIceFang", 0.01f);
 
     }
 
-    void InstanceSkillList()
+    void LearIceFang()
     {
-        SkillList.Clear();
-        //SkillList.Add(MudSlup);
-        SkillList.Add(PowderSnow);
-        SkillList.Add(Mist);
-        SkillList.Add(IceShard);
-        SkillList.Add(Endure);
-        SkillList.Add(Flail);
-        SkillList.Add(IcyWind);
+        if (Skill01 != IceFang && Skill02 != IceFang && Skill03 != IceFang && Skill04 != IceFang)
+        {
+            LearnNewSkillByOtherWay(IceFang);
+        }
     }
+
 
     private void Update()
     {

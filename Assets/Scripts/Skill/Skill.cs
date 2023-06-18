@@ -5,6 +5,8 @@ using UnityEngine;
 public class Skill : MonoBehaviour
 {
 
+    //技能的序号
+    public int SkillIndex;
     //声明玩家对象，
     public PlayerControler player;
     //声明技能存在的时间
@@ -26,6 +28,12 @@ public class Skill : MonoBehaviour
     public string SkillName;
     public string SkillChineseName;
     public string SkillDiscribe;
+    //精通技能的描述
+    public string PlusSkillDiscribe;
+    //该技能的精通技能
+    public Skill PlusSkill;
+    //对于已精通的技能，代表了精通前的版本；
+    public Skill MinusSkill;
 
     //一个布尔值表示攻击是否已发生，用于非多段伤害
     bool isHitDone = false;
@@ -38,27 +46,70 @@ public class Skill : MonoBehaviour
     //代表会心一击等级的变量
     public int CTLevel;
 
+    //技能的品质等级
+    public int SkillQualityLevel;
+    //表示技能的来源 0表示由学习获得 1表示由技能学习机获得 2表示精通技能
+    public int SkillFrom;
+
+
+
     //技能的Tag
     public int[] SkillTag;
     //Tag1:接触类 Tag2:非接触类 Tag3:爪类 Tag4:牙类 Tag5:声音类
 
-    //表示技能生成时是否生成于玩家所面对方向，如为Fales生成在玩家所面对的方向，如为False生成在玩家位置（多用于自我buff类技能）
+    //表示技能生成时是否生成于玩家所面对方向，如为Fales生成在玩家所面对的方向，如为true生成在玩家位置（多用于自我buff类技能）
     public bool isNotDirection;
+    //对于一个有方向的技能（isNotDirection == False），生成时距离玩家的距离有多远。
+    public float DirctionDistance;
 
     //表示技能是否会随着玩家移动 只对于isNotDirection == true的技能生效
     public bool isNotMoveWithPlayer;
 
     //表示技能是否是多端攻击
     public bool isMultipleDamage;
+    //对于一个多段攻击技能，表示多段之间的冷却时间
+    public float MultipleDamageCDTime;
 
     //表示技能生成是否需要抬手，比如位移类技能需要在摁下摁键的那一刻开始位移，而射弹类节能会有一个抬手前摇
     public bool isImmediately;
+
+
+    //用于多端攻击的构造体
+    struct EmptyList
+    {
+
+
+        public EmptyList(Empty target, bool v1, float v2) : this()
+        {
+            Target = target;
+            isMultipleDamageColdDown = v1;
+            MultipleDamageColdDownTimer = v2;
+        }
+
+        public Empty Target;
+        public bool isMultipleDamageColdDown { get; set; }
+        public float MultipleDamageColdDownTimer { get; set; }
+
+    }
+    List<EmptyList> TargetList = new List<EmptyList> { };
+
+
+
+
+
 
 
     //引用于所有技能的Update函数，当存在时间耗尽时技能消失
     public void StartExistenceTimer()
     {
         ExistenceTime -= Time.deltaTime;
+
+        //多段攻击开始冷却之后开始计时
+        if (isMultipleDamage)
+        {
+            RestoreTargetListCD();
+        }
+
         if (ExistenceTime <= 0)
         {
             DestroySelf();
@@ -71,12 +122,47 @@ public class Skill : MonoBehaviour
         Destroy(gameObject);
     }
 
+
+    void RestoreTargetListCD()
+    {
+        for (int i = 0; i < TargetList.Count; i++)
+        {
+            EmptyList CDCell = TargetList[i];
+            if (CDCell.isMultipleDamageColdDown) { 
+                CDCell.MultipleDamageColdDownTimer += Time.deltaTime;
+                if (CDCell.MultipleDamageColdDownTimer >= MultipleDamageCDTime) { CDCell.MultipleDamageColdDownTimer = 0; CDCell.isMultipleDamageColdDown = false; }
+            }
+            TargetList[i] = CDCell;
+        }
+    }
+
+
+
     //对敌人target造成伤害和击退
     public void HitAndKo(Empty target)
-    {
-        
-        if (isMultipleDamage || !isHitDone) {
-            if(Damage == 0)
+    {   
+        EmptyList TCEell = new EmptyList(target, false, 0.0f);
+        int ListIndex = 0;
+
+        if (isMultipleDamage)
+        {
+            bool isTargetExitInList = false;
+            if (TargetList.Count == 0) { TargetList.Add(new EmptyList(target, false, 0.0f)); }
+            for (int i = 0; i < TargetList.Count; i++)
+            {
+                if (TargetList[i].Target == target) { isTargetExitInList = true; TCEell = TargetList[i]; ListIndex = i ;  Debug.Log("xxx" + TargetList[i].isMultipleDamageColdDown);  break;   }
+            }
+            if (!isTargetExitInList)
+            {
+                TargetList.Add(TCEell);
+            }
+        }
+
+
+
+
+        if (!isHitDone || (isMultipleDamage && !TCEell.isMultipleDamageColdDown)) {
+            if (Damage == 0)
             {
                 if(Random.Range(0.0f , 1.0f ) >= 0.04f + 0.01f * player.LuckPoint)
                 {
@@ -103,6 +189,10 @@ public class Skill : MonoBehaviour
             }
             target.EmptyKnockOut(KOPoint);
             isHitDone = true;
+            if (isMultipleDamage) {
+                TCEell.isMultipleDamageColdDown = true;
+                TargetList[ListIndex] = TCEell;
+            }
             if (player.playerData.IsPassiveGetList[26] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.6f)
             {
                 if (SkillTag != null)

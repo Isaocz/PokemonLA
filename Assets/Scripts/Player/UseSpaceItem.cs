@@ -299,7 +299,7 @@ public class UseSpaceItem : MonoBehaviour
 
     static void TeraShard(PlayerControler player, int TeraShardType)
     {
-        player.PlayerTeraTypeJOR = TeraShardType - 2;
+        player.TeraTypeJORChange(TeraShardType - 2);
     }
 
     static void BerryTypeDef(PlayerControler player, int BerryNum)

@@ -58,7 +58,7 @@ public class Psyduck : Empty
 
             if (isToxicDone) { EmptyToxic(); }
         }
-        InvincibleUpdate();
+
     }
 
     private void FixedUpdate()

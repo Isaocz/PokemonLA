@@ -195,37 +195,41 @@ public class Pokemon : MonoBehaviour
     float SpeedBefoerChange;
 
     //调用此函数时，如果还未被冰冻，冰冻，状态变为被冰冻
-    public void Frozen(float FrozenTime , float FrozenPoint)
+    public void Frozen(float FrozenTime , float FrozenPoint , float FrozenPer)
     {
-        if (!isFrozenDone)
-        {
-            EmptyFrozenPointFloat += FrozenPoint*FrozenResistance;
-            if (!isFrozenStart && EmptyFrozenPointFloat < 1)
+        if (GetComponent<Empty>() != null && GetComponent<Empty>().isMistPlus) { FrozenPer += 0.2f; }
+        Debug.Log(FrozenPer);
+        if (Random.Range(0.0f , 1.0f) <= FrozenPer ) {
+            if (!isFrozenDone)
             {
-                playerUIState.StatePlus(2);
-                playerUIState.StateSlowUP(2, EmptyFrozenPointFloat);
-                isFrozenStart = true;
-            }
-            else if (isFrozenStart && EmptyFrozenPointFloat < 1)
-            {
-                playerUIState.StateSlowUP(2, EmptyFrozenPointFloat);
-            }
-            else if (EmptyFrozenPointFloat >= 1 && !isFrozenDone)
-            {
-                if (!isFrozenStart)
+                EmptyFrozenPointFloat += FrozenPoint * FrozenResistance;
+                if (!isFrozenStart && EmptyFrozenPointFloat < 1)
                 {
                     playerUIState.StatePlus(2);
                     playerUIState.StateSlowUP(2, EmptyFrozenPointFloat);
                     isFrozenStart = true;
                 }
-                isFrozenDone = true;
-                playerUIState.StateSlowUP(2, EmptyFrozenPointFloat);
-                MarterialChangeToFrozen();
-                SpeedBefoerChange = speed;
-                speed = 0;
-                isEmptyFrozenDone = true;
-                animator.speed = 0;
-                Invoke("FrozenRemove", FrozenTime);
+                else if (isFrozenStart && EmptyFrozenPointFloat < 1)
+                {
+                    playerUIState.StateSlowUP(2, EmptyFrozenPointFloat);
+                }
+                else if (EmptyFrozenPointFloat >= 1 && !isFrozenDone)
+                {
+                    if (!isFrozenStart)
+                    {
+                        playerUIState.StatePlus(2);
+                        playerUIState.StateSlowUP(2, EmptyFrozenPointFloat);
+                        isFrozenStart = true;
+                    }
+                    isFrozenDone = true;
+                    playerUIState.StateSlowUP(2, EmptyFrozenPointFloat);
+                    MarterialChangeToFrozen();
+                    SpeedBefoerChange = speed;
+                    speed = 0;
+                    isEmptyFrozenDone = true;
+                    animator.speed = 0;
+                    Invoke("FrozenRemove", FrozenTime);
+                }
             }
         }
     }
@@ -827,6 +831,40 @@ public class Pokemon : MonoBehaviour
     }
 
     //===========================================================================睡眠的函数=====================================================================================
+
+
+    //一个变量代表是否中毒，一个代表中毒的程度
+
+    public bool isConfusionDef;
+    public bool isConfusionDone = false;
+
+    //调用此函数时，如果还未开始中毒，开始中毒
+    public void ConfusionFloatPlus()
+    {
+        if (!isStateInvincible && !isConfusionDef && !isConfusionDone)
+        {
+                
+            playerUIState.StatePlus(9);
+            isConfusionDone = true;
+        }
+    }
+
+    //只可被上一个函数延迟调用，代表解冻的函数
+    public void ConfusionRemove()
+    {
+        if (isConfusionDone)
+        {
+            playerUIState.StateDestory(9);
+            isConfusionDone = false;
+        }
+    }
+
+
+    //===========================================================================混乱的函数=====================================================================================
+
+
+
+    //===========================================================================混乱的函数=====================================================================================
 
 
     //***************************************************************************对自己的函数*********************************************************************************

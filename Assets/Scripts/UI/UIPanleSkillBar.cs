@@ -8,7 +8,7 @@ public class UIPanleSkillBar : MonoBehaviour
     int PanleSkillBarColor;
     public UIDescribe SkillPanelDescribeImage ;
     Skill PanelSkill;
-
+    PlayerControler player;
 
     public void MouseEnter()
     {
@@ -26,6 +26,11 @@ public class UIPanleSkillBar : MonoBehaviour
     private void OnDisable()
     {
         SkillPanelDescribeImage.gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        player = FindObjectOfType<PlayerControler>();
     }
 
     void InstanceSkillBar()
@@ -91,5 +96,25 @@ public class UIPanleSkillBar : MonoBehaviour
             transform.GetChild(17).gameObject.SetActive(false);
             transform.GetChild(9).gameObject.SetActive(true);
         }
+
+        Text FromText = transform.GetChild(18).GetComponent<Text>();
+        UICallDescribe FromTextDiscrebe = transform.GetChild(18).GetComponent<UICallDescribe>();
+        switch (PanelSkill.SkillFrom)
+        {
+            case 0:
+                FromText.text = "「天赋技能」";
+                FromTextDiscrebe.TwoMode = false; FromTextDiscrebe.FirstText = ""; FromTextDiscrebe.DescribeText = "此技能可能会在灵感突发时精通";
+                break;
+            case 1:
+                FromText.text = "「学习技能」";
+                FromTextDiscrebe.TwoMode = false; FromTextDiscrebe.FirstText = ""; FromTextDiscrebe.DescribeText = "此技能来自于传授或者技能学习机，无法在灵感突发时精通";
+                break;
+            case 2:
+                FromText.text = "「精通技能」";
+                FromTextDiscrebe.TwoMode = true; FromTextDiscrebe.FirstText = "此技能已经精通！"; FromTextDiscrebe.DescribeText = "精通效果:" + PanelSkill.PlusSkillDiscribe;
+                break;
+        }
+        FromText.color = Type.TypeColor[PanleSkillBarColor] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+
     }
 }

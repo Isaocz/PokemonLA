@@ -5,42 +5,32 @@ using UnityEngine;
 public class AncientPower : Skill
 {
     Vector2 direction;
+    public bool isParticleCollider;
+    ParticleSystem ACPS;
+
     // Start is called before the first frame update
     void Start()
     {
         direction = (transform.rotation * Vector2.right).normalized;
+        transform.rotation = new Quaternion(0, 0, 0, 0);
+        ACPS = transform.GetChild(0).GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
     void Update()
     {
+
         StartExistenceTimer();
-        //移动刚体
-        Vector3 postion = transform.position;
-        postion.x += direction.x * 4.5f * Time.deltaTime;
-        postion.y += direction.y * 4.5f * Time.deltaTime;
-        transform.position = postion;
-    }
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "Empty")
+
+        if (!isParticleCollider && ExistenceTime <= 1.7f)
         {
-            Empty target = other.GetComponent<Empty>();
-            HitAndKo(target);
-            //10%几率触发所有效果加成（受幸运值影响）
-            if (Random.Range(0, 9) + (float)player.LuckPoint >= 8)
-            {
-                player.playerData.AtkBounsJustOneRoom += 1;
-                player.playerData.SpABounsJustOneRoom += 1;
-                player.playerData.DefBounsJustOneRoom += 1;
-                player.playerData.SpDBounsJustOneRoom += 1;
-                player.playerData.SpeBounsJustOneRoom += 1;
-            }
-        }
-        else if (other.tag == "Room" || other.tag == "Enviroment")
-        {
-            //触碰墙体后消失
-            Destroy(gameObject);
+            var CollisionModule = ACPS.collision;
+            CollisionModule.enabled = true;
+            Vector3 postion = transform.position;
+            postion.x += direction.x * 9.5f * Time.deltaTime;
+            postion.y += direction.y * 9.5f * Time.deltaTime;
+            transform.position = postion;
         }
     }
+
 }

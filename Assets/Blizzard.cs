@@ -33,11 +33,7 @@ public class Blizzard : Skill
             HitAndKo(target);
             if (!IsFrozenDone)
             {
-                if (Random.Range(0, 9) + (float)player.LuckPoint >= 9)
-                {
-                    target.Frozen(2.5f, 1);
-                    target.playerUIState.StatePlus(2);
-                }
+                target.Frozen(2.5f, 1, 0.1f + (float)player.LuckPoint / 30);
                 IsFrozenDone = true;
             }
         }

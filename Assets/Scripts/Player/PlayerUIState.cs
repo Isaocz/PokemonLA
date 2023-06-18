@@ -42,6 +42,10 @@ public class PlayerUIState : MonoBehaviour
     Image EndureObj;
     bool IsEndure = false;
 
+    public Image ConfusionImage;
+    Image ConfusionObj;
+    bool IsConfusion;
+
 
     // Start is called before the first frame update
     public void StatePlus(int StateNum)
@@ -107,6 +111,13 @@ public class PlayerUIState : MonoBehaviour
                 {
                     EndureObj = Instantiate(EndureImage, transform.position, Quaternion.identity, transform);
                     IsEndure = true;
+                }
+                break;
+            case 9:
+                if (!IsConfusion)
+                {
+                    ConfusionObj = Instantiate(ConfusionImage, transform.position, Quaternion.identity, transform);
+                    IsConfusion = true;
                 }
                 break;
         }
@@ -179,6 +190,13 @@ public class PlayerUIState : MonoBehaviour
                     IsEndure = false;
                 }
                 break;
+            case 9:
+                if (IsConfusion)
+                {
+                    Destroy(ConfusionObj.gameObject);
+                    IsConfusion = false;
+                }
+                break;
         }
     }
 
@@ -198,8 +216,8 @@ public class PlayerUIState : MonoBehaviour
                 {
                     float OrangenalSize = FrozenObj.rectTransform.rect.height;
                     FrozenObj.transform.GetChild(0).GetComponent<Image>().rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - Per) * OrangenalSize);
-                    Debug.Log(OrangenalSize);
-                    Debug.Log(FrozenObj.transform.GetChild(0).GetComponent<Image>().rectTransform.rect.height);
+                    //Debug.Log(OrangenalSize);
+                    //Debug.Log(FrozenObj.transform.GetChild(0).GetComponent<Image>().rectTransform.rect.height);
                 }
                 break;
             case 3:
@@ -237,6 +255,7 @@ public class PlayerUIState : MonoBehaviour
                     FearObj.transform.GetChild(0).GetComponent<Image>().rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - Per) * OrangenalSize);
                 }
                 break;
+
         }
     }
 

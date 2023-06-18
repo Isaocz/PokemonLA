@@ -50,8 +50,28 @@ public class PokemonDataWindowsPanel : MonoBehaviour
 
     void GetHead()
     {
-        HeadUI.GetComponent<Image>().sprite = player.GetComponent<PlayerControler>().PlayerHead;
-        HeadUI.transform.GetChild(0).GetComponent<Text>().text = player.GetComponent<PlayerControler>().PlayerNameChinese;
+        PlayerControler playerControler = player.GetComponent<PlayerControler>();
+        HeadUI.GetComponent<Image>().sprite = playerControler.PlayerHead;
+        HeadUI.transform.GetChild(0).GetComponent<Text>().text = playerControler.PlayerNameChinese;
+        string PokemonD1 = "";
+        string PokemonD2;
+        switch (playerControler.PlayerBodySize)
+        {
+            case 0:
+                PokemonD1 = "小体型的宝可梦，可以进入一些狭小的道路，但是对于一些巨大的路障没有办法";
+                break;
+            case 1:
+                PokemonD1 = "中体型的宝可梦，进入一些狭小的道路比较困难，力量足够的话可以击碎一些巨大的障碍物";
+                break;
+            case 2:
+                PokemonD1 = "大体型的宝可梦，完全无法进入狭小的道路，但是可以轻而易举的摧毁一些障碍物";
+                break;
+        }
+        PokemonD2 = "这只宝可梦好像每升" + playerControler.GetSkillLevel +  "级就会有一次灵感爆发！";
+        UICallDescribe s1 = HeadUI.transform.GetChild(0).GetComponent<UICallDescribe>();
+        UICallDescribe s2 = HeadUI.transform.GetComponent<UICallDescribe>();
+        s1.FirstText = PokemonD1;s1.DescribeText = PokemonD2;s1.TwoMode = true;
+        s2.FirstText = PokemonD1;s2.DescribeText = PokemonD2;s2.TwoMode = true;
     }
 
     void GetTypeMark()

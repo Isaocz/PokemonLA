@@ -35,6 +35,9 @@ public class UIGetANewItem : MonoBehaviour
             case 2:
                 ItemClass = "被动道具:";
                 break;
+            case 3:
+                ItemClass = "技能学习机:";
+                break;
         }
         UIImage.transform.GetChild(0).GetComponent<Text>().text = "获得了" + ItemClass;
         UIImage.transform.GetChild(1).GetComponent<Text>().text = "「" + ItemName　+ "」";

@@ -127,6 +127,11 @@ public class UIExpBar : MonoBehaviour
             isExpUp = false;
             level++;
             Leveltext.text = string.Format("{00}",level);
+            if (player == null)
+            {
+                player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
+
+            }
             player.LevelForSkill++;
             player.LearnNewSkill();
         }

@@ -7,24 +7,30 @@ public class XszControler : PlayerControler
 
     public Skill Tackle;
     public Skill MudSlup;
-    public Skill PowderSnow;
-    public Skill Flail;
-    public Skill IceShard;
-    public Skill Endure;
-    public Skill Mist;
-    public Skill IcyWind;
-    public Skill Earthquake;
-    public Skill Amnesia;
-    public Skill Blizzard;
-    public Skill TakeDown;
-    public Skill TeraBlast;
-    public Skill AncientPower;
+    //public Skill PowderSnow;
+    //public Skill Flail;
+    //public Skill IceShard;
+    //public Skill Endure;
+    //public Skill Mist;
+    //public Skill IcyWind;
+    //public Skill Earthquake;
+    //public Skill Amnesia;
+    //public Skill Blizzard;
+    //public Skill TakeDown;
+    //public Skill IceFang;
+    //public Skill AncientPower;
+    //public Skill Tharsh;
+    //public Skill DoubleHit;
 
-    public Skill Growl;
-    public Skill SandAttack;
+    //技能机
+    //public Skill TeraBlast;
+
+    //伊布
+    //public Skill Growl;
+    //public Skill SandAttack;
     //甜冷美后
-    public Skill Splash;
-    
+    //public Skill Splash;
+
 
     // Start is called before the first frame update
     void Start()
@@ -34,13 +40,12 @@ public class XszControler : PlayerControler
 
 
         Instance();
-        InstanceSkillList();
         InstanceNewSkillPanel();
 
         Skill01 = Tackle;
         Skill02 = MudSlup;
-        Skill03 = Splash;
-        Skill04 = TeraBlast;
+        //Skill03 = IcyWind;
+        //Skill04 = DoubleHit;
 
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);
@@ -49,33 +54,17 @@ public class XszControler : PlayerControler
         PlayerType01 = 5;
         PlayerType02 = 15;
         
-        GetSkillLevel = new int[] { 9,12,16,20,23,25,10000};
+        //GetSkillLevel = new int[] { 5,12,16,20,23,25,10000};
         
-    }
-
-    void InstanceSkillList()
-    {
-        SkillList.Clear();
-        //SkillList.Add(MudSlup);
-        SkillList.Add(PowderSnow);
-        SkillList.Add(Mist);
-        SkillList.Add(IceShard);
-        SkillList.Add(Endure);
-        SkillList.Add(Flail);
-        SkillList.Add(IcyWind);
     }
 
     private void Update()
     {
         UpdatePlayer();
         StateMaterialChange();
-        if(!isEvolution && LevelForSkill >= 6)
+        if(!isEvolution && LevelForSkill >= 5)
         {
-            EvoAnimaObj =  Instantiate(EvolutionAnimation, transform.position + Vector3.up*0.5f, Quaternion.identity);
-            animator.updateMode = AnimatorUpdateMode.UnscaledTime;
-            Time.timeScale = 0;
-            animator.SetTrigger("Evolution");
-            isEvolution = true;
+            EvolutionStart();
         }
     }
 

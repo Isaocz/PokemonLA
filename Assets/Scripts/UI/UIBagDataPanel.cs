@@ -8,6 +8,10 @@ public class UIBagDataPanel : MonoBehaviour
     public static UIBagDataPanel InBagData;
     public Text MoneyText;
     public Text StoneText;
+    public Text HeartScaleText;
+    public Text PPUpText;
+    public Text SeedofMasteryText;
+
     public UICallDescribe SpaceItemUI;
     public GameObject PassiveItemBlockPanel;
     public UICallDescribe PassiveItemBlock;
@@ -33,9 +37,14 @@ public class UIBagDataPanel : MonoBehaviour
 
     void RestoreBagDataPanel()
     {
-        Debug.Log(1);
         MoneyText.text = player.Money.ToString();
         StoneText.text = player.Stone.ToString();
+        HeartScaleText.text = player.HeartScale.ToString();
+        PPUpText.text = player.PPUp.ToString();
+        SeedofMasteryText.text = player.SeedofMastery.ToString();
+
+
+
         if (player.spaceItem != null) { 
             SpaceItemUI.gameObject.SetActive(true);
             SpaceItemUI.TwoMode = true;
