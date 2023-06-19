@@ -37,7 +37,7 @@ public class SkillBar01 : MonoBehaviour
             if (uiPanleSkillBar != null)
             {
                 uiPanleSkillBar.gameObject.SetActive(true);
-                uiPanleSkillBar.GetSkill_Panle(skill);
+                uiPanleSkillBar.GetSkill_Panle(skill , player);
             }
             SkillCdTime = skill.ColdDown;
             SkillBarColor = skill.SkillType;
@@ -54,7 +54,7 @@ public class SkillBar01 : MonoBehaviour
         
         if (isCDStart && skill != null)
         {
-            Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalsize - originalsize * (1/ ((player.isParalysisDone ? 1.8f : 1.0f) * SkillCdTime * (1 - (player.SpeedAbilityPoint / 500))) ) * Timer);
+            Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalsize - originalsize * (1/ ((player.isParalysisDone ? 1.8f : 1.0f) * ( SkillCdTime * (skill.isPPUP ? 0.625f : 1)) * (1 - ((float)player.SpeedAbilityPoint / 500))) ) * Timer);
             Timer += Time.deltaTime;
             if (Timer > ((player.isParalysisDone ? 1.8f : 1.0f) * SkillCdTime * (1 - (player.SpeedAbilityPoint / 500)))) { isCDStart = false;Timer = 0; }
         }
@@ -64,7 +64,7 @@ public class SkillBar01 : MonoBehaviour
         if(isCDStart && skill != null)
         {
             Timer += CDPlusPoint;
-            Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalsize - originalsize * (1 / ((player.isParalysisDone ? 1.8f : 1.0f) * SkillCdTime * (1 - (player.SpeedAbilityPoint / 500)))) * Timer);
+            Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalsize - originalsize * (1 / ((player.isParalysisDone ? 1.8f : 1.0f) * (SkillCdTime * (skill.isPPUP ? 0.625f : 1)) * (1 - ((float)player.SpeedAbilityPoint / 500)))) * Timer);
             
         }
     }

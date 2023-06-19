@@ -26,6 +26,11 @@ public class IteamPickUp : Item
         Direction = ( new Vector3 (Random.Range(-1.0f, 1.0f) , Random.Range(-1.0f,1.0f) , 0.0f)).normalized;
     }
 
+    void Update()
+    {
+        if (targer == null) { targer = GameObject.FindGameObjectWithTag("Player"); }
+    }
+
     public void LunchItem()
     {
         gameObject.transform.position += new Vector3(LunchSpeed * Direction.x, LunchSpeed * Direction.y,0);

@@ -6,11 +6,10 @@ using UnityEngine.UI;
 public class NPC : MonoBehaviour
 {
     GameObject ZBotton;
-    Animator animator;
+    protected Animator animator;
     public PlayerControler playerControler;
     protected NPCTalkPanel TalkPanel;
     bool isInTrriger;
-    bool isTalked;
 
     protected void NPCStart()
     {
@@ -41,9 +40,8 @@ public class NPC : MonoBehaviour
 
     protected void NPCUpdate()
     {
-        if (isInTrriger && Input.GetKeyDown(KeyCode.Z))
+        if (isInTrriger && Input.GetKeyDown(KeyCode.Z) )
         {
-            isTalked = true;
             TalkPanel.gameObject.SetActive(true);
             TalkPanel.player = playerControler;
         }

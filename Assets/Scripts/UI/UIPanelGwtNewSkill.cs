@@ -65,7 +65,7 @@ public class UIPanelGwtNewSkill : MonoBehaviour
             //Debug.Log(GetNewSkill.SkillChineseName);
             transform.GetChild(0).gameObject.GetComponent<Text>().text = PokemonNameChinese + "学会了新技能" + NewSkill.SkillChineseName + "!";
             transform.GetChild(2).GetChild(0).gameObject.GetComponent<Text>().text = "确定学习" + NewSkill.SkillChineseName;
-            uIPanleNewSkillBar.GetSkill_Panle(NewSkill);
+            uIPanleNewSkillBar.GetSkill_Panle(NewSkill , playerControler);
 
             gameObject.SetActive(true);
             transform.parent.gameObject.SetActive(true);
@@ -80,7 +80,7 @@ public class UIPanelGwtNewSkill : MonoBehaviour
                 GetNewSkillPanel2 = transform.GetChild(4).gameObject;
                 GetNewSkillPanel2.SetActive(true);
                 GetNewSkillPanel2.transform.GetChild(0).GetComponent<Text>().text = PokemonNameChinese + "学会了新技能" + NewSkill.SkillChineseName + "!";
-                GetNewSkillPanel2.transform.GetChild(2).GetComponent<UIPanleSkillBar>().GetSkill_Panle(NewSkill);
+                GetNewSkillPanel2.transform.GetChild(2).GetComponent<UIPanleSkillBar>().GetSkill_Panle(NewSkill, playerControler);
                 GetNewSkillPanel2.transform.GetChild(3).GetChild(0).GetComponent<Text>().text = "忘掉技能" + playerControler.Skill01.SkillChineseName;
                 GetNewSkillPanel2.transform.GetChild(4).GetChild(0).GetComponent<Text>().text = "忘掉技能" + playerControler.Skill02.SkillChineseName;
                 GetNewSkillPanel2.transform.GetChild(5).GetChild(0).GetComponent<Text>().text = "忘掉技能" + playerControler.Skill03.SkillChineseName;

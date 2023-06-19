@@ -44,11 +44,11 @@ public class LearnNewSkillSelectPanel : MonoBehaviour
         //Debug.Log(PokemonChineseName);
         //Debug.Log(text);
         text.text = PokemonChineseName + "灵感突发，想到了新的技能！\n选择一个学习吧！";
-        SkillBar01.GetSkill_Panle(skill01);
+        SkillBar01.GetSkill_Panle(skill01 , GetNewSkillPanel.playerControler);
         Skill01ButtonText.text = "学习技能" + Skill01.SkillChineseName;
-        SkillBar02.GetSkill_Panle(skill02);
+        SkillBar02.GetSkill_Panle(skill02, GetNewSkillPanel.playerControler);
         Skill02ButtonText.text = "学习技能" + Skill02.SkillChineseName;
-        SkillBar03.GetSkill_Panle(skill03);
+        SkillBar03.GetSkill_Panle(skill03, GetNewSkillPanel.playerControler);
         Skill03ButtonText.text = "学习技能" + Skill03.SkillChineseName;
     }
 

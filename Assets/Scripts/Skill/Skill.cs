@@ -45,7 +45,16 @@ public class Skill : MonoBehaviour
 
     //代表会心一击等级的变量
     public int CTLevel;
+    //表示该技能是否经过PPUP
+    public bool isPPUP
+    {
+        //Debug.Log(isppp);
+        get { return isppp; }
+        set { isppp = value; }
+    }
+    bool isppp ;
 
+    
     //技能的品质等级
     public int SkillQualityLevel;
     //表示技能的来源 0表示由学习获得 1表示由技能学习机获得 2表示精通技能
@@ -72,6 +81,7 @@ public class Skill : MonoBehaviour
 
     //表示技能生成是否需要抬手，比如位移类技能需要在摁下摁键的那一刻开始位移，而射弹类节能会有一个抬手前摇
     public bool isImmediately;
+
 
 
     //用于多端攻击的构造体

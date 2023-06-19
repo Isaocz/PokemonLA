@@ -340,7 +340,7 @@ public class PlayerControler : Pokemon
             if (isSkill01CD && !isSleepDone)
             {
                 Skill01Timer += Time.deltaTime;
-                if (Skill01Timer >= (isParalysisDone ? 1.8f : 1.0f) * Skill01.ColdDown * (1 - (SpeedAbilityPoint / 500)))
+                if (Skill01Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
                 {
                     isSkill01CD = false;
                     Skill01Timer = 0;
@@ -362,7 +362,7 @@ public class PlayerControler : Pokemon
             if (isSkill02CD && !isSleepDone)
             {
                 Skill02Timer += Time.deltaTime;
-                if (Skill02Timer >= (isParalysisDone ? 1.8f : 1.0f) * Skill02.ColdDown * (1 - (SpeedAbilityPoint / 500)))
+                if (Skill02Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
                 {
                     isSkill02CD = false;
                     Skill02Timer = 0;
@@ -384,7 +384,7 @@ public class PlayerControler : Pokemon
             if (isSkill03CD && !isSleepDone)
             {
                 Skill03Timer += Time.deltaTime;
-                if (Skill03Timer >= (isParalysisDone ? 1.8f : 1.0f) * Skill03.ColdDown * (1 - (SpeedAbilityPoint / 500)))
+                if (Skill03Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
                 {
                     isSkill03CD = false;
                     Skill03Timer = 0;
@@ -406,7 +406,7 @@ public class PlayerControler : Pokemon
             if (isSkill04CD && !isSleepDone)
             {
                 Skill04Timer += Time.deltaTime;
-                if (Skill04Timer >= (isParalysisDone ? 1.8f : 1.0f) * Skill04.ColdDown * (1 - (SpeedAbilityPoint / 500)))
+                if (Skill04Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1) )* (1 - ((float)SpeedAbilityPoint / 500)))
                 {
                     isSkill04CD = false;
                     Skill04Timer = 0;
@@ -579,6 +579,9 @@ public class PlayerControler : Pokemon
         e.Money = Money;
         e.Stone = Stone;
         e.Money = Money;
+        e.HeartScale = HeartScale;
+        e.PPUp = PPUp;
+        e.SeedofMastery = SeedofMastery;
         e.Level = Level;
         e.LevelForSkill = LevelForSkill;
         e.NowRoom = NowRoom;
@@ -629,10 +632,10 @@ public class PlayerControler : Pokemon
 
     public void RefreshSkillCD()
     {
-        if (isSkill01CD) { Skill01Timer = (isParalysisDone ? 1.8f : 1.0f) * Skill01.ColdDown * (1 - (SpeedAbilityPoint / 500)); skillBar01.CDPlus((isParalysisDone ? 1.8f : 1.0f) * Skill01.ColdDown * (1 - (SpeedAbilityPoint / 500))); }
-        if (isSkill02CD) { Skill02Timer = (isParalysisDone ? 1.8f : 1.0f) * Skill02.ColdDown * (1 - (SpeedAbilityPoint / 500)); skillBar02.CDPlus((isParalysisDone ? 1.8f : 1.0f) * Skill02.ColdDown * (1 - (SpeedAbilityPoint / 500))); }
-        if (isSkill03CD) { Skill03Timer = (isParalysisDone ? 1.8f : 1.0f) * Skill03.ColdDown * (1 - (SpeedAbilityPoint / 500)); skillBar03.CDPlus((isParalysisDone ? 1.8f : 1.0f) * Skill03.ColdDown * (1 - (SpeedAbilityPoint / 500))); }
-        if (isSkill04CD) { Skill04Timer = (isParalysisDone ? 1.8f : 1.0f) * Skill04.ColdDown * (1 - (SpeedAbilityPoint / 500)); skillBar04.CDPlus((isParalysisDone ? 1.8f : 1.0f) * Skill04.ColdDown * (1 - (SpeedAbilityPoint / 500))); }
+        if (isSkill01CD) { Skill01Timer = (isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)); skillBar01.CDPlus((isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); }
+        if (isSkill02CD) { Skill02Timer = (isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)); skillBar02.CDPlus((isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); }
+        if (isSkill03CD) { Skill03Timer = (isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)); skillBar03.CDPlus((isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); }
+        if (isSkill04CD) { Skill04Timer = (isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)); skillBar04.CDPlus((isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); }
     }
 
 
@@ -932,27 +935,43 @@ public class PlayerControler : Pokemon
             case 1:
                 Skill01 = NewSkill;
                 skillBar01.GetSkill(Skill01);
-                SkillPanel.StaticSkillPanel.transform.GetChild(6).gameObject.SetActive(true);
-                SkillPanel.StaticSkillPanel.transform.GetChild(6).GetComponent<UIPanleSkillBar>().GetSkill_Panle(NewSkill);
+                if (SkillPanel.StaticSkillPanel != null)
+                {
+                    SkillPanel.StaticSkillPanel.transform.GetChild(6).gameObject.SetActive(true);
+                    SkillPanel.StaticSkillPanel.transform.GetChild(6).GetComponent<UIPanleSkillBar>().GetSkill_Panle(NewSkill, this);
+                }
                 break;
             case 2:
                 Skill02 = NewSkill;
                 skillBar02.GetSkill(Skill02);
-                SkillPanel.StaticSkillPanel.transform.GetChild(7).gameObject.SetActive(true);
-                SkillPanel.StaticSkillPanel.transform.GetChild(7).GetComponent<UIPanleSkillBar>().GetSkill_Panle(NewSkill);
+                if (SkillPanel.StaticSkillPanel != null) {
+                    SkillPanel.StaticSkillPanel.transform.GetChild(7).gameObject.SetActive(true);
+                    SkillPanel.StaticSkillPanel.transform.GetChild(7).GetComponent<UIPanleSkillBar>().GetSkill_Panle(NewSkill, this);
+                }
                 break;
             case 3:
                 Skill03 = NewSkill;
                 skillBar03.GetSkill(Skill03);
-                SkillPanel.StaticSkillPanel.transform.GetChild(8).gameObject.SetActive(true);
-                SkillPanel.StaticSkillPanel.transform.GetChild(8).GetComponent<UIPanleSkillBar>().GetSkill_Panle(NewSkill);
+                if (SkillPanel.StaticSkillPanel != null)
+                {
+                    SkillPanel.StaticSkillPanel.transform.GetChild(8).gameObject.SetActive(true);
+                    SkillPanel.StaticSkillPanel.transform.GetChild(8).GetComponent<UIPanleSkillBar>().GetSkill_Panle(NewSkill, this);
+                }
                 break;
             case 4:
                 Skill04 = NewSkill;
                 skillBar04.GetSkill(Skill04);
-                SkillPanel.StaticSkillPanel.transform.GetChild(9).gameObject.SetActive(true);
-                SkillPanel.StaticSkillPanel.transform.GetChild(9).GetComponent<UIPanleSkillBar>().GetSkill_Panle(NewSkill);
+                if (SkillPanel.StaticSkillPanel != null)
+                {
+                    SkillPanel.StaticSkillPanel.transform.GetChild(9).gameObject.SetActive(true);
+                    SkillPanel.StaticSkillPanel.transform.GetChild(9).GetComponent<UIPanleSkillBar>().GetSkill_Panle(NewSkill, this);
+                }
                 break;
+        }
+        if (OldSkill != null)
+        {
+            if (OldSkill.isPPUP == true && OldSkill.PlusSkill != null && OldSkill.PlusSkill == NewSkill) { NewSkill.isPPUP = true; }
+            OldSkill.isPPUP = false;
         }
         playerSkillList.RemoveSkillInList(NewSkill, OldSkill);
     }

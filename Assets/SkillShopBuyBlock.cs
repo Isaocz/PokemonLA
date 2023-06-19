@@ -30,7 +30,7 @@ public class SkillShopBuyBlock : MonoBehaviour
     public void GetSkill(Skill s)
     {
         BlockSkill = s;
-        SkillBar.GetSkill_Panle(BlockSkill);
+        SkillBar.GetSkill_Panle(BlockSkill , BuyPanel.player);
         if (BlockSkill.SkillQualityLevel <= 2) { SkillPrice = 1; }
         else if (BlockSkill.SkillQualityLevel > 2 && BlockSkill.SkillQualityLevel <= 4) { SkillPrice = 2; }
         if (BlockSkill.SkillQualityLevel > 4) { SkillPrice = 3; }

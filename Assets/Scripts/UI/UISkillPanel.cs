@@ -13,7 +13,7 @@ public class UISkillPanel : MonoBehaviour
         Time.timeScale = 0;
     }
 
-    public void SetPanelActiveFalse()
+    public void SetPanelActiv1eFalse()
     {
         Time.timeScale = 1;
         gameObject.SetActive(false);

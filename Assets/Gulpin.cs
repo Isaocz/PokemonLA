@@ -13,7 +13,16 @@ public class Gulpin : NPC
     // Update is called once per frame
     void Update()
     {
-        NPCUpdate();
+        if (TalkPanel.gameObject.activeSelf == false && TalkPanel.transform.parent.GetChild(1).gameObject.activeSelf == false && TalkPanel.transform.parent.GetChild(2).gameObject.activeSelf == false)
+        {
+
+            NPCUpdate();
+        }
+    }
+
+    public void Beybey()
+    {
+        animator.SetTrigger("Bey");
     }
 
     private void OnTriggerStay2D(Collider2D other)
