@@ -20,15 +20,17 @@ public class SkillShopBuyPanel : MonoBehaviour
     void Start()
     {
         ViewPanel = transform.GetChild(1).GetChild(0).GetChild(0).gameObject;
+        InstantiateSkillBlock();
+        BornPosition = new Vector3(-3, -5, 0);
+    }
+
+    private void OnEnable()
+    {
         CoinNumPanel = transform.GetChild(3).gameObject;
         HSText = CoinNumPanel.transform.GetChild(0).GetComponent<Text>();
         PPUPText = CoinNumPanel.transform.GetChild(1).GetComponent<Text>();
         MSText = CoinNumPanel.transform.GetChild(2).GetComponent<Text>();
-
-        InstantiateSkillBlock();
-
         ChangeCoinNum();
-        BornPosition = new Vector3(-3, -5, 0);
     }
 
     void InstantiateSkillBlock() 
