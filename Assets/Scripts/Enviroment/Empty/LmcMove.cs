@@ -63,7 +63,7 @@ public class LmcMove : Empty
             //每帧检测敌人材质是否变更
             StateMaterialChange();
             //每帧检测敌人是否中毒
-            if (isToxicDone) { EmptyToxic(); }
+            UpdateEmptyChangeHP();
         }
     }
 

@@ -101,7 +101,7 @@ public class poochyena : Empty
                 isBite = false;
                 BiteTimer = 5.0f;
             }
-            if (isToxicDone) { EmptyToxic(); }
+            UpdateEmptyChangeHP();
         }
     }
 

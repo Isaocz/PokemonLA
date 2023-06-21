@@ -56,7 +56,7 @@ public class Jigglypuff : Empty
         if (!isBorn)
         {
             EmptyDie();
-            if (isToxicDone) { EmptyToxic(); }
+            UpdateEmptyChangeHP();
         }
         if (!isBorn && !isDie && !isHit && isRoll)
         {

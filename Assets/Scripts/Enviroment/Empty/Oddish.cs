@@ -50,7 +50,7 @@ public class Oddish : Empty
         {
             EmptyDie();
             StateMaterialChange();
-            if (isToxicDone) { EmptyToxic(); }
+            UpdateEmptyChangeHP();
         }
     }
 

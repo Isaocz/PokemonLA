@@ -93,7 +93,7 @@ public class Mareep : Empty
             }
             EmptyDie();
             StateMaterialChange();
-            if (isToxicDone) { EmptyToxic(); }
+            UpdateEmptyChangeHP();
         }
 
 
