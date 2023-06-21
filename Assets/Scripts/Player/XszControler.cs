@@ -21,6 +21,10 @@ public class XszControler : PlayerControler
     //public Skill AncientPower;
     //public Skill Tharsh;
     //public Skill DoubleHit;
+    public Skill RainDance;
+    public Skill SunnyDay;
+    public Skill Hail;
+    public Skill SandStorm;
 
     //¼¼ÄÜ»ú
     //public Skill TeraBlast;
@@ -42,10 +46,12 @@ public class XszControler : PlayerControler
         Instance();
         InstanceNewSkillPanel();
 
-        Skill01 = Tackle;
-        Skill02 = MudSlup;
-        //Skill03 = IcyWind;
-        //Skill04 = DoubleHit;
+        //Skill01 = Tackle;
+        //Skill02 = MudSlup;
+        Skill01 = RainDance;
+        Skill02 = SunnyDay;
+        Skill03 = Hail;
+        Skill04 = SandStorm;
 
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);

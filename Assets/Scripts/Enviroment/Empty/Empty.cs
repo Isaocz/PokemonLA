@@ -334,6 +334,14 @@ public class Empty : Pokemon
 
 
 
+    //=========================随时间的受伤时间=====================
+
+    public void UpdateEmptyChangeHP()
+    {
+        if (isToxicDone) { EmptyToxic(); }
+        if (Weather.GlobalWeather.isHail) { EmptyHail(); }
+        if (Weather.GlobalWeather.isSandstorm) { EmptySandStorm(); }
+    }
 
     //=========================中毒事件========================
 
@@ -344,18 +352,69 @@ public class Empty : Pokemon
     /// <summary>
     /// 根据中毒时间敌人掉血
     /// </summary>
-    public void EmptyToxic()
+    void EmptyToxic()
     {
         EmptyToxicTimer += Time.deltaTime;
         if(EmptyToxicTimer >= 2)
         {
             EmptyToxicTimer += Time.deltaTime;
-            EmptyHpChange( Mathf.Clamp((((float)maxHP)/16)*OtherStateResistance ,1,10) , 0, 19);
+            EmptyHpChange( Mathf.Clamp((((float)maxHP)/16)*OtherStateResistance ,1, isBoos ? 8 : 10) , 0, 19);
             EmptyToxicTimer = 0;
         }
 
     }
     //=========================中毒事件========================
+
+
+    //=========================冰雹伤害事件========================
+
+    /// <summary>
+    /// 敌人的冰雹计时器，每计时两秒中一次毒
+    /// </summary>
+    protected float EmptyHailTimer;
+    /// <summary>
+    /// 根据冰雹时间敌人掉血
+    /// </summary>
+    void EmptyHail()
+    {
+        if (EmptyType01 != Type.TypeEnum.Ice && EmptyType02 != Type.TypeEnum.Ice)
+        {
+            EmptyHailTimer += Time.deltaTime;
+            if (EmptyHailTimer >= 2)
+            {
+                EmptyHailTimer += Time.deltaTime;
+                if (Weather.GlobalWeather.isHailPlus) { EmptyHpChange(Mathf.Clamp((((float)maxHP) / 16) * OtherStateResistance, 1, isBoos ? 8 : 10), 0, 19); }
+                else { EmptyHpChange(Mathf.Clamp((((float)maxHP) / 16) * OtherStateResistance, 1, isBoos ? 8 : 10), 0, 19); }
+                EmptyHailTimer = 0;
+            }
+        }
+    }
+    //=========================冰雹伤害事件========================
+
+    //=========================沙暴伤害事件========================
+
+    /// <summary>
+    /// 敌人的沙暴计时器，每计时两秒中一次毒
+    /// </summary>
+    protected float EmptySandStormTimer;
+    /// <summary>
+    /// 根据沙暴时间敌人掉血
+    /// </summary>
+    void EmptySandStorm()
+    {
+        if (EmptyType01 != Type.TypeEnum.Ground && EmptyType01 != Type.TypeEnum.Rock && EmptyType01 != Type.TypeEnum.Steel && EmptyType02 != Type.TypeEnum.Ground && EmptyType02 != Type.TypeEnum.Rock && EmptyType02 != Type.TypeEnum.Steel)
+        {
+            EmptySandStormTimer += Time.deltaTime;
+            if (EmptySandStormTimer >= 2)
+            {
+                EmptySandStormTimer += Time.deltaTime;
+                if (Weather.GlobalWeather.isSandstormPlus) { EmptyHpChange(Mathf.Clamp((((float)maxHP) / 8) * OtherStateResistance, 1, isBoos ? 16 : 20), 0, 19); }
+                else { EmptyHpChange(Mathf.Clamp((((float)maxHP) / 16) * OtherStateResistance, 1, isBoos ? 8 : 10), 0, 19); }
+                EmptySandStormTimer = 0;
+            }
+        }
+    }
+    //=========================沙暴伤害事件========================
 
 
 

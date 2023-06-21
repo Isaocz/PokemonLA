@@ -69,8 +69,7 @@ public class WurmpleMove : Empty
                     if (launchTimer >= 3.0f) { launch = false; launchTimer = 0; }
                 }
             }
-
-            if (isToxicDone){EmptyToxic();}
+            UpdateEmptyChangeHP();
         }
     }
 

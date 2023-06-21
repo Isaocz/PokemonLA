@@ -55,8 +55,7 @@ public class Psyduck : Empty
                 isAttak = false;
                 AttackTimer = 0;
             }
-
-            if (isToxicDone) { EmptyToxic(); }
+            UpdateEmptyChangeHP();
         }
 
     }

@@ -288,6 +288,9 @@ public class PlayerControler : Pokemon
     {
         if (!isDie)
         {
+
+            UpdatePlayerChangeHP();
+
             //每帧获取一次十字键的按键信息
             horizontal = Input.GetAxis("Horizontal") * (isConfusionDone ? -1 : 1);
             vertical = Input.GetAxis("Vertical") * (isConfusionDone ? -1 : 1) ;
@@ -668,6 +671,14 @@ public class PlayerControler : Pokemon
     //声明一个改变生命的函数ChangeHp，改变的点数为ChangePoint，当改变点数为负时触发无敌时间，当改变点数为正时不触发无敌时间
     public void ChangeHp(float ChangePoint , float ChangePointSp , int SkillType)
     {
+        ChangePoint = ChangePoint * ( (Weather.GlobalWeather.isRain && SkillType == 11 )? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f ) : 1 )
+            * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1)
+            * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1)
+            * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+        ChangePointSp = ChangePointSp * ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+            * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1)
+            * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1)
+            * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
 
         if (ChangePoint > 0 || ChangePointSp > 0)
         {
@@ -1218,5 +1229,64 @@ public class PlayerControler : Pokemon
             case 24:   break;
         }
     }
+
+
+    //=========================随时间的受伤时间=====================
+
+    public void UpdatePlayerChangeHP()
+    {
+        if (Weather.GlobalWeather.isHail) { PlayerHail(); }
+        if (Weather.GlobalWeather.isSandstorm) { PlayerSandStorm(); }
+    }
+
+    //=========================冰雹伤害事件========================
+
+    /// <summary>
+    /// 玩家的冰雹计时器，每计时两秒中一次毒
+    /// </summary>
+    protected float PlayerHailTimer;
+    /// <summary>
+    /// 根据冰雹时间玩家掉血
+    /// </summary>
+    void PlayerHail()
+    {
+        if (PlayerType01 != 15 && PlayerType02 != 15 && PlayerTeraType != 15 && PlayerTeraTypeJOR != 15)
+        {
+            PlayerHailTimer += Time.deltaTime;
+            if (PlayerHailTimer >= 2)
+            {
+                PlayerHailTimer += Time.deltaTime;
+                if (Weather.GlobalWeather.isHailPlus) { ChangeHp(Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 19); }
+                else { ChangeHp(Mathf.Clamp((((float)maxHp) / 16), 1, 8), 0, 19); }
+                PlayerHailTimer = 0;
+            }
+        }
+    }
+    //=========================冰雹伤害事件========================
+
+    //=========================沙暴伤害事件========================
+
+    /// <summary>
+    /// 玩家的沙暴计时器，每计时两秒中一次毒
+    /// </summary>
+    protected float PlayerSandStormTimer;
+    /// <summary>
+    /// 根据沙暴时间玩家掉血
+    /// </summary>
+    void PlayerSandStorm()
+    {
+        if (PlayerType01 != 5 && PlayerType01 != 6 && PlayerType01 != 9 && PlayerType02 != 5 && PlayerType02 != 6 && PlayerType02 != 9 && PlayerTeraType != 5 && PlayerTeraType != 6 && PlayerTeraType != 9 && PlayerTeraTypeJOR != 5 && PlayerTeraTypeJOR != 6 && PlayerTeraTypeJOR != 9)
+        {
+            PlayerSandStormTimer += Time.deltaTime;
+            if (PlayerSandStormTimer >= 2)
+            {
+                PlayerSandStormTimer += Time.deltaTime;
+                if (Weather.GlobalWeather.isSandstormPlus) { ChangeHp(-Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 19); }
+                else { ChangeHp(-Mathf.Clamp((((float)maxHp) / 16), 1, 8), 0, 19); }
+                PlayerSandStormTimer = 0;
+            }
+        }
+    }
+    //=========================沙暴伤害事件========================
 
 }

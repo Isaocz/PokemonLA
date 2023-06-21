@@ -31,8 +31,7 @@ public class Exeggcute : Empty
             EmptyDie();
             StateMaterialChange();
             // TODO
-
-            if (isToxicDone) { EmptyToxic(); }
+            UpdateEmptyChangeHP();
         }
         //InvincibleUpdate();
     }

@@ -46,7 +46,7 @@ public class Gastly : Empty
         if (!isBorn)
         {
             EmptyDie();
-            if (isToxicDone) { EmptyToxic(); }
+            UpdateEmptyChangeHP();
         }
     }
 

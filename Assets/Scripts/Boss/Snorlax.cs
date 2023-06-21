@@ -74,7 +74,7 @@ public class Snorlax : Empty
         ResetPlayer();
         if (!isBorn)
         {
-            if (isToxicDone) { EmptyToxic(); }
+            UpdateEmptyChangeHP();
             if (!isAngry && EmptyHp <= maxHP * 0.65f && !isEmptyFrozenDone && !isFearDone) {
                 isAngry = true;
                 isGigaImpact = true;
