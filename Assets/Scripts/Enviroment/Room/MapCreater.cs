@@ -18,17 +18,22 @@ public class MapCreater : MonoBehaviour
     public Room PCRoomRight;
     public Vector3Int PCRoomPoint;
     bool isPCRoomSpawn;
+    int PCCreatCount;
 
     public Room StoreRoomUp;
     public Room StoreRoomLeft;
     public Room StoreRoomRight;
     public Vector3Int StoreRoomPoint;
     bool isStoreRoomSpawn;
+    int StoreCreatCount;
+
 
     public Room BossRoom;
     public Vector3Int BossRoomPoint;
     bool isBossRoomSpawn;
+    int BossRoomCreatCount;
 
+    bool isReset;
 
     //声明一个整形变量，表示生成的最小房间。
     //一个浮点型变量，表示生成概率。
@@ -58,6 +63,7 @@ public class MapCreater : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (FloorNum.GlobalFloorNum != null) { StepMin = FloorNum.GlobalFloorNum.MapSize[FloorNum.GlobalFloorNum.FloorNumber]; }
         for (int i = 0; i < BaseRoomList.transform.childCount; i++)
         {
             RoomWhiteList.Add(i);
@@ -77,12 +83,19 @@ public class MapCreater : MonoBehaviour
     //声明一个生成真实房间的函数
     void CreateRoom()
     {
-        //生成虚拟房间和PC房间和商店
-        BuildVRoom();
-        BuiledPCroom();
-        BuiledStoreRoom();
-        BuiledBossRoom();
+        if (!isReset)
+        {
+            //生成虚拟房间和PC房间和商店
+            BuildVRoom();
+            BuiledPCroom();
+            BuiledStoreRoom();
+            BuiledBossRoom();
 
+        }
+        foreach (Vector3 k in RRoom.Keys)
+        {
+            Debug.Log(k);
+        }
         //遍历所有虚拟房间，如果该坐标不是特殊房间，在该坐标生成真实房间
         foreach (Vector3Int item in VRoom.Keys)
         {
@@ -107,6 +120,28 @@ public class MapCreater : MonoBehaviour
 
             }
         }
+    }
+
+    //如果生成的地图无法生成特殊房间时使用，重置所有地图
+    void ResetMap()
+    {
+        isReset = true;
+        Debug.Log("MapReset");
+        foreach( Room room in RRoom.Values)
+        {
+            Destroy(room.gameObject);
+        }
+        isPCRoomSpawn = false; isStoreRoomSpawn = false; isBossRoomSpawn = false;
+        PCCreatCount = 0; StoreCreatCount = 0; BossRoomCreatCount = 0;
+        PCRoomPoint = Vector3Int.zero; StoreRoomPoint = Vector3Int.zero; BossRoomPoint = Vector3Int.zero; NowPoint = Vector3Int.zero;
+        SpawnR = 1.0f; SpawnChance = 1.0f;
+        VRoom.Clear(); RRoom.Clear();
+        RRoom = new Dictionary<Vector3Int, Room> { };
+        BuildVRoom();
+        BuiledPCroom();
+        BuiledStoreRoom();
+        BuiledBossRoom();
+
     }
 
     Room SwithABaseRoom()
@@ -211,7 +246,9 @@ public class MapCreater : MonoBehaviour
         {
             SpawnR += 0.2f;
             if(SpawnR >= 8.0f) { SpawnR = 1.0f; }
-            BuiledPCroom();
+            PCCreatCount++;
+            if (PCCreatCount >= 20) { ResetMap(); }
+            else { BuiledPCroom(); }
 
         }
         SpawnR = 1.0f;
@@ -285,7 +322,8 @@ public class MapCreater : MonoBehaviour
         {
             SpawnR += 0.2f;
             if (SpawnR >= 8.0f) { SpawnR = 1.0f; }
-            BuiledStoreRoom();
+            if (StoreCreatCount >= 20) { ResetMap(); }
+            else { BuiledStoreRoom(); }
         }
         SpawnR = 1.0f;
 
@@ -378,7 +416,8 @@ public class MapCreater : MonoBehaviour
         {
             SpawnR += 0.2f;
             if (SpawnR >= 8.0f) { SpawnR = 1.0f; }
-            BuiledBossRoom();
+            if (BossRoomCreatCount >= 20) { ResetMap(); }
+            else { BuiledBossRoom(); }
         }
         SpawnR = 1.0f;
 

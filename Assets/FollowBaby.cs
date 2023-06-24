@@ -42,7 +42,7 @@ public class FollowBaby : MonoBehaviour
     {
         if(isInANewRoom2 == false && TargetPlayer.InANewRoom == true) { isInANewRoom = true; isInANewRoom2 = true; }
         if (isInANewRoom2 == true && TargetPlayer.InANewRoom == false) { isInANewRoom2 = false; }
-        if (isInANewRoom == true) { Debug.Log(TargetPlayer); transform.position = TargetPlayer.transform.position; isInANewRoom = false; }
+        if (isInANewRoom == true) {  transform.position = TargetPlayer.transform.position; isInANewRoom = false; }
 
         //Debug.Log(TargetPlayer.InANewRoom);
         Vector2 direction = (Target.transform.position - transform.position).normalized;

@@ -42,6 +42,13 @@ public class UIHealthBar : MonoBehaviour
     void Start()
     {
         originalSize = Mask.rectTransform.rect.width;
+        PlayerControler player = FindObjectOfType<PlayerControler>();
+        if(player != null)
+        {
+            MaxHpText.text = string.Format("{000}", player.maxHp);
+            NowHpText.text = string.Format("{000}", player.Hp);
+            Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)player.Hp/(float)player.maxHp * originalSize);
+        }
     }
     
 

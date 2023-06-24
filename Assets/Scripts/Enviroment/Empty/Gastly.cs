@@ -124,9 +124,15 @@ public class Gastly : Empty
                     if (player.transform.position.x + 3 <= transform.parent.position.x + 12)
                     {
                         transform.position = new Vector3(player.transform.position.x + 3 + Random.Range(-0.5f, 0.0f), player.transform.position.y + Random.Range(-1.5f, 1.5f), 0);
-                        animator.SetFloat("LookX", 1);
-                        animator.SetFloat("LookY", 0);
-                        Direction = Vector2.right;
+                        if (!isEmptyConfusionDone)
+                        {
+                            animator.SetFloat("LookX", 1);
+                            animator.SetFloat("LookY", 0);
+                            Direction = Vector2.right;
+                        }
+                        else { switch (Random.Range(0, 4)) { case 0: Direction = Vector2.right; break; case 1: Direction = Vector2.left; break; case 2: Direction = Vector2.up; break; case 3: Direction = Vector2.down; break; } }
+                        animator.SetFloat("LookX", Direction.x);
+                        animator.SetFloat("LookY", Direction.y);
                     }
                     else
                     {
@@ -138,9 +144,15 @@ public class Gastly : Empty
                     if (player.transform.position.x + 5 <= transform.parent.position.x + 12)
                     {
                         transform.position = new Vector3(player.transform.position.x + 5 + Random.Range(-0.5f, 0.0f), player.transform.position.y + Random.Range(-1.5f, 1.5f), 0);
-                        animator.SetFloat("LookX", -1);
-                        animator.SetFloat("LookY", 0);
-                        Direction = Vector2.right;
+                        if (!isEmptyConfusionDone)
+                        {
+                            animator.SetFloat("LookX", -1);
+                            animator.SetFloat("LookY", 0);
+                            Direction = Vector2.right;
+                        }
+                        else { switch (Random.Range(0, 4)) { case 0: Direction = Vector2.right; break; case 1: Direction = Vector2.left; break; case 2: Direction = Vector2.up; break; case 3: Direction = Vector2.down; break; } }
+                        animator.SetFloat("LookX", Direction.x);
+                        animator.SetFloat("LookY", Direction.y);
                     }
                     else
                     {
@@ -154,9 +166,15 @@ public class Gastly : Empty
                     if (player.transform.position.x - 3 >= transform.parent.position.x - 12)
                     {
                         transform.position = new Vector3(player.transform.position.x - 3 - Random.Range(-0.5f, 0.0f), player.transform.position.y + Random.Range(-1.5f, 1.5f), 0);
-                        animator.SetFloat("LookX", -1);
-                        animator.SetFloat("LookY", 0);
-                        Direction = Vector2.left;
+                        if (!isEmptyConfusionDone)
+                        {
+                            animator.SetFloat("LookX", -1);
+                            animator.SetFloat("LookY", 0);
+                            Direction = Vector2.left;
+                        }
+                        else { switch (Random.Range(0, 4)) { case 0: Direction = Vector2.right; break; case 1: Direction = Vector2.left; break; case 2: Direction = Vector2.up; break; case 3: Direction = Vector2.down; break; } }
+                        animator.SetFloat("LookX", Direction.x);
+                        animator.SetFloat("LookY", Direction.y);
                     }
                     else
                     {
@@ -168,9 +186,15 @@ public class Gastly : Empty
                     if (player.transform.position.x - 5 >= transform.parent.position.x - 12)
                     {
                         transform.position = new Vector3(player.transform.position.x - 5 - Random.Range(-0.5f, 0.0f), player.transform.position.y + Random.Range(-1.5f, 1.5f), 0);
-                        animator.SetFloat("LookX", 1);
-                        animator.SetFloat("LookY", 0);
-                        Direction = Vector2.left;
+                        if (!isEmptyConfusionDone)
+                        {
+                            animator.SetFloat("LookX", 1);
+                            animator.SetFloat("LookY", 0);
+                            Direction = Vector2.left;
+                        }
+                        else { switch (Random.Range(0, 4)) { case 0: Direction = Vector2.right; break; case 1: Direction = Vector2.left; break; case 2: Direction = Vector2.up; break; case 3: Direction = Vector2.down; break; }}
+                        animator.SetFloat("LookX", Direction.x);
+                        animator.SetFloat("LookY", Direction.y);
                     }
                     else
                     {
@@ -184,9 +208,15 @@ public class Gastly : Empty
                     if (player.transform.position.y + 3 <= transform.parent.position.y + 7)
                     {
                         transform.position = new Vector3(player.transform.position.x + Random.Range(-1.5f, 1.5f), player.transform.position.y + 3 + Random.Range(-0.5f, 0.0f), 0);
-                        animator.SetFloat("LookY", 1);
-                        animator.SetFloat("LookX", 0);
-                        Direction = Vector2.up;
+                        if (!isEmptyConfusionDone)
+                        {
+                            animator.SetFloat("LookY", 1);
+                            animator.SetFloat("LookX", 0);
+                            Direction = Vector2.up;
+                        }
+                        else { switch (Random.Range(0, 4)) { case 0: Direction = Vector2.right; break; case 1: Direction = Vector2.left; break; case 2: Direction = Vector2.up; break; case 3: Direction = Vector2.down; break; } }
+                        animator.SetFloat("LookX", Direction.x);
+                        animator.SetFloat("LookY", Direction.y);
                     }
                     else
                     {
@@ -198,9 +228,15 @@ public class Gastly : Empty
                     if (player.transform.position.y + 5 <= transform.parent.position.y + 7)
                     {
                         transform.position = new Vector3(player.transform.position.x + Random.Range(-1.5f, 1.5f), player.transform.position.y + 5 + Random.Range(-0.5f, 0.0f), 0);
-                        animator.SetFloat("LookY", -1);
-                        animator.SetFloat("LookX", 0);
-                        Direction = Vector2.up;
+                        if (!isEmptyConfusionDone)
+                        {
+                            animator.SetFloat("LookY", -1);
+                            animator.SetFloat("LookX", 0);
+                            Direction = Vector2.up;
+                        }
+                        else { switch (Random.Range(0, 4)) { case 0: Direction = Vector2.right; break; case 1: Direction = Vector2.left; break; case 2: Direction = Vector2.up; break; case 3: Direction = Vector2.down; break; } }
+                        animator.SetFloat("LookX", Direction.x);
+                        animator.SetFloat("LookY", Direction.y);
                     }
                     else
                     {
@@ -214,9 +250,15 @@ public class Gastly : Empty
                     if (player.transform.position.y - 3 >= transform.parent.position.x - 7)
                     {
                         transform.position = new Vector3(player.transform.position.x + Random.Range(-1.5f, 1.5f), player.transform.position.y - 3 - Random.Range(-0.5f, 0.0f), 0);
-                        animator.SetFloat("LookY", -1);
-                        animator.SetFloat("LookX", 0);
-                        Direction = Vector2.down;
+                        if (!isEmptyConfusionDone)
+                        {
+                            animator.SetFloat("LookY", -1);
+                            animator.SetFloat("LookX", 0);
+                            Direction = Vector2.down;
+                        }
+                        else { switch (Random.Range(0, 4)) { case 0: Direction = Vector2.right; break; case 1: Direction = Vector2.left; break; case 2: Direction = Vector2.up; break; case 3: Direction = Vector2.down; break; }  }
+                        animator.SetFloat("LookX", Direction.x);
+                        animator.SetFloat("LookY", Direction.y);
                     }
                     else
                     {
@@ -228,9 +270,17 @@ public class Gastly : Empty
                     if (player.transform.position.y - 5 >= transform.parent.position.x - 7)
                     {
                         transform.position = new Vector3(player.transform.position.x + Random.Range(-1.5f, 1.5f), player.transform.position.y - 5 - Random.Range(-0.5f, 0.0f), 0);
-                        animator.SetFloat("LookY", 1);
-                        animator.SetFloat("LookX", 0);
-                        Direction = Vector2.down;
+                        if (!isEmptyConfusionDone)
+                        {
+                            animator.SetFloat("LookY", 1);
+                            animator.SetFloat("LookX", 0);
+                            Direction = Vector2.down;
+                        }
+                        else {
+                            switch (Random.Range(0, 4)) { case 0: Direction = Vector2.right; break; case 1: Direction = Vector2.left; break; case 2: Direction = Vector2.up; break; case 3: Direction = Vector2.down; break; }
+                        }
+                        animator.SetFloat("LookX", Direction.x);
+                        animator.SetFloat("LookY", Direction.y);
                     }
                     else
                     {

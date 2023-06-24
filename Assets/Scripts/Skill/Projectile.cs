@@ -10,6 +10,8 @@ public class Projectile : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public Empty empty;
     protected Vector3 BornPosition;
+    float Speed;
+    protected Vector2 LunchDirection;
     // Start is called before the first frame update
 
 
@@ -29,7 +31,7 @@ public class Projectile : MonoBehaviour
             {
                 spriteRenderer.material.color = spriteRenderer.material.color - new Color(0, 0, 0, 3f * Time.deltaTime);
             }
-            if((transform.position - BornPosition).magnitude >= ProjectileRange + 3)
+            if ((transform.position - BornPosition).magnitude >= ProjectileRange + 3)
             {
                 Destroy(gameObject);
             }
@@ -38,9 +40,28 @@ public class Projectile : MonoBehaviour
 
     }
 
+    public void CollisionDestory()
+    {
+        spriteRenderer.material.color = spriteRenderer.material.color - new Color(0, 0, 0, 3f * Time.deltaTime);
+        if (spriteRenderer.material.color.a <= 0.1f)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     //发射当前子弹
     public void Launch(Vector2 direction, float force)
     {
         rigidbody2D.AddForce(direction * force);
+    }
+
+    public void LaunchNotForce(Vector2 direction, float speed)
+    {
+        //Debug.Log(direction);
+        LunchDirection = direction.normalized; Speed = speed;
+    }
+    protected void MoveNotForce()
+    {
+        transform.position = transform.position + new Vector3(LunchDirection.x * Speed * Time.deltaTime , LunchDirection.y * Speed * Time.deltaTime, 0);
     }
 }

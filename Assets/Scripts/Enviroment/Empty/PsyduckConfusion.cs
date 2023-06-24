@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PsyduckConfusion : Projectile
 {
-    bool isDestory;
     // Start is called before the first frame update
+    bool isDestory;
     private void Awake()
     {
         AwakeProjectile();
@@ -18,11 +18,7 @@ public class PsyduckConfusion : Projectile
         DestoryProjectile(10);
         if (isDestory)
         {
-            spriteRenderer.material.color = spriteRenderer.material.color - new Color(0, 0, 0, 3f * Time.deltaTime);
-            if (spriteRenderer.material.color.a <= 0.1f)
-            {
-                Destroy(gameObject);
-            }
+            CollisionDestory();
         }
 
     }

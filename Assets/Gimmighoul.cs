@@ -7,11 +7,13 @@ public class Gimmighoul : FollowBaby
 
     public GameObject RandomMoney;
     bool BornAMoney;
+    PlayerControler player;
 
     // Start is called before the first frame update
     void Start()
     {
         FollowBabyStart();
+        player = transform.parent.parent.parent.GetComponent<PlayerControler>();
     }
 
     // Update is called once per frame
@@ -20,7 +22,7 @@ public class Gimmighoul : FollowBaby
         FollowBabyUpdate();
         if(!BornAMoney && MapCreater.StaticMap.RRoom[TargetPlayer.NowRoom].isClear == 0)
         {
-            Instantiate(RandomMoney, transform.position, Quaternion.identity);
+            if (Random.Range(0.0f , 1.0f) + ((float)player.LuckPoint/30) > 0.3f) { Instantiate(RandomMoney, transform.position, Quaternion.identity); } 
             BornAMoney = true;
         }
         if (MapCreater.StaticMap.RRoom[TargetPlayer.NowRoom].isClear != 0)
