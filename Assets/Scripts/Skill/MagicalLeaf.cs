@@ -60,11 +60,11 @@ public class MagicalLeaf : Skill
             this.enemy = other.gameObject;
         }
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        Empty target = collision.gameObject.GetComponent<Empty>();
-        if (target.tag == "Empty")
+        if (other.gameObject.tag == "Empty" )
         {
+            Empty target = other.gameObject.GetComponent<Empty>();
             HitAndKo(target);
             Destroy(gameObject);
         }
