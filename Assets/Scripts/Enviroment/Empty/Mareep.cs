@@ -109,25 +109,30 @@ public class Mareep : Empty
         animator.ResetTrigger("Escape");
         animator.ResetTrigger("EscapeOver");
         animator.SetTrigger("Escape");
-        switch (Random.Range(1, 5))
+        if (!isEmptyConfusionDone) {
+            switch (Random.Range(1, 5))
+            {
+                case 1:
+                    //AStarAIEscap.Escape(transform.parent.position + new Vector3(12.0f, 8.0f, 0));
+                    AStarAIEscap.Escape(transform.parent.position + new Vector3(Random.Range(7.0f, 10.0f), Random.Range(4.0f, 6.0f), 0));
+                    break;
+                case 2:
+                    //AStarAIEscap.Escape(transform.parent.position + new Vector3(12.0f, 8.0f, 0));
+                    AStarAIEscap.Escape(transform.parent.position + new Vector3(Random.Range(7.0f, 10.0f), -Random.Range(4.0f, 6.0f), 0));
+                    break;
+                case 3:
+                    //AStarAIEscap.Escape(transform.parent.position + new Vector3(12.0f, 8.0f, 0));
+                    AStarAIEscap.Escape(transform.parent.position + new Vector3(-Random.Range(7.0f, 10.0f), Random.Range(4.0f, 6.0f), 0));
+                    break;
+                case 4:
+                    //AStarAIEscap.Escape(transform.parent.position + new Vector3(12.0f, 8.0f, 0));
+                    AStarAIEscap.Escape(transform.parent.position + new Vector3(-Random.Range(7.0f, 10.0f), -Random.Range(4.0f, 6.0f), 0));
+                    break;
+            }
+        }
+        else
         {
-            case 1:
-                //AStarAIEscap.Escape(transform.parent.position + new Vector3(12.0f, 8.0f, 0));
-                AStarAIEscap.Escape(transform.parent.position + new Vector3(Random.Range(7.0f, 10.0f), Random.Range(4.0f, 6.0f), 0));
-                break;
-            case 2:
-                //AStarAIEscap.Escape(transform.parent.position + new Vector3(12.0f, 8.0f, 0));
-                AStarAIEscap.Escape(transform.parent.position + new Vector3(Random.Range(7.0f, 10.0f), -Random.Range(4.0f, 6.0f), 0));
-                break;
-            case 3:
-                //AStarAIEscap.Escape(transform.parent.position + new Vector3(12.0f, 8.0f, 0));
-                AStarAIEscap.Escape(transform.parent.position + new Vector3(-Random.Range(7.0f, 10.0f), Random.Range(4.0f, 6.0f), 0));
-                break;
-            case 4:
-                //AStarAIEscap.Escape(transform.parent.position + new Vector3(12.0f, 8.0f, 0));
-                AStarAIEscap.Escape(transform.parent.position + new Vector3(-Random.Range(7.0f, 10.0f), -Random.Range(4.0f, 6.0f), 0));
-                break;
-
+            AStarAIEscap.Escape(transform.parent.position);
         }
         isEscapeTimer = 0;
         isDrop = true;

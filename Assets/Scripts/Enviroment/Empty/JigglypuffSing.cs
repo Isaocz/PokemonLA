@@ -7,10 +7,13 @@ public class JigglypuffSing : MonoBehaviour
     // Start is called before the first frame update
 
     float MaxRadius;
+    float SingTimer;
+    CircleCollider2D SingRange;
 
     private void Start()
     {
-        MaxRadius = 4.6f;
+        MaxRadius = 4.3f;
+        SingRange = GetComponent<CircleCollider2D>();
     }
 
     private void OnTriggerStay2D(Collider2D other)
@@ -33,9 +36,14 @@ public class JigglypuffSing : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(GetComponent<CircleCollider2D>().radius <= MaxRadius)
+        SingTimer += Time.deltaTime;
+        if (SingRange.radius <= MaxRadius)
         {
-            GetComponent<CircleCollider2D>().radius += Time.deltaTime;
+            SingRange.radius += Time.deltaTime;
+        }
+        if (SingTimer >= 5.6f)
+        {
+            SingRange.radius -= Time.deltaTime * 1.2f;
         }
     }
 

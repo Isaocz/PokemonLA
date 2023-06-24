@@ -255,6 +255,13 @@ public class PlayerUIState : MonoBehaviour
                     FearObj.transform.GetChild(0).GetComponent<Image>().rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - Per) * OrangenalSize);
                 }
                 break;
+            case 9:
+                if (IsConfusion)
+                {
+                    float OrangenalSize = ConfusionObj.rectTransform.rect.height;
+                    ConfusionObj.transform.GetChild(0).GetComponent<Image>().rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - Per) * OrangenalSize);
+                }
+                break;
 
         }
     }

@@ -404,6 +404,59 @@ public class Pokemon : MonoBehaviour
     //===========================================================================敌人中毒的函数=====================================================================================
 
 
+    //===========================================================================敌人混乱的函数=====================================================================================
+
+    public bool isEmptyConfusionDone = false;
+    public bool isEmptyConfusionStart = false;
+    float EmptyConfusionPoint;
+
+    //调用此函数时，如果还未害怕，状态变为害怕
+    public void EmptyConfusion(float ConfusionTimer, float ConfusionPoint)
+    {
+        if (!isEmptyConfusionDone)
+        {
+            EmptyConfusionPoint += ConfusionPoint * OtherStateResistance;
+            //Debug.Log(EmptyConfusionPoint);
+            if (!isEmptyConfusionStart && EmptyConfusionPoint < 1)
+            {
+                playerUIState.StatePlus(9);
+                playerUIState.StateSlowUP(9, EmptyConfusionPoint);
+                isEmptyConfusionStart = true;
+            }
+            else if (isEmptyConfusionStart && EmptyConfusionPoint < 1)
+            {
+                playerUIState.StateSlowUP(9, EmptyConfusionPoint);
+            }
+            else if (EmptyConfusionPoint >= 1 && !isEmptyConfusionDone)
+            {
+                if (!isEmptyConfusionStart)
+                {
+                    playerUIState.StatePlus(9);
+                    playerUIState.StateSlowUP(9, EmptyConfusionPoint);
+                    isEmptyConfusionStart = true;
+                }
+                isEmptyConfusionDone = true;
+                playerUIState.StateSlowUP(9, EmptyConfusionPoint);
+                if (ConfusionTimer != 0) { Invoke("EmptyConfusionRemove", ConfusionTimer); }
+            }
+        }
+
+    }
+    //只可被上一个函数延迟调用，代表速度害怕的函数
+    public void EmptyConfusionRemove()
+    {
+        if (isEmptyConfusionDone)
+        {
+            EmptyConfusionPoint = 0;
+            playerUIState.StateSlowUP(9, 0);
+            isEmptyConfusionStart = false;
+            isEmptyConfusionDone = false;
+            playerUIState.StateDestory(9);
+        }
+    }
+
+    //===========================================================================敌人混乱的函数=====================================================================================
+
     //***************************************************************************对敌人的函数*********************************************************************************
 
 
@@ -845,6 +898,7 @@ public class Pokemon : MonoBehaviour
         {
                 
             playerUIState.StatePlus(9);
+            playerUIState.StateSlowUP(9, 1);
             isConfusionDone = true;
         }
     }
@@ -854,6 +908,7 @@ public class Pokemon : MonoBehaviour
     {
         if (isConfusionDone)
         {
+            playerUIState.StateSlowUP(9, 0);
             playerUIState.StateDestory(9);
             isConfusionDone = false;
         }

@@ -80,6 +80,7 @@ public class MIAStarAIEscape : MonoBehaviour
             }
 
             Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
+            if (ParentEmpty.isEmptyConfusionDone) { dir = (dir + new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f), 0)).normalized; }
             Vector3 velocity = dir * speed;
             transform.position += velocity * Time.deltaTime;
         }

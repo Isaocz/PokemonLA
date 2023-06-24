@@ -31,6 +31,17 @@ public class UIMoneyBar : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        PlayerControler player = FindObjectOfType<PlayerControler>();
+        if(player != null)
+        {
+            money = player.Money;
+            stone = player.Stone;
+            MoneyChange();StoneChange();
+        }
+    }
+
 
     //声明一个函数，当金钱变化时改变文本。
     public void MoneyChange()
