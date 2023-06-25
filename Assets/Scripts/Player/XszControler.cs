@@ -21,19 +21,21 @@ public class XszControler : PlayerControler
     //public Skill AncientPower;
     //public Skill Tharsh;
     //public Skill DoubleHit;
-    public Skill RainDance;
-    public Skill SunnyDay;
-    public Skill Hail;
-    public Skill SandStorm;
+    //public Skill RainDance;
+    //public Skill SunnyDay;
+    //public Skill Hail;
+    //public Skill SandStorm;
 
     //技能机
-    //public Skill TeraBlast;
+    public Skill TeraBlast;
 
     //伊布
-    //public Skill Growl;
+    public Skill Growl;
     //public Skill SandAttack;
     //甜冷美后
     //public Skill Splash;
+    public Skill PlayNice;
+    public Skill MagicalLeaf;
 
 
     // Start is called before the first frame update
@@ -48,10 +50,10 @@ public class XszControler : PlayerControler
 
         //Skill01 = Tackle;
         //Skill02 = MudSlup;
-        Skill01 = RainDance;
-        Skill02 = SunnyDay;
-        Skill03 = Hail;
-        Skill04 = SandStorm;
+        Skill01 = TeraBlast;
+        Skill02 = Growl;
+        Skill03 = PlayNice;
+        Skill04 = MagicalLeaf;
 
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);

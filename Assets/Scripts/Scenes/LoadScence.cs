@@ -21,7 +21,7 @@ public class LoadScence : MonoBehaviour
 
     public void LoadGame()
     {
-        StartCoroutine(StartLoadGame(3));
+        StartCoroutine(StartLoadGame(FloorNum.GlobalFloorNum.FloorNumber + 3));
 
     }
 

@@ -5,7 +5,6 @@ using UnityEngine;
 public class Snorlax : Empty
 {
     public Yamn yamn;
-
     public bool isEmptyU = true;
     public bool isEmptyD = true;
     public bool isEmptyL = true;
@@ -197,6 +196,7 @@ public class Snorlax : Empty
                 if (isSlameMove)
                 {
                     position = rigidbody2D.position;
+                    if (isEmptyConfusionDone) { SlamStartPostion = SlamStartPostion + new Vector2( Random.Range(-3,3) , Random.Range(-3,3)); }
                     if (!isFearDone && !isSilence)
                     {
                         position.x = Mathf.Clamp(position.x + ((player.transform.position.x - SlamStartPostion.x) / 15f), transform.parent.position.x - 11, transform.parent.position.x + 11);
@@ -212,8 +212,8 @@ public class Snorlax : Empty
                 if (isImpactMove)
                 {
                     position = rigidbody2D.position;
-                    position.x = Mathf.Clamp(position.x + 4 * speed * direction.x * Time.deltaTime, transform.parent.position.x - 13, transform.parent.position.x + 13);
-                    position.y = Mathf.Clamp(position.y + 4 * speed * direction.y * Time.deltaTime, transform.parent.position.y - 10, transform.parent.position.y + 10);
+                    position.x = Mathf.Clamp(position.x + (isEmptyConfusionDone ? Random.Range(2, 6) : 4) * speed * direction.x * Time.deltaTime, transform.parent.position.x - 13, transform.parent.position.x + 13);
+                    position.y = Mathf.Clamp(position.y + (isEmptyConfusionDone ? Random.Range(2, 6) : 4) * speed * direction.y * Time.deltaTime, transform.parent.position.y - 10, transform.parent.position.y + 10);
                     rigidbody2D.position = position;
                 }
                 if (isGigaImpactMove)
@@ -229,9 +229,10 @@ public class Snorlax : Empty
                         direction.x = 0;
                         direction.y = (GigaImpactPostion1.y >= 0 ? 1 : -1);
                     }
+                    if (isEmptyConfusionDone) { GigaImpactPostion1 = (GigaImpactPostion1 + new Vector2(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f))).normalized; }
                     position = rigidbody2D.position;
-                    position.x = Mathf.Clamp(position.x + 4 * speed * GigaImpactPostion1.x * Time.deltaTime, transform.parent.position.x - 13, transform.parent.position.x + 13);
-                    position.y = Mathf.Clamp(position.y + 4 * speed * GigaImpactPostion1.y * Time.deltaTime, transform.parent.position.y - 10, transform.parent.position.y + 10);
+                    position.x = Mathf.Clamp(position.x + 5.5f * speed * GigaImpactPostion1.x * Time.deltaTime, transform.parent.position.x - 13, transform.parent.position.x + 13);
+                    position.y = Mathf.Clamp(position.y + 5.5f * speed * GigaImpactPostion1.y * Time.deltaTime, transform.parent.position.y - 10, transform.parent.position.y + 10);
                     rigidbody2D.position = position;
                 }
             }
@@ -356,7 +357,8 @@ public class Snorlax : Empty
     public void LunchYawn()
     {
         Yamn yamnObj = Instantiate(yamn, transform.transform.position + Vector3.up*1.7f, Quaternion.identity, transform.parent);
-        yamnObj.Launch(direction, 220);
+        if (isEmptyConfusionDone) { yamnObj.Launch((direction + new Vector2(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f))).normalized, 220); }
+        else { yamnObj.Launch(direction, 220); }
         yamnObj.empty = transform.GetComponent<Empty>();
     }
 

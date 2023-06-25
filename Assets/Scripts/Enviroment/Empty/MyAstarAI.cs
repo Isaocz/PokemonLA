@@ -52,6 +52,7 @@ public class MyAstarAI : MonoBehaviour
                 if (RePathFind >= 40)
                 {
                     RunTargetPosition = targetPosition.position;
+                    if (ParentEmpty.isEmptyConfusionDone) { Debug.Log("xxx"); RunTargetPosition = (RunTargetPosition + new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3), 0)).normalized; }
                     seeker.StartPath(transform.position, RunTargetPosition, OnPathComplete);
                     RePathFind = 0;
                 }
@@ -100,6 +101,7 @@ public class MyAstarAI : MonoBehaviour
             }
 
             Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
+            if (ParentEmpty.isEmptyConfusionDone) { Debug.Log("xxx"); dir = (dir + new Vector3(Random.Range(-1f, 1f) , Random.Range(-1f, 1), 0 )).normalized; }
             Vector3 velocity = dir * (ParentEmpty.isFearDone?speed*2:speed);
             if ((transform.position - RunTargetPosition).magnitude >= 0.5f) {
                 transform.position += velocity * Time.deltaTime;

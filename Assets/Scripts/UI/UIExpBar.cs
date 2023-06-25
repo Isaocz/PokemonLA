@@ -65,6 +65,8 @@ public class UIExpBar : MonoBehaviour
         Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
         player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
         level = player.Level;
+        Leveltext.text = string.Format("{00}", level);
+        Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)player.Ex/ (float)player.maxEx * originnoSize);
     }
 
     //每帧检测一次经验条是否需要增长，以及增长是否溢出

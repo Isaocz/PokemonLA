@@ -39,9 +39,6 @@ public class Growl : Skill
         for(int i = 0; i < influence.Count; i++)
         {
             influence[i].AtkEmptyPoint = infnum[i];
-            influence.Clear();
-            infnum.Clear();
-
         }
     }
 }

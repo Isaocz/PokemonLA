@@ -17,7 +17,7 @@ public class poochyena : Empty
     Vector2 position;
     Vector2Int direction;
     Vector2 move;
-
+    Vector2 ConfusionDirection;
     public GameObject BiteAnimation;
 
 
@@ -127,8 +127,15 @@ public class poochyena : Empty
             {
                 //ҧ
                 position = rigidbody2D.position;
-                position.x = position.x + 3 * speed * direction.x * Time.deltaTime;
-                position.y = position.y + 3 * speed * direction.y * Time.deltaTime;
+                if (!isEmptyConfusionDone) {
+                    position.x = position.x + 3 * speed * direction.x * Time.deltaTime;
+                    position.y = position.y + 3 * speed * direction.y * Time.deltaTime;
+                }
+                else
+                {
+                    position.x = position.x + 3 * speed * ConfusionDirection.x * Time.deltaTime;
+                    position.y = position.y + 3 * speed * ConfusionDirection.y * Time.deltaTime;
+                }
                 rigidbody2D.position = position;
 
             }
@@ -144,6 +151,7 @@ public class poochyena : Empty
     {
         isBiteAnimation = false;
         isBite = true;
+        ConfusionDirection = (direction + new Vector2(Random.Range(-0.25f, 0.25f), Random.Range(-0.25f, 0.25f))).normalized;
     }
 
     void CheckPlayer()

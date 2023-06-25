@@ -150,15 +150,18 @@ public class WurmpleMove : Empty
 
             if (PlayerPosition.y - position.y >= 0)
             {
-                ProjectileObject = Instantiate(ProjectilePrefab, rigidbody2D.position + new Vector2(0.04f - look.x * 0.5f, 0.375f), Quaternion.Euler(0, 0, Vector2.Angle(PlayerPosition - position, new Vector2(1, 0))), gameObject.transform);
+                ProjectileObject = Instantiate(ProjectilePrefab, rigidbody2D.position + new Vector2(0.04f - look.x * 0.5f, 0.375f), Quaternion.identity, gameObject.transform);
 
             }
             else
             {
-                ProjectileObject = Instantiate(ProjectilePrefab, rigidbody2D.position + new Vector2(0.04f - look.x * 0.5f, 0.375f), Quaternion.Euler(0, 0, -Vector2.Angle(PlayerPosition - position, new Vector2(1, 0))), gameObject.transform);
+                ProjectileObject = Instantiate(ProjectilePrefab, rigidbody2D.position + new Vector2(0.04f - look.x * 0.5f, 0.375f), Quaternion.identity, gameObject.transform);
 
             }
-            ProjectileObject.Launch(PlayerPosition - position, 110);
+            Vector2 p = (PlayerPosition - position).normalized;
+            if (isEmptyConfusionDone) { p = p + new Vector2(Random.Range(-0.8f, 0.8f), Random.Range(-0.8f, 0.8f)); p = p.normalized; }
+            ProjectileObject.transform.rotation = Quaternion.Euler(0, 0, 180 + (player.transform.position.y - transform.position.y >= 0 ? -1 : 1) * Vector2.Angle(p, new Vector2(-1, 0)));
+            ProjectileObject.Launch(p*3, 110);
         }
     }
 }
