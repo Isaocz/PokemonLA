@@ -22,6 +22,9 @@ public class Exeggcute : Empty
     public GameObject ui;
     public GameObject oneEggShadow;
 
+    // temp
+    public GameObject effectExplosion;
+
     private AI_STATE aIState = AI_STATE.IDLE;
 
     // Start is called before the first frame update
@@ -131,6 +134,7 @@ public class Exeggcute : Empty
                 {
                     // 大蛋根据玩家的移动方向做预判
                     var speed = player.GetSpeed();
+                    // TODO: 如果超出房间范围，规范为边界
                     playerPos = playerPos + new Vector3(speed.x, speed.y) * throwTime;
                 }
             });
@@ -151,7 +155,9 @@ public class Exeggcute : Empty
 
             seq.AppendCallback(() =>
             {
-                // boom
+                Instantiate(effectExplosion, eggobj.transform.position, Quaternion.identity);
+                eggobj.SetActive(false);
+                shadow.SetActive(false);
             });
 
             if (i == eggList.Count - 1)
