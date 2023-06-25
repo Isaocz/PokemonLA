@@ -490,7 +490,13 @@ public class PlayerControler : Pokemon
 
     void ChangeRoomBgm(PlayerControler player)
     {
-        if(NowRoom == MapCreater.StaticMap.PCRoomPoint)
+        if (!MapCreater.StaticMap)
+        {
+            // 兼容测试 case
+            BackGroundMusic.StaticBGM.ChangeBGMToTown();
+            return;
+        }
+        if (NowRoom == MapCreater.StaticMap.PCRoomPoint)
         {
             BackGroundMusic.StaticBGM.ChangeBGMToPC();
         }
@@ -1289,4 +1295,11 @@ public class PlayerControler : Pokemon
     }
     //=========================沙暴伤害事件========================
 
+
+    // == 对外接口 == 
+    public Vector2 GetSpeed()
+    {
+        return new Vector2(speed * horizontal, speed * vertical);
+    }
+    // == 对外接口 == 
 }
