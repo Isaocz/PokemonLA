@@ -228,7 +228,8 @@ public class PlayerControler : Pokemon
     //初始化玩家的必要函数
     protected void Instance()
     {
-        
+
+        DontDestroyOnLoad(this);
         //当前最大生命值等于一级时的最大生命值
         //当前生命值等于最大生命值
         //初始化当前血量和最大血量的文字UI
@@ -737,10 +738,13 @@ public class PlayerControler : Pokemon
 
     public void CallDieMask()
     {
-        TPMask.In.BlackTime = 0;
-        TPMask.In.TPStart = true;
-        TPMask.In.transform.GetChild(0).gameObject.SetActive(true);
-        TPMask.In.transform.GetChild(0).GetComponent<DiePanel>().Die(PlayerNameChinese);
+        if (TPMask.In != null)
+        {
+            TPMask.In.BlackTime = 0;
+            TPMask.In.TPStart = true;
+            TPMask.In.transform.GetChild(0).gameObject.SetActive(true);
+            TPMask.In.transform.GetChild(0).GetComponent<DiePanel>().Die(PlayerNameChinese);
+        }
     }
 
 

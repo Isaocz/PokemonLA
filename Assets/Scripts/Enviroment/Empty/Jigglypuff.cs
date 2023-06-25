@@ -15,7 +15,7 @@ public class Jigglypuff : Empty
     bool isRollStart;
     bool isTurn;
     bool isSing;
-    int TurnCount;
+    public int TurnCount;
     int RollTimer;
     public int SingTimer;
     Vector2 Director;
@@ -133,7 +133,7 @@ public class Jigglypuff : Empty
             if (TurnToL) {  Director.x *= -1; isTurn = true; TurnCount += (Random.Range(0.0f, 1.0f) > 0.3f && !isFearDone) ? 1 : 0; Invoke("CallisTurnFalse", 0.2f); }
             animator.SetFloat("LookX", Director.x);
             animator.SetFloat("LookY", Director.y);
-            if(TurnCount >= 7)
+            if(TurnCount >= (isEmptyConfusionDone?(Random.Range(5,12)):7))
             {
                 //RollOver();
                 Invoke("RollOver", 0.7f);

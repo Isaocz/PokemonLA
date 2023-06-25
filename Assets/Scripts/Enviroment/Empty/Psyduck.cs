@@ -81,8 +81,11 @@ public class Psyduck : Empty
         {
             Shot = Confusion;
         }
-        ProjectileObject = Instantiate(Shot, rigidbody2D.position + new Vector2(direction*0.375f, 0.375f), Quaternion.Euler(0, 0, -direction * Vector2.Angle(player.transform.position - transform.position, new Vector2(0, 1))));
-        ProjectileObject.Launch(new Vector2(player.transform.position.x - transform.position.x, player.transform.position.y - transform.position.y), 55);
+        ProjectileObject = Instantiate(Shot, rigidbody2D.position + new Vector2(direction*0.375f, 0.375f), Quaternion.Euler(0, 0, (player.transform.position.x - transform.position.x >= 0 ?-1:1) * Vector2.Angle(player.transform.position - transform.position, new Vector2(0, 1))));
+        Vector2 p = new Vector2((player.transform.position.x - transform.position.x), (player.transform.position.y - transform.position.y)).normalized;
+        if (isEmptyConfusionDone) { Debug.Log("xxx"); p += new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)); p = p.normalized; }
+        ProjectileObject.transform.rotation = Quaternion.Euler(0,0, (player.transform.position.x - transform.position.x >= 0 ? -1 : 1) * Vector2.Angle(p, new Vector2(0, 1)) );
+        ProjectileObject.Launch(p*6, 55);
         ProjectileObject.empty = gameObject.GetComponent<Empty>();
 
     }
