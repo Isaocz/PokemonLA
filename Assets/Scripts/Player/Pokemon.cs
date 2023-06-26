@@ -423,7 +423,7 @@ public class Pokemon : MonoBehaviour
     public bool isEmptyConfusionStart = false;
     float EmptyConfusionPoint;
 
-    //调用此函数时，如果还未害怕，状态变为害怕
+    //调用此函数时，如果还未混乱，状态变为混乱
     public void EmptyConfusion(float ConfusionTimer, float ConfusionPoint)
     {
         if (!isEmptyConfusionDone)
