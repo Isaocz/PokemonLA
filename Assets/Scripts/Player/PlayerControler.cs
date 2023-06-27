@@ -678,14 +678,15 @@ public class PlayerControler : Pokemon
     //声明一个改变生命的函数ChangeHp，改变的点数为ChangePoint，当改变点数为负时触发无敌时间，当改变点数为正时不触发无敌时间
     public void ChangeHp(float ChangePoint , float ChangePointSp , int SkillType)
     {
-        ChangePoint = ChangePoint * ( (Weather.GlobalWeather.isRain && SkillType == 11 )? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f ) : 1 )
-            * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1)
-            * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1)
-            * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
-        ChangePointSp = ChangePointSp * ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
-            * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1)
-            * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1)
-            * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+        Type.TypeEnum enumVaue = (Type.TypeEnum)SkillType;
+        ChangePoint = ChangePoint * ( (Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water )? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f ) : 1 )
+            * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
+            * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
+            * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+        ChangePointSp = ChangePointSp * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+            * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
+            * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
+            * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
 
         if (ChangePoint > 0 || ChangePointSp > 0)
         {
@@ -706,9 +707,9 @@ public class PlayerControler : Pokemon
             }
             else
             {
-                if(SkillType != 19)
+                if((int)SkillType != 19)
                 {
-                    nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[SkillType][PlayerType01] * Type.TYPE[SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[SkillType][PlayerTeraType] : Type.TYPE[SkillType][PlayerTeraTypeJOR]  ) )*((playerData.TypeDefAlways[SkillType] + playerData.TypeDefJustOneRoom[SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[SkillType] + playerData.TypeDefJustOneRoom[SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[SkillType] + playerData.TypeDefJustOneRoom[SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                    nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR]  ) )*((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                    
                 }
                 else
