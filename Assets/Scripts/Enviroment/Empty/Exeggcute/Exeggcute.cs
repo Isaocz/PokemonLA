@@ -31,6 +31,9 @@ public class Exeggcute : Empty
     // temp
     public GameObject effectExplosion;
 
+    // 附属对象，死亡时去除
+    private List<GameObject> objects;
+
     private AI_STATE aIState = AI_STATE.IDLE;
 
     // Start is called before the first frame update
@@ -51,6 +54,7 @@ public class Exeggcute : Empty
         rigidbody2D = GetComponent<Rigidbody2D>();
 
         transFound.gameObject.SetActive(false);
+        objects = new List<GameObject>();
     }
 
     // Update is called once per frame
@@ -144,18 +148,32 @@ public class Exeggcute : Empty
 
         seq.AppendCallback(() =>
         {
-            Instantiate(effectExplosion, eggobj.transform.position, Quaternion.identity);
+            GameObject effect = Instantiate(effectExplosion, eggobj.transform.position, Quaternion.identity);
+            ExeggcuteExploreCB exploreCB = effect.transform.GetChild(0).GetChild(0).GetComponent<ExeggcuteExploreCB>();
+            exploreCB.SetEmptyInfo(this);
             eggobj.SetActive(false);
             shadow.SetActive(false);
+            objects.Add(effect);
+            objects.Add(shadow);
         });
 
         if (i == eggList.Count - 1)
         {
-            // 全部爆炸后的处理
+            // 全部爆炸完成后的处理
+            seq.AppendInterval(1.5F);
             seq.AppendCallback(() =>
             {
                 // 触发死亡
                 EmptyHp = 0;
+            });
+            seq.AppendInterval(0.1F);
+            seq.AppendCallback(() =>
+            {
+                foreach (var item in objects)
+                {
+                    Destroy(item);
+                }
+                EmptyDestroy();
             });
         }
     }
@@ -183,6 +201,7 @@ public class Exeggcute : Empty
 
         for (int i = 0; i < eggList.Count; i++)
         {
+            eggList[i].GetComponent<SpriteRenderer>().sortingOrder = 11;
             RunEggActionByIdx(i);
         }
     }
