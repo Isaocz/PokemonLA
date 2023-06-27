@@ -30,12 +30,13 @@ public class XszControler : PlayerControler
     public Skill TeraBlast;
 
     //“¡≤º
-    public Skill Growl;
+    //public Skill Growl;
     //public Skill SandAttack;
     //Ã¿‰√¿∫Û
     //public Skill Splash;
     public Skill PlayNice;
     public Skill MagicalLeaf;
+    public Skill TeeterDance;
 
 
     // Start is called before the first frame update
@@ -51,8 +52,8 @@ public class XszControler : PlayerControler
         //Skill01 = Tackle;
         //Skill02 = MudSlup;
         Skill01 = TeraBlast;
-        Skill02 = Growl;
-        Skill03 = PlayNice;
+        Skill02 = PlayNice;
+        Skill03 = TeeterDance;
         Skill04 = MagicalLeaf;
 
         skillBar01.GetSkill(Skill01);
