@@ -37,6 +37,7 @@ public class ExeggcutePSCallback : MonoBehaviour
 
     void OnParticleTrigger()
     {
-        Debug.Log("111111");
+        //Debug.Log("111111");
     }
 }
+
