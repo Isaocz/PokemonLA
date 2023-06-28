@@ -121,7 +121,7 @@ public class Exeggcute : Empty
             {
                 // 大蛋根据玩家的移动方向做预判
                 var speed = player.GetSpeed();
-                playerPos = playerPos + new Vector3(speed.x, speed.y) * throwTime;
+                playerPos = playerPos + new Vector3(speed.x, speed.y) * (throwTime+0.5f);
             }
             var downRadius = atkDownRadius;
             if (isEmptyConfusionDone)
@@ -129,7 +129,10 @@ public class Exeggcute : Empty
                 downRadius = downRadius + 1;
             }
             playerPos = playerPos + new Vector3(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f)) * downRadius;
-            // TODO: 如果超出房间范围，规范为边界
+            // 如果超出房间中心范围，规范为其边界
+            Vector2 roomMid = transform.parent.position;
+            playerPos.x = Mathf.Clamp(playerPos.x, roomMid.x - ConstantRoom.ROOM_INNER_WIDTH / 2, roomMid.x + ConstantRoom.ROOM_INNER_WIDTH / 2);
+            playerPos.y = Mathf.Clamp(playerPos.y, roomMid.y - ConstantRoom.ROOM_INNER_HIGHT / 2, roomMid.y + ConstantRoom.ROOM_INNER_HIGHT / 2);
         });
 
         Vector3 curScale = eggobj.transform.localScale;
@@ -142,6 +145,7 @@ public class Exeggcute : Empty
             shadow = Instantiate(oneEggShadow, eggobj.transform.position, Quaternion.identity);
             shadow.transform.DOMove(playerPos, throwTime);
             eggobj.transform.DOJump(playerPos, throwHigh, 1, throwTime);
+            eggobj.transform.DOLocalRotate(new Vector3(0, 0, 360F), throwTime, RotateMode.LocalAxisAdd).SetEase(Ease.Linear);
         });
         // wait jump finish
         seq.AppendInterval(throwTime);
