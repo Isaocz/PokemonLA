@@ -26,7 +26,10 @@ public class Exeggcute : Empty
     [Tooltip("对象列表")]
     public List<GameObject> eggList;
     public GameObject ui;
+    [Label("蛋蛋影子")]
     public GameObject oneEggShadow;
+    [Label("预判框")]
+    public GameObject skillRange;
 
     // temp
     public GameObject effectExplosion;
@@ -112,6 +115,7 @@ public class Exeggcute : Empty
 
         seq.AppendInterval(atkInterval * i);
 
+        GameObject range = null;
         Vector3 playerPos = player.transform.position;
         seq.AppendCallback(() =>
         {
@@ -121,7 +125,7 @@ public class Exeggcute : Empty
             {
                 // 大蛋根据玩家的移动方向做预判
                 var speed = player.GetSpeed();
-                playerPos = playerPos + new Vector3(speed.x, speed.y) * (throwTime+0.5f);
+                playerPos = playerPos + new Vector3(speed.x, speed.y) * (throwTime+0.3f);
             }
             var downRadius = atkDownRadius;
             if (isEmptyConfusionDone)
@@ -133,6 +137,11 @@ public class Exeggcute : Empty
             Vector2 roomMid = transform.parent.position;
             playerPos.x = Mathf.Clamp(playerPos.x, roomMid.x - ConstantRoom.ROOM_INNER_WIDTH / 2, roomMid.x + ConstantRoom.ROOM_INNER_WIDTH / 2);
             playerPos.y = Mathf.Clamp(playerPos.y, roomMid.y - ConstantRoom.ROOM_INNER_HIGHT / 2, roomMid.y + ConstantRoom.ROOM_INNER_HIGHT / 2);
+
+            range = Instantiate(skillRange, playerPos, Quaternion.identity);
+            range.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+            range.GetComponent<SpriteRenderer>().DOFade(1, 1f);
+            objects.Add(range);
         });
 
         Vector3 curScale = eggobj.transform.localScale;
@@ -152,6 +161,9 @@ public class Exeggcute : Empty
 
         seq.AppendCallback(() =>
         {
+            Destroy(range);
+            objects.Remove(range);
+
             GameObject effect = Instantiate(effectExplosion, eggobj.transform.position, Quaternion.identity);
             ExeggcuteExploreCB exploreCB = effect.transform.GetChild(0).GetChild(0).GetComponent<ExeggcuteExploreCB>();
             exploreCB.SetEmptyInfo(this);
@@ -173,11 +185,7 @@ public class Exeggcute : Empty
             seq.AppendInterval(0.1F);
             seq.AppendCallback(() =>
             {
-                foreach (var item in objects)
-                {
-                    Destroy(item);
-                }
-                EmptyDestroy();
+                FinishDie();
             });
         }
     }
@@ -208,5 +216,14 @@ public class Exeggcute : Empty
             eggList[i].GetComponent<SpriteRenderer>().sortingOrder = 11;
             RunEggActionByIdx(i);
         }
+    }
+
+    public void FinishDie()
+    {
+        foreach (var item in objects)
+        {
+            Destroy(item);
+        }
+        EmptyDestroy();
     }
 }
