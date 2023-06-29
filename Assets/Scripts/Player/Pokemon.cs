@@ -27,6 +27,9 @@ public class Pokemon : MonoBehaviour
     protected float StateInvincileTimer = 0.0f;
     protected bool isStateInvincible = false;
 
+    [Tooltip("pokemon主体的渲染组件集")]
+    public List<SpriteRenderer> skinRenderers;
+
     //声明一个动画管理者变量，获取动画管理者
     public Animator animator;
 
@@ -150,31 +153,41 @@ public class Pokemon : MonoBehaviour
         else { gameObject.GetComponent<SpriteRenderer>().material = InfatuationMaterial; }
     }
 
+    //获取 pokemon 主体的渲染组件
+    private List<SpriteRenderer> GetSkinRenderers()
+    {
+        if (skinRenderers.Count > 0)
+        {
+            return skinRenderers;
+        }
+        List<SpriteRenderer> srs = new List<SpriteRenderer>();
+        if (gameObject.GetComponent<SpriteRenderer>() != null)
+        {
+            srs.Add(gameObject.GetComponent<SpriteRenderer>());
+            return srs;
+        }
+
+        Transform child3 = gameObject.transform.GetChild(3);
+        if (child3.GetComponent<SpriteRenderer>() != null)
+        {
+            srs.Add(child3.GetComponent<SpriteRenderer>());
+            return srs;
+        }
+        Transform child30 = child3.GetChild(0);
+        srs.Add(child30.GetComponent<SpriteRenderer>());
+        return srs;
+    }
 
     /// <summary>
     /// 修改敌人的材质
     /// </summary>
     public void StateMaterialChange()
     {
-        if (gameObject.GetComponent<SpriteRenderer>() == null)
+        List<SpriteRenderer> skinRendererList = GetSkinRenderers();
+        foreach (SpriteRenderer skinRenderer in skinRendererList)
         {
-            if (gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>() == null)
-            {
-                var StateMat = gameObject.transform.GetChild(3).GetChild(0).GetComponent<SpriteRenderer>().material;
-                var playerTex = gameObject.transform.GetChild(3).GetChild(0).GetComponent<SpriteRenderer>().sprite.texture;
-                StateMat.SetTexture("_PlayerTex", playerTex);
-            }
-            else
-            {
-                var StateMat = gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>().material;
-                var playerTex = gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>().sprite.texture;
-                StateMat.SetTexture("_PlayerTex", playerTex);
-            }
-        }
-        else
-        {
-            var StateMat = gameObject.GetComponent<SpriteRenderer>().material;
-            var playerTex = GetComponent<SpriteRenderer>().sprite.texture;
+            var StateMat = skinRenderer.material;
+            var playerTex = skinRenderer.sprite.texture;
             StateMat.SetTexture("_PlayerTex", playerTex);
         }
     }

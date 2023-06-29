@@ -94,10 +94,14 @@ public class Room : MonoBehaviour
         {
            
             string MiniMapRoomName = new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y  / 24.0f), 0).ToString();
-            Image RoomBlock = UiMiniMap.Instance.transform.Find(MiniMapRoomName).GetComponent<Image>();
-            RoomBlock.color = new Vector4(255,255,255,255);
-            if(UiMiniMap.Instance.VisitedRoomList.Exists(t => t == RoomBlock)){     }
-            else { UiMiniMap.Instance.VisitedRoomList.Add(RoomBlock); }
+            Transform room = UiMiniMap.Instance.transform.Find(MiniMapRoomName);
+            if (room)
+            {
+                Image RoomBlock = room.GetComponent<Image>();
+                RoomBlock.color = new Vector4(255, 255, 255, 255);
+                if (UiMiniMap.Instance.VisitedRoomList.Exists(t => t == RoomBlock)) { }
+                else { UiMiniMap.Instance.VisitedRoomList.Add(RoomBlock); }
+            }
 
             string MiniMapRoomNameUp = new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f + 1), 0).ToString();
             if(UiMiniMap.Instance.transform.Find(MiniMapRoomNameUp) != null) 
