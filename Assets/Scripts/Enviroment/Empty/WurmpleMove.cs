@@ -41,32 +41,57 @@ public class WurmpleMove : Empty
     void Update()
     {
         ResetPlayer();
+        if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }
         if (!isBorn)
         {
             EmptyDie();
             StateMaterialChange();
-            if (!isDie && !isHit && !run && !isSilence)
-            {
-
-                position = rigidbody2D.position;
-                PlayerPosition = player.GetComponent<Rigidbody2D>().position;
-                if (position.x - PlayerPosition.x >= 0) { look.x = 1; } else { look.x = -1; }
-                if (position.y - PlayerPosition.y >= 0) { look.y = 1; } else { look.y = -1; }
-                RaycastHit2D SearchPlayer = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), new Vector2(player.transform.position.x - transform.position.x, player.transform.position.y - transform.position.y), 8f, LayerMask.GetMask("Player", "Enviroment", "Room","PlayerFly"));
-                if (Vector2.Distance(position, PlayerPosition) >= 2.1f && Vector2.Distance(position, PlayerPosition) < 6.0f && SearchPlayer.collider != null && SearchPlayer.transform.tag == "Player")
-                {
-                    launch = true;
-                }
-                if (launch && !isSilence)
+            //判断该帧时敌人是否处于睡眠或者麻痹的卡顿状态，如果true则不执行该帧的行动
+            if (!isSleepDone && !isCanNotMoveWhenParalysis) {
+                if (!isDie && !isHit && !run && !isSilence)
                 {
 
-                    if (launchTimer == 0)
-                    {
+                    position = rigidbody2D.position;
+                    if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(8) == null) {
+                        PlayerPosition = player.GetComponent<Rigidbody2D>().position;
+                        if (position.x - PlayerPosition.x >= 0) { look.x = 1; } else { look.x = -1; }
+                        if (position.y - PlayerPosition.y >= 0) { look.y = 1; } else { look.y = -1; }
+                        RaycastHit2D SearchPlayer = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), new Vector2(player.transform.position.x - transform.position.x, player.transform.position.y - transform.position.y), 8f, LayerMask.GetMask("Player", "Enviroment", "Room", "PlayerFly"));
+                        if (Vector2.Distance(position, PlayerPosition) >= 2.1f && Vector2.Distance(position, PlayerPosition) < 6.0f && SearchPlayer.collider != null && ( SearchPlayer.transform.tag == "Player" || SearchPlayer.transform.tag == "PlayerFly"))
+                        {
+                            launch = true;
+                        }
+                        if (launch && !isSilence)
+                        {
 
-                        animator.SetTrigger("Launch");
+                            if (launchTimer == 0)
+                            {
+
+                                animator.SetTrigger("Launch");
+                            }
+                            launchTimer += Time.deltaTime;
+                            if (launchTimer >= 3.0f) { launch = false; launchTimer = 0; }
+                        }
                     }
-                    launchTimer += Time.deltaTime;
-                    if (launchTimer >= 3.0f) { launch = false; launchTimer = 0; }
+                    else
+                    {
+                        PlayerPosition = InfatuationForRangeRayCastEmpty(8.0f).transform.position;
+                        if (position.x - PlayerPosition.x >= 0) { look.x = 1; } else { look.x = -1; }
+                        if (position.y - PlayerPosition.y >= 0) { look.y = 1; } else { look.y = -1; }
+                        if (Vector2.Distance(position, PlayerPosition) >= 2.1f && Vector2.Distance(position, PlayerPosition) < 8.0f)
+                        {
+                            launch = true;
+                        }
+                        if (launch && !isSilence)
+                        {
+                            if (launchTimer == 0)
+                            {
+                                animator.SetTrigger("Launch");
+                            }
+                            launchTimer += Time.deltaTime;
+                            if (launchTimer >= 3.0f) { launch = false; launchTimer = 0; }
+                        }
+                    }
                 }
             }
             UpdateEmptyChangeHP();
@@ -82,46 +107,46 @@ public class WurmpleMove : Empty
         ResetPlayer();
         if (!isBorn)
         {
-            if (!isDie && !isHit && !isSilence)
+            if (!isDie && !isHit && !isSilence && !isEmptyInfatuationDone)
             {
                 //获取当前刚体坐标，
-                position = rigidbody2D.position;
-                PlayerPosition = player.GetComponent<Rigidbody2D>().position;
-                if (position.x - PlayerPosition.x >= 0) { look.x = 1; } else { look.x = -1; }
-                if (position.y - PlayerPosition.y >= 0) { look.y = 1; } else { look.y = -1; }
-                if (Vector2.Distance(position, PlayerPosition) < 2.1f)
+                if (!isSleepDone && !isCanNotMoveWhenParalysis)
                 {
-                    run = true;
+                    position = rigidbody2D.position;
+                    PlayerPosition = player.GetComponent<Rigidbody2D>().position;
+                    if (position.x - PlayerPosition.x >= 0) { look.x = 1; } else { look.x = -1; }
+                    if (position.y - PlayerPosition.y >= 0) { look.y = 1; } else { look.y = -1; }
+                    if (Vector2.Distance(position, PlayerPosition) < 2.1f)
+                    {
+                        run = true;
+                    }
+                    Vector2 NowPosition = position;
+                    if (run && runCDTimer == 0)
+                    {
+
+
+                        animator.SetFloat("LookDirectionX", look.x);
+                        animator.SetFloat("LookDirectionY", look.y);
+                        position.x += (position.x - PlayerPosition.x) * speed * Time.deltaTime;
+                        position.y += (position.y - PlayerPosition.y) * speed * Time.deltaTime;
+
+                        rigidbody2D.position = position;
+                        if (Vector2.Distance(position, PlayerPosition) >= Random.Range(7, 13)) { run = false; runCDTimer = 1; }
+                    }
+                    if (runCDTimer != 0)
+                    {
+                        runCDTimer += Time.deltaTime;
+                        if (runCDTimer > 2.2f) { runCDTimer = 0; }
+                    }
+                    if (!run && Vector2.Distance(position, PlayerPosition) < 5.0f)
+                    {
+                        animator.SetFloat("LookDirectionX", -look.x);
+                        animator.SetFloat("LookDirectionY", -look.y);
+                    }
+                    move = new Vector2(position.x - NowPosition.x, position.y - NowPosition.y);
+
+                    animator.SetFloat("Speed", move.magnitude);
                 }
-                Vector2 NowPosition = position;
-                if (run && runCDTimer == 0)
-                {
-
-
-                    animator.SetFloat("LookDirectionX", look.x);
-                    animator.SetFloat("LookDirectionY", look.y);
-                    position.x += (position.x - PlayerPosition.x) * speed * Time.deltaTime;
-                    position.y += (position.y - PlayerPosition.y) * speed * Time.deltaTime;
-
-                    rigidbody2D.position = position;
-                    if (Vector2.Distance(position, PlayerPosition) >= Random.Range(7, 13)) { run = false; runCDTimer = 1; }
-                }
-                if (runCDTimer != 0)
-                {
-                    runCDTimer += Time.deltaTime;
-                    if (runCDTimer > 2.2f) { runCDTimer = 0; }
-                }
-                if (!run && Vector2.Distance(position, PlayerPosition) < 5.0f)
-                {
-                    animator.SetFloat("LookDirectionX", -look.x);
-                    animator.SetFloat("LookDirectionY", -look.y);
-                }
-
-
-
-                move = new Vector2(position.x - NowPosition.x, position.y - NowPosition.y);
-
-                animator.SetFloat("Speed", move.magnitude);
             }
 
 
@@ -141,6 +166,11 @@ public class WurmpleMove : Empty
             run = false;
             runCDTimer = 1;
         }
+        //被魅惑时对敌人触碰伤害
+        if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
+        {
+            InfatuationEmptyTouchHit(other.gameObject);
+        }
     }
 
     public void LaunchStringShot()
@@ -148,6 +178,7 @@ public class WurmpleMove : Empty
         if ( !isFearDone) {
             Projectile ProjectileObject;
 
+            Debug.Log(PlayerPosition);
             if (PlayerPosition.y - position.y >= 0)
             {
                 ProjectileObject = Instantiate(ProjectilePrefab, rigidbody2D.position + new Vector2(0.04f - look.x * 0.5f, 0.375f), Quaternion.identity, gameObject.transform);
@@ -160,7 +191,8 @@ public class WurmpleMove : Empty
             }
             Vector2 p = (PlayerPosition - position).normalized;
             if (isEmptyConfusionDone) { p = p + new Vector2(Random.Range(-0.8f, 0.8f), Random.Range(-0.8f, 0.8f)); p = p.normalized; }
-            ProjectileObject.transform.rotation = Quaternion.Euler(0, 0, 180 + (player.transform.position.y - transform.position.y >= 0 ? -1 : 1) * Vector2.Angle(p, new Vector2(-1, 0)));
+            ProjectileObject.empty = this;
+            ProjectileObject.transform.rotation = Quaternion.Euler(0, 0, 180 + (PlayerPosition.y - transform.position.y >= 0 ? -1 : 1) * Vector2.Angle(p, new Vector2(-1, 0)));
             ProjectileObject.Launch(p*3, 110);
         }
     }

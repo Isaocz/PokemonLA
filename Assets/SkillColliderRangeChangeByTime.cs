@@ -1,0 +1,35 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SkillColliderRangeChangeByTime : MonoBehaviour
+{
+    public float FadeInTime; 
+    public float FadeOutTime;
+
+    CircleCollider2D Collider2D;
+    float MaxCollider2DRadius;
+
+    Skill ParentSkill;
+    float Duration;
+    public float EmptySkillDuration;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        Collider2D = GetComponent<CircleCollider2D>();
+        ParentSkill = GetComponent<Skill>();
+        MaxCollider2DRadius = Collider2D.radius;
+        if (ParentSkill != null) { Duration = ParentSkill.ExistenceTime; }
+        else { Duration = EmptySkillDuration; }
+        Collider2D.radius = 0;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (ParentSkill.ExistenceTime <= FadeOutTime) { Collider2D.radius = Mathf.Clamp(Collider2D.radius - ((Time.deltaTime) * MaxCollider2DRadius) / FadeOutTime, 0, MaxCollider2DRadius); }
+        else { Collider2D.radius = Mathf.Clamp(Collider2D.radius + ((Time.deltaTime)   * MaxCollider2DRadius)/ FadeInTime, 0, MaxCollider2DRadius); }
+    }
+
+}

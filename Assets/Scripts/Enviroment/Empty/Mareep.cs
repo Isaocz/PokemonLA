@@ -58,7 +58,8 @@ public class Mareep : Empty
     private void FixedUpdate()
     {
         ResetPlayer();
-        if (isDrop)
+
+        if (isDrop && !isSleepDone && !isCanNotMoveWhenParalysis)
         {
             if(isDropTimer%20 == 0)
             {
@@ -73,24 +74,27 @@ public class Mareep : Empty
         }
         if (!isBorn && !isDie)
         {
-            animator.SetFloat("Speed", Mathf.Abs((transform.position - LastPostion).magnitude));
-            if (transform.position.x - LastPostion.x >= 0) { animator.SetFloat("LookX", 1); } else { animator.SetFloat("LookX", -1); }
-            if (transform.position.y - LastPostion.y >= 0) { animator.SetFloat("LookY", 1); } else { animator.SetFloat("LookY", -1); }
-            LastPostion = transform.position;
-            TurnTimer += 1;
-            EmptyBeKnock();
-            if (!isEscape && !isDie && !isHit && !isSilence)
-            {
-                rigidbody2D.position += Time.deltaTime * speed * Direction;
-                isDrop = false;
-                isDropTimer = 0;
-                isEscapeTimer += 1;
+            if (!isSleepDone && !isCanNotMoveWhenParalysis) {
+                animator.SetFloat("Speed", Mathf.Abs((transform.position - LastPostion).magnitude));
+                if (transform.position.x - LastPostion.x >= 0) { animator.SetFloat("LookX", 1); } else { animator.SetFloat("LookX", -1); }
+                if (transform.position.y - LastPostion.y >= 0) { animator.SetFloat("LookY", 1); } else { animator.SetFloat("LookY", -1); }
+                LastPostion = transform.position;
+                TurnTimer += 1;
+                EmptyBeKnock();
+                if (!isEscape && !isDie && !isHit && !isSilence)
+                {
+                    rigidbody2D.position += Time.deltaTime * speed * Direction;
+                    isDrop = false;
+                    isDropTimer = 0;
+                    isEscapeTimer += 1;
+                }
+                if (TurnTimer >= 90)
+                {
+                    TurnTimer = 0;
+                    Direction = RandomDirection();
+                }
             }
-            if(TurnTimer >= 90)
-            {
-                TurnTimer = 0;
-                Direction = RandomDirection();
-            }
+            if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }
             EmptyDie();
             StateMaterialChange();
             UpdateEmptyChangeHP();
@@ -99,7 +103,13 @@ public class Mareep : Empty
 
         if ((isEscapeTimer >= 200 && !isEscape && !isDie && !isSilence) && (isHit || (isFearDone && (transform.position - player.transform.position).magnitude <= 3 )))
         {
-            Escape();
+            if (!isEmptyInfatuationDone) {
+                if (!isSleepDone && !isCanNotMoveWhenParalysis) { Escape(); }
+            }
+            else
+            {
+                if (!isSleepDone && !isCanNotMoveWhenParalysis) { isDrop = true; }
+            }
         }
     }
 
@@ -161,7 +171,7 @@ public class Mareep : Empty
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.transform.tag == ("Player"))
+        if ((other.transform.tag == ("Player") ) && !isEmptyInfatuationDone)
         {
             EmptyTouchHit(other.gameObject);
             Escape();

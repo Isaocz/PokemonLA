@@ -18,11 +18,6 @@ public class IceShard : Skill
         IceShardPS = transform.GetChild(0).GetComponent<ParticleSystem>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //StartExistenceTimer();
-    }
 
     private void FixedUpdate()
     {

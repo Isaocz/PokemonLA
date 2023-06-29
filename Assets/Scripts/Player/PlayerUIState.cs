@@ -46,7 +46,48 @@ public class PlayerUIState : MonoBehaviour
     Image ConfusionObj;
     bool IsConfusion;
 
+    public Image InfatuationImage;
+    Image InfatuationObj;
+    bool IsInfatuation;
 
+    public Image AtkUpImage;
+    Image AtkUpObj;
+    bool IsAtkUp;
+
+    public Image AtkDownImage;
+    Image AtkDownObj;
+    bool IsAtkDown;
+
+    public Image DefUpImage;
+    Image DefUpObj;
+    bool IsDefUp;
+
+    public Image DefDownImage;
+    Image DefDownObj;
+    bool IsDefDown;
+
+    public Image SpAUpImage;
+    Image SpAUpObj;
+    bool IsSpAUp;
+
+    public Image SpADownImage;
+    Image SpADownObj;
+    bool IsSpADown;
+
+    public Image SpDUpImage;
+    Image SpDUpObj;
+    bool IsSpDUp;
+
+    public Image SpDDownImage;
+    Image SpDDownObj;
+    bool IsSpDDown;
+
+
+
+    /// <summary>
+    /// 0¼õËÙ 1ÖÂÃ¤ 2±ù¶³ 3ÖÐ¶¾ 4Âé±Ô 5ÉÕÉË 6Ë¯Ãß 7¿Ö¾å 8ÆøÊÆÍ·´÷ 9»ìÂÒ 10×ÅÃÔ 11¹¥»÷ÉÏÉý 12¹¥»÷ÏÂ½µ 13·ÀÓùÉÏÉý 14·ÀÓùÏÂ½µ 15ÌØ¹¥ÉÏÉý 16ÌØ¹¥ÏÂ½µ 17ÌØ·ÀÉÏÉý 18ÌØ·ÀÏÂ½µ
+    /// </summary>
+    /// <param name="StateNum"></param>
     // Start is called before the first frame update
     public void StatePlus(int StateNum)
     {
@@ -62,6 +103,7 @@ public class PlayerUIState : MonoBehaviour
                 {
                     BlindingObj = Instantiate(BlindingImage, transform.position , Quaternion.identity, transform);
                     IsBlinding = true;
+                    Debug.Log(BlindingObj.rectTransform.rect.height);
                 }
                 break;
             case 2:
@@ -120,9 +162,77 @@ public class PlayerUIState : MonoBehaviour
                     IsConfusion = true;
                 }
                 break;
+            case 10:
+                if (!IsInfatuation)
+                {
+                    InfatuationObj = Instantiate(InfatuationImage, transform.position, Quaternion.identity, transform);
+                    IsInfatuation = true;
+                    Debug.Log(InfatuationObj.rectTransform.rect.height);
+                }
+                break;
+            case 11:
+                if (!IsAtkUp)
+                {
+                    AtkUpObj = Instantiate(AtkUpImage, transform.position, Quaternion.identity, transform);
+                    IsAtkUp = true;
+                }
+                break;
+            case 12:
+                if (!IsAtkDown)
+                {
+                    AtkDownObj = Instantiate(AtkDownImage, transform.position, Quaternion.identity, transform);
+                    IsAtkDown = true;
+                }
+                break;
+            case 13:
+                if (!IsDefUp)
+                {
+                    DefUpObj = Instantiate(DefUpImage, transform.position, Quaternion.identity, transform);
+                    IsDefUp = true;
+                }
+                break;
+            case 14:
+                if (!IsDefDown)
+                {
+                    DefDownObj = Instantiate(DefDownImage, transform.position, Quaternion.identity, transform);
+                    IsDefDown = true;
+                }
+                break;
+            case 15:
+                if (!IsSpAUp)
+                {
+                    SpAUpObj = Instantiate(SpAUpImage, transform.position, Quaternion.identity, transform);
+                    IsSpAUp = true;
+                }
+                break;
+            case 16:
+                if (!IsSpADown)
+                {
+                    SpADownObj = Instantiate(SpADownImage, transform.position, Quaternion.identity, transform);
+                    IsSpADown = true;
+                }
+                break;
+            case 17:
+                if (!IsSpDUp)
+                {
+                    SpDUpObj = Instantiate(SpDUpImage, transform.position, Quaternion.identity, transform);
+                    IsSpDUp = true;
+                }
+                break;
+            case 18:
+                if (!IsSpDDown)
+                {
+                    SpDDownObj = Instantiate(SpDDownImage, transform.position, Quaternion.identity, transform);
+                    IsSpDDown = true;
+                }
+                break;
         }
     }
 
+    /// <summary>
+    ///  0¼õËÙ 1ÖÂÃ¤ 2±ù¶³ 3ÖÐ¶¾ 4Âé±Ô 5ÉÕÉË 6Ë¯Ãß 7¿Ö¾å 8ÆøÊÆÍ·´÷ 9»ìÂÒ 10×ÅÃÔ 11¹¥»÷ÉÏÉý 12¹¥»÷ÏÂ½µ 13·ÀÓùÉÏÉý 14·ÀÓùÏÂ½µ 15ÌØ¹¥ÉÏÉý 16ÌØ¹¥ÏÂ½µ 17ÌØ·ÀÉÏÉý 18ÌØ·ÀÏÂ½µ
+    /// </summary>
+    /// <param name="StateNum"></param>
     public void StateDestory(int StateNum)
     {
         switch (StateNum)
@@ -197,6 +307,70 @@ public class PlayerUIState : MonoBehaviour
                     IsConfusion = false;
                 }
                 break;
+            case 10:
+                if (IsInfatuation)
+                {
+                    Destroy(InfatuationObj.gameObject);
+                    IsInfatuation = false;
+                }
+                break;
+            case 11:
+                if (IsAtkUp)
+                {
+                    Destroy(AtkUpObj.gameObject);
+                    IsAtkUp = false;
+                }
+                break;
+            case 12:
+                if (IsAtkDown)
+                {
+                    Destroy(AtkDownObj.gameObject);
+                    IsAtkDown = false;
+                }
+                break;
+            case 13:
+                if (IsDefUp)
+                {
+                    Destroy(DefUpObj.gameObject);
+                    IsDefUp = false;
+                }
+                break;
+            case 14:
+                if (IsDefDown)
+                {
+                    Destroy(DefDownObj.gameObject);
+                    IsDefDown = false;
+                }
+                break;
+            case 15:
+                if (IsSpAUp)
+                {
+                    Destroy(SpAUpObj.gameObject);
+                    IsSpAUp = false;
+                }
+                break;
+            case 16:
+                if (IsSpADown)
+                {
+                    Destroy(SpADownObj.gameObject);
+                    IsSpADown = false;
+                }
+                break;
+            case 17:
+                if (IsSpDUp)
+                {
+                    Destroy(SpDUpObj.gameObject);
+                    IsSpDUp = false;
+                }
+                break;
+            case 18:
+                if (IsSpDDown)
+                {
+                    Destroy(SpDDownObj.gameObject);
+                    IsSpDDown = false;
+                }
+                break;
+
         }
     }
 
@@ -208,7 +382,7 @@ public class PlayerUIState : MonoBehaviour
                 if (IsBlinding)
                 {
                     float OrangenalSize = BlindingObj.rectTransform.rect.height;
-                    BlindingObj.transform.GetChild(0).GetComponent<Image>().rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - Per) * OrangenalSize);
+                    BlindingObj.transform.GetChild(0).GetComponent<Image>().rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - Per) * OrangenalSize);    
                 }
                 break;
             case 2:
@@ -260,6 +434,13 @@ public class PlayerUIState : MonoBehaviour
                 {
                     float OrangenalSize = ConfusionObj.rectTransform.rect.height;
                     ConfusionObj.transform.GetChild(0).GetComponent<Image>().rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - Per) * OrangenalSize);
+                }
+                break;
+            case 10:
+                if (IsInfatuation)
+                {
+                    float OrangenalSize = InfatuationObj.rectTransform.rect.height;
+                    InfatuationObj.transform.GetChild(0).GetComponent<Image>().rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - Per) * OrangenalSize);
                 }
                 break;
 

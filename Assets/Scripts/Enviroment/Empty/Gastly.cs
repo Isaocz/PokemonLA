@@ -57,7 +57,7 @@ public class Gastly : Empty
         {
             EmptyBeKnock();
             StateMaterialChange();
-            if (!isAtack)
+            if (!isAtack && !isSleepDone && !isCanNotMoveWhenParalysis)
             {
                 AtackTimer += Random.Range(0.0f, 1.0f) >= 0.15f ? 1 : 0;
                 if (AtackTimer >= 100)
@@ -69,7 +69,7 @@ public class Gastly : Empty
                 
             }
         }
-        if (isInvisible)
+        if (isInvisible && !isSleepDone && !isCanNotMoveWhenParalysis)
         {
             AtackTimer += Random.Range(0.0f, 1.0f) >= 0.15f ? 1 : 0;
             if(AtackTimer >= 160) {
@@ -91,13 +91,13 @@ public class Gastly : Empty
         {
             Projectile WOWObj1 = Instantiate(WillOWisp, transform.position, Quaternion.Euler(-90, 0, 0), transform.parent);
             WOWObj1.Launch(-Direction, 220);
-            WOWObj1.empty = transform.GetComponent<Empty>();
+            WOWObj1.empty = this;
             Projectile WOWObj2 = Instantiate(WillOWisp, transform.position, Quaternion.Euler(-90, 0, 0), transform.parent);
             WOWObj2.Launch(-(Quaternion.AngleAxis(15, Vector3.forward) * Direction), 220);
-            WOWObj2.empty = transform.GetComponent<Empty>();
+            WOWObj2.empty = this;
             Projectile WOWObj3 = Instantiate(WillOWisp, transform.position, Quaternion.Euler(-90, 0, 0), transform.parent);
             WOWObj3.Launch(-(Quaternion.AngleAxis(-15, Vector3.forward) * Direction), 220);
-            WOWObj3.empty = transform.GetComponent<Empty>();
+            WOWObj3.empty = this;
         }
     }
 
@@ -112,18 +112,27 @@ public class Gastly : Empty
         {
             EmptyTouchHit(other.gameObject);
         }
+        if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
+        {
+            InfatuationEmptyTouchHit(other.gameObject);
+        }
     }
 
     void MoveForPlayer()
     {
+        Vector3 TargetPosition = player.transform.position;
+        if ( isEmptyInfatuationDone && InfatuationForDistanceEmpty() != null )
+        {
+            TargetPosition = InfatuationForDistanceEmpty().transform.position;
+        }
         switch (Random.Range(1, 5))
         {
             case 1:
                 if (!isFearDone)
                 {
-                    if (player.transform.position.x + 3 <= transform.parent.position.x + 12)
+                    if (TargetPosition.x + 3 <= transform.parent.position.x + 12)
                     {
-                        transform.position = new Vector3(player.transform.position.x + 3 + Random.Range(-0.5f, 0.0f), player.transform.position.y + Random.Range(-1.5f, 1.5f), 0);
+                        transform.position = new Vector3(TargetPosition.x + 3 + Random.Range(-0.5f, 0.0f), TargetPosition.y + Random.Range(-1.5f, 1.5f), 0);
                         if (!isEmptyConfusionDone)
                         {
                             animator.SetFloat("LookX", 1);
@@ -141,9 +150,9 @@ public class Gastly : Empty
                 }
                 else
                 {
-                    if (player.transform.position.x + 5 <= transform.parent.position.x + 12)
+                    if (TargetPosition.x + 5 <= transform.parent.position.x + 12)
                     {
-                        transform.position = new Vector3(player.transform.position.x + 5 + Random.Range(-0.5f, 0.0f), player.transform.position.y + Random.Range(-1.5f, 1.5f), 0);
+                        transform.position = new Vector3(TargetPosition.x + 5 + Random.Range(-0.5f, 0.0f), TargetPosition.y + Random.Range(-1.5f, 1.5f), 0);
                         if (!isEmptyConfusionDone)
                         {
                             animator.SetFloat("LookX", -1);
@@ -163,9 +172,9 @@ public class Gastly : Empty
             case 2:
                 if (!isFearDone)
                 {
-                    if (player.transform.position.x - 3 >= transform.parent.position.x - 12)
+                    if (TargetPosition.x - 3 >= transform.parent.position.x - 12)
                     {
-                        transform.position = new Vector3(player.transform.position.x - 3 - Random.Range(-0.5f, 0.0f), player.transform.position.y + Random.Range(-1.5f, 1.5f), 0);
+                        transform.position = new Vector3(TargetPosition.x - 3 - Random.Range(-0.5f, 0.0f), TargetPosition.y + Random.Range(-1.5f, 1.5f), 0);
                         if (!isEmptyConfusionDone)
                         {
                             animator.SetFloat("LookX", -1);
@@ -183,9 +192,9 @@ public class Gastly : Empty
                 }
                 else
                 {
-                    if (player.transform.position.x - 5 >= transform.parent.position.x - 12)
+                    if (TargetPosition.x - 5 >= transform.parent.position.x - 12)
                     {
-                        transform.position = new Vector3(player.transform.position.x - 5 - Random.Range(-0.5f, 0.0f), player.transform.position.y + Random.Range(-1.5f, 1.5f), 0);
+                        transform.position = new Vector3(TargetPosition.x - 5 - Random.Range(-0.5f, 0.0f), TargetPosition.y + Random.Range(-1.5f, 1.5f), 0);
                         if (!isEmptyConfusionDone)
                         {
                             animator.SetFloat("LookX", 1);
@@ -205,9 +214,9 @@ public class Gastly : Empty
             case 3:
                 if (!isFearDone)
                 {
-                    if (player.transform.position.y + 3 <= transform.parent.position.y + 7)
+                    if (TargetPosition.y + 3 <= transform.parent.position.y + 7)
                     {
-                        transform.position = new Vector3(player.transform.position.x + Random.Range(-1.5f, 1.5f), player.transform.position.y + 3 + Random.Range(-0.5f, 0.0f), 0);
+                        transform.position = new Vector3(TargetPosition.x + Random.Range(-1.5f, 1.5f), TargetPosition.y + 3 + Random.Range(-0.5f, 0.0f), 0);
                         if (!isEmptyConfusionDone)
                         {
                             animator.SetFloat("LookY", 1);
@@ -225,9 +234,9 @@ public class Gastly : Empty
                 }
                 else
                 {
-                    if (player.transform.position.y + 5 <= transform.parent.position.y + 7)
+                    if (TargetPosition.y + 5 <= transform.parent.position.y + 7)
                     {
-                        transform.position = new Vector3(player.transform.position.x + Random.Range(-1.5f, 1.5f), player.transform.position.y + 5 + Random.Range(-0.5f, 0.0f), 0);
+                        transform.position = new Vector3(TargetPosition.x + Random.Range(-1.5f, 1.5f), TargetPosition.y + 5 + Random.Range(-0.5f, 0.0f), 0);
                         if (!isEmptyConfusionDone)
                         {
                             animator.SetFloat("LookY", -1);
@@ -247,9 +256,9 @@ public class Gastly : Empty
             case 4:
                 if (!isFearDone)
                 {
-                    if (player.transform.position.y - 3 >= transform.parent.position.x - 7)
+                    if (TargetPosition.y - 3 >= transform.parent.position.x - 7)
                     {
-                        transform.position = new Vector3(player.transform.position.x + Random.Range(-1.5f, 1.5f), player.transform.position.y - 3 - Random.Range(-0.5f, 0.0f), 0);
+                        transform.position = new Vector3(TargetPosition.x + Random.Range(-1.5f, 1.5f), TargetPosition.y - 3 - Random.Range(-0.5f, 0.0f), 0);
                         if (!isEmptyConfusionDone)
                         {
                             animator.SetFloat("LookY", -1);
@@ -267,9 +276,9 @@ public class Gastly : Empty
                 }
                 else
                 {
-                    if (player.transform.position.y - 5 >= transform.parent.position.x - 7)
+                    if (TargetPosition.y - 5 >= transform.parent.position.x - 7)
                     {
-                        transform.position = new Vector3(player.transform.position.x + Random.Range(-1.5f, 1.5f), player.transform.position.y - 5 - Random.Range(-0.5f, 0.0f), 0);
+                        transform.position = new Vector3(TargetPosition.x + Random.Range(-1.5f, 1.5f), TargetPosition.y - 5 - Random.Range(-0.5f, 0.0f), 0);
                         if (!isEmptyConfusionDone)
                         {
                             animator.SetFloat("LookY", 1);

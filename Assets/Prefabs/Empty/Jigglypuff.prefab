@@ -341,8 +341,9 @@ MonoBehaviour:
   ToxicMaterial: {fileID: 2100000, guid: 296f83a3541c1b24485906af3dff32b2, type: 2}
   ParalysisMaterial: {fileID: 2100000, guid: 0f06f7a11b286104ba4dbc36c80da013, type: 2}
   BurnMaterial: {fileID: 2100000, guid: 46e9e683ceef1af4ba339da5f01bb0a0, type: 2}
-  SleepMaterial: {fileID: 0}
+  SleepMaterial: {fileID: 2100000, guid: 5bfe3122f137b5a4aa634772d5bccad1, type: 2}
   FearMaterial: {fileID: 2100000, guid: 9d22d74762a5c0148a4cb1ecfaa4e840, type: 2}
+  InfatuationMaterial: {fileID: 2100000, guid: 2310fa42f7ef9434d8b100c9292ab5fd, type: 2}
   FrozenResistance: 1
   ToxicResistance: 1
   ParalysisResistance: 1
@@ -358,6 +359,10 @@ MonoBehaviour:
   isFearStart: 0
   isBlindDone: 0
   isBlindStart: 0
+  isEmptyConfusionDone: 0
+  isEmptyConfusionStart: 0
+  isEmptyInfatuationDone: 0
+  isEmptyInfatuationStart: 0
   isToxicDef: 0
   isToxicDone: 0
   isToxicStart: 0
@@ -374,21 +379,22 @@ MonoBehaviour:
   isSleepDone: 0
   isSleepStart: 0
   SleepPointFloat: 0
+  isConfusionDef: 0
+  isConfusionDone: 0
   Knock: 4
   EmptyHp: 0
   Emptylevel: 0
   isBorn: 0
   uIHealth: {fileID: 7812781280549596081}
+  EmptyType01: 1
+  EmptyType02: 18
   HpEmptyPoint: 115
   AtkEmptyPoint: 45
   SpAEmptyPoint: 20
   DefEmptyPoint: 45
   SpdEmptyPoint: 20
   SpeedEmptyPoint: 25
-  EmptyType01: 1
-  EmptyType02: 18
-  TimeInvincible: 0.8
-  isInvincible: 0
+  TypeDef: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   isDie: 0
   isHit: 0
   Exp: 0
@@ -398,10 +404,13 @@ MonoBehaviour:
   rigidbody2D: {fileID: 0}
   isSilence: 0
   isBoos: 0
+  DropItem: {fileID: 0}
+  isMistPlus: 0
   TurnToU: 0
   TurnToD: 0
   TurnToL: 0
   TurnToR: 0
+  TurnCount: 0
   SingTimer: 0
   Sing: {fileID: 4391765125458902477, guid: 9d09edd9c27e0a742bdd693bc66a66d4, type: 3}
 --- !u!61 &6185967305553174482

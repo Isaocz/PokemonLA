@@ -63,8 +63,13 @@ public class Skill : MonoBehaviour
 
 
     //技能的Tag
-    public int[] SkillTag;
+    public Skill.SkillTagEnum[] SkillTag;
     //Tag1:接触类 Tag2:非接触类 Tag3:爪类 Tag4:牙类 Tag5:声音类
+    public enum SkillTagEnum
+    {
+        接触类,非接触类,爪类,牙类,声音类,连续多次使用类,恢复HP类,吸取HP类,降低使用者能力类,反作用力伤害类,爆炸类,
+        拳类,波动和波导类,粉末类,球和弹类,心灵攻击类,跳舞类,风类,切割类,天气类,场地类,防住类,
+    }
 
     //表示技能生成时是否生成于玩家所面对方向，如为Fales生成在玩家所面对的方向，如为true生成在玩家位置（多用于自我buff类技能）
     public bool isNotDirection;
@@ -82,12 +87,13 @@ public class Skill : MonoBehaviour
     //表示技能生成是否需要抬手，比如位移类技能需要在摁下摁键的那一刻开始位移，而射弹类节能会有一个抬手前摇
     public bool isImmediately;
 
+    //技能的使用条件
+
 
 
     //用于多端攻击的构造体
     struct EmptyList
     {
-
 
         public EmptyList(Empty target, bool v1, float v2) : this()
         {
@@ -102,9 +108,6 @@ public class Skill : MonoBehaviour
 
     }
     List<EmptyList> TargetList = new List<EmptyList> { };
-
-
-
 
 
 
@@ -210,9 +213,9 @@ public class Skill : MonoBehaviour
             {
                 if (SkillTag != null)
                 {
-                    foreach (int i in SkillTag)
+                    foreach (Skill.SkillTagEnum i in SkillTag)
                     {
-                        if (i == 1) { target.EmptyToxicDone(1); }
+                        if (i == Skill.SkillTagEnum.接触类) { target.EmptyToxicDone(1 , 30); }
                     }
                 }
             }
@@ -223,5 +226,38 @@ public class Skill : MonoBehaviour
         }
 
     }
+
+
+
+
+    //==========================有关技能的条件判定=================================
+
+    public bool useSkillConditions(PlayerControler player)
+    {
+        if( SkillIndex == 53 || SkillIndex == 54 || SkillIndex == 55 || SkillIndex == 56)
+        {
+            return SleepCanUseSkill(player);
+        }
+        else
+        {
+            return NormalSkill(player);
+        }
+    }
+
+
+    protected static bool NormalSkill(PlayerControler player)
+    {
+        if (player.isSleepDone) { return false; }
+        else { return true; }
+    }
+
+    protected static bool SleepCanUseSkill(PlayerControler player)
+    {
+        if (player.isSleepDone) { return true; }
+        else { return false; }
+    }
+
+    //==========================有关技能的条件判定=================================
+
 
 }

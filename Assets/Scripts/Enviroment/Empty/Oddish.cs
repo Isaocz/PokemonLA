@@ -46,6 +46,7 @@ public class Oddish : Empty
     void Update()
     {
         ResetPlayer();
+        if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }
         if (!isBorn)
         {
             EmptyDie();
@@ -60,10 +61,12 @@ public class Oddish : Empty
         if (!isBorn)
         {
             EmptyBeKnock();
-            animator.SetFloat("Speed" , Mathf.Abs(transform.position.x - LookX));
-            if (transform.position.x - LookX >= 0) { animator.SetFloat("LookX", 1); }
-            else { animator.SetFloat("LookX", 0); }
-            LookX = transform.position.x;
+            if (!isSleepDone && !isCanNotMoveWhenParalysis) {
+                animator.SetFloat("Speed", Mathf.Abs(transform.position.x - LookX));
+                if (transform.position.x - LookX >= 0) { animator.SetFloat("LookX", 1); }
+                else { animator.SetFloat("LookX", 0); }
+                LookX = transform.position.x;
+            }
         }
 
     }
@@ -73,6 +76,10 @@ public class Oddish : Empty
         if (other.transform.tag == ("Player"))
         {
             EmptyTouchHit(other.gameObject);
+        }
+        if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
+        {
+            InfatuationEmptyTouchHit(other.gameObject);
         }
     }
 

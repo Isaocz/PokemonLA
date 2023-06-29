@@ -7,6 +7,8 @@ public class WurmpleStringShot02 : MonoBehaviour
 
     float StringShotExitTimer = 0;
     SpriteRenderer Sp;
+    public bool isProjectelParentInfatuation;
+
     private void Start()
     {
         Sp = gameObject.GetComponent<SpriteRenderer>();
@@ -19,12 +21,23 @@ public class WurmpleStringShot02 : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D other)
     {
-        if(other.tag == ("Player")) { other.GetComponent<PlayerControler>().SpeedChange(); }
+        if (!isProjectelParentInfatuation && other.tag == ("Player"))
+        {
+            other.GetComponent<PlayerControler>().SpeedChange();
+        }
+        if (isProjectelParentInfatuation && other.tag == ("Empty"))
+        {
+            other.GetComponent<Empty>().SpeedChange();
+        }
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == ("Player")) {
+        if (!isProjectelParentInfatuation && other.tag == ("Player")) {
             other.GetComponent<PlayerControler>().SpeedRemove01(2.5f); 
+        }
+        if (isProjectelParentInfatuation && other.tag == ("Empty"))
+        {
+            other.GetComponent<Empty>().SpeedRemove01(2.5f);
         }
     }
 }

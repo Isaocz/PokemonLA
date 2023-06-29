@@ -13,6 +13,8 @@ public class Pokemon : MonoBehaviour
     public Material BurnMaterial;
     public Material SleepMaterial;
     public Material FearMaterial;
+    public Material InfatuationMaterial;
+
 
     public float FrozenResistance;
     public float ToxicResistance;
@@ -57,6 +59,10 @@ public class Pokemon : MonoBehaviour
         else if (isFearDone)
         {
             MarterialChangeToFear();
+        }
+        else if (isEmptyInfatuationDone)
+        {
+            MarterialChangeToInfatuation();
         }
         else
         {
@@ -131,6 +137,17 @@ public class Pokemon : MonoBehaviour
             else { gameObject.transform.GetChild(3).GetChild(0).GetComponent<SpriteRenderer>().material = FearMaterial; }
         }
         else { gameObject.GetComponent<SpriteRenderer>().material = FearMaterial; }
+    }
+
+    public void MarterialChangeToInfatuation()
+    {
+
+        if (gameObject.GetComponent<SpriteRenderer>() == null)
+        {
+            if (gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>() != null) { gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>().material = InfatuationMaterial; }
+            else { gameObject.transform.GetChild(3).GetChild(0).GetComponent<SpriteRenderer>().material = InfatuationMaterial; }
+        }
+        else { gameObject.GetComponent<SpriteRenderer>().material = InfatuationMaterial; }
     }
 
 
@@ -369,7 +386,7 @@ public class Pokemon : MonoBehaviour
 
     //===========================================================================敌人中毒的函数=====================================================================================
     //调用此函数时，如果还未开始中毒，开始中毒
-    public void EmptyToxicDone(float ToxicPoint)
+    public void EmptyToxicDone(float ToxicPoint , float ToxicTime)
     {
         Empty EmptyObj = GetComponent<Empty>();
         if (!isToxicDef && EmptyObj.EmptyType01 != Type.TypeEnum.Poison && EmptyObj.EmptyType01 != Type.TypeEnum.Steel && EmptyObj.EmptyType02 != Type.TypeEnum.Poison && EmptyObj.EmptyType02 != Type.TypeEnum.Steel && !isToxicDone)
@@ -396,12 +413,216 @@ public class Pokemon : MonoBehaviour
                 isToxicDone = true;
                 playerUIState.StateSlowUP(3, ToxicPointFloat);
                 MarterialChangeToToxic();
+                Invoke("EmptyToxicRemove" , ToxicTime);
                 EmptyObj.SpAAbilityPoint /= 2;
+
             }
         }
     }
 
+    void EmptyToxicRemove()
+    {
+        if (isToxicDone)
+        {
+            ToxicPointFloat = 0;
+            playerUIState.StateSlowUP(3, 0);
+            isToxicStart = false;
+            isToxicDone = false;
+            playerUIState.StateDestory(3);
+            MarterialChangeToNurmal();
+            GetComponent<Empty>().SpAAbilityPoint *= 2;
+        }
+    }
+
     //===========================================================================敌人中毒的函数=====================================================================================
+
+
+
+
+    //===========================================================================敌人烧伤的函数=====================================================================================
+    //调用此函数时，如果还未开始烧伤，开始烧伤
+    public void EmptyBurnDone(float BurnPoint , float BurnTime)
+    {
+        Empty EmptyObj = GetComponent<Empty>();
+        if (!isToxicDef && EmptyObj.EmptyType01 != Type.TypeEnum.Fire && EmptyObj.EmptyType02 != Type.TypeEnum.Fire && !isBurnDone)
+        {
+            BurnPointFloat += BurnPoint * BurnResistance;
+            if (!isBurnStart && BurnPointFloat < 1)
+            {
+                playerUIState.StatePlus(5);
+                playerUIState.StateSlowUP(5, BurnPointFloat);
+                isBurnStart = true;
+            }
+            else if (isBurnStart && BurnPointFloat < 1)
+            {
+                playerUIState.StateSlowUP(5, BurnPointFloat);
+            }
+            else if (BurnPointFloat >= 1 && !isBurnDone)
+            {
+                if (!isBurnStart)
+                {
+                    playerUIState.StatePlus(5);
+                    playerUIState.StateSlowUP(5, BurnPointFloat);
+                    isBurnStart = true;
+                }
+                isBurnDone = true;
+                playerUIState.StateSlowUP(5, BurnPointFloat);
+                MarterialChangeToBurn();
+                Invoke("EmptyBurnRemove", BurnTime);
+                EmptyObj.AtkAbilityPoint /= 2;
+            }
+        }
+    }
+    void EmptyBurnRemove()
+    {
+        if (isBurnDone)
+        {
+            BurnPointFloat = 0;
+            playerUIState.StateSlowUP(5, 0);
+            isBurnStart = false;
+            isBurnDone = false;
+            playerUIState.StateDestory(5);
+            MarterialChangeToNurmal();
+            GetComponent<Empty>().AtkAbilityPoint *= 2;
+        }
+    }
+
+    //===========================================================================敌人烧伤的函数=====================================================================================
+
+    //===========================================================================敌人睡眠的函数=====================================================================================
+    //调用此函数时，如果还未开始睡眠，开始睡眠
+    public void EmptySleepDone(float SleepPoint, float SleepTime)
+    {
+        Empty EmptyObj = GetComponent<Empty>();
+        if (!isSleepDone)
+        {
+            SleepPointFloat += SleepPoint * SleepResistance;
+            if (!isSleepStart && SleepPointFloat < 1)
+            {
+                playerUIState.StatePlus(6);
+                playerUIState.StateSlowUP(6, SleepPointFloat);
+                isSleepStart = true;
+            }
+            else if (isSleepStart && SleepPointFloat < 1)
+            {
+                playerUIState.StateSlowUP(6, SleepPointFloat);
+            }
+            else if (SleepPointFloat >= 1 && !isSleepDone)
+            {
+                if (!isSleepStart)
+                {
+                    playerUIState.StatePlus(6);
+                    playerUIState.StateSlowUP(6, SleepPointFloat);
+                    isSleepStart = true;
+                }
+                isSleepDone = true;
+                playerUIState.StateSlowUP(6, SleepPointFloat);
+                MarterialChangeToSleep();
+                Invoke("EmptySleepRemove", SleepTime);
+            }
+        }
+    }
+    public void EmptySleepRemove()
+    {
+
+        if (isSleepDone)
+        {
+
+            SleepPointFloat = 0;
+            playerUIState.StateSlowUP(6, 0);
+            isSleepStart = false;
+            isSleepDone = false;
+            MarterialChangeToNurmal();
+            playerUIState.StateDestory(6);
+        }
+    }
+
+    //===========================================================================敌人睡眠的函数=====================================================================================
+
+
+
+    //===========================================================================敌人麻痹的函数=====================================================================================
+    //调用此函数时，如果还未开始麻痹，开始麻痹
+    public void EmptyParalysisDone(float ParalysisPoint, float ParalysisTime)
+    {
+        Empty EmptyObj = GetComponent<Empty>();
+        if (!isToxicDef && EmptyObj.EmptyType01 != Type.TypeEnum.Electric && EmptyObj.EmptyType02 != Type.TypeEnum.Electric)
+        {
+            if (!isParalysisDone)
+            {
+                ParalysisPointFloat += ParalysisPoint * ParalysisResistance;
+                if (!isParalysisStart && ParalysisPointFloat < 1)
+                {
+                    playerUIState.StatePlus(4);
+                    playerUIState.StateSlowUP(4, ParalysisPointFloat);
+                    isParalysisStart = true;
+                }
+                else if (isParalysisStart && ParalysisPointFloat < 1)
+                {
+                    playerUIState.StateSlowUP(4, ParalysisPointFloat);
+                }
+                else if (ParalysisPointFloat >= 1 && !isParalysisDone)
+                {
+                    if (!isParalysisStart)
+                    {
+                        playerUIState.StatePlus(4);
+                        playerUIState.StateSlowUP(4, ParalysisPointFloat);
+                        isParalysisStart = true;
+                    }
+                    isParalysisDone = true;
+                    playerUIState.StateSlowUP(4, ParalysisPointFloat);
+                    MarterialChangeToParalysis();
+                    speed *= 0.8f;
+                    Invoke("EmptyParalysisRemove", ParalysisTime);
+                }
+            }
+        }
+    }
+    public void EmptyParalysisRemove()
+    {
+
+        if (isParalysisDone)
+        {
+
+            ParalysisPointFloat = 0;
+            playerUIState.StateSlowUP(4, 0);
+            isParalysisStart = false;
+            isParalysisDone = false;
+            MarterialChangeToNurmal();
+            speed /= 0.8f;
+            playerUIState.StateDestory(4);
+        }
+    }
+
+    //===========================================================================敌人麻痹的函数=====================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     //===========================================================================敌人混乱的函数=====================================================================================
@@ -410,7 +631,7 @@ public class Pokemon : MonoBehaviour
     public bool isEmptyConfusionStart = false;
     float EmptyConfusionPoint;
 
-    //调用此函数时，如果还未害怕，状态变为害怕
+    //调用此函数时，如果还未混乱，状态变为混论
     public void EmptyConfusion(float ConfusionTimer, float ConfusionPoint)
     {
         if (!isEmptyConfusionDone)
@@ -442,7 +663,7 @@ public class Pokemon : MonoBehaviour
         }
 
     }
-    //只可被上一个函数延迟调用，代表速度害怕的函数
+    //只可被上一个函数延迟调用，代表移除混论的函数
     public void EmptyConfusionRemove()
     {
         if (isEmptyConfusionDone)
@@ -456,6 +677,438 @@ public class Pokemon : MonoBehaviour
     }
 
     //===========================================================================敌人混乱的函数=====================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //===========================================================================敌人着迷的函数=====================================================================================
+
+    public bool isEmptyInfatuationDone = false;
+    public bool isEmptyInfatuationStart = false;
+    float EmptyInfatuationPoint;
+
+    /// <summary>
+    /// 调用此函数时，如果还未着迷，状态变为着迷
+    /// </summary>
+    /// <param name="InfatuationTimer">着迷的持续时间</param>
+    /// <param name="InfatuationPoint">着迷的点数</param>
+    public void EmptyInfatuation(float InfatuationTimer, float InfatuationPoint)
+    {
+        if (!isEmptyInfatuationDone)
+        {
+            EmptyInfatuationPoint += InfatuationPoint * OtherStateResistance;
+            if (!isEmptyInfatuationStart && EmptyInfatuationPoint < 1)
+            {
+                playerUIState.StatePlus(10);
+                playerUIState.StateSlowUP(10, EmptyInfatuationPoint);
+                isEmptyInfatuationStart = true;
+            }
+            else if (isEmptyInfatuationStart && EmptyInfatuationPoint < 1)
+            {
+                playerUIState.StateSlowUP(10, EmptyInfatuationPoint);
+            }
+            else if (EmptyInfatuationPoint >= 1 && !isEmptyInfatuationDone)
+            {
+                if (!isEmptyInfatuationStart)
+                {
+                    playerUIState.StatePlus(10);
+                    playerUIState.StateSlowUP(10, EmptyInfatuationPoint);
+                    isEmptyInfatuationStart = true;
+                }
+                isEmptyInfatuationDone = true;
+                playerUIState.StateSlowUP(10, EmptyInfatuationPoint);
+                MarterialChangeToInfatuation();
+                Empty Boss = GetComponent<Empty>();
+                if(Boss != null && Boss.isBoos)
+                {
+                    Boss.speed *= 0.5f;
+                }
+                if (InfatuationTimer != 0) { Invoke("EmptyInfatuationRemove", InfatuationTimer); }
+            }
+        }
+
+    }
+    //只可被上一个函数延迟调用，代表移除着迷的函数
+    public void EmptyInfatuationRemove()
+    {
+        if (isEmptyInfatuationDone)
+        {
+            EmptyInfatuationPoint = 0;
+            playerUIState.StateSlowUP(10, 0);
+            isEmptyInfatuationStart = false;
+            isEmptyInfatuationDone = false;
+            MarterialChangeToNurmal();
+            Empty Boss = GetComponent<Empty>();
+            if (Boss != null && Boss.isBoos)
+            {
+                Boss.speed *= 2f;
+            }
+            playerUIState.StateDestory(10);
+        }
+    }
+
+    //===========================================================================敌人着迷的函数=====================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //===========================================================================敌人攻击力提升的函数=====================================================================================
+
+    /// <summary>
+    /// 代表攻击力是否提升
+    /// </summary>
+    bool isAtkUp;
+
+    /// <summary>
+    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果攻击力未被提升，状态变为攻击力被提升
+    /// </summary>
+    /// <param name="Time"> 提升的时间，如果为零时间为无限，需要手动Remove </param>
+    public void AtkUP( float Time )
+    {
+        if (GetComponent<Empty>() != null)
+        {
+            isAtkUp = true;
+            playerUIState.StatePlus(11);
+            if (Time != 0) { Invoke("AtkUpRemove", Time); }
+        }
+    }
+    /// <summary>
+    /// 如果AtkUP( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在攻击力恢复时调用此函数
+    /// </summary>
+    void AtkUpRemove()
+    {
+        if (isAtkUp)
+        {
+            if (GetComponent<Empty>() != null)
+            {
+                isAtkUp = false;
+                playerUIState.StateDestory(11);
+            }
+        }
+    }
+
+    //===========================================================================敌人攻击力提升的函数=====================================================================================
+
+
+
+
+    //===========================================================================敌人攻击力下降的函数=====================================================================================
+
+    /// <summary>
+    /// 代表攻击力是否下降
+    /// </summary>
+    bool isAtkDown;
+
+    /// <summary>
+    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果攻击力未被下降，状态变为攻击力被下降
+    /// </summary>
+    /// <param name="Time"> 下降的时间，如果为零时间为无限，需要手动Remove </param>
+    public void AtkDown(float Time)
+    {
+        if (GetComponent<Empty>() != null)
+        {
+            isAtkDown = true;
+            playerUIState.StatePlus(12);
+            if (Time != 0) { Invoke("AtkDownRemove", Time); }
+        }
+    }
+    /// <summary>
+    /// 如果AtkDown( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在攻击力恢复时调用此函数
+    /// </summary>
+    void AtkDownRemove()
+    {
+        if (isAtkDown)
+        {
+            if (GetComponent<Empty>() != null)
+            {
+                isAtkDown = false;
+                playerUIState.StateDestory(12);
+            }
+        }
+    }
+
+    //===========================================================================敌人攻击力下降的函数=====================================================================================
+
+
+    //===========================================================================敌人防御力提升的函数=====================================================================================
+
+    /// <summary>
+    /// 代表防御力是否提升
+    /// </summary>
+    bool isDefUp;
+
+    /// <summary>
+    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果防御力未被提升，状态变为防御力被提升
+    /// </summary>
+    /// <param name="Time"> 提升的时间，如果为零时间为无限，需要手动Remove </param>
+    public void DefUP(float Time)
+    {
+        if (GetComponent<Empty>() != null)
+        {
+            isDefUp = true;
+            playerUIState.StatePlus(13);
+            if (Time != 0) { Invoke("DefUpRemove", Time); }
+        }
+    }
+    /// <summary>
+    /// 如果DefUP( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在防御力恢复时调用此函数
+    /// </summary>
+    void DefUpRemove()
+    {
+        if (isDefUp)
+        {
+            if (GetComponent<Empty>() != null)
+            {
+                isDefUp = false;
+                playerUIState.StateDestory(13);
+            }
+        }
+    }
+
+    //===========================================================================敌人防御力提升的函数=====================================================================================
+
+
+
+
+    //===========================================================================敌人防御力下降的函数=====================================================================================
+
+    /// <summary>
+    /// 代表防御力是否下降
+    /// </summary>
+    bool isDefDown;
+
+    /// <summary>
+    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果防御力未被下降，状态变为防御力被下降
+    /// </summary>
+    /// <param name="Time"> 下降的时间，如果为零时间为无限，需要手动Remove </param>
+    public void DefDown(float Time)
+    {
+        if (GetComponent<Empty>() != null)
+        {
+            isDefDown = true;
+            playerUIState.StatePlus(14);
+            if (Time != 0) { Invoke("DefDownRemove", Time); }
+
+        }
+    }
+    /// <summary>
+    /// 如果DefDown( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在防御力恢复时调用此函数
+    /// </summary>
+    void DefDownRemove()
+    {
+        if (isDefDown)
+        {
+            if (GetComponent<Empty>() != null)
+            {
+                isDefDown = false;
+                playerUIState.StateDestory(14);
+            }
+        }
+    }
+
+    //===========================================================================敌人防御力下降的函数=====================================================================================
+
+
+
+
+    //===========================================================================敌人特攻力提升的函数=====================================================================================
+
+    /// <summary>
+    /// 代表特攻力是否提升
+    /// </summary>
+    bool isSpAUp;
+
+    /// <summary>
+    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果特攻力未被提升，状态变为特攻力被提升
+    /// </summary>
+    /// <param name="Time"> 提升的时间，如果为零时间为无限，需要手动Remove </param>
+    public void SpAUP(float Time)
+    {
+        if (GetComponent<Empty>() != null)
+        {
+            isSpAUp = true;
+            playerUIState.StatePlus(15);
+            if (Time != 0) { Invoke("SpAUpRemove", Time); }
+
+        }
+    }
+    /// <summary>
+    /// 如果SpAUP( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在特攻力恢复时调用此函数
+    /// </summary>
+    void SpAUpRemove()
+    {
+        if (isSpAUp)
+        {
+            if (GetComponent<Empty>() != null)
+            {
+                isSpAUp = false;
+                playerUIState.StateDestory(15);
+            }
+        }
+    }
+
+    //===========================================================================敌人特攻力提升的函数=====================================================================================
+
+
+
+
+    //===========================================================================敌人特攻力下降的函数=====================================================================================
+
+    /// <summary>
+    /// 代表特攻力是否下降
+    /// </summary>
+    bool isSpADown;
+
+    /// <summary>
+    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果特攻力未被下降，状态变为特攻力被下降
+    /// </summary>
+    /// <param name="Time"> 下降的时间，如果为零时间为无限，需要手动Remove </param>
+    public void SpADown(float Time)
+    {
+        if (GetComponent<Empty>() != null)
+        {
+            isSpADown = true;
+            playerUIState.StatePlus(16);
+            if (Time != 0) { Invoke("SpADownRemove", Time); }
+
+        }
+    }
+    /// <summary>
+    /// 如果SpADown( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在特攻力恢复时调用此函数
+    /// </summary>
+    void SpADownRemove()
+    {
+        if (isSpADown)
+        {
+            if (GetComponent<Empty>() != null)
+            {
+                isSpADown = false;
+                playerUIState.StateDestory(16);
+            }
+        }
+    }
+
+    //===========================================================================敌人特攻力下降的函数=====================================================================================
+
+
+
+
+    //===========================================================================敌人特防力提升的函数=====================================================================================
+
+    /// <summary>
+    /// 代表特防力是否提升
+    /// </summary>
+    bool isSpDUP;
+
+    /// <summary>
+    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果特防力未被提升，状态变为特防力被提升
+    /// </summary>
+    /// <param name="Time"> 提升的时间，如果为零时间为无限，需要手动Remove </param>
+    public void SpDUP(float Time)
+    {
+        if (GetComponent<Empty>() != null)
+        {
+            isSpDUP = true;
+            playerUIState.StatePlus(17);
+            if (Time != 0) { Invoke("SpDUpRemove", Time); }
+
+        }
+    }
+    /// <summary>
+    /// 如果SpDUP( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在特防力恢复时调用此函数
+    /// </summary>
+    void SpDUpRemove()
+    {
+        if (isSpDUP)
+        {
+            if (GetComponent<Empty>() != null)
+            {
+                isSpDUP = false;
+                playerUIState.StateDestory(17);
+            }
+        }
+    }
+
+    //===========================================================================敌人特防力提升的函数=====================================================================================
+
+
+
+
+    //===========================================================================敌人特防力下降的函数=====================================================================================
+
+    /// <summary>
+    /// 代表特防力是否下降
+    /// </summary>
+    bool isSpdDown;
+
+    /// <summary>
+    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果特防力未被下降，状态变为特防力被下降
+    /// </summary>
+    /// <param name="Time"> 下降的时间，如果为零时间为无限，需要手动Remove </param>
+    public void SpDDown(float Time)
+    {
+        if (GetComponent<Empty>() != null)
+        {
+            isSpdDown = true;
+            playerUIState.StatePlus(18);
+            if (Time != 0) { Invoke("SpDDownRemove", Time); }
+
+        }
+    }
+    /// <summary>
+    /// 如果SpDDown( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在特防力恢复时调用此函数
+    /// </summary>
+    void SpDDownRemove()
+    {
+        if (isSpdDown)
+        {
+            if (GetComponent<Empty>() != null)
+            {
+                isSpdDown = false;
+                playerUIState.StateDestory(18);
+            }
+        }
+    }
+
+    //===========================================================================敌人特防力下降的函数=====================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //***************************************************************************对敌人的函数*********************************************************************************
 
@@ -473,7 +1126,7 @@ public class Pokemon : MonoBehaviour
     //===========================================================================改变速度的函数=====================================================================================
 
     //一个变量代表速度是否被改变，一个代表改变的倍率
-    bool isSpeedChange = false;
+    bool isSpeedChange;
 
     //调用此函数时，如果速度还未被改变，改变速度并改变颜色，状态变为被改变
     public void SpeedChange()
@@ -536,9 +1189,9 @@ public class Pokemon : MonoBehaviour
 
     //一个变量代表是否中毒，一个代表中毒的程度
     public bool isToxicDef;
-    public bool isToxicDone = false;
-    public bool isToxicStart = false;
-    public float ToxicPointFloat = 0;
+    public bool isToxicDone;
+    public bool isToxicStart;
+    public float ToxicPointFloat;
     float SpAHWBeforeChange;
 
     //调用此函数时，如果还未开始中毒，开始中毒
@@ -547,6 +1200,7 @@ public class Pokemon : MonoBehaviour
         if (!isStateInvincible && !isToxicDef)
         {
             ToxicPointFloat += ToxicPoint;
+            ToxicPointFloat = (ToxicPointFloat > 1 ? 1 : ToxicPointFloat);
             if (!isToxicStart && ToxicPointFloat < 1)
             {
                 playerUIState.StatePlus(3);
@@ -624,11 +1278,11 @@ public class Pokemon : MonoBehaviour
     public ParalysisDoneHappend ParalysisDoneHappendEvent;
     public ParalysisDoneHappend ParalysisRemoveHappendEvent;
 
-    //一个变量代表是否中毒，一个代表中毒的程度
+    //一个变量代表是否麻痹，一个代表麻痹的程度
 
-    public bool isParalysisDone = false;
-    public bool isParalysisStart = false;
-    public float ParalysisPointFloat = 0;
+    public bool isParalysisDone;
+    public bool isParalysisStart ;
+    public float ParalysisPointFloat;
     float MoveSpeHWBeforeChange;
 
     //调用此函数时，如果还未开始中毒，开始中毒
@@ -637,6 +1291,8 @@ public class Pokemon : MonoBehaviour
         if (!isStateInvincible && !isParalysisDef)
         {
             ParalysisPointFloat += ParalysisPoint;
+            ParalysisPointFloat = (ParalysisPointFloat > 1 ? 1 : ParalysisPointFloat);
+
             if (!isParalysisStart && ParalysisPointFloat < 1)
             {
                 playerUIState.StatePlus(4);
@@ -724,9 +1380,9 @@ public class Pokemon : MonoBehaviour
 
 
     public bool isBurnDef;
-    public bool isBurnDone = false;
-    public bool isBurnStart = false;
-    public float BurnPointFloat = 0;
+    public bool isBurnDone;
+    public bool isBurnStart;
+    public float BurnPointFloat;
     float AtkHWBeforeChange;
 
     //调用此函数时，如果还未开始中毒，开始中毒
@@ -736,6 +1392,8 @@ public class Pokemon : MonoBehaviour
         if (!isStateInvincible && !isBurnDef)
         {
             BurnPointFloat += BurnPoint;
+            BurnPointFloat = (BurnPointFloat > 1 ? 1 : BurnPointFloat);
+
             if (!isBurnStart && BurnPointFloat < 1)
             {
                 playerUIState.StatePlus(5);
@@ -809,9 +1467,9 @@ public class Pokemon : MonoBehaviour
     //一个变量代表是否中毒，一个代表中毒的程度
 
     public bool isSleepDef;
-    public bool isSleepDone = false;
-    public bool isSleepStart = false;
-    public float SleepPointFloat = 0;
+    public bool isSleepDone;
+    public bool isSleepStart;
+    public float SleepPointFloat;
 
     //调用此函数时，如果还未开始中毒，开始中毒
     public void SleepFloatPlus(float SleepPoint)
@@ -819,6 +1477,8 @@ public class Pokemon : MonoBehaviour
         if (!isStateInvincible && !isSleepDef)
         {
             SleepPointFloat += SleepPoint;
+            SleepPointFloat = (SleepPointFloat > 1 ? 1 : SleepPointFloat);
+
             if (!isSleepStart && SleepPointFloat < 1)
             {
                 playerUIState.StatePlus(6);
@@ -889,7 +1549,7 @@ public class Pokemon : MonoBehaviour
     //一个变量代表是否中毒，一个代表中毒的程度
 
     public bool isConfusionDef;
-    public bool isConfusionDone = false;
+    public bool isConfusionDone;
 
     //调用此函数时，如果还未开始中毒，开始中毒
     public void ConfusionFloatPlus()
@@ -919,13 +1579,61 @@ public class Pokemon : MonoBehaviour
 
 
 
-    //===========================================================================混乱的函数=====================================================================================
+
+
+
+    //===========================================================================进化时复制目前状态的函数=====================================================================================
+
+    protected void CopyState(PlayerControler CopyTarget)
+    {
+        CopyTarget.isSpeedChange = isSpeedChange;
+        if (isSpeedChange) { CopyTarget.MarterialChangeToSpeedDown(); }
+
+        CopyTarget.isToxicDef = isToxicDef;
+        CopyTarget.isToxicDone = isToxicDone;
+        if (isToxicDone) { CopyTarget.MarterialChangeToToxic(); }
+        CopyTarget.isToxicStart = isToxicStart;
+        CopyTarget.ToxicPointFloat = ToxicPointFloat;
+        CopyTarget.SpAHWBeforeChange = SpAHWBeforeChange;
+
+        CopyTarget.isParalysisDef = isParalysisDef;
+        CopyTarget.ParalysisDoneHappendEvent = ParalysisDoneHappendEvent;
+        CopyTarget.ParalysisRemoveHappendEvent = ParalysisRemoveHappendEvent;
+        CopyTarget.isParalysisDone = isParalysisDone;
+        if (isParalysisDone) { CopyTarget.MarterialChangeToParalysis(); }
+        CopyTarget.isParalysisStart = isParalysisStart;
+        CopyTarget.ParalysisPointFloat = ParalysisPointFloat;
+        CopyTarget.MoveSpeHWBeforeChange = MoveSpeHWBeforeChange;
+
+        CopyTarget.isBurnDef = isBurnDef;
+        CopyTarget.isBurnDone = isBurnDone;
+        if (isBurnDone) { CopyTarget.MarterialChangeToBurn(); }
+        CopyTarget.isBurnStart = isBurnStart;
+        CopyTarget.BurnPointFloat = BurnPointFloat;
+        CopyTarget.AtkHWBeforeChange = AtkHWBeforeChange;
+
+        CopyTarget.isSleepDef = isSleepDef;
+        CopyTarget.isSleepDone = isSleepDone;
+        if (isSleepDone) { CopyTarget.MarterialChangeToSleep(); }
+        CopyTarget.isSleepStart = isSleepStart;
+        CopyTarget.SleepPointFloat = SleepPointFloat;
+
+        CopyTarget.isConfusionDef = isConfusionDef;
+        CopyTarget.isConfusionDone = isConfusionDone;
+
+        for(int i = 0; i< playerUIState.transform.childCount; i++)
+        {
+            Instantiate(playerUIState.transform.GetChild(i), Vector3.zero, Quaternion.identity, CopyTarget.playerUIState.transform);
+        }
+
+
+    }
+
+    //===========================================================================进化时复制目前状态的函数=====================================================================================
 
 
     //***************************************************************************对自己的函数*********************************************************************************
 
-
-    //===========================================================================害怕的函数=====================================================================================
 
 }
 

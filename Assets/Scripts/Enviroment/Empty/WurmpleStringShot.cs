@@ -19,11 +19,12 @@ public class WurmpleStringShot : Projectile
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == ("Enviroment") || other.tag == ("Room") || other.tag == ("Player"))
+        if(other.tag == ("Enviroment") || other.tag == ("Room") || other.tag == ("Player") || (empty.isEmptyInfatuationDone && other.gameObject != empty.gameObject && other.tag == ("Empty")))
         {
             if (other.tag != ("Room"))
             {
-                Instantiate(WurmpleStringShot02, (transform.position + other.transform.position) / 2, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+                GameObject WSS2 =  Instantiate(WurmpleStringShot02, (transform.position + other.transform.position) / 2, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+                WSS2.GetComponent<WurmpleStringShot02>().isProjectelParentInfatuation = empty.isEmptyInfatuationDone;
             }
             Destroy(gameObject);
         }

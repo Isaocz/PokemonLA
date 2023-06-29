@@ -48,65 +48,70 @@ public class MIAStarAIEscape : MonoBehaviour
     public void Update()
     {
         speed = 7*ParentEmpty.speed;
-        if (!isCanNotMove && !ParentEmpty.isBorn && !ParentEmpty.isDie && !ParentEmpty.isHit && !ParentEmpty.isSilence && !ParentEmpty.isEmptyFrozenDone)
+        if (!ParentEmpty.isSleepDone && !ParentEmpty.isCanNotMoveWhenParalysis)
         {
-            //Debug.Log(1);
-            RePathFind++;
-            if (path == null)
+            if (!isCanNotMove && !ParentEmpty.isBorn && !ParentEmpty.isDie && !ParentEmpty.isHit && !ParentEmpty.isSilence && !ParentEmpty.isEmptyFrozenDone)
             {
-                return;
-            }
-            reachedEndOfPath = false;
-            float distanceToWaypoint;
-            while (true)
-            {
-                distanceToWaypoint = Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]);
-                if (distanceToWaypoint < nextWaypointDistance)
+                //Debug.Log(1);
+                RePathFind++;
+                if (path == null)
                 {
-                    if (currentWaypoint + 1 < path.vectorPath.Count)
+                    return;
+                }
+                reachedEndOfPath = false;
+                float distanceToWaypoint;
+                while (true)
+                {
+                    distanceToWaypoint = Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]);
+                    if (distanceToWaypoint < nextWaypointDistance)
                     {
-                        currentWaypoint++;
+                        if (currentWaypoint + 1 < path.vectorPath.Count)
+                        {
+                            currentWaypoint++;
+                        }
+                        else
+                        {
+                            reachedEndOfPath = true;
+                            break;
+                        }
                     }
                     else
                     {
-                        reachedEndOfPath = true;
                         break;
                     }
                 }
-                else
-                {
-                    break;
-                }
+
+                Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
+                if (ParentEmpty.isEmptyConfusionDone) { dir = (dir + new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f), 0)).normalized; }
+                Vector3 velocity = dir * speed;
+                transform.position += velocity * Time.deltaTime;
+            }
+            if ((transform.position - targetPosition).magnitude <= 0.1f)
+            {
+                isCanNotMove = true;
+                ParentEmpty.GetComponent<Mareep>().EscapOver();
             }
 
-            Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
-            if (ParentEmpty.isEmptyConfusionDone) { dir = (dir + new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f), 0)).normalized; }
-            Vector3 velocity = dir * speed;
-            transform.position += velocity * Time.deltaTime;
         }
-        if ((transform.position-targetPosition).magnitude <= 0.1f)
-        {
-            isCanNotMove = true;
-            ParentEmpty.GetComponent<Mareep>().EscapOver();
-        }
-        
-
         
 
 
     }
     private void FixedUpdate()
     {
-        if (!isCanNotMove && Mathf.Abs((LastPosition - transform.position).magnitude) <= 0.01f)
+        if (!ParentEmpty.isSleepDone && !ParentEmpty.isCanNotMoveWhenParalysis)
         {
-            StaticTimer++;
-            if(StaticTimer >= 15)
+            if (!isCanNotMove && Mathf.Abs((LastPosition - transform.position).magnitude) <= 0.01f)
             {
-                StaticTimer = 0;
-                isCanNotMove = true;
-                ParentEmpty.GetComponent<Mareep>().EscapOver();
+                StaticTimer++;
+                if (StaticTimer >= 15)
+                {
+                    StaticTimer = 0;
+                    isCanNotMove = true;
+                    ParentEmpty.GetComponent<Mareep>().EscapOver();
+                }
             }
+            LastPosition = transform.position;
         }
-        LastPosition = transform.position;
     }
 }

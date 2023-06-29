@@ -9,9 +9,13 @@ public class Projectile : MonoBehaviour
     public new Rigidbody2D rigidbody2D;
     public SpriteRenderer spriteRenderer;
     public Empty empty;
+    public int BabyLevel;
     protected Vector3 BornPosition;
     float Speed;
     protected Vector2 LunchDirection;
+    public int Dmage;
+    public int SpDmage;
+
     // Start is called before the first frame update
 
 

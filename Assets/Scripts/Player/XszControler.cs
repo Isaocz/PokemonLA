@@ -7,35 +7,9 @@ public class XszControler : PlayerControler
 
     public Skill Tackle;
     public Skill MudSlup;
-    //public Skill PowderSnow;
-    //public Skill Flail;
-    //public Skill IceShard;
-    //public Skill Endure;
-    //public Skill Mist;
-    //public Skill IcyWind;
-    //public Skill Earthquake;
-    //public Skill Amnesia;
-    //public Skill Blizzard;
-    //public Skill TakeDown;
-    //public Skill IceFang;
-    //public Skill AncientPower;
-    //public Skill Tharsh;
-    //public Skill DoubleHit;
-    //public Skill RainDance;
-    //public Skill SunnyDay;
-    //public Skill Hail;
-    //public Skill SandStorm;
+    public Skill TestSkill01;
+    public Skill TestSkill02;
 
-    //技能机
-    public Skill TeraBlast;
-
-    //伊布
-    public Skill Growl;
-    //public Skill SandAttack;
-    //甜冷美后
-    //public Skill Splash;
-    public Skill PlayNice;
-    public Skill MagicalLeaf;
 
 
     // Start is called before the first frame update
@@ -48,12 +22,10 @@ public class XszControler : PlayerControler
         Instance();
         InstanceNewSkillPanel();
 
-        //Skill01 = Tackle;
-        //Skill02 = MudSlup;
-        Skill01 = TeraBlast;
-        Skill02 = Growl;
-        Skill03 = PlayNice;
-        Skill04 = MagicalLeaf;
+        Skill01 = Tackle;
+        Skill02 = MudSlup;
+        Skill03 = TestSkill01;
+        Skill04 = TestSkill02;
 
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);
@@ -61,8 +33,6 @@ public class XszControler : PlayerControler
         skillBar04.GetSkill(Skill04);
         PlayerType01 = 5;
         PlayerType02 = 15;
-        
-        //GetSkillLevel = new int[] { 5,12,16,20,23,25,10000};
         
     }
 

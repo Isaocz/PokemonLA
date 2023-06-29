@@ -331,17 +331,19 @@ public class PlayerControler : Pokemon
 
             //当按下q键时发射skill01
 
-            if (Input.GetKeyDown(KeyCode.Q) && isSkill01CD == false && Skill01 != null && !isSleepDone && !isSkill)
+            if (Input.GetKeyDown(KeyCode.Q) && isSkill01CD == false && Skill01 != null && !isSkill )
             {
-                //当动画进行到第8帧时会发射技能1，并技能1进入CD
-                animator.SetTrigger("Skill");
-                isSkill01CD = true;
-                isSkill = true;
-                isSkill01lunch = true;
-                skillBar01.isCDStart = true;
+                if ((Skill01.useSkillConditions(this))) {
+                    //当动画进行到第8帧时会发射技能1，并技能1进入CD
+                    animator.SetTrigger("Skill");
+                    isSkill01CD = true;
+                    isSkill = true;
+                    isSkill01lunch = true;
+                    skillBar01.isCDStart = true;
+                }
             }
             //如果技能1在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
-            if (isSkill01CD && !isSleepDone)
+            if (isSkill01CD && ((Skill01.useSkillConditions(this))))
             {
                 Skill01Timer += Time.deltaTime;
                 if (Skill01Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
@@ -353,17 +355,20 @@ public class PlayerControler : Pokemon
 
             //当按下w键时发射skill02
 
-            if (Input.GetKeyDown(KeyCode.W) && isSkill02CD == false && Skill02 != null && !isSleepDone && !isSkill)
+            if (Input.GetKeyDown(KeyCode.W) && isSkill02CD == false && Skill02 != null  && !isSkill)
             {
-                //当动画进行到第8帧时会发射技能2，并技能2进入CD
-                animator.SetTrigger("Skill");
-                isSkill02CD = true;
-                isSkill = true;
-                isSkill02lunch = true;
-                skillBar02.isCDStart = true;
+                if ((Skill02.useSkillConditions(this)))
+                {
+                    //当动画进行到第8帧时会发射技能2，并技能2进入CD
+                    animator.SetTrigger("Skill");
+                    isSkill02CD = true;
+                    isSkill = true;
+                    isSkill02lunch = true;
+                    skillBar02.isCDStart = true;
+                }
             }
             //如果技能2在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
-            if (isSkill02CD && !isSleepDone)
+            if (isSkill02CD && ((Skill02.useSkillConditions(this))))
             {
                 Skill02Timer += Time.deltaTime;
                 if (Skill02Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
@@ -375,17 +380,20 @@ public class PlayerControler : Pokemon
 
             //当按下e键时发射skill03
 
-            if (Input.GetKeyDown(KeyCode.E) && isSkill03CD == false && Skill03 != null && !isSleepDone && !isSkill)
+            if (Input.GetKeyDown(KeyCode.E) && isSkill03CD == false && Skill03 != null  && !isSkill)
             {
-                //当动画进行到第8帧时会发射技能3，并技能3进入CD
-                animator.SetTrigger("Skill");
-                isSkill03CD = true;
-                isSkill = true;
-                isSkill03lunch = true;
-                skillBar03.isCDStart = true;
+                if ((Skill03.useSkillConditions(this)))
+                {
+                    //当动画进行到第8帧时会发射技能3，并技能3进入CD
+                    animator.SetTrigger("Skill");
+                    isSkill03CD = true;
+                    isSkill = true;
+                    isSkill03lunch = true;
+                    skillBar03.isCDStart = true;
+                }
             }
             //如果技能3在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
-            if (isSkill03CD && !isSleepDone)
+            if (isSkill03CD && ((Skill03.useSkillConditions(this))))
             {
                 Skill03Timer += Time.deltaTime;
                 if (Skill03Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
@@ -397,17 +405,20 @@ public class PlayerControler : Pokemon
 
             //当按下r键时发射skill04
 
-            if (Input.GetKeyDown(KeyCode.R) && isSkill04CD == false && Skill04 != null && !isSleepDone && !isSkill)
+            if (Input.GetKeyDown(KeyCode.R) && isSkill04CD == false && Skill04 != null && !isSkill)
             {
-                //当动画进行到第8帧时会发射技能4，并技能4进入CD
-                animator.SetTrigger("Skill");
-                isSkill04CD = true;
-                isSkill = true;
-                isSkill04lunch = true;
-                skillBar04.isCDStart = true;
+                if ((Skill04.useSkillConditions(this)))
+                {
+                    //当动画进行到第8帧时会发射技能4，并技能4进入CD
+                    animator.SetTrigger("Skill");
+                    isSkill04CD = true;
+                    isSkill = true;
+                    isSkill04lunch = true;
+                    skillBar04.isCDStart = true;
+                }
             }
             //如果技能1在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
-            if (isSkill04CD && !isSleepDone)
+            if (isSkill04CD && ((Skill04.useSkillConditions(this))))
             {
                 Skill04Timer += Time.deltaTime;
                 if (Skill04Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1) )* (1 - ((float)SpeedAbilityPoint / 500)))
@@ -590,6 +601,7 @@ public class PlayerControler : Pokemon
         e.LevelForSkill = LevelForSkill;
         e.NowRoom = NowRoom;
         e.InANewRoom = InANewRoom;
+        CopyState(e);
         UnityEditorInternal.ComponentUtility.CopyComponent(playerData);
         UnityEditorInternal.ComponentUtility.PasteComponentValues(e.GetComponent<PlayerData>());
         UnityEditorInternal.ComponentUtility.CopyComponent(playerSubSkillList);
@@ -670,17 +682,17 @@ public class PlayerControler : Pokemon
     }
 
     //声明一个改变生命的函数ChangeHp，改变的点数为ChangePoint，当改变点数为负时触发无敌时间，当改变点数为正时不触发无敌时间
+
+    /// <summary>
+    /// 玩家是否处于反射壁状态
+    /// </summary>
+    public bool isReflect;
+    /// <summary>
+    /// 玩家是否处于光墙状态
+    /// </summary>
+    public bool isLightScreen;
     public void ChangeHp(float ChangePoint , float ChangePointSp , int SkillType)
     {
-        ChangePoint = ChangePoint * ( (Weather.GlobalWeather.isRain && SkillType == 11 )? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f ) : 1 )
-            * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1)
-            * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1)
-            * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
-        ChangePointSp = ChangePointSp * ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
-            * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1)
-            * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1)
-            * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
-
         if (ChangePoint > 0 || ChangePointSp > 0)
         {
             
@@ -693,6 +705,16 @@ public class PlayerControler : Pokemon
         }
         else
         {
+            ChangePoint = ChangePoint * ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+                * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1)
+                * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1)
+                * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+            ChangePointSp = ChangePointSp * ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+                * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1)
+                * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1)
+                * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+            ChangePoint = ChangePoint * (isReflect ? 0.75f : 1);
+            ChangePointSp = ChangePointSp * (isLightScreen ? 0.75f : 1);
             //如果无敌结束，不无敌的话变为不无敌状态，无敌时间计时器时间设置为无敌时间
             if (isInvincible || isInvincibleAlways)
             {

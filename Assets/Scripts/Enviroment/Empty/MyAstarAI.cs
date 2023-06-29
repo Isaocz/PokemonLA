@@ -40,90 +40,114 @@ public class MyAstarAI : MonoBehaviour
     }
     public void Update()
     {
-        if(targetPosition == null)
+        if (!ParentEmpty.isSleepDone && !ParentEmpty.isCanNotMoveWhenParalysis)
         {
-            targetPosition = ParentEmpty.player.transform;
-            RunTargetPosition = targetPosition.position;
-        }
-        speed = ParentEmpty.speed;
-        if (!ParentEmpty.isBorn && !ParentEmpty.isDie && !ParentEmpty.isHit && !ParentEmpty.isSilence && !ParentEmpty.isEmptyFrozenDone && !isCanNotMove) {
-            RePathFind++;
-            if (!ParentEmpty.isFearDone) {
-                if (RePathFind >= 40)
+            if (!ParentEmpty.isEmptyInfatuationDone || ParentEmpty.InfatuationForRangeRayCastEmpty(3) == null)
+            {
+                if (targetPosition == null)
                 {
+                    targetPosition = ParentEmpty.player.transform;
                     RunTargetPosition = targetPosition.position;
-                    if (ParentEmpty.isEmptyConfusionDone) { Debug.Log("xxx"); RunTargetPosition = (RunTargetPosition + new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3), 0)).normalized; }
-                    seeker.StartPath(transform.position, RunTargetPosition, OnPathComplete);
-                    RePathFind = 0;
                 }
-                if (path == null)
-                {
-                    return;
-                }
-            }else if (ParentEmpty.isFearDone && !isEscape)
-            {
-                if ((transform.position - targetPosition.position).magnitude <= 10.5f) {
-                    RunTargetPosition = ((transform.position - targetPosition.position).normalized) * (10.5f) + targetPosition.position;
-                    while ((RunTargetPosition.x <= ParentEmpty.transform.parent.position.x - 11 || RunTargetPosition.x >= ParentEmpty.transform.parent.position.x + 11) || (RunTargetPosition.y <= ParentEmpty.transform.parent.position.y - 6 || RunTargetPosition.y >= ParentEmpty.transform.parent.position.y + 6))
-                    {
-                        RunTargetPosition = Quaternion.AngleAxis(Random.Range(-100, 100), Vector3.forward) * (5 * Vector3.up) + targetPosition.position;
-                    }
-                }
-                else
-                {
-                    RunTargetPosition = transform.position;
-                }
-                seeker.StartPath(transform.position, RunTargetPosition, OnPathComplete);
-                //RePathFind = 0;
-                isEscape = true;
-            }
-            reachedEndOfPath = false;
-            float distanceToWaypoint;
-            while (true)
-            {
-                distanceToWaypoint = Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]);
-                if (distanceToWaypoint < nextWaypointDistance)
-                {
-                    if (currentWaypoint + 1 < path.vectorPath.Count)
-                    {
-                        currentWaypoint++;
-                    }
-                    else
-                    {
-                        reachedEndOfPath = true;
-                        break;
-                    }
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
-            if (ParentEmpty.isEmptyConfusionDone) { Debug.Log("xxx"); dir = (dir + new Vector3(Random.Range(-1f, 1f) , Random.Range(-1f, 1), 0 )).normalized; }
-            Vector3 velocity = dir * (ParentEmpty.isFearDone?speed*2:speed);
-            if ((transform.position - RunTargetPosition).magnitude >= 0.5f) {
-                transform.position += velocity * Time.deltaTime;
             }
             else
             {
-                isEscape = false;
+                    targetPosition = ParentEmpty.InfatuationForRangeRayCastEmpty(3).transform;
+                    RunTargetPosition = targetPosition.position;
+                
+            }
+
+
+
+
+            speed = ParentEmpty.speed;
+            if (!ParentEmpty.isBorn && !ParentEmpty.isDie && !ParentEmpty.isHit && !ParentEmpty.isSilence && !ParentEmpty.isEmptyFrozenDone && !isCanNotMove)
+            {
+                RePathFind++;
+                if (!ParentEmpty.isFearDone)
+                {
+                    if (RePathFind >= 40)
+                    {
+                        RunTargetPosition = targetPosition.position;
+                        if (ParentEmpty.isEmptyConfusionDone) { RunTargetPosition = (RunTargetPosition + new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3), 0)).normalized; }
+                        seeker.StartPath(transform.position, RunTargetPosition, OnPathComplete);
+                        RePathFind = 0;
+                    }
+                    if (path == null)
+                    {
+                        return;
+                    }
+                }
+                else if (ParentEmpty.isFearDone && !isEscape)
+                {
+                    if ((transform.position - targetPosition.position).magnitude <= 10.5f)
+                    {
+                        RunTargetPosition = ((transform.position - targetPosition.position).normalized) * (10.5f) + targetPosition.position;
+                        while ((RunTargetPosition.x <= ParentEmpty.transform.parent.position.x - 11 || RunTargetPosition.x >= ParentEmpty.transform.parent.position.x + 11) || (RunTargetPosition.y <= ParentEmpty.transform.parent.position.y - 6 || RunTargetPosition.y >= ParentEmpty.transform.parent.position.y + 6))
+                        {
+                            RunTargetPosition = Quaternion.AngleAxis(Random.Range(-100, 100), Vector3.forward) * (5 * Vector3.up) + targetPosition.position;
+                        }
+                    }
+                    else
+                    {
+                        RunTargetPosition = transform.position;
+                    }
+                    seeker.StartPath(transform.position, RunTargetPosition, OnPathComplete);
+                    //RePathFind = 0;
+                    isEscape = true;
+                }
+                reachedEndOfPath = false;
+                float distanceToWaypoint;
+                while (true)
+                {
+                    distanceToWaypoint = Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]);
+                    if (distanceToWaypoint < nextWaypointDistance)
+                    {
+                        if (currentWaypoint + 1 < path.vectorPath.Count)
+                        {
+                            currentWaypoint++;
+                        }
+                        else
+                        {
+                            reachedEndOfPath = true;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
+                if (ParentEmpty.isEmptyConfusionDone) { Debug.Log("xxx"); dir = (dir + new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1), 0)).normalized; }
+                Vector3 velocity = dir * (ParentEmpty.isFearDone ? speed * 2 : speed);
+                if ((transform.position - RunTargetPosition).magnitude >= 0.5f)
+                {
+                    transform.position += velocity * Time.deltaTime;
+                }
+                else
+                {
+                    isEscape = false;
+                }
             }
         }
     }
 
     private void FixedUpdate()
     {
-        if (Mathf.Abs((LastPosition - transform.position).magnitude) <= 0.01f)
-        {
-            StaticTimer++;
-            if (StaticTimer >= 15)
+
+        if (!ParentEmpty.isSleepDone && !ParentEmpty.isCanNotMoveWhenParalysis) {
+            if (Mathf.Abs((LastPosition - transform.position).magnitude) <= 0.01f)
             {
-                StaticTimer = 0;
-                isEscape = false;
+                StaticTimer++;
+                if (StaticTimer >= 15)
+                {
+                    StaticTimer = 0;
+                    isEscape = false;
+                }
             }
+            LastPosition = transform.position;
         }
-        LastPosition = transform.position;
     }
 }

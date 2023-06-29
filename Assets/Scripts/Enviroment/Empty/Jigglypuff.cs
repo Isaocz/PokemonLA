@@ -58,7 +58,7 @@ public class Jigglypuff : Empty
             EmptyDie();
             UpdateEmptyChangeHP();
         }
-        if (!isBorn && !isDie && !isHit && isRoll)
+        if (!isBorn && !isDie && !isHit && isRoll && !isSleepDone && !isCanNotMoveWhenParalysis)
         {
            CheckTurn();
         }
@@ -66,58 +66,86 @@ public class Jigglypuff : Empty
 
     private void FixedUpdate()
     {
+
         ResetPlayer();
+        if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }
         if (!isBorn)
-        {        
-            if (!isDie && !isHit)
-                {    
-                if (!isRoll) 
-                {
-                    if(RollTimer != 0)
-                    {
-                        RollTimer += Random.Range(0.0f, 1.0f) > 0.2 ? 1 : 0;
-                    }
-                    else if(!isRollStart)
-                    {
-                        animator.SetTrigger("Sing");
-                        animator.ResetTrigger("SingOver");
-                        if (SingTimer == 0) { SingObj = Instantiate(Sing, transform.position, Quaternion.identity, transform); }
-                        SingTimer += isSing?1:0;
-                        isSing = true;
-                        if(SingTimer >= 400 || isSilence || isEmptyFrozenDone)
-                        {
-                            SingTimer = 0;
-                            RollTimer = 1;
-                            isSing = false;
-                            animator.SetTrigger("SingOver");
-                            animator.ResetTrigger("Sing");
-                        }
-                        
-                    }
-                    if (RollTimer >= 400)         
-                    {
-                        RollTimer = 0;
-                        isRollStart = true;
-                        animator.SetTrigger("Roll");
-                        animator.ResetTrigger("RollOver");
-                        Director = new Vector2Int(Random.Range(0.0f, 1.0f) > 0.5 ? -1 : 1, Random.Range(0.0f, 1.0f) > 0.5 ? -1 : 1);     
-                        animator.SetFloat("LookX", Director.x);           
-                        animator.SetFloat("LookY", Director.y);                 
-                    }              
-                }                
-                else         
-                {                      
-                    transform.position += new Vector3(Director.x * speed * Time.deltaTime, Director.y * speed * Time.deltaTime, 0);                
-                }        
-            }
-            if (isSilence || isEmptyFrozenDone || ((transform.position - player.transform.position).magnitude <= 5 && TurnCount >= 2))
+        {
+            if (!isSleepDone && !isCanNotMoveWhenParalysis)
             {
-                if ((isSilence || isEmptyFrozenDone)&& SingObj != null) { Destroy(SingObj); }
-                RollOver();
+
+                animator.ResetTrigger("Sleep");
+                if (!isDie && !isHit)
+                {
+                    if (!isRoll)
+                    {
+                        if (RollTimer != 0)
+                        {
+                            RollTimer += Random.Range(0.0f, 1.0f) > 0.2 ? 1 : 0;
+                        }
+                        else if (!isRollStart)
+                        {
+                            animator.SetTrigger("Sing");
+                            animator.ResetTrigger("SingOver");
+                            SingTimer += isSing ? 1 : 0;
+                            if (SingTimer == 0) { SingObj = Instantiate(Sing, transform.position, Quaternion.identity, transform); }
+                            isSing = true;
+                            if (SingTimer >= 400 || isSilence || isEmptyFrozenDone)
+                            {
+                                SingTimer = 0;
+                                RollTimer = 1;
+                                isSing = false;
+                                animator.SetTrigger("SingOver");
+                                animator.ResetTrigger("Sing");
+                            }
+
+                        }
+                        if (RollTimer >= 400)
+                        {
+                            RollTimer = 0;
+                            isRollStart = true;
+                            animator.SetTrigger("Roll");
+                            animator.ResetTrigger("RollOver");
+                            Director = new Vector2Int(Random.Range(0.0f, 1.0f) > 0.5 ? -1 : 1, Random.Range(0.0f, 1.0f) > 0.5 ? -1 : 1);
+                            animator.SetFloat("LookX", Director.x);
+                            animator.SetFloat("LookY", Director.y);
+                        }
+                    }
+                    else
+                    {
+                        transform.position += new Vector3(Director.x * speed * Time.deltaTime, Director.y * speed * Time.deltaTime, 0);
+                    }
+                }
+                Vector3 TargetPosition = player.transform.position;
+                if(isEmptyInfatuationDone && InfatuationForDistanceEmpty() != null)
+                {
+                    TargetPosition = InfatuationForDistanceEmpty().transform.position;
+                }
+                if (isSilence || isEmptyFrozenDone || ((transform.position - TargetPosition).magnitude <= 5 && TurnCount >= 2))
+                {
+                    if ((isSilence || isEmptyFrozenDone) && SingObj != null) { Destroy(SingObj); }
+                    RollOver();
+                }
+                if (isHit && isSing) { SingTimer += 10; }
+            }
+            if (isSleepDone)
+            {
+                animator.ResetTrigger("Sing");
+                animator.ResetTrigger("SingOver");
+                animator.ResetTrigger("Roll");
+                animator.ResetTrigger("RollOver");
+                animator.SetTrigger("Sleep");
+                RollTimer = 0;
+                isRoll = false;
+                isRollStart = false;
+                SingTimer = 0;
+                isSing = false;
+                TurnCount = 0;
+                Destroy(SingObj);
             }
             EmptyBeKnock();
             StateMaterialChange();
-            if(isHit && isSing) { SingTimer += 10; }
+
         }
     }
 
@@ -166,6 +194,10 @@ public class Jigglypuff : Empty
         {
             EmptyTouchHit(other.gameObject);
             
+        }
+        if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
+        {
+            InfatuationEmptyTouchHit(other.gameObject);
         }
     }
 }

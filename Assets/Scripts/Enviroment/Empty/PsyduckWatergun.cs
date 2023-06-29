@@ -29,16 +29,24 @@ public class PsyduckWatergun : Projectile
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == ("Enviroment") || other.tag == ("Room") || other.tag == ("Player"))
+        if (other.tag == ("Enviroment") || other.tag == ("Room") || other.tag == ("Player") || (empty.isEmptyInfatuationDone && other.gameObject != empty.gameObject && other.tag == ("Empty")))
         {
             isDestory = true;
             Destroy(rigidbody2D);
-            if(other.tag == ("Player"))
+            float WeatherAlpha = ((Weather.GlobalWeather.isRain) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1) * ((Weather.GlobalWeather.isSunny) ? 0.5f : 1);
+
+            if (other.tag == ("Player"))
             {
                 PlayerControler playerControler = other.GetComponent<PlayerControler>();
-                playerControler.ChangeHp(0, -(60 * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / 250), 11);
+                playerControler.ChangeHp(0, -(SpDmage * empty.SpAAbilityPoint * WeatherAlpha * (2 * empty.Emptylevel + 10) / 250), 11);
                 playerControler.KnockOutPoint = 5;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+            }
+            if (other.tag == ("Empty"))
+            {
+                Empty e = other.GetComponent<Empty>();
+                e.EmptyHpChange( 0 , (SpDmage * empty.SpAAbilityPoint * WeatherAlpha * (2 * empty.Emptylevel + 10) / (250 * e.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((e.EmptyType01 == Type.TypeEnum.Ice || e.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2), 11 );
+
             }
         }
     }
