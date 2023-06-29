@@ -40,7 +40,7 @@ public class SubSkill : MonoBehaviour
 
 
     //技能的Tag
-    public int[] SkillTag;
+    public Skill.SkillTagEnum[] SkillTag;
     //Tag1:接触类 Tag2:非接触类 Tag3:爪类 Tag4:牙类 Tag5:声音类
 
     //表示技能生成时是否生成于玩家所面对方向，如为Fales生成在玩家所面对的方向，如为true生成在玩家位置（多用于自我buff类技能）
@@ -186,9 +186,9 @@ public class SubSkill : MonoBehaviour
             {
                 if (SkillTag != null)
                 {
-                    foreach (int i in SkillTag)
+                    foreach (Skill.SkillTagEnum i in SkillTag)
                     {
-                        if (i == 1) { target.EmptyToxicDone(1); }
+                        if (i == Skill.SkillTagEnum.接触类) { target.EmptyToxicDone(1 , 30); }
                     }
                 }
             }

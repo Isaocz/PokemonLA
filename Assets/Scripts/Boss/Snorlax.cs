@@ -74,102 +74,109 @@ public class Snorlax : Empty
         if (!isBorn)
         {
             UpdateEmptyChangeHP();
-            if (!isAngry && EmptyHp <= maxHP * 0.65f && !isEmptyFrozenDone && !isFearDone) {
-                isAngry = true;
-                isGigaImpact = true;
-                animator.SetTrigger("GigaImpact");
-            }
-
             EmptyDie();
 
-            if ( !isSlam && !isGigaImpact && !isDie && !isEmptyFrozenDone)
+
+            if (!isSleepDone && !isCanNotMoveWhenParalysis)
             {
-                CheckPlayer();
-                if (!isTurn && !isYamn && !isImpact)
+                if (!isAngry && EmptyHp <= maxHP * 0.65f && !isEmptyFrozenDone && !isFearDone)
                 {
-                    CheckTurn();
-                }
-            }
-            if (isTurn )
-            {
-                TurnTimer -= Time.deltaTime;
-            }
-            if (TurnTimer <= 0.0f)
-            {
-                isTurn = false;
-                TurnTimer = 2.0f;
-            }
-
-            if (!isSlam && !isSlamFull  && !isEmptyFrozenDone)
-            {
-                if ((transform.position-player.transform.position).magnitude < (isAngry?15:6)) {
-                    if (Random.Range(0.0f, 1.0f) > SlamPer)
-                    {
-                        isSlamFull = true;
-                        SlamPer += 0.1f;
-                    }
-                    else
-                    {
-                        if (!isFearDone) { SlamPostion = player.transform.position; }
-                        else { SlamPostion = 2 * transform.position - player.transform.position; }
-                        SlamStartPostion = transform.position;
-                        isSlam = true;
-                        animator.SetTrigger("Slam");
-                        if (Mathf.Abs(transform.position.x - player.transform.position.x) > Mathf.Abs(transform.position.y - player.transform.position.y))
-                        {
-                            direction = new Vector2Int(((transform.position.x - player.transform.position.x) > 0 ? -1 : 1), 0);
-                        }
-                        else
-                        {
-                            direction = new Vector2Int(0, ((transform.position.y - player.transform.position.y) > 0 ? -1 : 1));
-                        }
-                        if (isFearDone) {direction = new Vector2Int(-direction.x, -direction.y); }
-                        SlamPer = 0.3f;
-                    }
-                }
-            }
-
-            if ((isSlam || isSlamFull) )
-            {
-                SlamTimer -= Time.deltaTime;
-            }
-            if (SlamTimer <= 0.0f)
-            {
-                isSlam = false;
-                isSlamFull = false;
-                SlamTimer = 2.0f;
-            }
-
-
-            if (isYamn && !isEmptyFrozenDone)
-            {
-                YamnTimer -= Time.deltaTime;
-            }
-            if (YamnTimer <= 0.0f)
-            {
-                isYamn = false;
-                YamnTimer = isImpact? 7f : 3f;
-            }
-            if (isImpact )
-            {
-                ImpactTimer -= Time.deltaTime;
-            }
-            if (ImpactTimer <= 0.0f)
-            {
-                isImpact = false;
-                ImpactTimer = 3f;
-            }
-
-            if (!isGigaImpact && player.isSleepDone && isAngry && !isEmptyFrozenDone && !isFearDone)
-            {
-                RaycastHit2D PlayerChecker = Physics2D.Raycast(new Vector2(transform.position.x + 0.7f, transform.position.y + 0.5f), new Vector2(player.transform.position.x - transform.position.x + 0.7f, player.transform.position.y - transform.position.y + 0.5f ), 15f, LayerMask.GetMask("Player", "PlayerFly", "Enviroment"));
-                if(PlayerChecker.collider != null && (PlayerChecker.collider.gameObject.layer == 8 || PlayerChecker.collider.gameObject.layer == 17))
-                {
+                    isAngry = true;
                     isGigaImpact = true;
                     animator.SetTrigger("GigaImpact");
                 }
-            }
 
+
+
+                if (!isSlam && !isGigaImpact && !isDie && !isEmptyFrozenDone)
+                {
+                    CheckPlayer();
+                    if (!isTurn && !isYamn && !isImpact)
+                    {
+                        CheckTurn();
+                    }
+                }
+                if (isTurn)
+                {
+                    TurnTimer -= Time.deltaTime;
+                }
+                if (TurnTimer <= 0.0f)
+                {
+                    isTurn = false;
+                    TurnTimer = 2.0f;
+                }
+
+                if (!isSlam && !isSlamFull && !isEmptyFrozenDone)
+                {
+                    if ((transform.position - player.transform.position).magnitude < (isAngry ? 15 : 6))
+                    {
+                        if (Random.Range(0.0f, 1.0f) > SlamPer)
+                        {
+                            isSlamFull = true;
+                            SlamPer += 0.1f;
+                        }
+                        else
+                        {
+                            if (!isFearDone) { SlamPostion = player.transform.position; }
+                            else { SlamPostion = 2 * transform.position - player.transform.position; }
+                            SlamStartPostion = transform.position;
+                            isSlam = true;
+                            animator.SetTrigger("Slam");
+                            if (Mathf.Abs(transform.position.x - player.transform.position.x) > Mathf.Abs(transform.position.y - player.transform.position.y))
+                            {
+                                direction = new Vector2Int(((transform.position.x - player.transform.position.x) > 0 ? -1 : 1), 0);
+                            }
+                            else
+                            {
+                                direction = new Vector2Int(0, ((transform.position.y - player.transform.position.y) > 0 ? -1 : 1));
+                            }
+                            if (isFearDone) { direction = new Vector2Int(-direction.x, -direction.y); }
+                            SlamPer = 0.3f;
+                        }
+                    }
+                }
+
+                if ((isSlam || isSlamFull))
+                {
+                    SlamTimer -= Time.deltaTime;
+                }
+                if (SlamTimer <= 0.0f)
+                {
+                    isSlam = false;
+                    isSlamFull = false;
+                    SlamTimer = 2.0f;
+                }
+
+
+                if (isYamn && !isEmptyFrozenDone)
+                {
+                    YamnTimer -= Time.deltaTime;
+                }
+                if (YamnTimer <= 0.0f)
+                {
+                    isYamn = false;
+                    YamnTimer = isImpact ? 7f : 3f;
+                }
+                if (isImpact)
+                {
+                    ImpactTimer -= Time.deltaTime;
+                }
+                if (ImpactTimer <= 0.0f)
+                {
+                    isImpact = false;
+                    ImpactTimer = 3f;
+                }
+
+                if (!isGigaImpact && player.isSleepDone && isAngry && !isEmptyFrozenDone && !isFearDone)
+                {
+                    RaycastHit2D PlayerChecker = Physics2D.Raycast(new Vector2(transform.position.x + 0.7f, transform.position.y + 0.5f), new Vector2(player.transform.position.x - transform.position.x + 0.7f, player.transform.position.y - transform.position.y + 0.5f), 15f, LayerMask.GetMask("Player", "PlayerFly", "Enviroment"));
+                    if (PlayerChecker.collider != null && (PlayerChecker.collider.gameObject.layer == 8 || PlayerChecker.collider.gameObject.layer == 17))
+                    {
+                        isGigaImpact = true;
+                        animator.SetTrigger("GigaImpact");
+                    }
+                }
+            }
             animator.SetFloat("LookX", direction.x);
             animator.SetFloat("LookY", direction.y);
 
@@ -185,55 +192,58 @@ public class Snorlax : Empty
             Vector2 NowPosition = position;
             if (!isDie && !isHit  && !isEmptyFrozenDone)
             {
-                if (!isSlam && !isYamnMove && !isImpactMove & !isGigaImpact)
+                if (!isSleepDone && !isCanNotMoveWhenParalysis)
                 {
-                    //获取当前刚体坐标，当当前x坐标和初始x坐标距离小于设定好的移动距离时，缓慢移动 当大于时，重置初始位置，方向反转
-                    position = rigidbody2D.position;
-                    position.x = Mathf.Clamp(position.x + speed * direction.x * Time.deltaTime, transform.parent.position.x - 13, transform.parent.position.x + 13);
-                    position.y = Mathf.Clamp(position.y + speed * direction.y * Time.deltaTime, transform.parent.position.y - 10f, transform.parent.position.y + 10f);
-                    rigidbody2D.position = position;
-                }
-                if (isSlameMove)
-                {
-                    position = rigidbody2D.position;
-                    if (isEmptyConfusionDone) { SlamStartPostion = SlamStartPostion + new Vector2( Random.Range(-3,3) , Random.Range(-3,3)); }
-                    if (!isFearDone && !isSilence)
+                    if (!isSlam && !isYamnMove && !isImpactMove & !isGigaImpact)
                     {
-                        position.x = Mathf.Clamp(position.x + ((player.transform.position.x - SlamStartPostion.x) / 15f), transform.parent.position.x - 11, transform.parent.position.x + 11);
-                        position.y = Mathf.Clamp(position.y + ((player.transform.position.y - SlamStartPostion.y) / 15f), transform.parent.position.y - 6.2f, transform.parent.position.y + 6.2f);
+                        //获取当前刚体坐标，当当前x坐标和初始x坐标距离小于设定好的移动距离时，缓慢移动 当大于时，重置初始位置，方向反转
+                        position = rigidbody2D.position;
+                        position.x = Mathf.Clamp(position.x + speed * direction.x * Time.deltaTime, transform.parent.position.x - 13, transform.parent.position.x + 13);
+                        position.y = Mathf.Clamp(position.y + speed * direction.y * Time.deltaTime, transform.parent.position.y - 10f, transform.parent.position.y + 10f);
+                        rigidbody2D.position = position;
                     }
-                    else 
+                    if (isSlameMove)
                     {
-                        position.x = Mathf.Clamp(position.x + ((SlamPostion.x - SlamStartPostion.x) / 15f), transform.parent.position.x - 11, transform.parent.position.x + 11);
-                        position.y = Mathf.Clamp(position.y + ((SlamPostion.y - SlamStartPostion.y) / 15f), transform.parent.position.y - 6.2f, transform.parent.position.y + 6.2f);
+                        position = rigidbody2D.position;
+                        if (isEmptyConfusionDone) { SlamStartPostion = SlamStartPostion + new Vector2(Random.Range(-3, 3), Random.Range(-3, 3)); }
+                        if (!isFearDone && !isSilence)
+                        {
+                            position.x = Mathf.Clamp(position.x + ((player.transform.position.x - SlamStartPostion.x) / 15f), transform.parent.position.x - 11, transform.parent.position.x + 11);
+                            position.y = Mathf.Clamp(position.y + ((player.transform.position.y - SlamStartPostion.y) / 15f), transform.parent.position.y - 6.2f, transform.parent.position.y + 6.2f);
+                        }
+                        else
+                        {
+                            position.x = Mathf.Clamp(position.x + ((SlamPostion.x - SlamStartPostion.x) / 15f), transform.parent.position.x - 11, transform.parent.position.x + 11);
+                            position.y = Mathf.Clamp(position.y + ((SlamPostion.y - SlamStartPostion.y) / 15f), transform.parent.position.y - 6.2f, transform.parent.position.y + 6.2f);
+                        }
+                        rigidbody2D.position = position;
                     }
-                    rigidbody2D.position = position;
-                }
-                if (isImpactMove)
-                {
-                    position = rigidbody2D.position;
-                    position.x = Mathf.Clamp(position.x + (isEmptyConfusionDone ? Random.Range(2, 6) : 4) * speed * direction.x * Time.deltaTime, transform.parent.position.x - 13, transform.parent.position.x + 13);
-                    position.y = Mathf.Clamp(position.y + (isEmptyConfusionDone ? Random.Range(2, 6) : 4) * speed * direction.y * Time.deltaTime, transform.parent.position.y - 10, transform.parent.position.y + 10);
-                    rigidbody2D.position = position;
-                }
-                if (isGigaImpactMove)
-                {
-                    if (isFearDone) { GigaImpactPostion1 = new Vector2(-GigaImpactPostion1.x, -GigaImpactPostion1.y) ; }
-                    if( Mathf.Abs(GigaImpactPostion1.x) >= Mathf.Abs(GigaImpactPostion1.y))
+                    if (isImpactMove)
                     {
-                        direction.x = (GigaImpactPostion1.x >= 0?1:-1);
-                        direction.y = 0;
+                        position = rigidbody2D.position;
+                        position.x = Mathf.Clamp(position.x + (isEmptyConfusionDone ? Random.Range(2, 6) : 4) * speed * direction.x * Time.deltaTime, transform.parent.position.x - 13, transform.parent.position.x + 13);
+                        position.y = Mathf.Clamp(position.y + (isEmptyConfusionDone ? Random.Range(2, 6) : 4) * speed * direction.y * Time.deltaTime, transform.parent.position.y - 10, transform.parent.position.y + 10);
+                        rigidbody2D.position = position;
                     }
-                    else
+                    if (isGigaImpactMove)
                     {
-                        direction.x = 0;
-                        direction.y = (GigaImpactPostion1.y >= 0 ? 1 : -1);
+                        if (isFearDone) { GigaImpactPostion1 = new Vector2(-GigaImpactPostion1.x, -GigaImpactPostion1.y); }
+                        if (Mathf.Abs(GigaImpactPostion1.x) >= Mathf.Abs(GigaImpactPostion1.y))
+                        {
+                            direction.x = (GigaImpactPostion1.x >= 0 ? 1 : -1);
+                            direction.y = 0;
+                        }
+                        else
+                        {
+                            direction.x = 0;
+                            direction.y = (GigaImpactPostion1.y >= 0 ? 1 : -1);
+                        }
+                        if (isEmptyConfusionDone) { GigaImpactPostion1 = (GigaImpactPostion1 + new Vector2(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f))).normalized; }
+                        position = rigidbody2D.position;
+                        position.x = Mathf.Clamp(position.x + 5.5f * speed * GigaImpactPostion1.x * Time.deltaTime, transform.parent.position.x - 13, transform.parent.position.x + 13);
+                        position.y = Mathf.Clamp(position.y + 5.5f * speed * GigaImpactPostion1.y * Time.deltaTime, transform.parent.position.y - 10, transform.parent.position.y + 10);
+                        rigidbody2D.position = position;
                     }
-                    if (isEmptyConfusionDone) { GigaImpactPostion1 = (GigaImpactPostion1 + new Vector2(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f))).normalized; }
-                    position = rigidbody2D.position;
-                    position.x = Mathf.Clamp(position.x + 5.5f * speed * GigaImpactPostion1.x * Time.deltaTime, transform.parent.position.x - 13, transform.parent.position.x + 13);
-                    position.y = Mathf.Clamp(position.y + 5.5f * speed * GigaImpactPostion1.y * Time.deltaTime, transform.parent.position.y - 10, transform.parent.position.y + 10);
-                    rigidbody2D.position = position;
                 }
             }
             Vector2 move = new Vector2(position.x - NowPosition.x, position.y - NowPosition.y);

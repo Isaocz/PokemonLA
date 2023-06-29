@@ -9,11 +9,13 @@ public class JigglypuffSing : MonoBehaviour
     float MaxRadius;
     float SingTimer;
     CircleCollider2D SingRange;
+    Empty ParentEmpty;
 
     private void Start()
     {
         MaxRadius = 4.3f;
         SingRange = GetComponent<CircleCollider2D>();
+        ParentEmpty = transform.parent.GetComponent<Empty>();
     }
 
     private void OnTriggerStay2D(Collider2D other)
@@ -22,6 +24,9 @@ public class JigglypuffSing : MonoBehaviour
         {
             other.GetComponent<PlayerControler>().SleepFloatPlus(0.2f);
         }   
+        if(ParentEmpty.isEmptyInfatuationDone && (other.tag == "Empty") && other.gameObject != ParentEmpty.gameObject){
+            other.GetComponent<Empty>().EmptySleepDone(0.1f, 10);
+        }
     }
 
 

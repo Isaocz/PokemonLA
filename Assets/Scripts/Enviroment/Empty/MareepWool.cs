@@ -53,14 +53,22 @@ public class MareepWool : Projectile
     // Start is called before the first frame update
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.transform.tag == "Player")
+        if(other.transform.tag == "Player" || (empty.isEmptyInfatuationDone && other.gameObject != empty.gameObject && other.gameObject.tag == ("Empty")))
         {
-            isDestory = true;
-            PlayerControler playerControler = other.transform.GetComponent<PlayerControler>();
-            playerControler.ChangeHp(0, -(10 * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / 250), 13);
-            playerControler.KnockOutPoint = 5;
-            playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
-            playerControler.ParalysisFloatPlus(0.2f);
+            if (other.transform.tag == "Player" && !empty.isEmptyInfatuationDone) {
+                isDestory = true;
+                PlayerControler playerControler = other.transform.GetComponent<PlayerControler>();
+                playerControler.ChangeHp(0, -(SpDmage * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / 250), 13);
+                playerControler.KnockOutPoint = 5;
+                playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+                playerControler.ParalysisFloatPlus(0.2f);
+            }
+            else if (empty.isEmptyInfatuationDone && other.gameObject.tag == ("Empty")) {
+                isDestory = true;
+                Empty e = other.transform.GetComponent<Empty>();
+                e.EmptyHpChange(0, -(SpDmage * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / (250 * e.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((e.EmptyType01 == Type.TypeEnum.Ice || e.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2), 13);
+                e.EmptyParalysisDone(1 , 5);
+            }
         }
         
     }

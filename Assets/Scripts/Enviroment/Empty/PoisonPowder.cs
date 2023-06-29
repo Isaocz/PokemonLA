@@ -4,13 +4,24 @@ using UnityEngine;
 
 public class PoisonPowder : MonoBehaviour
 {
+
+    Empty ParentEmpty;
+
+    private void Start()
+    {
+        ParentEmpty = transform.parent.GetComponent<Empty>();
+    }
+
     // Start is called before the first frame update
 
     void OnParticleCollision(GameObject other)
     {
-        if(other.tag == "Player")
+        if (!ParentEmpty.isEmptyInfatuationDone)
         {
-            other.GetComponent<PlayerControler>().ToxicFloatPlus(0.15f);
+            if (other.tag == "Player")
+            {
+                other.GetComponent<PlayerControler>().ToxicFloatPlus(0.15f);
+            }
         }
     }
 }

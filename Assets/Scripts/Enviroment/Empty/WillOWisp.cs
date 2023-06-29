@@ -39,7 +39,7 @@ public class WillOWisp : Projectile
     // Start is called before the first frame update
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Enviroment" || other.tag == "Player" || other.tag == "Room" )
+        if(other.tag == "Enviroment" || other.tag == "Player" || other.tag == "Room" || (empty.isEmptyInfatuationDone && other.tag == "Empty"))
         {
             if(other.tag == "Player")
             {
@@ -48,6 +48,13 @@ public class WillOWisp : Projectile
                 playerControler.ChangeHp(0, -1, 19);
                 playerControler.KnockOutPoint = 5;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+            }
+            if(other.tag == "Empty" && other.gameObject != empty.gameObject)
+            {
+                Empty e = other.GetComponent<Empty>();
+                e.EmptyBurnDone(0.4f , 10f);
+                e.EmptyHpChange( 0 , 1, 19);
+                
             }
             gameObject.transform.localScale -= new Vector3(0.15f, 0.15f, 0.15f);
             if(gameObject.transform.localScale.x <= 0.3)

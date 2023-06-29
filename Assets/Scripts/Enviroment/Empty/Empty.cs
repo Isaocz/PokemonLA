@@ -185,12 +185,14 @@ public class Empty : Pokemon
             {
                 if (SkillType != 19)
                 {
-                    EmptyHp -= (int)((Dmage + SpDmage) * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]);
+                    EmptyHp -=  Mathf.Clamp((int)((Dmage + SpDmage) * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]) , 1 , 100000 );
                 }
                 else
                 {
-                    EmptyHp -= (int)((Dmage + SpDmage) * typeDef);
+                    EmptyHp -= Mathf.Clamp( (int)((Dmage + SpDmage) * typeDef) , 1 , 100000 );
                 }
+            EmptySleepRemove();
+
             }
             else
             {
@@ -280,6 +282,36 @@ public class Empty : Pokemon
         }
     }
 
+    protected bool isInfatuationDmageDone;
+    float InfatuationDmageCDTimer;
+    /// <summary>
+    /// 当地人被魅惑时，调用方法
+    /// </summary>
+    public void UpdateInfatuationDmageCDTimer()
+    {
+        if (isInfatuationDmageDone)
+        {
+            InfatuationDmageCDTimer += Time.deltaTime;
+            if(InfatuationDmageCDTimer >= 0.8)
+            {
+                InfatuationDmageCDTimer = 0; isInfatuationDmageDone = false;
+            }
+        }
+    }
+
+    public void InfatuationEmptyTouchHit(GameObject TargetEmpty)
+    {
+        if (!isInfatuationDmageDone) {
+            //如果触碰到的是玩家，使玩家扣除一点血量
+            Empty e = TargetEmpty.gameObject.GetComponent<Empty>();
+            if (e != null)
+            {
+                e.EmptyHpChange((10 * AtkAbilityPoint * (2 * Emptylevel + 10) / (250 * e.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((e.EmptyType01 == Type.TypeEnum.Ice || e.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2), 0, 0);
+                isInfatuationDmageDone = true;
+            }
+        }
+    }
+
     //========================敌人碰撞伤害========================
 
 
@@ -334,14 +366,119 @@ public class Empty : Pokemon
 
 
 
+
+
+    //===============================着迷时搜索其他敌人=================================
+
+    /// <summary>
+    /// 对于通过射线检测范围内目标的敌人，在着迷时使用此方法寻找敌人
+    /// </summary>
+    /// <param name="Range">该敌人的视野范围</param>
+    public Empty InfatuationForRangeRayCastEmpty(float Range)
+    {
+        //输出的敌人目标
+        Empty OutPutEmpty = null;
+        //仅当房间敌人数多余1（也就是房间内有除该敌人以外的敌人）时，搜索敌人
+        if (transform.parent.childCount >= 1)
+        {
+            float D = 1000;
+            //遍历当前房间内所有敌人
+            foreach (Transform e in transform.parent)
+            {
+                //如果e不是自己,射线检测，如果成功输出e
+                if(e.gameObject != this.gameObject)
+                {
+                    RaycastHit2D SearchTarget = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), new Vector2(e.transform.position.x - transform.position.x, e.transform.position.y - transform.position.y), Range , LayerMask.GetMask("Empty", "Enviroment", "Room", "EmptyFly"));
+                    if (SearchTarget.collider != null && SearchTarget.collider.gameObject != gameObject && ( SearchTarget.transform.tag == "Empty" || SearchTarget.transform.tag == "EmptyFly"))
+                    {
+                        if((transform.position - e.transform.position).magnitude < D)
+                        {
+                            OutPutEmpty = e.GetComponent<Empty>();
+                            D = (transform.position - e.transform.position).magnitude;
+                        }
+                    }
+
+                }
+            }
+        }
+        return OutPutEmpty;
+    }
+
+
+
+
+    /// <summary>
+    /// 对于不通过射线检测的敌人（如耿鬼这种锁定玩家的飞行敌人），在着迷时使用此方法，计算离自己距离最近的敌人
+    /// </summary>
+    /// <returns></returns>
+    public Empty InfatuationForDistanceEmpty()
+    {
+        //输出的敌人目标
+        Empty OutPutEmpty = null;
+        //仅当房间敌人数多余1（也就是房间内有除该敌人以外的敌人）时，搜索敌人
+        if (transform.parent.childCount >= 1)
+        {
+            float D = 1000;
+            //遍历当前房间内所有敌人
+            foreach (Transform e in transform.parent)
+            {
+                //如果e不是自己,计算距离，如果小于当前距离输出e
+                if (e.gameObject != this.gameObject)
+                {                
+                    if ((transform.position - e.transform.position).magnitude < D)     
+                    {
+                        OutPutEmpty = e.GetComponent<Empty>();   
+                        D = (transform.position - e.transform.position).magnitude; 
+                    }
+                }
+            }
+        }
+        return OutPutEmpty;
+    }
+
+    //===============================着迷时搜索其他敌人=================================
+
+
+
+
+
+
+
     //=========================随时间的受伤时间=====================
 
     public void UpdateEmptyChangeHP()
     {
         if (isToxicDone) { EmptyToxic(); }
+        if (isBurnDone) { EmptyBurn(); }
+        if (isParalysisDone) { EmptyParalysisJudge(); } else { isCanNotMoveWhenParalysis = false; }
         if (Weather.GlobalWeather.isHail) { EmptyHail(); }
         if (Weather.GlobalWeather.isSandstorm) { EmptySandStorm(); }
     }
+
+
+    //========================= 麻痹事件========================
+
+    /// <summary>
+    /// 敌人的麻痹计时器，每计时0.5s进行一次判定，如果通过判定则敌人可以移动 不通过不可以移动直到判定通过
+    /// </summary>
+    protected float EmptyParalysisJudgeTimer;
+    public bool isCanNotMoveWhenParalysis;
+    /// <summary>
+    /// 敌人的麻痹计时器，每计时0.5s进行一次判定，
+    /// </summary>
+    void EmptyParalysisJudge()
+    {
+        EmptyParalysisJudgeTimer += Time.deltaTime;
+        if (EmptyParalysisJudgeTimer >= 0.5)
+        {
+            if (Random.Range(0.0f, 1.0f) > 0.65f) { isCanNotMoveWhenParalysis = true; }
+            else { isCanNotMoveWhenParalysis = false; }
+            EmptyParalysisJudgeTimer = 0;
+        }
+
+    }
+    //=========================麻痹事件========================
+
 
     //=========================中毒事件========================
 
@@ -358,13 +495,34 @@ public class Empty : Pokemon
         if(EmptyToxicTimer >= 2)
         {
             EmptyToxicTimer += Time.deltaTime;
-            EmptyHpChange( Mathf.Clamp((((float)maxHP)/16)*OtherStateResistance ,1, isBoos ? 8 : 10) , 0, 19);
+            EmptyHpChange( Mathf.Clamp((((float)maxHP)/16)*ToxicResistance ,1, isBoos ? 8 : 10) , 0, 19);
             EmptyToxicTimer = 0;
         }
 
     }
     //=========================中毒事件========================
 
+    //=========================中毒事件========================
+
+    /// <summary>
+    /// 敌人的烧伤计时器，每计时两秒烧伤一次
+    /// </summary>
+    protected float EmptyBurnTimer;
+    /// <summary>
+    /// 根据烧伤时间敌人掉血
+    /// </summary>
+    void EmptyBurn()
+    {
+        EmptyBurnTimer += Time.deltaTime;
+        if (EmptyBurnTimer >= 2)
+        {
+            EmptyBurnTimer += Time.deltaTime;
+            EmptyHpChange(Mathf.Clamp((((float)maxHP) / 16) * BurnResistance, 1, isBoos ? 8 : 10), 0, 19);
+            EmptyBurnTimer = 0;
+        }
+
+    }
+    //=========================中毒事件========================
 
     //=========================冰雹伤害事件========================
 

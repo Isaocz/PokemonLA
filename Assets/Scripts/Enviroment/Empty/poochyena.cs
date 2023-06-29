@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class poochyena : Empty
@@ -19,6 +17,7 @@ public class poochyena : Empty
     Vector2 move;
     Vector2 ConfusionDirection;
     public GameObject BiteAnimation;
+
 
 
     // Start is called before the first frame update
@@ -71,35 +70,39 @@ public class poochyena : Empty
         {
             EmptyDie();
             StateMaterialChange();
-            if (direction.x == 1) { animator.SetFloat("LookX", 1); }
-            else if (direction.x == -1) { animator.SetFloat("LookX", 0); }
+            if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }
+            if (!isSleepDone && !isCanNotMoveWhenParalysis)
+            {
+                if (direction.x == 1) { animator.SetFloat("LookX", 1); }
+                else if (direction.x == -1) { animator.SetFloat("LookX", 0); }
 
-            if (!isTurn && !isBite && !isBite && !isSilence && !isBiteAnimation)
-            {
-                CheckTurn();
-            }
-            if (isTurn && !isSilence)
-            {
-                TurnTimer -= Time.deltaTime;
-            }
-            if (TurnTimer <= 0.0f)
-            {
-                isTurn = false;
-                TurnTimer = 2.0f;
-            }
+                if (!isTurn && !isBite && !isBite && !isSilence && !isBiteAnimation)
+                {
+                    CheckTurn();
+                }
+                if (isTurn && !isSilence)
+                {
+                    TurnTimer -= Time.deltaTime;
+                }
+                if (TurnTimer <= 0.0f)
+                {
+                    isTurn = false;
+                    TurnTimer = 2.0f;
+                }
 
-            if (!isBite && !isSilence && !isBiteAnimation)
-            {
-                CheckPlayer();
-            }
-            if (isBite && !isSilence)
-            {
-                BiteTimer -= Time.deltaTime;
-            }
-            if (BiteTimer <= 0.0f)
-            {
-                isBite = false;
-                BiteTimer = 5.0f;
+                if (!isBite && !isSilence && !isBiteAnimation)
+                {
+                    CheckPlayer();
+                }
+                if (isBite && !isSilence)
+                {
+                    BiteTimer -= Time.deltaTime;
+                }
+                if (BiteTimer <= 0.0f)
+                {
+                    isBite = false;
+                    BiteTimer = 5.0f;
+                }
             }
             UpdateEmptyChangeHP();
         }
@@ -109,6 +112,7 @@ public class poochyena : Empty
     {
         ResetPlayer();
         if (!isBorn){
+            if (!isSleepDone && !isCanNotMoveWhenParalysis) { 
             Vector2 NowPosition = position;
             if (isHit && isBiteAnimation)
             {
@@ -123,25 +127,27 @@ public class poochyena : Empty
                 rigidbody2D.position = position;
 
             }
-            if (!isDie && !isHit && !isSilence && isBite)
-            {
-                //ҧ
-                position = rigidbody2D.position;
-                if (!isEmptyConfusionDone) {
-                    position.x = position.x + 3 * speed * direction.x * Time.deltaTime;
-                    position.y = position.y + 3 * speed * direction.y * Time.deltaTime;
-                }
-                else
+                if (!isDie && !isHit && !isSilence && isBite)
                 {
-                    position.x = position.x + 3 * speed * ConfusionDirection.x * Time.deltaTime;
-                    position.y = position.y + 3 * speed * ConfusionDirection.y * Time.deltaTime;
+                    //ҧ
+                    position = rigidbody2D.position;
+                    if (!isEmptyConfusionDone)
+                    {
+                        position.x = position.x + 3 * speed * direction.x * Time.deltaTime;
+                        position.y = position.y + 3 * speed * direction.y * Time.deltaTime;
+                    }
+                    else
+                    {
+                        position.x = position.x + 3 * speed * ConfusionDirection.x * Time.deltaTime;
+                        position.y = position.y + 3 * speed * ConfusionDirection.y * Time.deltaTime;
+                    }
+                    rigidbody2D.position = position;
                 }
-                rigidbody2D.position = position;
-
+                move = new Vector2(position.x - NowPosition.x, position.y - NowPosition.y);
+                animator.SetFloat("Speed", move.magnitude);
             }
 
-            move = new Vector2(position.x - NowPosition.x, position.y - NowPosition.y);
-            animator.SetFloat("Speed", move.magnitude);
+
 
             EmptyBeKnock();
         }
@@ -156,40 +162,109 @@ public class poochyena : Empty
 
     void CheckPlayer()
     {
-        RaycastHit2D hitS = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), direction, 8f, LayerMask.GetMask("Player", "PlayerFly" , "Enviroment"));
-        RaycastHit2D hitU = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.up, 3f, LayerMask.GetMask("Player", "PlayerFly", "Enviroment"));
-        RaycastHit2D hitD = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.down, 3f, LayerMask.GetMask("Player", "PlayerFly", "Enviroment"));
-        RaycastHit2D hitR = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.right, 3f, LayerMask.GetMask("Player", "PlayerFly", "Enviroment"));
-        RaycastHit2D hitL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.left, 3f, LayerMask.GetMask("Player", "PlayerFly", "Enviroment"));
+        RaycastHit2D hitS;
+        RaycastHit2D hitU;
+        RaycastHit2D hitD;
+        RaycastHit2D hitR;
+        RaycastHit2D hitL;
+        if (!isEmptyInfatuationDone || transform.parent.childCount <= 1)
+        {
+            hitS = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), direction, 8f, LayerMask.GetMask("Player", "PlayerFly", "Enviroment"));
+            hitU = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.up, 3f, LayerMask.GetMask("Player", "PlayerFly", "Enviroment"));
+            hitD = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.down, 3f, LayerMask.GetMask("Player", "PlayerFly", "Enviroment"));
+            hitR = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.right, 3f, LayerMask.GetMask("Player", "PlayerFly", "Enviroment"));
+            hitL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.left, 3f, LayerMask.GetMask("Player", "PlayerFly", "Enviroment"));
+        }
+        else
+        {
+            hitS = Physics2D.Raycast( (new Vector2(transform.position.x, transform.position.y + 0.5f)) , direction, 8f, LayerMask.GetMask("Empty", "EmptyFly", "Enviroment") );
+            hitU = Physics2D.Raycast(new Vector2(transform.position.x , transform.position.y + 0.5f), Vector2.up, 3f, LayerMask.GetMask("Empty", "EmptyFly", "Enviroment"));
+            hitD = Physics2D.Raycast(new Vector2(transform.position.x , transform.position.y + 0.5f), Vector2.down, 3f, LayerMask.GetMask("Empty", "EmptyFly", "Enviroment"));
+            hitR = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.right, 3f, LayerMask.GetMask("Empty", "EmptyFly", "Enviroment"));
+            hitL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.left, 3f, LayerMask.GetMask("Empty", "EmptyFly", "Enviroment"));
+        }
         if (!isFearDone)
         {
             if (hitS.collider != null) {
-                if (hitS.collider.gameObject.layer == 8 || hitS.collider.gameObject.layer == 17) {
-                    isBiteAnimation = true; animator.SetTrigger("Bite");
+                if (!isEmptyInfatuationDone || transform.parent.childCount <= 1)
+                {
+                    if (hitS.collider.gameObject.layer == 8 || hitS.collider.gameObject.layer == 17)
+                    {
+                        isBiteAnimation = true; animator.SetTrigger("Bite");
+                    }
+                }
+                else
+                {
+                    if (hitS.collider.gameObject != gameObject && ( hitS.collider.gameObject.layer == 9 || hitS.collider.gameObject.layer == 16))
+                    {
+                        isBiteAnimation = true; animator.SetTrigger("Bite");
+                    }
                 }
             }
             if (hitU.collider != null)
             {
-                if (hitU.collider.gameObject.layer == 8 || hitU.collider.gameObject.layer == 17)
+                if (!isEmptyInfatuationDone || transform.parent.childCount <= 1)
                 {
-                    isBiteAnimation = true; animator.SetTrigger("Bite"); direction = new Vector2Int(0, 1);
+                    if (hitU.collider.gameObject.layer == 8 || hitU.collider.gameObject.layer == 17)
+                    {
+                        isBiteAnimation = true; animator.SetTrigger("Bite"); direction = new Vector2Int(0, 1);
+                    }
+                }
+                else
+                {
+                    if (hitU.collider.gameObject != gameObject && (hitU.collider.gameObject.layer == 9 || hitU.collider.gameObject.layer == 16))
+                    {
+                        isBiteAnimation = true; animator.SetTrigger("Bite"); direction = new Vector2Int(0, 1);
+                    }
                 }
             }
 
             if (hitD.collider != null ) {
-                if (hitD.collider.gameObject.layer == 8 || hitD.collider.gameObject.layer == 17)
+                if (!isEmptyInfatuationDone || transform.parent.childCount <= 1)
                 {
-                    isBiteAnimation = true; animator.SetTrigger("Bite"); direction = new Vector2Int(0, -1); 
+                    if (hitD.collider.gameObject.layer == 8 || hitD.collider.gameObject.layer == 17)
+                    {
+                        isBiteAnimation = true; animator.SetTrigger("Bite"); direction = new Vector2Int(0, -1);
+                    }
+                }
+                else
+                {
+                    if (hitD.collider.gameObject != gameObject && (hitD.collider.gameObject.layer == 9 || hitD.collider.gameObject.layer == 16))
+                    {
+                        isBiteAnimation = true; animator.SetTrigger("Bite"); direction = new Vector2Int(0, -1);
+                    }
                 }
             }
             if (hitR.collider != null ) {
-                if (hitR.collider.gameObject.layer == 8 || hitR.collider.gameObject.layer == 17) {
-                    isBiteAnimation = true; animator.SetTrigger("Bite"); direction = new Vector2Int(1, 0);
-                } 
+                if (!isEmptyInfatuationDone || transform.parent.childCount <= 1)
+                {
+                    if (hitR.collider.gameObject.layer == 8 || hitR.collider.gameObject.layer == 17)
+                    {
+                        isBiteAnimation = true; animator.SetTrigger("Bite"); direction = new Vector2Int(1, 0);
+                    }
+                }
+                else
+                {
+                    if (hitR.collider.gameObject != gameObject && (hitR.collider.gameObject.layer == 9 || hitR.collider.gameObject.layer == 16))
+                    {
+                        isBiteAnimation = true; animator.SetTrigger("Bite"); direction = new Vector2Int(1, 0);
+                    }
+                }
             }
             if (hitL.collider != null) {
-                if (hitL.collider.gameObject.layer == 8 || hitL.collider.gameObject.layer == 17) {       
-                    isBiteAnimation = true; animator.SetTrigger("Bite"); direction = new Vector2Int(-1, 0);
+                if (!isEmptyInfatuationDone || transform.parent.childCount <= 1)
+                {
+                    if (hitL.collider.gameObject.layer == 8 || hitL.collider.gameObject.layer == 17)
+                    {
+                        isBiteAnimation = true; animator.SetTrigger("Bite"); direction = new Vector2Int(-1, 0);
+                    }
+                }
+                else
+                {
+                    if (hitL.collider.gameObject != gameObject && (hitL.collider.gameObject.layer == 9 || hitL.collider.gameObject.layer == 16))
+                    {
+                        isBiteAnimation = true; animator.SetTrigger("Bite"); direction = new Vector2Int(-1, 0);
+                    }
                 }
             }
         }
@@ -322,24 +397,50 @@ public class poochyena : Empty
 
     }
 
+    
+
     private void OnCollisionStay2D(Collision2D other)
     {
-        if (other.transform.tag == ("Player"))
+        if (other.transform.tag == ("Player") || (isEmptyInfatuationDone && other.gameObject.tag == ("Empty")))
         {
             if (!isBite)
             {
-                EmptyTouchHit(other.gameObject);
+
+                if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
+                {
+                    InfatuationEmptyTouchHit(other.gameObject);
+                }
+                else if (!isEmptyInfatuationDone && other.transform.tag == ("Player"))
+                {
+                    EmptyTouchHit(other.gameObject);
+                }
             }
             else
             {
-                PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
-                if (playerControler != null)
-                {
-                    if (!player.isInvincible) { Instantiate(BiteAnimation, new Vector3(other.contacts[0].point.x, other.contacts[0].point.y, 0), Quaternion.identity, other.transform); }
-                    playerControler.ChangeHp(-(75 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250), 0, 17);
-                    playerControler.KnockOutPoint = Knock;
-                    playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
 
+                if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
+                {
+                    Empty e = other.gameObject.GetComponent<Empty>();
+                    if (e != null)
+                    {
+                        if (!isInfatuationDmageDone)
+                        {
+                            Instantiate(BiteAnimation, new Vector3(other.contacts[0].point.x, other.contacts[0].point.y, 0), Quaternion.identity, other.transform); 
+                            e.EmptyHpChange((75 * AtkAbilityPoint * (2 * Emptylevel + 10) / (250 * e.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((e.EmptyType01 == Type.TypeEnum.Ice || e.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2), 0, 17);
+                            isInfatuationDmageDone = true;
+                        }
+                    }
+                }
+                else if(!isEmptyInfatuationDone && other.transform.tag == ("Player"))
+                {
+                    PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
+                    if (playerControler != null)
+                    {
+                        if (!player.isInvincible) { Instantiate(BiteAnimation, new Vector3(other.contacts[0].point.x, other.contacts[0].point.y, 0), Quaternion.identity, other.transform); }
+                        playerControler.ChangeHp(-(75 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250), 0, 17);
+                        playerControler.KnockOutPoint = Knock;
+                        playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+                    }
                 }
             }
             

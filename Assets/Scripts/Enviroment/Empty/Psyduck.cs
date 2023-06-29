@@ -8,6 +8,7 @@ public class Psyduck : Empty
     bool isAttak;
     float AttackTimer=0;
     float direction;
+    Vector2 TargetPosition;
     public Projectile WaterGun;
     public Projectile Confusion;
 
@@ -38,23 +39,28 @@ public class Psyduck : Empty
     void Update()
     {
         ResetPlayer();
+        if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }
         if (!isBorn)
         {
             EmptyDie();
             StateMaterialChange();
-            if (!isDie && !isSilence && !isAttak && !isFearDone)
-            {
-                Attak();
+            if (!isSleepDone && !isCanNotMoveWhenParalysis) {
+                if (!isDie && !isSilence && !isAttak && !isFearDone)
+                {
+                    Attak();
+                }
+                if (isAttak && !isSilence && !isFearDone)
+                {
+                    AttackTimer += Time.deltaTime;
+                }
+                if (AttackTimer >= 3.0f)
+                {
+                    isAttak = false;
+                    AttackTimer = 0;
+                }
             }
-            if (isAttak && !isSilence && !isFearDone)
-            {
-                AttackTimer += Time.deltaTime;
-            }
-            if (AttackTimer >= 3.0f)
-            {
-                isAttak = false;
-                AttackTimer = 0;
-            }
+            if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(8) == null) { TargetPosition = player.transform.position; }
+            else { TargetPosition = InfatuationForRangeRayCastEmpty(8).transform.position; }
             UpdateEmptyChangeHP();
         }
 
@@ -71,6 +77,7 @@ public class Psyduck : Empty
 
     public void Lunch()
     {
+         
         Projectile ProjectileObject;
         Projectile Shot;
         if (Random.Range(0.0f, 1.0f) <= 0.5f)
@@ -81,10 +88,10 @@ public class Psyduck : Empty
         {
             Shot = Confusion;
         }
-        ProjectileObject = Instantiate(Shot, rigidbody2D.position + new Vector2(direction*0.375f, 0.375f), Quaternion.Euler(0, 0, (player.transform.position.x - transform.position.x >= 0 ?-1:1) * Vector2.Angle(player.transform.position - transform.position, new Vector2(0, 1))));
-        Vector2 p = new Vector2((player.transform.position.x - transform.position.x), (player.transform.position.y - transform.position.y)).normalized;
+        ProjectileObject = Instantiate(Shot, rigidbody2D.position + new Vector2(direction*0.375f, 0.375f), Quaternion.Euler(0, 0, (TargetPosition.x - transform.position.x >= 0 ?-1:1) * Vector2.Angle(TargetPosition - (Vector2)transform.position, new Vector2(0, 1))));
+        Vector2 p = new Vector2((TargetPosition.x - transform.position.x), (TargetPosition.y - transform.position.y)).normalized;
         if (isEmptyConfusionDone) { Debug.Log("xxx"); p += new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)); p = p.normalized; }
-        ProjectileObject.transform.rotation = Quaternion.Euler(0,0, (player.transform.position.x - transform.position.x >= 0 ? -1 : 1) * Vector2.Angle(p, new Vector2(0, 1)) );
+        ProjectileObject.transform.rotation = Quaternion.Euler(0,0, (TargetPosition.x - transform.position.x >= 0 ? -1 : 1) * Vector2.Angle(p, new Vector2(0, 1)) );
         ProjectileObject.Launch(p*6, 55);
         ProjectileObject.empty = gameObject.GetComponent<Empty>();
 
@@ -92,9 +99,18 @@ public class Psyduck : Empty
 
     void Attak()
     {
-
-        RaycastHit2D SearchPlayer = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), new Vector2(player.transform.position.x - transform.position.x, player.transform.position.y - transform.position.y), 8f, LayerMask.GetMask("Player", "Enviroment", "Room","PlayerFly"));
-        if (SearchPlayer.collider != null && SearchPlayer.transform.tag == "Player") {
+        if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(8) == null)
+        {
+            RaycastHit2D SearchPlayer = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), new Vector2(player.transform.position.x - transform.position.x, player.transform.position.y - transform.position.y), 8f, LayerMask.GetMask("Player", "Enviroment", "Room", "PlayerFly"));
+            if (SearchPlayer.collider != null && SearchPlayer.transform.tag == "Player")
+            {
+                Turn();
+                animator.SetTrigger("Attak");
+                isAttak = true;
+            }
+        }
+        else
+        {
             Turn();
             animator.SetTrigger("Attak");
             isAttak = true;
@@ -103,7 +119,7 @@ public class Psyduck : Empty
 
     void Turn()
     {
-        if(player.transform.position.x - transform.position.x >= 0) { animator.SetFloat("LookX", 1);direction = 1; }
+        if(TargetPosition.x - transform.position.x >= 0) { animator.SetFloat("LookX", 1);direction = 1; }
         else{ animator.SetFloat("LookX", 0);direction = -1; }
     }
 
@@ -113,7 +129,10 @@ public class Psyduck : Empty
         if (other.transform.tag == ("Player"))
         {
             EmptyTouchHit(other.gameObject);
-
+        }
+        if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
+        {
+            InfatuationEmptyTouchHit(other.gameObject);
         }
     }
 }

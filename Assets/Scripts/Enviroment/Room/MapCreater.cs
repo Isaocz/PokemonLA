@@ -115,7 +115,8 @@ public class MapCreater : MonoBehaviour
                     Room room = Instantiate(BaseRoom, new Vector3(item.x * 30, item.y * 24, 0), Quaternion.identity);
                     room.CreatWall();
                     room.transform.name = roomname;
-                    RRoom.Add(item, room);
+                    if (!RRoom.ContainsKey(item)) { RRoom.Add(item, room); }
+                    else { RRoom[item] = room; }
                 }
 
             }
@@ -130,6 +131,7 @@ public class MapCreater : MonoBehaviour
         foreach( Room room in RRoom.Values)
         {
             Destroy(room.gameObject);
+            Debug.Log(room.gameObject);
         }
         isPCRoomSpawn = false; isStoreRoomSpawn = false; isBossRoomSpawn = false;
         PCCreatCount = 0; StoreCreatCount = 0; BossRoomCreatCount = 0;
