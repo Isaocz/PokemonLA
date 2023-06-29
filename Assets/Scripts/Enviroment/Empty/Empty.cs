@@ -60,9 +60,17 @@ public class Empty : Pokemon
     public delegate void EmptyEvent();
     public EmptyEvent DestoryEvent;
 
-    //声明2个布尔值，表示目标对象是否死亡,表示目标是否被攻击,一个击退计时器，一个被击退值
+    //声明2个布尔值，表示目标对象是否死亡,表示目标是否被攻击
     public bool isDie = false;
     public bool isHit = false;
+    //无敌状态
+    private bool isInvincible = false;
+    public bool Invincible
+    {
+        get { return isInvincible; }
+        set { isInvincible = value; }
+    }
+    //一个击退计时器，一个被击退值
     float KOTimer = 0;
     float KOPoint;
 
@@ -103,9 +111,6 @@ public class Empty : Pokemon
 
     //表示敌人是否处于被白雾【精通】击中
     public bool isMistPlus;
-
-
-
 
 
 
@@ -180,6 +185,10 @@ public class Empty : Pokemon
     /// <param name="SkillType">伤害属性（数字参考Type.cs）</param>
     public void EmptyHpChange(float  Dmage , float SpDmage , int SkillType)
     {
+        if (isInvincible)
+        {
+            return;
+        }
         float typeDef = (TypeDef[SkillType] < 0 ? (Mathf.Pow(1.2f, -TypeDef[SkillType])) : 1) * (TypeDef[SkillType] > 0 ? (Mathf.Pow(0.8f, TypeDef[SkillType])) : 1);
             if (Dmage + SpDmage >= 0)
             {

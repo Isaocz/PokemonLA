@@ -7,8 +7,6 @@ public class PlayNice : Skill
 {
     List<Empty> influence = new List<Empty>();
     List<int> infnum = new List<int>();
-    //旋转角
-    float zAngle = 0.1f;
     // Start is called before the first frame update
     void Awake()
     {
@@ -19,8 +17,6 @@ public class PlayNice : Skill
     void Update()
     {
         StartExistenceTimer();
-        //刚体旋转，速度0.1f
-        transform.RotateAround(transform.position, Vector3.forward, zAngle);
     }
 
     void OnTriggerEnter2D(Collider2D other)
