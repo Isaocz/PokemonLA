@@ -64,6 +64,7 @@ public class Exeggcute : Empty
     void Update()
     {
         ResetPlayer();
+        if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }
         if (!isBorn)
         {
             EmptyDie();
@@ -83,11 +84,19 @@ public class Exeggcute : Empty
         }
         if(aIState == AI_STATE.IDLE)
         {
-            if (Vector2.Distance(transform.position, player.transform.position) <= foundRadius)
+            if (isEmptyInfatuationDone)
             {
-                transFound.gameObject.SetActive(true);
-                animator.SetTrigger("ReadyAtk");
-                aIState = AI_STATE.READY_ATK;
+                if (transform.parent.childCount > 1 && InfatuationForRangeRayCastEmpty(foundRadius) != null)
+                {
+                    turnToReadyAtk();
+                }
+            }
+            else
+            {
+                if (Vector2.Distance(transform.position, player.transform.position) <= foundRadius)
+                {
+                    turnToReadyAtk();
+                }
             }
             return;
         }
@@ -108,6 +117,13 @@ public class Exeggcute : Empty
         }
     }
 
+    private void turnToReadyAtk()
+    {
+        transFound.gameObject.SetActive(true);
+        animator.SetTrigger("ReadyAtk");
+        aIState = AI_STATE.READY_ATK;
+    }
+
     public void RunEggActionByIdx(int i)
     {
         GameObject eggobj = eggList[i];
@@ -119,17 +135,25 @@ public class Exeggcute : Empty
         Vector3 playerPos = player.transform.position;
         seq.AppendCallback(() =>
         {
-            // 以起跳时的位置为准
-            playerPos = player.transform.position;
-            if (i == eggList.Count - 1)
+            // 起跳时，取目标的位置
+            if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(foundRadius) == null) 
             {
-                // 大蛋根据玩家的移动方向做预判
-                var speed = player.GetSpeed();
-                playerPos = playerPos + new Vector3(speed.x, speed.y) * (throwTime+0.3f);
+                playerPos = player.transform.position;
+                if (i == eggList.Count - 1)
+                {
+                    // 大蛋根据玩家的移动方向做预判
+                    var speed = player.GetSpeed();
+                    playerPos = playerPos + new Vector3(speed.x, speed.y) * (throwTime + 0.3f);
+                }
             }
+            else {
+                playerPos = InfatuationForRangeRayCastEmpty(foundRadius).transform.position;
+            }
+
             var downRadius = atkDownRadius;
             if (isEmptyConfusionDone)
             {
+                // 混乱会有更不确定的范围
                 downRadius = downRadius + 1;
             }
             playerPos = playerPos + new Vector3(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f)) * downRadius;
@@ -167,6 +191,7 @@ public class Exeggcute : Empty
             GameObject effect = Instantiate(effectExplosion, eggobj.transform.position, Quaternion.identity);
             ExeggcuteExploreCB exploreCB = effect.transform.GetChild(0).GetChild(0).GetComponent<ExeggcuteExploreCB>();
             exploreCB.SetEmptyInfo(this);
+            exploreCB.SetAimTag(isEmptyInfatuationDone ? "Empty" : "Player");
             eggobj.SetActive(false);
             shadow.SetActive(false);
             objects.Add(effect);
@@ -195,6 +220,10 @@ public class Exeggcute : Empty
         if (other.transform.tag == ("Player"))
         {
             EmptyTouchHit(other.gameObject);
+        }
+        if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
+        {
+            InfatuationEmptyTouchHit(other.gameObject);
         }
     }
 
