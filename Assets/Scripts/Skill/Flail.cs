@@ -12,7 +12,6 @@ public class Flail : Skill
     void Start()
     {
         animator = GetComponent<Animator>();
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
         Instantiate(FlailWater, player.transform.position + Vector3.up*0.5f, Quaternion.identity , player.transform);
     }
 

@@ -1599,8 +1599,6 @@ public class Pokemon : MonoBehaviour
 
     protected void CopyState(PlayerControler CopyTarget)
     {
-        CopyTarget.isSpeedChange = isSpeedChange;
-        if (isSpeedChange) { CopyTarget.MarterialChangeToSpeedDown(); }
 
         CopyTarget.isToxicDef = isToxicDef;
         CopyTarget.isToxicDone = isToxicDone;
@@ -1646,6 +1644,107 @@ public class Pokemon : MonoBehaviour
 
 
     //***************************************************************************对自己的函数*********************************************************************************
+
+
+
+
+    //***************************************************************************对全体的函数*********************************************************************************
+
+    /// <summary>
+    /// 当有宝可梦的生命值改变时，使用此方法，降低生命时选择两个威力，并设回复量为0。
+    /// 此方法会自动把威力转换为实际的伤害值，如果想让宝可梦的生命值减少指定的“值”，选择属性为Type.TypeEnum.IgnoreType
+    /// （例如当AtkPower=10，属性不等于IgnoreType时，对宝可梦造成“威力等于10的”一次伤害，属性等于IgnoreType时，对宝可梦造成“10点”伤害）
+    /// </summary>
+    /// <param name="Attacker">攻击的制造者</param>
+    /// <param name="Attacked">被攻击者</param>
+    /// <param name="AtkPower">此次伤害的物理威力</param>
+    /// <param name="SpAPower">此次伤害的特攻威力</param>
+    /// <param name="HpUpValue">此次改变不是伤害，而是回复</param>
+    /// <param name="SkillType">此次伤害的属性</param>
+
+    public static void PokemonHpChange(GameObject Attacker , GameObject Attacked , float AtkPower , float SpAPower ,int HpUpValue , Type.TypeEnum SkillType)
+    {
+        //决定攻击者
+        int AttackerATK = 1;
+        int AttackerSpA = 1;
+        int AttackerLevel = 1;
+        float EmptyTypeAlpha = 1;
+        if (Attacker != null)
+        {
+            Empty EmptyAttacker = Attacker.GetComponent<Empty>();
+            PlayerControler PlayerAttacker = Attacker.GetComponent<PlayerControler>();
+            FollowBaby FollowBabyAttacker = Attacker.GetComponent<FollowBaby>();
+            if (EmptyAttacker != null)  { 
+                AttackerATK = EmptyAttacker.AtkAbilityPoint ;  AttackerSpA = EmptyAttacker.SpAAbilityPoint ; AttackerLevel = EmptyAttacker.Emptylevel;
+                EmptyTypeAlpha = ((SkillType == EmptyAttacker.EmptyType01) || (SkillType == EmptyAttacker.EmptyType02)) ? 1.5f : 1;
+            }
+            if (PlayerAttacker != null) {
+                AttackerATK = PlayerAttacker.AtkAbilityPoint; AttackerSpA = PlayerAttacker.SpAAbilityPoint; AttackerLevel = PlayerAttacker.Level;
+                EmptyTypeAlpha = ((int)SkillType == PlayerAttacker.PlayerType01 ? 1.5f : 1) * ((int)SkillType == PlayerAttacker.PlayerType02 ? 1.5f : 1) * (PlayerAttacker.PlayerTeraTypeJOR == 0 ? ((int)SkillType == PlayerAttacker.PlayerTeraType ? 1.5f : 1) : ((int)SkillType == PlayerAttacker.PlayerTeraTypeJOR ? 1.5f : 1));
+            }
+            if (FollowBabyAttacker != null) { AttackerATK = FollowBabyAttacker.BabyAtk(); AttackerSpA = FollowBabyAttacker.BabySpA(); AttackerLevel = FollowBabyAttacker.BabyLevel(); }
+        }
+
+
+        //决定被攻击者
+        if (Attacked.GetComponent<Empty>() != null)
+        {
+            Empty EmptyAttacked = Attacked.GetComponent<Empty>();
+            if (HpUpValue == 0) {
+                float WeatherDefAlpha = ((Weather.GlobalWeather.isSandstorm ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Rock || EmptyAttacked.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1));
+                float WeatherSpDAlpha = ((Weather.GlobalWeather.isHail ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Ice || EmptyAttacked.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1));
+                float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+                    * ((Weather.GlobalWeather.isRain && SkillType == Type.TypeEnum.Fire) ? 0.5f : 1)
+                    * ((Weather.GlobalWeather.isSunny && SkillType == Type.TypeEnum.Water) ? 0.5f : 1)
+                    * ((Weather.GlobalWeather.isSunny && SkillType == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+
+
+                if (SkillType != Type.TypeEnum.IgnoreType)
+                {
+                    EmptyAttacked.EmptyHpChange(
+                    (AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha * WeatherAlpha * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2),
+                    (SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha * WeatherAlpha * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.SpdAbilityPoint * WeatherSpDAlpha + 2),
+                    (int)SkillType);
+                }
+                else
+                {
+                    EmptyAttacked.EmptyHpChange(AtkPower, SpAPower, 19);
+                }
+            }
+            else
+            {
+                EmptyAttacked.EmptyHpChange(-HpUpValue, 0, 19);
+            }
+        }
+        if (Attacked.GetComponent<PlayerControler>() != null)
+        {
+            PlayerControler PlayerAttacked = Attacked.GetComponent<PlayerControler>();
+            if (HpUpValue == 0)
+            {
+                PlayerAttacked.ChangeHp(
+                    (-AtkPower * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250),
+                    (-SpAPower * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250),
+                    (int)SkillType);
+            }
+            else
+            {
+                PlayerAttacked.ChangeHp(HpUpValue, 0, 19);
+            }
+        }
+        if(Attacked.GetComponent<Substitute>() != null)
+        {
+            Substitute SubstotuteAttacked = Attacked.GetComponent<Substitute>();
+            if (HpUpValue == 0)
+            {
+                SubstotuteAttacked.SubStituteChangeHp(
+                    (-AtkPower * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250),
+                    (-SpAPower * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250),
+                    (int)SkillType);
+            }
+        }
+    }
+
+    //***************************************************************************对全体的函数*********************************************************************************
 
 
 }

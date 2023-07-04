@@ -22,7 +22,9 @@ public class JigglypuffSing : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            other.GetComponent<PlayerControler>().SleepFloatPlus(0.2f);
+            if (other.GetComponent<PlayerControler>() != null) {
+                other.GetComponent<PlayerControler>().SleepFloatPlus(0.2f);
+            }
         }   
         if(ParentEmpty.isEmptyInfatuationDone && (other.tag == "Empty") && other.gameObject != ParentEmpty.gameObject){
             other.GetComponent<Empty>().EmptySleepDone(0.1f, 10);

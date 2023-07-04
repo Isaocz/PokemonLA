@@ -18,7 +18,7 @@ public class Psyduck : Empty
         speed = 0f;
         EmptyType01 = Type.TypeEnum.Water;
         EmptyType02 = 0;
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
+        player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level,30);
         EmptyHpForLevel(Emptylevel);
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);
@@ -59,7 +59,10 @@ public class Psyduck : Empty
                     AttackTimer = 0;
                 }
             }
-            if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(8) == null) { TargetPosition = player.transform.position; }
+            if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(8) == null) { 
+                TargetPosition = player.transform.position;
+                if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
+            }
             else { TargetPosition = InfatuationForRangeRayCastEmpty(8).transform.position; }
             UpdateEmptyChangeHP();
         }
@@ -101,7 +104,7 @@ public class Psyduck : Empty
     {
         if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(8) == null)
         {
-            RaycastHit2D SearchPlayer = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), new Vector2(player.transform.position.x - transform.position.x, player.transform.position.y - transform.position.y), 8f, LayerMask.GetMask("Player", "Enviroment", "Room", "PlayerFly"));
+            RaycastHit2D SearchPlayer = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), new Vector2(TargetPosition.x - transform.position.x, TargetPosition.y - transform.position.y), 8f, LayerMask.GetMask("Player", "Enviroment", "Room", "PlayerFly"));
             if (SearchPlayer.collider != null && SearchPlayer.transform.tag == "Player")
             {
                 Turn();

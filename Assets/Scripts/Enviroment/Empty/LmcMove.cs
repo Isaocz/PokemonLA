@@ -25,7 +25,7 @@ public class LmcMove : Empty
         EmptyType02 = 0;
 
         //---（对于所有敌人子类）---，获取玩家
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
+        player = GameObject.FindObjectOfType<PlayerControler>();
 
         //---（对于所有敌人子类）---，设置等级
         Emptylevel = SetLevel(player.Level,15);

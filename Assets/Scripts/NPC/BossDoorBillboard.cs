@@ -22,16 +22,19 @@ public class BossDoorBillboard : MonoBehaviour
     {
         if (other.tag == ("Player"))
         {
-            playerControler = other.GetComponent<PlayerControler>();
-            ZBotton.SetActive(true);
-            isInTrriger = true;
+            if (other.GetComponent<PlayerControler>() != null)
+            {
+                playerControler = other.GetComponent<PlayerControler>();
+                ZBotton.SetActive(true);
+                isInTrriger = true;
+            }
         }
     }
 
     // Update is called once per frame
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == ("Player") && isInTrriger)
+        if (other.tag == ("Player") && isInTrriger && other.GetComponent<PlayerControler>() != null)
         {
             ZBotton.SetActive(false);
             isInTrriger = false;

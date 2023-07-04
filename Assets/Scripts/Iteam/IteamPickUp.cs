@@ -21,14 +21,14 @@ public class IteamPickUp : Item
     void Start()
     {
         //获取玩家
-        targer = GameObject.FindGameObjectWithTag("Player");
+        targer = GameObject.FindObjectOfType<PlayerControler>().gameObject;
         StartPosition = gameObject.transform.position;
         Direction = ( new Vector3 (Random.Range(-1.0f, 1.0f) , Random.Range(-1.0f,1.0f) , 0.0f)).normalized;
     }
 
     void Update()
     {
-        if (targer == null) { targer = GameObject.FindGameObjectWithTag("Player"); }
+        if (targer == null) { targer = GameObject.FindObjectOfType<PlayerControler>().gameObject; }
     }
 
     public void LunchItem()

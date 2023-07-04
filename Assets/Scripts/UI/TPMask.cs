@@ -42,7 +42,7 @@ public class TPMask : MonoBehaviour
         {
             if (!isTPDoit)
             {
-                PlayerControler player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
+                PlayerControler player = GameObject.FindObjectOfType<PlayerControler>();
                 if (player.isTPMove)
                 {
                     player.TPDoit();

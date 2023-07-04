@@ -24,7 +24,7 @@ public class PokemonDataWindowsPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControler>();
+        player = GameObject.FindObjectOfType<PlayerControler>();
         Invoke("RestorePokemonDataPanel", 0.0001f);
     }
 

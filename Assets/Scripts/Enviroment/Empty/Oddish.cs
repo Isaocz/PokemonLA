@@ -20,7 +20,7 @@ public class Oddish : Empty
     {
         EmptyType01 = Type.TypeEnum.Poison;
         EmptyType02 = Type.TypeEnum.Grass;
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
+        player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, 30);
         EmptyHpForLevel(Emptylevel);
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);

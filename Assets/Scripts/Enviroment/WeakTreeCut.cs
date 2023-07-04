@@ -24,28 +24,30 @@ public class WeakTreeCut : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if(other.tag == "Player")
+        if(other.tag == "Player" && other.GetComponent<PlayerControler>() != null)
         {
             ZButton.SetActive(true);
             if (Input.GetKey(KeyCode.Z))
             {
-                if(other.GetComponent<PlayerControler>().Stone > 0 && !isBeCut)
-                {
-                    animator.SetTrigger("Cut");
-                    other.GetComponent<PlayerControler>().ChangeStone(-1);
-                    isBeCut = true;
-                }else if (other.GetComponent<PlayerControler>().Stone <= 0)
-                {
-                    UIGetANewItem.UI.JustSaySth("一颗很细小的树","如果有锋利的工具就可以砍倒它");
+                PlayerControler p = other.GetComponent<PlayerControler>();
+                if (p != null) {
+                    if (p.Stone > 0 && !isBeCut)
+                    {
+                        animator.SetTrigger("Cut");
+                        p.ChangeStone(-1);
+                        isBeCut = true;
+                    } else if (p.Stone <= 0)
+                    {
+                        UIGetANewItem.UI.JustSaySth("一颗很细小的树", "如果有锋利的工具就可以砍倒它");
+                    }
                 }
-                
             }
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && other.GetComponent<PlayerControler>() != null)
         {
             ZButton.SetActive(false);
         }

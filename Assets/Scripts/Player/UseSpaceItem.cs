@@ -286,7 +286,7 @@ public class UseSpaceItem : MonoBehaviour
             {
                 if (empty.GetComponent<Empty>() != null)
                 {
-                    empty.GetComponent<Empty>().EmptyHpChange(100, 0, 0);
+                    Pokemon.PokemonHpChange(null , empty.GetComponent<Empty>().gameObject , 100 , 0 , 0 , Type.TypeEnum.IgnoreType);
                 }
             }
         }
@@ -380,17 +380,22 @@ public class UseSpaceItem : MonoBehaviour
 
     public static void Fly(PlayerControler player)
     {
-        player.gameObject.layer = LayerMask.NameToLayer("PlayerFly");
-        player.transform.position += new Vector3(0,0.5f,0);
-        player.transform.GetChild(3).position = player.transform.GetChild(3).position + Vector3.up*0.5f;
-        player.ComeInANewRoomEvent += RemoveFly; 
+        if (player.gameObject.layer != LayerMask.NameToLayer("PlayerFly"))
+        {
+            player.gameObject.layer = LayerMask.NameToLayer("PlayerFly");
+            player.transform.position += new Vector3(0, 0.5f, 0);
+            player.transform.GetChild(3).position = player.transform.GetChild(3).position + Vector3.up * 0.5f;
+            player.ComeInANewRoomEvent += RemoveFly;
+        }
     }
     public static void RemoveFly(PlayerControler player)
     {
-        player.gameObject.layer = LayerMask.NameToLayer("Player");
-        player.transform.position -= new Vector3(0, 0.5f, 0);
-        player.transform.GetChild(3).position = player.transform.GetChild(3).position - Vector3.up * 0.5f;
-        player.ComeInANewRoomEvent -= RemoveFly;
+        if (player.gameObject.layer == LayerMask.NameToLayer("PlayerFly")) {
+            player.gameObject.layer = LayerMask.NameToLayer("Player");
+            player.transform.position -= new Vector3(0, 0.5f, 0);
+            player.transform.GetChild(3).position = player.transform.GetChild(3).position - Vector3.up * 0.5f;
+            player.ComeInANewRoomEvent -= RemoveFly;
+        }
     }
 
     public static void ScatterBomb(PlayerControler player)

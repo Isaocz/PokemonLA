@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FollowBaby : MonoBehaviour
+public class FollowBaby : Baby
 {
     // Start is called before the first frame update
 
@@ -13,6 +13,8 @@ public class FollowBaby : MonoBehaviour
     public bool isInANewRoom;
     bool isInANewRoom2;
     protected PlayerControler TargetPlayer;
+
+
 
     public void FollowBabyStart()
     {

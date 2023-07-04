@@ -23,7 +23,7 @@ public class Mareep : Empty
 
         EmptyType01 = Type.TypeEnum.Electric;
         EmptyType02 = 0;
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
+        player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, 30);
         EmptyHpForLevel(Emptylevel);
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);

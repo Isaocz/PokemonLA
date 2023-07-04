@@ -9,6 +9,7 @@ public class Projectile : MonoBehaviour
     public new Rigidbody2D rigidbody2D;
     public SpriteRenderer spriteRenderer;
     public Empty empty;
+    public FollowBaby Baby;
     public int BabyLevel;
     protected Vector3 BornPosition;
     float Speed;

@@ -63,7 +63,7 @@ public class UIExpBar : MonoBehaviour
     {
         originnoSize = Mask.rectTransform.rect.width;
         Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
+        player = GameObject.FindObjectOfType<PlayerControler>();
         level = player.Level;
         Leveltext.text = string.Format("{00}", level);
         Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)player.Ex/ (float)player.maxEx * originnoSize);
@@ -131,7 +131,7 @@ public class UIExpBar : MonoBehaviour
             Leveltext.text = string.Format("{00}",level);
             if (player == null)
             {
-                player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
+                player = GameObject.FindObjectOfType<PlayerControler>();
 
             }
             player.LevelForSkill++;

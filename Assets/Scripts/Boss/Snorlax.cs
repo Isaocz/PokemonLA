@@ -14,7 +14,7 @@ public class Snorlax : Empty
     bool isTurn;
     float TurnTimer = 2.0f;
 
-    bool isSlam;
+    public bool isSlam;
     bool isSlamFull;
     public bool isSlameMove;
     float SlamTimer = 2.0f;
@@ -37,7 +37,8 @@ public class Snorlax : Empty
     public bool isGigaImpactMove;
     Vector2 GigaImpactPostion1;
 
-    public SnorlaxBerry[] BerryList; 
+    public SnorlaxBerry[] BerryList;
+    Vector3 TargetPosition;
 
 
 
@@ -47,7 +48,7 @@ public class Snorlax : Empty
     {
         EmptyType01 = Type.TypeEnum.Normal;
         EmptyType02 = 0;
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
+        player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, 30);
         EmptyHpForLevel(Emptylevel);
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);
@@ -79,6 +80,10 @@ public class Snorlax : Empty
 
             if (!isSleepDone && !isCanNotMoveWhenParalysis)
             {
+                TargetPosition = player.transform.position;
+                if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
+
+
                 if (!isAngry && EmptyHp <= maxHP * 0.65f && !isEmptyFrozenDone && !isFearDone)
                 {
                     isAngry = true;
@@ -108,7 +113,7 @@ public class Snorlax : Empty
 
                 if (!isSlam && !isSlamFull && !isEmptyFrozenDone)
                 {
-                    if ((transform.position - player.transform.position).magnitude < (isAngry ? 15 : 6))
+                    if ((transform.position - TargetPosition).magnitude < (isAngry ? 15 : 6))
                     {
                         if (Random.Range(0.0f, 1.0f) > SlamPer)
                         {
@@ -117,18 +122,19 @@ public class Snorlax : Empty
                         }
                         else
                         {
-                            if (!isFearDone) { SlamPostion = player.transform.position; }
-                            else { SlamPostion = 2 * transform.position - player.transform.position; }
+
+                            if (!isFearDone) { SlamPostion = TargetPosition; }
+                            else { SlamPostion = 2 * transform.position - TargetPosition; }
                             SlamStartPostion = transform.position;
                             isSlam = true;
                             animator.SetTrigger("Slam");
-                            if (Mathf.Abs(transform.position.x - player.transform.position.x) > Mathf.Abs(transform.position.y - player.transform.position.y))
+                            if (Mathf.Abs(transform.position.x - TargetPosition.x) > Mathf.Abs(transform.position.y - TargetPosition.y))
                             {
-                                direction = new Vector2Int(((transform.position.x - player.transform.position.x) > 0 ? -1 : 1), 0);
+                                direction = new Vector2Int(((transform.position.x - TargetPosition.x) > 0 ? -1 : 1), 0);
                             }
                             else
                             {
-                                direction = new Vector2Int(0, ((transform.position.y - player.transform.position.y) > 0 ? -1 : 1));
+                                direction = new Vector2Int(0, ((transform.position.y - TargetPosition.y) > 0 ? -1 : 1));
                             }
                             if (isFearDone) { direction = new Vector2Int(-direction.x, -direction.y); }
                             SlamPer = 0.3f;
@@ -169,7 +175,7 @@ public class Snorlax : Empty
 
                 if (!isGigaImpact && player.isSleepDone && isAngry && !isEmptyFrozenDone && !isFearDone)
                 {
-                    RaycastHit2D PlayerChecker = Physics2D.Raycast(new Vector2(transform.position.x + 0.7f, transform.position.y + 0.5f), new Vector2(player.transform.position.x - transform.position.x + 0.7f, player.transform.position.y - transform.position.y + 0.5f), 15f, LayerMask.GetMask("Player", "PlayerFly", "Enviroment"));
+                    RaycastHit2D PlayerChecker = Physics2D.Raycast(new Vector2(transform.position.x + 0.7f, transform.position.y + 0.5f), new Vector2(TargetPosition.x - transform.position.x + 0.7f, TargetPosition.y - transform.position.y + 0.5f), 15f, LayerMask.GetMask("Player", "PlayerFly", "Enviroment"));
                     if (PlayerChecker.collider != null && (PlayerChecker.collider.gameObject.layer == 8 || PlayerChecker.collider.gameObject.layer == 17))
                     {
                         isGigaImpact = true;
@@ -208,8 +214,8 @@ public class Snorlax : Empty
                         if (isEmptyConfusionDone) { SlamStartPostion = SlamStartPostion + new Vector2(Random.Range(-3, 3), Random.Range(-3, 3)); }
                         if (!isFearDone && !isSilence)
                         {
-                            position.x = Mathf.Clamp(position.x + ((player.transform.position.x - SlamStartPostion.x) / 15f), transform.parent.position.x - 11, transform.parent.position.x + 11);
-                            position.y = Mathf.Clamp(position.y + ((player.transform.position.y - SlamStartPostion.y) / 15f), transform.parent.position.y - 6.2f, transform.parent.position.y + 6.2f);
+                            position.x = Mathf.Clamp(position.x + ((TargetPosition.x - SlamStartPostion.x) / 15f), transform.parent.position.x - 11, transform.parent.position.x + 11);
+                            position.y = Mathf.Clamp(position.y + ((TargetPosition.y - SlamStartPostion.y) / 15f), transform.parent.position.y - 6.2f, transform.parent.position.y + 6.2f);
                         }
                         else
                         {
@@ -260,7 +266,7 @@ public class Snorlax : Empty
             case 1:
                 Debug.Log(EmptyHp);
                 Debug.Log(-maxHP / 8);
-                EmptyHpChange(-maxHP / 8, 0, 19);
+                PokemonHpChange(null , this.gameObject , 0 ,0 , maxHP / 8,Type.TypeEnum.IgnoreType);
                 Debug.Log(EmptyHp);
                 break;
             case 2:
@@ -280,9 +286,10 @@ public class Snorlax : Empty
             }else if (isSlam)
             {
                 PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
+                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 80, 0, 0, Type.TypeEnum.Normal);
                 if (playerControler != null)
                 {
-                    playerControler.ChangeHp(-(80 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250), 0, 1);
+                    //playerControler.ChangeHp(-(80 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250), 0, 1);
                     playerControler.KnockOutPoint = Knock;
                     playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                     playerControler.ParalysisFloatPlus(0.15f);
@@ -291,9 +298,10 @@ public class Snorlax : Empty
             else if (isImpact)
             {
                 PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
+                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 50, 0, 0, Type.TypeEnum.Normal);
                 if (playerControler != null)
                 {
-                    playerControler.ChangeHp(-(50 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250), 0, 1);
+                    //playerControler.ChangeHp(-(50 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250), 0, 1);
                     playerControler.KnockOutPoint = Knock;
                     playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                 }
@@ -301,9 +309,10 @@ public class Snorlax : Empty
             else if (isGigaImpact)
             {
                 PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
+                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 120, 0, 0, Type.TypeEnum.Normal);
                 if (playerControler != null)
                 {
-                    playerControler.ChangeHp(-(120 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250), 0, 1);
+                    //playerControler.ChangeHp(-(120 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250), 0, 1);
                     playerControler.KnockOutPoint = Knock;
                     playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                 }
@@ -319,7 +328,7 @@ public class Snorlax : Empty
 
     public void CallGigaImpactPostion()
     {
-        GigaImpactPostion1 = player.transform.position;
+        GigaImpactPostion1 = TargetPosition;
     }
 
     public void DropBerry()
@@ -354,7 +363,7 @@ public class Snorlax : Empty
     {
         if (!isSilence)
         {
-            GigaImpactPostion1 = (new Vector2(5 * player.transform.position.x - 4 * GigaImpactPostion1.x - transform.position.x, 5 * player.transform.position.y - 4 * GigaImpactPostion1.y - transform.position.y));
+            GigaImpactPostion1 = (new Vector2(5 * TargetPosition.x - 4 * GigaImpactPostion1.x - transform.position.x, 5 * TargetPosition.y - 4 * GigaImpactPostion1.y - transform.position.y));
         }
         else
         {

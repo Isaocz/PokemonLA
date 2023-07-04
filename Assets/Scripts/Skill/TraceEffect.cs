@@ -9,7 +9,7 @@ public class TraceEffect : MonoBehaviour
     float timer;//计时器
     public float Waittime = 0.5f;//开始追踪时间
     public float distance;//跟踪距离
-    private float angle_fix = 10;//每次修正的角度
+    private float angle_fix = 80f;//每次修正的角度
     private float angle_differ = 10;//允许的差异角度
 
     // Start is called before the first frame update
@@ -46,12 +46,12 @@ public class TraceEffect : MonoBehaviour
                 //朝向需要追踪对象的方向调整角度，按照设定的值进行调整
                 if (angle3 < 180 - angle_differ)
                 {
-                    Quaternion reAngle = Quaternion.Euler(0, 0, transform.eulerAngles.z - angle_fix);
+                    Quaternion reAngle = Quaternion.Euler(0, 0, transform.eulerAngles.z - Time.deltaTime * (angle_fix + timer*100));
                     transform.rotation = reAngle;
                 }
                 else if (angle3 > 180 + angle_differ)
                 {
-                    Quaternion reAngle = Quaternion.Euler(0, 0, transform.eulerAngles.z + angle_fix);
+                    Quaternion reAngle = Quaternion.Euler(0, 0, transform.eulerAngles.z + Time.deltaTime * (angle_fix + timer*100));
                     transform.rotation = reAngle;
                 }
 

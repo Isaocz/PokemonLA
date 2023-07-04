@@ -48,13 +48,16 @@ public class GateWayDown : GateWay
     //当碰撞时且碰撞对象是玩家时,摄像机开始移动
     private void OnTriggerEnter2D(Collider2D Player)
     {
-        if(Player.tag == ("Player"))
+        if(Player.tag == ("Player") && Player.GetComponent<PlayerControler>() != null)
         {
             isCameraMove = true;
             Player.transform.position += new Vector3(0, -MoveDistance, 0);
-            Player.GetComponent<PlayerControler>().NowRoom = Player.GetComponent<PlayerControler>().NowRoom + Vector3Int.down;
-            Player.GetComponent<PlayerControler>().InANewRoom = true;
-            Player.GetComponent<PlayerControler>().NewRoomTimer = 0f;
+            PlayerControler p = Player.GetComponent<PlayerControler>();
+            if (p != null) {
+                p.NowRoom = p.NowRoom + Vector3Int.down;
+                p.InANewRoom = true;
+                p.NewRoomTimer = 0f;
+            }
             UiMiniMap.Instance.SeeMapOver();
             UiMiniMap.Instance.MiniMapMove(Vector3.up);
         }

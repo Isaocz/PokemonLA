@@ -26,14 +26,16 @@ public class Meowth : MonoBehaviour
     {
         if(other.tag == ("Player"))
         {
-            playerControler = other.GetComponent<PlayerControler>();
+            if (other.GetComponent<PlayerControler>() != null) {
+                playerControler = other.GetComponent<PlayerControler>();
+            }
             ZBotton.SetActive(true);
             isInTrriger = true;
         }
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == ("Player"))
+        if (other.tag == ("Player") && other.GetComponent<PlayerControler>() != null)
         {
             ZBotton.SetActive(false);
             isInTrriger = false;
