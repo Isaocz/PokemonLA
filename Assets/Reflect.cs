@@ -35,6 +35,28 @@ public class Reflect : Skill
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (SkillFrom == 2 && other.tag == "PlayerProjectel")
+        {
+            TraceEffect t = other.GetComponent<TraceEffect>();
+            Debug.Log(t);
+            if (t == null)
+            {
+                foreach(GameObject child in other.transform)
+                {
+                    t = child.GetComponent<TraceEffect>();
+                    Debug.Log(t);
+                }
+            }
+            if (t != null)
+            {
+                t.moveSpeed *= 1.5f;
+                t.distance = Mathf.Clamp(t.distance * 2, 0, 10);
+            }
+        }
+    }
+
     private void OnDestroy()
     {
         if (isThisSkillLightScreen) { player.isLightScreen = false; }

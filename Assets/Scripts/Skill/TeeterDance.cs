@@ -16,12 +16,15 @@ public class TeeterDance : Skill
         StartExistenceTimer();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        Empty target = collision.GetComponent<Empty>();
-        if(target.tag=="Empty")
+        if(other.tag=="Empty")
         {
-            target.EmptyConfusion(2f, 1);
+            Empty target = other.GetComponent<Empty>();
+            if (target != null)
+            {
+                target.EmptyConfusion(2f, 1);
+            }
         }
     }
 }

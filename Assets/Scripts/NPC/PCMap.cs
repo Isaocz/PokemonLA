@@ -38,7 +38,7 @@ public class PCMap : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.tag == ("Player"))
+        if (other.tag == ("Player") && other.GetComponent<PlayerControler>() != null)
         {
             player = other.GetComponent<PlayerControler>();
             ZBotton.SetActive(true);
@@ -47,7 +47,7 @@ public class PCMap : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == ("Player") && isInTrriger)
+        if (other.tag == ("Player") && isInTrriger && other.GetComponent<PlayerControler>() != null)
         {
             ZBotton.SetActive(false);
             isInTrriger = false;

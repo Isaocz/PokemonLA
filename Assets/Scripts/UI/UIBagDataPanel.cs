@@ -31,7 +31,7 @@ public class UIBagDataPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControler>();
+        player = GameObject.FindObjectOfType<PlayerControler>();
         Invoke("RestoreBagDataPanel", 0.0001f);
     }
 

@@ -50,8 +50,9 @@ public class Room : MonoBehaviour
         if (RoomTag == 0 || RoomTag == 3) {
             Empty = gameObject.transform.GetChild(3).gameObject;
         }
-        
-        Player = GameObject.FindWithTag("Player");
+
+        ;
+        Player = GameObject.FindObjectOfType<PlayerControler>().gameObject;
         playerControler = Player.GetComponent<PlayerControler>();
         if(RoomTag == 0 || RoomTag == -1 || RoomTag == 3)
         {
@@ -65,7 +66,7 @@ public class Room : MonoBehaviour
     {
         if(playerControler == null)
         {
-            Player = GameObject.FindWithTag("Player");
+            Player = GameObject.FindObjectOfType<PlayerControler>().gameObject;
             playerControler = Player.GetComponent<PlayerControler>();
         }
         if (new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f), 0) == playerControler.NowRoom)

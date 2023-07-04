@@ -23,21 +23,31 @@ public class WurmpleStringShot02 : MonoBehaviour
     {
         if (!isProjectelParentInfatuation && other.tag == ("Player"))
         {
-            other.GetComponent<PlayerControler>().SpeedChange();
+            if (other.GetComponent<PlayerControler>() != null)
+            {
+                other.GetComponent<PlayerControler>().SpeedChange();
+            }
         }
         if (isProjectelParentInfatuation && other.tag == ("Empty"))
         {
-            other.GetComponent<Empty>().SpeedChange();
+            if (other.GetComponent<Empty>() != null)
+            {
+                other.GetComponent<Empty>().SpeedChange();
+            }
         }
     }
     private void OnTriggerExit2D(Collider2D other)
     {
         if (!isProjectelParentInfatuation && other.tag == ("Player")) {
-            other.GetComponent<PlayerControler>().SpeedRemove01(2.5f); 
+            if (other.GetComponent<PlayerControler>() != null) {
+                other.GetComponent<PlayerControler>().SpeedRemove01(2.5f);
+            }
         }
         if (isProjectelParentInfatuation && other.tag == ("Empty"))
         {
-            other.GetComponent<Empty>().SpeedRemove01(2.5f);
+            if (other.GetComponent<Empty>() != null) {
+                other.GetComponent<Empty>().SpeedRemove01(2.5f);
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ public class PoisonPowder : MonoBehaviour
     {
         if (!ParentEmpty.isEmptyInfatuationDone)
         {
-            if (other.tag == "Player")
+            if (other.tag == "Player" && other.GetComponent<PlayerControler>() != null)
             {
                 other.GetComponent<PlayerControler>().ToxicFloatPlus(0.15f);
             }

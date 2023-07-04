@@ -9,6 +9,8 @@ public class Skill : MonoBehaviour
     public int SkillIndex;
     //声明玩家对象，
     public PlayerControler player;
+    //如果该技能为跟随宝宝释放，使用宝宝
+    public Baby baby;
     //声明技能存在的时间
     public float ExistenceTime;
     //声明物理威力值
@@ -68,7 +70,7 @@ public class Skill : MonoBehaviour
     public enum SkillTagEnum
     {
         接触类,非接触类,爪类,牙类,声音类,连续多次使用类,恢复HP类,吸取HP类,降低使用者能力类,反作用力伤害类,爆炸类,
-        拳类,波动和波导类,粉末类,球和弹类,心灵攻击类,跳舞类,风类,切割类,天气类,场地类,防住类,
+        拳类,波动和波导类,粉末类,球和弹类,心灵攻击类,跳舞类,风类,切割类,天气类,场地类,防住类,压击类,绑紧类,
     }
 
     //表示技能生成时是否生成于玩家所面对方向，如为Fales生成在玩家所面对的方向，如为true生成在玩家位置（多用于自我buff类技能）
@@ -87,7 +89,8 @@ public class Skill : MonoBehaviour
     //表示技能生成是否需要抬手，比如位移类技能需要在摁下摁键的那一刻开始位移，而射弹类节能会有一个抬手前摇
     public bool isImmediately;
 
-    //技能的使用条件
+    //技能的威力加成系数（比如硬撑的威力翻倍）
+
 
 
 
@@ -110,11 +113,18 @@ public class Skill : MonoBehaviour
     List<EmptyList> TargetList = new List<EmptyList> { };
 
 
-
+    void ResetPlayer()
+    {
+        if(player == null && baby == null)
+        {
+            player = GameObject.FindObjectOfType<PlayerControler>();
+        }
+    }
 
     //引用于所有技能的Update函数，当存在时间耗尽时技能消失
     public void StartExistenceTimer()
     {
+        ResetPlayer();
         ExistenceTime -= Time.deltaTime;
 
         //多段攻击开始冷却之后开始计时
@@ -163,7 +173,7 @@ public class Skill : MonoBehaviour
             if (TargetList.Count == 0) { TargetList.Add(new EmptyList(target, false, 0.0f)); }
             for (int i = 0; i < TargetList.Count; i++)
             {
-                if (TargetList[i].Target == target) { isTargetExitInList = true; TCEell = TargetList[i]; ListIndex = i ;  Debug.Log("xxx" + TargetList[i].isMultipleDamageColdDown);  break;   }
+                if (TargetList[i].Target == target) { isTargetExitInList = true; TCEell = TargetList[i]; ListIndex = i ; /* Debug.Log("xxx" + TargetList[i].isMultipleDamageColdDown); */ break;   }
             }
             if (!isTargetExitInList)
             {
@@ -178,30 +188,45 @@ public class Skill : MonoBehaviour
             if (Damage == 0)
             {
                 float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1) * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
-                if(Random.Range(0.0f , 1.0f ) >= 0.04f + 0.01f * player.LuckPoint)
+                if (player != null) {
+                    if (Random.Range(0.0f, 1.0f) >= 0.04f + 0.01f * player.LuckPoint)
+                    {
+                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage, 0, (Type.TypeEnum)SkillType);
+                        Debug.Log(player);
+                    }
+                    else
+                    {
+                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * 1.5f, 0, (Type.TypeEnum)SkillType);
+                        Debug.Log(player);
+                    }
+                }else if (baby != null)
                 {
-                    target.EmptyHpChange(0, (SpDamage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.SpAAbilityPoint) / (250 * target.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((target.EmptyType01 == Type.TypeEnum.Ice || target.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2, SkillType);
+                    Pokemon.PokemonHpChange(baby.gameObject, target.gameObject, 0, SpDamage * 1.5f, 0, (Type.TypeEnum)SkillType);
+                    Debug.Log(baby);
                 }
-                else
-                {
-                    target.EmptyHpChange(0, (SpDamage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.SpAAbilityPoint) / (250 * target.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((target.EmptyType01 == Type.TypeEnum.Ice || target.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2, SkillType);
-                }
-                
 
             }
             else if(SpDamage == 0)
             {
                 float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1) * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
 
-                if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2,CTLevel) + 0.01f * player.LuckPoint)
+                if (player != null)
                 {
-                    target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? ((target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1))) + 2, 0, SkillType);
-                }
-                else
+                    if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
+                    {
+                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage, 0, 0, (Type.TypeEnum)SkillType);
+                        Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? ((target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1))) + 2, 0, SkillType);
+                    }
+                    else
+                    {
+                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * 1.5f, 0, 0, (Type.TypeEnum)SkillType);
+                        Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? (( target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1 ) : 1)) ) + 2, 0, SkillType);
+                    }
+                }else if (baby != null)
                 {
-                    target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? (( target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1 ) : 1)) ) + 2, 0, SkillType);
+                    Pokemon.PokemonHpChange(baby.gameObject, target.gameObject, Damage, 0, 0, (Type.TypeEnum)SkillType);
+                    Debug.Log(baby);
                 }
-                
             }
             target.EmptyKnockOut(KOPoint);
             isHitDone = true;
@@ -209,19 +234,22 @@ public class Skill : MonoBehaviour
                 TCEell.isMultipleDamageColdDown = true;
                 TargetList[ListIndex] = TCEell;
             }
-            if (player.playerData.IsPassiveGetList[26] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.6f)
+            if (player != null)
             {
-                if (SkillTag != null)
+                if (player.playerData.IsPassiveGetList[26] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.6f)
                 {
-                    foreach (Skill.SkillTagEnum i in SkillTag)
+                    if (SkillTag != null)
                     {
-                        if (i == Skill.SkillTagEnum.接触类) { target.EmptyToxicDone(1 , 30); }
+                        foreach (Skill.SkillTagEnum i in SkillTag)
+                        {
+                            if (i == Skill.SkillTagEnum.接触类) { target.EmptyToxicDone(1, 30); }
+                        }
                     }
                 }
-            }
-            if (player.playerData.IsPassiveGetList[25] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.8f)
-            {
-                target.Fear(3.0f, 1);
+                if (player.playerData.IsPassiveGetList[25] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.8f)
+                {
+                    target.Fear(3.0f, 1);
+                }
             }
         }
 

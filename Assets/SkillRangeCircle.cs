@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SkillRangeCircle : MonoBehaviour
 {
-
+    public float StartDelay;
     public float Duration;
     public float FadeInTime;
     public float FadeOutTime;
@@ -25,8 +25,13 @@ public class SkillRangeCircle : MonoBehaviour
     {
         Timer += Time.deltaTime;
 
-        if (Timer < (Duration - FadeOutTime)) { CircleSprite.color = new Color(CircleSprite.color.r, CircleSprite.color.g, CircleSprite.color.b, Mathf.Clamp(CircleSprite.color.a + (Time.deltaTime * MaxAlpha)/(FadeInTime) , 0,MaxAlpha) ); }
-        else{ CircleSprite.color = new Color(CircleSprite.color.r, CircleSprite.color.g, CircleSprite.color.b, Mathf.Clamp(CircleSprite.color.a - (Time.deltaTime * MaxAlpha) / (FadeOutTime), 0, MaxAlpha)); }
+        if (Timer > StartDelay && (Timer < (StartDelay + Duration - FadeOutTime))) {
+            CircleSprite.color = new Color(CircleSprite.color.r, CircleSprite.color.g, CircleSprite.color.b, Mathf.Clamp(CircleSprite.color.a + (Time.deltaTime * MaxAlpha)/(FadeInTime) , 0,MaxAlpha) );
+        }
+        else if ((Timer > (StartDelay + Duration - FadeOutTime)))
+        {
+            CircleSprite.color = new Color(CircleSprite.color.r, CircleSprite.color.g, CircleSprite.color.b, Mathf.Clamp(CircleSprite.color.a - (Time.deltaTime * MaxAlpha) / (FadeOutTime), 0, MaxAlpha));
+        }
 
         if (Timer > Duration) { Destroy(gameObject); }
 

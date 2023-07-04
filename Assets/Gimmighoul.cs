@@ -7,7 +7,6 @@ public class Gimmighoul : FollowBaby
 
     public GameObject RandomMoney;
     bool BornAMoney;
-    PlayerControler player;
 
     // Start is called before the first frame update
     void Start()

@@ -13,7 +13,10 @@ public class Mist : Skill
     void Start()
     {
         ParentPlayer = gameObject.transform.parent.GetComponent<PlayerControler>();
-        ParentPlayer.playerData.isMist = true;
+        if (ParentPlayer != null)
+        {
+            ParentPlayer.playerData.isMist = true;
+        }
         if (SkillFrom == 2) { MistPlusCollider2D = GetComponent<CircleCollider2D>(); }
     }
     private void Update()

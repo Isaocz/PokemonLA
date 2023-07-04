@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Rowlet : FollowBaby
 {
-
-    PlayerControler player;
     float LeafCD;
     bool isLeafLunch;
     public Projectile Leaf;
@@ -41,9 +39,9 @@ public class Rowlet : FollowBaby
                     Vector2 d = (new Vector2(other.transform.position.x - transform.position.x, other.transform.position.y - transform.position.y)).normalized;
                     Projectile p = Instantiate(Leaf, transform.position, Quaternion.identity);
                     p.transform.rotation = Quaternion.AngleAxis(_mTool.Angle_360(d, Vector3.up), Vector3.forward);
-                    Debug.Log(_mTool.Angle_360(d, Vector3.up)); 
                     p.LaunchNotForce(d, 7);
-                    p.BabyLevel = player.Level;
+                    p.Baby = this;
+                    p.BabyLevel = BabyLevel();
                     isLeafLunch = true;
                 }
             }

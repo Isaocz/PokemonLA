@@ -44,16 +44,18 @@ public class WillOWisp : Projectile
             if(other.tag == "Player")
             {
                 PlayerControler playerControler = other.GetComponent<PlayerControler>();
-                playerControler.BurnFloatPlus(0.4f);
-                playerControler.ChangeHp(0, -1, 19);
-                playerControler.KnockOutPoint = 5;
-                playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+                Pokemon.PokemonHpChange(null , other.gameObject , 0 , 1 , 0 , Type.TypeEnum.IgnoreType);
+                if (playerControler != null) {
+                    playerControler.BurnFloatPlus(0.4f);
+                    playerControler.KnockOutPoint = 5;
+                    playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+                }
             }
             if(other.tag == "Empty" && other.gameObject != empty.gameObject)
             {
                 Empty e = other.GetComponent<Empty>();
                 e.EmptyBurnDone(0.4f , 10f);
-                e.EmptyHpChange( 0 , 1, 19);
+                Pokemon.PokemonHpChange(null, e.gameObject, 0, 1, 0, Type.TypeEnum.IgnoreType);
                 
             }
             gameObject.transform.localScale -= new Vector3(0.15f, 0.15f, 0.15f);

@@ -36,10 +36,12 @@ public class Yamn : Projectile
     {
         if ( other.tag == ("Player"))
         {
+            
             isDestory = true;
             Destroy(rigidbody2D);
             PlayerControler playerControler = other.GetComponent<PlayerControler>();
-            playerControler.SleepFloatPlus(0.4f);
+            if (playerControler != null) { playerControler.SleepFloatPlus(0.4f); }
+
         }
         if (other.tag == ("Room") || other.tag == ("Enviroment"))
         {

@@ -12,10 +12,10 @@ public class Spike : MonoBehaviour
         if(other.tag == ("Player"))
         {
             PlayerControler playerControler = other.GetComponent<PlayerControler>();
-            if (!playerControler.playerData.IsPassiveGetList[13])
+            //playerControler.ChangeHp(-Damage, 0, 19);
+            Pokemon.PokemonHpChange(null, other.gameObject, Damage, 0, 0, Type.TypeEnum.IgnoreType);
+            if (playerControler != null && !playerControler.playerData.IsPassiveGetList[13])
             {
-                playerControler.ChangeHp(-Damage, 0, 19);
-
                 playerControler.KnockOutPoint = 1f;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
             }
@@ -23,8 +23,10 @@ public class Spike : MonoBehaviour
         else if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            target.EmptyHpChange(10, 0, 19);
-            target.EmptyKnockOut(0);
+            if (target != null) {
+                Pokemon.PokemonHpChange(null, target.gameObject, 10, 0, 0, Type.TypeEnum.IgnoreType);
+                target.EmptyKnockOut(0);
+            }
         }
     }
 

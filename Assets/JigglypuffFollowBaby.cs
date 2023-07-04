@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class JigglypuffFollowBaby : FollowBaby
 {
-    PlayerControler player;
     float SweetKissCD;
     bool isSweetKissLunch;
     public Projectile SweetKiss;

@@ -44,10 +44,18 @@ public class MyAstarAI : MonoBehaviour
         {
             if (!ParentEmpty.isEmptyInfatuationDone || ParentEmpty.InfatuationForRangeRayCastEmpty(3) == null)
             {
-                if (targetPosition == null)
+                if (ParentEmpty.isSubsititue && ParentEmpty.SubsititueTarget != null)
                 {
-                    targetPosition = ParentEmpty.player.transform;
+                    targetPosition = ParentEmpty.SubsititueTarget.transform;
                     RunTargetPosition = targetPosition.position;
+                }
+                else
+                {
+                    if (targetPosition == null)
+                    {
+                        targetPosition = ParentEmpty.player.transform;
+                        RunTargetPosition = targetPosition.position;
+                    }
                 }
             }
             else

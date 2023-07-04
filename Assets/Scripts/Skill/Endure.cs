@@ -10,11 +10,14 @@ public class Endure : Skill
     void Start()
     {
         ParentPlayer = gameObject.transform.parent.GetComponent<PlayerControler>();
-        ParentPlayer.EndureStart();
-        if (SkillFrom == 2)
+        if (ParentPlayer != null)
         {
-            player.playerData.DefBounsAlways++;
-            player.playerData.SpDBounsAlways++;
+            ParentPlayer.EndureStart();
+            if (SkillFrom == 2)
+            {
+                player.playerData.DefBounsAlways++;
+                player.playerData.SpDBounsAlways++;
+            }
         }
     }
 

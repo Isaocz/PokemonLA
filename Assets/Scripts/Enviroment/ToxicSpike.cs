@@ -11,7 +11,7 @@ public class ToxicSpike : Spike
         if (other.tag == ("Player"))
         {
             PlayerControler playerControler = other.GetComponent<PlayerControler>();
-            if (!playerControler.playerData.IsPassiveGetList[13]) {
+            if (playerControler != null && !playerControler.playerData.IsPassiveGetList[13]) {
                 playerControler.ToxicFloatPlus(0.18f);
                 if (playerControler.isToxicDone && !isDamageUp) { Damage *= 2; isDamageUp = true; }
             }

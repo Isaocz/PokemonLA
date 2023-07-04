@@ -28,7 +28,7 @@ public class Jigglypuff : Empty
     {
         EmptyType01 = Type.TypeEnum.Fairy;
         EmptyType02 = Type.TypeEnum.Normal;
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
+        player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, 30);
         EmptyHpForLevel(Emptylevel);
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);
@@ -117,7 +117,8 @@ public class Jigglypuff : Empty
                     }
                 }
                 Vector3 TargetPosition = player.transform.position;
-                if(isEmptyInfatuationDone && InfatuationForDistanceEmpty() != null)
+                if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
+                if (isEmptyInfatuationDone && InfatuationForDistanceEmpty() != null)
                 {
                     TargetPosition = InfatuationForDistanceEmpty().transform.position;
                 }

@@ -45,9 +45,11 @@ public class GressPlayerINOUT : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.transform.tag == "Player") {
-            animator.SetTrigger("PlayerIn");
-            player = other.GetComponent<PlayerControler>();
-            CreatNewItem();
+            if (other.GetComponent<PlayerControler>() != null) {
+                animator.SetTrigger("PlayerIn");
+                player = other.GetComponent<PlayerControler>();
+                CreatNewItem();
+            }
         }
         
     }

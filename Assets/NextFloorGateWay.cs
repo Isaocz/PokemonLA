@@ -40,7 +40,7 @@ public class NextFloorGateWay : GateWay
     //当碰撞时且碰撞对象是玩家时,摄像机开始移动
     private void OnTriggerEnter2D(Collider2D Player)
     {
-        if (Player.tag == ("Player"))
+        if (Player.tag == ("Player") && Player.GetComponent<PlayerControler>() != null)
         {
             if (FloorNum.GlobalFloorNum != null && FindObjectOfType<MapCreater>() != null)
             {

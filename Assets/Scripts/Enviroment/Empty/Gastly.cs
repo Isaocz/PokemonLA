@@ -18,7 +18,7 @@ public class Gastly : Empty
         speed = 0f;
         EmptyType01 = Type.TypeEnum.Ghost;
         EmptyType02 = Type.TypeEnum.Poison;
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerControler>();
+        player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, 30);
         EmptyHpForLevel(Emptylevel);
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);
@@ -121,6 +121,8 @@ public class Gastly : Empty
     void MoveForPlayer()
     {
         Vector3 TargetPosition = player.transform.position;
+        //如果该敌人处于被替身吸引状态，且替身目标不为空
+        if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
         if ( isEmptyInfatuationDone && InfatuationForDistanceEmpty() != null )
         {
             TargetPosition = InfatuationForDistanceEmpty().transform.position;

@@ -14,6 +14,8 @@ public class SkillColliderRangeChangeByTime : MonoBehaviour
     float Duration;
     public float EmptySkillDuration;
 
+    float Timer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,12 +25,14 @@ public class SkillColliderRangeChangeByTime : MonoBehaviour
         if (ParentSkill != null) { Duration = ParentSkill.ExistenceTime; }
         else { Duration = EmptySkillDuration; }
         Collider2D.radius = 0;
+        Timer = Duration;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (ParentSkill.ExistenceTime <= FadeOutTime) { Collider2D.radius = Mathf.Clamp(Collider2D.radius - ((Time.deltaTime) * MaxCollider2DRadius) / FadeOutTime, 0, MaxCollider2DRadius); }
+        Timer -= Time.deltaTime;
+        if (Timer <= FadeOutTime) { Collider2D.radius = Mathf.Clamp(Collider2D.radius - ((Time.deltaTime) * MaxCollider2DRadius) / FadeOutTime, 0, MaxCollider2DRadius); }
         else { Collider2D.radius = Mathf.Clamp(Collider2D.radius + ((Time.deltaTime)   * MaxCollider2DRadius)/ FadeInTime, 0, MaxCollider2DRadius); }
     }
 
