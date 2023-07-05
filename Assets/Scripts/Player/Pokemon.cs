@@ -1073,7 +1073,7 @@ public class Pokemon : MonoBehaviour
     /// <summary>
     /// 代表特防力是否下降
     /// </summary>
-    bool isSpdDown;
+    public bool isSpdDown;
 
     /// <summary>
     /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果特防力未被下降，状态变为特防力被下降
@@ -1092,7 +1092,7 @@ public class Pokemon : MonoBehaviour
     /// <summary>
     /// 如果SpDDown( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在特防力恢复时调用此函数
     /// </summary>
-    void SpDDownRemove()
+    public void SpDDownRemove()
     {
         if (isSpdDown)
         {

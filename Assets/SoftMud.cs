@@ -19,8 +19,8 @@ public class SoftMud : MonoBehaviour
     {
         if (!isBorn)
         {
-            SoftMudSprite.color += new Color(0, 0, 0, Time.deltaTime*2);
-            transform.localScale += new Vector3(Time.deltaTime * 2, Time.deltaTime * 2, 0);
+            SoftMudSprite.color += new Color(0, 0, 0, Time.deltaTime*2.5f);
+            transform.localScale += new Vector3(Time.deltaTime * 2.5f, Time.deltaTime * 2.5f, 0);
             if (SoftMudSprite.color.a >= 1) {
                 transform.localScale = new Vector3(1, 1, 1);
                 isBorn = true;
