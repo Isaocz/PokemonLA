@@ -18,7 +18,8 @@ public class CameraAdapt : MonoBehaviour
         {
             lastwidth = Screen.width;
             lastheight = Screen.height;
-            print("Resolution :" + Screen.width + " X" + Screen.height);
+            adapt();
+            //print("Resolution :" + Screen.width + " X" + Screen.height);
         }
     }
 
@@ -32,7 +33,6 @@ public class CameraAdapt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        adapt();
     }
 
     void adapt()
