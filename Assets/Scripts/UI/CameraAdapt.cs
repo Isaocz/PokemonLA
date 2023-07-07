@@ -30,11 +30,6 @@ public class CameraAdapt : MonoBehaviour
         halfWidth = aimRatio * halfHeightPre;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     void adapt()
     {
         float winRatio = (float)Screen.width / Screen.height;
