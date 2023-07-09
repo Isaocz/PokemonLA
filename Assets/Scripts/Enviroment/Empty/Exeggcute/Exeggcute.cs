@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-enum AI_STATE {
-    IDLE,
-    READY_ATK,
-    ATKING,
-}
+
 
 public class Exeggcute : Empty
 {
@@ -30,6 +26,13 @@ public class Exeggcute : Empty
     public GameObject oneEggShadow;
     [Label("т╓еп©Р")]
     public GameObject skillRange;
+
+    private enum AI_STATE
+    {
+        IDLE,
+        READY_ATK,
+        ATKING,
+    }
 
     // temp
     public GameObject effectExplosion;

@@ -6,7 +6,7 @@ public class EnumMultiAttribute : PropertyAttribute { }
 public class Empty : Pokemon
 {
     //攻击到玩家时造成的击退值声明4个变量，一个代表对玩家造成的伤害，一个代表击退值，一个表示移动的距离,一个表示移动速度，一个表示初始血量
-    public float Knock;
+    public float Knock = 5f;
     //敌人的当前血量和最大血量
     [Tooltip("当前HP")]
     public int EmptyHp;
