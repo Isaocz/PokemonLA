@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6372986719692096260}
+  - component: {fileID: 7191548858229441436}
   - component: {fileID: 7795692599977798522}
   - component: {fileID: 599080008090673229}
   - component: {fileID: 999230192664347038}
@@ -38,6 +39,93 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7191548858229441436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290301912176527091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c19042cd80bb84c43bd1321aa95ac69b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NormalMaterial: {fileID: 2100000, guid: b3561bc8940b4354bb645b4ec8b64fd3, type: 2}
+  FrozenMaterial: {fileID: 2100000, guid: 5621402ffca87244a96d4dd5a467a62c, type: 2}
+  SpeedDownMaterial: {fileID: 2100000, guid: a29ae9cd7deb811449a0e250d0e533b2, type: 2}
+  ToxicMaterial: {fileID: 2100000, guid: 296f83a3541c1b24485906af3dff32b2, type: 2}
+  ParalysisMaterial: {fileID: 2100000, guid: 0f06f7a11b286104ba4dbc36c80da013, type: 2}
+  BurnMaterial: {fileID: 2100000, guid: 46e9e683ceef1af4ba339da5f01bb0a0, type: 2}
+  SleepMaterial: {fileID: 2100000, guid: 5bfe3122f137b5a4aa634772d5bccad1, type: 2}
+  FearMaterial: {fileID: 2100000, guid: 9d22d74762a5c0148a4cb1ecfaa4e840, type: 2}
+  InfatuationMaterial: {fileID: 2100000, guid: 2310fa42f7ef9434d8b100c9292ab5fd, type: 2}
+  FrozenResistance: 1
+  ToxicResistance: 1
+  ParalysisResistance: 1
+  BurnResistance: 1
+  SleepResistance: 1
+  OtherStateResistance: 1
+  TimeStateInvincible: 0
+  skinRenderers:
+  - {fileID: 482255846620198535}
+  animator: {fileID: 0}
+  playerUIState: {fileID: 3124443494815413820}
+  speed: 0
+  isEmptyFrozenDone: 0
+  isFearDone: 0
+  isFearStart: 0
+  isBlindDone: 0
+  isBlindStart: 0
+  isEmptyConfusionDone: 0
+  isEmptyConfusionStart: 0
+  isEmptyInfatuationDone: 0
+  isEmptyInfatuationStart: 0
+  isSpdDown: 0
+  isToxicDef: 0
+  isToxicDone: 0
+  isToxicStart: 0
+  ToxicPointFloat: 0
+  isParalysisDef: 0
+  isParalysisDone: 0
+  isParalysisStart: 0
+  ParalysisPointFloat: 0
+  isBurnDef: 0
+  isBurnDone: 0
+  isBurnStart: 0
+  BurnPointFloat: 0
+  isSleepDef: 0
+  isSleepDone: 0
+  isSleepStart: 0
+  SleepPointFloat: 0
+  isConfusionDef: 0
+  isConfusionDone: 0
+  Knock: 5
+  EmptyHp: 0
+  Emptylevel: 0
+  isBorn: 0
+  uIHealth: {fileID: 1546774681432735392}
+  EmptyType01: 5
+  EmptyType02: 0
+  HpEmptyPoint: 45
+  AtkEmptyPoint: 100
+  SpAEmptyPoint: 45
+  DefEmptyPoint: 45
+  SpdEmptyPoint: 45
+  SpeedEmptyPoint: 10
+  TypeDef: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  isDie: 0
+  isHit: 0
+  Exp: 0
+  BaseExp: 80
+  HWP: {x: 2, y: 1}
+  player: {fileID: 0}
+  rigidbody2D: {fileID: 0}
+  isSilence: 0
+  isBoos: 0
+  DropItem: {fileID: 0}
+  isMistPlus: 0
+  isCanNotMoveWhenParalysis: 0
 --- !u!95 &7795692599977798522
 Animator:
   serializedVersion: 3
@@ -98,7 +186,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -447,3 +535,25 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7202884177668870445, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
   m_PrefabInstance: {fileID: 4155139042655456992}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3124443494815413820 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1366354562257352924, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
+  m_PrefabInstance: {fileID: 4155139042655456992}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21cfa8ba11c643c4f958cdb5f1ccde6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1546774681432735392 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3232805603349393472, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
+  m_PrefabInstance: {fileID: 4155139042655456992}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6ca394f092f1f741ab36e4319f1fc41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
