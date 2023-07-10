@@ -17,18 +17,38 @@ using UnityEngine;
  * base part 2
  * 
  * ani:
- * param(Die, Hit)
+ * param: Die, Hit
 */
 
 public class Trapinch : Empty
 {
+
+    [Label("观察半径")]
+    public float foundRadius = 8;
+    [Label("发动咬咬的半径")]
+    public float biteRadius = 3;
+    [Label("扩展流沙地狱的最小半径")]
+    public float growSandsRadius = 5;
+    [Label("扩展流沙地狱距离开始的最小时间")]
+    public float growSandsDuration = 2;
+    [Label("咬咬cd")]
+    public float cdBite = 2;
+    [Label("流沙地狱cd")]
+    public float cdSands = 14;
+
     private enum AI_STATE
     {
         IDLE,
-        READY_ATK,
-        ATKING,
+        ATK_BITE,
+        ATK_SANDS,
+        ATK_SANDS_GROW,
     }
 
+    private float lastUseBite = 0;
+    private float lastUseSands = 0;
+    //private GameObject sandsObj = null;
+
+    private AI_STATE aiState;
     private IEnumerator timerAi = null;
 
     // Start is called before the first frame update
@@ -63,20 +83,94 @@ public class Trapinch : Empty
         }
     }
 
-    void OnAniBornFinsih()
+    private void StartAiTimer()
     {
-        int now = 1;
-        print(now);
+        // 平均 5 帧反应一次
+        float aiDuration = 0.3f;
         timerAi = Timer.Start(this, 0f, () =>
         {
-            print(now);
-            now++;
-            if (now > 10)
+            if (isDie)
             {
                 StopCoroutine(timerAi);
+                return 0;
             }
-            // 平均 5 帧反应一次
-            return 0.3f;
+            AnimatorStateInfo stateinfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (stateinfo.IsName("TrapinchLeftBeHit") || stateinfo.IsName("TrapinchRightBeHit"))
+            {
+                return aiDuration;
+            }
+            if (stateinfo.IsName("TrapinchLeftIdle") || stateinfo.IsName("TrapinchRightIdle"))
+            {
+                aiState = AI_STATE.IDLE;
+            }
+            if (aiState == AI_STATE.IDLE)
+            {
+                GameObject target = FindAtkTarget(foundRadius);
+                if (target)
+                {
+                    Vector2 dis = target.transform.position - transform.position;
+                    animator.SetFloat("Direction", dis.x);
+                    if (Vector2.Distance(transform.position, target.transform.position) <= biteRadius && Time.time - lastUseBite > cdBite)
+                    {
+                        triggerBite();
+                    }
+                    else if (Time.time - lastUseSands > cdSands)
+                    {
+                        animator.SetTrigger("Sands");
+                        aiState = AI_STATE.ATK_SANDS;
+                        lastUseSands = Time.time;
+                    }
+                }
+            }
+            if (aiState == AI_STATE.ATK_SANDS)
+            {
+                GameObject target = FindAtkTarget(growSandsRadius);
+                if (target && Vector2.Distance(transform.position, target.transform.position) <= biteRadius && Time.time - lastUseBite > cdBite)
+                {
+                    triggerBite();
+                }
+                else if (Time.time - lastUseSands > growSandsDuration)
+                {
+                    if (!target)
+                    {
+                        //目标不在范围内，扩展
+                        //TODO 检查是否已经扩展
+                        animator.SetTrigger("SandsGrow");
+                        aiState = AI_STATE.ATK_SANDS_GROW;
+                    }
+                }
+            }
+            if (aiState == AI_STATE.ATK_SANDS_GROW)
+            {
+                GameObject target = FindAtkTarget(growSandsRadius);
+                if (target && Vector2.Distance(transform.position, target.transform.position) <= biteRadius && Time.time - lastUseBite > cdBite)
+                {
+                    triggerBite();
+                }
+            }
+                return aiDuration;
         });
+    }
+
+    private void triggerBite()
+    {
+        animator.SetTrigger("Bite");
+        aiState = AI_STATE.ATK_BITE;
+        lastUseBite = Time.time;
+    }
+
+    void OnAniBornFinsih()
+    {
+        StartAiTimer();
+    }
+
+    void OnAniTriggerBite()
+    {
+
+    }
+
+    void OnAniTriggerSands()
+    {
+
     }
 }
