@@ -139,14 +139,21 @@ public class Exeggcute : Empty
         seq.AppendCallback(() =>
         {
             // 起跳时，取目标的位置
-            if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(foundRadius) == null) 
+            if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(foundRadius) == null)
             {
-                playerPos = player.transform.position;
-                if (i == eggList.Count - 1)
+                if (isSubsititue && SubsititueTarget != null) 
+                { 
+                    playerPos = SubsititueTarget.transform.position; 
+                }
+                else
                 {
-                    // 大蛋根据玩家的移动方向做预判
-                    var speed = player.GetSpeed();
-                    playerPos = playerPos + new Vector3(speed.x, speed.y) * (throwTime + 0.3f);
+                    playerPos = player.transform.position;
+                    if (i == eggList.Count - 1)
+                    {
+                        // 大蛋根据玩家的移动方向做预判
+                        var speed = player.GetSpeed();
+                        playerPos = playerPos + new Vector3(speed.x, speed.y) * (throwTime + 0.3f);
+                    }
                 }
             }
             else {
