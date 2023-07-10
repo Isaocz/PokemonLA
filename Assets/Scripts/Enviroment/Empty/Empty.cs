@@ -634,7 +634,28 @@ public class Empty : Pokemon
 
 
 
-
+    // 在半径范围内寻找攻击目标
+    public GameObject FindAtkTarget(float radius)
+    {
+        GameObject target = null;
+        Empty nearlyEmptyObj = InfatuationForRangeRayCastEmpty(radius);
+        if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || nearlyEmptyObj == null)
+        {
+            if (isSubsititue && SubsititueTarget != null)
+            {
+                target = SubsititueTarget;
+            }
+            else
+            {
+                target = player.gameObject;
+            }
+        }
+        if (nearlyEmptyObj)
+        {
+            target = nearlyEmptyObj.gameObject;
+        }
+        return target;
+    }
 
     /// <summary>
     /// ---Update和FixedUpdate中调用---，声明一个函数，当玩家进化后因为之前的玩家对象被销毁，所以需要重新获取玩家
