@@ -26,7 +26,7 @@ public class Trapinch : Empty
     [Label("观察半径")]
     public float foundRadius = 8;
     [Label("发动咬咬的半径")]
-    public float biteRadius = 3;
+    public float biteRadius = 1.2f;
     [Label("扩展流沙地狱的最小半径")]
     public float growSandsRadius = 5;
     [Label("扩展流沙地狱距离开始的最小时间")]
@@ -35,6 +35,10 @@ public class Trapinch : Empty
     public float cdBite = 2;
     [Label("流沙地狱cd")]
     public float cdSands = 14;
+    [Label("prefab咬咬")]
+    public GameObject biteObj;
+    [Label("prefab流沙地狱")]
+    public GameObject sandsObj;
 
     private enum AI_STATE
     {
@@ -67,6 +71,9 @@ public class Trapinch : Empty
         Exp = BaseExp * Emptylevel / 7;
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
+
+        lastUseBite = -cdBite;
+        lastUseSands = -cdSands;
     }
 
     // Update is called once per frame
@@ -113,12 +120,14 @@ public class Trapinch : Empty
                     if (Vector2.Distance(transform.position, target.transform.position) <= biteRadius && Time.time - lastUseBite > cdBite)
                     {
                         triggerBite();
+                        print("bites");
                     }
-                    else if (Time.time - lastUseSands > cdSands)
+                    else if (Vector2.Distance(transform.position, target.transform.position) <= foundRadius && Time.time - lastUseSands > cdSands)
                     {
                         animator.SetTrigger("Sands");
                         aiState = AI_STATE.ATK_SANDS;
                         lastUseSands = Time.time;
+                        print("Sands");
                     }
                 }
             }
@@ -166,11 +175,20 @@ public class Trapinch : Empty
 
     void OnAniTriggerBite()
     {
-
+        //再次检查目标
+        GameObject target = FindAtkTarget(foundRadius);
+        if (target && Vector2.Distance(transform.position, target.transform.position) <= biteRadius)
+        {
+            Instantiate(biteObj, target.transform.position, Quaternion.identity);
+            Timer.Start(this, 0.15f, () =>
+            {
+                Pokemon.PokemonHpChange(gameObject, target, 10, 0, 0, Type.TypeEnum.Dark);
+            });
+        }
     }
 
     void OnAniTriggerSands()
     {
-
+        Instantiate(sandsObj, transform.position, Quaternion.identity);
     }
 }
