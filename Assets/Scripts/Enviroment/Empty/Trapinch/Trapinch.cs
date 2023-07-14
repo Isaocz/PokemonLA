@@ -13,11 +13,11 @@ using UnityEngine;
  * skinRenderers body渲染器数组（可能）
  * 
  * code part:
- * base part 1
- * base part 2
+ * base part 1,2,3,4
  * 
  * ani:
  * param: Die, Hit
+ * clip: Die(EmptyDestroy), Hit
 */
 
 public class Trapinch : Empty
@@ -50,7 +50,7 @@ public class Trapinch : Empty
 
     private float lastUseBite = 0;
     private float lastUseSands = 0;
-    //private GameObject sandsObj = null;
+    private GameObject sandsHolding = null;
 
     private AI_STATE aiState;
     private IEnumerator timerAi = null;
@@ -90,6 +90,29 @@ public class Trapinch : Empty
         }
     }
 
+    private void FixedUpdate()
+    {
+        // * base part 3
+        ResetPlayer();
+        if (!isBorn)
+        {
+            EmptyBeKnock();
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        // * base part 4
+        if (other.transform.tag == ("Player"))
+        {
+            EmptyTouchHit(other.gameObject);
+        }
+        if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
+        {
+            InfatuationEmptyTouchHit(other.gameObject);
+        }
+    }
+
     private void StartAiTimer()
     {
         // 平均 5 帧反应一次
@@ -109,10 +132,19 @@ public class Trapinch : Empty
             if (stateinfo.IsName("TrapinchLeftIdle") || stateinfo.IsName("TrapinchRightIdle"))
             {
                 aiState = AI_STATE.IDLE;
+                if (sandsHolding)
+                {
+                    aiState = AI_STATE.ATK_SANDS;
+                    if (sandsHolding.GetComponent<TrapinchSandTomb>().IsGrowUp)
+                    {
+                        aiState = AI_STATE.ATK_SANDS_GROW;
+                    }
+                }
             }
             if (aiState == AI_STATE.IDLE)
             {
                 GameObject target = FindAtkTarget(foundRadius);
+                //target = null;
                 if (target)
                 {
                     Vector2 dis = target.transform.position - transform.position;
@@ -120,18 +152,16 @@ public class Trapinch : Empty
                     if (Vector2.Distance(transform.position, target.transform.position) <= biteRadius && Time.time - lastUseBite > cdBite)
                     {
                         triggerBite();
-                        print("bites");
                     }
                     else if (Vector2.Distance(transform.position, target.transform.position) <= foundRadius && Time.time - lastUseSands > cdSands)
                     {
                         animator.SetTrigger("Sands");
                         aiState = AI_STATE.ATK_SANDS;
                         lastUseSands = Time.time;
-                        print("Sands");
                     }
                 }
             }
-            if (aiState == AI_STATE.ATK_SANDS)
+            else if (aiState == AI_STATE.ATK_SANDS)
             {
                 GameObject target = FindAtkTarget(growSandsRadius);
                 if (target && Vector2.Distance(transform.position, target.transform.position) <= biteRadius && Time.time - lastUseBite > cdBite)
@@ -142,22 +172,21 @@ public class Trapinch : Empty
                 {
                     if (!target)
                     {
-                        //目标不在范围内，扩展
-                        //TODO 检查是否已经扩展
+                        //不在范围内，扩展流沙地狱
                         animator.SetTrigger("SandsGrow");
                         aiState = AI_STATE.ATK_SANDS_GROW;
                     }
                 }
             }
-            if (aiState == AI_STATE.ATK_SANDS_GROW)
+            else if (aiState == AI_STATE.ATK_SANDS_GROW)
             {
-                GameObject target = FindAtkTarget(growSandsRadius);
+                GameObject target = FindAtkTarget(foundRadius);
                 if (target && Vector2.Distance(transform.position, target.transform.position) <= biteRadius && Time.time - lastUseBite > cdBite)
                 {
                     triggerBite();
                 }
             }
-                return aiDuration;
+            return aiDuration;
         });
     }
 
@@ -180,15 +209,33 @@ public class Trapinch : Empty
         if (target && Vector2.Distance(transform.position, target.transform.position) <= biteRadius)
         {
             Instantiate(biteObj, target.transform.position, Quaternion.identity);
-            Timer.Start(this, 0.15f, () =>
-            {
+            //Timer.Start(this, 0.1f, () =>
+            //{
                 Pokemon.PokemonHpChange(gameObject, target, 10, 0, 0, Type.TypeEnum.Dark);
-            });
+
+                PlayerControler playerControler = target.GetComponent<PlayerControler>();
+                if (playerControler != null && target.tag == "Player")
+                {
+                    // 击退主角
+                    playerControler.KnockOutPoint = 20;
+                    playerControler.KnockOutDirection = (target.transform.position - transform.position).normalized;
+                }
+            //});
         }
     }
 
     void OnAniTriggerSands()
     {
-        Instantiate(sandsObj, transform.position, Quaternion.identity);
+        GameObject sands = Instantiate(sandsObj, transform.position, Quaternion.identity);
+        sands.GetComponent<TrapinchSandTomb>().SetOwner(this);
+        sandsHolding = sands;
+    }
+
+    void OnAniTriggerSandsGrow()
+    {
+        if (sandsHolding && !sandsHolding.GetComponent<TrapinchSandTomb>().IsGrowUp)
+        {
+            sandsHolding.GetComponent<TrapinchSandTomb>().GrowUp();
+        }
     }
 }

@@ -641,16 +641,16 @@ public class Empty : Pokemon
         Empty nearlyEmptyObj = InfatuationForRangeRayCastEmpty(radius);
         if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || nearlyEmptyObj == null)
         {
-            if (isSubsititue && SubsititueTarget != null)
+            if (isSubsititue && SubsititueTarget != null && Vector3.Distance(transform.position, SubsititueTarget.transform.position) <= radius)
             {
                 target = SubsititueTarget;
             }
-            else
+            else if(Vector3.Distance(transform.position, player.transform.position) <= radius)
             {
                 target = player.gameObject;
             }
         }
-        if (nearlyEmptyObj)
+        else if (nearlyEmptyObj)
         {
             target = nearlyEmptyObj.gameObject;
         }
