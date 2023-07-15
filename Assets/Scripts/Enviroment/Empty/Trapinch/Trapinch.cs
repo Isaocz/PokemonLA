@@ -115,8 +115,8 @@ public class Trapinch : Empty
 
     private void StartAiTimer()
     {
-        // 平均 5 帧反应一次
-        float aiDuration = 0.3f;
+        // 反应时间20帧
+        float aiDuration = 0.05f;
         timerAi = Timer.Start(this, 0f, () =>
         {
             if (isDie)
@@ -209,18 +209,18 @@ public class Trapinch : Empty
         if (target && Vector2.Distance(transform.position, target.transform.position) <= biteRadius)
         {
             Instantiate(biteObj, target.transform.position, Quaternion.identity);
-            //Timer.Start(this, 0.1f, () =>
-            //{
-                Pokemon.PokemonHpChange(gameObject, target, 10, 0, 0, Type.TypeEnum.Dark);
+            Timer.Start(this, 0.1f, () =>
+            {
+                Pokemon.PokemonHpChange(gameObject, target, 60, 0, 0, Type.TypeEnum.Dark);
 
                 PlayerControler playerControler = target.GetComponent<PlayerControler>();
                 if (playerControler != null && target.tag == "Player")
                 {
                     // 击退主角
-                    playerControler.KnockOutPoint = 20;
+                    playerControler.KnockOutPoint = 15;
                     playerControler.KnockOutDirection = (target.transform.position - transform.position).normalized;
                 }
-            //});
+            });
         }
     }
 
