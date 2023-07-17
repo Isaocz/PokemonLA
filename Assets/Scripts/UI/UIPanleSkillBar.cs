@@ -66,7 +66,7 @@ public class UIPanleSkillBar : MonoBehaviour
         for (int i = 0;i < 12; i++)
         {
             GameObject NowObject = transform.GetChild(i).gameObject;
-            
+            if (player == null) { player = FindObjectOfType<PlayerControler>(); }
             if      (i == 6)  { NowObject.GetComponent<Text>().text = TargetSkill.SkillName; }
             else if (i == 7)  { NowObject.GetComponent<Text>().text = TargetSkill.SkillChineseName; }
             else if (i == 8)  { NowObject.GetComponent<Text>().text = Type.TypeChineseName[PanleSkillBarColor]; }
