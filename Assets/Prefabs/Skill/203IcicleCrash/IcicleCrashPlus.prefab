@@ -1,0 +1,202 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &668762575792958868
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3585690745645308265}
+  - component: {fileID: 8505605016765985706}
+  - component: {fileID: 1277005008382170600}
+  - component: {fileID: 8571497761946032903}
+  m_Layer: 0
+  m_Name: IcicleCrashPlus
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3585690745645308265
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668762575792958868}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7036685340854918427}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8505605016765985706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668762575792958868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c29e3c500aa43d4489b78820c9e7aa71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SkillIndex: 204
+  player: {fileID: 0}
+  baby: {fileID: 0}
+  ExistenceTime: 1
+  Damage: 85
+  SpDamage: 0
+  IsDamageChangeable: 0
+  animator: {fileID: 0}
+  MaxRange: 0
+  SkillType: 15
+  SkillName: IcicleCrash
+  SkillChineseName: "\u51B0\u67F1\u5760\u51FB"
+  SkillDiscribe: "\u7528\u5927\u51B0\u67F1\u6FC0\u70C8\u5730\u649E\u5411\u5BF9\u624B\u8FDB\u884C\u653B\u51FB\u3002\u6709\u65F6\u4F1A\u4F7F\u5BF9\u624B\u754F\u7F29\u3002\u6389\u843D\u7684\u51B0\u67F1\u4F1A\u88AB\u89C6\u4E3A\u3010\u51B0\u51BB\u7684\u654C\u4EBA\u3011\uFF0C\u53EF\u4EE5\u89E6\u53D1\u4E00\u4E9B\u6280\u80FD\u7684\u7279\u6548\u3002"
+  PlusSkillDiscribe: "\u5927\u51B0\u67F1\u53D8\u5F97\u4E0D\u4F1A\u968F\u7740\u65F6\u95F4\u7834\u788E\u3002"
+  PlusSkill: {fileID: 0}
+  MinusSkill: {fileID: 8505605016765985706, guid: 4d24d65885aa50544939971c2a211166, type: 3}
+  KOPoint: 5
+  ColdDown: 4.2
+  CTLevel: 0
+  SkillQualityLevel: 6
+  SkillFrom: 2
+  SkillTag: 01000000
+  isNotDirection: 0
+  DirctionDistance: 2
+  isNotMoveWithPlayer: 1
+  isMultipleDamage: 0
+  MultipleDamageCDTime: 0
+  isImmediately: 0
+  IcicleCrashOBJ: {fileID: 668762575792958868, guid: c9eb016b8c532c147b830ca14b7883f8, type: 3}
+--- !u!58 &1277005008382170600
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668762575792958868}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.95
+--- !u!114 &8571497761946032903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668762575792958868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 889d5e064f1c7764481281d163413ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FadeInTime: 0.8
+  FadeOutTime: 0.1
+  EmptySkillDuration: 1
+--- !u!1001 &4115229425134063326
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3585690745645308265}
+    m_Modifications:
+    - target: {fileID: 6393826497442010050, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: Duration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010050, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: FadeInTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010050, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: FadeOutTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.g
+      value: 0.9573642
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.r
+      value: 0.6839622
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010055, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Name
+      value: SkillRangeCircle
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+--- !u!4 &7036685340854918427 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+  m_PrefabInstance: {fileID: 4115229425134063326}
+  m_PrefabAsset: {fileID: 0}

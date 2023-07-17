@@ -13,7 +13,11 @@ public class SceneLoadManger : MonoBehaviour
     private void Awake()
     {
         sceneLoadManger = this;
-        if (FindObjectOfType<MapCreater>() != null && FindObjectOfType<PlayerControler>() == null) { Debug.Log(1); Instantiate(XSZ, Vector3.zero, Quaternion.identity); }
+        if (FindObjectOfType<MapCreater>() != null && FindObjectOfType<PlayerControler>() == null) { 
+            PlayerControler p = Instantiate(XSZ, Vector3.zero, Quaternion.identity);
+            UIPanelGwtNewSkill.StaticUIGNS.SetPlayer(p);
+            Debug.Log(p);
+        }
         if (FindObjectOfType<PlayerControler>() != null) { PlayerControler player = FindObjectOfType<PlayerControler>(); player.transform.position = Vector3.zero; player.NowRoom = Vector3Int.zero; }
     }
 

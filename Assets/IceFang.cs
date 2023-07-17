@@ -30,7 +30,7 @@ public class IceFang : Skill
             HitAndKo(target);
             if (SkillFrom == 2 && target.TypeDef[15] >= 0) { target.TypeDef[15]--;Debug.Log(target.TypeDef[15]); }
             if (animator != null) { animator.SetTrigger("Hit"); }
-            target.Frozen(2.5f, 1, 0.1f + (float)player.LuckPoint / 30);
+            target.Frozen(7.5f, 1, 0.1f + (float)player.LuckPoint / 30);
             if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.9f)
             {
                 target.Fear(2.5f, 1);

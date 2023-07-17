@@ -35,7 +35,7 @@ public class SubSkill : MonoBehaviour
     public Skill MainSkill;
     public SubSkill subskill;
 
-
+    public bool isPlusSkill;
 
 
 

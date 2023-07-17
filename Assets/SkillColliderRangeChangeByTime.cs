@@ -22,7 +22,7 @@ public class SkillColliderRangeChangeByTime : MonoBehaviour
         Collider2D = GetComponent<CircleCollider2D>();
         ParentSkill = GetComponent<Skill>();
         MaxCollider2DRadius = Collider2D.radius;
-        if (ParentSkill != null) { Duration = ParentSkill.ExistenceTime; }
+        if (ParentSkill != null && EmptySkillDuration == 0) { Duration = ParentSkill.ExistenceTime; }
         else { Duration = EmptySkillDuration; }
         Collider2D.radius = 0;
         Timer = Duration;

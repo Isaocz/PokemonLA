@@ -58,7 +58,7 @@ public class MareepWool : Projectile
             if (other.transform.tag == "Player" && !empty.isEmptyInfatuationDone) {
                 isDestory = true;
                 PlayerControler playerControler = other.transform.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject , other.gameObject , 0 , SpDmage , 0 , Type.TypeEnum.Electric);
+                Pokemon.PokemonHpChange(null, other.gameObject , 0 , SpDmage , 0 , Type.TypeEnum.Electric);
                 //playerControler.ChangeHp(0, -(SpDmage * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / 250), 13);
                 if (playerControler != null)
                 {
