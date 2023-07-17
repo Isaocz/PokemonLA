@@ -1,0 +1,190 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7811486045502424363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7811486045502424362}
+  - component: {fileID: -2992352991721629427}
+  - component: {fileID: 9015492960309230451}
+  m_Layer: 0
+  m_Name: StealthRockPlus
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7811486045502424362
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7811486045502424363}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3436829601120564555}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-2992352991721629427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7811486045502424363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c543d86fec293d4eac91ae4c8b870a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SkillIndex: 88
+  player: {fileID: 0}
+  baby: {fileID: 0}
+  ExistenceTime: 8
+  Damage: 0
+  SpDamage: 0
+  IsDamageChangeable: 0
+  animator: {fileID: 0}
+  MaxRange: 0
+  SkillType: 6
+  SkillName: StealthRock
+  SkillChineseName: "\u9690\u5F62\u5CA9"
+  SkillDiscribe: "\u5C06\u65E0\u6570\u5CA9\u77F3\u60AC\u6D6E\u5728\u5468\u56F4\uFF0C\u4ECE\u800C\u5BF9\u7ECF\u8FC7\u7684\u5BF9\u624B\u7ED9\u4E88\u4F24\u5BB3\u3002"
+  PlusSkillDiscribe: "\u6FC0\u53D1\u9690\u5F62\u5CA9\u4E2D\u7684\u78C1\u529B\uFF0C\u4F1A\u628A\u5468\u56F4\u7684\u9690\u5F62\u5CA9\u5438\u5F15\u8FC7\u6765"
+  PlusSkill: {fileID: 0}
+  MinusSkill: {fileID: 5815163473407072199, guid: 7efc2acef72fb3447b044c8fa51b6dbd, type: 3}
+  KOPoint: 0
+  ColdDown: 1.4
+  CTLevel: 0
+  SkillQualityLevel: 3
+  SkillFrom: 2
+  SkillTag: 01000000
+  isNotDirection: 1
+  DirctionDistance: 0
+  isNotMoveWithPlayer: 0
+  isMultipleDamage: 0
+  MultipleDamageCDTime: 0
+  isImmediately: 0
+  stealthRockPrefabs: {fileID: 3246254625042693630, guid: 35dda9c8f8a710343bba1b1e27c88367, type: 3}
+--- !u!58 &9015492960309230451
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7811486045502424363}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 4.7
+--- !u!1001 &8577524416736683662
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7811486045502424362}
+    m_Modifications:
+    - target: {fileID: 6393826497442010050, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: Duration
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010050, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: FadeInTime
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010050, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: FadeOutTime
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.a
+      value: 0.29803923
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.b
+      value: 0.7372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.g
+      value: 0.9254902
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.r
+      value: 0.91764706
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010055, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Name
+      value: SkillRangeCircle
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+--- !u!4 &3436829601120564555 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+  m_PrefabInstance: {fileID: 8577524416736683662}
+  m_PrefabAsset: {fileID: 0}

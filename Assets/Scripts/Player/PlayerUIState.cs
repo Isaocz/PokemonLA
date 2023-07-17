@@ -82,10 +82,17 @@ public class PlayerUIState : MonoBehaviour
     Image SpDDownObj;
     bool IsSpDDown;
 
+    public Image ColdImage;
+    Image ColdObj;
+    bool IsCold;
+
+    public Image CurseImage;
+    Image CurseObj;
+    bool IsCurse;
 
 
     /// <summary>
-    /// 0减速 1致盲 2冰冻 3中毒 4麻痹 5烧伤 6睡眠 7恐惧 8气势头戴 9混乱 10着迷 11攻击上升 12攻击下降 13防御上升 14防御下降 15特攻上升 16特攻下降 17特防上升 18特防下降
+    /// 0减速 1致盲 2冰冻 3中毒 4麻痹 5烧伤 6睡眠 7恐惧 8气势头戴 9混乱 10着迷 11攻击上升 12攻击下降 13防御上升 14防御下降 15特攻上升 16特攻下降 17特防上升 18特防下降 19寒冷 20:诅咒
     /// </summary>
     /// <param name="StateNum"></param>
     // Start is called before the first frame update
@@ -224,6 +231,20 @@ public class PlayerUIState : MonoBehaviour
                 {
                     SpDDownObj = Instantiate(SpDDownImage, transform.position, Quaternion.identity, transform);
                     IsSpDDown = true;
+                }
+                break;
+            case 19:
+                if (!IsCold)
+                {
+                    ColdObj = Instantiate(ColdImage, transform.position, Quaternion.identity, transform);
+                    IsCold = true;
+                }
+                break;
+            case 20:
+                if (!IsCurse)
+                {
+                    CurseObj = Instantiate(CurseImage, transform.position, Quaternion.identity, transform);
+                    IsCurse = true;
                 }
                 break;
         }
@@ -370,6 +391,20 @@ public class PlayerUIState : MonoBehaviour
                     IsSpDDown = false;
                 }
                 break;
+            case 19:
+                if (IsCold)
+                {
+                    Destroy(ColdObj.gameObject);
+                    IsCold = false;
+                }
+                break;
+            case 20:
+                if (IsCurse)
+                {
+                    Destroy(CurseObj.gameObject);
+                    IsCurse = false;
+                }
+                break;
 
         }
     }
@@ -443,7 +478,13 @@ public class PlayerUIState : MonoBehaviour
                     InfatuationObj.transform.GetChild(0).GetComponent<Image>().rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - Per) * OrangenalSize);
                 }
                 break;
-
+            case 20:
+                if (IsCurse)
+                {
+                    float OrangenalSize = CurseObj.rectTransform.rect.height;
+                    CurseObj.transform.GetChild(0).GetComponent<Image>().rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - Per) * OrangenalSize);
+                }
+                break;
         }
     }
 

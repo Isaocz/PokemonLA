@@ -128,10 +128,15 @@ public class MapCreater : MonoBehaviour
     {
         isReset = true;
         Debug.Log("MapReset");
-        foreach( Room room in RRoom.Values)
+        foreach (Vector3 k in RRoom.Keys)
         {
-            Destroy(room.gameObject);
-            Debug.Log(room.gameObject);
+            Debug.Log(k);
+        }
+        foreach ( Vector3Int k in RRoom.Keys)
+        {
+            Debug.Log("Reset"+k);
+            Destroy(RRoom[k].gameObject);
+            Debug.Log(RRoom[k].gameObject);
         }
         isPCRoomSpawn = false; isStoreRoomSpawn = false; isBossRoomSpawn = false;
         PCCreatCount = 0; StoreCreatCount = 0; BossRoomCreatCount = 0;

@@ -227,7 +227,7 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未被冰冻，冰冻，状态变为被冰冻
     public void Frozen(float FrozenTime , float FrozenPoint , float FrozenPer)
     {
-        if (GetComponent<Empty>() != null && GetComponent<Empty>().isMistPlus) { FrozenPer += 0.2f; }
+        if (GetComponent<Empty>() != null && isColdDown != 0) { FrozenPer += 0.25f * isColdDown; }
         Debug.Log(FrozenPer);
         if (Random.Range(0.0f , 1.0f) <= FrozenPer ) {
             if (!isFrozenDone)
@@ -265,7 +265,7 @@ public class Pokemon : MonoBehaviour
     }
 
     //只可被上一个函数延迟调用，代表解冻的函数
-    protected void FrozenRemove()
+    public void FrozenRemove()
     {
         if (isFrozenStart)
         {
@@ -849,7 +849,7 @@ public class Pokemon : MonoBehaviour
     /// <summary>
     /// 如果AtkDown( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在攻击力恢复时调用此函数
     /// </summary>
-    void AtkDownRemove()
+    public void AtkDownRemove()
     {
         if (isAtkDown)
         {
@@ -1108,12 +1108,105 @@ public class Pokemon : MonoBehaviour
 
 
 
+    //===========================================================================敌人寒冷（更容易被冰冻）的函数=====================================================================================
+
+    /// <summary>
+    /// 代表是否寒冷
+    /// </summary>
+    public int isColdDown;
+
+    /// <summary>
+    /// 调用此函数时，如果未被寒冷，状态变为寒冷
+    /// </summary>
+    /// <param name="Time"> 下降的时间，如果为零时间为无限，需要手动Remove </param>
+    public void Cold(float Time)
+    {
+        if (GetComponent<Empty>() != null)
+        {
+            isColdDown += 1;
+            playerUIState.StatePlus(19);
+            if (Time != 0) { Invoke("ColdRemove", Time); }
+        }
+    }
+    /// <summary>
+    /// 如果Cold( float Time )的Time不等于0，不需要调用此函数，
+    /// </summary>
+    public void ColdRemove()
+    {
+        Debug.Log(isColdDown);
+        if (isColdDown != 0)
+        {
+            if (GetComponent<Empty>() != null)
+            {
+                isColdDown = 0;
+                playerUIState.StateDestory(19);
+            }
+        }
+    }
+
+    //===========================================================================敌人寒冷（更容易被冰冻）的函数=====================================================================================
 
 
 
 
 
 
+    //===========================================================================敌人被诅咒的函数=====================================================================================
+
+    public bool isEmptyCurseDone = false;
+    public bool isEmptyCurseStart = false;
+    float EmptyCursePoint;
+
+    /// <summary>
+    /// 调用此函数时，如果还未诅咒，状态变为诅咒
+    /// </summary>
+    /// <param name="InfatuationTimer">诅咒的持续时间（通常为0）</param>
+    /// <param name="InfatuationPoint">诅咒的点数</param>
+    public void EmptyCurse(float CurseTimer, float CursePoint)
+    {
+        if (!isEmptyCurseDone)
+        {
+            EmptyCursePoint += CursePoint * OtherStateResistance;
+            if (!isEmptyCurseStart && EmptyCursePoint < 1)
+            {
+                playerUIState.StatePlus(20);
+                playerUIState.StateSlowUP(20, EmptyCursePoint);
+                isEmptyCurseStart = true;
+            }
+            else if (isEmptyCurseStart && EmptyCursePoint < 1)
+            {
+                playerUIState.StateSlowUP(20, EmptyCursePoint);
+            }
+            else if (EmptyCursePoint >= 1 && !isEmptyCurseDone)
+            {
+                if (!isEmptyCurseStart)
+                {
+                    playerUIState.StatePlus(20);
+                    playerUIState.StateSlowUP(20, EmptyCursePoint);
+                    isEmptyCurseStart = true;
+                }
+                isEmptyCurseDone = true;
+                playerUIState.StateSlowUP(20, EmptyCursePoint);
+                if (CurseTimer != 0) { Invoke("EmptyCurseRemove", CurseTimer); }
+            }
+        }
+
+    }
+    //只可被上一个函数延迟调用，代表移除诅咒的函数
+    public void EmptyCurseRemove()
+    {
+        if (isEmptyCurseDone)
+        {
+            EmptyCursePoint = 0;
+            playerUIState.StateSlowUP(20, 0);
+            isEmptyCurseStart = false;
+            isEmptyCurseDone = false;
+            playerUIState.StateDestory(20);
+        }
+    }
+
+
+    //===========================================================================敌人被诅咒的函数=====================================================================================
 
 
 
@@ -1671,6 +1764,7 @@ public class Pokemon : MonoBehaviour
         float EmptyTypeAlpha = 1;
         if (Attacker != null)
         {
+            
             Empty EmptyAttacker = Attacker.GetComponent<Empty>();
             PlayerControler PlayerAttacker = Attacker.GetComponent<PlayerControler>();
             FollowBaby FollowBabyAttacker = Attacker.GetComponent<FollowBaby>();
@@ -1693,17 +1787,17 @@ public class Pokemon : MonoBehaviour
             if (HpUpValue == 0) {
                 float WeatherDefAlpha = ((Weather.GlobalWeather.isSandstorm ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Rock || EmptyAttacked.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1));
                 float WeatherSpDAlpha = ((Weather.GlobalWeather.isHail ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Ice || EmptyAttacked.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1));
-                float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+                /*float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
                     * ((Weather.GlobalWeather.isRain && SkillType == Type.TypeEnum.Fire) ? 0.5f : 1)
                     * ((Weather.GlobalWeather.isSunny && SkillType == Type.TypeEnum.Water) ? 0.5f : 1)
                     * ((Weather.GlobalWeather.isSunny && SkillType == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
-
+                */
 
                 if (SkillType != Type.TypeEnum.IgnoreType)
                 {
                     EmptyAttacked.EmptyHpChange(
-                    (AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha * WeatherAlpha * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2),
-                    (SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha * WeatherAlpha * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.SpdAbilityPoint * WeatherSpDAlpha + 2),
+                    Mathf.Clamp((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2) , 1 , 10000),
+                    Mathf.Clamp((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.SpdAbilityPoint * WeatherSpDAlpha + 2), 1, 10000),
                     (int)SkillType);
                 }
                 else
@@ -1722,9 +1816,9 @@ public class Pokemon : MonoBehaviour
             if (HpUpValue == 0)
             {
                 PlayerAttacked.ChangeHp(
-                    (-AtkPower * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250),
-                    (-SpAPower * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250),
-                    (int)SkillType);
+                         Mathf.Clamp((-AtkPower * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1),
+                         Mathf.Clamp((-SpAPower * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1),
+                        (int)SkillType);
             }
             else
             {

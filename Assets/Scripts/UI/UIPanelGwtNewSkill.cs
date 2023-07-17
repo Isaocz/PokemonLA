@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class UIPanelGwtNewSkill : MonoBehaviour
 {
+    public static UIPanelGwtNewSkill StaticUIGNS;
+
     public string PokemonNameChinese;
     public PlayerControler playerControler;
     public LearnNewSkillSelectPanel LNSSPanel;
@@ -18,10 +20,21 @@ public class UIPanelGwtNewSkill : MonoBehaviour
 
     private void Awake()
     {
+        StaticUIGNS = this;
         playerControler = FindObjectOfType<PlayerControler>();
-        if (playerControler.uIPanelGwtNewSkill == null)
+        if (playerControler != null && playerControler.uIPanelGwtNewSkill == null)
         {
             playerControler.uIPanelGwtNewSkill = this;
+            transform.gameObject.SetActive(false);
+            transform.parent.gameObject.SetActive(false);
+        }
+    }
+
+    public void SetPlayer(PlayerControler player)
+    {
+        if (player.uIPanelGwtNewSkill == null)
+        {
+            player.uIPanelGwtNewSkill = this;
             transform.gameObject.SetActive(false);
             transform.parent.gameObject.SetActive(false);
         }
@@ -85,12 +98,12 @@ public class UIPanelGwtNewSkill : MonoBehaviour
                 GetNewSkillPanel2.transform.GetChild(4).GetChild(0).GetComponent<Text>().text = "忘掉技能" + playerControler.Skill02.SkillChineseName;
                 GetNewSkillPanel2.transform.GetChild(5).GetChild(0).GetComponent<Text>().text = "忘掉技能" + playerControler.Skill03.SkillChineseName;
                 GetNewSkillPanel2.transform.GetChild(6).GetChild(0).GetComponent<Text>().text = "忘掉技能" + playerControler.Skill04.SkillChineseName;
-                if (GetNewSkill.SkillFrom == 1) { GetNewSkillPanel2.transform.GetChild(7).GetChild(0).GetComponent<Text>().text = "不学习" + NewSkill.SkillChineseName; }
+                if (GetNewSkill.SkillFrom == 1 || !IsLearnSkill) { GetNewSkillPanel2.transform.GetChild(7).GetChild(0).GetComponent<Text>().text = "不学习" + NewSkill.SkillChineseName; }
                 else { GetNewSkillPanel2.transform.GetChild(7).GetChild(0).GetComponent<Text>().text = "学习其他技能"; }
             }
             else
             {
-                if (GetNewSkill.SkillFrom == 1) { transform.GetChild(3).GetChild(0).GetComponent<Text>().text = "不学习" + NewSkill.SkillChineseName; }
+                if (GetNewSkill.SkillFrom == 1 || !IsLearnSkill) { transform.GetChild(3).GetChild(0).GetComponent<Text>().text = "不学习" + NewSkill.SkillChineseName; }
                 else { transform.GetChild(3).GetChild(0).GetComponent<Text>().text = "学习其他技能"; }
             }
         }
@@ -134,7 +147,7 @@ public class UIPanelGwtNewSkill : MonoBehaviour
 
     public void ReturnSelectPanel()
     {
-        if (NewSkill.SkillFrom != 1)
+        if (IsLearnSkill)
         {
             LNSSPanel.gameObject.SetActive(true);
             gameObject.SetActive(false);

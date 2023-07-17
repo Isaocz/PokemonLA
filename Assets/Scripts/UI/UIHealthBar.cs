@@ -41,7 +41,10 @@ public class UIHealthBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        originalSize = Mask.rectTransform.rect.width;
+        if (originalSize == 0)
+        {
+            originalSize = Mask.rectTransform.rect.width;
+        }
         PlayerControler player = FindObjectOfType<PlayerControler>();
         if(player != null)
         {
@@ -49,6 +52,12 @@ public class UIHealthBar : MonoBehaviour
             NowHpText.text = string.Format("{000}", player.Hp);
             Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)player.Hp/(float)player.maxHp * originalSize);
         }
+    }
+
+    public void InstanceHpBar()
+    {
+        if (originalSize == 0) { originalSize = Mask.rectTransform.rect.width; }
+        Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalSize);
     }
     
 

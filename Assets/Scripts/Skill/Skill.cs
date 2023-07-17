@@ -62,6 +62,7 @@ public class Skill : MonoBehaviour
     //表示技能的来源 0表示由学习获得 1表示由技能学习机获得 2表示精通技能
     public int SkillFrom;
 
+    
 
 
     //技能的Tag
@@ -89,13 +90,10 @@ public class Skill : MonoBehaviour
     //表示技能生成是否需要抬手，比如位移类技能需要在摁下摁键的那一刻开始位移，而射弹类节能会有一个抬手前摇
     public bool isImmediately;
 
-    //技能的威力加成系数（比如硬撑的威力翻倍）
-
-
 
 
     //用于多端攻击的构造体
-    struct EmptyList
+    protected struct EmptyList
     {
 
         public EmptyList(Empty target, bool v1, float v2) : this()
@@ -110,7 +108,7 @@ public class Skill : MonoBehaviour
         public float MultipleDamageColdDownTimer { get; set; }
 
     }
-    List<EmptyList> TargetList = new List<EmptyList> { };
+    protected List<EmptyList> TargetList = new List<EmptyList> { };
 
 
     void ResetPlayer()
@@ -120,6 +118,18 @@ public class Skill : MonoBehaviour
             player = GameObject.FindObjectOfType<PlayerControler>();
         }
     }
+
+
+    //生成技能的暴击特效
+    protected void GetCTEffect(Empty target)
+    {
+        //获取暴击动画特效
+        GameObject CTEffect = PublicEffect.StaticPublicEffectList.ReturnAPublicEffect(0);
+        //实例化
+        Instantiate(CTEffect, target.transform.position + Vector3.right*Random.Range(-0.5f,0.5f) + Vector3.up * Random.Range(0.0f, 0.8f), Quaternion.identity , target.transform).SetActive(true);
+    }
+
+
 
     //引用于所有技能的Update函数，当存在时间耗尽时技能消失
     public void StartExistenceTimer()
@@ -189,15 +199,16 @@ public class Skill : MonoBehaviour
             {
                 float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1) * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
                 if (player != null) {
-                    if (Random.Range(0.0f, 1.0f) >= 0.04f + 0.01f * player.LuckPoint)
+                    if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
                     {
                         Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage, 0, (Type.TypeEnum)SkillType);
-                        Debug.Log(player);
+                        //Debug.Log(player);
                     }
                     else
                     {
-                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * 1.5f, 0, (Type.TypeEnum)SkillType);
-                        Debug.Log(player);
+                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * 1.5f * (Mathf.Pow(1.2f, CTLevel)), 0, (Type.TypeEnum)SkillType);
+                        GetCTEffect(target);
+                        //Debug.Log(player);
                     }
                 }else if (baby != null)
                 {
@@ -215,12 +226,13 @@ public class Skill : MonoBehaviour
                     if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
                     {
                         Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage, 0, 0, (Type.TypeEnum)SkillType);
-                        Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? ((target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1))) + 2, 0, SkillType);
+                        //Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? ((target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1))) + 2, 0, SkillType);
                     }
                     else
                     {
-                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * 1.5f, 0, 0, (Type.TypeEnum)SkillType);
-                        Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? (( target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1 ) : 1)) ) + 2, 0, SkillType);
+                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * 1.5f * (Mathf.Pow(1.2f, CTLevel)), 0, 0, (Type.TypeEnum)SkillType);
+                        GetCTEffect(target);
+                        //Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? (( target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1 ) : 1)) ) + 2, 0, SkillType);
                     }
                 }else if (baby != null)
                 {
@@ -234,26 +246,63 @@ public class Skill : MonoBehaviour
                 TCEell.isMultipleDamageColdDown = true;
                 TargetList[ListIndex] = TCEell;
             }
-            if (player != null)
-            {
-                if (player.playerData.IsPassiveGetList[26] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.6f)
-                {
-                    if (SkillTag != null)
-                    {
-                        foreach (Skill.SkillTagEnum i in SkillTag)
-                        {
-                            if (i == Skill.SkillTagEnum.接触类) { target.EmptyToxicDone(1, 30); }
-                        }
-                    }
-                }
-                if (player.playerData.IsPassiveGetList[25] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.8f)
-                {
-                    target.Fear(3.0f, 1);
-                }
-            }
+            HitEvent(target);
         }
 
     }
+
+
+    public void HitEvent(Empty target)
+    {
+        if (player != null)
+        {
+            if (player.playerData.IsPassiveGetList[26] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.6f)
+            {
+                if (SkillTag != null)
+                {
+                    foreach (Skill.SkillTagEnum i in SkillTag)
+                    {
+                        if (i == Skill.SkillTagEnum.接触类) { target.EmptyToxicDone(1, 30); }
+                    }
+                }
+            }
+            if (player.playerData.IsPassiveGetList[25] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.8f)
+            {
+                target.Fear(3.0f, 1);
+            }
+        }
+    }
+
+
+
+    //=================================多次攻击的次数判定===========================================
+   /// <summary>
+   /// 如岩石暴击，冰锥等次数为2-5次的攻击，使用次方法输出次数
+   /// </summary>
+   /// <returns></returns>
+    protected int Count2_5()
+    {
+        float p = Random.Range(0.0f, 1.0f)+((float)player.LuckPoint/30);
+        if(p>=0 && p <= 0.35f)
+        {
+            return 2;
+        }
+        else if (p >= 0.35f && p <= 0.70f)
+        {
+            return 3;
+        }
+        else if (p >= 0.70f && p <= 0.85f)
+        {
+            return 4;
+        }
+        else
+        {
+            return 5;
+        }
+    }
+
+    //=================================多次攻击的次数判定===========================================
+
 
 
 

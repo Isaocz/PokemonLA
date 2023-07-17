@@ -21,7 +21,7 @@ public class AncientPower : Skill
     {
 
         StartExistenceTimer();
-
+        
         if (!isParticleCollider && ExistenceTime <= 1.7f)
         {
             var CollisionModule = ACPS.collision;

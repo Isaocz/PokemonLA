@@ -80,24 +80,24 @@ public class Psyduck : Empty
 
     public void Lunch()
     {
-         
-        Projectile ProjectileObject;
-        Projectile Shot;
-        if (Random.Range(0.0f, 1.0f) <= 0.5f)
-        {
-            Shot = WaterGun;
+        if (!isDie) {
+            Projectile ProjectileObject;
+            Projectile Shot;
+            if (Random.Range(0.0f, 1.0f) <= 0.5f)
+            {
+                Shot = WaterGun;
+            }
+            else
+            {
+                Shot = Confusion;
+            }
+            ProjectileObject = Instantiate(Shot, rigidbody2D.position + new Vector2(direction * 0.375f, 0.375f), Quaternion.Euler(0, 0, (TargetPosition.x - transform.position.x >= 0 ? -1 : 1) * Vector2.Angle(TargetPosition - (Vector2)transform.position, new Vector2(0, 1))));
+            Vector2 p = new Vector2((TargetPosition.x - transform.position.x), (TargetPosition.y - transform.position.y)).normalized;
+            if (isEmptyConfusionDone) { Debug.Log("xxx"); p += new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)); p = p.normalized; }
+            ProjectileObject.transform.rotation = Quaternion.Euler(0, 0, (TargetPosition.x - transform.position.x >= 0 ? -1 : 1) * Vector2.Angle(p, new Vector2(0, 1)));
+            ProjectileObject.Launch(p * 6, 55);
+            ProjectileObject.empty = gameObject.GetComponent<Empty>();
         }
-        else
-        {
-            Shot = Confusion;
-        }
-        ProjectileObject = Instantiate(Shot, rigidbody2D.position + new Vector2(direction*0.375f, 0.375f), Quaternion.Euler(0, 0, (TargetPosition.x - transform.position.x >= 0 ?-1:1) * Vector2.Angle(TargetPosition - (Vector2)transform.position, new Vector2(0, 1))));
-        Vector2 p = new Vector2((TargetPosition.x - transform.position.x), (TargetPosition.y - transform.position.y)).normalized;
-        if (isEmptyConfusionDone) { Debug.Log("xxx"); p += new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)); p = p.normalized; }
-        ProjectileObject.transform.rotation = Quaternion.Euler(0,0, (TargetPosition.x - transform.position.x >= 0 ? -1 : 1) * Vector2.Angle(p, new Vector2(0, 1)) );
-        ProjectileObject.Launch(p*6, 55);
-        ProjectileObject.empty = gameObject.GetComponent<Empty>();
-
     }
 
     void Attak()

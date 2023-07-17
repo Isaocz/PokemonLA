@@ -29,8 +29,8 @@ public class PowderSnowEffect : MonoBehaviour
                     Instantiate(PowderSnow_02, target.transform.position + new Vector3(Random.Range(-0.77f, 0.77f), Random.Range(0.3f, 1.3f), 0), Quaternion.Euler(0, 0, Random.Range(0, 180)), target.transform);
                     Instantiate(PowderSnow_02, target.transform.position + new Vector3(Random.Range(-0.77f, 0.77f), Random.Range(0.3f, 1.3f), 0), Quaternion.Euler(0, 0, Random.Range(0, 180)), target.transform);
                 }
-                if (ParentPowderSnow.SkillFrom == 2) { target.Frozen(5f, 2, 0.3f + (float)ParentPowderSnow.player.LuckPoint / 30); }
-                else { target.Frozen(2.5f, 1, 0.3f + (float)ParentPowderSnow.player.LuckPoint / 30); }
+                if (ParentPowderSnow.SkillFrom == 2) { target.Frozen(15f, 2, 0.3f + (float)ParentPowderSnow.player.LuckPoint / 30); }
+                else { target.Frozen(7.5f, 1, 0.3f + (float)ParentPowderSnow.player.LuckPoint / 30); }
             }
             gameObject.transform.parent.GetComponent<MudSlup>().HitAndKo(target);
             IsFrozenDone = true;

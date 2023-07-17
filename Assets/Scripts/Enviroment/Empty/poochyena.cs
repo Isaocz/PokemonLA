@@ -431,6 +431,7 @@ public class poochyena : Empty
                         if (!isInfatuationDmageDone)
                         {
                             Instantiate(BiteAnimation, new Vector3(other.contacts[0].point.x, other.contacts[0].point.y, 0), Quaternion.identity, other.transform);
+
                             Pokemon.PokemonHpChange(this.gameObject , e.gameObject , 60 , 0 , 0 , Type.TypeEnum.Dark );
                             //e.EmptyHpChange((60 * AtkAbilityPoint * (2 * Emptylevel + 10) / (250 * e.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((e.EmptyType01 == Type.TypeEnum.Ice || e.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2), 0, 17);
                             isInfatuationDmageDone = true;
@@ -440,13 +441,14 @@ public class poochyena : Empty
                 else if(!isEmptyInfatuationDone && other.transform.tag == ("Player"))
                 {
                     PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
-                    Pokemon.PokemonHpChange(this.gameObject , other.gameObject, 75 , 0 , 0 , Type.TypeEnum.Dark);
+                    
                     if (playerControler != null)
                     {
                         if (!player.isInvincible) { Instantiate(BiteAnimation, new Vector3(other.contacts[0].point.x, other.contacts[0].point.y, 0), Quaternion.identity, other.transform); }
                         playerControler.KnockOutPoint = Knock;
                         playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                     }
+                    Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 75, 0, 0, Type.TypeEnum.Dark);
                 }
             }
             

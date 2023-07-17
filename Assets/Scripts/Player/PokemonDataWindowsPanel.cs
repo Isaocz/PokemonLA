@@ -24,12 +24,12 @@ public class PokemonDataWindowsPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        player = GameObject.FindObjectOfType<PlayerControler>();
         Invoke("RestorePokemonDataPanel", 0.0001f);
     }
 
     public void RestorePokemonDataPanel()
     {
+        player = GameObject.FindObjectOfType<PlayerControler>();
         HeadUI = transform.GetChild(0).gameObject;
         TypeMarkUI = transform.GetChild(1).gameObject;
         MoneyAndExpUI = transform.GetChild(2).gameObject;
@@ -45,11 +45,12 @@ public class PokemonDataWindowsPanel : MonoBehaviour
         GetPlayerStrengthData();
         GetTypeDefUI();
         GetNature();
-
+        
     }
 
     void GetHead()
     {
+        
         PlayerControler playerControler = player.GetComponent<PlayerControler>();
         HeadUI.GetComponent<Image>().sprite = playerControler.PlayerHead;
         HeadUI.transform.GetChild(0).GetComponent<Text>().text = playerControler.PlayerNameChinese;

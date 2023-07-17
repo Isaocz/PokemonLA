@@ -10,7 +10,7 @@ public class Empty : Pokemon
     //敌人的当前血量和最大血量
     [Tooltip("当前HP")]
     public int EmptyHp;
-    protected int maxHP;
+    public int maxHP;
     //敌人的等级
     [Tooltip("等级")]
     public int Emptylevel;
@@ -109,8 +109,10 @@ public class Empty : Pokemon
     /// </summary>
     public GameObject DropItem;
 
+    /*
     //表示敌人是否处于被白雾【精通】击中
     public bool isMistPlus;
+    */
 
     /// <summary>
     /// 表示敌人是否进入被替身吸引状态
@@ -226,7 +228,7 @@ public class Empty : Pokemon
             {
                 if (SkillType != 19)
                 {
-                    EmptyHp -=  Mathf.Clamp((int)((Dmage + SpDmage) * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]) , 1 , 100000 );
+                    EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000);
                 }
                 else
                 {
@@ -240,10 +242,11 @@ public class Empty : Pokemon
                 EmptyHp = Mathf.Clamp(EmptyHp - (int)(Dmage + SpDmage), 0, maxHP);
             }
 
-            Debug.Log(Mathf.Clamp((int)((Dmage + SpDmage) * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000));
+            Debug.Log(Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000));
             if ((int)Dmage + (int)SpDmage > 0)
             {
                 animator.SetTrigger("Hit");
+                //Debug.Log((float)EmptyHp / (float)maxHP + "=" + (float)EmptyHp + "/" + (float)maxHP);
                 uIHealth.Per = (float)EmptyHp / (float)maxHP;
                 uIHealth.ChangeHpDown();
             }
@@ -396,7 +399,16 @@ public class Empty : Pokemon
     {
         if(DropItem != null)
         {
-            Instantiate(DropItem ,transform.position , Quaternion.identity , transform.parent);
+            if (isBoos)
+            {
+                Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+                Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+                Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+            }
+            else
+            {
+                Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent);
+            }
         }
         Destroy(gameObject);
     }
@@ -495,6 +507,7 @@ public class Empty : Pokemon
         if (isParalysisDone) { EmptyParalysisJudge(); } else { isCanNotMoveWhenParalysis = false; }
         if (Weather.GlobalWeather.isHail) { EmptyHail(); }
         if (Weather.GlobalWeather.isSandstorm) { EmptySandStorm(); }
+        if (isEmptyCurseDone) { EmptyCurseDmage(); }
     }
 
 
@@ -628,6 +641,30 @@ public class Empty : Pokemon
         }
     }
     //=========================沙暴伤害事件========================
+
+    //=========================诅咒事件========================
+
+    /// <summary>
+    /// 敌人的诅咒计时器，每计时5s诅咒一次
+    /// </summary>
+    protected float EmptyCurseTimer;
+    /// <summary>
+    /// 根据诅咒时间敌人掉血
+    /// </summary>
+    void EmptyCurseDmage()
+    {
+        if (EmptyCurseTimer == 0)
+        {
+            PokemonHpChange(null, this.gameObject, Mathf.Clamp(( (isBoos? ((float)EmptyHp) : ((float)maxHP)) / 4), 1, 10000), 0, 0, Type.TypeEnum.IgnoreType);
+        }
+        EmptyCurseTimer += Time.deltaTime;
+        if (EmptyCurseTimer >= 5)
+        {
+            EmptyCurseTimer = 0;
+        }
+
+    }
+    //=========================诅咒事件========================
 
 
 

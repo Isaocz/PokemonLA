@@ -27,7 +27,7 @@ public class IcyWindPS : MonoBehaviour
                 Empties.Add(target);
                 target.SpeedChange();
                 target.SpeedRemove01(3 * target.OtherStateResistance);
-                target.Frozen(2.5f, 1, 0.1f + (float)ParentIW.player.LuckPoint / 30); 
+                target.Frozen(7.5f, 1, 0.1f + (float)ParentIW.player.LuckPoint / 30); 
             }
         }
     }

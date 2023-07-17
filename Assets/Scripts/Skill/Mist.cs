@@ -39,20 +39,20 @@ public class Mist : Skill
 
     }
 
+
+    List<Empty> MistPlusList = new List<Empty> {  };
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Empty") {
             Empty Target = other.GetComponent<Empty>();
-            if (SkillFrom == 2) { Target.isMistPlus = true; }
+            if (SkillFrom == 2) {
+                if (!MistPlusList.Contains(Target))
+                {
+                    Target.Cold(15);
+                }
+                MistPlusList.Add(Target);
+            }
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.tag == "Empty")
-        {
-            Empty Target = other.GetComponent<Empty>();
-            if (SkillFrom == 2) { Target.isMistPlus = false; }
-        }
-    }
 }

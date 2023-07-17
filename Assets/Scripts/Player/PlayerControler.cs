@@ -262,6 +262,7 @@ public class PlayerControler : Pokemon
         }
         UIHealthBar.Instance.MaxHpText.text = string.Format("{000}", maxHp);
         UIHealthBar.Instance.NowHpText.text = string.Format("{000}", nowHp);
+        UIHealthBar.Instance.InstanceHpBar();
         UIExpBar.Instance.Leveltext.text = LevelForSkill.ToString();
         UIHeadIcon.StaticHeadIcon.ChangeHeadIcon(PlayerHead);
         ComeInANewRoomEvent += ChangeRoomBgm;
@@ -293,9 +294,18 @@ public class PlayerControler : Pokemon
             UpdatePlayerChangeHP();
 
             //每帧获取一次十字键的按键信息
-            horizontal = Input.GetAxis("Horizontal") * (isConfusionDone ? -1 : 1);
-            vertical = Input.GetAxis("Vertical") * (isConfusionDone ? -1 : 1) ;
 
+            
+            Vector2 MoveSpeed = (new Vector2(Input.GetAxis("Horizontal") * (isConfusionDone ? -1 : 1), Input.GetAxis("Vertical") * (isConfusionDone ? -1 : 1))).normalized * (Mathf.Max(Mathf.Abs(Input.GetAxis("Horizontal")) , Mathf.Abs(Input.GetAxis("Vertical"))));
+            horizontal = MoveSpeed.x;
+            vertical = MoveSpeed.y;
+
+            /*
+            horizontal = Input.GetAxis("Horizontal") * (isConfusionDone ? -1 : 1);
+            vertical = Input.GetAxis("Vertical") * (isConfusionDone ? -1 : 1);
+            */
+            
+            
 
             //每帧检测一次当前是否为无敌状态，如果是，则计时器计时，如果计时器时间小于0，则变为不无敌状态
             if (isInvincible)
@@ -494,6 +504,7 @@ public class PlayerControler : Pokemon
             TeraTypeJORChange(0);
             playerData.RestoreJORSata();
             isStrengthAndTeraTypeBeRestore = true;
+            ReFreshAbllityPoint();
         }
     }
 

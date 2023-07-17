@@ -27,6 +27,7 @@ public class PlayNice : Skill
             //对目标只造成一次降攻
             if (target != influence.Find(t => t))
             {
+                target.AtkDown(0);
                 infnum.Add(target.AtkEmptyPoint);
                 influence.Add(target);
                 target.AtkEmptyPoint = (int)(target.AtkEmptyPoint * 0.8);
@@ -39,6 +40,7 @@ public class PlayNice : Skill
         //结束时恢复攻击力
         for (int i = 0; i < influence.Count; i++)
         {
+            influence[i].AtkDownRemove();
             influence[i].AtkEmptyPoint = infnum[i];
         }
     }

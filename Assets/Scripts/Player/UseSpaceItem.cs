@@ -111,32 +111,32 @@ public class UseSpaceItem : MonoBehaviour
 
             //能力强化
             case 21:
-                player.playerData.AtkBounsJustOneRoom = 1 ;
+                player.playerData.AtkBounsJustOneRoom += 1 ;
                 player.playerData.AtkHardWorkJustOneRoom += player.AtkAbilityPoint * 0.2f;
                 player.ReFreshAbllityPoint();
                 break;
             case 22:
-                player.playerData.DefBounsJustOneRoom = 1;
+                player.playerData.DefBounsJustOneRoom += 1;
                 player.playerData.DefHardWorkJustOneRoom += player.DefAbilityPoint * 0.2f;
                 player.ReFreshAbllityPoint();             
                 break;
             case 23:
-                player.playerData.SpABounsJustOneRoom = 1;
+                player.playerData.SpABounsJustOneRoom += 1;
                 player.playerData.SpAHardWorkJustOneRoom += player.SpAAbilityPoint * 0.2f;
                 player.ReFreshAbllityPoint();
                 break;
             case 24:
-                player.playerData.SpDBounsJustOneRoom = 1;
+                player.playerData.SpDBounsJustOneRoom += 1;
                 player.playerData.SpDHardWorkJustOneRoom += player.SpdAbilityPoint * 0.2f;
                 player.ReFreshAbllityPoint();
                 break;
             case 25:
-                player.playerData.SpeBounsJustOneRoom = 1;
+                player.playerData.SpeBounsJustOneRoom += 1;
                 player.playerData.SpeHardWorkJustOneRoom += player.SpeedAbilityPoint * 0.2f;
                 player.ReFreshAbllityPoint();
                 break;
             case 26:
-                player.playerData.LuckBounsJustOneRoom = 1;
+                player.playerData.LuckBounsJustOneRoom += 1;
                 player.playerData.LuckHardWorkJustOneRoom += player.LuckPoint * 0.2f;
                 player.ReFreshAbllityPoint();
                 break;

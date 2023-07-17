@@ -76,7 +76,7 @@ public class Blizzard : Skill
             HitAndKo(target);
             if (!IsFrozenDone)
             {
-                target.Frozen(2.5f, 1, 0.1f + (float)player.LuckPoint / 30);
+                target.Frozen(7.5f, 1, 0.1f + (float)player.LuckPoint / 30);
                 IsFrozenDone = true;
             }
         }

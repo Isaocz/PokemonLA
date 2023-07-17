@@ -15,13 +15,14 @@ public class RandomDropItem : MonoBehaviour
     public GameObject XAbllityRandom;
     public GameObject FeatherRandom;
     public GameObject PokemonBall;
+    public GameObject SkillItem;
     public GameObject OutPut;
 
 
 
     private void Start()
     {
-        float RandomPoint = Random.Range(0.0f, 1.13f);
+        float RandomPoint = Random.Range(0.0f, 1.17f);
 
         if (RandomPoint >= 0.00f && RandomPoint < 0.22f)
         {
@@ -66,6 +67,10 @@ public class RandomDropItem : MonoBehaviour
         else if (RandomPoint >= 1.00f && RandomPoint <= 1.13f)
         {
             OutPut = Instantiate(FeatherRandom, transform.position, Quaternion.identity, transform);
+        }
+        else if (RandomPoint >= 1.13f && RandomPoint <= 1.17f)
+        {
+            OutPut = Instantiate(SkillItem, transform.position, Quaternion.identity, transform);
         }
         if (OutPut != null)
         {
