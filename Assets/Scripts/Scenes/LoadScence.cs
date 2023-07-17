@@ -9,20 +9,20 @@ public class LoadScence : MonoBehaviour
     // Start is called before the first frame update
     public Text Progress;
     public Image ProgressBarMask;
-    float OriginalSize;
+    public RectTransform progressTrans;
+    float OriginalSize = 0;
 
     private void Start()
     {
+        OriginalSize = progressTrans.rect.width;
         LoadGame();
         //OriginalSize = ProgressBarMask.rectTransform.rect.width;
-        OriginalSize = 1000;
         //ProgressBarMask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
     }
 
     public void LoadGame()
     {
         StartCoroutine(StartLoadGame(FloorNum.GlobalFloorNum.FloorNumber + 3));
-
     }
 
     public IEnumerator StartLoadGame(int Sence)
