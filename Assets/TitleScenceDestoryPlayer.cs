@@ -12,13 +12,7 @@ public class TitleScenceDestoryPlayer : MonoBehaviour
         if (FindObjectOfType<PlayerControler>() != null)
         {
             Debug.Log(FindObjectOfType<PlayerControler>());
-            Destroy(FindObjectOfType<PlayerControler>());
-            Debug.Log(FindObjectOfType<PlayerControler>());
-        }
-        if (FindObjectOfType<PlayerControler>() != null)
-        {
-            Debug.Log(FindObjectOfType<PlayerControler>());
-            Destroy(FindObjectOfType<PlayerControler>());
+            Destroy(FindObjectOfType<PlayerControler>().gameObject);
             Debug.Log(FindObjectOfType<PlayerControler>());
         }
     }

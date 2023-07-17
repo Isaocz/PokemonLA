@@ -16,12 +16,12 @@ public class Pokemon : MonoBehaviour
     public Material InfatuationMaterial;
 
 
-    public float FrozenResistance;
-    public float ToxicResistance;
-    public float ParalysisResistance;
-    public float BurnResistance;
-    public float SleepResistance;
-    public float OtherStateResistance;
+    public float FrozenResistance = 1f;
+    public float ToxicResistance = 1f;
+    public float ParalysisResistance = 1f;
+    public float BurnResistance = 1f;
+    public float SleepResistance = 1f;
+    public float OtherStateResistance = 1f;
 
     public float TimeStateInvincible;
     protected float StateInvincileTimer = 0.0f;

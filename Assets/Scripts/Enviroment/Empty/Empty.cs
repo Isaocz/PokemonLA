@@ -6,7 +6,7 @@ public class EnumMultiAttribute : PropertyAttribute { }
 public class Empty : Pokemon
 {
     //攻击到玩家时造成的击退值声明4个变量，一个代表对玩家造成的伤害，一个代表击退值，一个表示移动的距离,一个表示移动速度，一个表示初始血量
-    public float Knock;
+    public float Knock = 5f;
     //敌人的当前血量和最大血量
     [Tooltip("当前HP")]
     public int EmptyHp;
@@ -671,7 +671,28 @@ public class Empty : Pokemon
 
 
 
-
+    // 在半径范围内寻找攻击目标
+    public GameObject FindAtkTarget(float radius)
+    {
+        GameObject target = null;
+        Empty nearlyEmptyObj = InfatuationForRangeRayCastEmpty(radius);
+        if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || nearlyEmptyObj == null)
+        {
+            if (isSubsititue && SubsititueTarget != null && Vector3.Distance(transform.position, SubsititueTarget.transform.position) <= radius)
+            {
+                target = SubsititueTarget;
+            }
+            else if(Vector3.Distance(transform.position, player.transform.position) <= radius)
+            {
+                target = player.gameObject;
+            }
+        }
+        else if (nearlyEmptyObj)
+        {
+            target = nearlyEmptyObj.gameObject;
+        }
+        return target;
+    }
 
     /// <summary>
     /// ---Update和FixedUpdate中调用---，声明一个函数，当玩家进化后因为之前的玩家对象被销毁，所以需要重新获取玩家
