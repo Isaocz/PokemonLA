@@ -19,14 +19,15 @@ public class CameraAdapt : MonoBehaviour
             lastwidth = Screen.width;
             lastheight = Screen.height;
             adapt();
-            //print("Resolution :" + Screen.width + " X" + Screen.height);
+            print("Resolution :" + Screen.width + " X " + Screen.height);
         }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        aimRatio = (float)ConstantRoom.ROOM_WIDTH / ConstantRoom.ROOM_HIGHT;
+        //aimRatio = (float)ConstantRoom.ROOM_WIDTH / ConstantRoom.ROOM_HIGHT;
+        aimRatio = ConstantRoom.ROOM_SHOW_RATIO;
         halfWidth = aimRatio * halfHeightPre;
     }
 
