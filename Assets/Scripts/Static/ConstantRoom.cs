@@ -7,6 +7,8 @@ public class ConstantRoom
     public static int ROOM_WIDTH = 30;
     public static int ROOM_HIGHT = 24;
 
+    public static float ROOM_SHOW_RATIO = (float)1108 / 800;
+
     public static int ROOM_INNER_WIDTH = 24;
     public static int ROOM_INNER_HIGHT = 14;
 }
