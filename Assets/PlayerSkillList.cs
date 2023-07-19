@@ -51,6 +51,10 @@ public class PlayerSkillList : MonoBehaviour
         {
             SkillMachineListBorn.Add(SkillMachineList[i]);
         }
+        for (int i = 0; i < SkillMewList.Count; i++)
+        {
+            SkillMewListBorn.Add(SkillMewList[i]);
+        }
         AddPlusSkillInList();
     }
 
@@ -232,7 +236,7 @@ public class PlayerSkillList : MonoBehaviour
         SkillMachineList.Clear();
         for (int i = 0; i < SkillMachineListBorn.Count; i++)
         {
-            if ((player.Skill01 == null || SkillMachineListBorn[i].SkillIndex != player.Skill01.SkillIndex) && (player.Skill02 == null || SkillMachineListBorn[i].SkillIndex != player.Skill02.SkillIndex) && (player.Skill03 == null || SkillMachineListBorn[i].SkillIndex != player.Skill03.SkillIndex) && (player.Skill04 == null || SkillMachineListBorn[i].SkillIndex != player.Skill04.SkillIndex))
+            if ((player.Skill01 == null || SkillMachineListBorn[i].SkillIndex != player.Skill01.SkillIndex || SkillMachineListBorn[i].SkillIndex+1 != player.Skill01.SkillIndex) && (player.Skill02 == null || SkillMachineListBorn[i].SkillIndex != player.Skill02.SkillIndex || SkillMachineListBorn[i].SkillIndex+1 != player.Skill02.SkillIndex) && (player.Skill03 == null || SkillMachineListBorn[i].SkillIndex != player.Skill03.SkillIndex || SkillMachineListBorn[i].SkillIndex+1 != player.Skill03.SkillIndex) && (player.Skill04 == null || SkillMachineListBorn[i].SkillIndex != player.Skill04.SkillIndex || SkillMachineListBorn[i].SkillIndex+1 != player.Skill04.SkillIndex))
             {
                 SkillMachineList.Add(SkillMachineListBorn[i]);
             }
@@ -250,4 +254,98 @@ public class PlayerSkillList : MonoBehaviour
 
 
     //=================================================通过技能学习机获取技能=============================================================
+
+
+
+
+
+
+
+    //=================================================在梦幻处习得技能=============================================================
+
+    /// <summary>
+    /// 梦幻教授技能的技能列表
+    /// </summary>
+    public List<Skill> SkillMewList;
+    /// <summary>
+    /// 梦幻教授技能的技能列表的备份，不会改变
+    /// </summary>
+    List<Skill> SkillMewListBorn = new List<Skill> { };
+    /// <summary>
+    /// 梦幻教授技能的权重词典
+    /// </summary>
+    public Dictionary<Skill, float> SkillMewWeightD = new Dictionary<Skill, float>();
+    /// <summary>
+    /// 梦幻教授技能的等级品质概率
+    /// </summary>
+    float[] MewSkillPer = new float[] { 0.5f, 0.7f, 0.7f, 0.6f, 0.2f, 0.1f };
+
+    List<Skill> OnceTimeMewSkillList = new List<Skill> { };
+
+
+
+
+    public Skill RandomGetAMEWSkill()
+    {
+        SetSkillMewList();
+        SetMewDictionary();
+        
+
+        
+        if (OnceTimeMewSkillList.Count >= 3) { OnceTimeMewSkillList.Clear(); }
+
+        Skill OutPut = null;
+        float RanPoint = Random.Range(0, GetTotalWeight(SkillMewWeightD));
+        
+        float counter = 0;
+        
+        foreach (var temp in SkillMewWeightD)
+        {
+            counter += temp.Value;
+            if (RanPoint <= counter)
+            {
+                OutPut = temp.Key;
+                break;
+            }
+        }
+        
+        if (OnceTimeMewSkillList.Contains(OutPut))
+        {
+            return RandomGetAMEWSkill();
+        }
+        else
+        {
+            OnceTimeMewSkillList.Add(OutPut);
+            return OutPut;
+        }
+        
+
+    }
+
+    void SetSkillMewList()
+    {
+
+        SkillMewList.Clear();
+        for (int i = 0; i < SkillMewListBorn.Count; i++)
+        {
+            if ((player.Skill01 == null || SkillMewListBorn[i].SkillIndex != player.Skill01.SkillIndex || SkillMewListBorn[i].SkillIndex+1 != player.Skill01.SkillIndex) && (player.Skill02 == null || SkillMewListBorn[i].SkillIndex != player.Skill02.SkillIndex || SkillMewListBorn[i].SkillIndex+1 != player.Skill02.SkillIndex) && (player.Skill03 == null || SkillMewListBorn[i].SkillIndex != player.Skill03.SkillIndex || SkillMewListBorn[i].SkillIndex+1 != player.Skill03.SkillIndex) && (player.Skill04 == null || SkillMewListBorn[i].SkillIndex != player.Skill04.SkillIndex || SkillMewListBorn[i].SkillIndex+1 != player.Skill04.SkillIndex))
+            {
+                SkillMewList.Add(SkillMewListBorn[i]);
+            }
+        }
+    }
+
+    void SetMewDictionary()
+    {
+        SkillMewWeightD.Clear();
+        for (int i = 0; i < SkillMewList.Count; i++)
+        {
+            SkillMewWeightD[SkillMewList[i]] = MewSkillPer[SkillMewList[i].SkillQualityLevel - 1]; 
+            
+        }
+        //Debug.Log(SkillMewListBorn.Count + "+" + SkillMewList.Count + "+" + SkillMewWeightD.Count);
+    }
+
+    //=================================================在梦幻处习得技能=============================================================
+
 }

@@ -44,7 +44,7 @@ public class MewTail : MonoBehaviour
             {
                 Director = TurnDirector();
                 TurnTimer = 0;
-                TurmTime = Random.Range(0.5f, 1.5f);
+                TurmTime = Random.Range(0.5f, 1.2f);
             }
             if(NowPostion == (Vector2)transform.position)
             {
@@ -77,7 +77,8 @@ public class MewTail : MonoBehaviour
     {
         if (!isBorn)
         {
-            MewRigidbody.MovePosition(MewRigidbody.position + (Vector2)Director * Time.deltaTime * 11.5f);
+            MewRigidbody.MovePosition(new Vector2(Mathf.Clamp((MewRigidbody.position.x + (float)Director.x * Time.deltaTime * 11.5f) , -7.8f , 7.8f) , Mathf.Clamp(( MewRigidbody.position.y + (float)Director.y * Time.deltaTime * 11.5f) , -3.5f , 4.4f )) );
+            //MewRigidbody.MovePosition(new Vector2(((MewRigidbody.position.x + (float)Director.x * Time.deltaTime * 11.5f)) , (( MewRigidbody.position.y + (float)Director.y * Time.deltaTime * 11.5f))) );
             NowPostion = transform.position;
         }
     }

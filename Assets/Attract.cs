@@ -45,14 +45,14 @@ public class Attract : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            target.EmptyInfatuation(30,2.5f);
+            target.EmptyInfatuation(30, 2.5f);
             isCanNotMove = true;
             AttractOverPS.gameObject.SetActive(true);
             AttractOverPS.Play();
             AttractPS.Stop();
             animator.SetTrigger("Break");
         }
-        else if (other.tag == "Room" || other.tag == "Enviroment")
+        else if (other.tag == "Room" || (SkillFrom != 2 && other.tag == "Enviroment"))
         {
             isCanNotMove = true;
             AttractOverPS.gameObject.SetActive(true);
