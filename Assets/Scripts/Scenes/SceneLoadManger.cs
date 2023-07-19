@@ -18,7 +18,7 @@ public class SceneLoadManger : MonoBehaviour
             UIPanelGwtNewSkill.StaticUIGNS.SetPlayer(p);
             Debug.Log(p);
         }
-        if (FindObjectOfType<PlayerControler>() != null) { PlayerControler player = FindObjectOfType<PlayerControler>(); /*player.transform.position = Vector3.zero;*/ player.NowRoom = Vector3Int.zero; }
+        if (FindObjectOfType<PlayerControler>() != null) { PlayerControler player = FindObjectOfType<PlayerControler>(); /*player.transform.position = Vector3.zero; */player.NowRoom = Vector3Int.zero; }
     }
 
     private void Start()
