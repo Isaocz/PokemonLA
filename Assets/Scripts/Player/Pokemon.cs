@@ -820,6 +820,65 @@ public class Pokemon : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// 能力变化的函数，level是能力变化等级，type是能力变化类型
+    /// </summary>
+    /// <param name="level"></param>
+    /// <param name="type"></param>
+    public void LevelChange(int level, string type)
+    {
+        if (GetComponent<Empty>() != null)
+        {
+            if(type == "Atk")
+            {
+                switch (level)
+                {
+                    case 1:gameObject.GetComponent<Empty>().AtkAbilityPoint = (int)(gameObject.GetComponent<Empty>().AtkAbilityPoint * 1.2);break;
+                    case 2:gameObject.GetComponent<Empty>().AtkAbilityPoint = (int)(gameObject.GetComponent<Empty>().AtkAbilityPoint * 1.2 * 1.2);break;
+                    case 3:gameObject.GetComponent<Empty>().AtkAbilityPoint = (int)(gameObject.GetComponent<Empty>().AtkAbilityPoint * 1.2 * 1.2 * 1.2);break;
+                    case -1:gameObject.GetComponent<Empty>().AtkAbilityPoint = (int)(gameObject.GetComponent<Empty>().AtkAbilityPoint * 0.8); break;
+                    case -2:gameObject.GetComponent<Empty>().AtkAbilityPoint = (int)(gameObject.GetComponent<Empty>().AtkAbilityPoint * 0.8 * 0.8); break;
+                    case -3:gameObject.GetComponent<Empty>().AtkAbilityPoint = (int)(gameObject.GetComponent<Empty>().AtkAbilityPoint * 0.8 * 0.8 * 0.8); break;
+                }
+            }
+            if(type == "Def")
+            {
+                switch (level)
+                {
+                    case 1:gameObject.GetComponent<Empty>().DefAbilityPoint = (int)(gameObject.GetComponent<Empty>().DefAbilityPoint * 1.2);break;
+                    case 2:gameObject.GetComponent<Empty>().DefAbilityPoint = (int)(gameObject.GetComponent<Empty>().DefAbilityPoint * 1.2 * 1.2); break;
+                    case 3:gameObject.GetComponent<Empty>().DefAbilityPoint = (int)(gameObject.GetComponent<Empty>().DefAbilityPoint * 1.2 * 1.2 * 1.2); break;
+                    case -1:gameObject.GetComponent<Empty>().DefAbilityPoint = (int)(gameObject.GetComponent<Empty>().DefAbilityPoint * 0.8); break;
+                    case -2:gameObject.GetComponent<Empty>().DefAbilityPoint = (int)(gameObject.GetComponent<Empty>().DefAbilityPoint * 0.8 * 0.8); break;
+                    case -3:gameObject.GetComponent<Empty>().DefAbilityPoint = (int)(gameObject.GetComponent<Empty>().DefAbilityPoint * 0.8 * 0.8 * 0.8); break;
+                }
+            }
+            if(type == "SpA")
+            {
+                switch (level)
+                {
+                    case 1:gameObject.GetComponent<Empty>().SpAAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpAAbilityPoint * 1.2); break;
+                    case 2:gameObject.GetComponent<Empty>().SpAAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpAAbilityPoint * 1.2 * 1.2); break;
+                    case 3:gameObject.GetComponent<Empty>().SpAAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpAAbilityPoint * 1.2 * 1.2 * 1.2); break;
+                    case -1:gameObject.GetComponent<Empty>().SpAAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpAAbilityPoint * 0.8); break;
+                    case -2:gameObject.GetComponent<Empty>().SpAAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpAAbilityPoint * 0.8 * 0.8); break;
+                    case -3:gameObject.GetComponent<Empty>().SpAAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpAAbilityPoint * 0.8 * 0.8 * 0.8); break;
+                }
+            }
+            if(type == "SpD")
+            {
+                switch (level)
+                {
+                    case 1:gameObject.GetComponent<Empty>().SpdAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpdAbilityPoint * 1.2); break;
+                    case 2:gameObject.GetComponent<Empty>().SpdAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpdAbilityPoint * 1.2 * 1.2); break;
+                    case 3:gameObject.GetComponent<Empty>().SpdAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpdAbilityPoint * 1.2 * 1.2 * 1.2); break;
+                    case -1:gameObject.GetComponent<Empty>().SpdAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpdAbilityPoint * 0.8); break;
+                    case -2:gameObject.GetComponent<Empty>().SpdAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpdAbilityPoint * 0.8 * 0.8); break;
+                    case -3:gameObject.GetComponent<Empty>().SpdAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpdAbilityPoint * 0.8 * 0.8 * 0.8); break;
+                }
+            }
+        }
+    }
 
     //===========================================================================敌人攻击力提升的函数=====================================================================================
 
