@@ -18,10 +18,8 @@ public class ExeggcuteExploreCB : MonoBehaviour
         {
             collisionMap.Add(collision.gameObject, true);
             PlayerControler playerControler = collision.gameObject.GetComponent<PlayerControler>();
-
             if (aimTag == "Player")
             {
-                collisionMap.Add(collision.gameObject, true);
                 //PlayerControler playerControler = collision.gameObject.GetComponent<PlayerControler>();
                 Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 30, 0, 0, Type.TypeEnum.Grass);
                 if (playerControler != null) {
