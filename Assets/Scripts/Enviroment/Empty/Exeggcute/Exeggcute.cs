@@ -17,6 +17,8 @@ public class Exeggcute : Empty
     public float throwHigh = 5F;
     [Label("飞行时间")]
     public float throwTime = 0.8F;
+    [Label("cd（技能不能正常发出时有用）")]
+    public float cdBomb = 3F;
     [Label("发现标志")]
     public Transform transFound;
     [Tooltip("对象列表")]
@@ -41,6 +43,7 @@ public class Exeggcute : Empty
     private List<GameObject> objects;
 
     private AI_STATE aIState = AI_STATE.IDLE;
+    private float lastUseBomb = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -61,6 +64,8 @@ public class Exeggcute : Empty
 
         transFound.gameObject.SetActive(false);
         objects = new List<GameObject>();
+
+        lastUseBomb = -cdBomb;
     }
 
     // Update is called once per frame
@@ -87,6 +92,22 @@ public class Exeggcute : Empty
         }
         if(aIState == AI_STATE.IDLE)
         {
+            if (isSilence || isFearDone || isSleepDone)
+            {
+                return;
+            }
+            if (Time.time - lastUseBomb < cdBomb)
+            {
+                return;
+            }
+            if (isCanNotMoveWhenParalysis)
+            {
+                // 麻痹 1/3 概率进入cd
+                if (Random.Range(0.0f, 1.0f) < 0.33)
+                {
+                    lastUseBomb = Time.time;
+                }
+            }
             if (isEmptyInfatuationDone)
             {
                 if (transform.parent.childCount > 1 && InfatuationForRangeRayCastEmpty(foundRadius) != null)
