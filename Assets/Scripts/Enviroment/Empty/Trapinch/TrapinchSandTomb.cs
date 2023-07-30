@@ -70,6 +70,7 @@ public class TrapinchSandTomb : MonoBehaviour
         }
 
         //造成伤害
+        //TODO: 处理 trapinch 死亡
         //GameObject target = null;
         //if (other.transform.tag == ("Player"))
         //{

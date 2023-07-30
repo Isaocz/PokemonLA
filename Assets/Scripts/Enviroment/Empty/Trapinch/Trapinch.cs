@@ -18,6 +18,12 @@ using UnityEngine;
  * ani:
  * param: Die, Hit
  * clip: Die(EmptyDestroy), Hit
+ * 
+ * 异常状态：
+ * 着迷（FindAtkTarget()处理），混乱（isEmptyConfusionDone），沉默（isSilence）
+ * 畏缩（isFearDone），沉睡（isSleepDone），麻痹（isCanNotMoveWhenParalysis）
+ * 
+ * 替身（FindAtkTarget）
 */
 
 public class Trapinch : Empty
@@ -35,6 +41,8 @@ public class Trapinch : Empty
     public float cdBite = 2;
     [Label("流沙地狱cd")]
     public float cdSands = 14;
+    [Label("麻痹不能动概率")]
+    public float proParalysis = 0.33f;
     [Label("prefab咬咬")]
     public GameObject biteObj;
     [Label("prefab流沙地狱")]
@@ -116,7 +124,7 @@ public class Trapinch : Empty
 
     private void StartAiTimer()
     {
-        // 反应时间20帧
+        // 反应频率20帧
         float aiDuration = 0.05f;
         timerAi = Timer.Start(this, 0f, () =>
         {
@@ -126,7 +134,7 @@ public class Trapinch : Empty
                 return 0;
             }
             AnimatorStateInfo stateinfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (stateinfo.IsName("TrapinchLeftBeHit") || stateinfo.IsName("TrapinchRightBeHit"))
+            if (stateinfo.IsName("TrapinchLeftBeHit") || stateinfo.IsName("TrapinchRightBeHit") || isSilence || isFearDone || isSleepDone)
             {
                 return aiDuration;
             }
@@ -156,8 +164,11 @@ public class Trapinch : Empty
                     }
                     else if (Vector2.Distance(transform.position, target.transform.position) <= foundRadius && Time.time - lastUseSands > cdSands)
                     {
-                        animator.SetTrigger("Sands");
-                        aiState = AI_STATE.ATK_SANDS;
+                        if (!isCanNotMoveWhenParalysis || Random.Range(0.0f, 1.0f) > proParalysis)
+                        {
+                            animator.SetTrigger("Sands");
+                            aiState = AI_STATE.ATK_SANDS;
+                        }
                         lastUseSands = Time.time;
                     }
                 }
@@ -193,8 +204,11 @@ public class Trapinch : Empty
 
     private void triggerBite()
     {
-        animator.SetTrigger("Bite");
-        aiState = AI_STATE.ATK_BITE;
+        if (!isCanNotMoveWhenParalysis || Random.Range(0.0f, 1.0f) > proParalysis)
+        {
+            animator.SetTrigger("Bite");
+            aiState = AI_STATE.ATK_BITE;
+        }
         lastUseBite = Time.time;
     }
 
@@ -205,8 +219,14 @@ public class Trapinch : Empty
 
     void OnAniTriggerBite()
     {
-        
-
+        if (isEmptyConfusionDone)
+        {
+            // 混乱只有50%可以放出咬咬
+            if (Random.Range(0.0f, 1.0f) > 0.5)
+            {
+                return;
+            }
+        }
         //再次检查目标
         GameObject target = FindAtkTarget(foundRadius);
         if (target && Vector2.Distance(transform.position, target.transform.position) <= biteRadius)
