@@ -215,6 +215,8 @@ public class PlayerControler : Pokemon
     public PlayerData playerData;
     public PlayerSkillList playerSkillList;
     public SubSkillList playerSubSkillList;
+    public GameObject FollowBaby;
+    public GameObject NotFollowBaby;
 
     PlayerControler ThisPlayer;
 
@@ -236,6 +238,8 @@ public class PlayerControler : Pokemon
         playerData = GetComponent<PlayerData>();
         playerSkillList = GetComponent<PlayerSkillList>();
         playerSubSkillList = GetComponent<SubSkillList>();
+        FollowBaby = transform.GetChild(5).GetChild(0).gameObject;
+        NotFollowBaby = transform.GetChild(5).GetChild(01).gameObject;
 
         //获得小山猪的刚体组件和动画组件
         rigidbody2D = GetComponent<Rigidbody2D>();
@@ -1239,7 +1243,7 @@ public class PlayerControler : Pokemon
         isTPMove = false;
     }
 
-    void InstanceNature(int NatureIndex)
+    public void InstanceNature(int NatureIndex)
     {
         switch (NatureIndex)
         {
@@ -1274,7 +1278,41 @@ public class PlayerControler : Pokemon
             case 24:   break;
         }
     }
+    public void RemoveNature(int NatureIndex)
+    {
+        switch (NatureIndex)
+        {
+            case 0: break;
+            case 1: playerData.AtkBounsAlways--; playerData.DefBounsAlways++; break;
+            case 2: playerData.AtkBounsAlways--; playerData.SpABounsAlways++; break;
+            case 3: playerData.AtkBounsAlways--; playerData.SpDBounsAlways++; break;
+            case 4: playerData.AtkBounsAlways--; playerData.SpeBounsAlways++; break;
 
+            case 5: playerData.DefBounsAlways--; playerData.AtkBounsAlways++; break;
+            case 6: break;
+            case 7: playerData.DefBounsAlways--; playerData.SpABounsAlways++; break;
+            case 8: playerData.DefBounsAlways--; playerData.SpDBounsAlways++; break;
+            case 9: playerData.DefBounsAlways--; playerData.SpeBounsAlways++; break;
+
+            case 10: playerData.SpABounsAlways--; playerData.AtkBounsAlways++; break;
+            case 11: playerData.SpABounsAlways--; playerData.DefBounsAlways++; break;
+            case 12: break;
+            case 13: playerData.SpABounsAlways--; playerData.SpDBounsAlways++; break;
+            case 14: playerData.SpABounsAlways--; playerData.SpeBounsAlways++; break;
+
+            case 15: playerData.SpDBounsAlways--; playerData.AtkBounsAlways++; break;
+            case 16: playerData.SpDBounsAlways--; playerData.DefBounsAlways++; break;
+            case 17: playerData.SpDBounsAlways--; playerData.SpABounsAlways++; break;
+            case 18: break;
+            case 19: playerData.SpDBounsAlways--; playerData.SpeBounsAlways++; break;
+
+            case 20: playerData.SpeBounsAlways--; playerData.AtkBounsAlways++; break;
+            case 21: playerData.SpeBounsAlways--; playerData.DefBounsAlways++; break;
+            case 22: playerData.SpeBounsAlways--; playerData.SpABounsAlways++; break;
+            case 23: playerData.SpeBounsAlways--; playerData.SpDBounsAlways++; break;
+            case 24: break;
+        }
+    }
 
     //=========================随时间的受伤时间=====================
 

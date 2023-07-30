@@ -23,15 +23,47 @@ public class MapCreater : MonoBehaviour
     public Room StoreRoomUp;
     public Room StoreRoomLeft;
     public Room StoreRoomRight;
-    public Vector3Int StoreRoomPoint;
+    public Vector3Int StoreRoomPoint = new Vector3Int(10000, 10000, 0);
     bool isStoreRoomSpawn;
     int StoreCreatCount;
 
 
     public Room BossRoom;
-    public Vector3Int BossRoomPoint;
+    public Vector3Int BossRoomPoint = new Vector3Int(10000, 10000, 0);
     bool isBossRoomSpawn;
     int BossRoomCreatCount;
+
+    public Room SkillShopRoom;
+    public Vector3Int SkillShopRoomPoint = new Vector3Int(10000, 10000, 0);
+    bool isSkillShopRoomSpawn;
+    int SkillShopRoomCreatCount;
+
+
+    public Room MewsRoom;
+    public Vector3Int MewRoomPoint = new Vector3Int(10000, 10000, 0);
+    bool isMewRoomSpawn;
+    int MewRoomCreatCount;
+    bool isBornMewRoom;
+
+
+    public Room BabyCenterRoom;
+    public Vector3Int BabyCenterRoomPoint = new Vector3Int(10000, 10000, 0);
+    bool isBabyCenterRoomSpawn;
+    int BabyCenterRoomCreatCount;
+    bool isBornBabyCenterRoom;
+
+    public Room MintRoom;
+    public Vector3Int MintRoomPoint = new Vector3Int(10000, 10000, 0);
+    bool isMintRoomSpawn;
+    int MintRoomCreatCount;
+    bool isBornMintRoom;
+
+    public Room BerryTreeRoom;
+    public Vector3Int BerryTreeRoomPoint = new Vector3Int(10000, 10000, 0);
+    bool isBerryTreeRoomSpawn;
+    int BerryTreeRoomCreatCount;
+    bool isBornBerryTreeRoom;
+
 
     bool isReset;
 
@@ -54,6 +86,13 @@ public class MapCreater : MonoBehaviour
     List<int> RoomWhiteList = new List<int> { };
 
 
+
+
+
+
+
+
+
     private void Awake()
     {
         StaticMap = this;
@@ -63,7 +102,33 @@ public class MapCreater : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (FloorNum.GlobalFloorNum != null) { StepMin = FloorNum.GlobalFloorNum.MapSize[FloorNum.GlobalFloorNum.FloorNumber]; }
+
+        //根据当前层数设置地图
+        if(FloorNum.GlobalFloorNum != null)
+        {
+            //如果本剧游戏中已生成过梦幻房间，那么每层生成的概率为12%，如果还未生成，生成概率为(0.12f * Mathf.Pow(1.5f, 当前层数 - 1)));
+            isBornMewRoom = Random.Range(0.0f, 1.0f) <= (FloorNum.GlobalFloorNum.isMewRoomBeCreated ? 0.20f : (0.25f * Mathf.Pow(1.5f, FloorNum.GlobalFloorNum.FloorNumber - 1)));
+            //如果本剧游戏中已生成过Baby房间，那么不能再产生Baby房间，如果还未生成，生成概率为(0.3f - 0.1f * (当前层数 - 1))
+            isBornBabyCenterRoom = Random.Range(0.0f, 1.0f) <= (FloorNum.GlobalFloorNum.isBabyCenterBeCreated ? 0 : (0.3f - 0.1f * (FloorNum.GlobalFloorNum.FloorNumber - 1)));
+            //如果本剧游戏中已生成过Mint房间，那么不能再产生Mint房间，如果还未生成，生成概率为(0.3f - 0.1f * (当前层数 - 1))
+            isBornMintRoom = Random.Range(0.0f, 1.0f) <= (FloorNum.GlobalFloorNum.isMintRoomBeCreated ? 0 : (0.3f - 0.1f * (FloorNum.GlobalFloorNum.FloorNumber - 1)));
+            //每层生成树果房的概率为8%
+            isBornBerryTreeRoom = Random.Range(0.0f, 1.0f) <= 0.08f;
+            StepMin = FloorNum.GlobalFloorNum.MapSize[FloorNum.GlobalFloorNum.FloorNumber];
+        }
+        else
+        {
+            isBornMewRoom = Random.Range(0.0f, 1.0f) <= 0.25f;
+            isBornBabyCenterRoom = Random.Range(0.0f, 1.0f) <= 0.3f;
+            isBornMintRoom = Random.Range(0.0f, 1.0f) <= 0.3f;
+            isBornBerryTreeRoom = Random.Range(0.0f, 1.0f) <= 0.08f;
+            StepMin = 8;
+        }
+        Debug.Log(isBornMewRoom);
+        Debug.Log(isBornBabyCenterRoom);
+        Debug.Log(isBornMintRoom);
+
+
         for (int i = 0; i < BaseRoomList.transform.childCount; i++)
         {
             RoomWhiteList.Add(i);
@@ -90,26 +155,27 @@ public class MapCreater : MonoBehaviour
             BuiledPCroom();
             BuiledStoreRoom();
             BuiledBossRoom();
-
-        }
-        foreach (Vector3 k in RRoom.Keys)
-        {
-            Debug.Log(k);
+            BuiledSkillShopRoom();
+            if (isBornMewRoom) { BuiledMewRoom(); }
+            if (isBornBabyCenterRoom) { BuiledBabyCenterRoom(); }
+            if (isBornMintRoom) { BuiledMintRoom(); }
+            if (isBornBerryTreeRoom) { BuiledBerryTreeRoom(); }
         }
         //遍历所有虚拟房间，如果该坐标不是特殊房间，在该坐标生成真实房间
         foreach (Vector3Int item in VRoom.Keys)
         {
             string roomname = item.ToString();
-            if (item != PCRoomPoint && item != StoreRoomPoint && item != BossRoomPoint)
+            if(item == new Vector3Int(0, 0, 0))
             {
-                if (item == new Vector3Int(0, 0, 0))
-                {
-                    Room room = Instantiate(StarRoom, new Vector3(item.x * 30, item.y * 24, 0), Quaternion.identity);
-                    room.CreatWall();
-                    room.transform.name = roomname;
-                    RRoom.Add(item, room);
-                }
-                else
+                Room room = Instantiate(StarRoom, new Vector3(item.x * 30, item.y * 24, 0), Quaternion.identity);
+                room.CreatWall();
+                room.transform.name = roomname;
+                RRoom.Add(item, room);
+            }
+            else
+            {
+
+                if (item != PCRoomPoint && item != StoreRoomPoint && item != BossRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
                 {
                     BaseRoom = SwithABaseRoom();
                     Room room = Instantiate(BaseRoom, new Vector3(item.x * 30, item.y * 24, 0), Quaternion.identity);
@@ -118,23 +184,28 @@ public class MapCreater : MonoBehaviour
                     if (!RRoom.ContainsKey(item)) { RRoom.Add(item, room); }
                     else { RRoom[item] = room; }
                 }
-
             }
         }
+        /*
+        foreach (Vector3Int k in RRoom.Keys)
+        {
+            Debug.Log(k + "+" + RRoom[k]);
+        }
+        */
     }
 
-    //如果生成的地图无法生成特殊房间时使用，重置所有地图
+
+
+    //=======================================如果生成的地图无法生成特殊房间时使用，重置所有地图============================================
+
     void ResetMap()
     {
         isReset = true;
-        Debug.Log("MapReset");
-        foreach (Vector3 k in RRoom.Keys)
-        {
-            Debug.Log(k);
-        }
+        Debug.Log("MapReset" + RRoom.Count);
         foreach ( Vector3Int k in RRoom.Keys)
         {
-            Debug.Log("Reset"+k);
+            Debug.Log("MapReset");
+            Debug.Log("Reset" + "+" + k + "+" + RRoom[k]);
             Destroy(RRoom[k].gameObject);
             Debug.Log(RRoom[k].gameObject);
         }
@@ -148,22 +219,28 @@ public class MapCreater : MonoBehaviour
         BuiledPCroom();
         BuiledStoreRoom();
         BuiledBossRoom();
-
+        BuiledSkillShopRoom();
+        if (isBornMewRoom) { BuiledMewRoom(); }
+        if (isBornBabyCenterRoom) { BuiledBabyCenterRoom(); }
+        if (isBornMintRoom) { BuiledMintRoom(); }
+        if (isBornBerryTreeRoom) { BuiledBerryTreeRoom(); }
     }
 
-    Room SwithABaseRoom()
-    {
-        int x = RoomWhiteList[Random.Range(0, RoomWhiteList.Count-1)];
-        RoomWhiteList.Remove(x);
-        RoomBlackList.Add(x);
-        if(RoomWhiteList.Count == 0)
-        {
-            RoomWhiteList = RoomBlackList;
-            RoomBlackList = new List<int> { };
-        }
-        Room OutPut = BaseRoomList.transform.GetChild(x).GetComponent<Room>();
-        return OutPut;
-    }
+    //=======================================如果生成的地图无法生成特殊房间时使用，重置所有地图============================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //==============================================生成特殊房间的部分========================================================
 
     //生成一个计算虚拟普通房间的函数
     void BuildVRoom()
@@ -187,66 +264,69 @@ public class MapCreater : MonoBehaviour
 
     void BuiledPCroom()
     {
-
-        //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
-        foreach (Vector3Int item in VRoom.Keys)
-        {
-            if (Vector3Int.Distance(item, Vector3Int.zero) > (Mathf.Sqrt(StepMin)) / SpawnR && item != BossRoomPoint && item != StoreRoomPoint)
+        if (!isPCRoomSpawn) {
+            //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
+            foreach (Vector3Int item in VRoom.Keys)
             {
-                string roomname = item.ToString();
-                //声明一个坐标变量，用来储存当前遍历房间的周围房间的坐标
-                Vector3Int NowPCRoomPoint;
+                if (Vector3Int.Distance(item, Vector3Int.zero) > (Mathf.Sqrt(StepMin)) / SpawnR && item != BossRoomPoint && item != StoreRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
+                {
+                    string roomname = item.ToString();
+                    //声明一个坐标变量，用来储存当前遍历房间的周围房间的坐标
+                    Vector3Int NowPCRoomPoint;
 
-                //如果当前房间的上面无房间，则以该房间上面的房间作为临时坐标，
-                //检查临时坐标房间的上左右是否为空，如果为空有10%的概率添加该房间进入虚拟房间，并且PC房间坐标等于当前坐标，
-                //既之后以该虚拟坐标生成PC房间。PC房间是否生成的布尔型变量变为是，并且跳出该函数。
-                //之后也用相似方法检测该房间的左和右，但不检测下
-                if (!VRoom.ContainsKey(item + Vector3Int.up))
-                {
-                    NowPCRoomPoint = item + Vector3Int.up;
-                    if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.right))
+                    //如果当前房间的上面无房间，则以该房间上面的房间作为临时坐标，
+                    //检查临时坐标房间的上左右是否为空，如果为空有10%的概率添加该房间进入虚拟房间，并且PC房间坐标等于当前坐标，
+                    //既之后以该虚拟坐标生成PC房间。PC房间是否生成的布尔型变量变为是，并且跳出该函数。
+                    //之后也用相似方法检测该房间的左和右，但不检测下
+                    if (!isPCRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.up))
                     {
-                        
-                        VRoom.Add(NowPCRoomPoint, 0);
-                        PCRoomPoint = NowPCRoomPoint;
-                        isPCRoomSpawn = true;
-                        Room room = Instantiate(PCRoomUp, new Vector3(NowPCRoomPoint.x * 30, NowPCRoomPoint.y * 24, 0), Quaternion.identity);
-                        room.transform.name = "PC" + roomname;
-                        RRoom.Add(NowPCRoomPoint, room);
-                        return;
+                        NowPCRoomPoint = item + Vector3Int.up;
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowPCRoomPoint.ToString();
+                            VRoom.Add(NowPCRoomPoint, 0);
+                            PCRoomPoint = NowPCRoomPoint;
+                            isPCRoomSpawn = true;
+                            Room room = Instantiate(PCRoomUp, new Vector3(NowPCRoomPoint.x * 30, NowPCRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "PC" + roomname;
+                            RRoom.Add(NowPCRoomPoint, room);
+                            return;
+                        }
                     }
-                }
-                if (!VRoom.ContainsKey(item + Vector3Int.left))
-                {
-                    NowPCRoomPoint = item + Vector3Int.left;
-                    if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.up))
+                    if (!isPCRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.left))
                     {
-                        VRoom.Add(NowPCRoomPoint, 0);
-                        PCRoomPoint = NowPCRoomPoint;
-                        isPCRoomSpawn = true;
-                        Room room = Instantiate(PCRoomLeft, new Vector3(NowPCRoomPoint.x * 30, NowPCRoomPoint.y * 24, 0), Quaternion.identity);
-                        room.transform.name = "PC" + roomname;
-                        RRoom.Add(NowPCRoomPoint, room);
-                        return;
+                        NowPCRoomPoint = item + Vector3Int.left;
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.up))
+                        {
+                            roomname = NowPCRoomPoint.ToString();
+                            VRoom.Add(NowPCRoomPoint, 0);
+                            PCRoomPoint = NowPCRoomPoint;
+                            isPCRoomSpawn = true;
+                            Room room = Instantiate(PCRoomLeft, new Vector3(NowPCRoomPoint.x * 30, NowPCRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "PC" + roomname;
+                            RRoom.Add(NowPCRoomPoint, room);
+                            return;
+                        }
                     }
-                }
-                if (!VRoom.ContainsKey(item + Vector3Int.right))
-                {
-                    NowPCRoomPoint = item + Vector3Int.right;
-                    if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.right))
+                    if (!isPCRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.right))
                     {
-                        VRoom.Add(NowPCRoomPoint, 0);
-                        PCRoomPoint = NowPCRoomPoint;
-                        isPCRoomSpawn = true;
-                        Room room = Instantiate(PCRoomRight, new Vector3(NowPCRoomPoint.x * 30, NowPCRoomPoint.y * 24, 0), Quaternion.identity);
-                        room.transform.name = "PC" + roomname;
-                        RRoom.Add(NowPCRoomPoint, room);
-                        return;
+                        NowPCRoomPoint = item + Vector3Int.right;
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowPCRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowPCRoomPoint.ToString();
+                            VRoom.Add(NowPCRoomPoint, 0);
+                            PCRoomPoint = NowPCRoomPoint;
+                            isPCRoomSpawn = true;
+                            Room room = Instantiate(PCRoomRight, new Vector3(NowPCRoomPoint.x * 30, NowPCRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "PC" + roomname;
+                            RRoom.Add(NowPCRoomPoint, room);
+                            return;
+                        }
                     }
+
                 }
 
             }
-
         }
         //如果本轮没有生成商店，增加生成半径并递归，如果生成半径过大重置生成半径
         if (!isPCRoomSpawn)
@@ -261,65 +341,70 @@ public class MapCreater : MonoBehaviour
         SpawnR = 1.0f;
 
     }
+
     void BuiledStoreRoom()
     {
-
-        //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
-        foreach (Vector3Int item in VRoom.Keys)
-        {
-            if (Vector3Int.Distance(item, Vector3Int.zero) > (Mathf.Sqrt(StepMin)) / SpawnR && item != BossRoomPoint && item != PCRoomPoint)
+        if (!isStoreRoomSpawn) {
+            //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
+            foreach (Vector3Int item in VRoom.Keys)
             {
-                string roomname = item.ToString();
-                //声明一个坐标变量，用来储存当前遍历房间的周围房间的坐标
-                Vector3Int NowStoreRoomPoint;
+                if (item != BossRoomPoint && item != PCRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
+                {
+                    string roomname = item.ToString();
+                    //声明一个坐标变量，用来储存当前遍历房间的周围房间的坐标
+                    Vector3Int NowStoreRoomPoint;
 
-                //如果当前房间的上面无房间，则以该房间上面的房间作为临时坐标，
-                //检查临时坐标房间的上左右是否为空，如果为空有10%的概率添加该房间进入虚拟房间，并且PC房间坐标等于当前坐标，
-                //既之后以该虚拟坐标生成PC房间。PC房间是否生成的布尔型变量变为是，并且跳出该函数。
-                //之后也用相似方法检测该房间的左和右，但不检测下
-                if (!VRoom.ContainsKey(item + Vector3Int.up))
-                {
-                    NowStoreRoomPoint = item + Vector3Int.up;
-                    if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.right))
+                    //如果当前房间的上面无房间，则以该房间上面的房间作为临时坐标，
+                    //检查临时坐标房间的上左右是否为空，如果为空有10%的概率添加该房间进入虚拟房间，并且PC房间坐标等于当前坐标，
+                    //既之后以该虚拟坐标生成PC房间。PC房间是否生成的布尔型变量变为是，并且跳出该函数。
+                    //之后也用相似方法检测该房间的左和右，但不检测下
+                    if (!isStoreRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.up))
                     {
-                        VRoom.Add(NowStoreRoomPoint, 0);
-                        StoreRoomPoint = NowStoreRoomPoint;
-                        isStoreRoomSpawn = true;
-                        Room room = Instantiate(StoreRoomUp, new Vector3(NowStoreRoomPoint.x * 30, NowStoreRoomPoint.y * 24, 0), Quaternion.identity);
-                        room.transform.name = "Store" + roomname;
-                        RRoom.Add(NowStoreRoomPoint, room);
-                        return;
+                        NowStoreRoomPoint = item + Vector3Int.up;
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowStoreRoomPoint.ToString();
+                            VRoom.Add(NowStoreRoomPoint, 0);
+                            StoreRoomPoint = NowStoreRoomPoint;
+                            isStoreRoomSpawn = true;
+                            Room room = Instantiate(StoreRoomUp, new Vector3(NowStoreRoomPoint.x * 30, NowStoreRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "Store" + roomname;
+                            RRoom.Add(NowStoreRoomPoint, room);
+                            return;
+                        }
                     }
-                }
-                if (!VRoom.ContainsKey(item + Vector3Int.left))
-                {
-                    NowStoreRoomPoint = item + Vector3Int.left;
-                    if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.up))
+                    if (!isStoreRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.left))
                     {
-                        VRoom.Add(NowStoreRoomPoint, 0);
-                        StoreRoomPoint = NowStoreRoomPoint;
-                        isStoreRoomSpawn = true;
-                        Room room = Instantiate(StoreRoomLeft, new Vector3(NowStoreRoomPoint.x * 30, NowStoreRoomPoint.y * 24, 0), Quaternion.identity);
-                        room.transform.name = "Store" + roomname;
-                        RRoom.Add(NowStoreRoomPoint, room);
-                        return;
+                        NowStoreRoomPoint = item + Vector3Int.left;
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.up))
+                        {
+                            roomname = NowStoreRoomPoint.ToString();
+                            VRoom.Add(NowStoreRoomPoint, 0);
+                            StoreRoomPoint = NowStoreRoomPoint;
+                            isStoreRoomSpawn = true;
+                            Room room = Instantiate(StoreRoomLeft, new Vector3(NowStoreRoomPoint.x * 30, NowStoreRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "Store" + roomname;
+                            RRoom.Add(NowStoreRoomPoint, room);
+                            return;
+                        }
                     }
-                }
-                if (!VRoom.ContainsKey(item + Vector3Int.right))
-                {
-                    NowStoreRoomPoint = item + Vector3Int.right;
-                    if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.right))
+                    if (!isStoreRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.right))
                     {
-                        VRoom.Add(NowStoreRoomPoint, 0);
-                        StoreRoomPoint = NowStoreRoomPoint;
-                        isStoreRoomSpawn = true;
-                        Room room = Instantiate(StoreRoomRight, new Vector3(NowStoreRoomPoint.x * 30, NowStoreRoomPoint.y * 24, 0), Quaternion.identity);
-                        room.transform.name = "Store" + roomname;
-                        RRoom.Add(NowStoreRoomPoint, room);
-                        return;
+                        NowStoreRoomPoint = item + Vector3Int.right;
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowStoreRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowStoreRoomPoint.ToString();
+                            VRoom.Add(NowStoreRoomPoint, 0);
+                            StoreRoomPoint = NowStoreRoomPoint;
+                            isStoreRoomSpawn = true;
+                            Room room = Instantiate(StoreRoomRight, new Vector3(NowStoreRoomPoint.x * 30, NowStoreRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "Store" + roomname;
+                            RRoom.Add(NowStoreRoomPoint, room);
+                            return;
+                        }
                     }
-                }
 
+                }
             }
 
         }
@@ -329,6 +414,7 @@ public class MapCreater : MonoBehaviour
         {
             SpawnR += 0.2f;
             if (SpawnR >= 8.0f) { SpawnR = 1.0f; }
+            StoreCreatCount++;
             if (StoreCreatCount >= 20) { ResetMap(); }
             else { BuiledStoreRoom(); }
         }
@@ -338,97 +424,717 @@ public class MapCreater : MonoBehaviour
 
     void BuiledBossRoom()
     {
-
-        //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
-        foreach (Vector3Int item in VRoom.Keys)
-        {
-            if (Vector3Int.Distance(item, Vector3Int.zero) > (Mathf.Sqrt(StepMin)) / SpawnR && item != StoreRoomPoint && item != PCRoomPoint)
+        if (!isBossRoomSpawn) {
+            //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
+            foreach (Vector3Int item in VRoom.Keys)
             {
-                string roomname = item.ToString();
-                //声明一个坐标变量，用来储存当前遍历房间的周围房间的坐标
-                Vector3Int NowBossRoomPoint;
+                if (Vector3Int.Distance(item, Vector3Int.zero) > (Mathf.Sqrt(StepMin)) / SpawnR && item != StoreRoomPoint && item != PCRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
+                {
+                    string roomname = item.ToString();
+                    //声明一个坐标变量，用来储存当前遍历房间的周围房间的坐标
+                    Vector3Int NowBossRoomPoint;
 
-                //如果当前房间的上面无房间，则以该房间上面的房间作为临时坐标，
-                //检查临时坐标房间的上左右是否为空，如果为空有10%的概率添加该房间进入虚拟房间，并且PC房间坐标等于当前坐标，
-                //既之后以该虚拟坐标生成PC房间。PC房间是否生成的布尔型变量变为是，并且跳出该函数。
-                //之后也用相似方法检测该房间的左和右，但不检测下
-                if (!VRoom.ContainsKey(item + Vector3Int.up))
-                {
-                    NowBossRoomPoint = item + Vector3Int.up;
-                    if ((Random.Range(0.0f, 1.0f) < 0.25f) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.right))
+                    //如果当前房间的上面无房间，则以该房间上面的房间作为临时坐标，
+                    //检查临时坐标房间的上左右是否为空，如果为空有10%的概率添加该房间进入虚拟房间，并且PC房间坐标等于当前坐标，
+                    //既之后以该虚拟坐标生成PC房间。PC房间是否生成的布尔型变量变为是，并且跳出该函数。
+                    //之后也用相似方法检测该房间的左和右，但不检测下
+                    if (!isBossRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.up))
                     {
-                        VRoom.Add(NowBossRoomPoint, 0);
-                        BossRoomPoint = NowBossRoomPoint;
-                        isBossRoomSpawn = true;
-                        Room room = Instantiate(BossRoom, new Vector3(NowBossRoomPoint.x * 30, NowBossRoomPoint.y * 24, 0), Quaternion.identity);
-                        room.transform.name = "Boss" + roomname;
-                        room.CreatNextFloorWall();
-                        RRoom.Add(NowBossRoomPoint, room);
-                        return;
+                        NowBossRoomPoint = item + Vector3Int.up;
+                        if ((Random.Range(0.0f, 1.0f) < 0.25f) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowBossRoomPoint.ToString();
+                            VRoom.Add(NowBossRoomPoint, 0);
+                            BossRoomPoint = NowBossRoomPoint;
+                            isBossRoomSpawn = true;
+                            Room room = Instantiate(BossRoom, new Vector3(NowBossRoomPoint.x * 30, NowBossRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "Boss" + roomname;
+                            room.CreatNextFloorWall();
+                            RRoom.Add(NowBossRoomPoint, room);
+                            return;
+                        }
                     }
-                }
-                if (!VRoom.ContainsKey(item + Vector3Int.left))
-                {
-                    NowBossRoomPoint = item + Vector3Int.left;
-                    if ((Random.Range(0.0f, 1.0f) < 0.25f) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.up))
+                    if (!isBossRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.left))
                     {
-                        VRoom.Add(NowBossRoomPoint, 0);
-                        BossRoomPoint = NowBossRoomPoint;
-                        isBossRoomSpawn = true;
-                        Room room = Instantiate(BossRoom, new Vector3(NowBossRoomPoint.x * 30, NowBossRoomPoint.y * 24, 0), Quaternion.identity);
-                        room.transform.name = "Boos" + roomname;
-                        room.CreatNextFloorWall();
-                        RRoom.Add(NowBossRoomPoint, room);
-                        return;
+                        NowBossRoomPoint = item + Vector3Int.left;
+                        if ((Random.Range(0.0f, 1.0f) < 0.25f) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.up))
+                        {
+                            roomname = NowBossRoomPoint.ToString();
+                            VRoom.Add(NowBossRoomPoint, 0);
+                            BossRoomPoint = NowBossRoomPoint;
+                            isBossRoomSpawn = true;
+                            Room room = Instantiate(BossRoom, new Vector3(NowBossRoomPoint.x * 30, NowBossRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "Boos" + roomname;
+                            room.CreatNextFloorWall();
+                            RRoom.Add(NowBossRoomPoint, room);
+                            return;
+                        }
                     }
-                }
-                if (!VRoom.ContainsKey(item + Vector3Int.right))
-                {
-                    NowBossRoomPoint = item + Vector3Int.right;
-                    if ((Random.Range(0.0f, 1.0f) < 0.25f) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.right))
+                    if (!isBossRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.right))
                     {
-                        VRoom.Add(NowBossRoomPoint, 0);
-                        BossRoomPoint = NowBossRoomPoint;
-                        isBossRoomSpawn = true;
-                        Room room = Instantiate(BossRoom, new Vector3(NowBossRoomPoint.x * 30, NowBossRoomPoint.y * 24, 0), Quaternion.identity);
-                        room.transform.name = "Boss" + roomname;
-                        room.CreatNextFloorWall();
-                        RRoom.Add(NowBossRoomPoint, room);
-                        return;
+                        NowBossRoomPoint = item + Vector3Int.right;
+                        if ((Random.Range(0.0f, 1.0f) < 0.25f) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowBossRoomPoint.ToString();
+                            VRoom.Add(NowBossRoomPoint, 0);
+                            BossRoomPoint = NowBossRoomPoint;
+                            isBossRoomSpawn = true;
+                            Room room = Instantiate(BossRoom, new Vector3(NowBossRoomPoint.x * 30, NowBossRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "Boss" + roomname;
+                            room.CreatNextFloorWall();
+                            RRoom.Add(NowBossRoomPoint, room);
+                            return;
+                        }
                     }
-                }
 
-                if (!VRoom.ContainsKey(item + Vector3Int.down))
-                {
-                    NowBossRoomPoint = item + Vector3Int.down;
-                    if ((Random.Range(0.0f, 1.0f) < 0.25f) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.right))
+                    if (!isBossRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.down))
                     {
-                        VRoom.Add(NowBossRoomPoint, 0);
-                        BossRoomPoint = NowBossRoomPoint;
-                        isBossRoomSpawn = true;
-                        Room room = Instantiate(BossRoom, new Vector3(NowBossRoomPoint.x * 30, NowBossRoomPoint.y * 24, 0), Quaternion.identity);
-                        room.transform.name = "Boss" + roomname;
-                        room.CreatNextFloorWall();
-                        RRoom.Add(NowBossRoomPoint, room);
-                        return;
+                        NowBossRoomPoint = item + Vector3Int.down;
+                        if ((Random.Range(0.0f, 1.0f) < 0.25f) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowBossRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowBossRoomPoint.ToString();
+                            VRoom.Add(NowBossRoomPoint, 0);
+                            BossRoomPoint = NowBossRoomPoint;
+                            isBossRoomSpawn = true;
+                            Room room = Instantiate(BossRoom, new Vector3(NowBossRoomPoint.x * 30, NowBossRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "Boss" + roomname;
+                            room.CreatNextFloorWall();
+                            RRoom.Add(NowBossRoomPoint, room);
+                            return;
+                        }
                     }
+
                 }
 
             }
-
         }
+
 
         //如果本轮没有生成商店，增加生成半径并递归，如果生成半径过大重置生成半径
         if (!isBossRoomSpawn)
         {
             SpawnR += 0.2f;
             if (SpawnR >= 8.0f) { SpawnR = 1.0f; }
+            BossRoomCreatCount++;
             if (BossRoomCreatCount >= 20) { ResetMap(); }
             else { BuiledBossRoom(); }
         }
         SpawnR = 1.0f;
 
     }
+
+    void BuiledSkillShopRoom()
+    {
+
+        if (!isSkillShopRoomSpawn)
+        {
+            //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
+            foreach (Vector3Int item in VRoom.Keys)
+            {
+                if (item != BossRoomPoint && item != StoreRoomPoint && item != PCRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
+                {
+                    string roomname = item.ToString();
+                    //声明一个坐标变量，用来储存当前遍历房间的周围房间的坐标
+                    Vector3Int NowSkillShopRoomPoint;
+
+                    //如果当前房间的上面无房间，则以该房间上面的房间作为临时坐标，
+                    //检查临时坐标房间的上左右是否为空，如果为空有10%的概率添加该房间进入虚拟房间，并且PC房间坐标等于当前坐标，
+                    //既之后以该虚拟坐标生成PC房间。PC房间是否生成的布尔型变量变为是，并且跳出该函数。
+                    //之后也用相似方法检测该房间的左和右，但不检测下
+                    if (!isSkillShopRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.up))
+                    {
+                        NowSkillShopRoomPoint = item + Vector3Int.up;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowSkillShopRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowSkillShopRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowSkillShopRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowSkillShopRoomPoint.ToString();
+                            VRoom.Add(NowSkillShopRoomPoint, 0);
+                            SkillShopRoomPoint = NowSkillShopRoomPoint;
+                            isSkillShopRoomSpawn = true;
+                            Room room = Instantiate(SkillShopRoom, new Vector3(NowSkillShopRoomPoint.x * 30, NowSkillShopRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "SkillShop" + roomname;
+                            RRoom.Add(NowSkillShopRoomPoint, room);
+                            room.CreatWall();
+                            return;
+                        }
+                    }
+                    if (!isSkillShopRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.left))
+                    {
+                        
+
+                        NowSkillShopRoomPoint = item + Vector3Int.left;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowSkillShopRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowSkillShopRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowSkillShopRoomPoint + Vector3Int.up))
+                        {
+                            roomname = NowSkillShopRoomPoint.ToString();
+                            VRoom.Add(NowSkillShopRoomPoint, 0);
+                            SkillShopRoomPoint = NowSkillShopRoomPoint;
+                            isSkillShopRoomSpawn = true;
+                            Room room = Instantiate(SkillShopRoom, new Vector3(NowSkillShopRoomPoint.x * 30, NowSkillShopRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "SkillShop" + roomname;
+                            RRoom.Add(NowSkillShopRoomPoint, room);
+                            room.CreatWall();
+                            return;
+                        }
+                    }
+                    if (!isSkillShopRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.right))
+                    {
+                        
+                        NowSkillShopRoomPoint = item + Vector3Int.right;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowSkillShopRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowSkillShopRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowSkillShopRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowSkillShopRoomPoint.ToString();
+                            VRoom.Add(NowSkillShopRoomPoint, 0);
+                            SkillShopRoomPoint = NowSkillShopRoomPoint;
+                            isSkillShopRoomSpawn = true;
+                            Room room = Instantiate(SkillShopRoom, new Vector3(NowSkillShopRoomPoint.x * 30, NowSkillShopRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "SkillShop" + roomname;
+                            RRoom.Add(NowSkillShopRoomPoint, room);
+                            room.CreatWall();
+                            return;
+                        }
+                    }
+                    if (!isSkillShopRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.down))
+                    {
+
+                        NowSkillShopRoomPoint = item + Vector3Int.down;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowSkillShopRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowSkillShopRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowSkillShopRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowSkillShopRoomPoint.ToString();
+                            VRoom.Add(NowSkillShopRoomPoint, 0);
+                            SkillShopRoomPoint = NowSkillShopRoomPoint;
+                            isSkillShopRoomSpawn = true;
+                            Room room = Instantiate(SkillShopRoom, new Vector3(NowSkillShopRoomPoint.x * 30, NowSkillShopRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "SkillShop" + roomname;
+                            RRoom.Add(NowSkillShopRoomPoint, room);
+                            room.CreatWall();
+                            return;
+                        }
+                    }
+
+                }
+
+            }
+        }
+        //如果本轮没有生成商店，增加生成半径并递归，如果生成半径过大重置生成半径
+        if (!isSkillShopRoomSpawn)
+        {
+            SpawnR += 0.2f;
+            if (SpawnR >= 8.0f) { SpawnR = 1.0f; }
+            SkillShopRoomCreatCount++;
+            if (SkillShopRoomCreatCount >= 20) { ResetMap(); }
+            else { BuiledSkillShopRoom(); }
+
+        }
+        SpawnR = 1.0f;
+    }
+
+    void BuiledMewRoom()
+    {
+
+        if (!isMewRoomSpawn)
+        {
+            //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
+            foreach (Vector3Int item in VRoom.Keys)
+            {
+                if (Vector3Int.Distance(item, Vector3Int.zero) > (Mathf.Sqrt(StepMin)) / SpawnR && item != BossRoomPoint && item != StoreRoomPoint && item != PCRoomPoint && item != SkillShopRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
+                {
+                    string roomname = item.ToString();
+                    //声明一个坐标变量，用来储存当前遍历房间的周围房间的坐标
+                    Vector3Int NowMewRoomPoint;
+
+                    //如果当前房间的上面无房间，则以该房间上面的房间作为临时坐标，
+                    //检查临时坐标房间的上左右是否为空，如果为空有10%的概率添加该房间进入虚拟房间，并且PC房间坐标等于当前坐标，
+                    //既之后以该虚拟坐标生成PC房间。PC房间是否生成的布尔型变量变为是，并且跳出该函数。
+                    //之后也用相似方法检测该房间的左和右，但不检测下
+                    if (!isMewRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.up))
+                    {
+                        NowMewRoomPoint = item + Vector3Int.up;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowMewRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowMewRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowMewRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowMewRoomPoint.ToString();
+                            VRoom.Add(NowMewRoomPoint, 0);
+                            MewRoomPoint = NowMewRoomPoint;
+                            isMewRoomSpawn = true;
+                            Room room = Instantiate(MewsRoom, new Vector3(NowMewRoomPoint.x * 30, NowMewRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "SkillShop" + roomname;
+                            RRoom.Add(NowMewRoomPoint, room);
+                            if (FloorNum.GlobalFloorNum != null) { FloorNum.GlobalFloorNum.isMewRoomBeCreated = true; }
+                            room.CreatWall();
+                            return;
+                        }
+                    }
+                    if (!isMewRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.left))
+                    {
+
+
+                        NowMewRoomPoint = item + Vector3Int.left;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowMewRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowMewRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowMewRoomPoint + Vector3Int.up))
+                        {
+                            roomname = NowMewRoomPoint.ToString();
+                            VRoom.Add(NowMewRoomPoint, 0);
+                            MewRoomPoint = NowMewRoomPoint;
+                            isMewRoomSpawn = true;
+                            Room room = Instantiate(MewsRoom, new Vector3(NowMewRoomPoint.x * 30, NowMewRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "MewRoom" + roomname;
+                            RRoom.Add(NowMewRoomPoint, room);
+                            if (FloorNum.GlobalFloorNum != null)
+                            {
+                                FloorNum.GlobalFloorNum.isMewRoomBeCreated = true;
+                            }
+                            room.CreatWall();
+                            return;
+                        }
+                    }
+                    if (!isMewRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.right))
+                    {
+
+                        NowMewRoomPoint = item + Vector3Int.right;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowMewRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowMewRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowMewRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowMewRoomPoint.ToString();
+                            VRoom.Add(NowMewRoomPoint, 0);
+                            MewRoomPoint = NowMewRoomPoint;
+                            isMewRoomSpawn = true;
+                            Room room = Instantiate(MewsRoom, new Vector3(NowMewRoomPoint.x * 30, NowMewRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "MewRoom" + roomname;
+                            RRoom.Add(NowMewRoomPoint, room);
+                            if (FloorNum.GlobalFloorNum != null)
+                            {
+                                FloorNum.GlobalFloorNum.isMewRoomBeCreated = true;
+                            }
+                            room.CreatWall();
+                            return;
+                        }
+                    }
+                    if (!isMewRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.down))
+                    {
+
+                        NowMewRoomPoint = item + Vector3Int.down;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowMewRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowMewRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowMewRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowMewRoomPoint.ToString();
+                            VRoom.Add(NowMewRoomPoint, 0);
+                            MewRoomPoint = NowMewRoomPoint;
+                            isMewRoomSpawn = true;
+                            Room room = Instantiate(MewsRoom, new Vector3(NowMewRoomPoint.x * 30, NowMewRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "MewRoom" + roomname;
+                            RRoom.Add(NowMewRoomPoint, room);
+                            if (FloorNum.GlobalFloorNum != null)
+                            {
+                                FloorNum.GlobalFloorNum.isMewRoomBeCreated = true;
+                            }
+                            room.CreatWall();
+                            return;
+                        }
+                    }
+
+                }
+
+            }
+        }
+        //如果本轮没有生成商店，增加生成半径并递归，如果生成半径过大重置生成半径
+        if (!isMewRoomSpawn)
+        {
+            SpawnR += 0.2f;
+            if (SpawnR >= 8.0f) { SpawnR = 1.0f; }
+            MewRoomCreatCount++;
+            if (MewRoomCreatCount >= 20) { ResetMap(); }
+            else { BuiledMewRoom(); }
+
+        }
+        SpawnR = 1.0f;
+    }
+
+    void BuiledBabyCenterRoom()
+    {
+
+        if (!isBabyCenterRoomSpawn)
+        {
+            //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
+            foreach (Vector3Int item in VRoom.Keys)
+            {
+                if (Vector3Int.Distance(item, Vector3Int.zero) > (Mathf.Sqrt(StepMin)) / SpawnR && item != BossRoomPoint && item != StoreRoomPoint && item != PCRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
+                {
+                    string roomname = item.ToString();
+                    //声明一个坐标变量，用来储存当前遍历房间的周围房间的坐标
+                    Vector3Int NowBabyCenterRoomPoint;
+
+                    //如果当前房间的上面无房间，则以该房间上面的房间作为临时坐标，
+                    //检查临时坐标房间的上左右是否为空，如果为空有10%的概率添加该房间进入虚拟房间，并且PC房间坐标等于当前坐标，
+                    //既之后以该虚拟坐标生成PC房间。PC房间是否生成的布尔型变量变为是，并且跳出该函数。
+                    //之后也用相似方法检测该房间的左和右，但不检测下
+                    if (!isBabyCenterRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.up))
+                    {
+                        NowBabyCenterRoomPoint = item + Vector3Int.up;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowBabyCenterRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowBabyCenterRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowBabyCenterRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowBabyCenterRoomPoint.ToString();
+                            VRoom.Add(NowBabyCenterRoomPoint, 0);
+                            BabyCenterRoomPoint = NowBabyCenterRoomPoint;
+                            isBabyCenterRoomSpawn = true;
+                            Room room = Instantiate(BabyCenterRoom, new Vector3(NowBabyCenterRoomPoint.x * 30, NowBabyCenterRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "BabyCenter" + roomname;
+                            RRoom.Add(NowBabyCenterRoomPoint, room);
+                            room.CreatWall();
+                            if (FloorNum.GlobalFloorNum != null)
+                            {
+                                FloorNum.GlobalFloorNum.isBabyCenterBeCreated = true;
+                            }
+                            return;
+                        }
+                    }
+                    if (!isBabyCenterRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.left))
+                    {
+
+
+                        NowBabyCenterRoomPoint = item + Vector3Int.left;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowBabyCenterRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowBabyCenterRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowBabyCenterRoomPoint + Vector3Int.up))
+                        {
+                            roomname = NowBabyCenterRoomPoint.ToString();
+                            VRoom.Add(NowBabyCenterRoomPoint, 0);
+                            BabyCenterRoomPoint = NowBabyCenterRoomPoint;
+                            isBabyCenterRoomSpawn = true;
+                            Room room = Instantiate(BabyCenterRoom, new Vector3(NowBabyCenterRoomPoint.x * 30, NowBabyCenterRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "BabyCenter" + roomname;
+                            RRoom.Add(NowBabyCenterRoomPoint, room);
+                            room.CreatWall();
+                            if (FloorNum.GlobalFloorNum != null)
+                            {
+                                FloorNum.GlobalFloorNum.isBabyCenterBeCreated = true;
+                            }
+                            return;
+                        }
+                    }
+                    if (!isBabyCenterRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.right))
+                    {
+
+                        NowBabyCenterRoomPoint = item + Vector3Int.right;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowBabyCenterRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowBabyCenterRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowBabyCenterRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowBabyCenterRoomPoint.ToString();
+                            VRoom.Add(NowBabyCenterRoomPoint, 0);
+                            BabyCenterRoomPoint = NowBabyCenterRoomPoint;
+                            isBabyCenterRoomSpawn = true;
+                            Room room = Instantiate(BabyCenterRoom, new Vector3(NowBabyCenterRoomPoint.x * 30, NowBabyCenterRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "BabyCenter" + roomname;
+                            RRoom.Add(NowBabyCenterRoomPoint, room);
+                            room.CreatWall();
+                            if (FloorNum.GlobalFloorNum != null)
+                            {
+                                FloorNum.GlobalFloorNum.isBabyCenterBeCreated = true;
+                            }
+                            return;
+                        }
+                    }
+                    if (!isBabyCenterRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.down))
+                    {
+
+                        NowBabyCenterRoomPoint = item + Vector3Int.down;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowBabyCenterRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowBabyCenterRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowBabyCenterRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowBabyCenterRoomPoint.ToString();
+                            VRoom.Add(NowBabyCenterRoomPoint, 0);
+                            BabyCenterRoomPoint = NowBabyCenterRoomPoint;
+                            isBabyCenterRoomSpawn = true;
+                            Room room = Instantiate(BabyCenterRoom, new Vector3(NowBabyCenterRoomPoint.x * 30, NowBabyCenterRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "BabyCenter" + roomname;
+                            RRoom.Add(NowBabyCenterRoomPoint, room);
+                            room.CreatWall();
+                            if (FloorNum.GlobalFloorNum != null)
+                            {
+                                FloorNum.GlobalFloorNum.isBabyCenterBeCreated = true;
+                            }
+                            return;
+                        }
+                    }
+
+                }
+
+            }
+        }
+        //如果本轮没有生成商店，增加生成半径并递归，如果生成半径过大重置生成半径
+        if (!isBabyCenterRoomSpawn)
+        {
+            SpawnR += 0.2f;
+            if (SpawnR >= 8.0f) { SpawnR = 1.0f; }
+            BabyCenterRoomCreatCount++;
+            if (BabyCenterRoomCreatCount >= 20) { ResetMap(); }
+            else { BuiledBabyCenterRoom(); }
+
+        }
+        SpawnR = 1.0f;
+    }
+
+    void BuiledMintRoom()
+    {
+
+        if (!isMintRoomSpawn)
+        {
+            //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
+            foreach (Vector3Int item in VRoom.Keys)
+            {
+                if (item != BossRoomPoint && item != StoreRoomPoint && item != PCRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != BerryTreeRoomPoint)
+                {
+                    string roomname = item.ToString();
+                    //声明一个坐标变量，用来储存当前遍历房间的周围房间的坐标
+                    Vector3Int NowMintRoomPoint;
+
+                    //如果当前房间的上面无房间，则以该房间上面的房间作为临时坐标，
+                    //检查临时坐标房间的上左右是否为空，如果为空有10%的概率添加该房间进入虚拟房间，并且PC房间坐标等于当前坐标，
+                    //既之后以该虚拟坐标生成PC房间。PC房间是否生成的布尔型变量变为是，并且跳出该函数。
+                    //之后也用相似方法检测该房间的左和右，但不检测下
+                    if (!isMintRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.up))
+                    {
+                        NowMintRoomPoint = item + Vector3Int.up;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowMintRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowMintRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowMintRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowMintRoomPoint.ToString();
+                            VRoom.Add(NowMintRoomPoint, 0);
+                            MintRoomPoint = NowMintRoomPoint;
+                            isMintRoomSpawn = true;
+                            Room room = Instantiate(MintRoom, new Vector3(NowMintRoomPoint.x * 30, NowMintRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "Mint" + roomname;
+                            RRoom.Add(NowMintRoomPoint, room);
+                            room.CreatWall();
+                            if (FloorNum.GlobalFloorNum != null)
+                            {
+                                FloorNum.GlobalFloorNum.isMintRoomBeCreated = true;
+                            }
+                            return;
+                        }
+                    }
+                    if (!isMintRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.left))
+                    {
+
+
+                        NowMintRoomPoint = item + Vector3Int.left;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowMintRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowMintRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowMintRoomPoint + Vector3Int.up))
+                        {
+                            roomname = NowMintRoomPoint.ToString();
+                            VRoom.Add(NowMintRoomPoint, 0);
+                            MintRoomPoint = NowMintRoomPoint;
+                            isMintRoomSpawn = true;
+                            Room room = Instantiate(MintRoom, new Vector3(NowMintRoomPoint.x * 30, NowMintRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "Mint" + roomname;
+                            RRoom.Add(NowMintRoomPoint, room);
+                            room.CreatWall();
+                            if (FloorNum.GlobalFloorNum != null)
+                            {
+                                FloorNum.GlobalFloorNum.isMintRoomBeCreated = true;
+                            }
+                            return;
+                        }
+                    }
+                    if (!isMintRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.right))
+                    {
+
+                        NowMintRoomPoint = item + Vector3Int.right;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowMintRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowMintRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowMintRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowMintRoomPoint.ToString();
+                            VRoom.Add(NowMintRoomPoint, 0);
+                            MintRoomPoint = NowMintRoomPoint;
+                            isMintRoomSpawn = true;
+                            Room room = Instantiate(MintRoom, new Vector3(NowMintRoomPoint.x * 30, NowMintRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "Mint" + roomname;
+                            RRoom.Add(NowMintRoomPoint, room);
+                            room.CreatWall();
+                            if (FloorNum.GlobalFloorNum != null)
+                            {
+                                FloorNum.GlobalFloorNum.isMintRoomBeCreated = true;
+                            }
+                            return;
+                        }
+                    }
+                    if (!isMintRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.down))
+                    {
+
+                        NowMintRoomPoint = item + Vector3Int.down;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowMintRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowMintRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowMintRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowMintRoomPoint.ToString();
+                            VRoom.Add(NowMintRoomPoint, 0);
+                            MintRoomPoint = NowMintRoomPoint;
+                            isMintRoomSpawn = true;
+                            Room room = Instantiate(MintRoom, new Vector3(NowMintRoomPoint.x * 30, NowMintRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "Mint" + roomname;
+                            RRoom.Add(NowMintRoomPoint, room);
+                            room.CreatWall();
+                            if (FloorNum.GlobalFloorNum != null)
+                            {
+                                FloorNum.GlobalFloorNum.isMintRoomBeCreated = true;
+                            }
+                            return;
+                        }
+                    }
+
+                }
+
+            }
+        }
+        //如果本轮没有生成商店，增加生成半径并递归，如果生成半径过大重置生成半径
+        if (!isMintRoomSpawn)
+        {
+            SpawnR += 0.2f;
+            if (SpawnR >= 8.0f) { SpawnR = 1.0f; }
+            MintRoomCreatCount++;
+            if (MintRoomCreatCount >= 20) { ResetMap(); }
+            else { BuiledMintRoom(); }
+
+        }
+        SpawnR = 1.0f;
+    }
+
+    void BuiledBerryTreeRoom()
+    {
+
+        if (!isBerryTreeRoomSpawn)
+        {
+            //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
+            foreach (Vector3Int item in VRoom.Keys)
+            {
+                if (item != BossRoomPoint && item != StoreRoomPoint && item != PCRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint)
+                {
+                    string roomname = item.ToString();
+                    //声明一个坐标变量，用来储存当前遍历房间的周围房间的坐标
+                    Vector3Int NowBerryTreeRoomPoint;
+
+                    //如果当前房间的上面无房间，则以该房间上面的房间作为临时坐标，
+                    //检查临时坐标房间的上左右是否为空，如果为空有10%的概率添加该房间进入虚拟房间，并且PC房间坐标等于当前坐标，
+                    //既之后以该虚拟坐标生成PC房间。PC房间是否生成的布尔型变量变为是，并且跳出该函数。
+                    //之后也用相似方法检测该房间的左和右，但不检测下
+                    if (!isBerryTreeRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.up))
+                    {
+                        NowBerryTreeRoomPoint = item + Vector3Int.up;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowBerryTreeRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowBerryTreeRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowBerryTreeRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowBerryTreeRoomPoint.ToString();
+                            VRoom.Add(NowBerryTreeRoomPoint, 0);
+                            BerryTreeRoomPoint = NowBerryTreeRoomPoint;
+                            isBerryTreeRoomSpawn = true;
+                            Room room = Instantiate(BerryTreeRoom, new Vector3(NowBerryTreeRoomPoint.x * 30, NowBerryTreeRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "BerryTree" + roomname;
+                            RRoom.Add(NowBerryTreeRoomPoint, room);
+                            room.CreatWall();
+                            return;
+                        }
+                    }
+                    if (!isBerryTreeRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.left))
+                    {
+
+
+                        NowBerryTreeRoomPoint = item + Vector3Int.left;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowBerryTreeRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowBerryTreeRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowBerryTreeRoomPoint + Vector3Int.up))
+                        {
+                            roomname = NowBerryTreeRoomPoint.ToString();
+                            VRoom.Add(NowBerryTreeRoomPoint, 0);
+                            BerryTreeRoomPoint = NowBerryTreeRoomPoint;
+                            isBerryTreeRoomSpawn = true;
+                            Room room = Instantiate(BerryTreeRoom, new Vector3(NowBerryTreeRoomPoint.x * 30, NowBerryTreeRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "BerryTree" + roomname;
+                            RRoom.Add(NowBerryTreeRoomPoint, room);
+                            room.CreatWall();
+                            return;
+                        }
+                    }
+                    if (!isBerryTreeRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.right))
+                    {
+
+                        NowBerryTreeRoomPoint = item + Vector3Int.right;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowBerryTreeRoomPoint + Vector3Int.up) && !VRoom.ContainsKey(NowBerryTreeRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowBerryTreeRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowBerryTreeRoomPoint.ToString();
+                            VRoom.Add(NowBerryTreeRoomPoint, 0);
+                            BerryTreeRoomPoint = NowBerryTreeRoomPoint;
+                            isBerryTreeRoomSpawn = true;
+                            Room room = Instantiate(BerryTreeRoom, new Vector3(NowBerryTreeRoomPoint.x * 30, NowBerryTreeRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "BerryTree" + roomname;
+                            RRoom.Add(NowBerryTreeRoomPoint, room);
+                            room.CreatWall();
+                            return;
+                        }
+                    }
+                    if (!isBerryTreeRoomSpawn && !VRoom.ContainsKey(item + Vector3Int.down))
+                    {
+
+                        NowBerryTreeRoomPoint = item + Vector3Int.down;
+
+                        if ((Random.Range(0.0f, 1.0f) < 0.10f) && !VRoom.ContainsKey(NowBerryTreeRoomPoint + Vector3Int.left) && !VRoom.ContainsKey(NowBerryTreeRoomPoint + Vector3Int.down) && !VRoom.ContainsKey(NowBerryTreeRoomPoint + Vector3Int.right))
+                        {
+                            roomname = NowBerryTreeRoomPoint.ToString();
+                            VRoom.Add(NowBerryTreeRoomPoint, 0);
+                            BerryTreeRoomPoint = NowBerryTreeRoomPoint;
+                            isBerryTreeRoomSpawn = true;
+                            Room room = Instantiate(BerryTreeRoom, new Vector3(NowBerryTreeRoomPoint.x * 30, NowBerryTreeRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.transform.name = "BerryTree" + roomname;
+                            RRoom.Add(NowBerryTreeRoomPoint, room);
+                            room.CreatWall();
+                            return;
+                        }
+                    }
+
+                }
+
+            }
+        }
+        //如果本轮没有生成商店，增加生成半径并递归，如果生成半径过大重置生成半径
+        if (!isBerryTreeRoomSpawn)
+        {
+            SpawnR += 0.2f;
+            if (SpawnR >= 8.0f) { SpawnR = 1.0f; }
+            BerryTreeRoomCreatCount++;
+            if (BerryTreeRoomCreatCount >= 20) { ResetMap(); }
+            else { BuiledBerryTreeRoom(); }
+
+        }
+        SpawnR = 1.0f;
+    }
+
+    //==============================================生成特殊房间的部分========================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //一个随机方向的函数
     Vector3Int RandomRoomDirection()
@@ -445,4 +1151,25 @@ public class MapCreater : MonoBehaviour
                 return new Vector3Int(0, 1, 0);
         }
     }
+
+
+
+
+    Room SwithABaseRoom()
+    {
+        int x = RoomWhiteList[Random.Range(0, RoomWhiteList.Count - 1)];
+        RoomWhiteList.Remove(x);
+        RoomBlackList.Add(x);
+        if (RoomWhiteList.Count == 0)
+        {
+            RoomWhiteList = RoomBlackList;
+            RoomBlackList = new List<int> { };
+        }
+        Room OutPut = BaseRoomList.transform.GetChild(x).GetComponent<Room>();
+        return OutPut;
+    }
+
+
+
+
 }

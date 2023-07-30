@@ -29,7 +29,6 @@ public class Tackle : Skill
         {
             Empty target = other.GetComponent<Empty>();
             HitAndKo(target);
-            target.EmptyCurse(0, 1);
             if (animator != null)     { animator.SetTrigger("Hit"); }
         }
     }

@@ -114,4 +114,9 @@ public class PokemonBall : IteamPickUp
             RemoveChild.transform.parent = transform.parent;
         }
     }
+
+    public void OpenBall()
+    {
+        isPickUp = true;
+    }
 }

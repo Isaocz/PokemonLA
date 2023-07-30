@@ -86,6 +86,11 @@ public class PlayerData : MonoBehaviour
 
 
 
+
+
+
+
+
     public void GetPassiveItem(PassiveItem GetPassiveItem)
     {
         int ItemIndex = GetPassiveItem.PassiveItemIndex;
@@ -281,6 +286,179 @@ public class PlayerData : MonoBehaviour
                 //ÂèÂèÀë¿ªÁË
                 break;
 
+            case 30:
+                //Ä¾Ä¾èÉ±¦±¦
+                Instantiate(aGameObjectByPassiveItem(0), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+            case 31:
+                //Ð¡¶¼±¦±¦
+                Instantiate(aGameObjectByPassiveItem(1), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+            case 32:
+                //Ë÷²ÆÁé±¦±¦
+                Instantiate(aGameObjectByPassiveItem(2), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+            case 33:
+                //¶¡±¦±¦
+                Instantiate(aGameObjectByPassiveItem(3), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+
+            //====================±¡ºÉ===========================
+
+            case 34:
+                //Atk+Def-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 1;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 35:
+                //Atk+SpA-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 2;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 36:
+                //Atk+SpD-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 3;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 37:
+                //Atk+Spe-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 4;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 38:
+                //Def+Atk-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 5;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 39:
+                //Def+SpA-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 7;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 40:
+                //Def+SpD-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 8;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 41:
+                //Def+Spe-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 9;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 42:
+                //SpA+Atk-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 10;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 43:
+                //SpA+Def-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 11;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 44:
+                //SpA+SpD-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 13;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 45:
+                //SpA+Spe-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 14;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 46:
+                //SpD+Atk-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 15;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 47:
+                //SpD+Def-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 16;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 48:
+                //SpD+SpA-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 17;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 49:
+                //SpD+Spe-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 19;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 50:
+                //Spe+Atk-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 20;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 51:
+                //Spe+Def-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 21;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 52:
+                //Spe+SpA-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 22;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 53:
+                //Spe+SpD-±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 23;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+            case 54:
+                //Normal±¡ºÉ
+                player.RemoveNature(player.NatureIndex);
+                player.NatureIndex = 24;
+                player.InstanceNature(player.NatureIndex);
+                player.ReFreshAbllityPoint();
+                break;
+
+
+
+                //====================±¡ºÉ===========================
+
+
         }
 
         player.ReFreshAbllityPoint();
@@ -372,4 +550,24 @@ public class PlayerData : MonoBehaviour
     }
 
     //===================================================³äµçµç³Ø=================================================
+
+
+
+
+    //===================================================µ±±»¶¯µÀ¾ßÐèÒªÉú³ÉÊµÌåÊ±=================================================
+
+
+    public GameObject[] GameObjectList;
+    GameObject aGameObjectByPassiveItem(int i)
+    {
+        GameObject OutPutObj = GameObjectList[i];
+        return OutPutObj;
+    }
+
+
+
+
+
+    //===================================================µ±±»¶¯µÀ¾ßÐèÒªÉú³ÉÊµÌåÊ±=================================================
 }
+

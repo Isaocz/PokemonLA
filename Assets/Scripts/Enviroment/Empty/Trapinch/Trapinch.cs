@@ -79,6 +79,7 @@ public class Trapinch : Empty
     // Update is called once per frame
     void Update()
     {
+        
         // * base part 2
         ResetPlayer();
         if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }
@@ -204,6 +205,8 @@ public class Trapinch : Empty
 
     void OnAniTriggerBite()
     {
+        
+
         //再次检查目标
         GameObject target = FindAtkTarget(foundRadius);
         if (target && Vector2.Distance(transform.position, target.transform.position) <= biteRadius)
