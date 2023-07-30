@@ -9,6 +9,10 @@ public class FloorNum : MonoBehaviour
     public int MaxFloor;
     public int[] MapSize = new int[] { 8, 15, 20 };
 
+    public bool isBabyCenterBeCreated;
+    public bool isMewRoomBeCreated;
+    public bool isMintRoomBeCreated;
+
     private void Awake()
     {
         GlobalFloorNum = this;

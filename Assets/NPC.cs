@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class NPC : MonoBehaviour
 {
     protected GameObject ZBotton;
-    protected Animator animator;
+    public Animator animator;
     public PlayerControler playerControler;
     public NPCTalkPanel TalkPanel;
     protected bool isInTrriger;
@@ -44,8 +44,9 @@ public class NPC : MonoBehaviour
     {
         if (isInTrriger && Input.GetKeyDown(KeyCode.Z) && !TalkPanel.isTalkPuse)
         {
-            TalkPanel.gameObject.SetActive(true);
             TalkPanel.player = playerControler;
+            TalkPanel.gameObject.SetActive(true);
+            
         }
     }
 }

@@ -25,6 +25,11 @@ public class Room : MonoBehaviour
     public GameObject BossGateWayLeft;
     public GameObject BossGateWayRight;
 
+    public GameObject LockedGateWayUp;
+    public GameObject LockedGateWayDown;
+    public GameObject LockedGateWayLeft;
+    public GameObject LockedGateWayRight;
+
     public GameObject FloorFile;
 
     public bool isVisit = false;
@@ -224,6 +229,15 @@ public class Room : MonoBehaviour
         {
             GameObject gatewayup = Instantiate(BossGateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity , gameObject.transform);
         }
+        else if (NowRoomPoint + Vector3Int.up != Vector3Int.zero && ((mapCreater.SkillShopRoomPoint == NowRoomPoint + Vector3Int.up)
+            || (mapCreater.MewRoomPoint == NowRoomPoint + Vector3Int.up)
+            || (mapCreater.BabyCenterRoomPoint == NowRoomPoint + Vector3Int.up)
+            || (mapCreater.MintRoomPoint == NowRoomPoint + Vector3Int.up)
+            || (mapCreater.BerryTreeRoomPoint == NowRoomPoint + Vector3Int.up) ))
+        {
+            GameObject gatewayup = Instantiate(LockedGateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform);
+            gatewayup.GetComponent<LockedDoorSetText>().SetLockedDoorText(mapCreater, NowRoomPoint + Vector3Int.up);
+        }
         else
         {            
             GameObject gatewayup = Instantiate(GateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform);              
@@ -241,6 +255,15 @@ public class Room : MonoBehaviour
         else if (mapCreater.BossRoomPoint == NowRoomPoint + Vector3Int.down)
         {
             Instantiate(BossGateWayDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity , transform);
+        }
+        else if (NowRoomPoint + Vector3Int.down != Vector3Int.zero && ((mapCreater.SkillShopRoomPoint == NowRoomPoint + Vector3Int.down)
+    || (mapCreater.MewRoomPoint == NowRoomPoint + Vector3Int.down)
+    || (mapCreater.BabyCenterRoomPoint == NowRoomPoint + Vector3Int.down)
+    || (mapCreater.MintRoomPoint == NowRoomPoint + Vector3Int.down)
+    || (mapCreater.BerryTreeRoomPoint == NowRoomPoint + Vector3Int.down)))
+        {
+            GameObject gatewayup = Instantiate(LockedGateWayDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity, transform);
+            gatewayup.GetComponent<LockedDoorSetText>().SetLockedDoorText(mapCreater, NowRoomPoint + Vector3Int.down);
         }
         else         
         {       
@@ -269,6 +292,15 @@ public class Room : MonoBehaviour
         {
             GameObject gatewayleft = Instantiate(BossGateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90),transform);
         }
+        else if (NowRoomPoint + Vector3Int.left != Vector3Int.zero && ((mapCreater.SkillShopRoomPoint == NowRoomPoint + Vector3Int.left)
+    || (mapCreater.MewRoomPoint == NowRoomPoint + Vector3Int.left)
+    || (mapCreater.BabyCenterRoomPoint == NowRoomPoint + Vector3Int.left)
+    || (mapCreater.MintRoomPoint == NowRoomPoint + Vector3Int.left)
+    || (mapCreater.BerryTreeRoomPoint == NowRoomPoint + Vector3Int.left)))
+        {
+            GameObject gatewayup = Instantiate(LockedGateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.identity, gameObject.transform);
+            gatewayup.GetComponent<LockedDoorSetText>().SetLockedDoorText(mapCreater, NowRoomPoint + Vector3Int.left);
+        }
         else
             {
                 GameObject gatewayleft = Instantiate(GateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform);
@@ -295,6 +327,15 @@ public class Room : MonoBehaviour
         else if (mapCreater.BossRoomPoint == NowRoomPoint + Vector3Int.right)
         {
             Instantiate(BossGateWayRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), transform);
+        }
+        else if (NowRoomPoint + Vector3Int.right != Vector3Int.zero && ((mapCreater.SkillShopRoomPoint == NowRoomPoint + Vector3Int.right)
+    || (mapCreater.MewRoomPoint == NowRoomPoint + Vector3Int.right)
+    || (mapCreater.BabyCenterRoomPoint == NowRoomPoint + Vector3Int.right)
+    || (mapCreater.MintRoomPoint == NowRoomPoint + Vector3Int.right)
+    || (mapCreater.BerryTreeRoomPoint == NowRoomPoint + Vector3Int.right)))
+        {
+            GameObject gatewayup = Instantiate(LockedGateWayRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.identity, gameObject.transform);
+            gatewayup.GetComponent<LockedDoorSetText>().SetLockedDoorText(mapCreater, NowRoomPoint + Vector3Int.right);
         }
         else
             {
