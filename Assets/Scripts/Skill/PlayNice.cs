@@ -30,7 +30,7 @@ public class PlayNice : Skill
                 target.AtkDown(0);
                 infnum.Add(target.AtkEmptyPoint);
                 influence.Add(target);
-                target.AtkEmptyPoint = (int)(target.AtkEmptyPoint * 0.8);
+                target.LevelChange(-1, "Atk");
             }
         }
     }
