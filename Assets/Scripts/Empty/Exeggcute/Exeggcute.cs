@@ -4,29 +4,28 @@ using UnityEngine;
 using DG.Tweening;
 
 
-
 public class Exeggcute : Empty
 {
-    [Label("观察半径")]
+    //[Label("观察半径")]
     public float foundRadius = 5;
-    [Label("攻击时间间隔")]
+    //[Label("攻击时间间隔")]
     public float atkInterval = 0.3F;
-    [Label("落地范围半径")]
+    //[Label("落地范围半径")]
     public float atkDownRadius = 0.8F;
-    [Label("飞行高度")]
+    //[Label("飞行高度")]
     public float throwHigh = 5F;
-    [Label("飞行时间")]
+    //[Label("飞行时间")]
     public float throwTime = 0.8F;
-    [Label("cd（技能不能正常发出时有用）")]
+    //[Label("cd（技能不能正常发出时有用）")]
     public float cdBomb = 3F;
-    [Label("发现标志")]
+    //[Label("发现标志")]
     public Transform transFound;
-    [Tooltip("对象列表")]
+    //[Tooltip("对象列表")]
     public List<GameObject> eggList;
     public GameObject ui;
-    [Label("蛋蛋影子")]
+    //[Label("蛋蛋影子")]
     public GameObject oneEggShadow;
-    [Label("预判框")]
+    //[Label("预判框")]
     public GameObject skillRange;
 
     private enum AI_STATE
