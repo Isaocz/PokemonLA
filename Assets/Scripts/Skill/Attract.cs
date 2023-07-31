@@ -46,6 +46,7 @@ public class Attract : Skill
         {
             Empty target = other.GetComponent<Empty>();
             target.EmptyInfatuation(30, 2.5f);
+            //target.Fear(10,1);
             isCanNotMove = true;
             AttractOverPS.gameObject.SetActive(true);
             AttractOverPS.Play();

@@ -122,6 +122,8 @@ public class Trapinch : Empty
         }
     }
 
+    
+
     private void StartAiTimer()
     {
         // ·´Ó¦ÆµÂÊ20Ö¡
