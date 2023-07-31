@@ -29,23 +29,23 @@ using UnityEngine;
 public class Trapinch : Empty
 {
 
-    [Label("观察半径")]
+    //[Label("观察半径")]
     public float foundRadius = 8;
-    [Label("发动咬咬的半径")]
+    //[Label("发动咬咬的半径")]
     public float biteRadius = 1.2f;
-    [Label("扩展流沙地狱的最小半径")]
+    //[Label("扩展流沙地狱的最小半径")]
     public float growSandsRadius = 5;
-    [Label("扩展流沙地狱距离开始的最小时间")]
+    //[Label("扩展流沙地狱距离开始的最小时间")]
     public float growSandsDuration = 2;
-    [Label("咬咬cd")]
+    //[Label("咬咬cd")]
     public float cdBite = 2;
-    [Label("流沙地狱cd")]
+    //[Label("流沙地狱cd")]
     public float cdSands = 14;
-    [Label("麻痹不能动概率")]
+    //[Label("麻痹不能动概率")]
     public float proParalysis = 0.33f;
-    [Label("prefab咬咬")]
+    //[Label("prefab咬咬")]
     public GameObject biteObj;
-    [Label("prefab流沙地狱")]
+    //[Label("prefab流沙地狱")]
     public GameObject sandsObj;
 
     private enum AI_STATE
