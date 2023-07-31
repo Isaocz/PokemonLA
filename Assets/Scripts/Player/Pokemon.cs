@@ -342,7 +342,7 @@ public class Pokemon : MonoBehaviour
 
 
     //===========================================================================µÐÈËÖÂÃ¤µÄº¯Êý=====================================================================================
-
+    
     public bool isBlindDone = false;
     public bool isBlindStart = false;
     float EmptyBlindPoint;
