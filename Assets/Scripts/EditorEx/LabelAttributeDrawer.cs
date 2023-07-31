@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEditor;
-using Unity.VisualScripting.Dependencies.Sqlite;
+//using Unity.VisualScripting.Dependencies.Sqlite;
 
 [CustomPropertyDrawer(typeof(LabelAttribute))]
 public class LabelAttributeDrawer : PropertyDrawer

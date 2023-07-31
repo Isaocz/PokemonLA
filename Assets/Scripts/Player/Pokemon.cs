@@ -223,7 +223,7 @@ public class Pokemon : MonoBehaviour
     bool isFrozenStart = false;
     float EmptyFrozenPointFloat;
     float SpeedBefoerChange;
-
+    
     //调用此函数时，如果还未被冰冻，冰冻，状态变为被冰冻
     public void Frozen(float FrozenTime , float FrozenPoint , float FrozenPer)
     {
@@ -258,7 +258,7 @@ public class Pokemon : MonoBehaviour
                     speed = 0;
                     isEmptyFrozenDone = true;
                     animator.speed = 0;
-                    Invoke("FrozenRemove", FrozenTime);
+                    Invoke("FrozenRemove", FrozenTime*FrozenResistance);
                 }
             }
         }

@@ -21,7 +21,7 @@ public class PlayerControler : Pokemon
     protected GameObject EvoAnimaObj;
 
     //声明一个2D刚体组件，以获得小山猪的刚体组件
-    new Rigidbody2D rigidbody2D;
+    Rigidbody2D rigidbody2D;
 
     //声明两个变量，获取按键信息
     private float horizontal;
@@ -230,7 +230,7 @@ public class PlayerControler : Pokemon
     //初始化玩家的必要函数
     protected void Instance()
     {
-
+        
         DontDestroyOnLoad(this);
         //当前最大生命值等于一级时的最大生命值
         //当前生命值等于最大生命值
@@ -262,6 +262,7 @@ public class PlayerControler : Pokemon
         ReFreshAbllityPoint();
         if (!isNeedInherit)
         {
+            
             nowHp = maxHp;
         }
         UIHealthBar.Instance.MaxHpText.text = string.Format("{000}", maxHp);
