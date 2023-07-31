@@ -186,9 +186,12 @@ public class Trapinch : Empty
                 {
                     if (!target)
                     {
-                        //不在范围内，扩展流沙地狱
-                        animator.SetTrigger("SandsGrow");
-                        aiState = AI_STATE.ATK_SANDS_GROW;
+                        //不在范围内，尝试扩展流沙地狱
+                        if (sandsHolding && sandsHolding.GetComponent<TrapinchSandTomb>().IsCanGrowUp())
+                        {
+                            animator.SetTrigger("SandsGrow");
+                            aiState = AI_STATE.ATK_SANDS_GROW;
+                        }
                     }
                 }
             }
@@ -234,6 +237,11 @@ public class Trapinch : Empty
         if (target && Vector2.Distance(transform.position, target.transform.position) <= biteRadius)
         {
             Instantiate(biteObj, target.transform.position, Quaternion.identity);
+            if (isEmptyInfatuationDone && target.tag == "Player")
+            {
+                // 魅惑时不对player造成伤害
+                return;
+            }
             Timer.Start(this, 0.1f, () =>
             {
                 Pokemon.PokemonHpChange(gameObject, target, 60, 0, 0, Type.TypeEnum.Dark);
@@ -251,14 +259,14 @@ public class Trapinch : Empty
 
     void OnAniTriggerSands()
     {
-        GameObject sands = Instantiate(sandsObj, transform.position, Quaternion.identity);
+        GameObject sands = Instantiate(sandsObj, transform.position, Quaternion.identity, transform);
         sands.GetComponent<TrapinchSandTomb>().SetOwner(this);
         sandsHolding = sands;
     }
 
     void OnAniTriggerSandsGrow()
     {
-        if (sandsHolding && !sandsHolding.GetComponent<TrapinchSandTomb>().IsGrowUp)
+        if (sandsHolding && sandsHolding.GetComponent<TrapinchSandTomb>().IsCanGrowUp())
         {
             sandsHolding.GetComponent<TrapinchSandTomb>().GrowUp();
         }
