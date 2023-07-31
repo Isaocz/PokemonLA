@@ -7,8 +7,8 @@ public class XszControler : PlayerControler
 
     public Skill Tackle;
     public Skill MudSlup;
-    public Skill TestSkill01;
-    public Skill TestSkill02;
+    //public Skill TestSkill01;
+    //public Skill TestSkill02;
 
 
 
@@ -24,8 +24,8 @@ public class XszControler : PlayerControler
 
         Skill01 = Tackle;
         Skill02 = MudSlup;
-        Skill03 = TestSkill01;
-        Skill04 = TestSkill02;
+        //Skill03 = TestSkill01;
+        //Skill04 = TestSkill02;
 
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);
@@ -40,7 +40,7 @@ public class XszControler : PlayerControler
     {
         UpdatePlayer();
         StateMaterialChange();
-        if(!isEvolution && LevelForSkill >= 34)
+        if(!isEvolution && LevelForSkill >= 16)
         {
             EvolutionStart();
         }
