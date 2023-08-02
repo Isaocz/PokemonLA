@@ -80,77 +80,42 @@ public class Pokemon : MonoBehaviour
 
     public void MarterialChangeToFrozen()
     {
-        if (gameObject.GetComponent<SpriteRenderer>() == null)  {
-            if (gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>() != null) { gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>().material = FrozenMaterial; }
-            else { gameObject.transform.GetChild(3).GetChild(0).GetComponent<SpriteRenderer>().material = FrozenMaterial; }
-        }
-        else { gameObject.GetComponent<SpriteRenderer>().material = FrozenMaterial; }
+        SetSkinRenderersMaterial(FrozenMaterial);
         animator.speed = 0;
     }
     public void MarterialChangeToSpeedDown()
     {
-        if (gameObject.GetComponent<SpriteRenderer>() == null) {
-            if (gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>() != null) { gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>().material = SpeedDownMaterial; }
-            else { gameObject.transform.GetChild(3).GetChild(0).GetComponent<SpriteRenderer>().material = SpeedDownMaterial; }
-        }
-        else { gameObject.GetComponent<SpriteRenderer>().material = SpeedDownMaterial; }
+        SetSkinRenderersMaterial(SpeedDownMaterial);
     }
     public void MarterialChangeToToxic()
     {
-        if (gameObject.GetComponent<SpriteRenderer>() == null) {
-            if (gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>() != null) { gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>().material = ToxicMaterial; }
-            else { gameObject.transform.GetChild(3).GetChild(0).GetComponent<SpriteRenderer>().material = ToxicMaterial; }
-        }
-        else { gameObject.GetComponent<SpriteRenderer>().material = ToxicMaterial; }
+        SetSkinRenderersMaterial(ToxicMaterial);
     }
 
     public void MarterialChangeToParalysis()
     {
-        if (gameObject.GetComponent<SpriteRenderer>() == null) {
-            if (gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>() != null) { gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>().material = ParalysisMaterial; }
-            else { gameObject.transform.GetChild(3).GetChild(0).GetComponent<SpriteRenderer>().material = ParalysisMaterial; }
-        }
-        else { gameObject.GetComponent<SpriteRenderer>().material = ParalysisMaterial; }
+        SetSkinRenderersMaterial(ParalysisMaterial);
     }
 
     public void MarterialChangeToBurn()
     {
-        if (gameObject.GetComponent<SpriteRenderer>() == null) {
-            if (gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>() != null) { gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>().material = BurnMaterial; }
-            else { gameObject.transform.GetChild(3).GetChild(0).GetComponent<SpriteRenderer>().material = BurnMaterial; }
-        }
-        else { gameObject.GetComponent<SpriteRenderer>().material = BurnMaterial; }
+        SetSkinRenderersMaterial(BurnMaterial);
     }
 
     public void MarterialChangeToSleep()
     {
-        if (gameObject.GetComponent<SpriteRenderer>() == null) {
-            if (gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>() != null) { gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>().material = SleepMaterial; }
-            else { gameObject.transform.GetChild(3).GetChild(0).GetComponent<SpriteRenderer>().material = SleepMaterial; }
-        }
-        else { gameObject.GetComponent<SpriteRenderer>().material = SleepMaterial; }
+        SetSkinRenderersMaterial(SleepMaterial);
         //animator.speed = 0.55f;
     }
 
     public void MarterialChangeToFear()
     {
-
-        if (gameObject.GetComponent<SpriteRenderer>() == null) {
-            if (gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>() != null) { gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>().material = FearMaterial; }
-            else { gameObject.transform.GetChild(3).GetChild(0).GetComponent<SpriteRenderer>().material = FearMaterial; }
-        }
-        else { gameObject.GetComponent<SpriteRenderer>().material = FearMaterial; }
+        SetSkinRenderersMaterial(FearMaterial);
     }
 
     public void MarterialChangeToInfatuation()
     {
-
-        if (gameObject.GetComponent<SpriteRenderer>() == null)
-        {
-            if (gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>() != null) { gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>().material = InfatuationMaterial; }
-            else { gameObject.transform.GetChild(3).GetChild(0).GetComponent<SpriteRenderer>().material = InfatuationMaterial; }
-        }
-        else { gameObject.GetComponent<SpriteRenderer>().material = InfatuationMaterial; }
+        SetSkinRenderersMaterial(InfatuationMaterial);
     }
 
     //获取 pokemon 主体的渲染组件
@@ -176,6 +141,18 @@ public class Pokemon : MonoBehaviour
         Transform child30 = child3.GetChild(0);
         srs.Add(child30.GetComponent<SpriteRenderer>());
         return srs;
+    }
+
+    /// <summary>
+    /// 更新敌人的材质
+    /// </summary>
+    private void SetSkinRenderersMaterial(Material material)
+    {
+        List<SpriteRenderer> skinRendererList = GetSkinRenderers();
+        foreach (SpriteRenderer skinRenderer in skinRendererList)
+        {
+            skinRenderer.material = material;
+        }
     }
 
     /// <summary>
