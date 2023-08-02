@@ -77,7 +77,8 @@ public class MewTail : MonoBehaviour
     {
         if (!isBorn)
         {
-            MewRigidbody.MovePosition(new Vector2(Mathf.Clamp((MewRigidbody.position.x + (float)Director.x * Time.deltaTime * 11.5f) , -7.8f , 7.8f) , Mathf.Clamp(( MewRigidbody.position.y + (float)Director.y * Time.deltaTime * 11.5f) , -3.5f , 4.4f )) );
+            MewRigidbody.position = new Vector2( Mathf.Clamp(   MewRigidbody.position.x + (float)Director.x * Time.deltaTime * 11.5f, -7.8f+transform.parent.position.x, 7.8f + transform.parent.position.x)     ,    Mathf.Clamp(   MewRigidbody.position.y + (float)Director.y * Time.deltaTime * 11.5f, -3.5f + transform.parent.position.y, 4.4f + transform.parent.position.y)    ) ;
+            //MewRigidbody.MovePosition((Vector2)transform.parent.position + (new Vector2(Mathf.Clamp((MewRigidbody.position.x + (float)Director.x * Time.deltaTime * 1.5f) , -7.8f, 7.8f) ,Mathf.Clamp(( MewRigidbody.position.y + (float)Director.y * Time.deltaTime * 1.5f) , -3.5f , 4.4f )) ));
             //MewRigidbody.MovePosition(new Vector2(((MewRigidbody.position.x + (float)Director.x * Time.deltaTime * 11.5f)) , (( MewRigidbody.position.y + (float)Director.y * Time.deltaTime * 11.5f))) );
             NowPostion = transform.position;
         }
