@@ -43,6 +43,7 @@ public class Exeggcute : Empty
 
     private AI_STATE aIState = AI_STATE.IDLE;
     private float lastUseBomb = 0;
+    private Vector3 lastThrowPos;
 
     // Start is called before the first frame update
     void Start()
@@ -91,10 +92,6 @@ public class Exeggcute : Empty
         }
         if(aIState == AI_STATE.IDLE)
         {
-            if (isSilence || isFearDone || isSleepDone)
-            {
-                return;
-            }
             if (Time.time - lastUseBomb < cdBomb)
             {
                 return;
@@ -105,6 +102,7 @@ public class Exeggcute : Empty
                 if (Random.Range(0.0f, 1.0f) < 0.33)
                 {
                     lastUseBomb = Time.time;
+                    return;
                 }
             }
             if (isEmptyInfatuationDone)
@@ -117,6 +115,10 @@ public class Exeggcute : Empty
             else
             {
                 if (Vector2.Distance(transform.position, player.transform.position) <= foundRadius)
+                {
+                    turnToReadyAtk();
+                }
+                else if(isSubsititue && SubsititueTarget != null && Vector2.Distance(transform.position, SubsititueTarget.transform.position) <= foundRadius)
                 {
                     turnToReadyAtk();
                 }
@@ -155,9 +157,10 @@ public class Exeggcute : Empty
         seq.AppendInterval(atkInterval * i);
 
         GameObject range = null;
-        Vector3 playerPos = player.transform.position;
+        Vector3 jumpPos = transform.position;
         seq.AppendCallback(() =>
         {
+            Vector3 playerPos = transform.position;
             // 起跳时，取目标的位置
             if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(foundRadius) == null)
             {
@@ -165,7 +168,7 @@ public class Exeggcute : Empty
                 { 
                     playerPos = SubsititueTarget.transform.position; 
                 }
-                else
+                else if (player)
                 {
                     playerPos = player.transform.position;
                     if (i == eggList.Count - 1)
@@ -176,7 +179,8 @@ public class Exeggcute : Empty
                     }
                 }
             }
-            else {
+            else 
+            {
                 playerPos = InfatuationForRangeRayCastEmpty(foundRadius).transform.position;
             }
 
@@ -186,13 +190,33 @@ public class Exeggcute : Empty
                 // 混乱会有更不确定的范围
                 downRadius = downRadius + 1;
             }
-            playerPos = playerPos + new Vector3(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f)) * downRadius;
+            jumpPos = playerPos + new Vector3(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f)) * downRadius;
+
+            if (isFearDone)
+            {
+                // 恐惧时向相反方向发射
+                jumpPos.x = -jumpPos.x;
+                jumpPos.y = -jumpPos.y;
+            }
+
+            if (isSilence)
+            {
+                // 致盲向上次的方向发射
+                jumpPos = lastThrowPos;
+            }
+
+            if (isSleepDone)
+            {
+                jumpPos = transform.position;
+            }
+
             // 如果超出房间中心范围，规范为其边界
             Vector2 roomMid = transform.parent.position;
-            playerPos.x = Mathf.Clamp(playerPos.x, roomMid.x - ConstantRoom.ROOM_INNER_WIDTH / 2, roomMid.x + ConstantRoom.ROOM_INNER_WIDTH / 2);
-            playerPos.y = Mathf.Clamp(playerPos.y, roomMid.y - ConstantRoom.ROOM_INNER_HIGHT / 2, roomMid.y + ConstantRoom.ROOM_INNER_HIGHT / 2);
+            jumpPos.x = Mathf.Clamp(jumpPos.x, roomMid.x - ConstantRoom.ROOM_INNER_WIDTH / 2, roomMid.x + ConstantRoom.ROOM_INNER_WIDTH / 2);
+            jumpPos.y = Mathf.Clamp(jumpPos.y, roomMid.y - ConstantRoom.ROOM_INNER_HIGHT / 2, roomMid.y + ConstantRoom.ROOM_INNER_HIGHT / 2);
+            lastThrowPos = jumpPos;
 
-            range = Instantiate(skillRange, playerPos, Quaternion.identity);
+            range = Instantiate(skillRange, jumpPos, Quaternion.identity);
             range.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
             range.GetComponent<SpriteRenderer>().DOFade(1, 1f);
             objects.Add(range);
@@ -206,8 +230,8 @@ public class Exeggcute : Empty
         seq.AppendCallback(() =>
         {
             shadow = Instantiate(oneEggShadow, eggobj.transform.position, Quaternion.identity);
-            shadow.transform.DOMove(playerPos, throwTime);
-            eggobj.transform.DOJump(playerPos, throwHigh, 1, throwTime);
+            shadow.transform.DOMove(jumpPos, throwTime);
+            eggobj.transform.DOJump(jumpPos, throwHigh, 1, throwTime);
             eggobj.transform.DOLocalRotate(new Vector3(0, 0, 360F), throwTime, RotateMode.LocalAxisAdd).SetEase(Ease.Linear);
         });
         // wait jump finish
@@ -268,7 +292,8 @@ public class Exeggcute : Empty
         // 后续的动作由 DOTween 执行
         animator.enabled = false;
         ui.SetActive(false);
-        GetComponent<Collider2D>().enabled = false;
+        //GetComponent<Collider2D>().enabled = false;
+        lastThrowPos = transform.position;
 
         for (int i = 0; i < eggList.Count; i++)
         {

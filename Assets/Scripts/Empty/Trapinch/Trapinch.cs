@@ -20,7 +20,7 @@ using UnityEngine;
  * clip: Die(EmptyDestroy), Hit
  * 
  * 异常状态：
- * 着迷（FindAtkTarget()处理），混乱（isEmptyConfusionDone），沉默（isSilence）
+ * 着迷（FindAtkTarget()处理），混乱（isEmptyConfusionDone），致盲（isSilence）
  * 畏缩（isFearDone），沉睡（isSleepDone），麻痹（isCanNotMoveWhenParalysis）
  * 
  * 替身（FindAtkTarget）
