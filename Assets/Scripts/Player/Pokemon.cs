@@ -223,10 +223,11 @@ public class Pokemon : MonoBehaviour
     bool isFrozenStart = false;
     float EmptyFrozenPointFloat;
     float SpeedBefoerChange;
-    
+
     //调用此函数时，如果还未被冰冻，冰冻，状态变为被冰冻
     public void Frozen(float FrozenTime , float FrozenPoint , float FrozenPer)
     {
+        
         if (GetComponent<Empty>() != null && isColdDown != 0) { FrozenPer += 0.25f * isColdDown; }
         Debug.Log(FrozenPer);
         if (Random.Range(0.0f , 1.0f) <= FrozenPer ) {
@@ -1788,7 +1789,7 @@ public class Pokemon : MonoBehaviour
         {
             Instantiate(playerUIState.transform.GetChild(i), Vector3.zero, Quaternion.identity, CopyTarget.playerUIState.transform);
         }
-
+        CopyTarget.playerUIState.InstanceObjWhenEvlo(playerUIState);
 
     }
 
@@ -1901,4 +1902,3 @@ public class Pokemon : MonoBehaviour
 
 
 }
-

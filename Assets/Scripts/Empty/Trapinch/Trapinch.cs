@@ -29,23 +29,23 @@ using UnityEngine;
 public class Trapinch : Empty
 {
 
-    [Label("观察半径")]
+    //[Label("观察半径")]
     public float foundRadius = 8;
-    [Label("发动咬咬的半径")]
+    //[Label("发动咬咬的半径")]
     public float biteRadius = 1.2f;
-    [Label("扩展流沙地狱的最小半径")]
+    //[Label("扩展流沙地狱的最小半径")]
     public float growSandsRadius = 5;
-    [Label("扩展流沙地狱距离开始的最小时间")]
+    //[Label("扩展流沙地狱距离开始的最小时间")]
     public float growSandsDuration = 2;
-    [Label("咬咬cd")]
+    //[Label("咬咬cd")]
     public float cdBite = 2;
-    [Label("流沙地狱cd")]
+    //[Label("流沙地狱cd")]
     public float cdSands = 14;
-    [Label("麻痹不能动概率")]
+    //[Label("麻痹不能动概率")]
     public float proParalysis = 0.33f;
-    [Label("prefab咬咬")]
+    //[Label("prefab咬咬")]
     public GameObject biteObj;
-    [Label("prefab流沙地狱")]
+    //[Label("prefab流沙地狱")]
     public GameObject sandsObj;
 
     private enum AI_STATE
@@ -186,9 +186,12 @@ public class Trapinch : Empty
                 {
                     if (!target)
                     {
-                        //不在范围内，扩展流沙地狱
-                        animator.SetTrigger("SandsGrow");
-                        aiState = AI_STATE.ATK_SANDS_GROW;
+                        //不在范围内，尝试扩展流沙地狱
+                        if (sandsHolding && sandsHolding.GetComponent<TrapinchSandTomb>().IsCanGrowUp())
+                        {
+                            animator.SetTrigger("SandsGrow");
+                            aiState = AI_STATE.ATK_SANDS_GROW;
+                        }
                     }
                 }
             }
@@ -234,6 +237,11 @@ public class Trapinch : Empty
         if (target && Vector2.Distance(transform.position, target.transform.position) <= biteRadius)
         {
             Instantiate(biteObj, target.transform.position, Quaternion.identity);
+            if (isEmptyInfatuationDone && target.tag == "Player")
+            {
+                // 魅惑时不对player造成伤害
+                return;
+            }
             Timer.Start(this, 0.1f, () =>
             {
                 Pokemon.PokemonHpChange(gameObject, target, 60, 0, 0, Type.TypeEnum.Dark);
@@ -251,14 +259,14 @@ public class Trapinch : Empty
 
     void OnAniTriggerSands()
     {
-        GameObject sands = Instantiate(sandsObj, transform.position, Quaternion.identity);
+        GameObject sands = Instantiate(sandsObj, transform.position, Quaternion.identity, transform);
         sands.GetComponent<TrapinchSandTomb>().SetOwner(this);
         sandsHolding = sands;
     }
 
     void OnAniTriggerSandsGrow()
     {
-        if (sandsHolding && !sandsHolding.GetComponent<TrapinchSandTomb>().IsGrowUp)
+        if (sandsHolding && sandsHolding.GetComponent<TrapinchSandTomb>().IsCanGrowUp())
         {
             sandsHolding.GetComponent<TrapinchSandTomb>().GrowUp();
         }

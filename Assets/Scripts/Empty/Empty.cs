@@ -89,7 +89,7 @@ public class Empty : Pokemon
     public PlayerControler player;
 
     //声明一个刚体变量 一个动画管理者变量(动画管理者已经转到父类Pokeomn)
-    public Rigidbody2D rigidbody2D;
+    public new Rigidbody2D rigidbody2D;
 
 
     //表示异常状态的各种变量

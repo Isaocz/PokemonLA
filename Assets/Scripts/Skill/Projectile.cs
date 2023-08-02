@@ -6,7 +6,7 @@ public class Projectile : MonoBehaviour
 {
 
     // Start is called before the first frame update
-    public Rigidbody2D rigidbody2D;
+    public new Rigidbody2D rigidbody2D;
     public SpriteRenderer spriteRenderer;
     public Empty empty;
     public FollowBaby Baby;
@@ -16,7 +16,7 @@ public class Projectile : MonoBehaviour
     protected Vector2 LunchDirection;
     public int Dmage;
     public int SpDmage;
-
+    
     // Start is called before the first frame update
 
 

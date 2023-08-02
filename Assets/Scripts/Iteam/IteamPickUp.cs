@@ -28,7 +28,16 @@ public class IteamPickUp : Item
 
     void Update()
     {
-        if (targer == null) { targer = GameObject.FindObjectOfType<PlayerControler>().gameObject; }
+        if (targer == null) {
+            if (GameObject.FindObjectOfType<PlayerControler>() == null)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                targer = GameObject.FindObjectOfType<PlayerControler>().gameObject;
+            }
+        }
     }
 
     public void LunchItem()

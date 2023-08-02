@@ -52,6 +52,57 @@ public class PlayerData : MonoBehaviour
     public bool isEndure;
     public bool isMist;
 
+    public List<int> GetPassiveItemList = new List<int>();
+
+
+    public void CopyData(PlayerData OtherData)
+    {
+        passiveList = OtherData.passiveList;
+
+        HPHardWorkAlways = OtherData.HPHardWorkAlways;
+        AtkHardWorkAlways = OtherData.AtkHardWorkAlways;
+        DefHardWorkAlways = OtherData.DefHardWorkAlways;
+        SpAHardWorkAlways = OtherData.SpAHardWorkAlways;
+        SpDHardWorkAlways = OtherData.SpDHardWorkAlways;
+        SpeHardWorkAlways = OtherData.SpeHardWorkAlways;
+        MoveSpeHardWorkAlways = OtherData.MoveSpeHardWorkAlways;
+        LuckHardWorkAlways = OtherData.LuckHardWorkAlways;
+
+        HPHardWorkJustOneRoom = OtherData.HPHardWorkJustOneRoom;
+        AtkHardWorkJustOneRoom = OtherData.AtkHardWorkJustOneRoom;
+        DefHardWorkJustOneRoom = OtherData.DefHardWorkJustOneRoom;
+        SpAHardWorkJustOneRoom = OtherData.SpAHardWorkJustOneRoom;
+        SpDHardWorkJustOneRoom = OtherData.SpDHardWorkJustOneRoom;
+        SpeHardWorkJustOneRoom = OtherData.SpeHardWorkJustOneRoom;
+        MoveSpeHardWorkJustOneRoom = OtherData.MoveSpeHardWorkJustOneRoom;
+        LuckHardWorkJustOneRoom = OtherData.LuckHardWorkJustOneRoom;
+
+        HPBounsAlways = OtherData.HPBounsAlways;
+        AtkBounsAlways = OtherData.AtkBounsAlways;
+        DefBounsAlways = OtherData.DefBounsAlways;
+        SpABounsAlways = OtherData.SpABounsAlways;
+        SpDBounsAlways = OtherData.SpDBounsAlways;
+        SpeBounsAlways = OtherData.SpeBounsAlways;
+        MoveSpwBounsAlways = OtherData.MoveSpwBounsAlways;
+        LuckBounsAlways = OtherData.LuckBounsAlways;
+
+        HPBounsJustOneRoom = OtherData.HPBounsJustOneRoom;
+        AtkBounsJustOneRoom = OtherData.AtkBounsJustOneRoom;
+        DefBounsJustOneRoom = OtherData.DefBounsJustOneRoom;
+        SpABounsJustOneRoom = OtherData.SpABounsJustOneRoom;
+        SpDBounsJustOneRoom = OtherData.SpDBounsJustOneRoom;
+        SpeBounsJustOneRoom = OtherData.SpeBounsJustOneRoom;
+        MoveSpeBounsJustOneRoom = OtherData.MoveSpeBounsJustOneRoom;
+        LuckBounsJustOneRoom = OtherData.LuckBounsJustOneRoom;
+
+        TypeDefAlways = OtherData.TypeDefAlways;
+        TypeDefJustOneRoom = OtherData.TypeDefJustOneRoom;
+        IsPassiveGetList = OtherData.IsPassiveGetList;
+        GetPassiveItemList = OtherData.GetPassiveItemList;
+
+
+    }
+
 
     private void Start()
     {
@@ -81,7 +132,7 @@ public class PlayerData : MonoBehaviour
         TypeDefJustOneRoom = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     }
 
-    public List<int> GetPassiveItemList = new List<int>();
+
 
 
 

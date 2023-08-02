@@ -18,7 +18,7 @@ public class PlayerUIState : MonoBehaviour
     bool IsFrozen = false;
 
     public Image ToxicImage;
-    Image ToxicObj;
+    public Image ToxicObj;
     bool IsToxic = false;
 
     public Image ParalysisImage;
@@ -90,6 +90,66 @@ public class PlayerUIState : MonoBehaviour
     Image CurseObj;
     bool IsCurse;
 
+
+    public void InstanceObjWhenEvlo(PlayerUIState OtherState)
+    {
+        IsSpeedDown = OtherState.IsSpeedDown;
+        IsBlinding = OtherState.IsBlinding;
+        IsFrozen = OtherState.IsFrozen;
+        IsToxic = OtherState.IsToxic;
+        IsParalysis = OtherState.IsParalysis;
+        IsBurn = OtherState.IsBurn;
+        IsSleep = OtherState.IsSleep;
+        IsFear = OtherState.IsFear;
+        IsEndure = OtherState.IsEndure;
+        IsConfusion = OtherState.IsConfusion;
+
+        IsInfatuation = OtherState.IsInfatuation;
+        IsAtkUp = OtherState.IsAtkUp;
+        IsAtkDown = OtherState.IsAtkDown;
+        IsDefUp = OtherState.IsDefUp;
+        IsDefDown = OtherState.IsDefDown;
+        IsSpAUp = OtherState.IsSpAUp;
+        IsSpADown = OtherState.IsSpADown;
+        IsSpDUp = OtherState.IsSpDUp;
+        IsSpDDown = OtherState.IsSpDDown;
+        IsCold = OtherState.IsCold;
+        IsCurse = OtherState.IsCurse;
+        for (int i = 0; i < transform.childCount; i++) {
+
+            Debug.Log(transform.childCount);
+            Sprite s = transform.GetChild(i).GetComponent<Image>().sprite;
+
+
+
+            if (IsSpeedDown && s == SpeedDownImage.sprite) { SpeedDownObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsBlinding && s == BlindingImage.sprite) { BlindingObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsFrozen && s == FrozenImage.sprite) { FrozenObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsToxic && s == ToxicImage.sprite) { 
+                ToxicObj = transform.GetChild(i).GetComponent<Image>();
+                Debug.Log(ToxicObj);
+            }
+            if (IsParalysis && s == ParalysisImage.sprite) { ParalysisObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsBurn && s == BurnImage.sprite) { BurnObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsSleep && s == SleepImage.sprite) { SleepObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsFear && s == FearImage.sprite) { FearObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsEndure && s == EndureImage.sprite) { EndureObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsConfusion && s == ConfusionImage.sprite) { ConfusionObj = transform.GetChild(i).GetComponent<Image>(); }
+
+            if (IsInfatuation && s == InfatuationImage.sprite) { InfatuationObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsAtkUp && s == AtkUpImage.sprite) { AtkUpObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsAtkDown && s == AtkDownImage.sprite) { AtkDownObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsDefUp && s == DefUpImage.sprite) { DefUpObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsDefDown && s == DefDownImage.sprite) { DefDownObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsSpAUp && s == SpAUpImage.sprite) { SpAUpObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsSpADown && s == SpADownImage.sprite) { SpADownObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsSpDUp && s == SpDUpImage.sprite) { SpDUpObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsSpDDown && s == SpDDownImage.sprite) { SpDDownObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsCold && s == ColdImage.sprite) { ColdObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (IsCurse && s == CurseImage.sprite) { CurseObj = transform.GetChild(i).GetComponent<Image>(); }
+
+        }
+    }
 
     /// <summary>
     /// 0¼õËÙ 1ÖÂÃ¤ 2±ù¶³ 3ÖÐ¶¾ 4Âé±Ô 5ÉÕÉË 6Ë¯Ãß 7¿Ö¾å 8ÆøÊÆÍ·´÷ 9»ìÂÒ 10×ÅÃÔ 11¹¥»÷ÉÏÉý 12¹¥»÷ÏÂ½µ 13·ÀÓùÉÏÉý 14·ÀÓùÏÂ½µ 15ÌØ¹¥ÉÏÉý 16ÌØ¹¥ÏÂ½µ 17ÌØ·ÀÉÏÉý 18ÌØ·ÀÏÂ½µ 19º®Àä 20:×çÖä

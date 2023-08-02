@@ -9,6 +9,11 @@ public class SubSkillList : MonoBehaviour
     public List<SubSkill> SubSList = new List<SubSkill> { };
     PlayerControler player;
 
+    public void CopyList(SubSkillList OtherList)
+    {
+        SubSList = OtherList.SubSList;
+    }
+
     private void Start()
     {
         player = GetComponent<PlayerControler>();
