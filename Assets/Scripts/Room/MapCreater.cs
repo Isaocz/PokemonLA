@@ -107,7 +107,11 @@ public class MapCreater : MonoBehaviour
         if(FloorNum.GlobalFloorNum != null)
         {
             //如果本剧游戏中已生成过梦幻房间，那么每层生成的概率为12%，如果还未生成，生成概率为(0.12f * Mathf.Pow(1.5f, 当前层数 - 1)));
-            isBornMewRoom = Random.Range(0.0f, 1.0f) <= (FloorNum.GlobalFloorNum.isMewRoomBeCreated ? 0.20f : (0.25f * Mathf.Pow(1.5f, FloorNum.GlobalFloorNum.FloorNumber - 1)));
+
+            float x = Random.Range(0.0f, 1.0f);
+            isBornMewRoom = x <= (FloorNum.GlobalFloorNum.isMewRoomBeCreated ? 0.20f : (0.25f * Mathf.Pow(1.5f, FloorNum.GlobalFloorNum.FloorNumber - 1)));
+            Debug.Log((FloorNum.GlobalFloorNum.isMewRoomBeCreated ? 0.20f : (0.25f * Mathf.Pow(1.5f, FloorNum.GlobalFloorNum.FloorNumber - 1))));
+            Debug.Log(x);
             //如果本剧游戏中已生成过Baby房间，那么不能再产生Baby房间，如果还未生成，生成概率为(0.3f - 0.1f * (当前层数 - 1))
             isBornBabyCenterRoom = Random.Range(0.0f, 1.0f) <= (FloorNum.GlobalFloorNum.isBabyCenterBeCreated ? 0 : (0.3f - 0.1f * (FloorNum.GlobalFloorNum.FloorNumber - 1)));
             //如果本剧游戏中已生成过Mint房间，那么不能再产生Mint房间，如果还未生成，生成概率为(0.3f - 0.1f * (当前层数 - 1))

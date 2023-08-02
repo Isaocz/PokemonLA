@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class PlayerControler : Pokemon
 {
@@ -21,7 +22,7 @@ public class PlayerControler : Pokemon
     protected GameObject EvoAnimaObj;
 
     //声明一个2D刚体组件，以获得小山猪的刚体组件
-    Rigidbody2D rigidbody2D;
+    new Rigidbody2D rigidbody2D;
 
     //声明两个变量，获取按键信息
     private float horizontal;
@@ -624,11 +625,14 @@ public class PlayerControler : Pokemon
         e.NowRoom = NowRoom;
         e.InANewRoom = InANewRoom;
         CopyState(e);
-        UnityEditorInternal.ComponentUtility.CopyComponent(playerData);
+        /*
+        UnityEditorInternal.ComponentUtility.CopyComponent(playerData); 
         UnityEditorInternal.ComponentUtility.PasteComponentValues(e.GetComponent<PlayerData>());
-        UnityEditorInternal.ComponentUtility.CopyComponent(playerSubSkillList);
+        UnityEditorInternal.ComponentUtility.CopyComponent(playerSubSkillList); 
         UnityEditorInternal.ComponentUtility.PasteComponentValues(e.GetComponent<SubSkillList>());
-
+        */
+        e.GetComponent<PlayerData>().CopyData(playerData);
+        e.GetComponent<SubSkillList>().CopyList(playerSubSkillList);
         GameObject EBaby = e.transform.GetChild(5).gameObject;
         if (transform.GetChild(5).GetChild(0).childCount > 0)
         {
@@ -649,6 +653,7 @@ public class PlayerControler : Pokemon
         e.NatureIndex = NatureIndex;
         e.Hp = (e.Level + 10 + (int)(((float)Level * e.HpPlayerPoint * 2) / 100.0f)) - (maxHp - Hp);
         Destroy(gameObject);
+        UISkillButton.Instance.isEscEnable = true;
     }
 
     public void AddASubSkill(SubSkill sub)

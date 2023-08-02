@@ -22,7 +22,7 @@ public class RandomDropItem : MonoBehaviour
 
     private void Start()
     {
-        float RandomPoint = Random.Range(0.0f, 1.25f);
+        float RandomPoint = Random.Range(0.0f, 1.33f);
 
         if (RandomPoint >= 0.00f && RandomPoint < 0.25f)
         {
@@ -68,7 +68,7 @@ public class RandomDropItem : MonoBehaviour
         {
             OutPut = Instantiate(FeatherRandom, transform.position, Quaternion.identity, transform);
         }
-        else if (RandomPoint >= 1.13f && RandomPoint <= 1.25f)
+        else if (RandomPoint >= 1.13f && RandomPoint <= 1.33f)
         {
             OutPut = Instantiate(SkillItem, transform.position, Quaternion.identity, transform);
         }

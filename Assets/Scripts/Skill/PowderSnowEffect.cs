@@ -34,6 +34,7 @@ public class PowderSnowEffect : MonoBehaviour
             }
             gameObject.transform.parent.GetComponent<MudSlup>().HitAndKo(target);
             IsFrozenDone = true;
+            
         }
     }
 }
