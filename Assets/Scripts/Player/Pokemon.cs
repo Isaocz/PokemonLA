@@ -119,7 +119,7 @@ public class Pokemon : MonoBehaviour
     }
 
     //获取 pokemon 主体的渲染组件
-    private List<SpriteRenderer> GetSkinRenderers()
+    public List<SpriteRenderer> GetSkinRenderers()
     {
         if (skinRenderers.Count > 0)
         {

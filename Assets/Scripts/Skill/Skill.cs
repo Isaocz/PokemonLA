@@ -90,7 +90,7 @@ public class Skill : MonoBehaviour
     //表示技能生成是否需要抬手，比如位移类技能需要在摁下摁键的那一刻开始位移，而射弹类节能会有一个抬手前摇
     public bool isImmediately;
 
-
+    
 
     //用于多端攻击的构造体
     protected struct EmptyList
