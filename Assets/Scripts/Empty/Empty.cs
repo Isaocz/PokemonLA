@@ -137,6 +137,7 @@ public class Empty : Pokemon
 
 
 
+
     //=============================初始化敌人数据================================
 
     /// <summary>
@@ -600,6 +601,7 @@ public class Empty : Pokemon
                 if (Weather.GlobalWeather.isHailPlus)
                 {
                     PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 16) * OtherStateResistance, 1, isBoos ? 8 : 10), 0, 0, Type.TypeEnum.IgnoreType);
+                    EmptyHailTimer = 0;
                 }
                 else
                 {
@@ -631,6 +633,7 @@ public class Empty : Pokemon
                 if (Weather.GlobalWeather.isSandstormPlus)
                 {
                     PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 8) * OtherStateResistance, 1, isBoos ? 16 : 20), 0, 0, Type.TypeEnum.IgnoreType);
+                    EmptySandStormTimer = 0;
                 }
                 else
                 {

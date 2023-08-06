@@ -15,7 +15,7 @@ public class PublicEffect : MonoBehaviour
     }
 
     /// <summary>
-    /// 需要获得的特效{0：会心的特效}
+    /// 需要获得的特效{0：会心的特效 1:保护的特效}
     /// </summary>
     /// <param name="EffectIndex"></param>
     /// <returns></returns>

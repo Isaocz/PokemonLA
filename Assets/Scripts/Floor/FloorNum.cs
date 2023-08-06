@@ -11,6 +11,7 @@ public class FloorNum : MonoBehaviour
 
     public bool isBabyCenterBeCreated;
     public bool isMewRoomBeCreated;
+    public bool isMewBeTalk;
     public bool isMintRoomBeCreated;
 
     private void Awake()

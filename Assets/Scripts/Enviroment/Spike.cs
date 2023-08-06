@@ -13,9 +13,10 @@ public class Spike : MonoBehaviour
         {
             PlayerControler playerControler = other.GetComponent<PlayerControler>();
             //playerControler.ChangeHp(-Damage, 0, 19);
-            Pokemon.PokemonHpChange(null, other.gameObject, Damage, 0, 0, Type.TypeEnum.IgnoreType);
+            
             if (playerControler != null && !playerControler.playerData.IsPassiveGetList[13])
             {
+                Pokemon.PokemonHpChange(null, other.gameObject, Damage, 0, 0, Type.TypeEnum.IgnoreType);
                 playerControler.KnockOutPoint = 1f;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
             }
