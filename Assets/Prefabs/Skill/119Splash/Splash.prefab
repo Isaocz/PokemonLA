@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &738156840718994690
+--- !u!1 &5829289848291074782
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,76 +8,60 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 738156840718994688}
-  - component: {fileID: 3397010213815565071}
-  - component: {fileID: 1276113803132451230}
+  - component: {fileID: 1557393993428577378}
+  - component: {fileID: 1682553479186110878}
   m_Layer: 0
-  m_Name: Growl
+  m_Name: Splash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &738156840718994688
+--- !u!4 &1557393993428577378
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 738156840718994690}
+  m_GameObject: {fileID: 5829289848291074782}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 5219639249315409632}
+  - {fileID: 5937591888826499878}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &3397010213815565071
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 738156840718994690}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 2.4
---- !u!114 &1276113803132451230
+--- !u!114 &1682553479186110878
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 738156840718994690}
+  m_GameObject: {fileID: 5829289848291074782}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8d1849567ae61c4695c285495cdf1ef, type: 3}
+  m_Script: {fileID: 11500000, guid: 2173de9b2f7a90d4db7d756b69fd177c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SkillIndex: 35
+  SkillIndex: 119
   player: {fileID: 0}
-  ExistenceTime: 2
+  baby: {fileID: 0}
+  ExistenceTime: 1.6
   Damage: 0
   SpDamage: 0
   IsDamageChangeable: 0
   animator: {fileID: 0}
-  MaxRange: 2.4
-  SkillType: 1
-  SkillName: Growl
-  SkillChineseName: "\u53EB\u58F0"
-  SkillDiscribe: "\u8BA9\u5BF9\u624B\u542C\u53EF\u7231\u7684\u53EB\u58F0\uFF0C\u5F15\u5F00\u6CE8\u610F\u529B\u4F7F\u5176\u758F\u5FFD\uFF0C\u4ECE\u800C\u964D\u4F4E\u5BF9\u624B\u7684\u653B\u51FB\u3002"
+  MaxRange: 0.5
+  SkillType: 11
+  SkillName: Splash
+  SkillChineseName: "\u8DC3\u8D77"
+  SkillDiscribe: "\u4E5F\u4E0D\u653B\u51FB\u53EA\u662F\u4E00\u8E66\u4E00\u8E66\u5730\u8DF3\uFF0C\u4EC0\u4E48\u90FD\u4E0D\u4F1A\u53D1\u751F\u2026\u2026"
   PlusSkillDiscribe: 
   PlusSkill: {fileID: 0}
   MinusSkill: {fileID: 0}
   KOPoint: 0
-  ColdDown: 2.8
+  ColdDown: 0.8
   CTLevel: 0
   SkillQualityLevel: 1
   SkillFrom: 0
@@ -88,7 +72,7 @@ MonoBehaviour:
   isMultipleDamage: 0
   MultipleDamageCDTime: 0
   isImmediately: 0
---- !u!1 &1525244873853895440
+--- !u!1 &8673450287046765120
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,39 +80,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5219639249315409632}
-  - component: {fileID: 5501532802968469751}
-  - component: {fileID: 3373547931008615020}
+  - component: {fileID: 5937591888826499878}
+  - component: {fileID: 3504490476422292347}
+  - component: {fileID: 3125910333249054491}
   m_Layer: 0
-  m_Name: GrowlPratical
+  m_Name: Splash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5219639249315409632
+--- !u!4 &5937591888826499878
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1525244873853895440}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 8673450287046765120}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 738156840718994688}
+  m_Father: {fileID: 1557393993428577378}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!198 &5501532802968469751
+--- !u!198 &3504490476422292347
 ParticleSystem:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1525244873853895440}
+  m_GameObject: {fileID: 8673450287046765120}
   serializedVersion: 8
-  lengthInSec: 1.5
+  lengthInSec: 0.8
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -203,7 +187,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.8
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -256,7 +240,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3
+      scalar: 7
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -371,9 +355,9 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     startSize:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0.3
-      minScalar: 1
+      minMaxState: 3
+      scalar: 0.8
+      minScalar: 0.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -424,7 +408,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeY:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -477,7 +461,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeZ:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -530,7 +514,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startRotationX:
       serializedVersion: 2
-      minMaxState: 3
+      minMaxState: 0
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -583,7 +567,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startRotationY:
       serializedVersion: 2
-      minMaxState: 3
+      minMaxState: 0
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -636,8 +620,8 @@ ParticleSystem:
         m_RotationOrder: 4
     startRotation:
       serializedVersion: 2
-      minMaxState: 3
-      scalar: 3.1415925
+      minMaxState: 0
+      scalar: 0
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -748,8 +732,8 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 10
-    angle: 25
+    type: 4
+    angle: 15
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
@@ -954,7 +938,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 14
+      scalar: 12
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -1060,7 +1044,7 @@ ParticleSystem:
     m_BurstCount: 0
     m_Bursts: []
   SizeModule:
-    enabled: 0
+    enabled: 1
     curve:
       serializedVersion: 2
       minMaxState: 1
@@ -1071,21 +1055,21 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 1
+          value: 0.39725667
+          inSlope: 0.12430539
+          outSlope: 0.12430539
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.33333334
+          outWeight: 0.16897687
         - serializedVersion: 3
           time: 1
           value: 1
-          inSlope: 1
-          outSlope: 0
+          inSlope: 1.4899881
+          outSlope: 1.4899881
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0.111551225
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -1222,7 +1206,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   RotationModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -1332,7 +1316,7 @@ ParticleSystem:
     curve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.7853982
+      scalar: 0.7853981
       minScalar: 0.7853982
       maxCurve:
         serializedVersion: 2
@@ -1569,7 +1553,7 @@ ParticleSystem:
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 21300000, guid: f58c64283deb34c45997b3aaf2087c75, type: 3}
+    - sprite: {fileID: 21300000, guid: 5e6e8f46e082ee14197a15322472c9b2, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:
@@ -2271,7 +2255,7 @@ ParticleSystem:
         m_RotationOrder: 4
     m_Range: {x: 0, y: 1}
   ForceModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -2328,7 +2312,7 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: -14
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -2431,7 +2415,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    inWorldSpace: 0
+    inWorldSpace: 1
     randomizePerFrame: 0
   ExternalForcesModule:
     serializedVersion: 2
@@ -4827,14 +4811,14 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!199 &3373547931008615020
+--- !u!199 &3125910333249054491
 ParticleSystemRenderer:
   serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1525244873853895440}
+  m_GameObject: {fileID: 8673450287046765120}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
