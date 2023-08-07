@@ -7,7 +7,7 @@ public class XszControler : PlayerControler
 
     public Skill Tackle;
     public Skill MudSlup;
-    public Skill TestSkill01;
+    //public Skill TestSkill01;
     //public Skill TestSkill02;
 
 
@@ -24,7 +24,7 @@ public class XszControler : PlayerControler
 
         Skill01 = Tackle;
         Skill02 = MudSlup;
-        Skill03 = TestSkill01;
+        //Skill03 = TestSkill01;
         //Skill04 = TestSkill02;
 
         skillBar01.GetSkill(Skill01);
