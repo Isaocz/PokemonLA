@@ -9,6 +9,8 @@ public class TakeDown : Skill
     Vector2 Direction;
     public GameObject TackleBlast;
 
+    bool MoveStop;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,10 +26,12 @@ public class TakeDown : Skill
     void Update()
     {
         StartExistenceTimer();
-        Vector2 postion = PlayerRigibody.position;
-        postion.x += Direction.x * 2.5f * player.speed * Time.deltaTime;
-        postion.y += Direction.y * 2.5f * player.speed * Time.deltaTime;
-        PlayerRigibody.position = postion;
+        if (!MoveStop) {
+            Vector2 postion = PlayerRigibody.position;
+            postion.x += Direction.x * 2.5f * player.speed * Time.deltaTime;
+            postion.y += Direction.y * 2.5f * player.speed * Time.deltaTime;
+            PlayerRigibody.position = postion; 
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -37,6 +41,11 @@ public class TakeDown : Skill
             Empty target = other.GetComponent<Empty>();
             Instantiate(TackleBlast, target.transform.position, Quaternion.identity );
             HitAndKo(target);
+        }
+        if (other.tag == "Enviroment" || other.tag == "Room")
+        {
+            MoveStop = true;
+            ExistenceTime = 0.01f;
         }
     }
 

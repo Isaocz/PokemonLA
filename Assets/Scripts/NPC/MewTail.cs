@@ -23,6 +23,15 @@ public class MewTail : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+
+
+
+
+
+
+
+
         switch (Random.Range(0,4))
         {
             case 0: Director = Vector2Int.up; break;

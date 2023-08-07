@@ -6,6 +6,7 @@ public class SkillColliderRangeChangeByTime : MonoBehaviour
 {
     public float FadeInTime; 
     public float FadeOutTime;
+    public float StartDelay;
 
     CircleCollider2D Collider2D;
     float MaxCollider2DRadius;
@@ -32,8 +33,10 @@ public class SkillColliderRangeChangeByTime : MonoBehaviour
     void Update()
     {
         Timer -= Time.deltaTime;
-        if (Timer <= FadeOutTime) { Collider2D.radius = Mathf.Clamp(Collider2D.radius - ((Time.deltaTime) * MaxCollider2DRadius) / FadeOutTime, 0, MaxCollider2DRadius); }
-        else { Collider2D.radius = Mathf.Clamp(Collider2D.radius + ((Time.deltaTime)   * MaxCollider2DRadius)/ FadeInTime, 0, MaxCollider2DRadius); }
+        if (Timer < Duration - StartDelay) {
+            if (Timer <= FadeOutTime) { Collider2D.radius = Mathf.Clamp(Collider2D.radius - ((Time.deltaTime) * MaxCollider2DRadius) / FadeOutTime, 0, MaxCollider2DRadius); }
+            else { Collider2D.radius = Mathf.Clamp(Collider2D.radius + ((Time.deltaTime) * MaxCollider2DRadius) / FadeInTime, 0, MaxCollider2DRadius); }
+        }
     }
 
 }

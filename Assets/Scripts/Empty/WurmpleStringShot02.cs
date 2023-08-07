@@ -23,8 +23,9 @@ public class WurmpleStringShot02 : MonoBehaviour
     {
         if (!isProjectelParentInfatuation && other.tag == ("Player"))
         {
-            if (other.GetComponent<PlayerControler>() != null)
+            if (other.GetComponent<PlayerControler>() != null && !other.GetComponent<PlayerControler>().playerData.IsPassiveGetList[13])
             {
+                
                 other.GetComponent<PlayerControler>().SpeedChange();
             }
         }

@@ -5,6 +5,20 @@ using UnityEngine.UI;
 
 public class Room : MonoBehaviour
 {
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
     //获取墙和门的预制件
     public int RoomNum;
     public GameObject Wallv;
@@ -52,6 +66,10 @@ public class Room : MonoBehaviour
 
     private void Start()
     {
+
+
+
+
         if (RoomTag == 0 || RoomTag == 3) {
             Empty = gameObject.transform.GetChild(3).gameObject;
         }
