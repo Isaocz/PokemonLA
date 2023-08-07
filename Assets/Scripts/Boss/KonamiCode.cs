@@ -32,6 +32,16 @@ public class KonamiCode : MonoBehaviour
     {
         // 在这里编写触发效果的代码
         Debug.Log("Konami Code triggered!");
+        GameObject mewPrefab = Resources.Load<GameObject>("Mew"); // 加载Mew预制件
+        if (mewPrefab != null)
+        {
+            Instantiate(mewPrefab, transform.position, transform.rotation);
+            Destroy(gameObject); // 销毁当前的MewNPC对象
+        }
+        else
+        {
+            Debug.LogError("Failed to load Mew!");
+        }
     }
 }
 
