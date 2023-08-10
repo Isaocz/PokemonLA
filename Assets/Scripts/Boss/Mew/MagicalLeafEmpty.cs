@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -24,6 +25,10 @@ public class MagicalLeafEmpty : Projectile
         {
             // 根据目标的位置朝向目标移动
             transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            // 更新朝向
+            Vector3 direction = target.position - transform.position;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
 
         timer -= Time.deltaTime; // 更新计时器

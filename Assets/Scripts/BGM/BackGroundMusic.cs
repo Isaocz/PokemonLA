@@ -13,6 +13,7 @@ public class BackGroundMusic : MonoBehaviour
     public AudioClip Store;
     public AudioClip Boss;
     public AudioClip BossWin;
+    public AudioClip FightMew;
 
 
     private void Awake()
@@ -48,5 +49,9 @@ public class BackGroundMusic : MonoBehaviour
     public void ChangeBGMToBossWin()
     {
         if (BGM.clip != BossWin) { BGM.clip = BossWin; BGM.Play(); }
+    }
+    public void ChangeBGMToMew()
+    {
+        if (BGM.clip != FightMew) { BGM.clip =  FightMew; BGM.Play();}
     }
 }
