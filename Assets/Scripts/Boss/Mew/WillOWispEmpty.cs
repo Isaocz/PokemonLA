@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WillOWispEmpty : Projectile
+public class WillOWispEmpty : MonoBehaviour
 {
     public float moveSpeed;
     private Vector3 moveDirection;
+    public GameObject mew;
 
     private void Update()
     {
@@ -16,7 +17,7 @@ public class WillOWispEmpty : Projectile
         if (collision.tag == "Player")
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Fire);
+            Pokemon.PokemonHpChange(mew, playerControler.gameObject, 0, 60, 0, Type.TypeEnum.Fire);
             playerControler.BurnFloatPlus(0.4f);
             Destroy(gameObject); // Ïú»ÙWillOWisp¶ÔÏó
         }

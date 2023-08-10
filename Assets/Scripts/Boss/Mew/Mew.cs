@@ -4,37 +4,57 @@ using UnityEngine;
 
 public class Mew : Empty
 {
-    public bool isEmptyU = true;
-    public bool isEmptyD = true;
-    public bool isEmptyL = true;
-    public bool isEmptyR = true;
-    Vector2 position;
-    Vector2Int direction;
-
     public GameObject magicalLeafPrefab;//技能1
     public float delayBetweenLeaves = 0.3f; // 每片MagicalLeaf之间的延迟时间
     int Leafnum;//魔法叶数量
     public GameObject blizzardPrefab;//技能2
     public GameObject WillOWispPrefab;//技能3
     public int numWillOWisp = 12; // WillOWisp的数量
-    public float radius = 2f; // WillOWisp的生成半径
+    public float WillOWispRadius = 2f; // WillOWisp的生成半径
     public float moveSpeed = 4f; // WillOWisp的移动速度
+    public GameObject PlayNicePrefab;//技能4
+    public GameObject TeraBlastPrefab;//技能5
+    public float laserLength = 10f; // 激光的长度
+    public float laserOffset = 1f; // 激光的偏移量
+    public LayerMask obstacleLayer;
+    public GameObject CursePrefab;//技能6
+    public GameObject MagicalFirePrefab;//技能7
+    public GameObject IcicleSpearPrefab;//技能8
+    public float summonRadius = 5f;
+    public int icicleCount = 8;
+    public float delayBetweenExecutions = 1f;
+    public int numExecutions = 3;
+    public GameObject HeartStampPrefab;//技能9
+    public float HeartStampRadius=1.5f;
+    public int heartStampCount = 8;
+    public GameObject reticlePrefab; //Reticle预制体
+    public GameObject ScaleShotPrefab; //技能10
+    public int scaleShotCount;
+    public GameObject MeanLookPrefab;//技能11
+    public GameObject DazzlingGleamPrefab;//技能12
 
-    public float skillCooldown = 4f; // 技能冷却时间，单位为秒
-
+    float skillCooldown;
+    //Audio
+    public BackGroundMusic bgmScript;
+    //阶段
     private int currentPhase = 1; // 当前阶段
     private float skillTimer = 0f; // 技能计时器
+    private List<GameObject> heartStamps = new List<GameObject>();//对HeartStamp进行存储
     // Start is called before the first frame update
     void Start()
     {
+        //Audio
+        bgmScript = BackGroundMusic.StaticBGM;
+
+        //梦幻的基础属性
         EmptyType01 = Type.TypeEnum.Psychic;//梦幻的属性为超能
         EmptyType02 = 0;
         player = GameObject.FindObjectOfType<PlayerControler>();//获取玩家
         Emptylevel = SetLevel(player.Level, 100);//上限等级100
         EmptyHpForLevel(Emptylevel);//设置初始血量
-        
 
-        AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);//能力等级
+        //能力等级
+        AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);
         SpAAbilityPoint = AbilityForLevel(Emptylevel, SpAEmptyPoint);
         DefAbilityPoint = AbilityForLevel(Emptylevel, DefEmptyPoint);
         SpdAbilityPoint = AbilityForLevel(Emptylevel, SpdEmptyPoint);
@@ -43,7 +63,6 @@ public class Mew : Empty
 
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
-        direction = new Vector2Int(0, -1);
     }
 
     // Update is called once per frame
@@ -53,6 +72,7 @@ public class Mew : Empty
         if (!isBorn)
         {
             UpdateEmptyChangeHP();
+            bgmScript.ChangeBGMToMew();
             if (currentPhase == 3)
             {
                 EmptyDie();
@@ -84,15 +104,13 @@ public class Mew : Empty
         {
             // 随机选择一个技能释放
             RamdomTeleport();
-            int randomSkillIndex = Random.Range(1, 5);
+            int randomSkillIndex = Random.Range(1, 13);
             UseSkill(randomSkillIndex);
-
-            // 重置技能计时器
-            skillTimer = skillCooldown;
+            SkillTimerUpdate(randomSkillIndex, 1);
         }
 
         // 技能计时器递减
-        skillTimer -= Time.deltaTime;
+            skillTimer -= Time.deltaTime;
     }
     void Phase2()
     {
@@ -154,7 +172,7 @@ public class Mew : Empty
                 GameObject blizzard = Instantiate(blizzardPrefab, transform.position, Quaternion.identity);
                 Destroy(blizzard, 6f);//6秒后销毁暴风雪对象
                 break;
-            case 3:
+            case 3://技能3：磷火
                 StartCoroutine(ReleaseWillOWisp());
                 IEnumerator ReleaseWillOWisp()
                 {
@@ -164,7 +182,7 @@ public class Mew : Empty
                         for (int i = 0; i < numWillOWisp; i++)
                         {
                             float angle = i * angleStep; // 计算当前WillOWisp的角度
-                            Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * radius; // 计算当前WillOWisp的生成位置
+                            Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * WillOWispRadius; // 计算当前WillOWisp的生成位置
                             GameObject willOWisp = Instantiate(WillOWispPrefab, spawnPos, Quaternion.identity);
                             Vector3 direction = (spawnPos - transform.position).normalized;
                             willOWisp.GetComponent<WillOWispEmpty>().Initialize(moveSpeed, direction); // 设置WillOWisp的移动速度
@@ -174,6 +192,186 @@ public class Mew : Empty
                     }
                 }
                 break;
+            case 4://技能4：和睦相处
+                GameObject PlayNice = Instantiate(PlayNicePrefab, transform.position, Quaternion.identity);
+                Destroy(PlayNice, 5f);
+                break;
+            case 5://技能5：太晶爆发
+                //释放3道激光，分别位于90度、210度、330度的位置
+                transform.position = transform.parent.position;
+                //创建三条激光
+                float[] angles = { 90f, 210f, 330f };
+                for (int i = 0; i < angles.Length; i++)
+                {
+                    //计算激光的起始点和终点
+                    float angle = angles[i];
+                    Vector3 startPoint = transform.parent.position;
+                    Vector3 endPoint = new Vector3(15f * Mathf.Cos(Mathf.Deg2Rad * angle), 15f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
+                    GameObject Terablast = Instantiate(TeraBlastPrefab, startPoint, Quaternion.identity);
+                    TeraBlastEmpty terablast = Terablast.GetComponent<TeraBlastEmpty>();
+                    terablast.SetEndpoints(startPoint, endPoint, angle);
+                    terablast.SetColors(Color.yellow, Color.red);
+                }
+                break;
+            case 6://技能6：咒术
+                StartCoroutine(ReleaseCurse());
+                IEnumerator ReleaseCurse()
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        GameObject Curse = Instantiate(CursePrefab, player.transform.position, Quaternion.identity);
+                        Destroy(Curse, 4f);
+                        yield return new WaitForSeconds(0.6f);
+                    }
+                }
+                break;
+            case 7://技能7：魔法火焰
+                StartCoroutine(ReleaseMagicalFire());
+                IEnumerator ReleaseMagicalFire()
+                {
+                    float angleIncrement = 360f / 8;
+                    float rotationSpeed = 60f;
+                    for (int j = 0; j < 3; j++) {
+                        for (int i = 0; i < 8; i++)
+                        {
+                            float angle = i * angleIncrement;
+                            Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+
+                            GameObject magicalFire = Instantiate(MagicalFirePrefab, transform.position, rotation);
+                            MagicalFireEmpty magicalFireScript = magicalFire.GetComponent<MagicalFireEmpty>();
+                            magicalFireScript.ps(transform.position, rotationSpeed);
+                            Destroy(magicalFire, 7f);
+
+                        }
+                        yield return new WaitForSeconds(1f);
+                    }
+                }
+                break;
+
+            case 8://技能8：冰锥
+                StartCoroutine(SummonIcicleSpears());
+                break;
+            case 9://技能9：爱心印章
+                StartCoroutine(ReleaseHeartStamp());
+                IEnumerator ReleaseHeartStamp()
+                {
+                    for (int j = 0; j < 3; j++) {
+                        float angleIncrement = 360f / heartStampCount;
+                        for (int i = 0; i < heartStampCount; i++)
+                        {
+                            float angle = i * angleIncrement;
+                            Vector3 heartStampPosition = transform.position + new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle), 0f) * HeartStampRadius;
+
+                            GameObject heartStamp = Instantiate(HeartStampPrefab, heartStampPosition, Quaternion.identity);
+                            heartStamps.Add(heartStamp);
+                            HeartStampEmpty heartStampMovement = heartStamp.GetComponent<HeartStampEmpty>();
+
+                            if (heartStampMovement != null)
+                            {
+                                heartStampMovement.SetTarget(player.transform.position);
+                            }
+                        }
+                        yield return new WaitForSeconds(1.5f);
+                    }
+                }
+                break;
+            case 10://技能10：鳞射
+                // 生成ScaleShot
+                StartCoroutine(ReleaseScaleShoot());
+                IEnumerator ReleaseScaleShoot()
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        Vector3 randomPoint = (Vector2)player.transform.position + Random.insideUnitCircle.normalized * 3f;
+                        // 创建Reticle并设置位置
+                        GameObject reticle = Instantiate(reticlePrefab, randomPoint, Quaternion.identity);
+                        Destroy(reticle, 2f);
+                        yield return new WaitForSeconds(1.5f);
+                        for (int i = 0; i < scaleShotCount; i++)
+                        {
+                            // 计算ScaleShot生成的位置和方向
+                            Vector3 scaleShotPosition = randomPoint;
+                            float angleIncrement = 360f / scaleShotCount;
+                            float angle = i * angleIncrement;
+                            Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+
+                            // 创建ScaleShot
+                            GameObject scaleShot = Instantiate(ScaleShotPrefab, scaleShotPosition, rotation);
+
+                            // 由于ScaleShot生成后方向不同，所以需要给ScaleShot添加一个控制移动的脚本
+                            ScaleShotEmpty scaleShotMovement = scaleShot.GetComponent<ScaleShotEmpty>();
+                        }
+                    }
+                }
+                break;
+                case 11: //技能11：黑色目光
+                StartCoroutine(ReleaseMeanLook());
+                IEnumerator ReleaseMeanLook()
+                {
+                    yield return new WaitForSeconds(1f);
+                    GameObject blackCircle = Instantiate(MeanLookPrefab, player.transform.position, Quaternion.identity);
+
+                    // 获取黑色圆的半径
+                    float circleRadius = blackCircle.GetComponent<CircleCollider2D>().radius;
+
+                    // 在黑色圆范围内限制玩家的移动
+                    while (blackCircle != null)
+                    {
+                        // 计算玩家与黑色圆的距离
+                        float distance = Vector2.Distance(player.transform.position, blackCircle.transform.position);
+
+                        if (distance > circleRadius)
+                        {
+                            // 如果玩家距离黑色圆的距离大于圆半径，则将玩家移动回黑色圆的范围内
+                            Vector3 direction = (player.transform.position - blackCircle.transform.position).normalized;
+                            player.transform.position = blackCircle.transform.position + direction * circleRadius;
+                        }
+
+                        yield return null;
+                    }
+                }
+                break;
+            case 12:
+                GameObject dazzlingGleam = Instantiate(DazzlingGleamPrefab, transform.position, Quaternion.identity);
+                Destroy(dazzlingGleam, 5f);
+                // 在3.5秒后对圈内的玩家造成伤害
+                StartCoroutine(DamagePlayersWithDelay());
+                IEnumerator DamagePlayersWithDelay()
+                {
+                    yield return new WaitForSeconds(3.5f);
+
+                    // 获取圈内的玩家并对其造成伤害
+                    Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 5.85f);
+                    foreach (Collider2D collider in colliders)
+                    {
+                        // 判断碰撞体是否属于玩家
+                        PlayerControler playerinside = collider.GetComponent<PlayerControler>();
+                        if (playerinside != null)
+                        {
+                            Pokemon.PokemonHpChange(this.gameObject, playerinside.gameObject, 0, 120, 0, Type.TypeEnum.Fairy);
+                        }
+                    }
+                }
+                break;
+
+        }
+    }
+    void SkillTimerUpdate(int skillindex, int stage)//技能重置时间调整
+    {
+        switch (skillindex)
+        {
+            case 1:if(stage == 1)skillTimer = 2.4f;break;
+            case 2:if(stage == 1)skillTimer = 1.5f;break;
+            case 3:if (stage == 1) skillTimer = 3f;break;
+            case 4:if (stage == 1)skillTimer = 1.5f;break;
+            case 5:if (stage == 1)skillTimer = 4.7f;break;
+            case 6:if (stage == 1)skillTimer = 2.9f;break;
+            case 7:if (stage == 1) skillTimer = 2.6f;break;
+            case 8: if (stage == 1) skillTimer = 4.5f; break;
+            case 9: if (stage == 1) skillTimer = 4.5f; break;
+            case 10: if (stage == 1) skillTimer = 4.5f; break;
+            case 11: if (stage == 1) skillTimer = 2f; break;
+            case 12: if (stage == 1) skillTimer = 3.2f; break;
         }
     }
     void RamdomTeleport()
@@ -203,6 +401,24 @@ public class Mew : Empty
             transform.position = randomPosition;
         }
     }
+
+    private IEnumerator SummonIcicleSpears()
+    {
+        for (int execution = 0; execution < numExecutions; execution++)
+        {
+            for (int i = 0; i < icicleCount; i++)
+            {
+                float angle = i * (360f / icicleCount);
+                Vector2 spawnPosition = player.transform.position + (Quaternion.Euler(0f, 0f, angle) * Vector2.right * summonRadius);
+                GameObject IcicleSpear = Instantiate(IcicleSpearPrefab, spawnPosition, Quaternion.identity);
+
+                IcicleSpearEmpty icicleSpear = IcicleSpear.GetComponent<IcicleSpearEmpty>();
+                icicleSpear.sf(player.transform.position);
+            }
+            yield return new WaitForSeconds(delayBetweenExecutions);
+        }
+    }
+
     void ClearStatusEffects()
     {
         // 在这里编写清除异常状态的代码

@@ -23,7 +23,7 @@ public class BlizzardEmpty : Projectile
             // 对玩家造成伤害
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
             Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Ice);
-            playerControler.Frozen(2f, 0.4f, 0);
+            playerControler.Frozen(2f, 0.4f, 1);
         }
     }
 }
