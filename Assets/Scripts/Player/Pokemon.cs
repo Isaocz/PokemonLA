@@ -303,7 +303,7 @@ public class Pokemon : MonoBehaviour
 
     }
     //只可被上一个函数延迟调用，代表速度害怕的函数
-    void FearRemove()
+    public void FearRemove()
     {
         if (isFearStart)
         {
@@ -464,7 +464,7 @@ public class Pokemon : MonoBehaviour
             }
         }
     }
-    void EmptyBurnRemove()
+    public void EmptyBurnRemove()
     {
         if (isBurnDone)
         {
@@ -1170,7 +1170,6 @@ public class Pokemon : MonoBehaviour
     /// </summary>
     public void ColdRemove()
     {
-        Debug.Log(isColdDown);
         if (isColdDown != 0)
         {
             if (GetComponent<Empty>() != null)
