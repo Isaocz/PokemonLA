@@ -30,8 +30,19 @@ public class Mew : Empty
     public GameObject reticlePrefab; //Reticle预制体
     public GameObject ScaleShotPrefab; //技能10
     public int scaleShotCount;
+    public GameObject MeanLookSE;//黑色目光特效
     public GameObject MeanLookPrefab;//技能11
     public GameObject DazzlingGleamPrefab;//技能12
+    public GameObject LeafBladePrefab; // 技能13
+    public float shootInterval = 0.3f; // 发射间隔
+    public int shootCount = 10; // 发射次数
+    public GameObject stoneEdgePrefab;//技能14
+    private Vector3 mapCenter;  // 地图中心点
+    private Vector3 reticleSpawnPosition; // Reticle生成位置
+    public GameObject AirSlashPrefab;//技能15
+    public GameObject MakeItRainPrefab;//技能16
+    public GameObject StickyWebPrefab;//技能17
+    public GameObject CrossPoisonPrefab;//技能18
 
     float skillCooldown;
     //Audio
@@ -40,6 +51,9 @@ public class Mew : Empty
     private int currentPhase = 1; // 当前阶段
     private float skillTimer = 0f; // 技能计时器
     private List<GameObject> heartStamps = new List<GameObject>();//对HeartStamp进行存储
+    //随机传送计数器
+    private int teleportAttempts = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -63,6 +77,9 @@ public class Mew : Empty
 
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
+
+        //地图
+        mapCenter = transform.parent.position;
     }
 
     // Update is called once per frame
@@ -73,6 +90,7 @@ public class Mew : Empty
         {
             UpdateEmptyChangeHP();
             bgmScript.ChangeBGMToMew();
+            ClearStatusEffects();
             if (currentPhase == 3)
             {
                 EmptyDie();
@@ -93,18 +111,17 @@ public class Mew : Empty
     }
     void Phase1()
     {
-        if (EmptyHp <= 0)
+        if (EmptyHp <= maxHP/4)
         {
             currentPhase++;
             Debug.Log("进入二阶段");
-            EmptyHp = CalculateBossHealth();
-            ClearStatusEffects();
+            EmptyHp = maxHP;
         }
         else if (skillTimer <= 0f)
         {
             // 随机选择一个技能释放
             RamdomTeleport();
-            int randomSkillIndex = Random.Range(1, 13);
+            int randomSkillIndex = Random.Range(1, 19);
             UseSkill(randomSkillIndex);
             SkillTimerUpdate(randomSkillIndex, 1);
         }
@@ -118,8 +135,7 @@ public class Mew : Empty
         {
             currentPhase++;
             Debug.Log("进入三阶段");
-            EmptyHp = 1;
-            ClearStatusEffects();
+            EmptyHp = maxHP;
         }
         else if (skillTimer <= 0f)
         {
@@ -297,32 +313,31 @@ public class Mew : Empty
 
                             // 创建ScaleShot
                             GameObject scaleShot = Instantiate(ScaleShotPrefab, scaleShotPosition, rotation);
-
-                            // 由于ScaleShot生成后方向不同，所以需要给ScaleShot添加一个控制移动的脚本
-                            ScaleShotEmpty scaleShotMovement = scaleShot.GetComponent<ScaleShotEmpty>();
                         }
                     }
                 }
                 break;
                 case 11: //技能11：黑色目光
+                GameObject MeanLookse = Instantiate(MeanLookSE, transform.position, Quaternion.identity);
+                Destroy(MeanLookse, 1f);
                 StartCoroutine(ReleaseMeanLook());
                 IEnumerator ReleaseMeanLook()
                 {
                     yield return new WaitForSeconds(1f);
                     GameObject blackCircle = Instantiate(MeanLookPrefab, player.transform.position, Quaternion.identity);
 
-                    // 获取黑色圆的半径
+                    // 获取黑色目光的半径
                     float circleRadius = blackCircle.GetComponent<CircleCollider2D>().radius;
 
-                    // 在黑色圆范围内限制玩家的移动
+                    // 在黑色目光内限制玩家的移动
                     while (blackCircle != null)
                     {
-                        // 计算玩家与黑色圆的距离
+                        // 计算玩家与黑色目光的距离
                         float distance = Vector2.Distance(player.transform.position, blackCircle.transform.position);
 
                         if (distance > circleRadius)
                         {
-                            // 如果玩家距离黑色圆的距离大于圆半径，则将玩家移动回黑色圆的范围内
+                            // 如果玩家距离黑色目光的距离大于圆半径，则将玩家移动回黑色目光的范围内
                             Vector3 direction = (player.transform.position - blackCircle.transform.position).normalized;
                             player.transform.position = blackCircle.transform.position + direction * circleRadius;
                         }
@@ -331,7 +346,7 @@ public class Mew : Empty
                     }
                 }
                 break;
-            case 12:
+            case 12://技能12：魔法闪耀
                 GameObject dazzlingGleam = Instantiate(DazzlingGleamPrefab, transform.position, Quaternion.identity);
                 Destroy(dazzlingGleam, 5f);
                 // 在3.5秒后对圈内的玩家造成伤害
@@ -353,6 +368,115 @@ public class Mew : Empty
                     }
                 }
                 break;
+            case 13://技能13：叶刃
+                StartCoroutine(ReleaseLeafBlade());
+                IEnumerator ReleaseLeafBlade()
+                {
+                    for (int i = 0; i < shootCount; i++)
+                    {
+                        // 实例化LeafBlade
+                        GameObject LeafBlade = Instantiate(LeafBladePrefab, transform.position, Quaternion.identity);
+                        // 等待发射间隔
+                        yield return new WaitForSeconds(shootInterval);
+                    }
+                }
+                break;
+            case 14://技能14：尖石攻击
+                StartCoroutine(ReleaseStoneEdge());
+                IEnumerator ReleaseStoneEdge()
+                {
+                    for (int i = 0; i< 2; i++)
+                    {
+                        float mapLength = 26f;
+                        //选择一个不生成StoneEdge的位置
+                        int emptyPosition = Random.Range(1, 14);
+                        for (int j = 1; j <= 13; j++)
+                        {
+                            if (j != emptyPosition)
+                            {
+                                // 生成Reticle的位置
+                                float spaceLength = mapLength / 13f;
+                                float startX = mapCenter.x + (j - 7) * spaceLength;
+                                reticleSpawnPosition = new Vector3(startX, mapCenter.y, mapCenter.z);
+
+                                // 生成Reticle
+                                GameObject reticle = Instantiate(reticlePrefab, reticleSpawnPosition, Quaternion.identity);
+                                Destroy(reticle, 2f);
+                                //生成尖石
+                                Vector3 StoneEdgeSpawnPosition = new Vector3(reticleSpawnPosition.x, reticleSpawnPosition.y + 14f, reticleSpawnPosition.z);
+                                GameObject stoneEdge = Instantiate(stoneEdgePrefab, StoneEdgeSpawnPosition, Quaternion.identity);
+                            }
+                        }
+                        yield return new WaitForSeconds(5f);
+                    }
+                }
+                break;
+            case 15://技能15：空气之刃
+                StartCoroutine(ReleaseAirSlash());
+                IEnumerator ReleaseAirSlash()
+                {
+                    //每次释放空气之刃后等待1.3f
+                    for(int i = 0;i< 3;i++)
+                    {
+                        GameObject airSlash = Instantiate(AirSlashPrefab, transform.position, Quaternion.identity);
+                        yield return new WaitForSeconds(1.3f);
+                    }
+                }
+                break;
+            case 16://技能16：淘金潮
+                transform.position = transform.parent.position;
+                StartCoroutine(ReleaseMakeItRain());
+                IEnumerator ReleaseMakeItRain()
+                {
+                    float angle = 0f;
+                    float angleIncrement = 8f;
+                    for (int i = 0; i < 100; i++)
+                    {
+                        for (int j = 0; j < 3; j++)
+                        {
+                            float currentAngle = angle + j * 120f;
+                            Vector3 direction = Quaternion.Euler(0f, 0f, currentAngle) * Vector3.up;
+                            GameObject makeitrain = Instantiate(MakeItRainPrefab, transform.position, Quaternion.identity);
+                            MakeItRainEmpty Makeitrain = makeitrain.GetComponent<MakeItRainEmpty>();
+                            Makeitrain.MIRrotate(direction);
+                        }
+                        angle += angleIncrement;
+                        yield return new WaitForSeconds(0.07f);
+                    }
+                }
+                break;
+            case 17://技能17：黏黏网
+                for(int i = 0; i < 5; i++)
+                {
+                    Vector3 randomPosition = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
+                    GameObject StickyWeb = Instantiate(StickyWebPrefab, randomPosition, Quaternion.identity);
+                }
+                break;
+            case 18://技能18：十字毒刃
+                StartCoroutine(ReleaseCrossPoison());
+                IEnumerator ReleaseCrossPoison()
+                {
+                    //释放技能后等待的时间
+                    yield return new WaitForSeconds(1f);
+                    float angle = 0f;
+                    float angleIncrement = 45f;
+                    for (int i= 0; i < 4; i++)
+                    {
+                        for (int j = 0; j < 4; j++)
+                        {
+                            float currentAngle = angle + j * 90f;
+                            Vector3 direction = Quaternion.Euler(0f, 0f, currentAngle) * Vector3.up;
+                            GameObject crossPoison = Instantiate(CrossPoisonPrefab, transform.position, Quaternion.identity);
+                            CrossPoisonEmpty crosspoison = crossPoison.GetComponent<CrossPoisonEmpty>();
+                            crosspoison.CProtate(direction);
+                        }
+                        //技能间隔等待时间
+                        angle += angleIncrement;
+                        yield return new WaitForSeconds(1f);
+                    }
+                }
+                break;
+
 
         }
     }
@@ -368,14 +492,27 @@ public class Mew : Empty
             case 6:if (stage == 1)skillTimer = 2.9f;break;
             case 7:if (stage == 1) skillTimer = 2.6f;break;
             case 8: if (stage == 1) skillTimer = 4.5f; break;
-            case 9: if (stage == 1) skillTimer = 4.5f; break;
-            case 10: if (stage == 1) skillTimer = 4.5f; break;
+            case 9: if (stage == 1) skillTimer = 4.8f; break;
+            case 10: if (stage == 1) skillTimer = 4.3f; break;
             case 11: if (stage == 1) skillTimer = 2f; break;
-            case 12: if (stage == 1) skillTimer = 3.2f; break;
+            case 12: if (stage == 1) skillTimer = 3.7f; break;
+            case 13: if (stage == 1) skillTimer = 3.3f; break;
+            case 14: if (stage == 1) skillTimer = 10f; break;
+            case 15: if (stage == 1) skillTimer = 4.2f; break;
+            case 16: if (stage == 1) skillTimer = 9f; break;
+            case 17: if (stage == 1) skillTimer = 1.8f; break;
+            case 18: if (stage == 1) skillTimer = 10f; break;
         }
     }
     void RamdomTeleport()
     {
+        teleportAttempts++;
+        if (teleportAttempts > 150)
+        {
+            // 如果尝试次数超过150次，则取消随机传送
+            Debug.Log("没有成功找到合适的传送位置");
+            return;
+        }
         // 在房间内随机选择一个位置
         Vector3 randomPosition = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
 
@@ -385,6 +522,13 @@ public class Mew : Empty
         foreach (Collider2D collider in colliders)
         {
             if (collider.CompareTag("Room") || collider.CompareTag("Enviroment"))
+            {
+                collided = true;
+                break;
+            }
+            float playerRadius = 3f;
+            float distanceToPlayer = Vector3.Distance(randomPosition, player.transform.position);
+            if (distanceToPlayer <= playerRadius)
             {
                 collided = true;
                 break;
@@ -399,6 +543,8 @@ public class Mew : Empty
         {
             //反之进行瞬间移动
             transform.position = randomPosition;
+            //更新计数器
+            teleportAttempts = 0;
         }
     }
 
@@ -421,9 +567,17 @@ public class Mew : Empty
 
     void ClearStatusEffects()
     {
-        // 在这里编写清除异常状态的代码
-        isSilence = false;
-        Debug.Log("Boss cleared status effects");
+        //清除所有debuff
+        this.EmptyCurseRemove();
+        this.ColdRemove();
+        this.EmptyConfusionRemove();
+        this.EmptyInfatuationRemove();
+        this.EmptyParalysisRemove();
+        this.EmptySleepRemove();
+        this.EmptyBurnRemove();
+        this.BlindRemove();
+        this.FearRemove();
+        this.FrozenRemove();
     }
     int CalculateBossHealth()
     {
