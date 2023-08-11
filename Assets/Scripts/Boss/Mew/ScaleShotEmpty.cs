@@ -8,7 +8,7 @@ public class ScaleShotEmpty : Projectile
 {
     private float initialMoveSpeed = 5f; // 初始移动速度
     private float slowMoveSpeed = 1f; // 变慢后的移动速度
-    private float fastMoveSpeed = 5f; // 再次加速后的移动速度
+    private float fastMoveSpeed = 7f; // 再次加速后的移动速度
 
     private float timer; // 计时器
     private bool isSpeedIncreased; // 是否已经加速过
@@ -44,9 +44,9 @@ public class ScaleShotEmpty : Projectile
             timer = 1f;
         }
 
-        if (timer >= 1f && isSpeedIncreased)
+        if (timer >= 2f && isSpeedIncreased)
         {
-            // 再过一秒变快
+            // 再过2秒变快
             slowMoveSpeed = fastMoveSpeed;
         }
     }

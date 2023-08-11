@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5544817596536917874
+--- !u!1 &5104063469704110536
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9043835884795643341}
-  - component: {fileID: 9060094696839375941}
-  - component: {fileID: 4083228567102956234}
-  - component: {fileID: 6097842134574750991}
-  - component: {fileID: 4031132456015535619}
+  - component: {fileID: 2751287162936997101}
+  - component: {fileID: 5705205794411416231}
+  - component: {fileID: 4504496871040530354}
+  - component: {fileID: 6692023866899060884}
+  - component: {fileID: 74445851690278546}
   m_Layer: 0
-  m_Name: ScaleShotEmpty
+  m_Name: SplitAirSlashEmpty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9043835884795643341
+--- !u!4 &2751287162936997101
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5544817596536917874}
+  m_GameObject: {fileID: 5104063469704110536}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: -2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &9060094696839375941
+--- !u!212 &5705205794411416231
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5544817596536917874}
+  m_GameObject: {fileID: 5104063469704110536}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -74,9 +74,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 11
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 914ec9b0479bb4c44b88e6a351502475, type: 3}
-  m_Color: {r: 0, g: 0.10077143, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -86,30 +86,40 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &4083228567102956234
-CircleCollider2D:
+--- !u!61 &4504496871040530354
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5544817596536917874}
+  m_GameObject: {fileID: 5104063469704110536}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.10050834}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.48, y: 0.48}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.25
---- !u!50 &6097842134574750991
+  m_Size: {x: 0.48, y: 0.27898332}
+  m_EdgeRadius: 0
+--- !u!50 &6692023866899060884
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5544817596536917874}
+  m_GameObject: {fileID: 5104063469704110536}
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
@@ -123,22 +133,23 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &4031132456015535619
+--- !u!114 &74445851690278546
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5544817596536917874}
+  m_GameObject: {fileID: 5104063469704110536}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 302e4e2675b89154fa2e069b3040a0eb, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f1500c5f7de09145afd803bb70899c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody2D: {fileID: 6097842134574750991}
+  rigidbody2D: {fileID: 6692023866899060884}
   spriteRenderer: {fileID: 0}
   empty: {fileID: 6859442323134344298, guid: 1b8629ce96a02bf408d9128676db0249, type: 3}
   Baby: {fileID: 0}
   BabyLevel: 0
   Dmage: 0
   SpDmage: 0
+  SplitAirSlashSpeed: 12
