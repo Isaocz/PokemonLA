@@ -35,6 +35,7 @@ public class TestSkill : Skill
 
     [Header("ÊÇ·ñ»ìÂÒ")]
     public bool isConfusion;
+    public float ConfusionTime;
 
     [Header("ÊÇ·ñ×ÅÃÔ")]
     public bool isInfatuation;
@@ -93,7 +94,7 @@ public class TestSkill : Skill
             if (isSleep) { target.SleepFloatPlus(1) ; }
             if (isFear) { target.Fear(FearTime,1) ; }
             if (isBlind) { target.Blind(BlindTime,1) ; }
-            if (isConfusion) { target.ConfusionFloatPlus() ; }
+            if (isConfusion) { target.EmptyConfusion(ConfusionTime , 1) ; }
             if (isInfatuation) { target.EmptyInfatuation(InfatuationTime , 1) ; }
             if (isCold) { target.Cold(ColdTime) ; }
             if (isCurse) { target.EmptyCurse(CurseTime,1) ; }

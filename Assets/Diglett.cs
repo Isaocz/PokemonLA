@@ -41,11 +41,15 @@ public class Diglett : Empty
         ResetPlayer();
         if (!isBorn)
         {
+
             EmptyDie();
             UpdateEmptyChangeHP();
 
-            if (!isEmptyFrozenDone && !isSleepDone && !isParalysisDone) {
-                if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(8) == null)
+            if (isSleepDone) { animator.speed = 0; }
+            else { animator.speed = 1; }
+
+            if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis) {
+                if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(12) == null)
                 {
                     TargetPosition = player.transform.position;
                     if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
@@ -89,14 +93,33 @@ public class Diglett : Empty
 
     void LunchMudShot()
     {
-        RaycastHit2D SearchPlayer = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.25f), new Vector2(TargetPosition.x - transform.position.x, TargetPosition.y - transform.position.y), 12f, LayerMask.GetMask("Player", "Enviroment", "Room", "PlayerFly"));
-        if (SearchPlayer.collider != null && SearchPlayer.transform.tag == "Player")
+        if (!isEmptyInfatuationDone)
         {
-            Vector2 d = new Vector2(TargetPosition.x - transform.position.x, TargetPosition.y - transform.position.y).normalized;
-            Debug.Log(_mTool.Angle_360Y(d,Vector2.right));
-
-            Instantiate(MudShot , transform.position+0.25f*Vector3.up + (Vector3)d , Quaternion.Euler(new Vector3(0,0, _mTool.Angle_360Y(d, Vector2.right))), transform.parent).transform.GetChild(0).GetComponent<DiglettMudShot>().EmptyDiglett = this;
-            isLunchMudShot = true;
+            RaycastHit2D SearchPlayer = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.25f), new Vector2(TargetPosition.x - transform.position.x, TargetPosition.y - transform.position.y), 12f, LayerMask.GetMask("Player", "Enviroment", "Room", "PlayerFly"));
+            if (SearchPlayer.collider != null && SearchPlayer.transform.tag == "Player")
+            {
+                Vector2 d = new Vector2(TargetPosition.x - transform.position.x, TargetPosition.y - transform.position.y).normalized;
+                if (isEmptyConfusionDone) { d += new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)); d = d.normalized; }
+                if (!isFearDone && !isSilence)
+                {
+                    Instantiate(MudShot, transform.position + 0.25f * Vector3.up + (Vector3)d, Quaternion.Euler(new Vector3(0, 0, _mTool.Angle_360Y(d, Vector2.right))), transform.parent).transform.GetChild(0).GetComponent<DiglettMudShot>().EmptyDiglett = this;
+                }
+                isLunchMudShot = true;
+            }
+        }
+        else
+        {
+            RaycastHit2D SearchPlayer = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.25f), new Vector2(TargetPosition.x - transform.position.x, TargetPosition.y - transform.position.y), 12f, LayerMask.GetMask("Empty", "Enviroment", "Room", "EmptyFly"));
+            if (SearchPlayer.collider != null && SearchPlayer.transform.tag == "Empty")
+            {
+                Vector2 d = new Vector2(TargetPosition.x - transform.position.x, TargetPosition.y - transform.position.y).normalized;
+                if (isEmptyConfusionDone) { d += new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)); d = d.normalized; }
+                if (!isFearDone && !isSilence)
+                {
+                    Instantiate(MudShot, transform.position + 0.25f * Vector3.up + (Vector3)d, Quaternion.Euler(new Vector3(0, 0, _mTool.Angle_360Y(d, Vector2.right))), transform.parent).transform.GetChild(0).GetComponent<DiglettMudShot>().EmptyDiglett = this;
+                }
+                isLunchMudShot = true;
+            }
         }
     }
 
@@ -112,6 +135,15 @@ public class Diglett : Empty
             StateMaterialChange();
 
         }
+    }
+
+
+    bool isSubsititueUpground;
+    GameObject SubsititueTargetUpGround;
+    public void GetSubsititueInformation()
+    {
+        isSubsititueUpground = isSubsititue;
+        SubsititueTargetUpGround = SubsititueTarget;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -131,15 +163,21 @@ public class Diglett : Empty
 
     public void MoveToOtherPoint()
     {
-        if (Random.Range(0.0f, 1.0f) > 0.3f)
-        {
-            transform.position = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
+        if (!isFearDone) {
+            if ((Random.Range(0.0f, 1.0f) > 0.65f || isEmptyInfatuationDone || isSubsititueUpground) && !isSilence)
+            {
+                if (SubsititueTargetUpGround != null && isSubsititueUpground) { transform.position = SubsititueTargetUpGround.transform.position + new Vector3(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f), 0); }
+                else { transform.position = (Vector3)TargetPosition + new Vector3(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f), 0); }
+            }
+            else
+            {
+                transform.position = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
+            }
         }
         else
         {
-            transform.position = (Vector3)TargetPosition + new Vector3(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f), 0);
+            transform.position = transform.parent.position + new Vector3( (Random.Range(0.0f,1.0f) > 0.5 ? (Random.Range(-12.0f, -10.0f)) : (Random.Range(10.0f, 12.0f)) )   , (Random.Range(0.0f, 1.0f) > 0.5 ? (Random.Range(-7.0f, -5.50f)) : (Random.Range(5.5f, 7f))),    0);
         }
-        Debug.Log(transform.position);
         while (!isThisPointEmpty())
         {
             transform.position = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);

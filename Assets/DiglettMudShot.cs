@@ -24,7 +24,7 @@ public class DiglettMudShot : MonoBehaviour
                     if (other.tag == ("Player") && !EmptyDiglett.isEmptyInfatuationDone)
                     {
                         PlayerControler p = other.GetComponent<PlayerControler>();
-                        Pokemon.PokemonHpChange(EmptyDiglett.gameObject, p.gameObject, 0, 55, 0, Type.TypeEnum.Ground);
+                        Pokemon.PokemonHpChange(EmptyDiglett.gameObject, other.gameObject, 0, 55, 0, Type.TypeEnum.Ground);
                         if (p != null)
                         {
                             p.KnockOutPoint = 5;
@@ -39,6 +39,12 @@ public class DiglettMudShot : MonoBehaviour
                 }
             }
         }
+    }
+
+
+    private void OnDestroy()
+    {
+        Destroy(transform.parent.gameObject);
     }
 
 }
