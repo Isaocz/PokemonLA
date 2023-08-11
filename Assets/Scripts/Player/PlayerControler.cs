@@ -519,6 +519,7 @@ public class PlayerControler : Pokemon
 
     void ChangeRoomBgm(PlayerControler player)
     {
+        
         if (!MapCreater.StaticMap)
         {
             // ºÊ»›≤‚ ‘ case

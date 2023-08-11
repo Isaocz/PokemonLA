@@ -137,9 +137,6 @@ public class TeraBlast : Skill
 
     private void rayPosition()
     {
-
-
-
         Physics2D.queriesHitTriggers = false;
         //检测射线击中的对象
         RaycastHit2D hitinfo = Physics2D.Raycast(transform.position ,transform.right , 8 , LayerMask.GetMask("Empty" , "EmptyFly" , "Enviroment" , "Room") );
