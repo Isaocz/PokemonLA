@@ -24,6 +24,8 @@ public class AirSlash : Projectile
         Trail = transform.GetChild(0).GetComponent<TrailRenderer>();
         GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.2f);
         transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        transform.GetChild(1).position = transform.position + Vector3.down * 0.25f;
+        transform.GetChild(2).position = transform.position + Vector3.down * 0.25f;
     }
 
     private void Update()
