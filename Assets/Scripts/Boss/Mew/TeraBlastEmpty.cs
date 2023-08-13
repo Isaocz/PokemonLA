@@ -10,11 +10,13 @@ public class TeraBlastEmpty : Projectile
     public float rotationSpeed = 120f;
     public Vector3 startpoint;
     public Vector3 endpoint;
+    Mew mew;
 
     Vector3 direction;
     bool isSafe = true;
 
     private LineRenderer lineRenderer;
+    private int shootingTime;
 
     //获取起始特效
     GameObject StartVFX;
@@ -23,10 +25,12 @@ public class TeraBlastEmpty : Projectile
 
     private void Awake()
     {
+        mew = FindObjectOfType<Mew>();
         lineRenderer = GetComponent<LineRenderer>();
     }
     private void Start()
     {
+        shootingTime = 1;
         // 获取从起始点指向终点的标准向量
         direction = (endpoint - startpoint).normalized;
         isSafe = true;
@@ -45,7 +49,7 @@ public class TeraBlastEmpty : Projectile
     void Update()
     {
         angle += Time.deltaTime * rotationSpeed;
-        endpoint = new Vector3(15f * Mathf.Cos(Mathf.Deg2Rad * angle), 15f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
+        endpoint = startpoint + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
         direction = (endpoint - startpoint).normalized;
         //修改射线的位置
         lineRenderer.SetPosition(0, startpoint);
@@ -58,7 +62,21 @@ public class TeraBlastEmpty : Projectile
         lineRenderer.startColor = finalColor;
         lineRenderer.endColor= finalColor;
         isSafe = false;
-        Invoke("Delete", 3f);
+        if (mew.currentPhase == 1||shootingTime==3)
+        Invoke("Delete", 2f);
+        else
+        {
+            StartCoroutine(Continue());
+            IEnumerator Continue()
+            {
+                yield return new WaitForSeconds(2f);
+                if (shootingTime <= 3)
+                {
+                    shootingTime++;
+                    ContinueShooting();
+                }
+            }
+        }
     }
     private void Delete()
     {
@@ -68,9 +86,9 @@ public class TeraBlastEmpty : Projectile
     private void rayPosition()
     {
         //检测射线击中的对象
-        RaycastHit2D hitinfo = Physics2D.Raycast(transform.position, direction, 15f, LayerMask.GetMask("Player", "Enviroment", "Room"));
-        RaycastHit2D hitinfoTop = Physics2D.Raycast(transform.position + Vector3.up * 0.3f, direction, 15f, LayerMask.GetMask("Player", "Enviroment", "Room"));
-        RaycastHit2D hitinfoBottom = Physics2D.Raycast(transform.position - Vector3.up * 0.3f, direction, 15f, LayerMask.GetMask("Player", "Enviroment", "Room"));
+        RaycastHit2D hitinfo = Physics2D.Raycast(transform.position, direction, 40f, LayerMask.GetMask("Player", "Enviroment", "Room"));
+        RaycastHit2D hitinfoTop = Physics2D.Raycast(transform.position + Vector3.up * 0.3f, direction, 40f, LayerMask.GetMask("Player", "Enviroment", "Room"));
+        RaycastHit2D hitinfoBottom = Physics2D.Raycast(transform.position - Vector3.up * 0.3f, direction, 40f, LayerMask.GetMask("Player", "Enviroment", "Room"));
         Vector2 EndPoint = hitinfo.point;
         if (hitinfo.collider == null && hitinfoTop.collider == null && hitinfoBottom.collider == null)
         {
@@ -122,5 +140,13 @@ public class TeraBlastEmpty : Projectile
         //传入颜色
         initialColor = StartColor;
         finalColor = EndColor;
+    }
+
+    void ContinueShooting()
+    {
+        lineRenderer.startColor = initialColor;
+        lineRenderer.endColor = initialColor;
+        isSafe = true;
+        Invoke("ChangeColor", laserDuration);
     }
 }

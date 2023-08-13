@@ -14,6 +14,7 @@ public class BackGroundMusic : MonoBehaviour
     public AudioClip Boss;
     public AudioClip BossWin;
     public AudioClip FightMew;
+    public AudioClip Stigma;
 
 
     private void Awake()
@@ -53,5 +54,13 @@ public class BackGroundMusic : MonoBehaviour
     public void ChangeBGMToMew()
     {
         if (BGM.clip != FightMew) { BGM.clip =  FightMew; BGM.Play();}
+    }
+    public void ChangeBGMINSIST()
+    {
+        if (BGM.clip != Stigma)
+        {
+            BGM.clip = Stigma;
+            BGM.Play();
+        }
     }
 }
