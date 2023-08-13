@@ -44,6 +44,8 @@ public class Diglett : Empty
 
             EmptyDie();
             UpdateEmptyChangeHP();
+            StateMaterialChange();
+
 
             if (isSleepDone) { animator.speed = 0; }
             else { animator.speed = 1; }
@@ -132,8 +134,7 @@ public class Diglett : Empty
         if (!isBorn)
         {
             EmptyBeKnock();
-            StateMaterialChange();
-
+            
         }
     }
 
@@ -178,7 +179,7 @@ public class Diglett : Empty
         {
             transform.position = transform.parent.position + new Vector3( (Random.Range(0.0f,1.0f) > 0.5 ? (Random.Range(-12.0f, -10.0f)) : (Random.Range(10.0f, 12.0f)) )   , (Random.Range(0.0f, 1.0f) > 0.5 ? (Random.Range(-7.0f, -5.50f)) : (Random.Range(5.5f, 7f))),    0);
         }
-        while (!isThisPointEmpty())
+        while (!isThisPointEmpty(transform.position))
         {
             transform.position = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
             Debug.Log(transform.position);
@@ -186,17 +187,5 @@ public class Diglett : Empty
 
     }
 
-    bool isThisPointEmpty()
-    {
-        RaycastHit2D SearchEmpty01 = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.25f), Vector2.left + Vector2.up, 0.6f, LayerMask.GetMask("Enviroment"));
-        RaycastHit2D SearchEmpty02 = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.25f), Vector2.left + Vector2.down, 0.6f, LayerMask.GetMask("Enviroment"));
-        RaycastHit2D SearchEmpty03 = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.25f), Vector2.right + Vector2.up, 0.6f, LayerMask.GetMask("Enviroment"));
-        RaycastHit2D SearchEmpty04 = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.25f), Vector2.right + Vector2.down, 0.6f, LayerMask.GetMask("Enviroment"));
-        RaycastHit2D SearchEmpty05 = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.25f), Vector2.left, 0.6f, LayerMask.GetMask("Enviroment"));
-        RaycastHit2D SearchEmpty06 = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.25f), Vector2.down, 0.6f, LayerMask.GetMask("Enviroment"));
-        RaycastHit2D SearchEmpty07 = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.25f), Vector2.right, 0.6f, LayerMask.GetMask("Enviroment"));
-        RaycastHit2D SearchEmpty08 = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.25f), Vector2.down, 0.6f, LayerMask.GetMask("Enviroment"));
-        return !SearchEmpty01 && !SearchEmpty02 && !SearchEmpty03 && !SearchEmpty04 && !SearchEmpty05 && !SearchEmpty06 && !SearchEmpty07 && !SearchEmpty08;
-    }
 
 }

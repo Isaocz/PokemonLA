@@ -8,7 +8,7 @@ public class NormalEmpty : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Fairy;
+        EmptyType01 = Type.TypeEnum.Normal;
         EmptyType02 = Type.TypeEnum.Normal;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, 30);
@@ -34,6 +34,7 @@ public class NormalEmpty : Empty
         {
             EmptyDie();
             UpdateEmptyChangeHP();
+            StateMaterialChange();
         }
     }
 
@@ -45,14 +46,14 @@ public class NormalEmpty : Empty
         if (!isBorn)
         {
             EmptyBeKnock();
-            StateMaterialChange();
+
 
         }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.transform.tag == ("Player"))
+        if (isEmptyInfatuationDone && other.transform.tag == ("Player"))
         {
             EmptyTouchHit(other.gameObject);
 

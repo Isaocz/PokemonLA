@@ -46,6 +46,7 @@ public class Combee : Empty
         {
             EmptyDie();
             UpdateEmptyChangeHP();
+            StateMaterialChange();
         }
     }
 
@@ -57,7 +58,6 @@ public class Combee : Empty
         if (!isBorn && !isDie)
         {
             EmptyBeKnock();
-            StateMaterialChange();
             if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
             {
                 if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForDistanceEmpty() == null)
