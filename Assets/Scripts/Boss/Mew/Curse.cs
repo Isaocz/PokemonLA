@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Curse : MonoBehaviour
+public class Curse : Projectile
 {
     private CircleCollider2D triggerCollider;
-    public GameObject mew;
     public float colorChange = 2f;
     private bool isTriggerEnabled = false;
     // Start is called before the first frame update
@@ -32,7 +31,7 @@ public class Curse : MonoBehaviour
         if (isTriggerEnabled && collision.CompareTag("Player"))
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(mew, playerControler.gameObject, 0, 80, 0, Type.TypeEnum.Ghost);
+            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, 0, 80, 0, Type.TypeEnum.Ghost);
         }
     }
 }
