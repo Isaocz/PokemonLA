@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class Mew : Empty
 {
@@ -9,6 +10,7 @@ public class Mew : Empty
     int Leafnum;//魔法叶数量
     public GameObject blizzardPrefab;//技能2
     public GameObject WillOWispPrefab;//技能3
+    public int WillOWispDegree = 2;//WillOWisp重复次数
     public int numWillOWisp = 12; // WillOWisp的数量
     public float WillOWispRadius = 2f; // WillOWisp的生成半径
     public float moveSpeed = 4f; // WillOWisp的移动速度
@@ -21,9 +23,7 @@ public class Mew : Empty
     public GameObject MagicalFirePrefab;//技能7
     public GameObject IcicleSpearPrefab;//技能8
     public float summonRadius = 5f;
-    public int icicleCount = 8;
     public float delayBetweenExecutions = 1f;
-    public int numExecutions = 3;
     public GameObject HeartStampPrefab;//技能9
     public float HeartStampRadius=1.5f;
     public int heartStampCount = 8;
@@ -34,8 +34,6 @@ public class Mew : Empty
     public GameObject MeanLookPrefab;//技能11
     public GameObject DazzlingGleamPrefab;//技能12
     public GameObject LeafBladePrefab; // 技能13
-    public float shootInterval = 0.3f; // 发射间隔
-    public int shootCount = 10; // 发射次数
     public GameObject stoneEdgePrefab;//技能14
     private Vector3 mapCenter;  // 地图中心点
     private Vector3 reticleSpawnPosition; // Reticle生成位置
@@ -43,16 +41,37 @@ public class Mew : Empty
     public GameObject MakeItRainPrefab;//技能16
     public GameObject StickyWebPrefab;//技能17
     public GameObject CrossPoisonPrefab;//技能18
+    public GameObject SecredFirePrefab;//技能19
+    public GameObject SecredFireCentrePrefab;
+    public GameObject SecredFireVertexPrefab;
+    public GameObject reticle2Prefab;//Reticle2预制体
+    public GameObject SecredSwordPrefab;//技能20
 
-    float skillCooldown;
+    //切换房间时等待黑色目光
+    private float MeanLookTimer = 0f;
+    private bool UsedMeanLook = false;
+
     //Audio
     public BackGroundMusic bgmScript;
     //阶段
-    private int currentPhase = 1; // 当前阶段
+    public int currentPhase = 1; // 当前阶段
     private float skillTimer = 0f; // 技能计时器
     private List<GameObject> heartStamps = new List<GameObject>();//对HeartStamp进行存储
-    //随机传送计数器
-    private int teleportAttempts = 0;
+    private float MoreAttackTimer;//二阶段更多技能计时器
+    private int[] MoreAttackSkill = { 1, 3, 7, 8, 9, 10, 11, 13, 15, 17, 18, 20 };
+    private int MoreAttackSkillIndex;
+    //随机传送
+    private int teleportAttempts = 0;//随机传送计数器
+
+    //房间
+    public GameObject MewBossRoomPrefab;
+    public Vector3 MewBossRoomPosition = new Vector3(60f, 60f, 0f);
+    private bool roomCreated = false;
+    private Vector3Int GetnowRoom;
+
+    //摄像跟随
+    private CameraController cinemachineController;
+    private CameraAdapt cameraAdapt;
 
     // Start is called before the first frame update
     void Start()
@@ -77,9 +96,12 @@ public class Mew : Empty
 
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
+        cinemachineController = FindObjectOfType<CameraController>();
+        cameraAdapt = FindObjectOfType<CameraAdapt>();
 
         //地图
         mapCenter = transform.parent.position;
+        GetnowRoom = player.NowRoom;
     }
 
     // Update is called once per frame
@@ -89,39 +111,55 @@ public class Mew : Empty
         if (!isBorn)
         {
             UpdateEmptyChangeHP();
-            bgmScript.ChangeBGMToMew();
             ClearStatusEffects();
             if (currentPhase == 3)
             {
+                bgmScript.ChangeBGMINSIST();
                 EmptyDie();
             }
             else
             {
+                bgmScript.ChangeBGMToMew();
                 switch (currentPhase)
                 {
                     case 1:Phase1();
                         break;
                     case 2:Phase2();
+                        MoreAttack();
                         break;
                     case 3:Phase3();
                         break;
                 }
             }
+            if (UsedMeanLook)
+            {
+                MeanLookTimer += Time.deltaTime;
+                if(MeanLookTimer >= 3.5f)
+                {
+                    UsedMeanLook = false;
+                    MeanLookTimer = 0f;
+                }
+
+            }
         }
     }
     void Phase1()
     {
-        if (EmptyHp <= maxHP/4)
+        if (!UsedMeanLook && EmptyHp < maxHP)//需要测试，测试后修改
         {
+            if (!roomCreated && currentPhase == 1)
+            {
+                EmptyHp = maxHP;
+                StartCoroutine(Phase2Start());
+            }
             currentPhase++;
             Debug.Log("进入二阶段");
-            EmptyHp = maxHP;
         }
         else if (skillTimer <= 0f)
         {
             // 随机选择一个技能释放
             RamdomTeleport();
-            int randomSkillIndex = Random.Range(1, 19);
+            int randomSkillIndex = Random.Range(11, 13);
             UseSkill(randomSkillIndex);
             SkillTimerUpdate(randomSkillIndex, 1);
         }
@@ -131,7 +169,7 @@ public class Mew : Empty
     }
     void Phase2()
     {
-        if (EmptyHp <= 0)
+        if (EmptyHp <= maxHP*4/5)//需要测试，测试后修改
         {
             currentPhase++;
             Debug.Log("进入三阶段");
@@ -140,15 +178,32 @@ public class Mew : Empty
         else if (skillTimer <= 0f)
         {
             // 随机选择一个技能释放
-            int randomSkillIndex = Random.Range(1, 25);
+            RamdomTeleport();
+            int randomSkillIndex = Random.Range(1, 21);
+            SkillTimerUpdate(randomSkillIndex, 2);
             UseSkill(randomSkillIndex);
 
-            // 重置技能计时器
-            skillTimer = skillCooldown;
         }
 
         // 技能计时器递减
         skillTimer -= Time.deltaTime;
+    }
+    private void MoreAttack()//二阶段的额外攻击模式
+    {
+        MoreAttackTimer += Time.deltaTime;
+        if (MoreAttackTimer >= 6f)
+        {
+            // 切换到下一个技能
+            MoreAttackSkillIndex++;
+            if (MoreAttackSkillIndex >= MoreAttackSkill.Length)
+            {
+                MoreAttackSkillIndex = 0; // 回到第一个技能
+            }
+            // 执行当前技能的逻辑
+            UseSkill(MoreAttackSkill[MoreAttackSkillIndex]);
+            // 重置计时器
+            MoreAttackTimer = 0f;
+        }
     }
     void Phase3()
     {
@@ -157,7 +212,6 @@ public class Mew : Empty
     }
     void UseSkill(int skillIndex)
     {
-        // 在这里编写释放技能的代码
         Debug.Log("Boss used skill: " + skillIndex);
         switch (skillIndex)
         {
@@ -185,44 +239,60 @@ public class Mew : Empty
                 break;
             case 2:
                 //技能2：暴风雪
+                if(currentPhase!= 1)
+                {
+                    return;
+                }
                 GameObject blizzard = Instantiate(blizzardPrefab, transform.position, Quaternion.identity);
                 Destroy(blizzard, 6f);//6秒后销毁暴风雪对象
                 break;
             case 3://技能3：磷火
+                float WaitingWillOWisp = 1f;
                 StartCoroutine(ReleaseWillOWisp());
                 IEnumerator ReleaseWillOWisp()
                 {
-                    for (int j = 0; j < 2; j++)
+                    if (currentPhase != 1)
                     {
+                        numWillOWisp = 20;
+                        WillOWispDegree = 5;
+                        WaitingWillOWisp = 0.8f;
+                    }
+                    for (int j = 0; j < WillOWispDegree; j++)
+                    {
+                        float increaseAngle = 10f;
                         float angleStep = 360f / numWillOWisp; // 计算每个WillOWisp之间的角度间隔
                         for (int i = 0; i < numWillOWisp; i++)
                         {
-                            float angle = i * angleStep; // 计算当前WillOWisp的角度
+                            float angle = increaseAngle + i * angleStep; // 计算当前WillOWisp的角度
                             Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * WillOWispRadius; // 计算当前WillOWisp的生成位置
                             GameObject willOWisp = Instantiate(WillOWispPrefab, spawnPos, Quaternion.identity);
                             Vector3 direction = (spawnPos - transform.position).normalized;
                             willOWisp.GetComponent<WillOWispEmpty>().Initialize(moveSpeed, direction); // 设置WillOWisp的移动速度
                             Destroy(willOWisp, 4f);
                         }
-                        yield return new WaitForSeconds(1f);
+                        yield return new WaitForSeconds(WaitingWillOWisp);
                     }
                 }
                 break;
             case 4://技能4：和睦相处
+                if(currentPhase!= 1)
+                {
+                    return;
+                }
                 GameObject PlayNice = Instantiate(PlayNicePrefab, transform.position, Quaternion.identity);
                 Destroy(PlayNice, 5f);
                 break;
             case 5://技能5：太晶爆发
                 //释放3道激光，分别位于90度、210度、330度的位置
-                transform.position = transform.parent.position;
+                transform.position = mapCenter;
                 //创建三条激光
                 float[] angles = { 90f, 210f, 330f };
                 for (int i = 0; i < angles.Length; i++)
                 {
                     //计算激光的起始点和终点
                     float angle = angles[i];
-                    Vector3 startPoint = transform.parent.position;
-                    Vector3 endPoint = new Vector3(15f * Mathf.Cos(Mathf.Deg2Rad * angle), 15f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
+                    Vector3 startPoint = mapCenter;
+                    Vector3 endPoint = mapCenter + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
                     GameObject Terablast = Instantiate(TeraBlastPrefab, startPoint, Quaternion.identity);
                     TeraBlastEmpty terablast = Terablast.GetComponent<TeraBlastEmpty>();
                     terablast.SetEndpoints(startPoint, endPoint, angle);
@@ -230,6 +300,10 @@ public class Mew : Empty
                 }
                 break;
             case 6://技能6：咒术
+                if(currentPhase != 1)
+                {
+                    return;
+                }
                 StartCoroutine(ReleaseCurse());
                 IEnumerator ReleaseCurse()
                 {
@@ -245,9 +319,16 @@ public class Mew : Empty
                 StartCoroutine(ReleaseMagicalFire());
                 IEnumerator ReleaseMagicalFire()
                 {
+                    float intervalTime= 1f;
+                    int Times = 3;
+                    if (currentPhase != 1)
+                    {
+                        intervalTime = 0.8f;
+                        Times = 4;
+                    }
                     float angleIncrement = 360f / 8;
                     float rotationSpeed = 60f;
-                    for (int j = 0; j < 3; j++) {
+                    for (int j = 0; j < Times; j++) {
                         for (int i = 0; i < 8; i++)
                         {
                             float angle = i * angleIncrement;
@@ -259,19 +340,50 @@ public class Mew : Empty
                             Destroy(magicalFire, 7f);
 
                         }
-                        yield return new WaitForSeconds(1f);
+                        yield return new WaitForSeconds(intervalTime);
                     }
                 }
                 break;
 
             case 8://技能8：冰锥
                 StartCoroutine(SummonIcicleSpears());
+                IEnumerator SummonIcicleSpears()
+                {
+                    yield return new WaitForSeconds(1f);
+                    int numExecutions = 3;
+                    int icicleCount = 8;
+                    float delayBetweenExecutions = 1f;
+                    if (currentPhase != 1)
+                    {
+                        delayBetweenExecutions = 0.8f;
+                    }
+                    for (int j = 0; j < numExecutions; j++)
+                    {
+                        for (int i = 0; i < icicleCount; i++)
+                        {
+                            float angle = i * (360f / icicleCount);
+                            Vector2 spawnPosition = player.transform.position + (Quaternion.Euler(0f, 0f, angle) * Vector2.right * summonRadius);
+                            GameObject IcicleSpear = Instantiate(IcicleSpearPrefab, spawnPosition, Quaternion.identity);
+
+                            IcicleSpearEmpty icicleSpear = IcicleSpear.GetComponent<IcicleSpearEmpty>();
+                            icicleSpear.sf(player.transform.position);
+                        }
+                        yield return new WaitForSeconds(delayBetweenExecutions);
+                    }
+                }
                 break;
             case 9://技能9：爱心印章
                 StartCoroutine(ReleaseHeartStamp());
                 IEnumerator ReleaseHeartStamp()
                 {
-                    for (int j = 0; j < 3; j++) {
+                    float intervalTime = 1.5f;
+                    int Times = 4;
+                    if (currentPhase != 1)
+                    {
+                        intervalTime = 1.2f;
+                        Times = 5;
+                    }
+                    for (int j = 0; j < Times; j++) {
                         float angleIncrement = 360f / heartStampCount;
                         for (int i = 0; i < heartStampCount; i++)
                         {
@@ -287,7 +399,7 @@ public class Mew : Empty
                                 heartStampMovement.SetTarget(player.transform.position);
                             }
                         }
-                        yield return new WaitForSeconds(1.5f);
+                        yield return new WaitForSeconds(intervalTime);
                     }
                 }
                 break;
@@ -296,7 +408,12 @@ public class Mew : Empty
                 StartCoroutine(ReleaseScaleShoot());
                 IEnumerator ReleaseScaleShoot()
                 {
-                    for (int j = 0; j < 3; j++)
+                    int Times = 3;
+                    if (currentPhase != 1)
+                    {
+                        Times = 5;
+                    }
+                    for (int j = 0; j < Times; j++)
                     {
                         Vector3 randomPoint = (Vector2)player.transform.position + Random.insideUnitCircle.normalized * 3f;
                         // 创建Reticle并设置位置
@@ -318,6 +435,11 @@ public class Mew : Empty
                 }
                 break;
                 case 11: //技能11：黑色目光
+                if (UsedMeanLook)
+                {
+                    //防止连续使用两次黑色目光
+                    return;
+                }
                 GameObject MeanLookse = Instantiate(MeanLookSE, transform.position, Quaternion.identity);
                 Destroy(MeanLookse, 1f);
                 StartCoroutine(ReleaseMeanLook());
@@ -325,6 +447,7 @@ public class Mew : Empty
                 {
                     yield return new WaitForSeconds(1f);
                     GameObject blackCircle = Instantiate(MeanLookPrefab, player.transform.position, Quaternion.identity);
+                    UsedMeanLook = true;
 
                     // 获取黑色目光的半径
                     float circleRadius = blackCircle.GetComponent<CircleCollider2D>().radius;
@@ -372,6 +495,13 @@ public class Mew : Empty
                 StartCoroutine(ReleaseLeafBlade());
                 IEnumerator ReleaseLeafBlade()
                 {
+                    int shootCount = 10; // 发射次数
+                    float shootInterval = 0.3f; // 发射间隔
+                    if(currentPhase != 1)
+                    {
+                        shootCount = 15;
+                        shootInterval = 0.2f;
+                    }
                     for (int i = 0; i < shootCount; i++)
                     {
                         // 实例化LeafBlade
@@ -382,12 +512,17 @@ public class Mew : Empty
                 }
                 break;
             case 14://技能14：尖石攻击
+                if (currentPhase != 1)
+                {
+                    return;
+                }
                 StartCoroutine(ReleaseStoneEdge());
                 IEnumerator ReleaseStoneEdge()
                 {
-                    for (int i = 0; i< 2; i++)
+                    int Times = 2;
+                    float mapLength = 26f;
+                    for (int i = 0; i< Times; i++)
                     {
-                        float mapLength = 26f;
                         //选择一个不生成StoneEdge的位置
                         int emptyPosition = Random.Range(1, 14);
                         for (int j = 1; j <= 13; j++)
@@ -415,19 +550,26 @@ public class Mew : Empty
                 StartCoroutine(ReleaseAirSlash());
                 IEnumerator ReleaseAirSlash()
                 {
+                    float intervalTime = 1.3f;
+                    int Times = 3;
+                    if (currentPhase != 1)
+                    {
+                        intervalTime = 0.8f;
+                        Times = 5;
+                    }
                     //每次释放空气之刃后等待1.3f
-                    for(int i = 0;i< 3;i++)
+                    for(int i = 0;i< Times;i++)
                     {
                         GameObject airSlash = Instantiate(AirSlashPrefab, transform.position, Quaternion.identity);
-                        yield return new WaitForSeconds(1.3f);
+                        yield return new WaitForSeconds(intervalTime);
                     }
                 }
                 break;
             case 16://技能16：淘金潮
-                transform.position = transform.parent.position;
                 StartCoroutine(ReleaseMakeItRain());
                 IEnumerator ReleaseMakeItRain()
                 {
+                    transform.position = mapCenter;
                     float angle = 0f;
                     float angleIncrement = 8f;
                     for (int i = 0; i < 100; i++)
@@ -446,10 +588,21 @@ public class Mew : Empty
                 }
                 break;
             case 17://技能17：黏黏网
-                for(int i = 0; i < 5; i++)
+                if (currentPhase == 1)
                 {
-                    Vector3 randomPosition = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
-                    GameObject StickyWeb = Instantiate(StickyWebPrefab, randomPosition, Quaternion.identity);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Vector3 randomPosition = mapCenter + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
+                        GameObject StickyWeb = Instantiate(StickyWebPrefab, randomPosition, Quaternion.identity);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 14; i++)
+                    {
+                        Vector3 randomPosition = mapCenter + new Vector3(Random.Range(-24.0f, 24.0f), Random.Range(-14.0f, 14.0f), 0);
+                        GameObject StickyWeb = Instantiate(StickyWebPrefab, randomPosition, Quaternion.identity);
+                    }
                 }
                 break;
             case 18://技能18：十字毒刃
@@ -460,7 +613,15 @@ public class Mew : Empty
                     yield return new WaitForSeconds(1f);
                     float angle = 0f;
                     float angleIncrement = 45f;
-                    for (int i= 0; i < 4; i++)
+                    int Times = 4;
+                    float intervalTime = 1f;
+                    if (currentPhase != 1)
+                    {
+                        Times = 5;
+                        angleIncrement = 60f;
+                        intervalTime = 0.8f;
+                    }
+                    for (int i= 0; i < Times; i++)
                     {
                         for (int j = 0; j < 4; j++)
                         {
@@ -472,40 +633,156 @@ public class Mew : Empty
                         }
                         //技能间隔等待时间
                         angle += angleIncrement;
-                        yield return new WaitForSeconds(1f);
+                        yield return new WaitForSeconds(intervalTime);
                     }
                 }
                 break;
+            case 19://技能19：神圣之火
+                StartCoroutine(ReleaseScaredFire());
+                IEnumerator ReleaseScaredFire()
+                {
+                    int numPoints = 5; // 五角星上的点数
+                    float radius = 12f; // 五角星的顶点到中心的距离
 
+                    Vector3[] starVertices = new Vector3[numPoints];
+                    Vector3[] secredFirePositions = new Vector3[numPoints * 14]; // 存储SecredFire的位置
 
+                    // 创建五角星的顶点坐标
+                    for (int i = 0; i < numPoints; i++)
+                    {
+                        float angle = i * 2f * Mathf.PI / numPoints;
+                        float x = radius * Mathf.Sin(angle) + player.transform.position.x;
+                        float y = radius * Mathf.Cos(angle) + player.transform.position.y;
+                        starVertices[i] = new Vector3(x, y, player.transform.position.z);
+                    }
+                    // 生成圆弧中心的SecredFire
+                    for (int i = 0; i < numPoints; i++)
+                    {
+                        Vector3 startPoint = starVertices[i];
+                        Vector3 endPoint = starVertices[(i + 1) % numPoints];
+
+                        Vector3 center = (startPoint + endPoint) / 2f;
+
+                        GameObject secredFireCenter = Instantiate(SecredFireCentrePrefab, center, Quaternion.identity);
+                        secredFirePositions[numPoints * 12 + i] = center;
+                    }
+                    // 在每个五角星顶点生成SecredFire
+                    for (int i = 0; i < numPoints; i++)
+                    {
+                        GameObject secredFireVertex = Instantiate(SecredFireVertexPrefab, starVertices[i], Quaternion.identity);
+                        secredFirePositions[numPoints * 12 + numPoints + i] = starVertices[i];
+                    }
+
+                    // 在每条线上均匀分布生成SecredFire
+                    for (int i = 0; i < numPoints; i++)
+                    {
+                        Vector3 startPoint = starVertices[i];
+                        Vector3 endPoint = starVertices[(i + 2) % numPoints];
+
+                        float dist = Vector3.Distance(startPoint, endPoint);
+                        float step = dist / 12f; // 生成点的距离间隔
+
+                        Vector3 direction = (endPoint - startPoint).normalized;
+
+                        for (int j = 0; j < 12; j++)
+                        {
+                            Vector3 secredFirePosition = startPoint + direction * (j * step);
+                            GameObject secredFire = Instantiate(SecredFirePrefab, secredFirePosition, Quaternion.identity);
+                            secredFirePositions[(i * 12) + j] = secredFirePosition;
+                            SecredFireEmpty secredfire = secredFire.GetComponent<SecredFireEmpty>();
+                            secredfire.Initialize(player.transform.position, 2f);
+                            yield return null;
+                        }
+                    }
+                    yield return null;
+                }
+                break;
+            case 20://技能20：圣剑
+                StartCoroutine(ReleaseSecredSword());
+                IEnumerator ReleaseSecredSword()
+                {   
+                    for(int i = 0;i<3; i++)  
+                    {
+                        Instantiate(reticle2Prefab, player.transform.position, Quaternion.identity);
+                        for(int j = 0; j < 6; j++)
+                        {
+                            float angle = j * 60;
+                            float radius = 8f;
+                            Vector3 spawnPos = player.transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
+                            GameObject secredSword = Instantiate(SecredSwordPrefab, spawnPos, Quaternion.identity);
+                            SecredSwordEmpty SecredSword = secredSword.GetComponent<SecredSwordEmpty>();
+                            SecredSword.Initialize(angle, radius);
+                            
+                        }
+                        yield return new WaitForSeconds(3f);
+                    }
+
+                }
+                break;
         }
+        //二阶段总共移除的技能：暴风雪（2）、和睦相处（4）、咒术（6）和尖石攻击（14）
     }
     void SkillTimerUpdate(int skillindex, int stage)//技能重置时间调整
     {
         switch (skillindex)
         {
-            case 1:if(stage == 1)skillTimer = 2.4f;break;
-            case 2:if(stage == 1)skillTimer = 1.5f;break;
-            case 3:if (stage == 1) skillTimer = 3f;break;
-            case 4:if (stage == 1)skillTimer = 1.5f;break;
-            case 5:if (stage == 1)skillTimer = 4.7f;break;
+            case 1:
+                if (stage == 1) 
+                    skillTimer = 2.4f;
+                else
+                    skillTimer = 2f;
+                break;
+            case 2:
+                if (stage == 1)
+                    skillTimer = 1.5f;
+                break;
+            case 3:
+                if (stage == 1)
+                    skillTimer = 3f;
+                else
+                    skillTimer = 3.5f;
+                break;
+            case 4:if (stage == 1)
+                    skillTimer = 2f;
+                break;
+            case 5:if (stage == 1) skillTimer = 4.7f;
+                else skillTimer = 9.2f;
+                    break;
             case 6:if (stage == 1)skillTimer = 2.9f;break;
-            case 7:if (stage == 1) skillTimer = 2.6f;break;
-            case 8: if (stage == 1) skillTimer = 4.5f; break;
-            case 9: if (stage == 1) skillTimer = 4.8f; break;
-            case 10: if (stage == 1) skillTimer = 4.3f; break;
-            case 11: if (stage == 1) skillTimer = 2f; break;
-            case 12: if (stage == 1) skillTimer = 3.7f; break;
-            case 13: if (stage == 1) skillTimer = 3.3f; break;
+            case 7:skillTimer = 2.6f; break;
+            case 8: if (stage == 1) skillTimer = 5.5f;
+                else skillTimer = 3.4f; 
+                    break;
+            case 9:  skillTimer = 4.8f; break;
+            case 10: if (stage == 1) skillTimer = 4.3f;
+                else skillTimer = 3f;
+                break;
+            case 11: if (stage == 1) skillTimer = 2f;
+                else skillTimer = 1.7f;
+                break;
+            case 12: skillTimer = 3.7f; break;
+            case 13: if (stage == 1) skillTimer = 3.3f;
+                else skillTimer = 3.2f;
+                break;
             case 14: if (stage == 1) skillTimer = 10f; break;
-            case 15: if (stage == 1) skillTimer = 4.2f; break;
-            case 16: if (stage == 1) skillTimer = 9f; break;
-            case 17: if (stage == 1) skillTimer = 1.8f; break;
-            case 18: if (stage == 1) skillTimer = 10f; break;
+            case 15: if (stage == 1) skillTimer = 4.2f;
+                else skillTimer = 3.4f;
+                break;
+            case 16: skillTimer = 9f; break;
+            case 17: if (stage == 1) skillTimer = 1.8f;
+                else skillTimer = 1.5f;
+                break;
+            case 18: if (stage == 1) skillTimer = 10f;
+                else skillTimer = 5.5f;
+                break;
+            case 19: skillTimer = 6f; break;
+            case 20: skillTimer = 6f; break;
         }
     }
     void RamdomTeleport()
     {
+        bool collided = false;
+        Vector3 randomPosition;
         teleportAttempts++;
         if (teleportAttempts > 150)
         {
@@ -513,58 +790,118 @@ public class Mew : Empty
             Debug.Log("没有成功找到合适的传送位置");
             return;
         }
-        // 在房间内随机选择一个位置
-        Vector3 randomPosition = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
-
-        // 检查与"Wall"和"Environment"标签的对象是否相撞
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(randomPosition, 1f);
-        bool collided = false;
-        foreach (Collider2D collider in colliders)
+        //一阶段随机传送：地图内随机位置
+        if (currentPhase == 1)
         {
-            if (collider.CompareTag("Room") || collider.CompareTag("Enviroment"))
+            // 在房间内随机选择一个位置
+            randomPosition = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
+
+            // 检查与"Wall"和"Environment"标签的对象是否相撞
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(randomPosition, 1f);
+            foreach (Collider2D collider in colliders)
             {
-                collided = true;
-                break;
+                if (collider.CompareTag("Room") || collider.CompareTag("Enviroment"))
+                {
+                    collided = true;
+                    break;
+                }
             }
             float playerRadius = 3f;
             float distanceToPlayer = Vector3.Distance(randomPosition, player.transform.position);
+
             if (distanceToPlayer <= playerRadius)
             {
                 collided = true;
-                break;
             }
-        }
-        if (collided)
-        {
-            //如果相撞重新寻找位置
-            RamdomTeleport();
-        }
-        else
-        {
-            //反之进行瞬间移动
-            transform.position = randomPosition;
-            //更新计数器
-            teleportAttempts = 0;
-        }
-    }
-
-    private IEnumerator SummonIcicleSpears()
-    {
-        for (int execution = 0; execution < numExecutions; execution++)
-        {
-            for (int i = 0; i < icicleCount; i++)
+            if (collided)
             {
-                float angle = i * (360f / icicleCount);
-                Vector2 spawnPosition = player.transform.position + (Quaternion.Euler(0f, 0f, angle) * Vector2.right * summonRadius);
-                GameObject IcicleSpear = Instantiate(IcicleSpearPrefab, spawnPosition, Quaternion.identity);
-
-                IcicleSpearEmpty icicleSpear = IcicleSpear.GetComponent<IcicleSpearEmpty>();
-                icicleSpear.sf(player.transform.position);
+                //如果相撞重新寻找位置
+                RamdomTeleport();
             }
-            yield return new WaitForSeconds(delayBetweenExecutions);
+            else
+            {
+                //反之进行瞬间移动
+                transform.position = randomPosition;
+                //更新计数器
+                teleportAttempts = 0;
+            }
+        }
+        //二阶段随机传送：玩家周围
+        if(currentPhase == 2)
+        {
+            float minDistance = 5f;
+            float maxDistance = 10f;
+            Vector3 randomDirection = Random.insideUnitCircle.normalized;
+            float randomDistance = Random.Range(minDistance, maxDistance);
+            randomPosition = player.transform.position + randomDirection * randomDistance;
+            // 检查与"Room"和"Environment"标签的对象是否相撞
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(randomPosition, 1f);
+            foreach (Collider2D collider in colliders)
+            {
+                if (collider.CompareTag("Room") || collider.CompareTag("Enviroment"))
+                {
+                    collided = true;
+                    break;
+                }
+            }
+            //检查是否地图边界内
+            if (!IsInMapBounds(randomPosition))
+                collided = true;
+            if (collided)
+            {
+                //如果相撞重新寻找位置
+                RamdomTeleport();
+            }
+            else
+            {
+                //反之进行瞬间移动
+                transform.position = randomPosition;
+                //更新计数器
+                teleportAttempts = 0;
+            }
         }
     }
+    bool IsInMapBounds(Vector3 position)
+    {
+        // 根据地图边界的坐标范围，判断位置是否在地图内
+        float minX = 2985f;
+        float maxX = 3045f;
+        float minY = 2388f;
+        float maxY = 2436f;
 
+        bool isInBounds = position.x >= minX && position.x <= maxX && position.y >= minY && position.y <= maxY;
+        return isInBounds;
+    }
+    private IEnumerator Phase2Start()
+    {
+        //清除所有的子弹
+        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectel");
+        foreach (GameObject projectile in projectiles)
+        {
+            Destroy(projectile);
+        }
+
+        //创建新的房间
+        GameObject newRoom = Instantiate(MewBossRoomPrefab, MewBossRoomPosition, Quaternion.identity);
+        mapCenter = MewBossRoomPosition + new Vector3(15f, 12f, 0f);
+        transform.position = MewBossRoomPosition + new Vector3(15f, 12f, 0f);
+        player.transform.position = MewBossRoomPosition;
+        player.NowRoom = new Vector3Int(100, 100, 0);
+        player.InANewRoom = true;
+        player.NewRoomTimer = 0f;
+
+        Transform mewTransform = newRoom.transform.Find("Empty");
+        if (mewTransform != null)
+        {
+            //将梦幻移动到Empty子对象下
+            transform.SetParent(mewTransform);
+        }
+        //色相头，启动！
+        cinemachineController.MewCameraFollow();
+        cameraAdapt.HideCameraMasks();
+        yield return new WaitForSeconds(3f);
+
+    }
     void ClearStatusEffects()
     {
         //清除所有debuff
@@ -578,11 +915,5 @@ public class Mew : Empty
         this.BlindRemove();
         this.FearRemove();
         this.FrozenRemove();
-    }
-    int CalculateBossHealth()
-    {
-        int playerHealth = player.Hp;
-        int playerMaxHealth = player.maxHp;
-        return Mathf.FloorToInt(maxHP * (playerHealth / (float)playerMaxHealth));
     }
 }

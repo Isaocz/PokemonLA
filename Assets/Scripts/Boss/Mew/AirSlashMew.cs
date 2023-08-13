@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AirSlashMew : Projectile
 {
-    public float airSlashSpeed = 5f;
+    public float airSlashSpeed = 9f;
     public int numSplitAirSlashes = 6;
     public GameObject SplitAirSlashPrefab;
     float angle;
