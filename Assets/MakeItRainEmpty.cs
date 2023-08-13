@@ -6,7 +6,7 @@ using UnityEngine;
 public class MakeItRainEmpty : Projectile
 {
     private Vector3 direction;
-    private float movespeed = 4f;
+    private float movespeed = 5f;
     // Start is called before the first frame update
     public void MIRrotate(Vector3 Direction)
     {
@@ -14,7 +14,7 @@ public class MakeItRainEmpty : Projectile
     }
     void Start()
     {
-        Destroy(gameObject, 8f);
+        Destroy(gameObject, 7f);
     }
 
     // Update is called once per frame
