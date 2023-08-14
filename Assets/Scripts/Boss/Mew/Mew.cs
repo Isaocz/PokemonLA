@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using System.Diagnostics.Eventing.Reader;
 
 public class Mew : Empty
 {
@@ -46,10 +47,13 @@ public class Mew : Empty
     public GameObject SecredFireVertexPrefab;
     public GameObject reticle2Prefab;//Reticle2预制体
     public GameObject SecredSwordPrefab;//技能20
+    public GameObject Phase2Mask;
+    public GameObject UseSkillPrefab;
 
-    //切换房间时等待黑色目光
+    //切换房间时等待
     private float MeanLookTimer = 0f;
     private bool UsedMeanLook = false;
+    private bool turningPhase = false;
 
     //Audio
     public BackGroundMusic bgmScript;
@@ -58,8 +62,10 @@ public class Mew : Empty
     private float skillTimer = 0f; // 技能计时器
     private List<GameObject> heartStamps = new List<GameObject>();//对HeartStamp进行存储
     private float MoreAttackTimer;//二阶段更多技能计时器
-    private int[] MoreAttackSkill = { 1, 3, 7, 8, 9, 10, 11, 13, 15, 17, 18, 20 };
+    private int[] MoreAttackSkill = { 1, 8, 9, 10, 11, 13, 15, 17, 18, 20 };
     private int MoreAttackSkillIndex;
+    private bool isMasked = false;//更多技能释放遮罩
+
     //随机传送
     private int teleportAttempts = 0;//随机传送计数器
 
@@ -120,15 +126,21 @@ public class Mew : Empty
             else
             {
                 bgmScript.ChangeBGMToMew();
-                switch (currentPhase)
+                if (!turningPhase)
                 {
-                    case 1:Phase1();
-                        break;
-                    case 2:Phase2();
-                        MoreAttack();
-                        break;
-                    case 3:Phase3();
-                        break;
+                    switch (currentPhase)
+                    {
+                        case 1:
+                            Phase1();
+                            break;
+                        case 2:
+                            Phase2();
+                            MoreAttack();
+                            break;
+                        case 3:
+                            Phase3();
+                            break;
+                    }
                 }
             }
             if (UsedMeanLook)
@@ -149,6 +161,8 @@ public class Mew : Empty
         {
             if (!roomCreated && currentPhase == 1)
             {
+                turningPhase = true;
+                StopAllCoroutines();//停止所有技能释放
                 EmptyHp = maxHP;
                 StartCoroutine(Phase2Start());
             }
@@ -157,11 +171,8 @@ public class Mew : Empty
         }
         else if (skillTimer <= 0f)
         {
-            // 随机选择一个技能释放
-            RamdomTeleport();
-            int randomSkillIndex = Random.Range(11, 13);
-            UseSkill(randomSkillIndex);
-            SkillTimerUpdate(randomSkillIndex, 1);
+            skillTimer = 1.1f;
+            StartCoroutine(Phase1Skill());
         }
 
         // 技能计时器递减
@@ -169,7 +180,7 @@ public class Mew : Empty
     }
     void Phase2()
     {
-        if (EmptyHp <= maxHP*4/5)//需要测试，测试后修改
+        if (EmptyHp <= maxHP*4/5 && currentPhase == 2)//需要测试，测试后修改
         {
             currentPhase++;
             Debug.Log("进入三阶段");
@@ -178,11 +189,9 @@ public class Mew : Empty
         else if (skillTimer <= 0f)
         {
             // 随机选择一个技能释放
-            RamdomTeleport();
             int randomSkillIndex = Random.Range(1, 21);
+            StartCoroutine(Phase2Skill(randomSkillIndex));
             SkillTimerUpdate(randomSkillIndex, 2);
-            UseSkill(randomSkillIndex);
-
         }
 
         // 技能计时器递减
@@ -191,18 +200,25 @@ public class Mew : Empty
     private void MoreAttack()//二阶段的额外攻击模式
     {
         MoreAttackTimer += Time.deltaTime;
-        if (MoreAttackTimer >= 6f)
+        if (MoreAttackTimer >= 7f)
         {
-            // 切换到下一个技能
-            MoreAttackSkillIndex++;
-            if (MoreAttackSkillIndex >= MoreAttackSkill.Length)
+            //当前技能遮罩
+            if (!isMasked)
             {
-                MoreAttackSkillIndex = 0; // 回到第一个技能
+                isMasked = true;
+                UseSkillMask(MoreAttackSkillIndex);
             }
-            // 执行当前技能的逻辑
-            UseSkill(MoreAttackSkill[MoreAttackSkillIndex]);
-            // 重置计时器
-            MoreAttackTimer = 0f;
+            if (MoreAttackTimer >= 8)
+            {
+                if (MoreAttackSkillIndex >= MoreAttackSkill.Length)
+                {
+                    MoreAttackSkillIndex = 0; // 回到第一个技能
+                }
+                UseSkill(MoreAttackSkill[MoreAttackSkillIndex]);
+                MoreAttackSkillIndex++;
+                isMasked = false;
+                MoreAttackTimer = 0f;
+            }
         }
     }
     void Phase3()
@@ -217,17 +233,17 @@ public class Mew : Empty
         {
             case 1:
                 //技能1：魔法叶
-                if (currentPhase == 1)
-                {
-                    Leafnum = 3;
-                }
-                else
-                {
-                    Leafnum = 5;
-                }
                 StartCoroutine(ReleaseLeaves());
                 IEnumerator ReleaseLeaves()
                 {
+                    if (currentPhase == 1)
+                    {
+                        Leafnum = 3;
+                    }
+                    else
+                    {
+                        Leafnum = 5;
+                    }
                     for (int i = 0; i < Leafnum; i++)
                     {
                         // 在Mew位置实例化魔法叶
@@ -726,11 +742,7 @@ public class Mew : Empty
     {
         switch (skillindex)
         {
-            case 1:
-                if (stage == 1) 
-                    skillTimer = 2.4f;
-                else
-                    skillTimer = 2f;
+            case 1:skillTimer = 2.4f;
                 break;
             case 2:
                 if (stage == 1)
@@ -747,11 +759,13 @@ public class Mew : Empty
                 break;
             case 5:if (stage == 1) skillTimer = 4.7f;
                 else skillTimer = 9.2f;
-                    break;
+                break;
             case 6:if (stage == 1)skillTimer = 2.9f;break;
-            case 7:skillTimer = 2.6f; break;
+            case 7:if (stage == 1) skillTimer = 2.6f;
+                else skillTimer = 3.6f; 
+                break;
             case 8: if (stage == 1) skillTimer = 5.5f;
-                else skillTimer = 3.4f; 
+                else skillTimer = 4.4f; 
                     break;
             case 9:  skillTimer = 4.8f; break;
             case 10: if (stage == 1) skillTimer = 4.3f;
@@ -765,15 +779,14 @@ public class Mew : Empty
                 else skillTimer = 3.2f;
                 break;
             case 14: if (stage == 1) skillTimer = 10f; break;
-            case 15: if (stage == 1) skillTimer = 4.2f;
-                else skillTimer = 3.4f;
+            case 15: if(stage == 1) skillTimer = 4.2f;
+                else skillTimer = 5f;
                 break;
             case 16: skillTimer = 9f; break;
-            case 17: if (stage == 1) skillTimer = 1.8f;
-                else skillTimer = 1.5f;
+            case 17: skillTimer = 1.8f;
                 break;
             case 18: if (stage == 1) skillTimer = 10f;
-                else skillTimer = 5.5f;
+                else skillTimer = 6.5f;
                 break;
             case 19: skillTimer = 6f; break;
             case 20: skillTimer = 6f; break;
@@ -793,7 +806,7 @@ public class Mew : Empty
         //一阶段随机传送：地图内随机位置
         if (currentPhase == 1)
         {
-            // 在房间内随机选择一个位置
+            // 在房间内随机选择一个位置w
             randomPosition = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
 
             // 检查与"Wall"和"Environment"标签的对象是否相撞
@@ -872,6 +885,33 @@ public class Mew : Empty
         bool isInBounds = position.x >= minX && position.x <= maxX && position.y >= minY && position.y <= maxY;
         return isInBounds;
     }
+    private IEnumerator Phase1Skill()
+    {
+        animator.SetTrigger("Teleport");
+        yield return new WaitForSeconds(0.5f);
+        RamdomTeleport();
+
+        //随机选择技能释放
+        int randomSkillIndex = Random.Range(1, 19);
+        UseSkillMask(randomSkillIndex);
+        yield return new WaitForSeconds(0.5f);
+        UseSkill(randomSkillIndex);
+        SkillTimerUpdate(randomSkillIndex, 1);
+    }
+    private IEnumerator Phase2Skill(int randomSkillIndex)
+    {
+        if (randomSkillIndex == 2 || randomSkillIndex == 4 || randomSkillIndex == 6 || randomSkillIndex == 14)
+        {
+            yield break;
+        }
+        animator.SetTrigger("Teleport");
+        yield return new WaitForSeconds(0.5f);
+        RamdomTeleport();
+        UseSkillMask(randomSkillIndex);
+        yield return new WaitForSeconds(0.5f);
+        UseSkill(randomSkillIndex);
+        SkillTimerUpdate(randomSkillIndex, 2);
+    }
     private IEnumerator Phase2Start()
     {
         //清除所有的子弹
@@ -881,6 +921,44 @@ public class Mew : Empty
             Destroy(projectile);
         }
 
+        //制作一个黑色五角星
+        int numPoints = 5; // 五角星上的点数
+        float radius = 12f; // 五角星的顶点到中心的距离
+
+        Vector3[] starVertices = new Vector3[numPoints];
+
+        // 创建五角星的顶点坐标
+        for (int i = 0; i < numPoints; i++)
+        {
+            float angle = i * 2f * Mathf.PI / numPoints;
+            float x = radius * Mathf.Sin(angle) + player.transform.position.x;
+            float y = radius * Mathf.Cos(angle) + player.transform.position.y;
+            starVertices[i] = new Vector3(x, y, player.transform.position.z);
+        }
+        // 在每条线上均匀分布生成SecredFire
+        for (int i = 0; i < numPoints; i++)
+        {
+            Vector3 startPoint = starVertices[i];
+            Vector3 endPoint = starVertices[(i + 2) % numPoints];
+
+            float dist = Vector3.Distance(startPoint, endPoint);
+            float step = dist / 12f; // 生成点的距离间隔
+
+            Vector3 direction = (endPoint - startPoint).normalized;
+
+            for (int j = 0; j < 12; j++)
+            {
+                Vector3 secredFirePosition = startPoint + direction * (j * step);
+                GameObject willowispprefab = Instantiate(WillOWispPrefab, secredFirePosition, Quaternion.identity);
+                Destroy(willowispprefab, 4f);
+                yield return null;
+            }
+        }
+        yield return new WaitForSeconds(1f);
+        GameObject phase2mask = Instantiate(Phase2Mask, transform.position, Quaternion.identity);
+        Destroy(phase2mask, 2.2f);
+        yield return new WaitForSeconds(1.1f);
+;
         //创建新的房间
         GameObject newRoom = Instantiate(MewBossRoomPrefab, MewBossRoomPosition, Quaternion.identity);
         mapCenter = MewBossRoomPosition + new Vector3(15f, 12f, 0f);
@@ -899,8 +977,38 @@ public class Mew : Empty
         //色相头，启动！
         cinemachineController.MewCameraFollow();
         cameraAdapt.HideCameraMasks();
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1.5f);
+        turningPhase = false;
 
+    }
+    private void UseSkillMask(int randomSkillIndex)
+    {
+        GameObject useskillprefab = Instantiate(UseSkillPrefab, transform.position, Quaternion.identity);
+        UseSkill useskillmask = useskillprefab.GetComponent<UseSkill>();
+        useskillmask.originalColor = Color.white;
+        switch (randomSkillIndex)
+        {
+            case 1: useskillmask.targetColor = Color.green; break;
+            case 2: useskillmask.targetColor = Color.cyan; break;
+            case 3: useskillmask.targetColor = new Color(0.2f, 0f, 0.2f); break;//紫黑色
+            case 4: useskillmask.targetColor = new Color(1f, 0.75f, 0.8f); break;//粉色
+            case 5: useskillmask.targetColor = new Color(0.5f, 0f, 0.5f); useskillmask.originalColor = Color.red; break;
+            case 6: useskillmask.targetColor = new Color(0.5f, 0f, 0.5f); break;
+            case 7: useskillmask.targetColor = Color.red; break;
+            case 8: useskillmask.targetColor = Color.cyan; break;
+            case 9: useskillmask.targetColor = new Color(1f, 0f, 0.6f); break;//洋红色
+            case 10: useskillmask.targetColor = new Color(0f, 0f, 0.5f); break;//深蓝色
+            case 11: useskillmask.targetColor = Color.black; break;
+            case 12: useskillmask.targetColor = new Color(1f, 0.75f, 0.8f); break;
+            case 13: useskillmask.targetColor = Color.green; break;
+            case 14: useskillmask.targetColor = new Color(0.7f, 0.5f, 0.3f); break;//浅棕色
+            case 15: useskillmask.targetColor = Color.cyan; break;
+            case 16: useskillmask.targetColor = Color.grey; break;
+            case 17: useskillmask.targetColor = new Color(0.5f, 1f, 0.5f); break;//浅绿色
+            case 18: useskillmask.targetColor = new Color(0.5f, 0f, 0.5f); break;//紫色
+            case 19: useskillmask.targetColor = Color.red; break;
+            case 20: useskillmask.targetColor = new Color(1f, 0.5f, 0f); break;
+        }
     }
     void ClearStatusEffects()
     {
