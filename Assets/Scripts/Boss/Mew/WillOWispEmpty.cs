@@ -8,6 +8,8 @@ public class WillOWispEmpty : MonoBehaviour
     private Vector3 moveDirection;
     public GameObject mew;
 
+    public int SpAPower;
+
     private void Update()
     {
         transform.position += moveDirection * moveSpeed * Time.deltaTime;
@@ -17,7 +19,13 @@ public class WillOWispEmpty : MonoBehaviour
         if (collision.tag == "Player")
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(mew, playerControler.gameObject, 0, 60, 0, Type.TypeEnum.Fire);
+            Pokemon.PokemonHpChange(mew, playerControler.gameObject, 0, SpAPower, 0, Type.TypeEnum.Fire);
+            if (playerControler != null)
+            {
+                //playerControler.ChangeHp(0, -(SpDmage * empty.SpAAbilityPoint * WeatherAlpha * (2 * empty.Emptylevel + 10) / 250), 11);
+                playerControler.KnockOutPoint = 2.5f;
+                playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+            }
             playerControler.BurnFloatPlus(0.4f);
             Destroy(gameObject); // Ïú»ÙWillOWisp¶ÔÏó
         }

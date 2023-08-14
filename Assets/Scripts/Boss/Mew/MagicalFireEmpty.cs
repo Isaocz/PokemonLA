@@ -7,6 +7,7 @@ public class MagicalFireEmpty : Projectile
     Vector3 mewposition;
     float speed= 7f;
     float rotationspeed;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +28,12 @@ public class MagicalFireEmpty : Projectile
         if (collision.CompareTag("Player"))
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, 0, 75, 0, Type.TypeEnum.Fire);
+            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, 0, SpDmage, 0, Type.TypeEnum.Fire);
+            if (playerControler != null)
+            {
+                playerControler.KnockOutPoint = 2.5f;
+                playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+            }
         }
     }
     public void ps(Vector3 mewPosition, float rotationSpeed)

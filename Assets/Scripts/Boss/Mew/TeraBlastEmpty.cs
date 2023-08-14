@@ -115,6 +115,11 @@ public class TeraBlastEmpty : Projectile
             {
                 PlayerControler playerControler = EndRay.collider.GetComponent<PlayerControler>();
                 Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, 0, SpDmage, 0, Type.TypeEnum.IgnoreType);
+                if (playerControler != null)
+                {
+                    playerControler.KnockOutPoint = 2.5f;
+                    playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+                }
             }
             //如果有击中对象，将起始点和终点分别对应
             lineRenderer.SetPosition(0, transform.position);

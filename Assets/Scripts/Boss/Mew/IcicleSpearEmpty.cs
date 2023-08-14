@@ -5,8 +5,8 @@ using UnityEngine;
 public class IcicleSpearEmpty : Projectile
 {
     private Vector3 PlayerPosition;
-    private float initialMoveSpeed = 0.5f;
-    private float finalMoveSpeed = 3f;
+    private float initialMoveSpeed = 1.0f;
+    private float finalMoveSpeed = 4f;
     private bool isMoving = false;
 
     private void Start()
@@ -44,7 +44,12 @@ public class IcicleSpearEmpty : Projectile
         if (collision.CompareTag("Player"))
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, 0, 90, 0, Type.TypeEnum.Ice);
+            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, Dmage,0 , 0, Type.TypeEnum.Ice);
+            if (playerControler != null)
+            {
+                playerControler.KnockOutPoint = 2.5f;
+                playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+            }
         }
     }
     public void sf(Vector3 playerPosition)
