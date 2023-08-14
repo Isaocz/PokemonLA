@@ -28,7 +28,12 @@ public class LeafBladeEmpty : Projectile
         if (collision.CompareTag("Player"))
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, 90, 0, 0, Type.TypeEnum.Grass);
+            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, Dmage, 0, 0, Type.TypeEnum.Grass);
+            if (playerControler != null)
+            {
+                playerControler.KnockOutPoint = 2.5f;
+                playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+            }
         }
     }
 }

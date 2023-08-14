@@ -49,7 +49,7 @@ public class MagicalLeafEmpty : Projectile
             if (playerControler != null)
             {
                 //playerControler.ChangeHp(0, -(SpDmage * empty.SpAAbilityPoint * WeatherAlpha * (2 * empty.Emptylevel + 10) / 250), 11);
-                playerControler.KnockOutPoint = 5;
+                playerControler.KnockOutPoint = 2.5f;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
             }
             Destroy(gameObject); // 在碰撞后销毁魔法叶子对象

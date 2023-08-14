@@ -787,7 +787,7 @@ public class Pokemon : MonoBehaviour
     /// <summary>
     /// 如果AtkUP( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在攻击力恢复时调用此函数
     /// </summary>
-    void AtkUpRemove()
+    public void AtkUpRemove()
     {
         if (isAtkUp)
         {
@@ -924,7 +924,7 @@ public class Pokemon : MonoBehaviour
     /// <summary>
     /// 如果DefUP( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在防御力恢复时调用此函数
     /// </summary>
-    void DefUpRemove()
+    public void DefUpRemove()
     {
         if (isDefUp)
         {
@@ -965,7 +965,7 @@ public class Pokemon : MonoBehaviour
     /// <summary>
     /// 如果DefDown( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在防御力恢复时调用此函数
     /// </summary>
-    void DefDownRemove()
+    public void DefDownRemove()
     {
         if (isDefDown)
         {
@@ -1006,7 +1006,7 @@ public class Pokemon : MonoBehaviour
     /// <summary>
     /// 如果SpAUP( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在特攻力恢复时调用此函数
     /// </summary>
-    void SpAUpRemove()
+    public void SpAUpRemove()
     {
         if (isSpAUp)
         {
@@ -1047,7 +1047,7 @@ public class Pokemon : MonoBehaviour
     /// <summary>
     /// 如果SpADown( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在特攻力恢复时调用此函数
     /// </summary>
-    void SpADownRemove()
+    public void SpADownRemove()
     {
         if (isSpADown)
         {
@@ -1088,7 +1088,7 @@ public class Pokemon : MonoBehaviour
     /// <summary>
     /// 如果SpDUP( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在特防力恢复时调用此函数
     /// </summary>
-    void SpDUpRemove()
+    public void SpDUpRemove()
     {
         if (isSpDUP)
         {
@@ -1832,8 +1832,8 @@ public class Pokemon : MonoBehaviour
                 if (SkillType != Type.TypeEnum.IgnoreType)
                 {
                     EmptyAttacked.EmptyHpChange(
-                    Mathf.Clamp((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2) , 1 , 10000),
-                    Mathf.Clamp((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.SpdAbilityPoint * WeatherSpDAlpha + 2), 1, 10000),
+                    ((AtkPower == 0) ? 0 : (Mathf.Clamp((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2) , 1 , 10000))),
+                    ((SpAPower == 0) ? 0 : (Mathf.Clamp((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.SpdAbilityPoint * WeatherSpDAlpha + 2) , 1 , 10000))),
                     (int)SkillType);
                 }
                 else
@@ -1851,9 +1851,14 @@ public class Pokemon : MonoBehaviour
             PlayerControler PlayerAttacked = Attacked.GetComponent<PlayerControler>();
             if (HpUpValue == 0)
             {
+                Debug.Log(SpAPower);
+                Debug.Log(Attacker);
+                Debug.Log(AttackerSpA);
+                Debug.Log(AttackerLevel);
+                Debug.Log(SkillType);
                 PlayerAttacked.ChangeHp(
-                         Mathf.Clamp((-AtkPower * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1),
-                         Mathf.Clamp((-SpAPower * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1),
+                         ((AtkPower == 0) ? 0 : ( Mathf.Clamp((-AtkPower * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),
+                         ((SpAPower == 0) ? 0 : ( Mathf.Clamp((-SpAPower * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),
                         (int)SkillType);
             }
             else
@@ -1867,8 +1872,8 @@ public class Pokemon : MonoBehaviour
             if (HpUpValue == 0)
             {
                 SubstotuteAttacked.SubStituteChangeHp(
-                    (-AtkPower * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250),
-                    (-SpAPower * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250),
+                     ((AtkPower == 0) ? 0 : Mathf.Clamp( (-AtkPower * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250) , -10000 , -1 ) ),
+                     ((SpAPower == 0) ? 0 : Mathf.Clamp( (-SpAPower * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250) , -10000 , -1 ) ),
                     (int)SkillType);
             }
         }

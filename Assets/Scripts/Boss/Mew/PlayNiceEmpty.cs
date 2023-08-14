@@ -17,16 +17,30 @@ public class PlayNiceEmpty : MonoBehaviour
 
     void ApplySkillEffects()
     {
-        if (mew.AtkAbilityPoint < 10)
+        if (mew.AtkAbilityPoint < 10) {
             mew.AtkAbilityPoint += 1;
+            mew.AtkUP(0);
+            //mew.AtkUpRemove();
+        }
         if (mew.SpAAbilityPoint < 10)
+        {
             mew.SpAAbilityPoint += 1;
+            mew.SpAUP(0);
+        }
         if (mew.DefAbilityPoint < 10)
+        {
             mew.DefAbilityPoint += 1;
+            mew.DefUP(0);
+        }
         if (mew.SpdAbilityPoint < 10)
+        {
             mew.SpdAbilityPoint += 1;
+            mew.SpDUP(0);
+        }
         if (mew.SpeedAbilityPoint < 10)
+        {
             mew.SpeedAbilityPoint += 1;
+        }
 
         if (player.playerData.AtkBounsJustOneRoom > -10)
             player.playerData.AtkBounsJustOneRoom -= 1;

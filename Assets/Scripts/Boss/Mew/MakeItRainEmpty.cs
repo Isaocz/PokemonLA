@@ -28,8 +28,13 @@ public class MakeItRainEmpty : Projectile
         {
             
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            int MoneyIncreseddamage = playerControler.Money/2 + 70;
-            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, 0, MoneyIncreseddamage < 200 ? MoneyIncreseddamage : 200, 0, Type.TypeEnum.Steel);
+            int MoneyIncreseddamage = playerControler.Money/2 + 50;
+            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, 0, MoneyIncreseddamage < 100 ? MoneyIncreseddamage : 100, 0, Type.TypeEnum.Steel);
+            if (playerControler != null)
+            {
+                playerControler.KnockOutPoint = 1f;
+                playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+            }
             Destroy(gameObject);
             playerControler.ChangeMoney(1);
             

@@ -33,7 +33,12 @@ public class AirSlashMew : Projectile
             if (collision.CompareTag("Player"))
             {
                 PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, 0, 120, 0, Type.TypeEnum.Flying);
+                Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, 0, SpDmage, 0, Type.TypeEnum.Flying);
+                if (playerControler != null)
+                {
+                    playerControler.KnockOutPoint = 5f;
+                    playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+                }
             }
             SplitAirSlashes(collision.transform.position);
             Destroy(gameObject);
@@ -47,6 +52,7 @@ public class AirSlashMew : Projectile
             float splitangle =angle + i * (360f / numSplitAirSlashes);
             //’ŸªΩÀÈ∆¨
             GameObject splitAirSlash = Instantiate(SplitAirSlashPrefab, transform.position, Quaternion.Euler(0f, 0f, splitangle));
+            splitAirSlash.GetComponent<SplitAirSlash>().empty = empty;
         }
     }
 }
