@@ -69,11 +69,7 @@ public class Pokemon : MonoBehaviour
         }
         else
         {
-            if (gameObject.GetComponent<SpriteRenderer>() == null) {
-                if (gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>() != null) { gameObject.transform.GetChild(3).GetComponent<SpriteRenderer>().material = NormalMaterial; }
-                else { gameObject.transform.GetChild(3).GetChild(0).GetComponent<SpriteRenderer>().material = NormalMaterial; }
-            }
-            else { gameObject.GetComponent<SpriteRenderer>().material = NormalMaterial; }
+            SetSkinRenderersMaterial(NormalMaterial);
         }
     }
 
