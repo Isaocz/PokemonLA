@@ -7,7 +7,7 @@ public class TeraBlastEmpty : Projectile
     public Color initialColor = Color.yellow;
     public Color finalColor = Color.red;
     float angle;//接收传入的角度
-    public float rotationSpeed = 120f;
+    public float rotationSpeed = 50f;
     public Vector3 startpoint;
     public Vector3 endpoint;
     Mew mew;
@@ -45,6 +45,10 @@ public class TeraBlastEmpty : Projectile
         lineRenderer.SetPosition(1, endpoint);
         //修改激光颜色
         Invoke("ChangeColor", laserDuration);
+        if (mew.LaserChange)
+        {
+            rotationSpeed = rotationSpeed * -1;
+        }
     }
     void Update()
     {
@@ -62,7 +66,7 @@ public class TeraBlastEmpty : Projectile
         lineRenderer.startColor = finalColor;
         lineRenderer.endColor= finalColor;
         isSafe = false;
-        if (mew.currentPhase == 1||shootingTime==3)
+        if (mew.currentPhase != 2||shootingTime==3)
         Invoke("Delete", 2f);
         else
         {
