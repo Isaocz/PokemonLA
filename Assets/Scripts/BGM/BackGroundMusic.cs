@@ -16,6 +16,11 @@ public class BackGroundMusic : MonoBehaviour
     public AudioClip FightMew;
     public AudioClip Stigma;
 
+    public float transitionDuration = 1.0f; // 持续时间
+    private float currentVolume = 0.0f; // 当前音量
+    private float targetVolume = 0.0f; // 目标音量
+    private float transitionTimer = 0.0f; // 转换计时器
+
 
     private void Awake()
     {
@@ -62,5 +67,37 @@ public class BackGroundMusic : MonoBehaviour
             BGM.clip = Stigma;
             BGM.Play();
         }
+    }
+    void Update()
+    {
+        // 如果目标音量与当前音量不同，则进行渐变
+        if (currentVolume != targetVolume)
+        {
+            // 计算渐变过程中的音量值
+            float transitionProgress = Mathf.Clamp01(transitionTimer / transitionDuration);
+            float volume = Mathf.Lerp(currentVolume, targetVolume, transitionProgress);
+
+            // 更新音频源的音量
+            BGM.volume = volume;
+
+            // 更新计时器
+            transitionTimer += Time.deltaTime;
+        }
+    }
+    public void FadeIn()
+    {
+        // 设置目标音量为最大音量
+        targetVolume = 1.0f;
+
+        transitionTimer = 0.0f;
+    }
+
+    // 启动缓出效果
+    public void FadeOut()
+    {
+        // 设置目标音量为静音
+        targetVolume = 0.0f;
+
+        transitionTimer = 0.0f;
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class LeafBladeEmpty : Projectile
 {
     public float moveSpeed = 10f;
+    public Mew mew;
     private Transform target; //Ä¿±ê
 
     // Start is called before the first frame update
@@ -16,6 +17,10 @@ public class LeafBladeEmpty : Projectile
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        if(mew.currentPhase == 3)
+        {
+            moveSpeed = 20f;
+        }
     }
 
     // Update is called once per frame

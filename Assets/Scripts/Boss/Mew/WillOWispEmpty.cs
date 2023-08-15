@@ -10,6 +10,10 @@ public class WillOWispEmpty : MonoBehaviour
 
     public int SpAPower;
 
+    private void Start()
+    {
+        Destroy(gameObject,4f);
+    }
     private void Update()
     {
         transform.position += moveDirection * moveSpeed * Time.deltaTime;
