@@ -187,7 +187,7 @@ MonoBehaviour:
   - {fileID: 405551353723825399}
   animator: {fileID: 0}
   playerUIState: {fileID: 1681684285287949259}
-  speed: 2.5
+  speed: 3
   isEmptyFrozenDone: 0
   isFearDone: 0
   isFearStart: 0
@@ -205,7 +205,7 @@ MonoBehaviour:
   isToxicDone: 0
   isToxicStart: 0
   ToxicPointFloat: 0
-  isParalysisDef: 0
+  isParalysisDef: 1
   isParalysisDone: 0
   isParalysisStart: 0
   ParalysisPointFloat: 0
@@ -245,6 +245,10 @@ MonoBehaviour:
   isBoos: 0
   DropItem: {fileID: 0}
   isCanNotMoveWhenParalysis: 0
+  BelliboltThunder: {fileID: 1858117854845908800, guid: b4023c5ab33518e4b80c63a2b3d279b6, type: 3}
+  ThunderMask: {fileID: 405551353723825399}
+  isInJump: 0
+  ChargeCount: 0
 --- !u!95 &405551353639978274
 Animator:
   serializedVersion: 3
@@ -336,7 +340,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 405551353723825385}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.0001, z: 0.0001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 405551354111270972}
@@ -382,9 +386,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 12
+  m_SortingOrder: 10
   m_Sprite: {fileID: -4207873663494163908, guid: 2f942447fc8482d4aa97563027284ae9, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.4}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.6}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -420,7 +424,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 405551354111270973}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.0001, z: 0.0001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 405551353723825384}
@@ -467,7 +471,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 11
+  m_SortingOrder: 10
   m_Sprite: {fileID: -6160527952256584408, guid: 27c2c494320273b4a8d21669ca222a6d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

@@ -53,7 +53,7 @@ public class NormalEmpty : Empty
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (isEmptyInfatuationDone && other.transform.tag == ("Player"))
+        if (!isEmptyInfatuationDone && other.transform.tag == ("Player"))
         {
             EmptyTouchHit(other.gameObject);
 
