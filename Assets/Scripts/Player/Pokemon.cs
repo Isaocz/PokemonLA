@@ -1684,33 +1684,65 @@ public class Pokemon : MonoBehaviour
     //===========================================================================睡眠的函数=====================================================================================
 
 
-    //一个变量代表是否中毒，一个代表中毒的程度
+    //一个变量代表是否混乱，一个代表混乱的程度
 
     public bool isConfusionDef;
     public bool isConfusionDone;
-
-    //调用此函数时，如果还未开始中毒，开始中毒
-    public void ConfusionFloatPlus()
+    public bool isConfusionStart;
+    public float ConfusionPointFloat;
+    //调用此函数时，如果还未开始混乱，开始混乱
+    public void ConfusionFloatPlus(float ConfusionPoint)
     {
+
         if (!isStateInvincible && !isConfusionDef && !isConfusionDone)
         {
-                
-            playerUIState.StatePlus(9);
-            playerUIState.StateSlowUP(9, 1);
-            isConfusionDone = true;
+            ConfusionPointFloat += ConfusionPoint;
+            ConfusionPointFloat = (ConfusionPointFloat > 1 ? 1 : ConfusionPointFloat);
+
+            if (!isConfusionStart && ConfusionPointFloat < 1)
+            {
+                playerUIState.StatePlus(9);
+                playerUIState.StateSlowUP(9, ConfusionPointFloat);
+                isConfusionStart = true;
+            }
+            else if (isConfusionStart && ConfusionPointFloat < 1)
+            {
+                playerUIState.StateSlowUP(9, ConfusionPointFloat);
+            }
+            else if (ConfusionPointFloat >= 1 && !isConfusionDone)
+            {
+                if (!isConfusionStart)
+                {
+                    playerUIState.StatePlus(9);
+                    playerUIState.StateSlowUP(9,ConfusionPointFloat);
+                    isConfusionStart = true;
+                }
+                isConfusionDone = true;
+                playerUIState.StateSlowUP(9, ConfusionPointFloat);
+            }
+            if (GetComponent<PlayerControler>() != null)
+            {
+                isStateInvincible = true;
+                StateInvincileTimer = TimeStateInvincible;
+            }
         }
     }
 
-    //只可被上一个函数延迟调用，代表解冻的函数
+
+    //只可被上一个函数延迟调用，代表解除混乱的函数
     public void ConfusionRemove()
     {
-        if (isConfusionDone)
+        if (isConfusionStart)
         {
+
+            ConfusionPointFloat = 0;
             playerUIState.StateSlowUP(9, 0);
             playerUIState.StateDestory(9);
+            isConfusionStart = false;
             isConfusionDone = false;
         }
     }
+
 
 
     //===========================================================================混乱的函数=====================================================================================
@@ -1801,7 +1833,7 @@ public class Pokemon : MonoBehaviour
             PlayerControler PlayerAttacker = Attacker.GetComponent<PlayerControler>();
             FollowBaby FollowBabyAttacker = Attacker.GetComponent<FollowBaby>();
             if (EmptyAttacker != null)  { 
-                AttackerATK = EmptyAttacker.AtkAbilityPoint ;  AttackerSpA = EmptyAttacker.SpAAbilityPoint ; AttackerLevel = EmptyAttacker.Emptylevel;
+                AttackerATK = (int)EmptyAttacker.AtkAbilityPoint ;  AttackerSpA = (int)EmptyAttacker.SpAAbilityPoint ; AttackerLevel = EmptyAttacker.Emptylevel;
                 EmptyTypeAlpha = ((SkillType == EmptyAttacker.EmptyType01) || (SkillType == EmptyAttacker.EmptyType02)) ? 1.5f : 1;
             }
             if (PlayerAttacker != null) {
@@ -1847,11 +1879,6 @@ public class Pokemon : MonoBehaviour
             PlayerControler PlayerAttacked = Attacked.GetComponent<PlayerControler>();
             if (HpUpValue == 0)
             {
-                Debug.Log(SpAPower);
-                Debug.Log(Attacker);
-                Debug.Log(AttackerSpA);
-                Debug.Log(AttackerLevel);
-                Debug.Log(SkillType);
                 PlayerAttacked.ChangeHp(
                          ((AtkPower == 0) ? 0 : ( Mathf.Clamp((-AtkPower * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),
                          ((SpAPower == 0) ? 0 : ( Mathf.Clamp((-SpAPower * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),

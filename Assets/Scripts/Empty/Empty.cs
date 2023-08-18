@@ -36,16 +36,16 @@ public class Empty : Pokemon
     public int SpeedEmptyPoint;
 
     //ÄÜÁ¦Öµ
-    public int AtkAbilityPoint { get { return AtkAbility; } set { AtkAbility = value; } }
-    int AtkAbility;
-    public int SpAAbilityPoint { get { return SpAAbility; } set { SpAAbility = value; } }
-    int SpAAbility;
-    public int DefAbilityPoint { get { return DefAbility; } set { DefAbility = value; } }
-    int DefAbility;
-    public int SpdAbilityPoint { get { return SpDAbility; } set { SpDAbility = value; } }
-    int SpDAbility;
-    public int SpeedAbilityPoint { get { return SpeedAbility; } set { SpeedAbility = value; } }
-    int SpeedAbility;
+    public float AtkAbilityPoint { get { return AtkAbility; } set { AtkAbility = value; } }
+    float AtkAbility;
+    public float SpAAbilityPoint { get { return SpAAbility; } set { SpAAbility = value; } }
+    float SpAAbility;
+    public float DefAbilityPoint { get { return DefAbility; } set { DefAbility = value; } }
+    float DefAbility;
+    public float SpdAbilityPoint { get { return SpDAbility; } set { SpDAbility = value; } }
+    float SpDAbility;
+    public float SpeedAbilityPoint { get { return SpeedAbility; } set { SpeedAbility = value; } }
+    float SpeedAbility;
 
 
 
