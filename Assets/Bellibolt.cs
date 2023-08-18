@@ -60,7 +60,7 @@ public class Bellibolt : Empty
 
         ResetPlayer();
         if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }
-        if (!isBorn)
+        if (!isDie && !isBorn)
         {
             EmptyBeKnock();
 

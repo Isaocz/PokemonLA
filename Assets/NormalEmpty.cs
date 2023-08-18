@@ -30,7 +30,7 @@ public class NormalEmpty : Empty
     void Update()
     {
         ResetPlayer();
-        if (!isBorn)
+        if (!isDie && !isBorn)
         {
             EmptyDie();
             UpdateEmptyChangeHP();
@@ -43,7 +43,7 @@ public class NormalEmpty : Empty
 
         ResetPlayer();
         if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }
-        if (!isBorn)
+        if (!isDie && !isBorn)
         {
             EmptyBeKnock();
 

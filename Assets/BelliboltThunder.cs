@@ -12,6 +12,7 @@ public class BelliboltThunder : Projectile
 
     void SetPSActive()
     {
+        
         transform.GetChild(0).gameObject.SetActive(true);
     }
 

@@ -19,6 +19,7 @@ public class GateWayDown : GateWay
             Vector3 position = Maincamera.transform.position;
             position.y = position.y - 110*Time.deltaTime;
             timer += 110*Time.deltaTime;
+            Debug.Log(position.y + timer);
             Maincamera.transform.position = position;
             if (timer >= 24.0f) { 
                 isCameraMove = false;

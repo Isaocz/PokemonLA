@@ -60,7 +60,7 @@ public class Ralts : Empty
         if (!isBorn)
         {
             EmptyBeKnock();
-            if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
+            if (!isDie && !isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
             {
                 if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(7) == null)
                 {

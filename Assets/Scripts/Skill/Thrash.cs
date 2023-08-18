@@ -31,6 +31,6 @@ public class Thrash : Skill
     private void OnDestroy()
     {
         player.isCanNotMove = false;
-        player.ConfusionFloatPlus();
+        player.ConfusionFloatPlus(1);
     }
 }
