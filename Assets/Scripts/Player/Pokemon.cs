@@ -192,6 +192,7 @@ public class Pokemon : MonoBehaviour
 
     //一个变量代表速度是否被改变，一个代表改变的倍率
     public bool isEmptyFrozenDone;
+    public bool isFrozenDef;
     bool isFrozenDone = false;
     bool isFrozenStart = false;
     float EmptyFrozenPointFloat;
@@ -203,7 +204,7 @@ public class Pokemon : MonoBehaviour
         
         if (GetComponent<Empty>() != null && isColdDown != 0) { FrozenPer += 0.25f * isColdDown; }
         Debug.Log(FrozenPer);
-        if (Random.Range(0.0f , 1.0f) <= FrozenPer ) {
+        if (!isFrozenDef && Random.Range(0.0f , 1.0f) <= FrozenPer ) {
             if (!isFrozenDone)
             {
                 EmptyFrozenPointFloat += FrozenPoint * FrozenResistance;

@@ -30,8 +30,8 @@ public class Empty : Pokemon
     //声明六个整形数据，表示角色的六项种族值,以及六项当前能力值
     public int HpEmptyPoint;
     public int AtkEmptyPoint;
-    public int SpAEmptyPoint;
     public int DefEmptyPoint;
+    public int SpAEmptyPoint;
     public int SpdEmptyPoint;
     public int SpeedEmptyPoint;
 
