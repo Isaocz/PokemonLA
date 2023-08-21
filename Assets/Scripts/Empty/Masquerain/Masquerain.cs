@@ -45,6 +45,18 @@ public class Masquerain : Empty
         rigidbody2D = GetComponent<Rigidbody2D>();
 
         preBodyScale = body.localScale.x;
+
+        // Timer.Start(this, 5, () =>
+        // {
+        //     animator.SetTrigger("Hit");
+        // });
+        //
+        // Timer.Start(this, 8, () =>
+        // {
+        //     animator.SetTrigger("Die");
+        // });
+
+        // ChangeFaceTo(FACE_TO.BL);
     }
 
     void Update()
