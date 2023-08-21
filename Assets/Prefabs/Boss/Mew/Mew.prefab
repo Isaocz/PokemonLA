@@ -315,6 +315,62 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &2826558986452678994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 961550853679509331}
+  - component: {fileID: 4861746618610494558}
+  m_Layer: 9
+  m_Name: ElectricBallClockwise
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &961550853679509331
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2826558986452678994}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5095710276580237776}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4861746618610494558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2826558986452678994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8940e6e8f2088454cb08a68a1d4603e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidbody2D: {fileID: 0}
+  spriteRenderer: {fileID: 0}
+  empty: {fileID: 0}
+  Baby: {fileID: 0}
+  BabyLevel: 0
+  Dmage: 0
+  SpDmage: 0
+  mew: {fileID: 5095710276580237776}
+  rotationSpeed: 20
+  orbPrefab: {fileID: 7027899758838974584, guid: 1af19aa6d05631d46a85249ed23316d3, type: 3}
+  orbCount: 6
+  radius: 10
+  moveTime: 0.5
 --- !u!1 &3096599857131440849
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,6 +537,62 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &3693740786425945184
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5410001791705527319}
+  - component: {fileID: 8169314822818617243}
+  m_Layer: 9
+  m_Name: ElectricBallAnticlockwise
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5410001791705527319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693740786425945184}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5095710276580237776}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8169314822818617243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693740786425945184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 599511a53d875a94eaec31372895544c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidbody2D: {fileID: 0}
+  spriteRenderer: {fileID: 0}
+  empty: {fileID: 0}
+  Baby: {fileID: 0}
+  BabyLevel: 0
+  Dmage: 0
+  SpDmage: 0
+  mew: {fileID: 5095710276580237776}
+  rotationSpeed: 20
+  orbPrefab: {fileID: 7027899758838974584, guid: 1af19aa6d05631d46a85249ed23316d3, type: 3}
+  orbCount: 6
+  radius: 10
+  moveTime: 0.5
 --- !u!1 &5515376212026759625
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,6 +826,8 @@ Transform:
   - {fileID: 5952183706025729449}
   - {fileID: 5853435127535180500}
   - {fileID: 8077221718530089963}
+  - {fileID: 961550853679509331}
+  - {fileID: 5410001791705527319}
   - {fileID: 4419023594838040468}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -791,6 +905,7 @@ MonoBehaviour:
   playerUIState: {fileID: 5498906451936900709}
   speed: 0
   isEmptyFrozenDone: 0
+  isFrozenDef: 0
   isFearDone: 0
   isFearStart: 0
   isBlindDone: 0
@@ -821,6 +936,8 @@ MonoBehaviour:
   SleepPointFloat: 0
   isConfusionDef: 0
   isConfusionDone: 0
+  isConfusionStart: 0
+  ConfusionPointFloat: 0
   Knock: 0
   EmptyHp: 100
   maxHP: 100
@@ -831,8 +948,8 @@ MonoBehaviour:
   EmptyType02: 0
   HpEmptyPoint: 100
   AtkEmptyPoint: 100
-  SpAEmptyPoint: 100
   DefEmptyPoint: 100
+  SpAEmptyPoint: 100
   SpdEmptyPoint: 100
   SpeedEmptyPoint: 100
   TypeDef: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
@@ -890,7 +1007,10 @@ MonoBehaviour:
   Phase2Mask: {fileID: 6057410316402037426, guid: 7ecb85381b4eb124eacee6f68d34d8e9, type: 3}
   UseSkillPrefab: {fileID: 895790290568448737, guid: e47ed142ebc448f4d86da079a7354617, type: 3}
   Phase3OrbRotate: {fileID: 1286201656879028948}
+  ElectricBallPrefab: {fileID: 7027899758838974584, guid: 1af19aa6d05631d46a85249ed23316d3, type: 3}
   TimeStopEffect: {fileID: 978235333085611334, guid: 35b724f98aed75b4c9e9e39ad128101b, type: 3}
+  TrailEffect: {fileID: 4254263861014007369, guid: 18d69b4288201d441b91f1a391869652, type: 3}
+  IceBeamPrefab: {fileID: 2193759874819442424, guid: 7ac3364693986d7439a16e07c3fe86b7, type: 3}
   bgmScript: {fileID: 0}
   currentPhase: 1
   LaserChange: 0
@@ -1022,7 +1142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4392254425719300258, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4392254425719300258, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1066,11 +1186,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
---- !u!224 &4419023594838040468 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4392254425719300258, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
+--- !u!114 &5498906451936900709 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5618206323457624403, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
   m_PrefabInstance: {fileID: 119321934776696630}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21cfa8ba11c643c4f958cdb5f1ccde6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &805546192002133275 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 759478124209656365, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
@@ -1098,14 +1224,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5498906451936900709 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5618206323457624403, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
+--- !u!224 &4419023594838040468 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4392254425719300258, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
   m_PrefabInstance: {fileID: 119321934776696630}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21cfa8ba11c643c4f958cdb5f1ccde6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
