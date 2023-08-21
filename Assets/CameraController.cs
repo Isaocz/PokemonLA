@@ -7,7 +7,6 @@ public class CameraController : MonoBehaviour
 {
     public CinemachineVirtualCamera virtualCamera; // 引用Cinemachine Virtual Camera组件
     public GameObject cameraBounds; // 引用CameraBounds游戏对象
-
     private Transform playerTransform; // 玩家的Transform组件
 
     private void Start()
@@ -44,4 +43,5 @@ public class CameraController : MonoBehaviour
             }
         }
     }
+
 }
