@@ -17,7 +17,7 @@ using UnityEngine;
  * 
  * ani:
  * param: Die, Hit
- * clip: Die(EmptyDestroy), Hit
+ * clip: Die(EmptyDestroy), Hit, Born
  * 
  * 异常状态：
  * 着迷（FindAtkTarget()处理），混乱（isEmptyConfusionDone），致盲（isSilence）
