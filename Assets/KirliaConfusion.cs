@@ -2,60 +2,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RaltsConfusion : Projectile
+public class KirliaConfusion : Projectile
 {
-    // Start is called before the first frame update
+
+    //极坐标转换用的角度和长度
+    public float R;
+    public float RSpeed;
+    float L;
+    //原点
+    public Vector2 StartPosition;
+
     bool isDestory;
-    float ExitTime;
-    SpriteRenderer CircleS;
 
 
     private void Awake()
     {
         AwakeProjectile();
-        ExitTime = 3.5f;
+        
     }
 
     private void Start()
     {
-        CircleS = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        if (RSpeed == 0) { RSpeed = 210; }
+        L = 0;
     }
+
+
 
     private void Update()
     {
-        if (ExitTime >= 0)
+        DestoryProjectile(7.5f);
+        if (spriteRenderer.color.a <= 0.5f)
         {
-            ExitTime -= Time.deltaTime;
-            if (ExitTime > 3.0f) { CircleS.color = CircleS.color + new Color(0, 0, 0, 2f * Time.deltaTime);Debug.Log(CircleS.color + "+" + CircleS.gameObject); }
+            Debug.Log("xxx");
         }
-        else
-        {
-            if ((transform.position - BornPosition).magnitude >= 3)
-            {
-                if (spriteRenderer.material.color.a >= 0)
-                {
-                    spriteRenderer.material.color = spriteRenderer.material.color - new Color(0, 0, 0, 3f * Time.deltaTime);
-                    CircleS.color = CircleS.color - new Color(0, 0, 0, 3f * Time.deltaTime);
-                }
-                if (spriteRenderer.material.color.a <= 0.1f)
-                {
-                    Destroy(gameObject);
-                }
-
-            }
-        }
-        //this.transform.localScale += new Vector3(Time.deltaTime * 2, 0, 0);
         if (isDestory)
         {
             CollisionDestory();
-            CircleS.color = CircleS.color - new Color(0, 0, 0, 3f * Time.deltaTime);
+        }
+        else
+        {
+            L += Time.deltaTime * 1.7f;
+            R += Time.deltaTime * RSpeed;
+            transform.position = new Vector3(Mathf.Cos(R * Mathf.Deg2Rad) * L + StartPosition.x, Mathf.Sin(R * Mathf.Deg2Rad) * L + StartPosition.y, 0);
+            //transform.rotation = Quaternion.AngleAxis(R, Vector3.forward) * Quaternion.Euler(0,0,0); 
+            transform.rotation = Quaternion.Euler(0, 0, R + 90);
         }
 
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == ("Room") || other.tag == ("Player") || (empty.isEmptyInfatuationDone && other.gameObject != empty.gameObject && other.tag == ("Empty")))
+        if (other.tag == ("Enviroment") || other.tag == ("Room") || other.tag == ("Player") || (empty.isEmptyInfatuationDone && other.gameObject != empty.gameObject && other.tag == ("Empty")))
         {
             isDestory = true;
             Destroy(rigidbody2D);
