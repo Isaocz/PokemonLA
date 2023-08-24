@@ -50,7 +50,10 @@ public class Mew : Empty
     public GameObject Phase2Mask;
     public GameObject UseSkillPrefab;
     public GameObject Phase3OrbRotate;
-    public GameObject TimeStopEffect; 
+    public GameObject ElectricBallPrefab;//技能21
+    public GameObject TimeStopEffect;
+    public GameObject TrailEffect;
+    public GameObject IceBeamPrefab;//技能22
 
     //切换房间时等待
     private float MeanLookTimer = 0f;
@@ -110,7 +113,6 @@ public class Mew : Empty
 
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
-        cinemachineController = FindObjectOfType<CameraController>();
         cameraAdapt = FindObjectOfType<CameraAdapt>();
 
         //地图
@@ -1263,11 +1265,56 @@ public class Mew : Empty
                 secredFirePositions[(i * 12) + j] = secredFirePosition;
                 secredFire.empty = this;
                 secredFire.Initialize(player.transform.position, 2f);
-                yield return null;
             }
         }
         yield return new WaitForSeconds(4f);
-        //三阶段-第一部分
+        //三阶段-第一部分 finish
+
+        StartCoroutine(ElectricBall());
+        yield return new WaitForSeconds(4f);
+        UseSkillMask(2);
+        yield return new WaitForSeconds(1f);
+        for (int i = 0; i < 100; i++)
+        {
+            float angle = i * 11f;
+            GameObject trail = Instantiate(TrailEffect, transform.position, Quaternion.Euler(0, 0, angle));
+            StartCoroutine(IceBeam(i));
+            Destroy(trail, 2f);
+            yield return null;
+        }
+        yield return new WaitForSeconds(3f);
+    }
+
+    private IEnumerator ElectricBall()
+    {
+        for(int j = 0; j < 20; j++)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                float angle = i * 60f;
+                Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+                ElectroBallEmpty electricBall = Instantiate(ElectricBallPrefab, transform.position, rotation).GetComponent<ElectroBallEmpty>();
+                electricBall.Initialize(transform.position, 15f);
+                electricBall.empty = this;
+
+            }
+            for (int i = 0; i < 6; i++)
+            {
+                float angle = i * 60f;
+                Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+                ElectroBallEmpty electricBall = Instantiate(ElectricBallPrefab, transform.position, rotation).GetComponent<ElectroBallEmpty>();
+                electricBall.Initialize(transform.position, -15f);
+                electricBall.empty = this;
+
+            }
+            yield return new WaitForSeconds(8f);
+        }
+    }
+    private IEnumerator IceBeam(int i)
+    {
+        yield return new WaitForSeconds(2f);
+        float angle = i * 11f;
+        GameObject icebeam = Instantiate(IceBeamPrefab, transform.position, Quaternion.Euler(0, 0, angle));
     }
     private IEnumerator Phase2Start()
     {
@@ -1334,6 +1381,8 @@ public class Mew : Empty
             transform.SetParent(mewTransform);
         }
         //色相头，启动！
+        cameraAdapt.ActivateVcam();
+        cinemachineController = FindObjectOfType<CameraController>();
         cinemachineController.MewCameraFollow();
         cameraAdapt.HideCameraMasks();
         yield return new WaitForSeconds(1.5f);

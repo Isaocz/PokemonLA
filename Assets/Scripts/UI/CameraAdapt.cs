@@ -17,6 +17,7 @@ public class CameraAdapt : MonoBehaviour
     public GameObject cameraMaskRight; 
     public GameObject cameraMaskUp; 
     public GameObject cameraMaskDown;
+    public GameObject vcam;
 
     public void HideCameraMasks()
     {
@@ -43,6 +44,16 @@ public class CameraAdapt : MonoBehaviour
             cameraMaskDown.SetActive(true);
     }
 
+    public void ActivateVcam()
+    {
+        vcam.SetActive(true);
+    }
+
+    public void DeactivateVcam()
+    {
+        vcam.SetActive(false);
+    }
+
     private void OnGUI()
     {
         if (lastwidth != Screen.width || lastheight != Screen.height)
@@ -57,9 +68,10 @@ public class CameraAdapt : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-            //aimRatio = (float)ConstantRoom.ROOM_WIDTH / ConstantRoom.ROOM_HIGHT;
-            aimRatio = ConstantRoom.ROOM_SHOW_RATIO;
-            halfWidth = aimRatio * halfHeightPre;
+        //aimRatio = (float)ConstantRoom.ROOM_WIDTH / ConstantRoom.ROOM_HIGHT;
+        aimRatio = ConstantRoom.ROOM_SHOW_RATIO;
+        halfWidth = aimRatio * halfHeightPre;
+        vcam.SetActive(false);
     }
 
     void adapt()
