@@ -21,7 +21,7 @@ public class Cloyster : Empty
         EmptyType01 = Type.TypeEnum.Water;
         EmptyType02 = Type.TypeEnum.Ice;
         player = GameObject.FindObjectOfType<PlayerControler>();
-        Emptylevel = SetLevel(player.Level, 30);
+        Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);
         SpAAbilityPoint = AbilityForLevel(Emptylevel, SpAEmptyPoint);
