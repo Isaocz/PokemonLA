@@ -29,12 +29,10 @@ public class KricketotStruggleBug : Projectile
             {
                 Destroy(gameObject);
             }
-
         }
         if (isDestory)
         {
             s1.material.color = s1.material.color - new Color(0, 0, 0, 3f * Time.deltaTime);
-            Debug.Log(s1.material.color);
             CollisionDestory();
         }
         else

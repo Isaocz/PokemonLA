@@ -42,7 +42,7 @@ public class poochyena : Empty
         }
 
         player = GameObject.FindObjectOfType<PlayerControler>();
-        Emptylevel = SetLevel(player.Level,30);
+        Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyType01 = Type.TypeEnum.Dark;
         EmptyType02 = 0;
         

@@ -15,15 +15,19 @@ public class TestSkill : Skill
 
     [Header(" «∑Ò…’…À")]
     public bool isBurn;
+    public float BurnTime;
 
     [Header(" «∑Ò¬È±‘")]
     public bool isParalysis;
+    public float ParalysisTime;
 
     [Header(" «∑Ò÷–∂æ")]
     public bool isToxic;
+    public float ToxicTime;
 
     [Header(" «∑ÒÀØ√ﬂ")]
     public bool isSleep;
+    public float SleepTime;
 
     [Header(" «∑ÒŒ∑Àı")]
     public bool isFear;
@@ -88,10 +92,10 @@ public class TestSkill : Skill
             isCanNotMove = true;
             isTestHitDone = true;
             if (isFroze) { target.Frozen(FrozeTime, 1, 1); }
-            if (isBurn) { target.BurnFloatPlus(1) ; }
-            if (isParalysis) { target.ParalysisFloatPlus(1) ; }
-            if (isToxic) { target.ToxicFloatPlus(1) ; }
-            if (isSleep) { target.SleepFloatPlus(1) ; }
+            if (isBurn) { target.EmptyBurnDone(1,BurnTime) ; }
+            if (isParalysis) { target.EmptyParalysisDone(1 , ParalysisTime) ; }
+            if (isToxic) { target.EmptyToxicDone(1, ToxicTime) ; }
+            if (isSleep) { target.EmptySleepDone(1, SleepTime) ; }
             if (isFear) { target.Fear(FearTime,1) ; }
             if (isBlind) { target.Blind(BlindTime,1) ; }
             if (isConfusion) { target.EmptyConfusion(ConfusionTime , 1) ; }

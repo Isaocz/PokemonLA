@@ -28,7 +28,7 @@ public class LmcMove : Empty
         player = GameObject.FindObjectOfType<PlayerControler>();
 
         //---（对于所有敌人子类）---，设置等级
-        Emptylevel = SetLevel(player.Level,15);
+        Emptylevel = SetLevel(player.Level, MaxLevel);
         //---（对于所有敌人子类）---，初始化能力值和可获得经验
         EmptyHpForLevel(Emptylevel);
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);

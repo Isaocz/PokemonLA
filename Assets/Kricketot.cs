@@ -11,6 +11,9 @@ public class Kricketot : Empty
     float LunchTimer;
     public KricketotStruggleBug KSB;
 
+    public bool isBeCall;
+    public Kricketune CallParent;
+
 
     // Start is called before the first frame update
     void Start()
@@ -18,7 +21,7 @@ public class Kricketot : Empty
         EmptyType01 = Type.TypeEnum.Bug;
         EmptyType02 = Type.TypeEnum.No;
         player = GameObject.FindObjectOfType<PlayerControler>();
-        Emptylevel = SetLevel(player.Level, 30);
+        Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);
         SpAAbilityPoint = AbilityForLevel(Emptylevel, SpAEmptyPoint);
@@ -30,6 +33,13 @@ public class Kricketot : Empty
         //获取刚体目标 动画管理者目标 并让刚体的初始x坐标带入FirstX中
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
+        if (isBeCall)
+        {
+            DefAbilityPoint /= 2;
+            SpdAbilityPoint /= 2;
+            DefDown(0);
+            SpDDown(0);
+        }
     }
 
 
@@ -114,6 +124,15 @@ public class Kricketot : Empty
         p2.LaunchNotForce(LunchDirector2, 9.5f);
         p2.empty = this;
         p2.transform.rotation = Quaternion.AngleAxis(_mTool.Angle_360(  (Vector3)LunchDirector2, Vector3.up), Vector3.forward) * transform.rotation;
+    }
+
+
+    private void OnDestroy()
+    {
+        if (isBeCall && CallParent != null)
+        {
+            CallParent.ChildCount--;
+        }
     }
 
 }

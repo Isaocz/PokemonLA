@@ -233,6 +233,14 @@ public class Pokemon : MonoBehaviour
                     speed = 0;
                     isEmptyFrozenDone = true;
                     animator.speed = 0;
+                    foreach (SpriteRenderer s in skinRenderers)
+                    {
+                        Animator A = s.gameObject.GetComponent<Animator>();
+                        if (A != null)
+                        {
+                            A.speed = 0;
+                        }
+                    }
                     Invoke("FrozenRemove", FrozenTime*FrozenResistance);
                 }
             }
@@ -256,6 +264,14 @@ public class Pokemon : MonoBehaviour
             isEmptyFrozenDone = false;
             MarterialChangeToNurmal();
             animator.speed = 1;
+            foreach (SpriteRenderer s in skinRenderers)
+            {
+                Animator A = s.gameObject.GetComponent<Animator>();
+                if (A != null)
+                {
+                    A.speed = 1;
+                }
+            }
         }
     }
 

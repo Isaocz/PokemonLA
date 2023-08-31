@@ -26,7 +26,6 @@ public class KirliaDGOne : Projectile
                 {
                     playerControler.KnockOutPoint = 5f;
                     playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
-                    if (Random.Range(0.0f, 1.0f) > 0.9f) { playerControler.ParalysisFloatPlus(0.4f); }
                 }
 
             }
