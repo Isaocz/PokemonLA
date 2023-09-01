@@ -19,7 +19,7 @@ public class Gastly : Empty
         EmptyType01 = Type.TypeEnum.Ghost;
         EmptyType02 = Type.TypeEnum.Poison;
         player = GameObject.FindObjectOfType<PlayerControler>();
-        Emptylevel = SetLevel(player.Level, 30);
+        Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);
         SpAAbilityPoint = AbilityForLevel(Emptylevel, SpAEmptyPoint);
