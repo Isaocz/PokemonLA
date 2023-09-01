@@ -100,7 +100,7 @@ public class Mew : Empty
         EmptyType01 = Type.TypeEnum.Psychic;//梦幻的属性为超能
         EmptyType02 = 0;
         player = GameObject.FindObjectOfType<PlayerControler>();//获取玩家
-        Emptylevel = SetLevel(player.Level, 100);//上限等级100
+        Emptylevel = SetLevel(player.Level, MaxLevel);//上限等级100
         EmptyHpForLevel(Emptylevel);//设置初始血量
 
         //能力等级

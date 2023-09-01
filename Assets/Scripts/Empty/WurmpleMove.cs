@@ -21,7 +21,7 @@ public class WurmpleMove : Empty
         EmptyType01 = Type.TypeEnum.Bug;
         EmptyType02 = 0;
         player = GameObject.FindObjectOfType<PlayerControler>();
-        Emptylevel = SetLevel(player.Level,20);
+        Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);
         SpAAbilityPoint = AbilityForLevel(Emptylevel, SpAEmptyPoint);

@@ -20,7 +20,7 @@ public class Diglett : Empty
         EmptyType01 = Type.TypeEnum.Fairy;
         EmptyType02 = Type.TypeEnum.Normal;
         player = GameObject.FindObjectOfType<PlayerControler>();
-        Emptylevel = SetLevel(player.Level, 30);
+        Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);
         SpAAbilityPoint = AbilityForLevel(Emptylevel, SpAEmptyPoint);

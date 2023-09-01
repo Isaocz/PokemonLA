@@ -27,13 +27,14 @@ public class Empty : Pokemon
     public Type.TypeEnum EmptyType02;
 
     [Header("种族值")]
-    //声明六个整形数据，表示角色的六项种族值,以及六项当前能力值
+    //声明六个整形数据，表示角色的六项种族值,以及六项当前能力值,MaxLevel表示该敌人可以到达的最高等级
     public int HpEmptyPoint;
     public int AtkEmptyPoint;
     public int DefEmptyPoint;
     public int SpAEmptyPoint;
     public int SpdEmptyPoint;
     public int SpeedEmptyPoint;
+    public int MaxLevel;
 
     //能力值
     public float AtkAbilityPoint { get { return AtkAbility; } set { AtkAbility = value; } }
@@ -157,13 +158,13 @@ public class Empty : Pokemon
             }
             else
             {
-                OutPut = PlayerLevel - (player.playerData.IsPassiveGetList[29] ? (Random.Range(-5, -2)) : (Random.Range(2, 6)));
+                OutPut = PlayerLevel + (player.playerData.IsPassiveGetList[29] ? (Random.Range(2, 5)) : (Random.Range(-2, 2)));
                 if (OutPut > MaxLevel) { OutPut = MaxLevel; }
             }
         }
         else
         {
-            OutPut = Mathf.Clamp(player.Level+ (player.playerData.IsPassiveGetList[29] ? (Random.Range(-5,0)):(Random.Range(-2, 3))), (player.playerData.IsPassiveGetList[29] ? 22 : 15), (player.playerData.IsPassiveGetList[29] ? 60 : 50));
+            OutPut = Mathf.Clamp(player.Level + (player.playerData.IsPassiveGetList[29] ? (Random.Range(2, 5)) : (Random.Range(-2, 2)) ), (player.playerData.IsPassiveGetList[29] ? 15 : 5), 100);
         }
         return OutPut;
     }
@@ -174,7 +175,12 @@ public class Empty : Pokemon
     /// <param name="level"></param>
     protected void EmptyHpForLevel(int level)
     {
-        EmptyHp = (int)((level + 10 + (int)(((float)level * HpEmptyPoint * 2) / 100.0f))*(isBoos?1.7f:1));
+        float BossBonus = 1.7f;
+        if (FloorNum.GlobalFloorNum != null)
+        {
+            BossBonus = FloorNum.GlobalFloorNum.FloorBossHPBonus[FloorNum.GlobalFloorNum.FloorNumber];
+        }
+        EmptyHp = (int)((level + 10 + (int)(((float)level * HpEmptyPoint * 2) / 100.0f))*(isBoos? BossBonus : 1));
         maxHP = EmptyHp;
     }
 
@@ -743,6 +749,24 @@ public class Empty : Pokemon
         RaycastHit2D SearchEmpty07 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.right, 0.6f, LayerMask.GetMask("Enviroment"));
         RaycastHit2D SearchEmpty08 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.down, 0.6f, LayerMask.GetMask("Enviroment"));
         return !SearchEmpty01 && !SearchEmpty02 && !SearchEmpty03 && !SearchEmpty04 && !SearchEmpty05 && !SearchEmpty06 && !SearchEmpty07 && !SearchEmpty08;
+    }
+
+    /// <summary>
+    /// 多用于确定敌人是否处于当前房间的范围内
+    /// </summary>
+    /// <param name="P"></param>
+    /// <returns></returns>
+    public bool isThisPointInRoom(Vector3 P)
+    {
+        if(Mathf.Abs(P.x) <= 12.2f && Mathf.Abs(P.y) <= 7.1f)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        
     }
 
 
