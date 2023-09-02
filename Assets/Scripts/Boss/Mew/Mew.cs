@@ -54,6 +54,8 @@ public class Mew : Empty
     public GameObject TimeStopEffect;
     public GameObject TrailEffect;
     public GameObject IceBeamPrefab;//技能22
+    public GameObject FakePotionPrefab;//假伤药
+    public GameObject FakeLovePrefab;//假心
 
     //切换房间时等待
     private float MeanLookTimer = 0f;
@@ -377,7 +379,7 @@ public class Mew : Empty
                         Times = 4;
                     }
                     float angleIncrement = 360f / 8;
-                    float rotationSpeed = 60f;
+                    float rotationSpeed = 30f;
                     for (int j = 0; j < Times; j++) {
                         for (int i = 0; i < 8; i++)
                         {
@@ -976,6 +978,7 @@ public class Mew : Empty
                 float angle = i * (360f / 8);
                 Vector2 spawnPosition = transform.position + (Quaternion.Euler(0f, 0f, angle) * Vector2.right * 2f);
                 GameObject magicalleaf = Instantiate(magicalLeafPrefab, spawnPosition, Quaternion.identity);
+                magicalleaf.GetComponent<MagicalLeafEmpty>().empty = this;
                 Destroy(magicalleaf, 6f);
             }
             yield return new WaitForSeconds(2f);
@@ -1049,7 +1052,7 @@ public class Mew : Empty
         UseSkillMask(7);
         yield return new WaitForSeconds(1f);
         float angleIncrement = 360f / 8;
-        float rotationSpeed = 60f;
+        float rotationSpeed = 30f;
         for (int j = 0; j < 4; j++)
         {
             if (j % 2 == 0)
@@ -1268,23 +1271,54 @@ public class Mew : Empty
             }
         }
         yield return new WaitForSeconds(4f);
-        //三阶段-第一部分 finish
+        //三阶段-第二部分
+        //首先先圆形释放会给玩家造成伤害的假心，期间不断释放魔法叶
+        StartCoroutine(MagicalLeaf(8));
+        yield return new WaitForSeconds(2f);
+        for (int j = 0; j < 7; j++)
+        {
+            float increaseAngle = 9f;
+            float angleStep = 360f / 16;
+            for (int i = 0; i < 16; i++)
+            {
+                float angle = j * increaseAngle + i * angleStep;
+                Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * 1f;
+                FakeLove fakelove = Instantiate(FakeLovePrefab, spawnPos, Quaternion.identity).GetComponent<FakeLove>();
+                Vector3 direction = (spawnPos - transform.position).normalized;
+                fakelove.Initialize(5f, direction);
+                fakelove.mew = gameObject;
+            }
+            yield return new WaitForSeconds(3f);
+        }
 
+        //其次释放电球，释放冰冻光束
         StartCoroutine(ElectricBall());
         yield return new WaitForSeconds(4f);
         UseSkillMask(2);
         yield return new WaitForSeconds(1f);
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 50; i++)
         {
-            float angle = i * 11f;
+            float angle = i * 22f;
             GameObject trail = Instantiate(TrailEffect, transform.position, Quaternion.Euler(0, 0, angle));
             StartCoroutine(IceBeam(i));
             Destroy(trail, 2f);
             yield return null;
         }
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
+
+        //释放魔法叶，同时释放出现假伤药
+        StartCoroutine(MagicalLeaf(10));
+        for (int i = 0; i < 30; i++)
+        {
+            Vector2 randomPosition = RandomPosition();
+            GameObject fakepotion = Instantiate(FakePotionPrefab, randomPosition, Quaternion.identity);
+            Destroy(fakepotion, 15f);
+            yield return new WaitForSeconds(1f);
+        }
+
     }
 
+    //第三阶段电球
     private IEnumerator ElectricBall()
     {
         for(int j = 0; j < 20; j++)
@@ -1310,12 +1344,48 @@ public class Mew : Empty
             yield return new WaitForSeconds(8f);
         }
     }
+    //第三阶段的冰冻光束
     private IEnumerator IceBeam(int i)
     {
         yield return new WaitForSeconds(2f);
-        float angle = i * 11f;
+        float angle = i * 22f;
         GameObject icebeam = Instantiate(IceBeamPrefab, transform.position, Quaternion.Euler(0, 0, angle));
+        icebeam.GetComponent<IceBeamEmpty>().empty = this;
     }
+    //第三阶段的魔法叶
+    private IEnumerator MagicalLeaf(int times)
+    {
+        for(int i = 0; i < times; i++)
+        {
+            GameObject magicalleaf = Instantiate(magicalLeafPrefab, transform.position, Quaternion.identity);
+            magicalleaf.GetComponent<MagicalLeafEmpty>().empty = this;
+            Destroy(magicalleaf, 6f);
+            yield return new WaitForSeconds(3f);
+        }
+    }
+    //第三阶段随机寻找位置：在梦幻的范围内但是不在玩家范围内
+    Vector2 RandomPosition()
+    {
+        float mewRadius = 20f;
+        float playerRadius = 4f;
+        Vector2 randomPos = transform.position;
+
+        bool isValid = false;
+        while (!isValid)
+        {
+            randomPos = (Vector2)transform.position + Random.insideUnitCircle * mewRadius;
+
+            // 检查位置是否在玩家半径范围内
+            float distanceToPlayer = Vector2.Distance(randomPos, player.transform.position);
+            if (distanceToPlayer > playerRadius)
+            {
+                isValid = true;
+            }
+        }
+
+        return randomPos;
+    }
+
     private IEnumerator Phase2Start()
     {
         //清除所有的子弹
