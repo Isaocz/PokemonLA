@@ -13,7 +13,7 @@ public class MasquerainPathFinder : MonoBehaviour
     private Seeker seeker;
     public Path path;
     private float speed;
-    public float nextWaypointDistance = 0.05f;
+    public float nextWaypointDistance = 0.8f;
     private int currentWaypoint = 0;
     public bool reachedEndOfPath;
     Empty ParentEmpty;
@@ -31,6 +31,36 @@ public class MasquerainPathFinder : MonoBehaviour
         rigi = GetComponent<Rigidbody2D>();
         seeker = GetComponent<Seeker>();
         speed = ParentEmpty.speed;
+        
+        // ¸¨ÖúÅÐ¶ÏÊÇ·ñ×²Ç½£¬·ÀÖ¹¿¨ÔÚÒ»¸öµØ·½
+        Timer.Start(this, 0.2f, true, () =>
+        {
+            if (walking)
+            {
+                Vector2 rigiPos = rigi.position;
+                if (historyPos.Count >= 5)
+                {
+                    historyPos.RemoveAt(0);
+                }
+                historyPos.Add(rigiPos);
+
+                if (historyPos.Count >= 5)
+                {
+                    float disX = 0, disY = 0;
+                    for (int i = 1; i < historyPos.Count; i++)
+                    {
+                        disX += Math.Abs(historyPos[i].x - historyPos[i - 1].x);
+                        disY += Math.Abs(historyPos[i].y - historyPos[i - 1].y);
+                    }
+        
+                    if (disX < 0.0001 && disY < 0.0001)
+                    {
+                        walking = false;
+                        onFinish();
+                    }
+                }
+            }
+        });
     }
     public void OnPathComplete(Path p)
     {
@@ -41,16 +71,19 @@ public class MasquerainPathFinder : MonoBehaviour
         }
         walking = true;
     }
-    public void Update()
+    // public void Update()
+    // {
+    // }
+    
+    private void FixedUpdate()
     {
         speed = ParentEmpty.speed;
         if (walking && !ParentEmpty.isBorn && !ParentEmpty.isDie && !ParentEmpty.isHit && !ParentEmpty.isSilence && !ParentEmpty.isEmptyFrozenDone)
         {
             reachedEndOfPath = false;
-            float distanceToWaypoint;
             while (true)
             {
-                distanceToWaypoint = Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]);
+                float distanceToWaypoint = Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]);
                 if (distanceToWaypoint < nextWaypointDistance)
                 {
                     if (currentWaypoint + 1 < path.vectorPath.Count)
@@ -75,9 +108,10 @@ public class MasquerainPathFinder : MonoBehaviour
                 faceDir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
                 // if (ParentEmpty.isEmptyConfusionDone) { dir = (dir + new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1), 0)).normalized; }
                 Vector3 velocity = faceDir * speed;
+                // Vector2 rigiPos = rigi.position;
                 if ((new Vector3(rigi.position.x, rigi.position.y) - targetPosition).magnitude >= 0.5f)
                 {
-                    rigi.MovePosition(rigi.position + new Vector2(velocity.x, velocity.y) * Time.deltaTime);
+                    rigi.MovePosition(rigi.position + new Vector2(velocity.x, velocity.y) * Time.fixedDeltaTime);
                     move = true;
                 }
             }
@@ -90,27 +124,14 @@ public class MasquerainPathFinder : MonoBehaviour
             }
         }
     }
-    
-    // private void FixedUpdate()
-    // {
-    //
-    //     if (!ParentEmpty.isSleepDone && !ParentEmpty.isCanNotMoveWhenParalysis) {
-    //         if (Mathf.Abs((LastPosition - transform.position).magnitude) <= 0.01f)
-    //         {
-    //             StaticTimer++;
-    //             if (StaticTimer >= 15)
-    //             {
-    //                 StaticTimer = 0;
-    //                 isEscape = false;
-    //             }
-    //         }
-    //         LastPosition = transform.position;
-    //     }
-    // }
 
-    public void SetTargetPos(Vector3 target, Action cb)
+    public void SetTargetPos(Vector3 target, Action cb = null)
     {
         targetPosition = target;
+        if (cb == null)
+        {
+            cb = ()=>{};
+        }
         onFinish = cb;
         seeker.StartPath(rigi.position, targetPosition, OnPathComplete);
     }

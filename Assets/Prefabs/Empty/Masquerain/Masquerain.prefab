@@ -205,6 +205,7 @@ MonoBehaviour:
   SpAEmptyPoint: 100
   SpdEmptyPoint: 82
   SpeedEmptyPoint: 80
+  MaxLevel: 0
   TypeDef: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   isDie: 0
   isHit: 0
@@ -218,9 +219,15 @@ MonoBehaviour:
   DropItem: {fileID: 0}
   isCanNotMoveWhenParalysis: 0
   faceTo: 0
-  foundRadius: 8
-  patrolChooseRadius: 5
+  foundRadius: 12
+  atkRadius: 7
+  patrolChooseRadius: 8
+  disKeepChase: 15
+  patrolSpeed: 2.2
+  chaseSpeed: 5
+  cdSkill: 2
   body: {fileID: 6127595402269670024}
+  skill: {fileID: 6300139084994621321, guid: 4aff0c29a6ffb8349a59c26f9959cded, type: 3}
 --- !u!95 &1998429374286830741
 Animator:
   serializedVersion: 3
@@ -269,7 +276,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 10
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -290,7 +297,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPosition: {x: 0, y: 0, z: 0}
-  nextWaypointDistance: 0.05
+  faceDir: {x: -1, y: -1, z: 0}
+  nextWaypointDistance: 0.8
   reachedEndOfPath: 0
 --- !u!114 &1991743348449199077
 MonoBehaviour:
@@ -413,7 +421,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: -1408640921454858437, guid: f169cc173c39afc44894bbe56339d63c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

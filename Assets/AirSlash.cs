@@ -31,7 +31,6 @@ public class AirSlash : Projectile
     private void Update()
     {
 
-
         //this.transform.localScale += new Vector3(Time.deltaTime * 2, 0, 0);
         DestoryProjectile(13);
         if (isDestory)
@@ -41,6 +40,10 @@ public class AirSlash : Projectile
             var Emit = PS.emission;
             Emit.enabled = false;
             Trail.enabled = false;
+        }
+        else
+        {
+            MoveNotForce();
         }
 
 
