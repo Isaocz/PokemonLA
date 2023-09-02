@@ -86,7 +86,10 @@ public class Masquerain : Empty
         if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }
         if (!isBorn)
         {
-            HandleFaceTo();
+            if (_pathFinder.Walking)
+            {
+                HandleFaceTo(_pathFinder.faceDir);
+            }
             EmptyDie();
             StateMaterialChange();
             UpdateEmptyChangeHP();
@@ -116,9 +119,8 @@ public class Masquerain : Empty
         }
     }
 
-    private void HandleFaceTo()
+    private void HandleFaceTo(Vector2 dir)
     {
-        Vector2 dir = _pathFinder.faceDir;
         if (dir.x > 0)
         {
             if (dir.y > 0.1)
@@ -280,6 +282,7 @@ public class Masquerain : Empty
         print("atk");
         Vector2 dir = (target.transform.position - transform.position).normalized;
         _pathFinder.Stop();
+        HandleFaceTo(dir);
         aiState = AI_STATE.ATK;
         lastAtkTime = 0;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
@@ -291,7 +294,7 @@ public class Masquerain : Empty
             if (skillObj)
             {
                 airSlash.LaunchNotForce(dir, 10);
-                rigidbody2D.AddForce(- dir * 500);
+                rigidbody2D.AddForce(- dir * 600);
             }
         });
     }
