@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Cinemachine;
 using System.Dynamic;
 
@@ -54,8 +55,27 @@ public class Mew : Empty
     public GameObject TimeStopEffect;
     public GameObject TrailEffect;
     public GameObject IceBeamPrefab;//技能22
+    public GameObject FinalTrailEffect;
+    public GameObject EternalBeamPrefab;//技能23
+
     public GameObject FakePotionPrefab;//假伤药
+    public GameObject FakeAntidote;//假解麻药
+    public GameObject FakeBurnHeal;//假灼伤药
+    public GameObject FakeAwakening;//假解眠药
+    public GameObject FakeIceHeal;//假解冻药
+    public GameObject FakeParalyzeHeal;//假解麻药
+
     public GameObject FakeLovePrefab;//假心
+
+    //第三阶段ui变化
+    public GameObject timeBar1;
+    public GameObject timeBar2;
+    public GameObject timeBar3;
+    public GameObject timeBar4;
+    public Sprite TimeBar1;
+    public Sprite TimeBar2;
+    public Sprite TimeBar3;
+    public Sprite TimeBar4;
 
     //切换房间时等待
     private float MeanLookTimer = 0f;
@@ -135,6 +155,7 @@ public class Mew : Empty
                 Phase3();
                 HpTiming -= Time.deltaTime;
                 uIHealth.Per = HpTiming / HpTimer;
+                Debug.Log(HpTiming);
                 uIHealth.ChangeHpDown();
                 //限制玩家的移动半径
                 float distance = Vector2.Distance(player.transform.position, transform.position);
@@ -192,8 +213,9 @@ public class Mew : Empty
         }
         else if (skillTimer <= 0f)
         {
-            skillTimer = 1.1f;
-            StartCoroutine(Phase1Skill());
+            int randomSkillIndex = Random.Range(1, 19);
+            StartCoroutine(Phase1Skill(randomSkillIndex));
+            SkillTimerUpdate(randomSkillIndex, 1);
         }
         // 技能计时器递减
             skillTimer -= Time.deltaTime;
@@ -202,6 +224,7 @@ public class Mew : Empty
     {
         if (EmptyHp <= maxHP*4/5 && currentPhase == 2)//需要测试，测试后修改
         {
+            StopAllCoroutines();
             EmptyHp = maxHP;
             uIHealth.Per = EmptyHp / maxHP;
             uIHealth.ChangeHpUp();
@@ -248,11 +271,7 @@ public class Mew : Empty
     {
         if (isPhase3)
         {
-            transform.position = mapCenter;
-            MewOrbRotate mewOrbRotate = Phase3OrbRotate.GetComponent<MewOrbRotate>();
-            mewOrbRotate.ActivatePhase3Effect();
             Invincible = true;
-            
             isPhase3 = false;
             Debug.Log("使用技能");
             StartCoroutine(Phase3Skill());
@@ -924,13 +943,12 @@ public class Mew : Empty
         bool isInBounds = position.x >= minX && position.x <= maxX && position.y >= minY && position.y <= maxY;
         return isInBounds;
     }
-    private IEnumerator Phase1Skill()
+    private IEnumerator Phase1Skill(int randomSkillIndex)
     {
         animator.SetTrigger("Teleport");
         yield return new WaitForSeconds(0.5f);
 
         //随机选择技能释放
-        int randomSkillIndex = Random.Range(1, 19);
         if(randomSkillIndex == 5||randomSkillIndex == 16)
         {
             transform.position = mapCenter;//当技能为淘金潮或者太晶爆发时传送到正中间
@@ -968,6 +986,29 @@ public class Mew : Empty
 
     private IEnumerator Phase3Skill()
     {
+        animator.SetTrigger("Teleport");
+        yield return new WaitForSeconds(0.5f);
+        transform.position = mapCenter;
+        MewOrbRotate mewOrbRotate = Phase3OrbRotate.GetComponent<MewOrbRotate>();
+        mewOrbRotate.SetRadius(20f);
+        mewOrbRotate.ActivatePhase3Effect();
+        //修改ui
+        Image timebar1= timeBar1.GetComponent<Image>();
+        timebar1.sprite = TimeBar1;
+        Image timebar2 = timeBar2.GetComponent<Image>();
+        timebar2.sprite = TimeBar2;
+        Image timebar3 = timeBar3.GetComponent<Image>();
+        timebar3.sprite = TimeBar3;
+        Image timebar4 = timeBar4.GetComponent<Image>();
+        timebar4.sprite = TimeBar4;
+
+        //清除子弹
+        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectel");
+        foreach (GameObject projectile in projectiles)
+        {
+            Destroy(projectile);
+        }
+
         yield return new WaitForSeconds(1f);
         UseSkillMask(1);
         yield return new WaitForSeconds(1f);
@@ -1273,22 +1314,22 @@ public class Mew : Empty
         yield return new WaitForSeconds(4f);
         //三阶段-第二部分
         //首先先圆形释放会给玩家造成伤害的假心，期间不断释放魔法叶
-        StartCoroutine(MagicalLeaf(8));
+        StartCoroutine(MagicalLeaf(3));
         yield return new WaitForSeconds(2f);
         for (int j = 0; j < 7; j++)
         {
             float increaseAngle = 9f;
             float angleStep = 360f / 16;
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 32; i++)
             {
                 float angle = j * increaseAngle + i * angleStep;
                 Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * 1f;
                 FakeLove fakelove = Instantiate(FakeLovePrefab, spawnPos, Quaternion.identity).GetComponent<FakeLove>();
                 Vector3 direction = (spawnPos - transform.position).normalized;
-                fakelove.Initialize(5f, direction);
+                fakelove.Initialize(4f, direction);
                 fakelove.mew = gameObject;
             }
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(1.5f);
         }
 
         //其次释放电球，释放冰冻光束
@@ -1296,7 +1337,7 @@ public class Mew : Empty
         yield return new WaitForSeconds(4f);
         UseSkillMask(2);
         yield return new WaitForSeconds(1f);
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 33; i++)
         {
             float angle = i * 22f;
             GameObject trail = Instantiate(TrailEffect, transform.position, Quaternion.Euler(0, 0, angle));
@@ -1306,35 +1347,68 @@ public class Mew : Empty
         }
         yield return new WaitForSeconds(5f);
 
-        //释放魔法叶，同时释放出现假伤药
-        StartCoroutine(MagicalLeaf(10));
-        for (int i = 0; i < 30; i++)
+        //释放魔法叶，同时释放假药
+        StartCoroutine(MagicalLeaf(6));
+        for (int i = 0; i < 40; i++)
         {
             Vector2 randomPosition = RandomPosition();
-            GameObject fakepotion = Instantiate(FakePotionPrefab, randomPosition, Quaternion.identity);
-            Destroy(fakepotion, 15f);
-            yield return new WaitForSeconds(1f);
+            int randomIndex = Random.Range(1, 7);
+            GameObject RandomFake = null;
+            switch (randomIndex)
+            {
+                case 1:RandomFake = FakePotionPrefab;break;
+                case 2:RandomFake = FakeAntidote;break;
+                case 3:RandomFake = FakeAwakening;break;
+                case 4:RandomFake = FakeBurnHeal; break;
+                case 5:RandomFake = FakeIceHeal; break;
+                case 6:RandomFake = FakeParalyzeHeal; break;
+            }
+            GameObject fakepotion = Instantiate(RandomFake, randomPosition, Quaternion.identity);
+            Destroy(fakepotion, 20f);
         }
+        yield return new WaitForSeconds(20f);
+        //最终技能
+        GameObject finaltrail = Instantiate(FinalTrailEffect, transform.position, Quaternion.Euler(0, 0, 90));
+        Destroy(finaltrail, 3f);
 
+        yield return new WaitForSeconds(3f);
+        GameObject eternalbeam = Instantiate(EternalBeamPrefab, transform.position, Quaternion.Euler(0, 0, 90));
+        for (int j = 0; j < 15; j++)
+        {
+            float increaseAngle = 9f;
+            float angleStep = 360f / 16;
+            for (int i = 0; i < 32; i++)
+            {
+                float angle = j * increaseAngle + i * angleStep;
+                Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * 1f;
+                FakeLove fakelove = Instantiate(FakeLovePrefab, spawnPos, Quaternion.identity).GetComponent<FakeLove>();
+                Vector3 direction = (spawnPos - transform.position).normalized;
+                fakelove.Initialize(5f, direction);
+                fakelove.mew = gameObject;
+            }
+            yield return new WaitForSeconds(2f);
+        }
+        yield return new WaitForSeconds(30f);
+        mewOrbRotate.SetRadius(10f);
     }
 
     //第三阶段电球
     private IEnumerator ElectricBall()
     {
-        for(int j = 0; j < 20; j++)
+        for(int j = 0; j < 4; j++)
         {
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 8; i++)
             {
-                float angle = i * 60f;
+                float angle = i * 45f;
                 Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
                 ElectroBallEmpty electricBall = Instantiate(ElectricBallPrefab, transform.position, rotation).GetComponent<ElectroBallEmpty>();
                 electricBall.Initialize(transform.position, 15f);
                 electricBall.empty = this;
 
             }
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 8; i++)
             {
-                float angle = i * 60f;
+                float angle = i * 45f;
                 Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
                 ElectroBallEmpty electricBall = Instantiate(ElectricBallPrefab, transform.position, rotation).GetComponent<ElectroBallEmpty>();
                 electricBall.Initialize(transform.position, -15f);
