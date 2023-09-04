@@ -94,6 +94,7 @@ public class Mew : Empty
     private int MoreAttackSkillIndex;
     private bool isMasked = false;//更多技能释放遮罩
     private bool isPhase3 = false;
+    private bool isFinal = false;//最终时刻
 
     //随机传送
     private int teleportAttempts = 0;//随机传送计数器
@@ -109,8 +110,8 @@ public class Mew : Empty
     private CameraAdapt cameraAdapt;
 
     //时间血量
-    private float HpTimer = 216f;
-    private float HpTiming = 216f;
+    private float HpTimer = 193f;
+    private float HpTiming = 193f;
 
     // Start is called before the first frame update
     void Start()
@@ -159,11 +160,22 @@ public class Mew : Empty
                 uIHealth.ChangeHpDown();
                 //限制玩家的移动半径
                 float distance = Vector2.Distance(player.transform.position, transform.position);
-                if (distance > 20f)
+                if (isFinal == false)
                 {
-                    // 如果玩家距离黑色目光的距离大于圆半径，则将玩家移动回黑色目光的范围内
-                    Vector3 direction = (player.transform.position - transform.position).normalized;
-                    player.transform.position = transform.position + direction * 20f;
+                    if (distance > 20f)
+                    {
+                        Vector3 direction = (player.transform.position - transform.position).normalized;
+                        player.transform.position = transform.position + direction * 20f;
+                    }
+                }
+                else
+                {
+                    if (distance > 20f || distance < 10f) 
+                    {
+                        Vector3 direction = (player.transform.position - transform.position).normalized;
+                        float clampedDistance = Mathf.Clamp(distance, 10f, 20f);
+                        player.transform.position = transform.position + direction * clampedDistance;
+                    }
                 }
                 EmptyDie();
             }
@@ -1389,7 +1401,10 @@ public class Mew : Empty
             yield return new WaitForSeconds(2f);
         }
         yield return new WaitForSeconds(30f);
+        isFinal = true;
+        mewOrbRotate.orbCount = 15;
         mewOrbRotate.SetRadius(10f);
+        mewOrbRotate.ActivatePhase3Effect();
     }
 
     //第三阶段电球

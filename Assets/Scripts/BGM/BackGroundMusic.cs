@@ -14,7 +14,7 @@ public class BackGroundMusic : MonoBehaviour
     public AudioClip Boss;
     public AudioClip BossWin;
     public AudioClip FightMew;
-    public AudioClip Stigma;
+    public AudioClip Kronos;
 
     public float transitionDuration = 1.0f; // 持续时间
     private float currentVolume = 0.0f; // 当前音量
@@ -62,9 +62,9 @@ public class BackGroundMusic : MonoBehaviour
     }
     public void ChangeBGMINSIST()
     {
-        if (BGM.clip != Stigma)
+        if (BGM.clip != Kronos)
         {
-            BGM.clip = Stigma;
+            BGM.clip = Kronos;
             BGM.Play();
         }
     }
