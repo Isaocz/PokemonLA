@@ -8,55 +8,38 @@ public class MewOrbRotate : MonoBehaviour
     public float rotationSpeed = 50f;
 
     public GameObject orbPrefab; // Orb的预制体
-    public int orbCount = 30; // Orb的数量
-    public float radius = 20f; // 生成范围的半径
     public float moveTime = 2f; // 移动时间
-    private float currentRadius; // 当前的半径
     private List<GameObject> orbs = new List<GameObject>(); // 存储生成的Orb对象
-    private Vector3[] targetPositions; // Orb的目标位置
+    private List<GameObject> Secondorbs = new List<GameObject>(); // 存储生成的Orb对象
 
-    public void ActivatePhase3Effect()
+    public IEnumerator ActivatePhase3Effect(int stage ,int counts, float radius)
     {
         // 生成Orb并将其保存到列表中
-        for (int i = 0; i < orbCount; i++)
+        for (int i = 0; i < counts; i++)
         {
-            GameObject orb = Instantiate(orbPrefab, mew.position , Quaternion.identity);
+            GameObject orb = Instantiate(orbPrefab, mew.position, Quaternion.identity);
             orb.transform.parent = transform;
-            orbs.Add(orb);
+            if (stage == 1) orbs.Add(orb);
+            else Secondorbs.Add(orb);
         }
-        // 启动协程，控制Orb的移动
-        StartCoroutine(MoveOrbs());
-    }
-    public void SetRadius(float newRadius)
-    {
-        // 更新半径和目标位置
-        currentRadius = newRadius;
-        CalculateTargetPositions();
-    }
-
-    private void CalculateTargetPositions()
-    {
-        float angleStep = 360f / orbCount;
+        float angleStep = 360f / counts;
         float angle = 0f;
-        targetPositions = new Vector3[orbCount];
-        for (int i = 0; i < orbCount; i++)
+        Vector3[] targetPositions = new Vector3[counts];
+        for (int i = 0; i < counts; i++)
         {
             float radian = angle * Mathf.Deg2Rad;
-            targetPositions[i] = mew.position + new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * currentRadius + new Vector3(0f, 0.5f, 0f);
+            targetPositions[i] = mew.position + new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * radius + new Vector3(0f, 0.5f, 0f);
             angle += angleStep;
         }
-    }
-    private IEnumerator MoveOrbs()
-    {
-        CalculateTargetPositions();
         float timer = 0f;
         while (timer <= moveTime)
         {
             float progress = timer / moveTime;
 
-            for (int i = 0; i < orbCount; i++)
+            for (int i = 0; i < counts; i++)
             {
-                orbs[i].transform.position = Vector3.Lerp(mew.position + new Vector3(0f, 0.5f, 0f), targetPositions[i], progress);
+                if (stage == 1) orbs[i].transform.position = Vector3.Lerp(mew.position + new Vector3(0f, 0.5f, 0f), targetPositions[i], progress);
+                else Secondorbs[i].transform.position = Vector3.Lerp(mew.position + new Vector3(0f, 0.5f, 0f), targetPositions[i], progress);
             }
 
             timer += Time.deltaTime;
@@ -64,10 +47,69 @@ public class MewOrbRotate : MonoBehaviour
             yield return null;
         }
 
-        for (int i = 0; i < orbCount; i++)
+        for (int i = 0; i < counts; i++)
         {
-            orbs[i].transform.position = targetPositions[i];
+            if (stage == 1) orbs[i].transform.position = targetPositions[i];
+            else Secondorbs[i].transform.position = targetPositions[i];
         }
+    }
+    public IEnumerator ShrinkOrbs(float shrinkTime)
+    {
+        float timer = 0f;
+        while (timer <= shrinkTime)
+        {
+            float progress = timer / shrinkTime;
+
+            for (int i = 0; i < orbs.Count; i++)
+            {
+                float newScale = Mathf.Lerp(1f, 0f, progress);
+                orbs[i].transform.localScale = new Vector3(newScale, newScale, newScale);
+
+                Color newColor = orbs[i].GetComponent<SpriteRenderer>().color;
+                newColor.a = Mathf.Lerp(1f, 0f, progress);
+                orbs[i].GetComponent<SpriteRenderer>().color = newColor;
+            }
+
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+
+        // 移除已生成的 Orb
+        for (int i = 0; i < orbs.Count; i++)
+        {
+            Destroy(orbs[i]);
+        }
+        orbs.Clear();
+    }
+    public IEnumerator ShrinkSecondOrbs(float shrinkTime)
+    {
+        float timer = 0f;
+        while (timer <= shrinkTime)
+        {
+            float progress = timer / shrinkTime;
+
+            for (int i = 0; i < Secondorbs.Count; i++)
+            {
+                float newScale = Mathf.Lerp(1f, 0f, progress);
+                Secondorbs[i].transform.localScale = new Vector3(newScale, newScale, newScale);
+
+                Color newColor = Secondorbs[i].GetComponent<SpriteRenderer>().color;
+                newColor.a = Mathf.Lerp(1f, 0f, progress);
+                Secondorbs[i].GetComponent<SpriteRenderer>().color = newColor;
+            }
+
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+
+        // 移除已生成的 Orb
+        for (int i = 0; i < Secondorbs.Count; i++)
+        {
+            Destroy(Secondorbs[i]);
+        }
+        Secondorbs.Clear();
     }
 
     // Update is called once per frame
