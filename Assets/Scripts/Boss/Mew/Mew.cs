@@ -90,11 +90,12 @@ public class Mew : Empty
     private float skillTimer = 0f; // 技能计时器
     private List<GameObject> heartStamps = new List<GameObject>();//对HeartStamp进行存储
     private float MoreAttackTimer;//二阶段更多技能计时器
-    private int[] MoreAttackSkill = { 1, 8, 9, 10, 11, 13, 15, 17, 18, 20 };
+    private int[] MoreAttackSkill = { 1, 8, 9, 10, 13, 15, 17, 18, 20 };
     private int MoreAttackSkillIndex;
     private bool isMasked = false;//更多技能释放遮罩
     private bool isPhase3 = false;
     private bool isFinal = false;//最终时刻
+    private bool isDying = false;//结算
 
     //随机传送
     private int teleportAttempts = 0;//随机传送计数器
@@ -110,8 +111,11 @@ public class Mew : Empty
     private CameraAdapt cameraAdapt;
 
     //时间血量
-    private float HpTimer = 193f;
-    private float HpTiming = 193f;
+    private float HpTimer = 192f;
+    private float HpTiming = 192f;
+    
+    //死亡动画
+    public GameObject dyingParticle;
 
     // Start is called before the first frame update
     void Start()
@@ -141,22 +145,25 @@ public class Mew : Empty
         //地图
         mapCenter = transform.parent.position;
         GetnowRoom = player.NowRoom;
+
+        //debug
+        player.Level = 100;
+        player.maxHp = 10000;
+        player.Hp = 10000;
     }
 
     // Update is called once per frame
     void Update()
     {
         ResetPlayer();
-        if (!isBorn)
+        if (!isBorn && !isDying)
         {
-            ClearStatusEffects();
             if (currentPhase == 3)
             {
                 bgmScript.ChangeBGMINSIST();
                 Phase3();
                 HpTiming -= Time.deltaTime;
                 uIHealth.Per = HpTiming / HpTimer;
-                Debug.Log(HpTiming);
                 uIHealth.ChangeHpDown();
                 //限制玩家的移动半径
                 float distance = Vector2.Distance(player.transform.position, transform.position);
@@ -177,7 +184,13 @@ public class Mew : Empty
                         player.transform.position = transform.position + direction * clampedDistance;
                     }
                 }
-                EmptyDie();
+                if (HpTiming <= 0f && isDying == false)
+                {
+                    isDying = true;
+                    ClearProjectile();
+                    Instantiate(dyingParticle, transform.position + new Vector3(0f, 0.5f, 0f), Quaternion.identity);
+                    animator.SetTrigger("Die");
+                }
             }
             else
             {
@@ -210,13 +223,14 @@ public class Mew : Empty
     }
     void Phase1()
     {
-        if (!UsedMeanLook && EmptyHp < maxHP)//需要测试，测试后修改
+        if (!UsedMeanLook && EmptyHp < maxHP/2)//需要测试，测试后修改
         {
             if (!roomCreated && currentPhase == 1)
             {
                 turningPhase = true;
                 StopAllCoroutines();//停止所有技能释放
                 EmptyHp = maxHP;
+                player.Hp = player.maxHp;
                 uIHealth.Per = EmptyHp / maxHP;
                 StartCoroutine(Phase2Start());
             }
@@ -234,7 +248,7 @@ public class Mew : Empty
     }
     void Phase2()
     {
-        if (EmptyHp <= maxHP*4/5 && currentPhase == 2)//需要测试，测试后修改
+        if (EmptyHp <= 0 && currentPhase == 2)//需要测试，测试后修改
         {
             StopAllCoroutines();
             EmptyHp = maxHP;
@@ -258,7 +272,7 @@ public class Mew : Empty
     private void MoreAttack()//二阶段的额外攻击模式
     {
         MoreAttackTimer += Time.deltaTime;
-        if (MoreAttackTimer >= 7f)
+        if (MoreAttackTimer > 7f)
         {
             //当前技能遮罩
             if (!isMasked)
@@ -266,8 +280,9 @@ public class Mew : Empty
                 isMasked = true;
                 UseSkillMask(MoreAttackSkillIndex);
             }
-            if (MoreAttackTimer >= 8)
+            if (MoreAttackTimer > 8)
             {
+                MoreAttackTimer = 0f;
                 if (MoreAttackSkillIndex >= MoreAttackSkill.Length)
                 {
                     MoreAttackSkillIndex = 0; // 回到第一个技能
@@ -275,7 +290,6 @@ public class Mew : Empty
                 UseSkill(MoreAttackSkill[MoreAttackSkillIndex]);
                 MoreAttackSkillIndex++;
                 isMasked = false;
-                MoreAttackTimer = 0f;
             }
         }
     }
@@ -357,11 +371,8 @@ public class Mew : Empty
                 }
                 break;
             case 4://技能4：和睦相处
-                if(currentPhase!= 1)
-                {
-                    return;
-                }
                 GameObject PlayNice = Instantiate(PlayNicePrefab, transform.position, Quaternion.identity);
+                ClearStatusEffects();
                 Destroy(PlayNice, 5f);
                 break;
             case 5://技能5：太晶爆发
@@ -826,6 +837,7 @@ public class Mew : Empty
                 break;
             case 4:if (stage == 1)
                     skillTimer = 2f;
+                else skillTimer = 1.5f;
                 break;
             case 5:if (stage == 1) skillTimer = 4.7f;
                 else skillTimer = 9.2f;
@@ -1002,8 +1014,7 @@ public class Mew : Empty
         yield return new WaitForSeconds(0.5f);
         transform.position = mapCenter;
         MewOrbRotate mewOrbRotate = Phase3OrbRotate.GetComponent<MewOrbRotate>();
-        mewOrbRotate.SetRadius(20f);
-        mewOrbRotate.ActivatePhase3Effect();
+        StartCoroutine(mewOrbRotate.ActivatePhase3Effect(1, 30, 20f));
         //修改ui
         Image timebar1= timeBar1.GetComponent<Image>();
         timebar1.sprite = TimeBar1;
@@ -1015,12 +1026,7 @@ public class Mew : Empty
         timebar4.sprite = TimeBar4;
 
         //清除子弹
-        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectel");
-        foreach (GameObject projectile in projectiles)
-        {
-            Destroy(projectile);
-        }
-
+        ClearProjectile();
         yield return new WaitForSeconds(1f);
         UseSkillMask(1);
         yield return new WaitForSeconds(1f);
@@ -1380,12 +1386,15 @@ public class Mew : Empty
         }
         yield return new WaitForSeconds(20f);
         //最终技能
+        Debug.Log(HpTiming);
         GameObject finaltrail = Instantiate(FinalTrailEffect, transform.position, Quaternion.Euler(0, 0, 90));
         Destroy(finaltrail, 3f);
 
         yield return new WaitForSeconds(3f);
+        Debug.Log("EternalBeam:" + HpTiming);
         GameObject eternalbeam = Instantiate(EternalBeamPrefab, transform.position, Quaternion.Euler(0, 0, 90));
-        for (int j = 0; j < 15; j++)
+        eternalbeam.GetComponent<EternaBeamEmpty>().empty = this;
+        for (int j = 0; j < 10; j++)
         {
             float increaseAngle = 9f;
             float angleStep = 360f / 16;
@@ -1398,13 +1407,33 @@ public class Mew : Empty
                 fakelove.Initialize(5f, direction);
                 fakelove.mew = gameObject;
             }
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1.5f);
         }
-        yield return new WaitForSeconds(30f);
+        yield return new WaitForSeconds(3f);
         isFinal = true;
-        mewOrbRotate.orbCount = 15;
-        mewOrbRotate.SetRadius(10f);
-        mewOrbRotate.ActivatePhase3Effect();
+        Debug.Log("isFinal:" + HpTiming);
+        StartCoroutine(mewOrbRotate.ActivatePhase3Effect(2, 15, 10f));
+        yield return new WaitForSeconds(1.5f);
+        for (int j = 0; j < 17; j++)
+        {
+            float increaseAngle = 9f;
+            float angleStep = 360f / 16;
+            for (int i = 0; i < 32; i++)
+            {
+                float angle = j * increaseAngle + i * angleStep;
+                Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * 1f;
+                FakeLove fakelove = Instantiate(FakeLovePrefab, spawnPos, Quaternion.identity).GetComponent<FakeLove>();
+                Vector3 direction = (spawnPos - transform.position).normalized;
+                fakelove.Initialize(5f, direction);
+                fakelove.mew = gameObject;
+            }
+            yield return new WaitForSeconds(1.5f);
+        }
+        Debug.Log("End:"+HpTiming);
+        Destroy(eternalbeam);
+        yield return new WaitForSeconds(2f);
+        StartCoroutine(mewOrbRotate.ShrinkOrbs(2f));
+        StartCoroutine(mewOrbRotate.ShrinkSecondOrbs(2f));
     }
 
     //第三阶段电球
@@ -1480,12 +1509,7 @@ public class Mew : Empty
         //清除所有的子弹
         Invincible = true;
         uIHealth.ChangeHpUp();
-
-        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectel");
-        foreach (GameObject projectile in projectiles)
-        {
-            Destroy(projectile);
-        }
+        ClearProjectile();
 
         //制作一个黑色五角星
         int numPoints = 5; // 五角星上的点数
@@ -1547,7 +1571,6 @@ public class Mew : Empty
         yield return new WaitForSeconds(1.5f);
         turningPhase = false;
         Invincible = false;
-
     }
     private void UseSkillMask(int randomSkillIndex)
     {
@@ -1591,5 +1614,14 @@ public class Mew : Empty
         BlindRemove();
         FearRemove();
         FrozenRemove();
+    }
+
+    void ClearProjectile()
+    {
+        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectel");
+        foreach (GameObject projectile in projectiles)
+        {
+            Destroy(projectile);
+        }
     }
 }
