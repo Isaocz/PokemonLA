@@ -34,6 +34,7 @@ public class ElectroBallEmpty : Projectile
             {
                 playerControler.KnockOutPoint = 2.5f;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+                playerControler.ParalysisFloatPlus(0.35f);
             }
         }
     }
