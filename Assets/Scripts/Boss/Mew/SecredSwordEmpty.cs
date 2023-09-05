@@ -21,7 +21,7 @@ public class SecredSwordEmpty : Projectile
     {
         player = FindObjectOfType<PlayerControler>();
         position = player.transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
-        Destroy(gameObject, 5f);
+        Destroy(gameObject, 3f);
         Invoke("RecordPosition", 1.7f);
 
         initialDirection = Quaternion.Euler(0f, 0f, angle) * Vector2.right * -1;
@@ -39,7 +39,7 @@ public class SecredSwordEmpty : Projectile
         }
         else
         {
-            float moveSpeed = 12f; // 移动速度
+            float moveSpeed = 16f; // 移动速度
             transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
         }
     }

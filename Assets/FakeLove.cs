@@ -11,7 +11,7 @@ public class FakeLove : Projectile
 
     private void Start()
     {
-        Destroy(gameObject, 4f);
+        Destroy(gameObject, 5f);
     }
     private void Update()
     {

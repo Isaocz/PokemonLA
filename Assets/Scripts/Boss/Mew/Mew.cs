@@ -89,10 +89,7 @@ public class Mew : Empty
     public bool LaserChange = false;
     private float skillTimer = 0f; // 技能计时器
     private List<GameObject> heartStamps = new List<GameObject>();//对HeartStamp进行存储
-    private float MoreAttackTimer;//二阶段更多技能计时器
-    private int[] MoreAttackSkill = { 1, 8, 9, 10, 13, 15, 17, 18, 20 };
-    private int MoreAttackSkillIndex;
-    private bool isMasked = false;//更多技能释放遮罩
+    private float MoreAttackTimer = -4f;//二阶段更多技能计时器
     private bool isPhase3 = false;
     private bool isFinal = false;//最终时刻
     private bool isDying = false;//结算
@@ -103,19 +100,23 @@ public class Mew : Empty
     //房间
     public GameObject MewBossRoomPrefab;
     public Vector3 MewBossRoomPosition = new Vector3(60f, 60f, 0f);
+    private GameObject Camera;
     private bool roomCreated = false;
     private Vector3Int GetnowRoom;
+    private Vector3 GetPlayerPosition;
+    private Vector3 GetCameraPostion;
 
     //摄像跟随
     private CameraController cinemachineController;
     private CameraAdapt cameraAdapt;
 
     //时间血量
-    private float HpTimer = 192f;
-    private float HpTiming = 192f;
+    private float HpTimer = 191f;
+    private float HpTiming = 191f;
     
     //死亡动画
     public GameObject dyingParticle;
+    public bool MewBossKilled = false;
 
     // Start is called before the first frame update
     void Start()
@@ -143,11 +144,15 @@ public class Mew : Empty
         cameraAdapt = FindObjectOfType<CameraAdapt>();
 
         //地图
+        Camera = GameObject.FindGameObjectWithTag("MainCamera");
         mapCenter = transform.parent.position;
         GetnowRoom = player.NowRoom;
+        GetPlayerPosition = player.transform.position;
+        GetCameraPostion = Camera.transform.position;
+        transform.parent.parent.GetComponent<Room>().isClear += 1;
 
         //debug
-        player.Level = 100;
+        player.Level = 99;
         player.maxHp = 10000;
         player.Hp = 10000;
     }
@@ -188,8 +193,7 @@ public class Mew : Empty
                 {
                     isDying = true;
                     ClearProjectile();
-                    Instantiate(dyingParticle, transform.position + new Vector3(0f, 0.5f, 0f), Quaternion.identity);
-                    animator.SetTrigger("Die");
+                    StartCoroutine(Phase3End());
                 }
             }
             else
@@ -223,7 +227,7 @@ public class Mew : Empty
     }
     void Phase1()
     {
-        if (!UsedMeanLook && EmptyHp < maxHP/2)//需要测试，测试后修改
+        if (!UsedMeanLook && EmptyHp < maxHP/2)
         {
             if (!roomCreated && currentPhase == 1)
             {
@@ -248,7 +252,7 @@ public class Mew : Empty
     }
     void Phase2()
     {
-        if (EmptyHp <= 0 && currentPhase == 2)//需要测试，测试后修改
+        if (EmptyHp <= 0 && currentPhase == 2)
         {
             StopAllCoroutines();
             EmptyHp = maxHP;
@@ -271,26 +275,43 @@ public class Mew : Empty
     }
     private void MoreAttack()//二阶段的额外攻击模式
     {
+        List<Vector3> spawnedPositions = new List<Vector3>();
+
         MoreAttackTimer += Time.deltaTime;
-        if (MoreAttackTimer > 7f)
+        if (MoreAttackTimer > 2.5f)
         {
-            //当前技能遮罩
-            if (!isMasked)
+            for (int j = 0; j < 10; j++)
             {
-                isMasked = true;
-                UseSkillMask(MoreAttackSkillIndex);
-            }
-            if (MoreAttackTimer > 8)
-            {
-                MoreAttackTimer = 0f;
-                if (MoreAttackSkillIndex >= MoreAttackSkill.Length)
+                Vector3 position;
+                bool validPosition = false;
+
+                // 生成随机位置，直到找到一个合适的位置
+                while (!validPosition)
                 {
-                    MoreAttackSkillIndex = 0; // 回到第一个技能
+                    position = Random.insideUnitCircle * 20f;
+                    Vector3 spawnPosition = player.transform.position + new Vector3(position.x, position.y + 0.5f, 0f);
+
+                    // 检查新位置是否与已生成的位置过近
+                    validPosition = true;
+                    foreach (Vector3 spawnedPos in spawnedPositions)
+                    {
+                        if (Vector3.Distance(spawnPosition, spawnedPos) < 4f)
+                        {
+                            validPosition = false;
+                            break;
+                        }
+                    }
+
+                    if (validPosition)
+                    {
+                        spawnedPositions.Add(spawnPosition);
+                        GameObject Curse = Instantiate(CursePrefab, spawnPosition, Quaternion.identity);
+                        Curse.GetComponent<Curse>().empty = this;
+                        Destroy(Curse, 4f);
+                    }
                 }
-                UseSkill(MoreAttackSkill[MoreAttackSkillIndex]);
-                MoreAttackSkillIndex++;
-                isMasked = false;
             }
+            MoreAttackTimer = 0f;
         }
     }
     void Phase3()
@@ -299,7 +320,6 @@ public class Mew : Empty
         {
             Invincible = true;
             isPhase3 = false;
-            Debug.Log("使用技能");
             StartCoroutine(Phase3Skill());
         }
     }
@@ -804,7 +824,7 @@ public class Mew : Empty
                         for(int j = 0; j < 6; j++)
                         {
                             float angle = j * 60;
-                            float radius = 8f;
+                            float radius = 10f;
                             Vector3 spawnPos = player.transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
                             SecredSwordEmpty secredSword = Instantiate(SecredSwordPrefab, spawnPos, Quaternion.identity).GetComponent<SecredSwordEmpty>();
                             secredSword.empty = this;
@@ -1011,7 +1031,7 @@ public class Mew : Empty
     private IEnumerator Phase3Skill()
     {
         animator.SetTrigger("Teleport");
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         transform.position = mapCenter;
         MewOrbRotate mewOrbRotate = Phase3OrbRotate.GetComponent<MewOrbRotate>();
         StartCoroutine(mewOrbRotate.ActivatePhase3Effect(1, 30, 20f));
@@ -1211,8 +1231,21 @@ public class Mew : Empty
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < 60; i++)
         {
+            Vector3 bladePosition = transform.position;
+
+            Vector3 directionToPlayer = (player.transform.position - bladePosition).normalized;
+            Vector3 perpendicularDirection = new Vector3(directionToPlayer.y, -directionToPlayer.x, 0f);
+
+            Vector3 offset = perpendicularDirection * 1f;
+            Vector3 bladePosition1 = bladePosition + offset;
+            Vector3 bladePosition2 = bladePosition - offset;
+
+            GameObject LeafBlade1 = Instantiate(LeafBladePrefab, bladePosition1, Quaternion.identity);
+            GameObject LeafBlade2 = Instantiate(LeafBladePrefab, bladePosition2, Quaternion.identity);
             GameObject LeafBlade = Instantiate(LeafBladePrefab, transform.position, Quaternion.identity);
             LeafBlade.GetComponent<LeafBladeEmpty>().empty = this;
+            LeafBlade1.GetComponent<LeafBladeEmpty>().empty = this;
+            LeafBlade2.GetComponent<LeafBladeEmpty>().empty = this;
             yield return new WaitForSeconds(0.17f);
         }
         UseSkillMask(15);
@@ -1238,14 +1271,13 @@ public class Mew : Empty
                 makeitrain.MIRrotate(direction);
                 makeitrain.empty = this;
             }
-            if (i > 50 && i < 100) 
+            angle4 += angleIncrement4;
+            if (i > 50) 
             {
-                angle4 -= angleIncrement4;
+                float decreasedAngle = (i - 50) / 100f * Mathf.PI;
+                angleIncrement4 = 7f * Mathf.Cos(decreasedAngle);
             }
-            else
-            {
-                angle4 += angleIncrement4;
-            }
+
             yield return new WaitForSeconds(0.07f);
         }
         yield return new WaitForSeconds(2.5f);
@@ -1355,13 +1387,13 @@ public class Mew : Empty
         yield return new WaitForSeconds(4f);
         UseSkillMask(2);
         yield return new WaitForSeconds(1f);
-        for (int i = 0; i < 33; i++)
+        for (int i = 0; i < 66; i++)
         {
-            float angle = i * 22f;
+            float angle = i * 11f;
             GameObject trail = Instantiate(TrailEffect, transform.position, Quaternion.Euler(0, 0, angle));
             StartCoroutine(IceBeam(i));
             Destroy(trail, 2f);
-            yield return null;
+            yield return new WaitForSeconds(0.04f);
         }
         yield return new WaitForSeconds(5f);
 
@@ -1414,7 +1446,7 @@ public class Mew : Empty
         Debug.Log("isFinal:" + HpTiming);
         StartCoroutine(mewOrbRotate.ActivatePhase3Effect(2, 15, 10f));
         yield return new WaitForSeconds(1.5f);
-        for (int j = 0; j < 17; j++)
+        for (int j = 0; j < 15; j++)
         {
             float increaseAngle = 9f;
             float angleStep = 360f / 16;
@@ -1466,7 +1498,7 @@ public class Mew : Empty
     private IEnumerator IceBeam(int i)
     {
         yield return new WaitForSeconds(2f);
-        float angle = i * 22f;
+        float angle = i * 11f;
         GameObject icebeam = Instantiate(IceBeamPrefab, transform.position, Quaternion.Euler(0, 0, angle));
         icebeam.GetComponent<IceBeamEmpty>().empty = this;
     }
@@ -1553,6 +1585,7 @@ public class Mew : Empty
         mapCenter = MewBossRoomPosition + new Vector3(15f, 12f, 0f);
         transform.position = MewBossRoomPosition + new Vector3(15f, 12f, 0f);
         player.transform.position = MewBossRoomPosition;
+        transform.parent.parent.GetComponent<Room>().isClear -= 1;
         player.NowRoom = new Vector3Int(100, 100, 0);
         player.InANewRoom = true;
         player.NewRoomTimer = 0f;
@@ -1571,6 +1604,31 @@ public class Mew : Empty
         yield return new WaitForSeconds(1.5f);
         turningPhase = false;
         Invincible = false;
+    }
+
+    private IEnumerator Phase3End()
+    {
+        Instantiate(dyingParticle, transform.position + new Vector3(0f, 0.5f, 0f), Quaternion.identity);
+        animator.SetTrigger("Die");
+        //yield return new WaitForSeconds(0.5f);
+        MewBossKilled = true;
+
+        //将玩家传送回原来房间
+        GameObject mask = Instantiate(Phase2Mask, transform.position, Quaternion.identity);
+        Destroy(mask, 2.2f);
+        yield return new WaitForSeconds(1.1f);
+        player.NowRoom = GetnowRoom;
+        player.transform.position = GetPlayerPosition;
+
+        //色相头，关闭！
+        cameraAdapt.DeactivateVcam();
+        cameraAdapt.ShowCameraMasks();
+        Camera.transform.position = GetCameraPostion;
+
+        //梦幻嘎掉
+        Invincible = false;
+        EmptyHp = 0;
+        EmptyDie();
     }
     private void UseSkillMask(int randomSkillIndex)
     {
