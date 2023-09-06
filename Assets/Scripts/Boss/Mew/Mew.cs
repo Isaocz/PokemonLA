@@ -64,7 +64,6 @@ public class Mew : Empty
     public GameObject FakeAwakening;//假解眠药
     public GameObject FakeIceHeal;//假解冻药
     public GameObject FakeParalyzeHeal;//假解麻药
-
     public GameObject FakeLovePrefab;//假心
 
     //第三阶段ui变化
@@ -77,13 +76,14 @@ public class Mew : Empty
     public Sprite TimeBar3;
     public Sprite TimeBar4;
 
-    //切换房间时等待
+    //切换房间
     private float MeanLookTimer = 0f;
     private bool UsedMeanLook = false;
     private bool turningPhase = false;
 
     //Audio
     public BackGroundMusic bgmScript;
+
     //阶段
     public int currentPhase = 1; // 当前阶段
     public bool LaserChange = false;
@@ -109,6 +109,7 @@ public class Mew : Empty
     //摄像跟随
     private CameraController cinemachineController;
     private CameraAdapt cameraAdapt;
+    private GameObject AtkTarget;
 
     //时间血量
     private float HpTimer = 191f;
@@ -151,10 +152,23 @@ public class Mew : Empty
         GetCameraPostion = Camera.transform.position;
         transform.parent.parent.GetComponent<Room>().isClear += 1;
 
-        //debug
-        player.Level = 99;
-        player.maxHp = 10000;
-        player.Hp = 10000;
+        //入场
+        ClearProjectile();
+        Vector3 nowRoom = GetnowRoom;
+        float roomWidth = 14f; // 房间的宽度
+        float roomHeight = 7f; // 房间的高度
+
+        GameObject[] environments = GameObject.FindGameObjectsWithTag("Enviroment");
+        foreach (GameObject environment in environments)
+        {
+            Vector3 environmentPosition = environment.transform.position;
+            bool isInCurrentRoom = Mathf.Abs(environmentPosition.x - nowRoom.x) <= roomWidth / 2f && Mathf.Abs(environmentPosition.y - nowRoom.y) <= roomHeight / 2f;
+
+            if (isInCurrentRoom)
+            {
+                Destroy(environment);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -163,7 +177,7 @@ public class Mew : Empty
         ResetPlayer();
         if (!isBorn && !isDying)
         {
-            if (currentPhase == 3)
+            if (currentPhase == 3)//三阶段判定
             {
                 bgmScript.ChangeBGMINSIST();
                 Phase3();
@@ -177,7 +191,8 @@ public class Mew : Empty
                     if (distance > 20f)
                     {
                         Vector3 direction = (player.transform.position - transform.position).normalized;
-                        player.transform.position = transform.position + direction * 20f;
+                        Vector3 targetPosition = transform.position + direction * 20f;
+                        player.transform.position = Vector3.MoveTowards(player.transform.position, targetPosition, 7f * Time.deltaTime);
                     }
                 }
                 else
@@ -186,7 +201,8 @@ public class Mew : Empty
                     {
                         Vector3 direction = (player.transform.position - transform.position).normalized;
                         float clampedDistance = Mathf.Clamp(distance, 10f, 20f);
-                        player.transform.position = transform.position + direction * clampedDistance;
+                        Vector3 targetPosition = transform.position + direction * clampedDistance;
+                        player.transform.position = Vector3.MoveTowards(player.transform.position, targetPosition, 7f * Time.deltaTime);
                     }
                 }
                 if (HpTiming <= 0f && isDying == false)
@@ -198,17 +214,52 @@ public class Mew : Empty
             }
             else
             {
+                AtkTarget = FindAtkTarget(40f);
                 UpdateEmptyChangeHP();
+                StateMaterialChange();
                 bgmScript.ChangeBGMToMew();
                 if (!turningPhase)
                 {
                     switch (currentPhase)
                     {
                         case 1:
-                            Phase1();
+                            if (!UsedMeanLook && EmptyHp < maxHP / 2)
+                            {
+                                if (!roomCreated && currentPhase == 1)
+                                {
+                                    turningPhase = true;
+                                    ClearStatusEffects();
+                                    StopAllCoroutines();//停止所有技能释放
+                                    EmptyHp = maxHP;
+                                    player.Hp = player.maxHp;
+                                    uIHealth.Per = EmptyHp / maxHP;
+                                    StartCoroutine(Phase2Start());
+                                }
+                                currentPhase++;
+                                Debug.Log("进入二阶段");
+                            }
+                            else if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
+                            {
+                                //其实就是如果不需要转阶段或者没有异常状态，进行技能计时器，技能一旦开始便无法停止。异常状态只是停止技能计时器
+                                Phase1();
+                            }
                             break;
                         case 2:
-                            Phase2();
+                            if (EmptyHp <= 0 && currentPhase == 2)
+                            {
+                                ClearStatusEffects();
+                                StopAllCoroutines();
+                                EmptyHp = maxHP;
+                                uIHealth.Per = EmptyHp / maxHP;
+                                uIHealth.ChangeHpUp();
+                                currentPhase++;
+                                Debug.Log("进入三阶段");
+                                isPhase3 = true;
+                            }
+                            else if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
+                            {
+                                Phase2();
+                            }
                             MoreAttack();
                             break;
                     }
@@ -227,42 +278,18 @@ public class Mew : Empty
     }
     void Phase1()
     {
-        if (!UsedMeanLook && EmptyHp < maxHP/2)
-        {
-            if (!roomCreated && currentPhase == 1)
-            {
-                turningPhase = true;
-                StopAllCoroutines();//停止所有技能释放
-                EmptyHp = maxHP;
-                player.Hp = player.maxHp;
-                uIHealth.Per = EmptyHp / maxHP;
-                StartCoroutine(Phase2Start());
-            }
-            currentPhase++;
-            Debug.Log("进入二阶段");
-        }
-        else if (skillTimer <= 0f)
+        if (skillTimer <= 0f)
         {
             int randomSkillIndex = Random.Range(1, 19);
             StartCoroutine(Phase1Skill(randomSkillIndex));
             SkillTimerUpdate(randomSkillIndex, 1);
         }
         // 技能计时器递减
-            skillTimer -= Time.deltaTime;
+        skillTimer -= Time.deltaTime;
     }
     void Phase2()
     {
-        if (EmptyHp <= 0 && currentPhase == 2)
-        {
-            StopAllCoroutines();
-            EmptyHp = maxHP;
-            uIHealth.Per = EmptyHp / maxHP;
-            uIHealth.ChangeHpUp();
-            currentPhase++;
-            Debug.Log("进入三阶段");
-            isPhase3 = true;
-        }
-        else if (skillTimer <= 0f)
+        if (skillTimer <= 0f)
         {
             // 随机选择一个技能释放
             int randomSkillIndex = Random.Range(1, 21);
@@ -1387,7 +1414,7 @@ public class Mew : Empty
         yield return new WaitForSeconds(4f);
         UseSkillMask(2);
         yield return new WaitForSeconds(1f);
-        for (int i = 0; i < 66; i++)
+        for (int i = 0; i < 100; i++)
         {
             float angle = i * 11f;
             GameObject trail = Instantiate(TrailEffect, transform.position, Quaternion.Euler(0, 0, angle));
@@ -1446,7 +1473,7 @@ public class Mew : Empty
         Debug.Log("isFinal:" + HpTiming);
         StartCoroutine(mewOrbRotate.ActivatePhase3Effect(2, 15, 10f));
         yield return new WaitForSeconds(1.5f);
-        for (int j = 0; j < 15; j++)
+        for (int j = 0; j < 13; j++)
         {
             float increaseAngle = 9f;
             float angleStep = 360f / 16;
@@ -1619,6 +1646,8 @@ public class Mew : Empty
         yield return new WaitForSeconds(1.1f);
         player.NowRoom = GetnowRoom;
         player.transform.position = GetPlayerPosition;
+        player.InANewRoom = true;
+        player.NewRoomTimer = 0f;
 
         //色相头，关闭！
         cameraAdapt.DeactivateVcam();
