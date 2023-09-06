@@ -31,6 +31,7 @@ public class FakeLove : Projectile
             {
                 playerControler.KnockOutPoint = 2.5f;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+                playerControler.ConfusionFloatPlus(0.4f);
             }
             Destroy(gameObject);
         }
