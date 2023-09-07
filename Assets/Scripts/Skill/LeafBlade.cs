@@ -11,10 +11,25 @@ public class LeafBlade : Skill
     private float attackDetectionDelay = 1f;
     private float moveSpeed = 12f; // 控制移动速度
     private float timer;
+    private float atkTimer = 1f;
+    private int Counts;
 
+    private void Start()
+    {
+        if(SkillFrom == 2)
+        {
+            Counts = 3;
+        }
+        else
+        {
+            Counts = 2;
+        }
+    }
     // Update is called once per frame
     void Update()
     {
+        StartExistenceTimer();
+        atkTimer += Time.deltaTime;
         if (changingSpeed)
         {
             timer += Time.deltaTime;
@@ -30,17 +45,18 @@ public class LeafBlade : Skill
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.tag == "Empty")
+        if (other.tag == "Empty" && atkTimer > 1f)
         {
+            atkTimer = 0f;
             attackCount++;
             targetEnemy = other.GetComponent<Empty>();
             HitAndKo(targetEnemy);
 
-            if (attackCount >= 3)
+            if (attackCount >= Counts)
             {
-                // 如果连续三次攻击到敌人，则停止移动并销毁对象
+                // 如果连续三次攻击到敌人，则停止移动并销毁对象（1级2次）
                 StopMoving();
             }
             else

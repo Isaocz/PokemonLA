@@ -372,6 +372,7 @@ public class Mew : Empty
                     {
                         // 在Mew位置实例化魔法叶
                         GameObject magicalLeaf = Instantiate(magicalLeafPrefab, transform.position, Quaternion.identity);
+                        magicalLeaf.GetComponent<MagicalLeafEmpty>().SetTarget(AtkTarget);
                         magicalLeaf.GetComponent<MagicalLeafEmpty>().empty = this;
                         Destroy(magicalLeaf, 6f); // 6秒后销毁魔法叶对象
                         yield return new WaitForSeconds(delayBetweenLeaves);
@@ -449,7 +450,7 @@ public class Mew : Empty
                 {
                     for (int i = 0; i < 4; i++)
                     {
-                        GameObject Curse = Instantiate(CursePrefab, player.transform.position, Quaternion.identity);
+                        GameObject Curse = Instantiate(CursePrefab, AtkTarget.transform.position, Quaternion.identity);
                         Curse.GetComponent<Curse>().empty = this;
                         Destroy(Curse, 4f);
                         yield return new WaitForSeconds(0.6f);
@@ -503,9 +504,9 @@ public class Mew : Empty
                         for (int i = 0; i < icicleCount; i++)
                         {
                             float angle = i * (360f / icicleCount);
-                            Vector2 spawnPosition = player.transform.position + (Quaternion.Euler(0f, 0f, angle) * Vector2.right * summonRadius);
+                            Vector2 spawnPosition = AtkTarget.transform.position + (Quaternion.Euler(0f, 0f, angle) * Vector2.right * summonRadius);
                             IcicleSpearEmpty IcicleSpear = Instantiate(IcicleSpearPrefab, spawnPosition, Quaternion.identity).GetComponent<IcicleSpearEmpty>();
-                            IcicleSpear.sf(player.transform.position);
+                            IcicleSpear.sf(AtkTarget.transform.position);
                             IcicleSpear.empty = this;
                         }
                         yield return new WaitForSeconds(delayBetweenExecutions);
@@ -535,7 +536,7 @@ public class Mew : Empty
                             heartStamps.Add(heartStamp.gameObject);
                             if (heartStamp != null)
                             {
-                                heartStamp.SetTarget(player.transform.position);
+                                heartStamp.SetTarget(AtkTarget.transform.position);
                             }
                         }
                         yield return new WaitForSeconds(intervalTime);
@@ -554,7 +555,7 @@ public class Mew : Empty
                     }
                     for (int j = 0; j < Times; j++)
                     {
-                        Vector3 randomPoint = (Vector2)player.transform.position + Random.insideUnitCircle.normalized * 3f;
+                        Vector3 randomPoint = (Vector2)AtkTarget.transform.position + Random.insideUnitCircle.normalized * 3f;
                         // 创建Reticle并设置位置
                         GameObject reticle = Instantiate(reticlePrefab, randomPoint, Quaternion.identity);
                         Destroy(reticle, 2f);
@@ -626,7 +627,7 @@ public class Mew : Empty
                         PlayerControler playerinside = collider.GetComponent<PlayerControler>();
                         if (playerinside != null)
                         {
-                            Pokemon.PokemonHpChange(this.gameObject, playerinside.gameObject, 0, 120, 0, Type.TypeEnum.Fairy);
+                            Pokemon.PokemonHpChange(this.gameObject, collider.gameObject, 0, 120, 0, Type.TypeEnum.Fairy);
                             playerinside.KnockOutPoint = 5f;
                             playerinside.KnockOutDirection = (playerinside.transform.position - transform.position).normalized;
                         }
@@ -648,6 +649,7 @@ public class Mew : Empty
                     {
                         // 实例化LeafBlade
                         GameObject LeafBlade = Instantiate(LeafBladePrefab, transform.position, Quaternion.identity);
+                        LeafBlade.GetComponent<LeafBladeEmpty>().SetTarget(AtkTarget);
                         LeafBlade.GetComponent<LeafBladeEmpty>().empty = this;
                         // 等待发射间隔
                         yield return new WaitForSeconds(shootInterval);
@@ -847,15 +849,15 @@ public class Mew : Empty
                 {   
                     for(int i = 0;i<3; i++)  
                     {
-                        Instantiate(reticle2Prefab, player.transform.position, Quaternion.identity);
+                        Instantiate(reticle2Prefab, AtkTarget.transform.position, Quaternion.identity);
                         for(int j = 0; j < 6; j++)
                         {
                             float angle = j * 60;
                             float radius = 10f;
-                            Vector3 spawnPos = player.transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
+                            Vector3 spawnPos = AtkTarget.transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
                             SecredSwordEmpty secredSword = Instantiate(SecredSwordPrefab, spawnPos, Quaternion.identity).GetComponent<SecredSwordEmpty>();
                             secredSword.empty = this;
-                            secredSword.Initialize(angle, radius);
+                            secredSword.Initialize(angle, radius, AtkTarget);
                             
                         }
                         yield return new WaitForSeconds(3f);
@@ -968,14 +970,14 @@ public class Mew : Empty
                 teleportAttempts = 0;
             }
         }
-        //二阶段随机传送：玩家周围
+        //二阶段随机传送：玩家周围（受替身影响）
         if(currentPhase == 2)
         {
             float minDistance = 5f;
             float maxDistance = 10f;
             Vector3 randomDirection = Random.insideUnitCircle.normalized;
             float randomDistance = Random.Range(minDistance, maxDistance);
-            randomPosition = player.transform.position + randomDirection * randomDistance;
+            randomPosition = AtkTarget.transform.position + randomDirection * randomDistance;
             // 检查与"Room"和"Environment"标签的对象是否相撞
             Collider2D[] colliders = Physics2D.OverlapCircleAll(randomPosition, 1f);
             foreach (Collider2D collider in colliders)
@@ -1056,7 +1058,7 @@ public class Mew : Empty
     }
 
     private IEnumerator Phase3Skill()
-    {
+    {//第三阶段不受替身影响！
         animator.SetTrigger("Teleport");
         yield return new WaitForSeconds(1f);
         transform.position = mapCenter;
@@ -1084,6 +1086,7 @@ public class Mew : Empty
                 float angle = i * (360f / 8);
                 Vector2 spawnPosition = transform.position + (Quaternion.Euler(0f, 0f, angle) * Vector2.right * 2f);
                 GameObject magicalleaf = Instantiate(magicalLeafPrefab, spawnPosition, Quaternion.identity);
+                magicalleaf.GetComponent<MagicalLeafEmpty>().SetTarget(player.gameObject);
                 magicalleaf.GetComponent<MagicalLeafEmpty>().empty = this;
                 Destroy(magicalleaf, 6f);
             }
@@ -1273,6 +1276,9 @@ public class Mew : Empty
             LeafBlade.GetComponent<LeafBladeEmpty>().empty = this;
             LeafBlade1.GetComponent<LeafBladeEmpty>().empty = this;
             LeafBlade2.GetComponent<LeafBladeEmpty>().empty = this;
+            LeafBlade.GetComponent<LeafBladeEmpty>().SetTarget(player.gameObject);
+            LeafBlade1.GetComponent<LeafBladeEmpty>().SetTarget(player.gameObject);
+            LeafBlade2.GetComponent<LeafBladeEmpty>().SetTarget(player.gameObject);
             yield return new WaitForSeconds(0.17f);
         }
         UseSkillMask(15);
@@ -1535,6 +1541,7 @@ public class Mew : Empty
         for(int i = 0; i < times; i++)
         {
             GameObject magicalleaf = Instantiate(magicalLeafPrefab, transform.position, Quaternion.identity);
+            magicalleaf.GetComponent<MagicalLeafEmpty>().SetTarget(player.gameObject);
             magicalleaf.GetComponent<MagicalLeafEmpty>().empty = this;
             Destroy(magicalleaf, 6f);
             yield return new WaitForSeconds(3f);

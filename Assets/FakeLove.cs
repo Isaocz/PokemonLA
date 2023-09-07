@@ -26,7 +26,7 @@ public class FakeLove : Projectile
         if (collision.tag == "Player")
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(mew, playerControler.gameObject, 0, SpAPower, 0, Type.TypeEnum.Fairy);
+            Pokemon.PokemonHpChange(mew, collision.gameObject, 0, SpAPower, 0, Type.TypeEnum.Fairy);
             if (playerControler != null)
             {
                 playerControler.KnockOutPoint = 2.5f;

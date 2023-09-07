@@ -25,7 +25,7 @@ public class StoneEdgeEmpty : Projectile
         if (collision.CompareTag("Player"))
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, Dmage, 0, 0, Type.TypeEnum.Rock);
+            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Rock);
             if (playerControler != null)
             {
                 playerControler.KnockOutPoint = 2.5f;
