@@ -16,6 +16,8 @@ public class FloorNum : MonoBehaviour
     public bool isMewBeTalk;
     public bool isMintRoomBeCreated;
 
+    public List<bool> isBossRoomBeCreated = new List<bool> { };
+
     private void Awake()
     {
         GlobalFloorNum = this;

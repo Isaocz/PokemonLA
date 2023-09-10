@@ -28,7 +28,8 @@ public class MapCreater : MonoBehaviour
     int StoreCreatCount;
 
 
-    public Room BossRoom;
+    public List<Room> BossRoomList;
+    Room BossRoom;
     public Vector3Int BossRoomPoint = new Vector3Int(10000, 10000, 0);
     bool isBossRoomSpawn;
     int BossRoomCreatCount;
@@ -102,7 +103,7 @@ public class MapCreater : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
         //根据当前层数设置地图
         if(FloorNum.GlobalFloorNum != null)
         {
@@ -119,6 +120,12 @@ public class MapCreater : MonoBehaviour
             //每层生成树果房的概率为8%
             isBornBerryTreeRoom = Random.Range(0.0f, 1.0f) <= 0.08f;
             StepMin = FloorNum.GlobalFloorNum.MapSize[FloorNum.GlobalFloorNum.FloorNumber];
+            BossRoom = BossRoomList[Random.Range(0, BossRoomList.Count)];
+            while (FloorNum.GlobalFloorNum.isBossRoomBeCreated[BossRoom.GetComponent<BossRoom>().BossIndex])
+            {
+                BossRoom = BossRoomList[Random.Range(0, BossRoomList.Count)];
+            }
+            FloorNum.GlobalFloorNum.isBossRoomBeCreated[BossRoom.GetComponent<BossRoom>().BossIndex] = true;
         }
         else
         {
@@ -127,6 +134,7 @@ public class MapCreater : MonoBehaviour
             isBornMintRoom = Random.Range(0.0f, 1.0f) <= 0.3f;
             isBornBerryTreeRoom = Random.Range(0.0f, 1.0f) <= 0.08f;
             StepMin = 8;
+            BossRoom = BossRoomList[Random.Range(0,BossRoomList.Count)];
         }
         Debug.Log(isBornMewRoom);
         Debug.Log(isBornBabyCenterRoom);

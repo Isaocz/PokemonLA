@@ -161,61 +161,72 @@ public class Weather : MonoBehaviour
 
     public void ChangeWeatherRain(float Time , bool isPlus)
     {
-        RemoveAllWeather();
-        isRain = true;
-        if (isPlus) { isRainPlus = true; }
-        isRainColorStartChange = true;
-        RainPS.gameObject.SetActive(true);
-        RainPS.Play();
-        WeatherTimer = Time;
+        if (!isRain || !isRainPlus) {
+            RemoveAllWeather();
+            isRain = true;
+            if (isPlus) { isRainPlus = true; }
+            isRainColorStartChange = true;
+            RainPS.gameObject.SetActive(true);
+            RainPS.Play();
+            WeatherTimer = Time;
+        }
     }
 
     public void ChangeWeatherSunshine(float Time, bool isPlus)
     {
-        RemoveAllWeather();
-        isSunny = true;
-        if (isPlus) { isSunnyPlus = true; }
-        isSunColorStartChange = true;
-        SunShinePS.gameObject.SetActive(true);
-        SunShinePS.Play();
-        WeatherTimer = Time;
+        if (!isSunny || !isSunnyPlus)
+        {
+            RemoveAllWeather();
+            isSunny = true;
+            if (isPlus) { isSunnyPlus = true; }
+            isSunColorStartChange = true;
+            SunShinePS.gameObject.SetActive(true);
+            SunShinePS.Play();
+            WeatherTimer = Time;
+        }
     }
 
 
 
     public void ChangeWeatherHail(float Time, bool isPlus)
     {
-        RemoveAllWeather();
-        isHail = true;
-        if (isPlus) { isHailPlus = true; }
-        isHailColorStartChange = true;
-        HailPS1.gameObject.SetActive(true);
-        HailPS2.gameObject.SetActive(true);
-        HailPS1.Play();
-        HailPS2.Play();
-        if (!isPlayerDefUP &&(player.PlayerType01 == 15 || player.PlayerType02 == 15 || player.PlayerTeraType == 15 || player.PlayerTeraTypeJOR == 15))
+        if (!isHail || !isHailPlus)
         {
-            player.playerData.DefBounsAlways += 1;
-            player.ReFreshAbllityPoint();
-            isPlayerDefUP = true;
+            RemoveAllWeather();
+            isHail = true;
+            if (isPlus) { isHailPlus = true; }
+            isHailColorStartChange = true;
+            HailPS1.gameObject.SetActive(true);
+            HailPS2.gameObject.SetActive(true);
+            HailPS1.Play();
+            HailPS2.Play();
+            if (!isPlayerDefUP && (player.PlayerType01 == 15 || player.PlayerType02 == 15 || player.PlayerTeraType == 15 || player.PlayerTeraTypeJOR == 15))
+            {
+                player.playerData.DefBounsAlways += 1;
+                player.ReFreshAbllityPoint();
+                isPlayerDefUP = true;
+            }
+            WeatherTimer = Time;
         }
-        WeatherTimer = Time;
     }
 
     public void ChangeWeatherSandStorm(float Time, bool isPlus)
     {
-        RemoveAllWeather();
-        isSandstorm = true;
-        if (isPlus) { isSandstormPlus = true; }
-        isSandstormColorStartChange = true;
-        SandstormPS.gameObject.SetActive(true);
-        SandstormPS.Play();
-        WeatherTimer = Time;
-        if (!isPlayerSpDUP && (player.PlayerType01 == 6 || player.PlayerType02 == 6 || player.PlayerTeraType == 6 || player.PlayerTeraTypeJOR == 6))
+        if (!isSandstorm || !isSandstormPlus)
         {
-            player.playerData.SpDBounsAlways += 1;
-            player.ReFreshAbllityPoint();
-            isPlayerSpDUP = true;
+            RemoveAllWeather();
+            isSandstorm = true;
+            if (isPlus) { isSandstormPlus = true; }
+            isSandstormColorStartChange = true;
+            SandstormPS.gameObject.SetActive(true);
+            SandstormPS.Play();
+            WeatherTimer = Time;
+            if (!isPlayerSpDUP && (player.PlayerType01 == 6 || player.PlayerType02 == 6 || player.PlayerTeraType == 6 || player.PlayerTeraTypeJOR == 6))
+            {
+                player.playerData.SpDBounsAlways += 1;
+                player.ReFreshAbllityPoint();
+                isPlayerSpDUP = true;
+            }
         }
     }
 
@@ -237,6 +248,7 @@ public class Weather : MonoBehaviour
     void RemoveAllWeather()
     {
         CheckPlayer();
+        WeatherTimer = 0;
         isRainColorStartChange = false;
         isSunColorStartChange = false;
         isHailColorStartChange = false;
