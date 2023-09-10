@@ -498,7 +498,7 @@ public class Pokemon : MonoBehaviour
     public void EmptySleepDone(float SleepPoint, float SleepTime)
     {
         Empty EmptyObj = GetComponent<Empty>();
-        if (!isSleepDone)
+        if (!isSleepDef && !isSleepDone)
         {
             SleepPointFloat += SleepPoint * SleepResistance;
             if (!isSleepStart && SleepPointFloat < 1)
@@ -550,7 +550,7 @@ public class Pokemon : MonoBehaviour
     public void EmptyParalysisDone(float ParalysisPoint, float ParalysisTime)
     {
         Empty EmptyObj = GetComponent<Empty>();
-        if (!isToxicDef && EmptyObj.EmptyType01 != Type.TypeEnum.Electric && EmptyObj.EmptyType02 != Type.TypeEnum.Electric)
+        if (!isParalysisDef && EmptyObj.EmptyType01 != Type.TypeEnum.Electric && EmptyObj.EmptyType02 != Type.TypeEnum.Electric)
         {
             if (!isParalysisDone)
             {

@@ -134,6 +134,11 @@ public class Empty : Pokemon
     }
     GameObject subsititueTarget;
 
+    public bool isHailDef;
+    public bool isSandStormDef;
+
+
+    public bool isShadow;
 
 
 
@@ -152,6 +157,7 @@ public class Empty : Pokemon
         int OutPut;
         if (!isBoos)
         {
+            
             if (PlayerLevel <= 10)
             {
                 OutPut = (player.playerData.IsPassiveGetList[29] ? (Random.Range(11, 13)) : (Random.Range(4, 8)));
@@ -215,22 +221,28 @@ public class Empty : Pokemon
     /// <param name="SkillType">伤害属性（数字参考Type.cs）</param>
     public void EmptyHpChange(float  Dmage , float SpDmage , int SkillType)
     {
-        if (isInvincible)
+        if (isShadow && Dmage + SpDmage >= 0)
         {
-            return;
+            animator.SetTrigger("ShadowOver");
         }
+        else
+        {
+            if (isInvincible)
+            {
+                return;
+            }
 
-        Type.TypeEnum enumVaue = (Type.TypeEnum)SkillType;
-        Dmage = Dmage * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
-            * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
-            * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
-            * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
-        SpDmage = SpDmage * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
-            * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
-            * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
-            * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+            Type.TypeEnum enumVaue = (Type.TypeEnum)SkillType;
+            Dmage = Dmage * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+                * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
+                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
+                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+            SpDmage = SpDmage * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+                * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
+                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
+                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
 
-        float typeDef = (TypeDef[SkillType] < 0 ? (Mathf.Pow(1.2f, -TypeDef[SkillType])) : 1) * (TypeDef[SkillType] > 0 ? (Mathf.Pow(0.8f, TypeDef[SkillType])) : 1);
+            float typeDef = (TypeDef[SkillType] < 0 ? (Mathf.Pow(1.2f, -TypeDef[SkillType])) : 1) * (TypeDef[SkillType] > 0 ? (Mathf.Pow(0.8f, TypeDef[SkillType])) : 1);
             if (Dmage + SpDmage >= 0)
             {
                 if (SkillType != 19)
@@ -239,9 +251,9 @@ public class Empty : Pokemon
                 }
                 else
                 {
-                    EmptyHp -= Mathf.Clamp( (int)((Dmage + SpDmage) * typeDef) , 1 , 100000 );
+                    EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, 100000);
                 }
-            EmptySleepRemove();
+                EmptySleepRemove();
 
             }
             else
@@ -262,6 +274,7 @@ public class Empty : Pokemon
                 uIHealth.Per = (float)EmptyHp / (float)maxHP;
                 uIHealth.ChangeHpUp();
             }
+        }
     }
     //====================敌人血量改变======================
 
@@ -598,7 +611,7 @@ public class Empty : Pokemon
     /// </summary>
     void EmptyHail()
     {
-        if (EmptyType01 != Type.TypeEnum.Ice && EmptyType02 != Type.TypeEnum.Ice)
+        if (EmptyType01 != Type.TypeEnum.Ice && EmptyType02 != Type.TypeEnum.Ice && !isHailDef)
         {
             EmptyHailTimer += Time.deltaTime;
             if (EmptyHailTimer >= 2)
@@ -630,7 +643,7 @@ public class Empty : Pokemon
     /// </summary>
     void EmptySandStorm()
     {
-        if (EmptyType01 != Type.TypeEnum.Ground && EmptyType01 != Type.TypeEnum.Rock && EmptyType01 != Type.TypeEnum.Steel && EmptyType02 != Type.TypeEnum.Ground && EmptyType02 != Type.TypeEnum.Rock && EmptyType02 != Type.TypeEnum.Steel)
+        if (EmptyType01 != Type.TypeEnum.Ground && EmptyType01 != Type.TypeEnum.Rock && EmptyType01 != Type.TypeEnum.Steel && EmptyType02 != Type.TypeEnum.Ground && EmptyType02 != Type.TypeEnum.Rock && EmptyType02 != Type.TypeEnum.Steel && !isSandStormDef)
         {
             EmptySandStormTimer += Time.deltaTime;
             if (EmptySandStormTimer >= 2)

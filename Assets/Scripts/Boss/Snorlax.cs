@@ -89,6 +89,8 @@ public class Snorlax : Empty
                     isAngry = true;
                     isGigaImpact = true;
                     animator.SetTrigger("GigaImpact");
+                    GameObject AngryEffect = PublicEffect.StaticPublicEffectList.ReturnAPublicEffect(2);
+                    Instantiate(AngryEffect, transform.position + Vector3.up * 2.5f, Quaternion.identity).SetActive(true);
                 }
 
 
