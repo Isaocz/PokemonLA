@@ -13,9 +13,12 @@ public class MagicalLeafEmpty : Projectile
 
     private Transform target; // 跟随的目标
 
+    public void SetTarget(GameObject Target)
+    {
+        target = Target.transform;
+    }
     private void Start()
     {
-        target = GameObject.FindWithTag("Player").transform;
         timer = lifetime; // 初始化计时器
     }
 

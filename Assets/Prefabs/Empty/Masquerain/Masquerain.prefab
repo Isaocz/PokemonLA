@@ -96,6 +96,9 @@ GameObject:
   - component: {fileID: 1998429374286830741}
   - component: {fileID: 6315537184787675944}
   - component: {fileID: 7980138438893896840}
+  - component: {fileID: 8445864739523636358}
+  - component: {fileID: 1991743348449199077}
+  - component: {fileID: 5468714917345061506}
   m_Layer: 0
   m_Name: Masquerain
   m_TagString: Empty
@@ -202,6 +205,7 @@ MonoBehaviour:
   SpAEmptyPoint: 100
   SpdEmptyPoint: 82
   SpeedEmptyPoint: 80
+  MaxLevel: 0
   TypeDef: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   isDie: 0
   isHit: 0
@@ -214,9 +218,17 @@ MonoBehaviour:
   isBoos: 0
   DropItem: {fileID: 0}
   isCanNotMoveWhenParalysis: 0
+  aiState: 0
   faceTo: 0
-  foundRadius: 8
+  foundRadius: 12
+  atkRadius: 7
+  patrolChooseRadius: 8
+  disKeepChase: 15
+  patrolSpeed: 2.2
+  chaseSpeed: 5
+  cdSkill: 5
   body: {fileID: 6127595402269670024}
+  skill: {fileID: 6300139084994621321, guid: 4aff0c29a6ffb8349a59c26f9959cded, type: 3}
 --- !u!95 &1998429374286830741
 Animator:
   serializedVersion: 3
@@ -265,7 +277,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 10
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -273,6 +285,72 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &8445864739523636358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2567877698796688452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f0faa07b869e1f4c888c539f9a71e22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetPosition: {x: 0, y: 0, z: 0}
+  faceDir: {x: -1, y: -1, z: 0}
+  nextWaypointDistance: 0.8
+  reachedEndOfPath: 0
+--- !u!114 &1991743348449199077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2567877698796688452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  drawGizmos: 1
+  detailedGizmos: 0
+  startEndModifier:
+    addPoints: 0
+    exactStartPoint: 3
+    exactEndPoint: 3
+    useRaycasting: 0
+    mask:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    useGraphRaycasting: 0
+  traversableTags: -1
+  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  graphMask:
+    value: -1
+--- !u!114 &5468714917345061506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2567877698796688452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  smoothType: 1
+  subdivisions: 2
+  iterations: 2
+  strength: 0.5
+  uniformLength: 1
+  maxSegmentLength: 2
+  bezierTangentLength: 0.4
+  offset: 0.2
+  factor: 0.1
 --- !u!1 &5643924235649820759
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,7 +422,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: -1408640921454858437, guid: f169cc173c39afc44894bbe56339d63c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
