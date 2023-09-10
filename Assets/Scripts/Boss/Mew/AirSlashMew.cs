@@ -10,6 +10,7 @@ public class AirSlashMew : Projectile
     float angle;
 
     private Transform target; //Ä¿±ê
+    private float timer;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +24,8 @@ public class AirSlashMew : Projectile
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.up * airSlashSpeed * Time.deltaTime);
+        timer += Time.deltaTime;
+        transform.Translate(Vector3.up * airSlashSpeed * Time.deltaTime * Mathf.Exp(timer));
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -33,7 +35,7 @@ public class AirSlashMew : Projectile
             if (collision.CompareTag("Player"))
             {
                 PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, 0, SpDmage, 0, Type.TypeEnum.Flying);
+                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Flying);
                 if (playerControler != null)
                 {
                     playerControler.KnockOutPoint = 5f;

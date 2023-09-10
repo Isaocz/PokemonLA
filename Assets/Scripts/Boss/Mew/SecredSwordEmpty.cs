@@ -10,18 +10,19 @@ public class SecredSwordEmpty : Projectile
     private float radius;
     private Vector3 position;
     private float timer;
-    private Vector3 target;
+    private Transform target;
+    private Vector3 target2;
     private Vector3 initialDirection;
-    public void Initialize(float Angle, float Radius)
+    public void Initialize(float Angle, float Radius, GameObject Target)
     {
         angle = Angle;
         radius = Radius;
+        target = Target.transform;
     }
     void Start()
     {
-        player = FindObjectOfType<PlayerControler>();
-        position = player.transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
-        Destroy(gameObject, 5f);
+        position = target.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
+        Destroy(gameObject, 3f);
         Invoke("RecordPosition", 1.7f);
 
         initialDirection = Quaternion.Euler(0f, 0f, angle) * Vector2.right * -1;
@@ -33,26 +34,26 @@ public class SecredSwordEmpty : Projectile
         timer += Time.deltaTime;
         if(timer < 1.7f)
         {
-            position = player.transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
+            position = target.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
             transform.position = position;
             transform.right = initialDirection;
         }
         else
         {
-            float moveSpeed = 12f; // 移动速度
-            transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
+            float moveSpeed = 16f; // 移动速度
+            transform.position = Vector3.MoveTowards(transform.position, target2, moveSpeed * Time.deltaTime);
         }
     }
     void RecordPosition()
     {
-        target = player.transform.position;
+        target2 = target.position;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, Dmage, 0, 0, Type.TypeEnum.Fighting);
+            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Fighting);
             if (playerControler != null)
             {
                 playerControler.KnockOutPoint = 2.5f;

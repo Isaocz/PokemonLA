@@ -9,9 +9,12 @@ public class LeafBladeEmpty : Projectile
     private Transform target; //Ä¿±ê
 
     // Start is called before the first frame update
+    public void SetTarget(GameObject Target)
+    {
+        target = Target.transform;
+    }
     void Start()
     {
-        target = GameObject.FindWithTag("Player").transform;
         Vector3 direction = target.position - transform.position;
         Destroy(gameObject, 5f);
 
@@ -33,7 +36,7 @@ public class LeafBladeEmpty : Projectile
         if (collision.CompareTag("Player"))
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, Dmage, 0, 0, Type.TypeEnum.Grass);
+            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Grass);
             if (playerControler != null)
             {
                 playerControler.KnockOutPoint = 2.5f;

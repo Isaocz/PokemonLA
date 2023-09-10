@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class HeartStampEmpty : Projectile
 {
     private Vector3 position;
     private Vector3 moveDirection;
-    public float moveSpeed = 5f;
+    public float moveSpeed;
+    public float timer;
+    private float time;
+    private float currentSpeed;
     // Start is called before the first frame update
     public void SetTarget(Vector3 target)
     {
@@ -24,9 +24,15 @@ public class HeartStampEmpty : Projectile
     // Update is called once per frame
     void Update()
     {
+        time += Time.deltaTime;
+        if (time < timer)
+        {
+            currentSpeed = moveSpeed * time / timer ;
+        }
+
         if (position != null)
         {
-            transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
+            transform.Translate(moveDirection * currentSpeed * Time.deltaTime);
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -34,7 +40,7 @@ public class HeartStampEmpty : Projectile
         if (collision.CompareTag("Player"))
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, Dmage, 0, 0, Type.TypeEnum.Psychic);
+            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Psychic);
             if (playerControler != null)
             {
                 playerControler.KnockOutPoint = 2.5f;

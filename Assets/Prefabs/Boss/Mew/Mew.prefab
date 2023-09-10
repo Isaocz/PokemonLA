@@ -227,10 +227,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mew: {fileID: 5095710276580237776}
-  rotationSpeed: 180
+  rotationSpeed: 150
   orbPrefab: {fileID: 7345602270828385190, guid: f58d57a050a31b84e95f92958400151c, type: 3}
-  orbCount: 30
-  radius: 21
   moveTime: 2
 --- !u!1 &2617555654376179780
 GameObject:
@@ -803,7 +801,7 @@ GameObject:
   - component: {fileID: 8126778485415083127}
   - component: {fileID: 8717618241814755899}
   - component: {fileID: 6859442323134344298}
-  - component: {fileID: 1331214832429583627}
+  - component: {fileID: 8279931956915673792}
   m_Layer: 9
   m_Name: Mew
   m_TagString: Empty
@@ -986,7 +984,7 @@ MonoBehaviour:
   summonRadius: 7
   delayBetweenExecutions: 1
   HeartStampPrefab: {fileID: 2131620167936913869, guid: c70d4c83505af0343b651a1f8ccb1fd5, type: 3}
-  HeartStampRadius: 2.5
+  HeartStampRadius: 3.5
   heartStampCount: 8
   reticlePrefab: {fileID: 3725591114184852910, guid: 37b3ff89b9c11b94cb762f055d6f137a, type: 3}
   ScaleShotPrefab: {fileID: 5544817596536917874, guid: b7b2320442291b141a625fd43eb14c65, type: 3}
@@ -1012,13 +1010,32 @@ MonoBehaviour:
   TimeStopEffect: {fileID: 978235333085611334, guid: 35b724f98aed75b4c9e9e39ad128101b, type: 3}
   TrailEffect: {fileID: 4254263861014007369, guid: 18d69b4288201d441b91f1a391869652, type: 3}
   IceBeamPrefab: {fileID: 2193759874819442424, guid: 7ac3364693986d7439a16e07c3fe86b7, type: 3}
+  FinalTrailEffect: {fileID: 154209979678865827, guid: 99b31f9ce9bea2d47b1a2b3e93a50a52, type: 3}
+  EternalBeamPrefab: {fileID: 153083992987698086, guid: e63ffdc0beb618e40a3115e2b57695d6, type: 3}
+  FakePotionPrefab: {fileID: 7025429324419389877, guid: 03094aa32eb59c84fbf4c7cf638e34fe, type: 3}
+  FakeAntidote: {fileID: 5628681377187633895, guid: 78ca517e4a2a4e048b33e3dcfc7ccf32, type: 3}
+  FakeBurnHeal: {fileID: 2984883845854223293, guid: a0b455e01696fc145907a7faefe1f21f, type: 3}
+  FakeAwakening: {fileID: 7491411927681461895, guid: bb3a711e88350fd48873d63c6ec2cce1, type: 3}
+  FakeIceHeal: {fileID: 394652073006348937, guid: 3d8520e7a785dd941ba483b22cf089ea, type: 3}
+  FakeParalyzeHeal: {fileID: 1358173745429161359, guid: ed766c71c78b87041b4a8ff14f177ec1, type: 3}
+  FakeLovePrefab: {fileID: 1949139755938856843, guid: abe3a713d25bbcd4db5028773ca970ba, type: 3}
+  timeBar1: {fileID: 4288322206925397586}
+  timeBar2: {fileID: 7315325133561382924}
+  timeBar3: {fileID: 3235852703671108440}
+  timeBar4: {fileID: 3390435370525027024}
+  TimeBar1: {fileID: 21300000, guid: ccef5cbd79ff807488e1ec1ed60ef755, type: 3}
+  TimeBar2: {fileID: 21300000, guid: d76d5032b305e5a4b88810407994375e, type: 3}
+  TimeBar3: {fileID: 21300000, guid: c5c5355e267707d498f507ff850cb185, type: 3}
+  TimeBar4: {fileID: 21300000, guid: 4b2475ae2ef08924489d2f79efb22f69, type: 3}
   bgmScript: {fileID: 0}
   currentPhase: 1
   LaserChange: 0
   MewBossRoomPrefab: {fileID: 3520086324356193059, guid: 3785cdf64b3deec4e8151656569a422c, type: 3}
   MewBossRoomPosition: {x: 3000, y: 2400, z: 0}
---- !u!61 &1331214832429583627
-BoxCollider2D:
+  dyingParticle: {fileID: 9135703322436374420, guid: ea86c33fdec357449bf96569f289f5ab, type: 3}
+  MewBossKilled: 0
+--- !u!58 &8279931956915673792
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1030,19 +1047,9 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.02691561, y: -0.18636322}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: -0.0320127, y: 0.4481771}
   serializedVersion: 2
-  m_Size: {x: 0.18514878, y: 0.18660069}
-  m_EdgeRadius: 0.7
+  m_Radius: 1.0762286
 --- !u!1 &8350782470244808576
 GameObject:
   m_ObjectHideFlags: 0
@@ -1187,6 +1194,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
+--- !u!224 &4419023594838040468 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4392254425719300258, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
+  m_PrefabInstance: {fileID: 119321934776696630}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5498906451936900709 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5618206323457624403, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
@@ -1214,6 +1226,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6ca394f092f1f741ab36e4319f1fc41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &3390435370525027024 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3362735004187006438, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
+  m_PrefabInstance: {fileID: 119321934776696630}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4288322206925397586 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4189690128202195300, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
+  m_PrefabInstance: {fileID: 119321934776696630}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &957849871081164575 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 931433446552940585, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
@@ -1225,8 +1247,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &4419023594838040468 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4392254425719300258, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
+--- !u!1 &7315325133561382924 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7215518503681341242, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
+  m_PrefabInstance: {fileID: 119321934776696630}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3235852703671108440 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3265079257646972014, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
   m_PrefabInstance: {fileID: 119321934776696630}
   m_PrefabAsset: {fileID: 0}

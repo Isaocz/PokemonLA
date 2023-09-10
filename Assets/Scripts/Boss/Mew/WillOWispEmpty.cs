@@ -23,7 +23,7 @@ public class WillOWispEmpty : MonoBehaviour
         if (collision.tag == "Player")
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(mew, playerControler.gameObject, 0, SpAPower, 0, Type.TypeEnum.Fire);
+            Pokemon.PokemonHpChange(mew, collision.gameObject, 0, SpAPower, 0, Type.TypeEnum.Fire);
             if (playerControler != null)
             {
                 //playerControler.ChangeHp(0, -(SpDmage * empty.SpAAbilityPoint * WeatherAlpha * (2 * empty.Emptylevel + 10) / 250), 11);
