@@ -35,7 +35,9 @@ public class MasquerainPathFinder : MonoBehaviour
         // ¸¨ÖúÅÐ¶ÏÊÇ·ñ×²Ç½£¬·ÀÖ¹¿¨ÔÚÒ»¸öµØ·½
         Timer.Start(this, 0.2f, true, () =>
         {
-            if (walking)
+            if (walking && !ParentEmpty.isBorn && !ParentEmpty.isDie && !ParentEmpty.isHit && 
+                !ParentEmpty.isSilence && !ParentEmpty.isEmptyFrozenDone  && !ParentEmpty.isSleepDone && 
+                !ParentEmpty.isCanNotMoveWhenParalysis)
             {
                 Vector2 rigiPos = rigi.position;
                 if (historyPos.Count >= 5)
