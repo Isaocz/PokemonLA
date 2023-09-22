@@ -507,7 +507,21 @@ public class PlayerData : MonoBehaviour
 
 
 
-                //====================薄荷===========================
+            //====================薄荷===========================
+            case 55:
+                //梦幻道具：闪烁崇心（擦弹）
+                Instantiate(aGameObjectByPassiveItem(4), player.transform.position, Quaternion.identity, player.NotFollowBaby.transform);
+                break;
+            case 56:
+                //梦幻道具：减少子弹判定
+                break;
+            case 57:
+                //梦幻道具：旋转光球
+                break;
+            case 58:
+                //梦幻道具：单词修改
+                break;
+
 
 
         }

@@ -36,13 +36,13 @@ public class Masquerain : Empty
     public float atkRadius = 7;
     //[Label("巡逻选择半径")]
     public float patrolChooseRadius = 8;
-    //[Label("最大维持追踪距离")]
+    //[Label("最大维持追踪距�?")]
     public float disKeepChase = 15;
     //[Label("巡逻速度")]
     public float patrolSpeed = 2.2f;
     //[Label("追逐速度")]
     public float chaseSpeed = 5f;
-    //[Label("追逐速cd度")]
+    //[Label("追逐速cd�?")]
     public float cdSkill = 3f;
     public Transform body;
     public GameObject skill;
@@ -198,39 +198,42 @@ public class Masquerain : Empty
 
             if (aiState == AI_STATE.IDLE)
             {
-                GameObject target = FindAtkTarget(foundRadius);
-                if (target)
+                if (!isSilence && !isSleepDone && !isCanNotMoveWhenParalysis)
                 {
-                    Vector2 dis = target.transform.position - transform.position;
-                    if (dis.magnitude <= atkRadius)
+                    GameObject target = FindAtkTarget(foundRadius);
+                    if (target)
                     {
-                        changeToAtk(target);
+                        Vector2 dis = target.transform.position - transform.position;
+                        if (dis.magnitude <= atkRadius)
+                        {
+                            changeToAtk(target);
+                        }
+                        else
+                        {
+                            // 进入追踪
+                            changeToChase(target);
+                        }
                     }
                     else
                     {
-                        // 进入追踪
-                        changeToChase(target);
+                        // 选择巡逻点开始巡�?
+                        Vector2 patrolDir = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+                        patrolDir.Normalize();
+                        Vector2 patrolPos = patrolDir * Random.Range(5, patrolChooseRadius) + rigidbody2D.position;
+                        // 如果超出房间中心范围，规范为其边�?
+                        Vector2 roomMid = transform.parent.position;
+                        patrolPos.x = Mathf.Clamp(patrolPos.x, roomMid.x - ConstantRoom.ROOM_INNER_WIDTH / 2, roomMid.x + ConstantRoom.ROOM_INNER_WIDTH / 2);
+                        patrolPos.y = Mathf.Clamp(patrolPos.y, roomMid.y - ConstantRoom.ROOM_INNER_HIGHT / 2, roomMid.y + ConstantRoom.ROOM_INNER_HIGHT / 2);
+                        speed = patrolSpeed;
+                        _pathFinder.SetTargetPos(patrolPos);
+                        aiState = AI_STATE.PATROL;
                     }
-                }
-                else
-                {
-                    // 选择巡逻点开始巡逻
-                    Vector2 patrolDir = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-                    patrolDir.Normalize();
-                    Vector2 patrolPos = patrolDir * Random.Range(5, patrolChooseRadius) + rigidbody2D.position;
-                    // 如果超出房间中心范围，规范为其边界
-                    Vector2 roomMid = transform.parent.position;
-                    patrolPos.x = Mathf.Clamp(patrolPos.x, roomMid.x - ConstantRoom.ROOM_INNER_WIDTH / 2, roomMid.x + ConstantRoom.ROOM_INNER_WIDTH / 2);
-                    patrolPos.y = Mathf.Clamp(patrolPos.y, roomMid.y - ConstantRoom.ROOM_INNER_HIGHT / 2, roomMid.y + ConstantRoom.ROOM_INNER_HIGHT / 2);
-                    speed = patrolSpeed;
-                    _pathFinder.SetTargetPos(patrolPos);
-                    aiState = AI_STATE.PATROL;
                 }
             }
             else if (aiState == AI_STATE.PATROL)
             {
                 GameObject target = FindAtkTarget(foundRadius);
-                if (target)
+                if (target && !isSilence && !isSleepDone && !isCanNotMoveWhenParalysis)
                 {
                     Vector2 dis = target.transform.position - transform.position;
                     if (dis.magnitude <= atkRadius)
@@ -256,18 +259,29 @@ public class Masquerain : Empty
                     _pathFinder.Stop();
                     aiState = AI_STATE.IDLE;
                 }
-                else if (dis <= atkRadius)
+                else if (dis <= atkRadius && !isSilence && !isSleepDone && !isCanNotMoveWhenParalysis && !isFearDone)
                 {
                     changeToAtk(chasingObj);
                 }
                 else
                 {
-                    // 更新追踪位置
                     float disToLastChasePos = (lastChasePos - transform.position).magnitude;
-                    if (disToLastChasePos > 3 || !_pathFinder.Walking)
+                    if (isFearDone)
                     {
-                        lastChasePos = chasingObj.transform.position;
-                        _pathFinder.SetTargetPos(lastChasePos);
+                        if (disToLastChasePos < 5)
+                        {
+                            Vector3 pos = transform.position - (chasingObj.transform.position - transform.position);
+                            _pathFinder.SetTargetPos(pos.normalized * 5);
+                        }
+                    }
+                    else
+                    {
+                        if (disToLastChasePos > 3 || !_pathFinder.Walking)
+                        {
+                            // 更新追踪位置
+                            lastChasePos = chasingObj.transform.position;
+                            _pathFinder.SetTargetPos(lastChasePos);
+                        }
                     }
                 }
             }
@@ -288,7 +302,16 @@ public class Masquerain : Empty
         chasingObj = target;
         lastChasePos = target.transform.position;
         speed = chaseSpeed;
-        _pathFinder.SetTargetPos(lastChasePos);
+
+        if (isFearDone)
+        {
+            Vector3 pos = transform.position - (chasingObj.transform.position - transform.position);
+            _pathFinder.SetTargetPos(pos.normalized * 5);
+        }
+        else
+        {
+            _pathFinder.SetTargetPos(lastChasePos);
+        }
         aiState = AI_STATE.CHASE;
     }
     
