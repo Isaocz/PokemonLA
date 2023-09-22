@@ -77,7 +77,7 @@ public class Zubat : Empty
                     animator.SetFloat("LookX", (Director.x >= 0 ? 1 : -1));
                     animator.SetFloat("LookY", (Director.y >= 0 ? 1 : -1));
                     if (!isSonic) {
-                        if ((TargetPosition - (Vector2)transform.position).magnitude >= (isEmptyInfatuationDone? 4 : 2.5f))
+                        if ((TargetPosition - (Vector2)transform.position).magnitude >= (isEmptyInfatuationDone? 4 : 3.2f))
                         {
                             rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)Director.x * Time.deltaTime * speed, -15f + transform.parent.position.x, 15f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)Director.y * Time.deltaTime * speed, -10f + transform.parent.position.y, 10f + transform.parent.position.y));
                         }

@@ -128,6 +128,13 @@ public class PlayerControler : Pokemon
     }
     Vector2 koDirection = new Vector2(0f,0f);
 
+    //布尔型变量表示玩家是否触发Z互动 触发后其他互动不可再被触发
+    public bool isInZ
+    {
+        get { return isinz; }
+        set { isinz = value; }
+    }
+    bool isinz = false;
 
 
     //声明六个整形数据，表示角色的六项种族值,以及六项当前能力值

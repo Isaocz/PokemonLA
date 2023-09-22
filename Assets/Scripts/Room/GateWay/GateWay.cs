@@ -14,6 +14,22 @@ public class GateWay : MonoBehaviour
         Maincamera = GameObject.FindWithTag("MainCamera");
     }
 
+    private void Start()
+    {
+        Transform ParentRoom = transform.parent;
+        while (ParentRoom.GetComponent<Room>() == null)
+        {
+            if (ParentRoom.transform.parent == null)
+            {
+                break;
+            }    
+            ParentRoom = ParentRoom.transform.parent;
+        }
+        if (ParentRoom.GetComponent<Room>() != null) {
+            GetComponent<SpriteRenderer>().color = ParentRoom.GetComponent<Room>().GateWayColor;
+        }
+    }
+
     public void DoorEnable()
     {
         animator.speed = 0;

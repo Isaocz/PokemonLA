@@ -43,9 +43,11 @@ public class Masquerain : Empty
     //[Label("追逐速度")]
     public float chaseSpeed = 5f;
     //[Label("追逐速cd度")]
-    public float cdSkill = 2f;
+    public float cdSkill = 3f;
     public Transform body;
     public GameObject skill;
+
+    GameObject AtkTarget;
     
     void Start()
     {
@@ -86,16 +88,21 @@ public class Masquerain : Empty
         if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }
         if (!isBorn)
         {
-            if (_pathFinder.Walking)
-            {
-                HandleFaceTo(_pathFinder.faceDir);
+            if (!isFearDone) {
+                if (_pathFinder.Walking)
+                {
+                    HandleFaceTo(_pathFinder.faceDir);
+                }
             }
             EmptyDie();
             StateMaterialChange();
             UpdateEmptyChangeHP();
         }
 
-        lastAtkTime += Time.deltaTime;
+        if (!isDie && !isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence && !isFearDone)
+        {
+            lastAtkTime += Time.deltaTime;
+        }
     }
     
     private void FixedUpdate()
@@ -104,6 +111,14 @@ public class Masquerain : Empty
         if (!isBorn)
         {
             EmptyBeKnock();
+            if (isFearDone)
+            {
+                if (FindAtkTarget(foundRadius) != null) {
+                    Vector2 D = (transform.position - FindAtkTarget(foundRadius).transform.position).normalized;
+                    rigidbody2D.position = rigidbody2D.position + D * 5 * Time.deltaTime;
+                    HandleFaceTo(D);
+                }
+            }
         }
     }
     
@@ -279,24 +294,40 @@ public class Masquerain : Empty
     
     private void changeToAtk(GameObject target)
     {
-        print("atk");
-        Vector2 dir = (target.transform.position - transform.position).normalized;
-        _pathFinder.Stop();
-        HandleFaceTo(dir);
-        aiState = AI_STATE.ATK;
-        lastAtkTime = 0;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
-        GameObject skillObj = Instantiate(skill, transform.position + new Vector3(dir.x, dir.y) * 1, Quaternion.Euler(0f, 0f, angle));
-        AirSlash airSlash = skillObj.GetComponent<AirSlash>();
-        airSlash.empty = this;
-        Timer.Start(this, 0.2f, () =>
+        if (!isDie && !isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence && !isFearDone)
         {
-            if (skillObj)
+
+            int ConfusionLunchOffsetRotation = Random.Range(-30, 30);
+            Vector2 dir = (Quaternion.AngleAxis((isEmptyConfusionDone ? ConfusionLunchOffsetRotation : 0), Vector3.forward) * (target.transform.position - transform.position).normalized).normalized;
+            HandleFaceTo(dir);
+
+            animator.SetTrigger("Atk");
+            _pathFinder.Stop(); 
+            aiState = AI_STATE.ATK;
+            lastAtkTime = 0;
+
+            Timer.Start(this, 0.5f, () =>
             {
-                airSlash.LaunchNotForce(dir, 10);
-                rigidbody2D.AddForce(- dir * 600);
-            }
-        });
+                int ConfusionLunchOffsetRotation = Random.Range(-30, 30);
+                Vector2 dir = (Quaternion.AngleAxis((isEmptyConfusionDone ? ConfusionLunchOffsetRotation : 0), Vector3.forward) * (target.transform.position - transform.position).normalized).normalized;
+                HandleFaceTo(dir);
+                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
+
+                GameObject skillObj = Instantiate(skill, transform.position + new Vector3(dir.x, dir.y) * 1, Quaternion.Euler(0f, 0f, angle));
+                AirSlash airSlash = skillObj.GetComponent<AirSlash>();
+                airSlash.empty = this;
+                Timer.Start(this, 0.15f, () =>
+                {
+                    if (skillObj)
+                    {
+
+                        airSlash.LaunchNotForce(dir, 10);
+                        rigidbody2D.AddForce(-dir * 1600);
+                    }
+                });
+            });
+        }
     }
+
 
 }

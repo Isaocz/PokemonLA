@@ -55,7 +55,7 @@ public class RaltsConfusion : Projectile
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == ("Room") || other.tag == ("Player") || (empty.isEmptyInfatuationDone && other.gameObject != empty.gameObject && other.tag == ("Empty")))
+        if (other.tag == ("Room") || other.tag == ("Player") || (empty.isEmptyInfatuationDone && other.gameObject != empty.gameObject && other.tag == ("Empty")) || other.tag == ("Enviroment"))
         {
             isDestory = true;
             Destroy(rigidbody2D);
