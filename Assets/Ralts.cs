@@ -11,7 +11,7 @@ public class Ralts : Empty
 
     public Projectile RaltsConfusion;
     float ConfusionCDTimer;
-
+    
 
     // Start is called before the first frame update
     void Start()
@@ -88,7 +88,7 @@ public class Ralts : Empty
                                 rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)Director.x * Time.deltaTime * speed, -15f + transform.parent.position.x, 15f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)Director.y * Time.deltaTime * speed, -10f + transform.parent.position.y, 10f + transform.parent.position.y));
                             }
                              
-                            if (ConfusionCDTimer >= 1.5f)
+                            if (ConfusionCDTimer >= 3.2f)
                             {
                                 ConfusionCDTimer = 0;
                                 Lunch();

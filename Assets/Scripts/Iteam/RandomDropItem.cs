@@ -68,7 +68,7 @@ public class RandomDropItem : MonoBehaviour
         {
             OutPut = Instantiate(FeatherRandom, transform.position, Quaternion.identity, transform);
         }
-        else if (RandomPoint >= 1.13f && RandomPoint <= 1.33f)
+        else if (RandomPoint >= 1.13f && RandomPoint <= 1.23f)
         {
             OutPut = Instantiate(SkillItem, transform.position, Quaternion.identity, transform);
         }

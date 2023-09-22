@@ -20,8 +20,8 @@ public class Combee : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Fairy;
-        EmptyType02 = Type.TypeEnum.Normal;
+        EmptyType01 = Type.TypeEnum.Bug;
+        EmptyType02 = Type.TypeEnum.Flying;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);
@@ -68,7 +68,7 @@ public class Combee : Empty
                 else { TargetPosition = InfatuationForDistanceEmpty().transform.position; }
 
                 if (!isFearDone) {
-                    if ((TargetPosition - (Vector2)transform.position).magnitude >= 2.2f && !isRush)
+                    if ((TargetPosition - (Vector2)transform.position).magnitude >= 3.2f && !isRush)
                     {
                         isRushDmage = false;
                         rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)Director.x * Time.deltaTime * speed, -15f + transform.parent.position.x, 15f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)Director.y * Time.deltaTime * speed, -10f + transform.parent.position.y, 10f + transform.parent.position.y));
@@ -99,7 +99,7 @@ public class Combee : Empty
                             animator.SetTrigger("Rush");
                             animator.ResetTrigger("RushOver");
                             isRushDmage = true;
-                            rigidbody2D.position += RushDirection * 9.5f * Time.deltaTime;
+                            rigidbody2D.position += RushDirection * 9f * Time.deltaTime;
                             if (rigidbody2D.position.x - transform.parent.position.x >= 15.0f || rigidbody2D.position.x - transform.parent.position.x <= -15.0f || rigidbody2D.position.y - transform.parent.position.y >= 10.0f || rigidbody2D.position.y - transform.parent.position.y <= -10.0f)
                             {
                                 RushTimer = 4.0f;
@@ -114,7 +114,7 @@ public class Combee : Empty
                             Director = (TargetPosition - (Vector2)transform.position).normalized;
                             animator.SetFloat("LookX", Director.x);
                             animator.SetFloat("LookY", Director.y);
-                            if (RushTimer > 5.5f) { isRush = false; RushTimer = 0; }
+                            if (RushTimer > 8f) { isRush = false; RushTimer = 0; }
                         }
                     }
                 }

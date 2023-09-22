@@ -100,7 +100,7 @@ public class CloysterAuroraBeamLarge : MonoBehaviour
                 }
 
             }
-            else if (RayTimer >= 2.52f && RayTimer < 5f)
+            else if (RayTimer >= 2.52f && RayTimer < 7.5f)
             {
                 transform.GetChild(1).gameObject.SetActive(false);
                 transform.GetChild(2).gameObject.SetActive(false);

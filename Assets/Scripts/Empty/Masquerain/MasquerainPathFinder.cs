@@ -78,7 +78,7 @@ public class MasquerainPathFinder : MonoBehaviour
     private void FixedUpdate()
     {
         speed = ParentEmpty.speed;
-        if (walking && !ParentEmpty.isBorn && !ParentEmpty.isDie && !ParentEmpty.isHit && !ParentEmpty.isSilence && !ParentEmpty.isEmptyFrozenDone)
+        if (walking && !ParentEmpty.isBorn && !ParentEmpty.isCanNotMoveWhenParalysis && !ParentEmpty.isSleepDone && !ParentEmpty.isDie && !ParentEmpty.isHit && !ParentEmpty.isSilence && !ParentEmpty.isEmptyFrozenDone)
         {
             reachedEndOfPath = false;
             while (true)
