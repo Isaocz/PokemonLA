@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Skill : MonoBehaviour
@@ -90,7 +91,6 @@ public class Skill : MonoBehaviour
     //表示技能生成是否需要抬手，比如位移类技能需要在摁下摁键的那一刻开始位移，而射弹类节能会有一个抬手前摇
     public bool isImmediately;
 
-    
 
     //用于多端攻击的构造体
     protected struct EmptyList
@@ -201,14 +201,39 @@ public class Skill : MonoBehaviour
                 if (player != null) {
                     if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
                     {
-                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage, 0, (Type.TypeEnum)SkillType);
-                        //Debug.Log(player);
+                        if (player.playerData.IsPassiveGetList[55])
+                        {
+                            Transform playertrans = GameObject.FindWithTag("Player").transform;
+                            Transform Baby = playertrans.Find("Baby");
+                            Transform notFollowBaby = Baby.Find("NotFollowBaby");
+                            GameObject bulletGraze = notFollowBaby.Find("BulletGraze(Clone)").gameObject;
+                            float dmgImprovement = bulletGraze.GetComponent<BulletGraze>().DamageImprovement;
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * dmgImprovement, 0, (Type.TypeEnum)SkillType);
+                        }
+                        else
+                        {
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage, 0, (Type.TypeEnum)SkillType);
+                            //Debug.Log(player);
+                        }
                     }
                     else
                     {
-                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * 1.5f * (Mathf.Pow(1.2f, CTLevel)), 0, (Type.TypeEnum)SkillType);
-                        GetCTEffect(target);
-                        //Debug.Log(player);
+                        if (player.playerData.IsPassiveGetList[55])
+                        {
+                            Transform playertrans = GameObject.FindWithTag("Player").transform;
+                            Transform Baby = playertrans.Find("Baby");
+                            Transform notFollowBaby = Baby.Find("NotFollowBaby");
+                            GameObject bulletGraze = notFollowBaby.Find("BulletGraze(Clone)").gameObject;
+                            float dmgImprovement = bulletGraze.GetComponent<BulletGraze>().DamageImprovement;
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * 1.5f * (Mathf.Pow(1.2f, CTLevel) * dmgImprovement), 0, (Type.TypeEnum)SkillType);
+                            GetCTEffect(target);
+                        }
+                        else
+                        {
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * 1.5f * (Mathf.Pow(1.2f, CTLevel)), 0, (Type.TypeEnum)SkillType);
+                            GetCTEffect(target);
+                            //Debug.Log(player);
+                        }
                     }
                 }else if (baby != null)
                 {
@@ -225,14 +250,39 @@ public class Skill : MonoBehaviour
                 {
                     if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
                     {
-                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage, 0, 0, (Type.TypeEnum)SkillType);
-                        //Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? ((target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1))) + 2, 0, SkillType);
+                        if (player.playerData.IsPassiveGetList[55])
+                        {
+                            Transform playertrans = GameObject.FindWithTag("Player").transform;
+                            Transform Baby = playertrans.Find("Baby");
+                            Transform notFollowBaby = Baby.Find("NotFollowBaby");
+                            GameObject bulletGraze = notFollowBaby.Find("BulletGraze(Clone)").gameObject;
+                            float dmgImprovement = bulletGraze.GetComponent<BulletGraze>().DamageImprovement;
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * dmgImprovement, 0, 0, (Type.TypeEnum)SkillType);
+                        }
+                        else
+                        {
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage, 0, 0, (Type.TypeEnum)SkillType);
+                            //Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? ((target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1))) + 2, 0, SkillType);
+                        }
                     }
                     else
                     {
-                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * 1.5f * (Mathf.Pow(1.2f, CTLevel)), 0, 0, (Type.TypeEnum)SkillType);
-                        GetCTEffect(target);
-                        //Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? (( target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1 ) : 1)) ) + 2, 0, SkillType);
+                        if (player.playerData.IsPassiveGetList[55])
+                        {
+                            Transform playertrans = GameObject.FindWithTag("Player").transform;
+                            Transform Baby = playertrans.Find("Baby");
+                            Transform notFollowBaby = Baby.Find("NotFollowBaby");
+                            GameObject bulletGraze = notFollowBaby.Find("BulletGraze(Clone)").gameObject;
+                            float dmgImprovement = bulletGraze.GetComponent<BulletGraze>().DamageImprovement;
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * 1.5f * (Mathf.Pow(1.2f, CTLevel) * dmgImprovement), 0, 0, (Type.TypeEnum)SkillType);
+                            GetCTEffect(target);
+                        }
+                        else
+                        {
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * 1.5f * (Mathf.Pow(1.2f, CTLevel)), 0, 0, (Type.TypeEnum)SkillType);
+                            GetCTEffect(target);
+                            //Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? (( target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1 ) : 1)) ) + 2, 0, SkillType);
+                        }
                     }
                 }else if (baby != null)
                 {
