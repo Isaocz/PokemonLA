@@ -154,19 +154,16 @@ public class Mew : Empty
 
         //入场
         ClearProjectile();
-        Vector3 nowRoom = GetnowRoom;
-        float roomWidth = 14f; // 房间的宽度
-        float roomHeight = 7f; // 房间的高度
 
-        GameObject[] environments = GameObject.FindGameObjectsWithTag("Enviroment");
-        foreach (GameObject environment in environments)
+        //删除所有环境对象
+        Transform grandParent = transform.parent.parent;
+        Transform enviroment = grandParent.Find("Enviroment");
+
+        if (enviroment != null)
         {
-            Vector3 environmentPosition = environment.transform.position;
-            bool isInCurrentRoom = Mathf.Abs(environmentPosition.x - nowRoom.x) <= roomWidth / 2f && Mathf.Abs(environmentPosition.y - nowRoom.y) <= roomHeight / 2f;
-
-            if (isInCurrentRoom)
+            for (int i = 0; i < enviroment.childCount; i++)
             {
-                Destroy(environment);
+                Destroy(enviroment.GetChild(i).gameObject);
             }
         }
     }
