@@ -9,12 +9,15 @@ public class BulletGraze : MonoBehaviour
     private float timer;
     public GameObject grazeEffect;
     public float DamageImprovement;
+    public AudioClip Graze;
+    private AudioSource audioSource;
 
     private List<GameObject> projectelList = new List<GameObject>();// 用于记录进入触发器的Projectel
 
     private void Start()
     {
         DamageImprovement = 1f;
+        audioSource = GetComponent<AudioSource>();
     }
     private void Update()
     {
@@ -64,5 +67,10 @@ public class BulletGraze : MonoBehaviour
         GameObject GrazeEffect = Instantiate(grazeEffect, transform.position, Quaternion.identity);
         Destroy(GrazeEffect, 0.35f);
         timer = 10f;
+
+        if (Graze != null)
+        {
+            audioSource.PlayOneShot(Graze);
+        }
     }
 }
