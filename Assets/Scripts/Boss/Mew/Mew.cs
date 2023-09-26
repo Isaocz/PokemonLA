@@ -116,7 +116,6 @@ public class Mew : Empty
     private float HpTiming = 191f;
     
     //À¿Õˆ∂Øª≠
-    public GameObject dyingParticle;
     public bool MewBossKilled = false;
 
     // Start is called before the first frame update
@@ -1639,7 +1638,6 @@ public class Mew : Empty
 
     private IEnumerator Phase3End()
     {
-        Instantiate(dyingParticle, transform.position + new Vector3(0f, 0.5f, 0f), Quaternion.identity);
         animator.SetTrigger("Die");
         //yield return new WaitForSeconds(0.5f);
         MewBossKilled = true;
