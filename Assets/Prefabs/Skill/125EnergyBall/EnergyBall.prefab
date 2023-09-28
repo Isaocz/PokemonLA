@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 802905282378543468}
   - component: {fileID: 961530585562098795}
   - component: {fileID: 1994583448672950770}
+  - component: {fileID: 8785187388381772727}
   m_Layer: 0
   m_Name: EnergyBall
   m_TagString: Untagged
@@ -60,7 +61,7 @@ MonoBehaviour:
   SkillChineseName: "\u80FD\u91CF\u7403"
   SkillDiscribe: "\u53D1\u5C04\u4ECE\u81EA\u7136\u6536\u96C6\u7684\u751F\u547D\u529B\u91CF\u3002\u6709\u65F6\u4F1A\u964D\u4F4E\u5BF9\u624B\u7684\u7279\u9632\u3002"
   PlusSkillDiscribe: 
-  PlusSkill: {fileID: 0}
+  PlusSkill: {fileID: 2869707859094002477, guid: a4c1c2d3a06e7ef438b348ff8e62d45a, type: 3}
   MinusSkill: {fileID: 0}
   KOPoint: 1.5
   ColdDown: 6
@@ -74,7 +75,7 @@ MonoBehaviour:
   isMultipleDamage: 1
   MultipleDamageCDTime: 0.5
   isImmediately: 0
-  initialSpeed: 6
+  initialSpeed: 8
 --- !u!58 &961530585562098795
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -110,6 +111,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!50 &8785187388381772727
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 384370721071766565}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &677311152388175094
 GameObject:
   m_ObjectHideFlags: 0

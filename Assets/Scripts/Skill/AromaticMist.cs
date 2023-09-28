@@ -10,6 +10,10 @@ public class AromaticMist : Skill
         if (player.playerData.SpDBounsJustOneRoom <= 8)
         {
             player.playerData.SpDBounsJustOneRoom += 1;
+            if(SkillFrom == 2)
+            {
+                player.playerData.SpDBounsJustOneRoom += 1;
+            }
         }
     }
 

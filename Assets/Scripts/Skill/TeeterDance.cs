@@ -23,7 +23,14 @@ public class TeeterDance : Skill
             Empty target = other.GetComponent<Empty>();
             if (target != null)
             {
-                target.EmptyConfusion(2f, 1);
+                if (SkillFrom == 0)
+                {
+                    target.EmptyConfusion(2f, 1);
+                }
+                else if (SkillFrom == 2)
+                {
+                    target.EmptyConfusion(3f, 1);
+                }
             }
         }
     }

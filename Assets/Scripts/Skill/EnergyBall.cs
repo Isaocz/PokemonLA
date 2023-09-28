@@ -6,7 +6,6 @@ public class EnergyBall : Skill
 {
     public float initialSpeed; 
     private float moveSpeed;
-    private Empty enemy;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +23,16 @@ public class EnergyBall : Skill
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Empty"))
+        {
+            Empty target = collision.GetComponent<Empty>();
+            if (Random.Range(0f, 1f) + (float)player.LuckPoint / 30 > 0.9f)
+                target.LevelChange(-1, "SpD");
+        }
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Empty"))
@@ -32,13 +41,11 @@ public class EnergyBall : Skill
             if (target != null)
             {
                 HitAndKo(target);
-                if (enemy != target)
-                {
-                    enemy = target;//¼ÇÂ¼target£¬·ÀÖ¹±»ÖØ¸´¼ì²â½µ·À
-                    if (Random.Range(0f, 1f) + (float)player.LuckPoint / 30 > 0.9f)
-                        target.LevelChange(-1, "SpD");
-                }
             }
+        }
+        if ((collision.CompareTag("Enviroment") || collision.CompareTag("Room")) && SkillFrom != 2)
+        {
+            moveSpeed -= 6 * Time.deltaTime;
         }
     }
 }
