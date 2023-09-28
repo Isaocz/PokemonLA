@@ -31,6 +31,11 @@ public class PlayNice : Skill
                 infnum.Add(target.AtkEmptyPoint);
                 influence.Add(target);
                 target.LevelChange(-1, "Atk");
+                if(SkillFrom == 2)
+                {
+                    target.LevelChange(-1, "Atk");
+                    target.LevelChange(-1, "SpA");
+                }
             }
         }
     }

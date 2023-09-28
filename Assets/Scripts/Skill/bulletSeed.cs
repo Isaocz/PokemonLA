@@ -7,6 +7,7 @@ public class bulletSeed : Skill
 {
     int Count;
     public GameObject Seed;
+    public GameObject SeedAdvanced;
 
     void Start()
     {
@@ -21,12 +22,25 @@ public class bulletSeed : Skill
 
     IEnumerator ShootSeed(int counts)
     {
-        for(int i = 0; i < counts; i++)
+        if (SkillFrom != 2)
         {
-            GameObject Seeds = Instantiate(Seed, transform.position, Quaternion.identity);
-            Seeds.GetComponent<BulletSeedShoot>().player = this.player;
-            Seeds.GetComponent<BulletSeedShoot>().moveDirection = transform.right;
-            yield return new WaitForSeconds(0.1f);
+            for (int i = 0; i < counts; i++)
+            {
+                GameObject Seeds = Instantiate(Seed, transform.position, Quaternion.identity);
+                Seeds.GetComponent<BulletSeedShoot>().player = this.player;
+                Seeds.GetComponent<BulletSeedShoot>().moveDirection = transform.right;
+                yield return new WaitForSeconds(0.1f);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < counts; i++)
+            {
+                GameObject Seeds2 = Instantiate(SeedAdvanced, transform.position, Quaternion.identity);
+                Seeds2.GetComponent<BulletSeedShoot>().player = this.player;
+                Seeds2.GetComponent<BulletSeedShoot>().moveDirection = transform.right;
+                yield return new WaitForSeconds(0.1f);
+            }
         }
     }
 
