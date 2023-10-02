@@ -4,6 +4,27 @@ using UnityEngine;
 
 public class UseSpaceItem : MonoBehaviour
 {
+
+    public static bool UseSpaceItemConditions(PlayerControler player)
+    {
+        if (player.spaceItem.GetComponent<SpaceItem>().ItemNum == 66)
+        {
+            if (player.Hp <= 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+
     // Start is called before the first frame update
     public static void UsedSpaceItem(PlayerControler player)
     {
@@ -251,6 +272,153 @@ public class UseSpaceItem : MonoBehaviour
                 break;
 
 
+
+            //神奇黏糕
+            case 57:
+                switch (Random.Range(0,7))
+                {
+                    case 0:
+                        UIGetANewItem.UI.JustSaySth("是体力粘糕的味道!", "体力的奋斗力上升了!");
+                        player.ChangeHPW(new Vector2Int(1,12));
+                        break;
+                    case 1:
+                        UIGetANewItem.UI.JustSaySth("是肌力粘糕的味道!", "攻击的奋斗力上升了!");
+                        player.ChangeHPW(new Vector2Int(2, 12));
+                        break;
+                    case 2:
+                        UIGetANewItem.UI.JustSaySth("是抵抗粘糕的味道!", "防御的奋斗力上升了!");
+                        player.ChangeHPW(new Vector2Int(3, 12));
+                        break;
+                    case 3:
+                        UIGetANewItem.UI.JustSaySth("是智力粘糕的味道!", "特攻的奋斗力上升了!");
+                        player.ChangeHPW(new Vector2Int(4, 12));
+                        break;
+                    case 4:
+                        UIGetANewItem.UI.JustSaySth("是精神粘糕的味道!", "特防的奋斗力上升了!");
+                        player.ChangeHPW(new Vector2Int(5, 12));
+                        break;
+                    case 5:
+                        UIGetANewItem.UI.JustSaySth("是瞬发粘糕的味道!", "攻击速度的奋斗力上升了!");
+                        player.ChangeHPW(new Vector2Int(6, 12));
+                        break;
+                    case 6:
+                        UIGetANewItem.UI.JustSaySth("是净空粘糕的味道!", "所有属性的奋斗力都下降了!");
+                        player.ChangeHPW(new Vector2Int(1, -6));
+                        player.ChangeHPW(new Vector2Int(2, -6));
+                        player.ChangeHPW(new Vector2Int(3, -6));
+                        player.ChangeHPW(new Vector2Int(4, -6));
+                        player.ChangeHPW(new Vector2Int(5, -6));
+                        player.ChangeHPW(new Vector2Int(6, -6));
+                        break;
+                }
+                break;
+
+            //彗星碎片
+            case 58:
+                Instantiate(player.spaceItem.GetComponent<CometShard>().Start, player.transform.position, Quaternion.identity).GetComponent<RandomStarMoney>().isLunch = true;
+                Instantiate(player.spaceItem.GetComponent<CometShard>().Start, player.transform.position, Quaternion.identity).GetComponent<RandomStarMoney>().isLunch = true;
+                Instantiate(player.spaceItem.GetComponent<CometShard>().Start, player.transform.position, Quaternion.identity).GetComponent<RandomStarMoney>().isLunch = true;
+                Instantiate(player.spaceItem.GetComponent<CometShard>().Start, player.transform.position, Quaternion.identity).GetComponent<RandomStarMoney>().isLunch = true;
+                Instantiate(player.spaceItem.GetComponent<CometShard>().Start, player.transform.position, Quaternion.identity).GetComponent<RandomStarMoney>().isLunch = true;
+                if (Random.Range(0.0f,1.0f) > 0.6f)
+                {
+                    Instantiate(player.spaceItem.GetComponent<CometShard>().Start, player.transform.position, Quaternion.identity).GetComponent<RandomStarMoney>().isLunch = true;
+                    if (Random.Range(0.0f, 1.0f) > 0.6f)
+                    {
+                        Instantiate(player.spaceItem.GetComponent<CometShard>().Start, player.transform.position, Quaternion.identity).GetComponent<RandomStarMoney>().isLunch = true;
+                    }
+                }
+                break;
+
+            //潮湿岩石
+            case 59:
+                Weather.GlobalWeather.ChangeWeatherRain(15,false);
+                break;
+
+            //沙沙岩石
+            case 60:
+                Weather.GlobalWeather.ChangeWeatherSandStorm(15, false);
+                break;
+
+            //炽热岩石
+            case 61:
+                Weather.GlobalWeather.ChangeWeatherSunshine(15, false);
+                break;
+
+            //冰冷岩石
+            case 62:
+                Weather.GlobalWeather.ChangeWeatherHail(15, false);
+                break;
+
+            //头领凭证
+            case 63:
+                Instantiate(player.spaceItem.GetComponent<LeadersCrest>().Atrack, player.transform.position, Quaternion.identity, player.transform);
+                break;
+
+            //皮皮玩偶
+            case 64:
+                Substitute Obj = Instantiate(player.spaceItem.GetComponent<PokeDoll>().substitute, player.transform.position, Quaternion.Euler(Vector3.zero));
+                Obj.SetSubstitute(player.maxHp / 2, player);
+                break;
+
+            //怪兽笛
+            case 65:
+                player.SleepRemove();
+                Room NowRoom =  MapCreater.StaticMap.RRoom[player.NowRoom];
+                if (NowRoom.RoomTag == 0)
+                {
+                    for (int i = 0; i < NowRoom.transform.GetChild(3).childCount; i++ )
+                    {
+                        Empty e = NowRoom.transform.GetChild(3).GetChild(i).GetComponent<Empty>();
+                        if (e != null)
+                        {
+                            e.EmptySleepRemove();
+                        }
+                    }
+                }
+                else if(NowRoom.RoomTag == 1)
+                {
+                    Blissey b = NowRoom.transform.GetChild(7).GetComponent<Blissey>();
+                    if (b != null)
+                    {
+                        b.BlisseyAwake();
+                    }
+                }
+                break;
+
+            //复活草
+            case 66:
+                if (player.Hp <= 1) {
+                    player.ChangeHp(player.maxHp, 0, 0);
+                    switch (Random.Range(0, 6))
+                    {
+                        case 0:
+                            UIGetANewItem.UI.JustSaySth("好苦!", "体力的奋斗力被苦到下降了");
+                            player.ChangeHPW(new Vector2Int(1, -20));
+                            break;
+                        case 1:
+                            UIGetANewItem.UI.JustSaySth("好苦!", "攻击的奋斗力被苦到下降了");
+                            player.ChangeHPW(new Vector2Int(2, -20));
+                            break;
+                        case 2:
+                            UIGetANewItem.UI.JustSaySth("好苦!", "防御的奋斗力被苦到下降了");
+                            player.ChangeHPW(new Vector2Int(3, -20));
+                            break;
+                        case 3:
+                            UIGetANewItem.UI.JustSaySth("好苦!", "特攻的奋斗力被苦到下降了");
+                            player.ChangeHPW(new Vector2Int(4, -20));
+                            break;
+                        case 4:
+                            UIGetANewItem.UI.JustSaySth("好苦!", "特防的奋斗力被苦到下降了");
+                            player.ChangeHPW(new Vector2Int(5, -20));
+                            break;
+                        case 5:
+                            UIGetANewItem.UI.JustSaySth("好苦!", "攻击速度的奋斗力被苦到下降了");
+                            player.ChangeHPW(new Vector2Int(6, -20));
+                            break;
+                    }    
+                }
+                break;
 
 
         }

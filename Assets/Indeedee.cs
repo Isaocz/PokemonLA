@@ -32,7 +32,7 @@ public class Indeedee : Empty
         rigidbody2D = GetComponent<Rigidbody2D>();
 
         ProtectAnimation = PublicEffect.StaticPublicEffectList.ReturnAPublicEffect(1);
-        ProtectOtherEmpty();
+        Invoke("ProtectOtherEmpty" , 0.01f);
     }
 
 

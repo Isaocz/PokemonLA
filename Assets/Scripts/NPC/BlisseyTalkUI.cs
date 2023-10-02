@@ -25,6 +25,7 @@ public class BlisseyTalkUI : MonoBehaviour
     {
         if (TalkInformation != null)
         {
+            ParentBlissey.playerControler.CanNotUseSpaceItem = false;
             TalkIndex = 0;
             TalkInformation.text = TalkTextList[0];
             gameObject.SetActive(false);
@@ -45,6 +46,7 @@ public class BlisseyTalkUI : MonoBehaviour
             TalkInformation.text = TalkTextList[0];
             ParentBlissey.GoodBye();
             gameObject.SetActive(false);
+            ParentBlissey.playerControler.CanNotUseSpaceItem = false;
         }
         else
         {
@@ -94,6 +96,7 @@ public class BlisseyTalkUI : MonoBehaviour
     void SleepTalkEnd()
     {
         gameObject.SetActive(false);
+        ParentBlissey.playerControler.CanNotUseSpaceItem = false;
     }
 
     // Update is called once per frame

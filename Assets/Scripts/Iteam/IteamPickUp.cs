@@ -16,6 +16,13 @@ public class IteamPickUp : Item
     public GameObject targer;
 
 
+    public bool BanLunchUp;
+    public bool BanLunchDown;
+    public bool BanLunchRight;
+    public bool BanLunchLeft;
+    int BanCount;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +30,18 @@ public class IteamPickUp : Item
         //获取玩家
         targer = GameObject.FindObjectOfType<PlayerControler>().gameObject;
         StartPosition = gameObject.transform.position;
-        Direction = ( new Vector3 (Random.Range(-1.0f, 1.0f) , Random.Range(-1.0f,1.0f) , 0.0f)).normalized;
+        int r = Random.Range(0,360);
+        while ((BanLunchUp && r > 45 && r <= 135) || (BanLunchLeft && r > 135 && r <= 225) || (BanLunchDown && r > 225 && r <= 315) || (BanLunchRight &&( r > 315 || r <= 45)))
+        {
+            r = Random.Range(0, 360);
+            BanCount++;
+            if (BanCount >= 20)
+            {
+                break;
+            }
+        }
+        Debug.Log(r);
+        Direction = ( Quaternion.AngleAxis(r,Vector3.forward) * Vector3.right ).normalized;
     }
 
     void Update()

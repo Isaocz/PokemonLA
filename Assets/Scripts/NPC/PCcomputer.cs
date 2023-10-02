@@ -22,6 +22,7 @@ public class PCcomputer : MonoBehaviour
         if (isInTrriger && Input.GetKeyDown(KeyCode.Z))
         {
             TalkPanel.gameObject.SetActive(true);
+            player.CanNotUseSpaceItem = true;
         }
         if (!isInTrriger)
         {
@@ -44,6 +45,7 @@ public class PCcomputer : MonoBehaviour
         {
             ZBotton.SetActive(false);
             isInTrriger = false;
+            player.CanNotUseSpaceItem = false;
         }
     }
 }

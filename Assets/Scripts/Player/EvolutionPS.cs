@@ -7,10 +7,12 @@ public class EvolutionPS : MonoBehaviour
 {
     float EvolutionPSTimer;
     public Text text;
+    public string Name;
 
     private void Start()
     {
         BackGroundMusic.StaticBGM.BGM.volume = 0f;
+        text.text = " ......Å¶£¡£¿\n" + Name + "µÄÑù×Ó......£¡";
     }
 
     private void Update()

@@ -8,13 +8,23 @@ public class BerryTree : MonoBehaviour
     public RandomBerryTypeDef Berry;
     public HealthUpCCg CCG;
     public SpaceItem WY;
-    public PokemonBall PokemonBall;
+    public PokemonBall PB;
     PlayerControler player;
+
+
+    bool BanUp;
+    bool BanDown;
+    bool BanRight;
+    bool BanLeft;
+
+    int r;
+    int BanCount;
 
 
     private void Start()
     {
         animator = GetComponent<Animator>();
+        CheckBan();
     }
 
 
@@ -33,18 +43,69 @@ public class BerryTree : MonoBehaviour
 
     public void DropABerry()
     {
-        float PandomPoint = (player.playerData.IsPassiveGetList[0] ? (Random.Range(0.0f, 1.0f)) : (Random.Range(0.0f, 1.1f)));
+        float PandomPoint = (player.playerData.IsPassiveGetList[0] ? (Random.Range(0.0f, 1.0f)) : (Random.Range(0.0f, 1.04f)));
         if (PandomPoint <= 0.5f)
         {
-            Instantiate(Berry, transform.position, Quaternion.identity, transform).isLunch = true;
+            RandomBerryTypeDef b = Instantiate(Berry, transform.position + ((Quaternion.AngleAxis(r, Vector3.forward) * Vector3.right).normalized), Quaternion.identity, transform);
+            b.isLunch = true;
+            b.BanLunchUp = BanUp;
+            b.BanLunchDown = BanDown;
+            b.BanLunchRight = BanRight;
+            b.BanLunchLeft = BanLeft;
         }
         else if(PandomPoint > 0.5f && PandomPoint <= 0.97f)
         {
-            Instantiate(CCG, transform.position, Quaternion.identity, transform).isLunch = true;
+            HealthUpCCg b = Instantiate(CCG, transform.position + ((Quaternion.AngleAxis(r, Vector3.forward) * Vector3.right).normalized), Quaternion.identity, transform);
+            b.isLunch = true;
+            b.BanLunchUp = BanUp;
+            b.BanLunchDown = BanDown;
+            b.BanLunchRight = BanRight;
+            b.BanLunchLeft = BanLeft;
         }
         else if (PandomPoint > 0.97f && PandomPoint <= 1.0f)
         {
-            Instantiate(WY, transform.position, Quaternion.identity, transform).isLunch = true;
+            SpaceItem b = Instantiate(WY, transform.position + ((Quaternion.AngleAxis(r, Vector3.forward) * Vector3.right).normalized), Quaternion.identity, transform);
+            b.isLunch = true;
+            b.BanLunchUp = BanUp;
+            b.BanLunchDown = BanDown;
+            b.BanLunchRight = BanRight;
+            b.BanLunchLeft = BanLeft;
+        }
+        else
+        {
+            PokemonBall b = Instantiate(PB, transform.position + ((Quaternion.AngleAxis(r, Vector3.forward) * Vector3.right).normalized), Quaternion.identity, transform);
+            b.isLunch = true;
+            b.BanLunchUp = BanUp;
+            b.BanLunchDown = BanDown;
+            b.BanLunchRight = BanRight;
+            b.BanLunchLeft = BanLeft;
+        }
+        Debug.Log(BanRight);
+        Debug.Log(BanLeft);
+        Debug.Log(BanUp);
+        Debug.Log(BanDown);
+    }
+
+
+    void CheckBan()
+    {
+        RaycastHit2D CheckRight = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.right , 0.7f, LayerMask.GetMask("Enviroment", "Room"));
+        RaycastHit2D CheckLeft = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.left , 0.7f, LayerMask.GetMask("Enviroment", "Room"));
+        RaycastHit2D CheckUp = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.up , 0.7f, LayerMask.GetMask("Enviroment", "Room"));
+        RaycastHit2D CheckDown = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.down , 0.7f, LayerMask.GetMask("Enviroment", "Room"));
+        if (CheckRight.collider != null) { BanRight = true; }
+        if (CheckLeft.collider != null)    { BanLeft = true; }
+        if (CheckUp.collider != null)          { BanUp = true; }
+        if (CheckDown.collider != null)    { BanDown = true; }
+        r = Random.Range(0, 360);
+        while ((BanUp && r > 45 && r <= 135) || (BanLeft && r > 135 && r <= 225) || (BanDown && r > 225 && r <= 315) || (BanRight && (r > 315 || r <= 45)))
+        {
+            r = Random.Range(0, 360);
+            BanCount++;
+            if (BanCount >= 20)
+            {
+                break;
+            }
         }
     }
 

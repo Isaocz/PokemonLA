@@ -23,6 +23,7 @@ public class Gulpin : NPC
     public void Beybey()
     {
         animator.SetTrigger("Bey");
+        playerControler.CanNotUseSpaceItem = false;
     }
 
     private void OnTriggerStay2D(Collider2D other)

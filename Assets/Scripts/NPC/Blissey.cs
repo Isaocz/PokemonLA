@@ -50,6 +50,7 @@ public class Blissey : MonoBehaviour
     {
         if (isInTrriger && Input.GetKeyDown(KeyCode.Z) && !isHi && !isSleep)
         {
+            playerControler.CanNotUseSpaceItem = true;
             animator.ResetTrigger("TalkEnd");
             animator.SetTrigger("Hi"); 
             isHi = true;
@@ -58,6 +59,7 @@ public class Blissey : MonoBehaviour
         }
         else if(isSleep && isInTrriger && Input.GetKeyDown(KeyCode.Z) && !isHi)
         {
+            playerControler.CanNotUseSpaceItem = true;
             TalkPanel.SleepTalk();
         }
         if(isTalked && !transform.parent.GetComponent<Room>().isInThisRoom)
@@ -83,5 +85,15 @@ public class Blissey : MonoBehaviour
             animator.SetTrigger("TalkEnd");
         }
         isHi = false;
+    }
+
+
+
+    public void BlisseyAwake()
+    {
+        isHi = false;
+        isTalked = false;
+        isSleep = false;
+        animator.SetTrigger("Awake");
     }
 }

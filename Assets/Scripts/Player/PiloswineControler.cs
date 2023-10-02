@@ -79,6 +79,10 @@ public class PiloswineControler : PlayerControler
     {
         UpdatePlayer();
         StateMaterialChange();
+        if (!isEvolution && LevelForSkill >= 7)
+        {
+            EvolutionStart();
+        }
     }
 
     private void FixedUpdate()

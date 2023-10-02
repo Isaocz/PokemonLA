@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PushStone : MonoBehaviour
 {
+
+    public bool isInLake;
+
     // Start is called before the first frame update
     private void OnCollisionEnter2D(Collision2D other)
     {

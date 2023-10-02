@@ -27,6 +27,7 @@ public class MeowthTalkUI : MonoBehaviour
     {
         if (TalkInformation != null)
         {
+            ParentMeowth.playerControler.CanNotUseSpaceItem = false;
             TalkIndex = 0;
             TalkInformation.text = TalkTextList[0];
             gameObject.SetActive(false);
@@ -43,6 +44,7 @@ public class MeowthTalkUI : MonoBehaviour
         {
             TalkIndex = 0; TalkInformation.text = TalkTextList[0];
             gameObject.SetActive(false);
+            ParentMeowth.playerControler.CanNotUseSpaceItem = false;
             ParentMeowth.GoodBye();
         }
         TalkIndex += 1;

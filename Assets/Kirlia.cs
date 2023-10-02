@@ -219,9 +219,16 @@ public class Kirlia : Empty
     {
         Vector3 TPPosition;
         TPPosition = (Vector3)TargetPosition + (new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), 0).normalized) * Random.Range(4.5f, 9f);
+        int TPCount = 0;
         while (!isThisPointEmpty(TPPosition) || Mathf.Abs(TPPosition.x) >= 12 || Mathf.Abs(TPPosition.y) >= 7)
         {
             TPPosition = (Vector3)TargetPosition + (new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), 0).normalized) * Random.Range(4.5f, 7.5f);
+            TPCount++;
+            if(TPCount > 100)
+            {
+                TPPosition = transform.position;
+                break;
+            }
         }
 
         transform.position = TPPosition;

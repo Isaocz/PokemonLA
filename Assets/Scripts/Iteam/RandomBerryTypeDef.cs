@@ -7,6 +7,10 @@ public class RandomBerryTypeDef : MonoBehaviour
     public GameObject SpaceItemList;
     public GameObject OutPut;
     public bool isLunch;
+    public bool BanLunchUp;
+    public bool BanLunchDown;
+    public bool BanLunchRight;
+    public bool BanLunchLeft;
 
     private void Start()
     {
@@ -14,6 +18,10 @@ public class RandomBerryTypeDef : MonoBehaviour
         OutPut = Instantiate(SpaceItemList.transform.GetChild(RandomPoint), transform.position, Quaternion.identity, transform).gameObject;
         OutPut.transform.parent = transform.parent;
         if (isLunch) { OutPut.GetComponent<IteamPickUp>().isLunch = true; }
+        if (BanLunchUp) { OutPut.GetComponent<IteamPickUp>().BanLunchUp = true; }
+        if (BanLunchDown) { OutPut.GetComponent<IteamPickUp>().BanLunchDown = true; }
+        if (BanLunchRight) { OutPut.GetComponent<IteamPickUp>().BanLunchRight = true; }
+        if (BanLunchLeft) { OutPut.GetComponent<IteamPickUp>().BanLunchLeft = true; }
         Destroy(gameObject);
     }
 }
