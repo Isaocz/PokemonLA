@@ -7,6 +7,7 @@ public class RandomStarMoney : MonoBehaviour
     public GameObject StartDust;
     public GameObject StartPiece;
     public GameObject OutPut;
+    public bool isLunch;
 
     private void Start()
     {
@@ -20,6 +21,7 @@ public class RandomStarMoney : MonoBehaviour
             OutPut = Instantiate(StartPiece, transform.position, Quaternion.identity, transform);
         }
         OutPut.transform.parent = transform.parent;
+        if (isLunch) { OutPut.GetComponent<IteamPickUp>().isLunch = true; }
         Destroy(gameObject);
     }
 }

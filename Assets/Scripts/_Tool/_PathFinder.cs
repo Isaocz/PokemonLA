@@ -16,7 +16,7 @@ public class _PathFinder : MonoBehaviour
         
     }
 
-    public void CreatNewGrid(Vector3 RoomVector)
+    public GridGraph CreatNewGrid(Vector3 RoomVector)
     {
         GridGraph NowRoomGraph =  astarPath.data.AddGraph(typeof(GridGraph)) as GridGraph;
         NowRoomGraph.is2D = true;
@@ -26,5 +26,11 @@ public class _PathFinder : MonoBehaviour
         NowRoomGraph.center = RoomVector;
         NowRoomGraph.SetDimensions(30, 24, 1f);
         NowRoomGraph.Scan();
+        return NowRoomGraph;
+    }
+
+    public void UpdateGraph(GridGraph g)
+    {
+        g.Scan();
     }
 }

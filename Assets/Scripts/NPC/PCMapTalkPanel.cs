@@ -16,7 +16,7 @@ public class PCMapTalkPanel : MonoBehaviour
 
     public Sprite YesHL;
     public Sprite NoHL;
-
+    
 
     private void Awake()
     {
@@ -50,6 +50,7 @@ public class PCMapTalkPanel : MonoBehaviour
                 TalkInformation.text = TalkTextList[3];
                 gameObject.SetActive(false);
             }
+            ParentPcMap.player.CanNotUseSpaceItem = false;
         }
 
     }
@@ -81,6 +82,7 @@ public class PCMapTalkPanel : MonoBehaviour
         TalkInformation.text = TalkTextList[1];
         Buy.gameObject.SetActive(false);
         DontBuy.gameObject.SetActive(false);
+        
     }
 
 

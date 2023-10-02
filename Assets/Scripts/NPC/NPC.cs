@@ -37,6 +37,7 @@ public class NPC : MonoBehaviour
             ZBotton.SetActive(false);
             isInTrriger = false;
             TalkPanel.PlayerExit();
+            playerControler.CanNotUseSpaceItem = false;
         }
     }
 
@@ -46,7 +47,7 @@ public class NPC : MonoBehaviour
         {
             TalkPanel.player = playerControler;
             TalkPanel.gameObject.SetActive(true);
-            
+            playerControler.CanNotUseSpaceItem = true;
         }
     }
 }

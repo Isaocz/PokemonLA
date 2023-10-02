@@ -32,12 +32,14 @@ public class PCcomputerTalkPanle : MonoBehaviour
                 TalkIndex = 0;
                 TalkInformation.text = TalkTextList[0];
                 gameObject.SetActive(false);
+                ParentPCComputer.player.CanNotUseSpaceItem = false;
             }
             else
             {
                 TalkIndex = 3;
                 TalkInformation.text = TalkTextList[3];
                 gameObject.SetActive(false);
+                ParentPCComputer.player.CanNotUseSpaceItem = false;
             }
         }
 
@@ -49,6 +51,7 @@ public class PCcomputerTalkPanle : MonoBehaviour
         if (TalkIndex == 3)
         {
             gameObject.SetActive(false);
+            ParentPCComputer.player.CanNotUseSpaceItem = false;
         }
         else if (TalkIndex == 2)
         {
@@ -58,6 +61,7 @@ public class PCcomputerTalkPanle : MonoBehaviour
             TalkIndex = 3;
             TalkInformation.text = TalkTextList[3];
             gameObject.SetActive(false);
+            ParentPCComputer.player.CanNotUseSpaceItem = false;
         }
         else
         {

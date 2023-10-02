@@ -48,6 +48,14 @@ public class Cloyster : Empty
             EmptyDie();
             UpdateEmptyChangeHP();
             StateMaterialChange();
+
+            if (isSleepDone && isClose)
+            {
+                OpenTimer = 0;
+                animator.SetTrigger("Open");
+                isClose = false;
+            }
+
             if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
             {
                 if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForDistanceEmpty() == null)

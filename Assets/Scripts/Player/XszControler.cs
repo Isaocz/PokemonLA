@@ -40,7 +40,7 @@ public class XszControler : PlayerControler
     {
         UpdatePlayer();
         StateMaterialChange();
-        if(!isEvolution && LevelForSkill >= 34)
+        if(!isEvolution && LevelForSkill >= 5)
         {
             EvolutionStart();
         }

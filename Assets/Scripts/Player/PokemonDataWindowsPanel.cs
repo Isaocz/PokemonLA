@@ -62,10 +62,10 @@ public class PokemonDataWindowsPanel : MonoBehaviour
                 PokemonD1 = "小体型的宝可梦，可以进入一些狭小的道路，但是对于一些巨大的路障没有办法";
                 break;
             case 1:
-                PokemonD1 = "中体型的宝可梦，进入一些狭小的道路比较困难，力量足够的话可以击碎一些巨大的障碍物";
+                PokemonD1 = "大体型的宝可梦，完全无法进入狭小的道路，但是可以轻而易举的摧毁一些障碍物";
                 break;
             case 2:
-                PokemonD1 = "大体型的宝可梦，完全无法进入狭小的道路，但是可以轻而易举的摧毁一些障碍物";
+                PokemonD1 = "中体型的宝可梦，进入一些狭小的道路比较困难，力量足够的话可以击碎一些巨大的障碍物";
                 break;
         }
         PokemonD2 = "这只宝可梦好像每升" + playerControler.GetSkillLevel +  "级就会有一次灵感爆发！";

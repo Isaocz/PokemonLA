@@ -40,6 +40,7 @@ public class BossDoorBillboard : MonoBehaviour
             isInTrriger = false;
             if (TalkPanel != null)
             {
+                playerControler.CanNotUseSpaceItem = false;
                 TalkPanel.gameObject.SetActive(false);
             }
         }
@@ -52,10 +53,12 @@ public class BossDoorBillboard : MonoBehaviour
         {
             if (TalkPanel.IsActive())
             {
+                playerControler.CanNotUseSpaceItem = false;
                 TalkPanel.gameObject.SetActive(false);
             }
             else
             {
+                playerControler.CanNotUseSpaceItem = true;
                 TalkPanel.gameObject.SetActive(true);
             }
         }

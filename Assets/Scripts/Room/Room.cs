@@ -1,3 +1,4 @@
+using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -62,7 +63,8 @@ public class Room : MonoBehaviour
     public Vector3 DropItemPosion;
     protected bool isItemDrop;
 
-
+    GridGraph RoomGraph;
+    float GraphUpdateTimer;
 
 
 
@@ -83,7 +85,7 @@ public class Room : MonoBehaviour
         {
             SetFloor();
         }
-        _PathFinder.StaticPathFinder.CreatNewGrid(new Vector3Int((int)(transform.position.x), (int)(transform.position.y), 0));
+        RoomGraph = _PathFinder.StaticPathFinder.CreatNewGrid(new Vector3Int((int)(transform.position.x), (int)(transform.position.y), 0));
     }
 
 
@@ -103,6 +105,13 @@ public class Room : MonoBehaviour
                 transform.GetChild(3).gameObject.SetActive(true);
                 transform.GetChild(4).gameObject.SetActive(true);
             }
+            GraphUpdateTimer += Time.deltaTime;
+            if (GraphUpdateTimer >= 1)
+            {
+                GraphUpdateTimer = 0;
+                _PathFinder.StaticPathFinder.UpdateGraph(RoomGraph);
+            }
+
         }
         else
         {
@@ -231,7 +240,7 @@ public class Room : MonoBehaviour
         }
         else if (mapCreater.PCRoomPoint == NowRoomPoint + Vector3Int.up)       
         {        
-            GameObject gatewayup = Instantiate(PCGateWayUp, new Vector3(transform.position.x, transform.position.y , 0), Quaternion.identity,gameObject.transform);                 
+            GameObject gatewayup = Instantiate(PCGateWayUp, new Vector3(transform.position.x, transform.position.y + 6.7f, 0), Quaternion.identity,gameObject.transform);                 
         }
         else if (mapCreater.StoreRoomPoint == NowRoomPoint + Vector3Int.up)
         {

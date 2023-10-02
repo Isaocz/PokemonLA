@@ -33,7 +33,7 @@ public class SpaceItem : IteamPickUp
     {
 
     }
-
+    
     private void OnCollisionStay2D(Collision2D other)
     {
         PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();

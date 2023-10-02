@@ -9,8 +9,10 @@ public class RockInWaterTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.GetComponent<PushStone>() != null)
+        PushStone s = other.GetComponent<PushStone>();
+        if (s != null && s.isInLake == false)
         {
+            s.isInLake = true;
             Destroy(transform.parent.GetComponent<Collider2D>());
             Destroy(other.gameObject);
             Instantiate(RIWAnimation, transform.parent.position, Quaternion.identity, transform.parent);

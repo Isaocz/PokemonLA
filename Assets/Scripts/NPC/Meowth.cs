@@ -41,6 +41,7 @@ public class Meowth : MonoBehaviour
             isInTrriger = false;
             TalkPanel.PlayerExit();
             isHi = false;
+            playerControler.CanNotUseSpaceItem = false;
         }
     }
 
@@ -51,7 +52,7 @@ public class Meowth : MonoBehaviour
         {
             animator.SetTrigger("Hi"); isHi = true;
             TalkPanel.gameObject.SetActive(true);
-            
+            playerControler.CanNotUseSpaceItem = true;
         }
     }
 

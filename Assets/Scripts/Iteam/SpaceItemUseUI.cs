@@ -18,7 +18,7 @@ public class SpaceItemUseUI : MonoBehaviour
         isUIAnimationStart = true;
         gameObject.GetComponent<Image>().sprite = UIImageSprite;
     }
-
+    
     // Update is called once per frame
     void Update()
     {

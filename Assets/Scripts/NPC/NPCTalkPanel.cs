@@ -19,6 +19,7 @@ public class NPCTalkPanel : MonoBehaviour
         TalkIndex = 0;
         TalkInformation.text = TalkTextList[TalkIndex];
         ParentNPC = transform.parent.parent.GetComponent<NPC>();
+        ParentNPC.playerControler.CanNotUseSpaceItem = true;
     }
 
     protected void NPCTPContinue()
@@ -34,6 +35,7 @@ public class NPCTalkPanel : MonoBehaviour
                 TalkIndex = 0;
                 TalkInformation.text = TalkTextList[0];
                 gameObject.SetActive(false);
+                ParentNPC.playerControler.CanNotUseSpaceItem = false;
             }
         }
     }
@@ -45,6 +47,7 @@ public class NPCTalkPanel : MonoBehaviour
             TalkIndex = 0;
             TalkInformation.text = TalkTextList[0];
             gameObject.SetActive(false);
+            ParentNPC.playerControler.CanNotUseSpaceItem = false;
         }
 
     }

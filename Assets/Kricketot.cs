@@ -73,7 +73,7 @@ public class Kricketot : Empty
                         {
                             LunchTimer = 0;
                             animator.SetTrigger("Attack");
-                            Lunch();
+                            
                         }
                     }
                 }
@@ -112,8 +112,8 @@ public class Kricketot : Empty
 
     void Lunch()
     {
-        Vector2 LunchDirector1 = Quaternion.AngleAxis( (isEmptyConfusionDone ? 45 : 15) , Vector3.forward) * (TargetPosition - (Vector2)transform.position);
-        Vector2 LunchDirector2 = Quaternion.AngleAxis(-(isEmptyConfusionDone ? 45 : 15), Vector3.forward) * (TargetPosition - (Vector2)transform.position);
+        Vector2 LunchDirector1 = Quaternion.AngleAxis( (isEmptyConfusionDone ? 45 : 21) , Vector3.forward) * (TargetPosition - (Vector2)transform.position);
+        Vector2 LunchDirector2 = Quaternion.AngleAxis(-(isEmptyConfusionDone ? 45 : 21), Vector3.forward) * (TargetPosition - (Vector2)transform.position);
 
         KricketotStruggleBug p1 = Instantiate(KSB, transform.position, Quaternion.identity, transform.parent);
         p1.LaunchNotForce(LunchDirector1, 8.5f);

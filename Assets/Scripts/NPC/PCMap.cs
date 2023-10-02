@@ -21,10 +21,13 @@ public class PCMap : MonoBehaviour
         if (isInTrriger && Input.GetKeyDown(KeyCode.Z))
         {
             TalkPanel.gameObject.SetActive(true);
+            player.CanNotUseSpaceItem = true;
             if (TalkPanel.TalkIndex != 0 && TalkPanel.TalkIndex != -1)
             {
                 TalkPanel.PlayerExit();
-            }if(TalkPanel.TalkIndex == -1)
+                player.CanNotUseSpaceItem = false;
+            }
+            if(TalkPanel.TalkIndex == -1)
             {
                 TalkPanel.TalkIndex = 3;
                 UiMiniMap.Instance.SeeMapJustOneRoom();
@@ -51,6 +54,7 @@ public class PCMap : MonoBehaviour
         {
             ZBotton.SetActive(false);
             isInTrriger = false;
+            player.CanNotUseSpaceItem = false;
         }
     }
 
