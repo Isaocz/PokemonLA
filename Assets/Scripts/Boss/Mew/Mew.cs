@@ -116,7 +116,6 @@ public class Mew : Empty
     private float HpTiming = 191f;
     
     //死亡动画
-    public GameObject dyingParticle;
     public bool MewBossKilled = false;
 
     // Start is called before the first frame update
@@ -154,19 +153,16 @@ public class Mew : Empty
 
         //入场
         ClearProjectile();
-        Vector3 nowRoom = GetnowRoom;
-        float roomWidth = 14f; // 房间的宽度
-        float roomHeight = 7f; // 房间的高度
 
-        GameObject[] environments = GameObject.FindGameObjectsWithTag("Enviroment");
-        foreach (GameObject environment in environments)
+        //删除所有环境对象
+        Transform grandParent = transform.parent.parent;
+        Transform enviroment = grandParent.Find("Enviroment");
+
+        if (enviroment != null)
         {
-            Vector3 environmentPosition = environment.transform.position;
-            bool isInCurrentRoom = Mathf.Abs(environmentPosition.x - nowRoom.x) <= roomWidth / 2f && Mathf.Abs(environmentPosition.y - nowRoom.y) <= roomHeight / 2f;
-
-            if (isInCurrentRoom)
+            for (int i = 0; i < enviroment.childCount; i++)
             {
-                Destroy(environment);
+                Destroy(enviroment.GetChild(i).gameObject);
             }
         }
     }
@@ -1642,7 +1638,6 @@ public class Mew : Empty
 
     private IEnumerator Phase3End()
     {
-        Instantiate(dyingParticle, transform.position + new Vector3(0f, 0.5f, 0f), Quaternion.identity);
         animator.SetTrigger("Die");
         //yield return new WaitForSeconds(0.5f);
         MewBossKilled = true;

@@ -29,7 +29,11 @@ public class Growl : Skill
             {
                 infnum.Add(target.AtkEmptyPoint);
                 influence.Add(target);
-                target.AtkEmptyPoint = (int)(target.AtkEmptyPoint * 0.8);
+                target.LevelChange(-1, "Atk");
+                if(SkillFrom == 2)
+                {
+                    target.LevelChange(-1, "Atk");
+                }
             }
         }
     }

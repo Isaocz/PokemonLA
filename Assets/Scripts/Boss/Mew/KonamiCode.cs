@@ -15,7 +15,7 @@ public class KonamiCode : MonoBehaviour
             if (Input.GetKeyDown(konamiCode[currentIndex]))
             {
                 currentIndex++;
-                if (currentIndex >= konamiCode.Length)
+                if (currentIndex >= konamiCode.Length && MewBossPrefab.GetComponent<Mew>().MewBossKilled == false)
                 {
                     // ´¥·¢Ð§¹û
                     TriggerEffect();

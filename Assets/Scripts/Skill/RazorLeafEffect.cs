@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class RazorLeafEffect : MonoBehaviour
 {
+    List<Empty> enemy = new List<Empty>();
     // Start is called before the first frame update
-
-    Empty target;
     void OnParticleCollision(GameObject other)
     {
         if(other.tag == "Empty")
         {
-            target = other.GetComponent<Empty>();
-            gameObject.transform.parent.GetComponent<RazorLeaf>().HitAndKo(target);
+            Empty target = other.GetComponent<Empty>();
+            if (!enemy.Contains(target))
+            {
+                gameObject.transform.parent.GetComponent<RazorLeaf>().HitAndKo(target);
+                enemy.Add(target);
+            }
         }
 
     }

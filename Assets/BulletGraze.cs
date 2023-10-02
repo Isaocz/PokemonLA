@@ -4,40 +4,42 @@ using UnityEngine;
 
 public class BulletGraze : MonoBehaviour
 {
-    private Collider2D playerCollider;
-    private Vector2 playerColliderRange;
     private PlayerControler player;
     private int playerHP;
     private float timer;
     public GameObject grazeEffect;
     public float DamageImprovement;
+    public AudioClip Graze;
+    private AudioSource audioSource;
+
+    private List<GameObject> projectelList = new List<GameObject>();// 用于记录进入触发器的Projectel
 
     private void Start()
     {
-        player = FindObjectOfType<PlayerControler>();
-        playerCollider = player.GetComponent<Collider2D>();
         DamageImprovement = 1f;
-        if (playerCollider != null)
-        {
-            float playerWidth = playerCollider.bounds.size.x;
-            float playerHeight = playerCollider.bounds.size.y;
-            playerColliderRange =new Vector3(playerWidth, playerHeight);
-        }
+        audioSource = GetComponent<AudioSource>();
     }
     private void Update()
     {
         if(timer > 0)
         {
-            DamageImprovement = 1f + 0.2f * timer / 10f;
+            DamageImprovement = 1f + 0.25f * timer / 10f;
             timer -= Time.deltaTime;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Projectel"))
+        if (collision.CompareTag("Projectel") && !projectelList.Contains(collision.gameObject))
         {
-            playerHP = player.Hp;
+            player = FindObjectOfType<PlayerControler>();
+            if (player != null)
+            {
+                playerHP = player.Hp;
+
+                projectelList.Add(collision.gameObject);
+
+            }
         }
     }
 
@@ -45,7 +47,11 @@ public class BulletGraze : MonoBehaviour
     {
         if (collision.CompareTag("Projectel"))
         {
-            if (player.Hp == playerHP)
+            player = FindObjectOfType<PlayerControler>();
+
+            projectelList.Remove(collision.gameObject);
+
+            if (player != null && player.Hp == playerHP)
             {
                 OnGraze();
             }
@@ -56,11 +62,15 @@ public class BulletGraze : MonoBehaviour
         }
     }
 
-
     private void OnGraze()
     {
         GameObject GrazeEffect = Instantiate(grazeEffect, transform.position, Quaternion.identity);
         Destroy(GrazeEffect, 0.35f);
         timer = 10f;
+
+        if (Graze != null)
+        {
+            audioSource.PlayOneShot(Graze);
+        }
     }
 }
