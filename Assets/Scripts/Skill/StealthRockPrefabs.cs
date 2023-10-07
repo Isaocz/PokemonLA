@@ -49,9 +49,11 @@ public class StealthRockPrefabs : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if(other.tag == "Empty")
+        Debug.Log("xxx");
+        if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
+
 
             if (target != null) {
                 EmptyList TCEell = new EmptyList(target, false, 0.0f);
@@ -71,6 +73,7 @@ public class StealthRockPrefabs : MonoBehaviour
                 if (!TCEell.isMultipleDamageColdDown)
                 {
                     Pokemon.PokemonHpChange(null, TCEell.Target.gameObject, Mathf.Clamp((((float)TCEell.Target.maxHP) / 20) , 1, TCEell.Target.isBoos ? 2 : 3), 0 , 0 , Type.TypeEnum.IgnoreType ) ;
+                    
                     TCEell.isMultipleDamageColdDown = true;
                     TargetList[ListIndex] = TCEell;
                 }

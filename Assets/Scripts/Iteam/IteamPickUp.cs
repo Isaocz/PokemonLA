@@ -40,7 +40,6 @@ public class IteamPickUp : Item
                 break;
             }
         }
-        Debug.Log(r);
         Direction = ( Quaternion.AngleAxis(r,Vector3.forward) * Vector3.right ).normalized;
     }
 

@@ -235,6 +235,29 @@ public class PlayerControler : Pokemon
 
     bool isDie;
 
+
+    //处于高速旋转状态
+    public bool isRapidSpin
+    {
+        get { return isRapidspin; }
+        set { isRapidspin = value; }
+    }
+    bool isRapidspin = false;
+
+
+
+    //处于草丛中 当isInGress==0时代表不在草中 每和一片草碰撞+1
+    public int InGressCount
+    {
+        get { return inGressCount; }
+        set { inGressCount = value; }
+    }
+    int inGressCount = 0;
+
+
+    public Skill EvolutionSkill;
+    protected bool isCanEvolution;
+
     public bool CanNotUseSpaceItem
     {
         get { return isCanNotUseSpaceItem; }
@@ -327,6 +350,9 @@ public class PlayerControler : Pokemon
             
             
 
+
+
+
             //每帧检测一次当前是否为无敌状态，如果是，则计时器计时，如果计时器时间小于0，则变为不无敌状态
             if (isInvincible)
             {
@@ -335,25 +361,51 @@ public class PlayerControler : Pokemon
                 //在无敌时间计时器运行的前0。15秒内被击退
                 if (InvincileTimer > TimeInvincible - 0.15f)
                 {
-
-                    Vector2 position = rigidbody2D.position;
-                    if (NowRoom != new Vector3Int(100, 100, 0))
+                    float CollidorOffset = 0;
+                    float CollidorRadiusH = 0;
+                    float CollidorRadiusV = 0;
+                    switch (PlayerBodySize)
                     {
-                        position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 12);
-                        position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 7.3f);
+                        case 0:
+                            CollidorOffset = 0.4023046f; CollidorRadiusH = 0.6039822f; CollidorRadiusV = 0.2549849f;
+                            break;
+                        case 1:
+                            CollidorOffset = 0.7f; CollidorRadiusH = 1.3f; CollidorRadiusV = 1.1f;
+                            break;
                     }
+                    RaycastHit2D SearchED = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset) , Vector2.down,  CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
+                    RaycastHit2D SearchEU = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset) , Vector2.up,    CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
+                    RaycastHit2D SearchER = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset) , Vector2.right, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
+                    RaycastHit2D SearchEL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset) , Vector2.left,  CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
+
+                    if ((SearchED.collider != null && (SearchED.transform.tag == "Enviroment" || SearchED.transform.tag == "Room"))
+                        || (SearchEU.collider != null && (SearchEU.transform.tag == "Enviroment" || SearchEU.transform.tag == "Room"))
+                        || (SearchER.collider != null && (SearchER.transform.tag == "Enviroment" || SearchER.transform.tag == "Room"))
+                        || (SearchEL.collider != null && (SearchEL.transform.tag == "Enviroment" || SearchEL.transform.tag == "Room"))) { }
                     else
                     {
-                        position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 41.5f);
-                        position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 33.5f);
+                        Vector2 position = rigidbody2D.position;
+                        if (NowRoom != new Vector3Int(100, 100, 0))
+                        {
+                            position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 12);
+                            position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 7.3f);
+                        }
+                        else
+                        {
+                            position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 41.5f);
+                            position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 33.5f);
+                        }
+                        rigidbody2D.position = position;
                     }
-                    rigidbody2D.position = position;
                 }
                 if (InvincileTimer <= 0)
                 {
                     isInvincible = false;
                 }
             }
+
+
+
 
 
             if (isStateInvincible)
@@ -700,12 +752,37 @@ public class PlayerControler : Pokemon
         }
     }
 
+    //刷新技能
     public void RefreshSkillCD()
     {
         if (isSkill01CD) { Skill01Timer = (isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)); skillBar01.CDPlus((isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); }
         if (isSkill02CD) { Skill02Timer = (isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)); skillBar02.CDPlus((isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); }
         if (isSkill03CD) { Skill03Timer = (isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)); skillBar03.CDPlus((isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); }
         if (isSkill04CD) { Skill04Timer = (isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)); skillBar04.CDPlus((isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); }
+    }
+
+    //减少CD（int 减少第几号技能 ， float 减少的百分比（如果isTimeMode==true则减少固定时间） ，bool 是否为固定数量模式）
+    public void MinusSkillCDTime( int SkillIndex , float MinusCDTimerPer , bool isTimeMode)
+    {
+        switch (SkillIndex)
+        {
+            case 1:
+                Skill01Timer += (isTimeMode? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill01.ColdDown * MinusCDTimerPer * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); 
+                skillBar01.CDPlus((isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill01.ColdDown * MinusCDTimerPer * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))));
+                break;
+            case 2:
+                Skill02Timer += (isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill02.ColdDown * MinusCDTimerPer * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)));
+                skillBar02.CDPlus((isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill02.ColdDown * MinusCDTimerPer * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))));
+                break;
+            case 3:
+                Skill03Timer += (isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill03.ColdDown * MinusCDTimerPer * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)));
+                skillBar03.CDPlus((isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill03.ColdDown * MinusCDTimerPer * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))));
+                break;
+            case 4:
+                Skill04Timer += (isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill04.ColdDown * MinusCDTimerPer * (Skill04.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)));
+                skillBar04.CDPlus((isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill04.ColdDown * MinusCDTimerPer * (Skill04.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))));
+                break;
+        }
     }
 
 
@@ -976,7 +1053,10 @@ public class PlayerControler : Pokemon
                 for (; nowEx >= maxEx; UIExpBar.Instance.Icount++)
                 {
                     Level++;
-
+                    if (!isEvolution && isCanEvolution)
+                    {
+                        EvolutionStart();
+                    }
                     nowEx = nowEx - maxEx;
                     maxEx = Exp[Level - 1];
                     int HpBewton = maxHp - nowHp;
@@ -1093,6 +1173,10 @@ public class PlayerControler : Pokemon
             OldSkill.isPPUP = false;
         }
         playerSkillList.RemoveSkillInList(NewSkill, OldSkill);
+        if (!isEvolution && EvolutionSkill != null && (NewSkill.SkillIndex == EvolutionSkill.SkillIndex || NewSkill.SkillIndex == EvolutionSkill.SkillIndex+1) )
+        {
+            isCanEvolution = true;
+        }
     }
 
 

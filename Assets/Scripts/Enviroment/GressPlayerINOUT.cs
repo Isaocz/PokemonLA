@@ -49,6 +49,7 @@ public class GressPlayerINOUT : MonoBehaviour
                 animator.SetTrigger("PlayerIn");
                 player = other.GetComponent<PlayerControler>();
                 CreatNewItem();
+                other.GetComponent<PlayerControler>().InGressCount++;
             }
         }
         
@@ -58,6 +59,7 @@ public class GressPlayerINOUT : MonoBehaviour
         if (other.transform.tag == "Player")
         {
             animator.SetTrigger("PlayerOut");
+            other.GetComponent<PlayerControler>().InGressCount--;
         }
     }
 }

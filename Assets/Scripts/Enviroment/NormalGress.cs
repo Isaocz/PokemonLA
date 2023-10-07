@@ -22,6 +22,7 @@ public class NormalGress : MonoBehaviour
             if (other.GetComponent<PlayerControler>() != null)
             {
                 animator.SetTrigger("PlayerIn");
+                other.GetComponent<PlayerControler>().InGressCount++;
             }
         }
         if (other.transform.tag == "NPC")
@@ -38,6 +39,7 @@ public class NormalGress : MonoBehaviour
         if (other.transform.tag == "Player")
         {
             animator.SetTrigger("PlayerOut");
+            other.GetComponent<PlayerControler>().InGressCount--;
         }
         if (other.transform.tag == "NPC")
         {

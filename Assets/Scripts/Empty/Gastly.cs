@@ -37,6 +37,9 @@ public class Gastly : Empty
         animator.SetFloat("LookY" , 1);
         Direction = Vector2.up;
         AtackTimer = 80;
+
+        
+
     }
 
     // Update is called once per frame

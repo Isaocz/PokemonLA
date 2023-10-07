@@ -47,18 +47,18 @@ MonoBehaviour:
   SkillIndex: 119
   player: {fileID: 0}
   baby: {fileID: 0}
-  ExistenceTime: 1.6
+  ExistenceTime: 1.5
   Damage: 0
   SpDamage: 0
   IsDamageChangeable: 0
   animator: {fileID: 0}
   MaxRange: 0.5
-  SkillType: 11
+  SkillType: 1
   SkillName: Splash
   SkillChineseName: "\u8DC3\u8D77"
   SkillDiscribe: "\u4E5F\u4E0D\u653B\u51FB\u53EA\u662F\u4E00\u8E66\u4E00\u8E66\u5730\u8DF3\uFF0C\u4EC0\u4E48\u90FD\u4E0D\u4F1A\u53D1\u751F\u2026\u2026"
   PlusSkillDiscribe: 
-  PlusSkill: {fileID: 6206161232931864783, guid: d62406a106359b243889c5c2ef01f616, type: 3}
+  PlusSkill: {fileID: 1682553479186110878, guid: 725a09218b771aa4fbe424ada48402d0, type: 3}
   MinusSkill: {fileID: 0}
   KOPoint: 0
   ColdDown: 0.8
@@ -112,7 +112,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8673450287046765120}
   serializedVersion: 8
-  lengthInSec: 0.8
+  lengthInSec: 0.5
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -123,11 +123,11 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0
+    scalar: 0.1
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -180,7 +180,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 0
+  randomSeed: -47675259
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -240,7 +240,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 7
+      scalar: 5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -292,13 +292,13 @@ ParticleSystem:
         m_RotationOrder: 4
     startColor:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 4
       minColor: {r: 1, g: 1, b: 1, a: 1}
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 1}
+        key1: {r: 1, g: 1, b: 1, a: 0.5882353}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -356,8 +356,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.8
-      minScalar: 0.5
+      scalar: 0.75
+      minScalar: 0.45
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -733,7 +733,7 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 4
-    angle: 15
+    angle: 10
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
@@ -938,7 +938,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 12
+      scalar: 30
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -2312,7 +2312,7 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 0
-      scalar: -14
+      scalar: -10
       minScalar: 0
       maxCurve:
         serializedVersion: 2

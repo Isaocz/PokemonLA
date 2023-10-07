@@ -14,7 +14,7 @@ public class Spike : MonoBehaviour
             PlayerControler playerControler = other.GetComponent<PlayerControler>();
             //playerControler.ChangeHp(-Damage, 0, 19);
             
-            if (playerControler != null && !playerControler.playerData.IsPassiveGetList[13])
+            if (playerControler != null && !playerControler.playerData.IsPassiveGetList[13] && !playerControler.isRapidSpin)
             {
                 Pokemon.PokemonHpChange(null, other.gameObject, Damage, 0, 0, Type.TypeEnum.IgnoreType);
                 playerControler.KnockOutPoint = 1f;
