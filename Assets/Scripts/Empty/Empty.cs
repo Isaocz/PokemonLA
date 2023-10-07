@@ -146,6 +146,13 @@ public class Empty : Pokemon
 
     //=============================初始化敌人数据================================
 
+    //敌人最初的未经改变的速度
+    float FirstSpeed;
+    public void ResetSpeed()
+    {
+        speed = FirstSpeed;
+    }
+
     /// <summary>
     /// ---start中调用---，根据玩家等级动态设定敌人等级，
     /// </summary>
@@ -154,6 +161,7 @@ public class Empty : Pokemon
     /// <returns></returns>
     protected int SetLevel(int PlayerLevel,int MaxLevel)
     {
+        FirstSpeed = speed;
         int OutPut;
         if (!isBoos)
         {
@@ -198,7 +206,7 @@ public class Empty : Pokemon
     /// <param name="level"></param>
     /// <param name="Ability"></param>
     /// <returns></returns>
-    protected int AbilityForLevel(int level, int Ability)
+    public int AbilityForLevel(int level, int Ability)
     {
         return (Ability * 2 * level) / 100 + 5;
     }
@@ -421,18 +429,26 @@ public class Empty : Pokemon
     {
         if(DropItem != null)
         {
-            if (isBoos)
-            {
-                Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-                Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-                Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-            }
-            else
+            EmptyDrop();
+        }
+        Destroy(gameObject);
+    }
+
+    public void EmptyDrop()
+    {
+        if (isBoos)
+        {
+            Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+            Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+            Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+        }
+        else
+        {
+            if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 100 > 0.96f)
             {
                 Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent);
             }
         }
-        Destroy(gameObject);
     }
 
     //=============================死亡事件===========================

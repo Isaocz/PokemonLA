@@ -36,9 +36,9 @@ public class Oddish : Empty
         rigidbody2D = GetComponent<Rigidbody2D>();
         KaCheakVector = rigidbody2D.position;
 
-        transform.GetChild(3).DetachChildren();
+        transform.GetChild(4).DetachChildren();
 
-
+        
 
     }
 
