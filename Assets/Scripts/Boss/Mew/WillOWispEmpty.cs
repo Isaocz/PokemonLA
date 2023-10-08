@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WillOWispEmpty : MonoBehaviour
 {
-    public float moveSpeed;
+    private float moveSpeed;
     private Vector3 moveDirection;
     public GameObject mew;
 
