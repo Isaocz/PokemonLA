@@ -6,6 +6,17 @@ public class Charm : Skill
 {
     List<Empty> AtkDownTargetList = new List<Empty> { };
 
+    private void Start()
+    {
+        if (SkillFrom == 2) {
+            player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.浅粉色普通型);
+            if (Random.Range(0.0f , 1.0f) + (float)player.LuckPoint/30 > 0.8f ) 
+            {
+                player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.浅粉色普通型);
+            }
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -24,7 +35,7 @@ public class Charm : Skill
                 AtkDownTargetList.Add(target);
                 target.AtkDown(0);
                 target.AtkAbilityPoint *= 0.6f;
-                if (SkillFrom == 2) { target.EmptyInfatuation(15,1); }
+                
             }    
         }
     }

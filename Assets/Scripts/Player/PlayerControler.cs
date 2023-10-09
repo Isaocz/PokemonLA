@@ -225,6 +225,7 @@ public class PlayerControler : Pokemon
     public SubSkillList playerSubSkillList;
     public GameObject FollowBaby;
     public GameObject NotFollowBaby;
+    public PlayerButterflyManger ButterflyManger;
 
     PlayerControler ThisPlayer;
 
@@ -277,7 +278,8 @@ public class PlayerControler : Pokemon
         playerSkillList = GetComponent<PlayerSkillList>();
         playerSubSkillList = GetComponent<SubSkillList>();
         FollowBaby = transform.GetChild(5).GetChild(0).gameObject;
-        NotFollowBaby = transform.GetChild(5).GetChild(01).gameObject;
+        NotFollowBaby = transform.GetChild(5).GetChild(1).gameObject;
+        ButterflyManger = transform.GetChild(5).GetChild(2).GetComponent<PlayerButterflyManger>();
 
         //获得小山猪的刚体组件和动画组件
         rigidbody2D = GetComponent<Rigidbody2D>();
@@ -712,6 +714,7 @@ public class PlayerControler : Pokemon
         */
         e.GetComponent<PlayerData>().CopyData(playerData);
         e.GetComponent<SubSkillList>().CopyList(playerSubSkillList);
+
         GameObject EBaby = e.transform.GetChild(5).gameObject;
         if (transform.GetChild(5).GetChild(0).childCount > 0)
         {
@@ -725,6 +728,13 @@ public class PlayerControler : Pokemon
             foreach (Transform baby in transform.GetChild(5).GetChild(1))
             {
                 Instantiate(baby, baby.transform.position, Quaternion.identity, EBaby.transform.GetChild(1));
+            }
+        }
+        if (transform.GetChild(5).GetChild(2).childCount > 0)
+        {
+            foreach (Transform baby in transform.GetChild(5).GetChild(2))
+            {
+                Instantiate(baby, baby.transform.position, Quaternion.identity, EBaby.transform.GetChild(2));
             }
         }
 

@@ -4,34 +4,80 @@ using UnityEngine;
 
 public class TeeterDance : Skill
 {
+
+    float DanceTimer;
+
+    Vector3 StartP;
+    Vector3 StartS;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        player.isCanNotMove = true;
+        player.animator.SetFloat("Speed" , 0);
+        player.look = new Vector2(0, -1);
+        player.animator.SetFloat("LookX", 0);
+        player.animator.SetFloat("LookY", -1);
+        StartP = player.transform.GetChild(3).position;
+        StartS = player.transform.GetChild(3).localScale;
+
+        GameObject EmptyFile = MapCreater.StaticMap.RRoom[player.NowRoom].transform.GetChild(3).gameObject;
+        for (int i = 0; i < EmptyFile.transform.childCount; i++)
+        {
+            Empty e = EmptyFile.transform.GetChild(i).GetComponent<Empty>();
+            if (e != null)
+            {
+                if (SkillFrom == 2) { e.EmptyConfusion(12f, 1); }
+                else { e.EmptyConfusion(7.5f, 1); }
+            }
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         StartExistenceTimer();
+        DanceTimer += Time.deltaTime;
+
+        if (DanceTimer >= 0.2)
+        {
+            if (DanceTimer >= 0.2f && DanceTimer < 0.3f)
+            {
+                player.transform.GetChild(3).localScale = new Vector3( Mathf.Clamp(player.transform.GetChild(3).localScale.x + Time.deltaTime , 1.0f , 1.1f ) , Mathf.Clamp(player.transform.GetChild(3).localScale.y - Time.deltaTime, 0.9f , 1.0f) , player.transform.GetChild(3).localScale.z );
+            }
+            else if (DanceTimer >= 0.3f && DanceTimer < 0.4f)
+            {
+                player.transform.GetChild(3).localScale = new Vector3(Mathf.Clamp(player.transform.GetChild(3).localScale.x - Time.deltaTime, 1.0f, 1.1f), Mathf.Clamp(player.transform.GetChild(3).localScale.y + Time.deltaTime, 0.9f, 1.0f), player.transform.GetChild(3).localScale.z);
+            }
+            else if (DanceTimer >= 0.4f && DanceTimer < 0.6f)
+            {
+                player.transform.GetChild(3).position = new Vector3(player.transform.GetChild(3).position.x , player.transform.GetChild(3).position.y + 7 * Time.deltaTime, player.transform.GetChild(3).position.z);
+            }
+            else if (DanceTimer >= 0.6f && DanceTimer < 0.8f)
+            {
+                player.transform.GetChild(3).position = new Vector3(player.transform.GetChild(3).position.x, player.transform.GetChild(3).position.y - 7 * Time.deltaTime, player.transform.GetChild(3).position.z);
+            }
+            else if (DanceTimer >= 0.8f && DanceTimer < 0.9f)
+            {
+                player.transform.GetChild(3).localScale = new Vector3(Mathf.Clamp(player.transform.GetChild(3).localScale.x + Time.deltaTime, 1.0f, 1.1f), Mathf.Clamp(player.transform.GetChild(3).localScale.y - Time.deltaTime, 0.9f, 1.0f), player.transform.GetChild(3).localScale.z);
+            }
+            else if (DanceTimer >= 0.9f && DanceTimer < 1.0f)
+            {
+                player.transform.GetChild(3).localScale = new Vector3(Mathf.Clamp(player.transform.GetChild(3).localScale.x - 2 * Time.deltaTime, 1.0f, 1.1f), Mathf.Clamp(player.transform.GetChild(3).localScale.y + 2 * Time.deltaTime, 0.9f, 1.0f), player.transform.GetChild(3).localScale.z);
+            }
+            else if (DanceTimer >= 1.0f && DanceTimer < 1.1f)
+            {
+                player.transform.GetChild(3).localScale = new Vector3(Mathf.Clamp(player.transform.GetChild(3).localScale.x + Time.deltaTime, 1.0f, 1.1f), Mathf.Clamp(player.transform.GetChild(3).localScale.y - Time.deltaTime, 0.9f, 1.0f), player.transform.GetChild(3).localScale.z);
+            }
+            if (DanceTimer >= 1.2) { DanceTimer -= 1.0f; }
+        }
+
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnDestroy()
     {
-        if(other.tag=="Empty")
-        {
-            Empty target = other.GetComponent<Empty>();
-            if (target != null)
-            {
-                if (SkillFrom == 0)
-                {
-                    target.EmptyConfusion(2f, 1);
-                }
-                else if (SkillFrom == 2)
-                {
-                    target.EmptyConfusion(3f, 1);
-                }
-            }
-        }
+        player.isCanNotMove = false;
+        player.transform.GetChild(3).position = StartP;
+        player.transform.GetChild(3).localScale = StartS;
     }
 }
