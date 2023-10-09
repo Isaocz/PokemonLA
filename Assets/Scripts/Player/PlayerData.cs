@@ -517,7 +517,7 @@ public class PlayerData : MonoBehaviour
                 Instantiate(aGameObjectByPassiveItem(5), player.transform.position + new Vector3(0f, 0.5f, 0f), Quaternion.identity, player.NotFollowBaby.transform);
                 break;
             case 57:
-                //梦幻道具：
+                //梦幻道具：禁草
                 break;
             case 58:
                 //梦幻道具：单词修改
