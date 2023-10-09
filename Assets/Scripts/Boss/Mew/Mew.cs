@@ -53,6 +53,7 @@ public class Mew : Empty
     public GameObject ElectricBallPrefab;//技能21
     public GameObject TimeStopEffect;
     public GameObject TrailEffect;
+    public GameObject TrailEffect2;
     public GameObject IceBeamPrefab;//技能22
 
     public GameObject FakePotionPrefab;//假伤药
@@ -183,6 +184,7 @@ public class Mew : Empty
                 HpTiming -= Time.deltaTime;
                 uIHealth.Per = HpTiming / HpTimer;
                 uIHealth.ChangeHpDown();
+                UISkillButton.Instance.isEscEnable = false;
                 //限制玩家的移动半径
                 float distance = Vector2.Distance(player.transform.position, transform.position);
                 if (distance > 19f)
@@ -222,7 +224,6 @@ public class Mew : Empty
                                     StartCoroutine(Phase2Start());
                                 }
                                 currentPhase++;
-                                Debug.Log("进入二阶段");
                             }
                             else if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
                             {
@@ -239,7 +240,6 @@ public class Mew : Empty
                                 uIHealth.Per = EmptyHp / maxHP;
                                 uIHealth.ChangeHpUp();
                                 currentPhase++;
-                                Debug.Log("进入三阶段");
                                 isPhase3 = true;
                             }
                             else if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
@@ -1280,11 +1280,11 @@ public class Mew : Empty
         }
         UseSkillMask(15);
         yield return new WaitForSeconds(1f);
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 13; i++)
         {
             GameObject airSlash = Instantiate(AirSlashPrefab, transform.position, Quaternion.identity);
             airSlash.GetComponent<AirSlashMew>().empty = this;
-            yield return new WaitForSeconds(0.6f);
+            yield return new WaitForSeconds(0.3f);
         }
         yield return new WaitForSeconds(0.5f);
         UseSkillMask(16);
@@ -1449,12 +1449,10 @@ public class Mew : Empty
         yield return new WaitForSeconds(20f);
         //最终技能
         Debug.Log(HpTiming);
-        StartCoroutine(ShootSwords(377, 3, 0.1f, false));
+        StartCoroutine(ShootSwords(359, 3, 0.1f, false));
         yield return new WaitForSeconds(20f);
         StartCoroutine(ShootSwords(6, 8, 3f, true));
         yield return new WaitForSeconds(19f);
-        StartCoroutine(mewOrbRotate.ShrinkOrbs(2f));
-        StartCoroutine(mewOrbRotate.ShrinkSecondOrbs(2f));
     }
 
     //第三阶段电球
@@ -1516,12 +1514,12 @@ public class Mew : Empty
                 Vector2 spawnPosition = mapCenter + (Quaternion.Euler(0f, 0f, currentAngle) * Vector2.right * 20f);
                 if (needTrail)
                 {
-                    GameObject trail = Instantiate(TrailEffect, transform.position, Quaternion.Euler(0, 0, currentAngle));
-                    Destroy(trail, 2f);
+                    GameObject trail = Instantiate(TrailEffect2, transform.position, Quaternion.Euler(0, 0, currentAngle));
+                    Destroy(trail, 1f);
                 }
                 GameObject swords = Instantiate(Swords, spawnPosition, Quaternion.identity);
                 SwordsMew swordsmew = swords.GetComponent<SwordsMew>();
-                swordsmew.Initialize(mapCenter, i % 18);
+                swordsmew.Initialize(mapCenter, i % 18, i);
                 swordsmew.empty = this;
                 
             }
@@ -1624,13 +1622,13 @@ public class Mew : Empty
 
     private IEnumerator Phase3End()
     {
+        animator.SetTrigger("Die");
+        yield return new WaitForSeconds(0.4f);
         MewBossKilled = true;
         //将玩家传送回原来房间
         GameObject mask = Instantiate(Phase2Mask, transform.position, Quaternion.identity);
         Destroy(mask, 2.2f);
-        yield return new WaitForSeconds(0.6f);
-        animator.SetTrigger("Die");
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.1f);
         player.NowRoom = GetnowRoom;
         player.transform.position = GetPlayerPosition;
         player.InANewRoom = true;
@@ -1640,6 +1638,7 @@ public class Mew : Empty
         cameraAdapt.DeactivateVcam();
         cameraAdapt.ShowCameraMasks();
         Camera.transform.position = GetCameraPostion;
+        UISkillButton.Instance.isEscEnable = true;
 
         //梦幻嘎掉
         Invincible = false;
