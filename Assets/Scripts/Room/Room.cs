@@ -86,6 +86,7 @@ public class Room : MonoBehaviour
             SetFloor();
         }
         RoomGraph = _PathFinder.StaticPathFinder.CreatNewGrid(new Vector3Int((int)(transform.position.x), (int)(transform.position.y), 0));
+        StartCoroutine(DeleteObjectsCoroutine());
     }
 
 
@@ -436,5 +437,35 @@ public class Room : MonoBehaviour
             GameObject gatewayright = Instantiate(GateWayRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform);
         }
 
+    }
+    private IEnumerator DeleteObjectsCoroutine()
+    {
+        for(;;) 
+        {
+            if (playerControler.playerData.IsPassiveGetList[57])
+            {
+                DeleteGrass(transform);
+            }
+            yield return new WaitForSeconds(4f);
+        }
+    }
+
+    private void DeleteGrass(Transform parent)
+    {
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Transform child = parent.GetChild(i);
+
+            // 如果子对象有NormalGrass脚本，销毁该对象
+            if (child.TryGetComponent<NormalGress>(out var normalGrass)|| child.TryGetComponent<GressPlayerINOUT>(out var normalgrass))
+            {
+                Destroy(child.gameObject);
+            }
+            // 否则，递归调用DeleteObjects方法继续查找子对象
+            else
+            {
+                DeleteGrass(child);
+            }
+        }
     }
 }

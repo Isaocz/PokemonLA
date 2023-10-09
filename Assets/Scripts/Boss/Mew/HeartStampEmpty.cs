@@ -29,6 +29,10 @@ public class HeartStampEmpty : Projectile
         {
             currentSpeed = moveSpeed * time / timer ;
         }
+        else
+        {
+            currentSpeed = moveSpeed;
+        }
 
         if (position != null)
         {
