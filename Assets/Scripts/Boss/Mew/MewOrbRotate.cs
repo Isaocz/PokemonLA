@@ -53,66 +53,7 @@ public class MewOrbRotate : MonoBehaviour
             else Secondorbs[i].transform.position = targetPositions[i];
         }
     }
-    public IEnumerator ShrinkOrbs(float shrinkTime)
-    {
-        float timer = 0f;
-        while (timer <= shrinkTime)
-        {
-            float progress = timer / shrinkTime;
 
-            for (int i = 0; i < orbs.Count; i++)
-            {
-                float newScale = Mathf.Lerp(1f, 0f, progress);
-                orbs[i].transform.localScale = new Vector3(newScale, newScale, newScale);
-
-                Color newColor = orbs[i].GetComponent<SpriteRenderer>().color;
-                newColor.a = Mathf.Lerp(1f, 0f, progress);
-                orbs[i].GetComponent<SpriteRenderer>().color = newColor;
-            }
-
-            timer += Time.deltaTime;
-
-            yield return null;
-        }
-
-        // 移除已生成的 Orb
-        for (int i = 0; i < orbs.Count; i++)
-        {
-            Destroy(orbs[i]);
-        }
-        orbs.Clear();
-    }
-    public IEnumerator ShrinkSecondOrbs(float shrinkTime)
-    {
-        float timer = 0f;
-        while (timer <= shrinkTime)
-        {
-            float progress = timer / shrinkTime;
-
-            for (int i = 0; i < Secondorbs.Count; i++)
-            {
-                float newScale = Mathf.Lerp(1f, 0f, progress);
-                Secondorbs[i].transform.localScale = new Vector3(newScale, newScale, newScale);
-
-                Color newColor = Secondorbs[i].GetComponent<SpriteRenderer>().color;
-                newColor.a = Mathf.Lerp(1f, 0f, progress);
-                Secondorbs[i].GetComponent<SpriteRenderer>().color = newColor;
-            }
-
-            timer += Time.deltaTime;
-
-            yield return null;
-        }
-
-        // 移除已生成的 Orb
-        for (int i = 0; i < Secondorbs.Count; i++)
-        {
-            Destroy(Secondorbs[i]);
-        }
-        Secondorbs.Clear();
-    }
-
-    // Update is called once per frame
     void Update()
     {
         transform.RotateAround(mew.position + new Vector3(0f, 0.5f, 0f), Vector3.forward, rotationSpeed * Time.deltaTime);
