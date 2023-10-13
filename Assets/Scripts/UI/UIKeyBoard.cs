@@ -27,16 +27,7 @@ public class UIKeyBoard : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        RegisterKeybind("Skill1", KeyCode.Q); // 注册默认的技能按键
-        RegisterKeybind("Skill2", KeyCode.W);
-        RegisterKeybind("Skill3", KeyCode.E);
-        RegisterKeybind("Skill4", KeyCode.R);
-        RegisterKeybind("UseItem", KeyCode.Space);
-        RegisterKeybind("OpenMenu", KeyCode.Escape);
-        RegisterKeybind("Up", KeyCode.UpArrow);
-        RegisterKeybind("Down", KeyCode.DownArrow);
-        RegisterKeybind("Left", KeyCode.LeftArrow);
-        RegisterKeybind("Right", KeyCode.RightArrow);
+        ResetRegister();
     }
 
     private void Update()
@@ -113,6 +104,21 @@ public class UIKeyBoard : MonoBehaviour
         }
         return KeyCode.None;
     }
+
+    private void ResetRegister()
+    {
+        RegisterKeybind("Skill1", KeyCode.Q); // 注册默认的技能按键
+        RegisterKeybind("Skill2", KeyCode.W);
+        RegisterKeybind("Skill3", KeyCode.E);
+        RegisterKeybind("Skill4", KeyCode.R);
+        RegisterKeybind("UseItem", KeyCode.Space);
+        RegisterKeybind("OpenMenu", KeyCode.Escape);
+        RegisterKeybind("Up", KeyCode.UpArrow);
+        RegisterKeybind("Down", KeyCode.DownArrow);
+        RegisterKeybind("Left", KeyCode.LeftArrow);
+        RegisterKeybind("Right", KeyCode.RightArrow);
+    }
+
     public void Skill1KeyBoard()
     {
         OpenKeybindUI("Skill1");
