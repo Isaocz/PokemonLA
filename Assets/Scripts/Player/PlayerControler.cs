@@ -344,17 +344,40 @@ public class PlayerControler : Pokemon
 
             //每帧获取一次十字键的按键信息
 
-            
-            Vector2 MoveSpeed = (new Vector2(Input.GetAxis("Horizontal") * (isConfusionDone ? -1 : 1), Input.GetAxis("Vertical") * (isConfusionDone ? -1 : 1))).normalized * (Mathf.Max(Mathf.Abs(Input.GetAxis("Horizontal")) , Mathf.Abs(Input.GetAxis("Vertical"))));
+            Vector2 MoveSpeed = Vector2.zero;
+
+            if (Input.GetKey(UIKeyBoard.GetKeybind("Left")))
+            {
+                MoveSpeed.x = -1f * (isConfusionDone ? -1 : 1);
+            }
+            else if (Input.GetKey(UIKeyBoard.GetKeybind("Right")))
+            {
+                MoveSpeed.x = 1f * (isConfusionDone ? -1 : 1);
+            }
+
+            if (Input.GetKey(UIKeyBoard.GetKeybind("Up")))
+            {
+                MoveSpeed.y = 1f * (isConfusionDone ? -1 : 1);
+            }
+            else if (Input.GetKey(UIKeyBoard.GetKeybind("Down")))
+            {
+                MoveSpeed.y = -1f * (isConfusionDone ? -1 : 1);
+            }
+
+            MoveSpeed = MoveSpeed.normalized * Mathf.Max(Mathf.Abs(MoveSpeed.x), Mathf.Abs(MoveSpeed.y));
             horizontal = MoveSpeed.x;
             vertical = MoveSpeed.y;
+
+            //Vector2 MoveSpeed = (new Vector2(Input.GetAxis("Horizontal") * (isConfusionDone ? -1 : 1), Input.GetAxis("Vertical") * (isConfusionDone ? -1 : 1))).normalized * (Mathf.Max(Mathf.Abs(Input.GetAxis("Horizontal")) , Mathf.Abs(Input.GetAxis("Vertical"))));
+            //horizontal = MoveSpeed.x;
+            //vertical = MoveSpeed.y;
 
             /*
             horizontal = Input.GetAxis("Horizontal") * (isConfusionDone ? -1 : 1);
             vertical = Input.GetAxis("Vertical") * (isConfusionDone ? -1 : 1);
             */
-            
-            
+
+
 
 
 
@@ -427,7 +450,7 @@ public class PlayerControler : Pokemon
 
             //当按下q键时发射skill01
 
-            if (Input.GetKeyDown(KeyCode.Q) && isSkill01CD == false && Skill01 != null && !isSkill )
+            if (Input.GetKeyDown(UIKeyBoard.GetKeybind("Skill1")) && isSkill01CD == false && Skill01 != null && !isSkill )
             {
                 if ((Skill01.useSkillConditions(this))) {
                     //当动画进行到第8帧时会发射技能1，并技能1进入CD
@@ -451,7 +474,7 @@ public class PlayerControler : Pokemon
 
             //当按下w键时发射skill02
 
-            if (Input.GetKeyDown(KeyCode.W) && isSkill02CD == false && Skill02 != null  && !isSkill)
+            if (Input.GetKeyDown(UIKeyBoard.GetKeybind("Skill2")) && isSkill02CD == false && Skill02 != null  && !isSkill)
             {
                 if ((Skill02.useSkillConditions(this)))
                 {
@@ -476,7 +499,7 @@ public class PlayerControler : Pokemon
 
             //当按下e键时发射skill03
 
-            if (Input.GetKeyDown(KeyCode.E) && isSkill03CD == false && Skill03 != null  && !isSkill)
+            if (Input.GetKeyDown(UIKeyBoard.GetKeybind("Skill3")) && isSkill03CD == false && Skill03 != null  && !isSkill)
             {
                 if ((Skill03.useSkillConditions(this)))
                 {
@@ -501,7 +524,7 @@ public class PlayerControler : Pokemon
 
             //当按下r键时发射skill04
 
-            if (Input.GetKeyDown(KeyCode.R) && isSkill04CD == false && Skill04 != null && !isSkill)
+            if (Input.GetKeyDown(UIKeyBoard.GetKeybind("Skill4")) && isSkill04CD == false && Skill04 != null && !isSkill)
             {
                 if ((Skill04.useSkillConditions(this)))
                 {
@@ -550,7 +573,7 @@ public class PlayerControler : Pokemon
             }
 
 
-            if (isSpaceItemCanBeUse && Input.GetKeyDown(KeyCode.Space) && !isCanNotUseSpaceItem && spaceItem != null)
+            if (isSpaceItemCanBeUse && Input.GetKeyDown(UIKeyBoard.GetKeybind("UseItem")) && !isCanNotUseSpaceItem && spaceItem != null)
             {
                 if (UseSpaceItem.UseSpaceItemConditions(this)) {
                     spaceitemUseUI.UIAnimationStart(spaceItem.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite);
