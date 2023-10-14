@@ -54,6 +54,7 @@ public class Mew : Empty
     public GameObject TimeStopEffect;
     public GameObject TrailEffect;
     public GameObject TrailEffect2;
+    public GameObject TrailEffect3;
     public GameObject IceBeamPrefab;//技能22
 
     public GameObject FakePotionPrefab;//假伤药
@@ -66,7 +67,7 @@ public class Mew : Empty
 
     //终结技
     public GameObject Swords;
-
+    public GameObject Meanlookfinal;
 
     //第三阶段ui变化
     public GameObject timeBar1;
@@ -94,6 +95,7 @@ public class Mew : Empty
     private float MoreAttackTimer = -4f;//二阶段更多技能计时器
     private bool isPhase3 = false;
     private bool isDying = false;//结算
+    private bool isFinal;
 
     //随机传送
     private int teleportAttempts = 0;//随机传送计数器
@@ -166,9 +168,6 @@ public class Mew : Empty
                 Destroy(enviroment.GetChild(i).gameObject);
             }
         }
-
-        //test
-        player.Level = 32;
     }
 
     // Update is called once per frame
@@ -187,11 +186,23 @@ public class Mew : Empty
                 UISkillButton.Instance.isEscEnable = false;
                 //限制玩家的移动半径
                 float distance = Vector2.Distance(player.transform.position, transform.position);
-                if (distance > 19f)
+                if (!isFinal)
                 {
-                    Vector3 direction = (player.transform.position - transform.position).normalized;
-                    Vector3 targetPosition = transform.position + direction * 19f;
-                    player.transform.position = Vector3.MoveTowards(player.transform.position, targetPosition, 7f * Time.deltaTime);
+                    if (distance > 19f)
+                    {
+                        Vector3 direction = (player.transform.position - transform.position).normalized;
+                        Vector3 targetPosition = transform.position + direction * 19f;
+                        player.transform.position = Vector3.MoveTowards(player.transform.position, targetPosition, 7f * Time.deltaTime);
+                    }
+                }
+                else
+                {
+                    if (distance > 14f)
+                    {
+                        Vector3 direction = (player.transform.position - transform.position).normalized;
+                        Vector3 targetPosition = transform.position + direction * 14f;
+                        player.transform.position = Vector3.MoveTowards(player.transform.position, targetPosition, 7f * Time.deltaTime);
+                    }
                 }
                 if (HpTiming <= 0f && isDying == false)
                 {
@@ -211,7 +222,7 @@ public class Mew : Empty
                     switch (currentPhase)
                     {
                         case 1:
-                            if (!UsedMeanLook && EmptyHp < maxHP )
+                            if (!UsedMeanLook && EmptyHp < maxHP / 2)
                             {
                                 if (!roomCreated && currentPhase == 1)
                                 {
@@ -232,7 +243,7 @@ public class Mew : Empty
                             }
                             break;
                         case 2:
-                            if (EmptyHp <= maxHP && currentPhase == 2)
+                            if (EmptyHp <= 0 && currentPhase == 2)
                             {
                                 ClearStatusEffects();
                                 StopAllCoroutines();
@@ -556,6 +567,8 @@ public class Mew : Empty
 
                             // 创建ScaleShot
                             GameObject scaleShot = Instantiate(ScaleShotPrefab, scaleShotPosition, rotation);
+                            GameObject trail3 = Instantiate(TrailEffect3, scaleShotPosition, Quaternion.Euler(0, 0, angle));
+                            Destroy(trail3, 1f);
                             scaleShot.GetComponent<ScaleShotEmpty>().empty = this;
                         }
                     }
@@ -1249,6 +1262,10 @@ public class Mew : Empty
 
                 GameObject scaleShot = Instantiate(ScaleShotPrefab, scaleShotPosition, rotation);
                 GameObject scaleShot2 = Instantiate(ScaleShotPrefab, scaleShotPosition2, rotation);
+                GameObject trail3 = Instantiate(TrailEffect3, scaleShotPosition, Quaternion.Euler(0, 0, angle));
+                Destroy(trail3, 1f);
+                GameObject trail32 = Instantiate(TrailEffect3, scaleShotPosition2, Quaternion.Euler(0, 0, angle));
+                Destroy(trail32, 1f);
                 scaleShot.GetComponent<ScaleShotEmpty>().empty = this;
                 scaleShot2.GetComponent<ScaleShotEmpty>().empty = this;
             }
@@ -1446,13 +1463,18 @@ public class Mew : Empty
             GameObject fakepotion = Instantiate(RandomFake, randomPosition, Quaternion.identity);
             Destroy(fakepotion, 20f);
         }
-        yield return new WaitForSeconds(20f);
+        yield return new WaitForSeconds(19f);
         //最终技能
-        Debug.Log(HpTiming);
+        GameObject MeanLookse = Instantiate(MeanLookSE, transform.position, Quaternion.identity);
+        Destroy(MeanLookse, 1f);
+        yield return new WaitForSeconds(1f);
+        isFinal = true;
+        GameObject meanlookfinal = Instantiate(Meanlookfinal, transform.position, Quaternion.identity);
         StartCoroutine(ShootSwords(359, 3, 0.1f, false));
         yield return new WaitForSeconds(20f);
         StartCoroutine(ShootSwords(6, 8, 3f, true));
         yield return new WaitForSeconds(19f);
+        Destroy(meanlookfinal, 1f);
     }
 
     //第三阶段电球
@@ -1624,6 +1646,7 @@ public class Mew : Empty
     {
         animator.SetTrigger("Die");
         yield return new WaitForSeconds(0.4f);
+        isFinal = false;
         MewBossKilled = true;
         //将玩家传送回原来房间
         GameObject mask = Instantiate(Phase2Mask, transform.position, Quaternion.identity);
