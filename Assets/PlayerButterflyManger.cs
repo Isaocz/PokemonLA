@@ -73,6 +73,10 @@ public class PlayerButterflyManger : MonoBehaviour
     public void BornABF(FairyButterfly.ButterflyType t)
     {
         Instantiate(BF , transform.position + Vector3.right * 0.3f , Quaternion.identity , transform).BFType = t;
+        if (player.isInSuperMistyTerrain)
+        {
+            Instantiate(BF, transform.position + Vector3.right * 0.3f, Quaternion.identity, transform).BFType = t;
+        }
     }
 
 
