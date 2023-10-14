@@ -51,7 +51,6 @@ public class Splash : Skill
         }
         else if (ExistenceTime <= 1.4f && ExistenceTime > 1.15f)
         {
-            player.isInvincibleAlways = true;
             PlayerSpriteParent.transform.localScale = new Vector3(Mathf.Clamp(PlayerSpriteParent.transform.localScale.x + Time.deltaTime * 0.8f, 0.8f, 1.0f), Mathf.Clamp(PlayerSpriteParent.transform.localScale.y - Time.deltaTime * 0.8f, 1.0f, 1.2f), PlayerSpriteParent.transform.localScale.z);
             PlayerSpriteParent.transform.localPosition = new Vector3(PlayerSpriteParent.transform.localPosition.x, Mathf.Clamp(PlayerSpriteParent.transform.localPosition.y + Time.deltaTime * 6.4f, 0.0f, 1.6f), PlayerSpriteParent.transform.localPosition.z);
         }
@@ -68,7 +67,6 @@ public class Splash : Skill
         }
         else if (ExistenceTime <= 0.95f && ExistenceTime > 0.85f)
         {
-            player.isInvincibleAlways = false;
             PlayerSpriteParent.transform.localScale = new Vector3(Mathf.Clamp(PlayerSpriteParent.transform.localScale.x - Time.deltaTime * 2f, 1.0f, 1.2f), Mathf.Clamp(PlayerSpriteParent.transform.localScale.y + Time.deltaTime * 4f, 0.6f, 1.0f), PlayerSpriteParent.transform.localScale.z);
         }
         else if (ExistenceTime <= 0.8f)
@@ -83,6 +81,5 @@ public class Splash : Skill
         PlayerSpriteParent.transform.localScale = new Vector3(1, 1, 1);
         PlayerSpriteParent.transform.localPosition = Vector3.zero;
         player.isCanNotMove = false;
-        player.isInvincibleAlways = false;
     }
 }

@@ -9,7 +9,7 @@ public class Trailblaze : Skill
     void Start()
     {
         animator = GetComponent<Animator>();
-        if (player.InGressCount != 0)
+        if (player.InGressCount.Count != 0)
         {
             if (SkillFrom != 2) {
                 if (player.Skill01 != null && player.Skill01.SkillIndex == SkillIndex)

@@ -6,14 +6,15 @@ public class BounsweetControler : PlayerControler
 {
     public Skill Splash;
     public Skill Playnice;
+    public Skill RapidSpin;
     public Skill TestSkill01;
-    public Skill TestSkill02;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        //一百级时经验1059860
         Exp = new int[] { 
             9, 48, 39, 39, 44, 57, 79, 105, 141, 182, 
             231, 288, 351, 423, 500, 585, 678, 777, 885, 998, 
@@ -33,8 +34,8 @@ public class BounsweetControler : PlayerControler
 
         Skill01 = Splash;
         Skill02 = Playnice;
-        Skill03 = TestSkill01;
-        Skill04 = TestSkill02;
+        Skill03 = RapidSpin;
+        Skill04 = TestSkill01;
 
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);

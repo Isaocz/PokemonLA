@@ -36,10 +36,7 @@ public class BelliboltThunder : Projectile
             {
                 Empty e = collision.GetComponent<Empty>();
                 Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Electric);
-                if (Random.Range(0.0f, 1.0f) > 0.9f)
-                {
-                    e.EmptyParalysisDone(1, 10);
-                }
+                e.EmptyParalysisDone(1, 10, 0.1f);
 
             }
             if (empty.isEmptyConfusionDone && collision.gameObject == empty.gameObject)

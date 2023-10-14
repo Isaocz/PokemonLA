@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class MagicalLeaf : Skill
 {
+    public bool StartTimer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +18,8 @@ public class MagicalLeaf : Skill
     // Update is called once per frame
     void Update()
     {
-        StartExistenceTimer();
+        if (StartTimer) {
+            StartExistenceTimer();
+        }
     }
 }

@@ -118,7 +118,7 @@ public class SmackDown : Skill
             }
             HitAndKo(target);
             StoneBreak();
-            Instantiate(SealthRock, transform.position, Quaternion.identity);
+            if (SkillFrom == 2) { Instantiate(SealthRock, transform.position, Quaternion.identity); }
         }
         else if (other.tag == "Room" || other.tag == "Enviroment")
         {

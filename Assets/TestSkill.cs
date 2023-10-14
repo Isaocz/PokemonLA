@@ -92,10 +92,10 @@ public class TestSkill : Skill
             isCanNotMove = true;
             isTestHitDone = true;
             if (isFroze) { target.Frozen(FrozeTime, 1, 1); }
-            if (isBurn) { target.EmptyBurnDone(1,BurnTime) ; }
-            if (isParalysis) { target.EmptyParalysisDone(1 , ParalysisTime) ; }
-            if (isToxic) { target.EmptyToxicDone(1, ToxicTime) ; }
-            if (isSleep) { target.EmptySleepDone(1, SleepTime) ; }
+            if (isBurn) { target.EmptyBurnDone(1,BurnTime,1) ; }
+            if (isParalysis) { target.EmptyParalysisDone(1 , ParalysisTime, 1) ; }
+            if (isToxic) { target.EmptyToxicDone(1, ToxicTime , 1) ; }
+            if (isSleep) { target.EmptySleepDone(1, SleepTime , 1) ; }
             if (isFear) { target.Fear(FearTime,1) ; }
             if (isBlind) { target.Blind(BlindTime,1) ; }
             if (isConfusion) { target.EmptyConfusion(ConfusionTime , 1) ; }

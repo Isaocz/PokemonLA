@@ -77,7 +77,7 @@ public class PincurchinSpikeMove : Projectile
             {
                 Empty e = other.GetComponent<Empty>();
                 Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, Dmage, 0, 0, Type.TypeEnum.Electric);
-                if (Random.Range(0.0f, 1.0f) > 0.8f) { e.EmptyParalysisDone(1f , 5); }
+                e.EmptyParalysisDone(1f, 5, 0.2f);
                 //e.EmptyHpChange(0, (SpDmage * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / (250 * e.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((e.EmptyType01 == Type.TypeEnum.Ice || e.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2), 14);
             }
         }

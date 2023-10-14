@@ -186,13 +186,13 @@ public class SubSkill : MonoBehaviour
                 TCEell.isMultipleDamageColdDown = true;
                 TargetList[ListIndex] = TCEell;
             }
-            if (player.playerData.IsPassiveGetList[26] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.6f)
+            if (player.playerData.IsPassiveGetList[26])
             {
                 if (SkillTag != null)
                 {
                     foreach (Skill.SkillTagEnum i in SkillTag)
                     {
-                        if (i == Skill.SkillTagEnum.接触类) { target.EmptyToxicDone(1 , 30); }
+                        if (i == Skill.SkillTagEnum.接触类) { target.EmptyToxicDone(1 , 30 , 0.4f + (float)player.LuckPoint); }
                     }
                 }
             }

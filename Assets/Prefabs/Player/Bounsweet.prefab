@@ -476,8 +476,8 @@ MonoBehaviour:
   look: {x: 0, y: -1}
   maxHp: 0
   maxEx: 0
-  Level: 6
-  LevelForSkill: 6
+  Level: 5
+  LevelForSkill: 5
   iCount: 0
   TimeInvincible: 1.2
   isInvincible: 0
@@ -487,7 +487,7 @@ MonoBehaviour:
   DefPlayerPoint: 30
   SpdPlayerPoint: 38
   SpeedPlayerPoint: 32
-  MoveSpePlayerPoint: 5
+  MoveSpePlayerPoint: 6
   LuckPlayerPoint: 0
   PlayerType01: 0
   PlayerType02: 0
@@ -520,6 +520,7 @@ MonoBehaviour:
   playerSubSkillList: {fileID: 0}
   FollowBaby: {fileID: 0}
   NotFollowBaby: {fileID: 0}
+  ButterflyManger: {fileID: 0}
   NatureIndex: 0
   isCanNotMove: 0
   isInvincibleAlways: 0
@@ -528,8 +529,8 @@ MonoBehaviour:
   isLightScreen: 0
   Splash: {fileID: 1682553479186110878, guid: fb3a9e759189ce44eb5db929e9adf784, type: 3}
   Playnice: {fileID: 5802712570413950528, guid: 67b7d2214aef99a40946579adef0b98d, type: 3}
-  TestSkill01: {fileID: 3163273248935881763, guid: 79446e95fd4aea04dba26f7f9f1fa619, type: 3}
-  TestSkill02: {fileID: 8537819989467288204, guid: ef6ee7742c800274a963c87ecc6c08ee, type: 3}
+  RapidSpin: {fileID: 2565654828128499493, guid: 129b4eebe1ef3c448a1f710d8d338c5a, type: 3}
+  TestSkill01: {fileID: 0}
 --- !u!114 &6249658966115042218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -601,27 +602,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SkillLearnList:
-  - {fileID: 1244769055400583463, guid: fa0fe05731aa05645999124891ed3730, type: 3}
-  - {fileID: 6818376982515540585, guid: 23cd35394c2db2f49a7bf1d7cf1973a9, type: 3}
-  - {fileID: 6818376982515540585, guid: 73cad06278cc6a24cb80ecb265ff0b23, type: 3}
+  - {fileID: 1682553479186110878, guid: fb3a9e759189ce44eb5db929e9adf784, type: 3}
+  - {fileID: 5802712570413950528, guid: 67b7d2214aef99a40946579adef0b98d, type: 3}
+  - {fileID: 2565654828128499493, guid: 129b4eebe1ef3c448a1f710d8d338c5a, type: 3}
+  - {fileID: 31271946034189237, guid: ae2645eb5425bfb408f6922c7d72e70d, type: 3}
+  - {fileID: 3163273248935881763, guid: 79446e95fd4aea04dba26f7f9f1fa619, type: 3}
+  - {fileID: 163719631283843320, guid: 46725117b09400f40b2b713b1da594d0, type: 3}
   - {fileID: 1880974542226505, guid: 969015630e78e93468c9673d51d6f3bd, type: 3}
-  - {fileID: 231083410470411323, guid: ef63a42cf536c714889679ef1f0cf435, type: 3}
-  - {fileID: 4237701757486280787, guid: 8d7eff1f647616144afd54d44954c442, type: 3}
-  - {fileID: 1555498523246217451, guid: 0d7b8e164d4c14142907a667320fae2f, type: 3}
-  - {fileID: 1594877619978483300, guid: 23b5d8abfde057f4da10a14fe9dbb6a0, type: 3}
-  - {fileID: 4525924730058828587, guid: 0f3766499d4ea9e498f9ca207c380189, type: 3}
-  - {fileID: 8595952147050215167, guid: 84e5df4e59a282a49bec5b9fc2409bf5, type: 3}
-  - {fileID: 2022291420251981147, guid: ef8e75a5a0784f449bfbeb40b81d5a59, type: 3}
-  - {fileID: 2521171313470180118, guid: c931f8893e90eaa4d9efd718864262d4, type: 3}
+  - {fileID: 8537819989467288204, guid: ef6ee7742c800274a963c87ecc6c08ee, type: 3}
+  - {fileID: 114696115344457992, guid: 79707b7a176254346906581e207bcfb1, type: 3}
   SkillMachineList:
-  - {fileID: 2521171313470180118, guid: c3541b43825c4b04aa6e13a7f4c7ad74, type: 3}
-  - {fileID: 2022291420251981147, guid: 85f28411c49545b48ba91afbaa7a33d4, type: 3}
-  - {fileID: 1555498523246217451, guid: 553e28276ab16944b9c4ba66312314c5, type: 3}
-  - {fileID: 6818376982515540585, guid: c55cefbab65303a438f79c9f650ac7e3, type: 3}
-  - {fileID: 1594877619978483300, guid: 05f3f61ffe295d348b4bb7ab7a84b962, type: 3}
-  - {fileID: 4525924730058828587, guid: 5783b3abda3faeb4a88f43daad184f9f, type: 3}
   - {fileID: 8595952147050215167, guid: 6e067c6e5bf2d9a47a814c995bcfa7fc, type: 3}
+  - {fileID: 7011283203387569093, guid: f6195750e368c6e479a73bc782d2ae87, type: 3}
+  - {fileID: 1848576513982158394, guid: 065296213e1fe3144b3d728ca64aab5e, type: 3}
+  - {fileID: 6014550301277721759, guid: edaebfc2966b3bc42a9213a46581594e, type: 3}
+  - {fileID: 1032629400572233839, guid: 3716eec1b1093c4448000a91c5eccffd, type: 3}
+  - {fileID: 1041644727316284167, guid: 231ab418011d7704db3f0db786d26c4e, type: 3}
+  - {fileID: 163719631283843320, guid: 025ed5a452f2f724fbb61d6e0cf5dac6, type: 3}
+  - {fileID: 6228158214529865862, guid: 72709d69e3eba274684bc57841d99632, type: 3}
+  - {fileID: 1555498523246217451, guid: 553e28276ab16944b9c4ba66312314c5, type: 3}
+  - {fileID: 444328747638503804, guid: f18b5910dafd12340ac9e8f7bf144b3a, type: 3}
+  - {fileID: 3491562013919424432, guid: 7e036ff3cb7ffec47aa8520906e9d560, type: 3}
+  - {fileID: 3804989887817951799, guid: 09f431efc0d88194f8825c73f1ab7ee2, type: 3}
+  - {fileID: 3804989887817951799, guid: 4dc4e7f24d7339240b0330860459ad0d, type: 3}
+  - {fileID: 5087111677481045397, guid: ddf93af73af96de40b6cd072a6232f6d, type: 3}
+  - {fileID: 3168834908387941062, guid: d944fa8962ccc2e41a9280577156f37a, type: 3}
   - {fileID: 4955907317177638566, guid: 8916327c43995234fa6459e3f542e07b, type: 3}
+  - {fileID: 909761395785244131, guid: f23f7bd9a4a3c6e47b85ae5749f3bdd2, type: 3}
+  - {fileID: 2232908434196015977, guid: 098e3b27ccab265489df093b5ad2d614, type: 3}
+  - {fileID: 7353026534848658517, guid: f97b299c94e93534e8eae22eef1d3090, type: 3}
+  - {fileID: 465177864297356994, guid: c6d5256087230144492ffa8749c1b996, type: 3}
+  - {fileID: 2377619805035706047, guid: 07ec671f9352e4f44ab9a1da30334199, type: 3}
+  - {fileID: 8946318495350401086, guid: 1fad2e59d586baf4a8c7d37d0bdb2b60, type: 3}
   SkillMewList: []
 --- !u!114 &6249658966115042212
 MonoBehaviour:

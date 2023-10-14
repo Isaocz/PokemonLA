@@ -111,7 +111,7 @@ public class FairyButterfly : MonoBehaviour
                 }
                 if (BFType == ButterflyType.浅黄色回血型)
                 {
-                    Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, Mathf.Clamp(player.maxHp/16 , 1 , 100) , Type.TypeEnum.IgnoreType);
+                    Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, Mathf.Clamp(player.maxHp/16 , 1 , 20) , Type.TypeEnum.IgnoreType);
                 }
                 if (BFType == ButterflyType.蓝色增加特攻型)
                 {

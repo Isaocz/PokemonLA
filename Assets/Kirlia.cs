@@ -223,6 +223,8 @@ public class Kirlia : Empty
         while (!isThisPointEmpty(TPPosition) || Mathf.Abs(TPPosition.x) >= 12 || Mathf.Abs(TPPosition.y) >= 7)
         {
             TPPosition = (Vector3)TargetPosition + (new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), 0).normalized) * Random.Range(4.5f, 7.5f);
+            Debug.Log(TPPosition);
+            Debug.Log(!isThisPointEmpty(TPPosition) || Mathf.Abs(TPPosition.x) >= 12 || Mathf.Abs(TPPosition.y) >= 7);
             TPCount++;
             if(TPCount > 100)
             {
