@@ -248,12 +248,12 @@ public class PlayerControler : Pokemon
 
 
     //处于草丛中 当isInGress==0时代表不在草中 每和一片草碰撞+1
-    public int InGressCount
+    public List<GameObject> InGressCount
     {
-        get { return inGressCount; }
-        set { inGressCount = value; }
+        get { return inGressGameObjCount; }
+        set { inGressGameObjCount = value; }
     }
-    int inGressCount = 0;
+    List<GameObject> inGressGameObjCount = new List<GameObject> { };
 
 
     public Skill EvolutionSkill;
@@ -335,6 +335,10 @@ public class PlayerControler : Pokemon
     {
         if (!isDie)
         {
+
+            //随时间掉血或者改变状态的函数
+            if (isInGrassyTerrain) {  PlayerGrassyTerrainHeal(); }
+
 
             UpdatePlayerChangeHP();
 
@@ -560,6 +564,33 @@ public class PlayerControler : Pokemon
             }
         }
     }
+
+    //=========================青草场地回血事件========================
+    /// <summary>
+    /// 角色的青草场地回血计时器，每计时5s青草场地回血一次
+    /// </summary>
+    protected float PlayerGrassyTerrainTimer;
+    /// <summary>
+    /// 根据青草场地时间敌人回血
+    /// </summary>
+    void PlayerGrassyTerrainHeal()
+    {
+        if (PlayerGrassyTerrainTimer == 0)
+        {
+            PokemonHpChange(null, this.gameObject, 0, 0, (int)Mathf.Clamp(((float)maxHp / 16), 1, 10), Type.TypeEnum.IgnoreType);
+        }
+        PlayerGrassyTerrainTimer += Time.deltaTime;
+        if (PlayerGrassyTerrainTimer >= 5)
+        {
+            PlayerGrassyTerrainTimer = 0;
+        }
+
+    }
+    //=========================青草场地回血事件========================
+
+
+
+
     bool isComeInANewRoomEvent;
     bool isToxicDoneInNewRoom;
     bool isBornDoneInNewRoom;
@@ -867,12 +898,31 @@ public class PlayerControler : Pokemon
             {
                 if((int)SkillType != 19)
                 {
-                    nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR]  ) )*((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
-                   
+                    if (!isInPsychicTerrain)
+                    {
+                        nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                    }
+                    else
+                    {
+                        if ((int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))) > (int)(maxHp / 10))
+                        {
+                            nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                        }
+                    }
                 }
                 else
                 {
-                    nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint ,-100000 , -1), (nowHp > 1)?(playerData.isEndure?1:0):0, maxHp);
+                    if (!isInPsychicTerrain)
+                    {
+                        nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                    }
+                    else
+                    {
+                        if (Mathf.Clamp((int)ChangePoint, -100000, -1) > (int)(maxHp / 10))
+                        {
+                            nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                        }
+                    }
                 }
                 isInvincible = true;
                 InvincileTimer = TimeInvincible;
@@ -882,13 +932,21 @@ public class PlayerControler : Pokemon
                 UIHealthBar.Instance.ChangeHpDown();
                 UIHealthBar.Instance.NowHpText.text = string.Format("{000}", nowHp);
 
-                if(nowHp <= 0) { isDie = true; animator.SetTrigger("Die");rigidbody2D.bodyType = RigidbodyType2D.Static;}
+                if(nowHp <= 0) { PlayerDie(); }
                 //血量上升时对血条UI输出当前血量，并调用血条上升的函数
 
                 //输出被击打的动画管理器参数
                 animator.SetTrigger("Hit");
             }
         }
+    }
+
+
+    public void PlayerDie()
+    {
+        isDie = true; 
+        animator.SetTrigger("Die");
+        rigidbody2D.bodyType = RigidbodyType2D.Static;
     }
 
 
@@ -1272,7 +1330,7 @@ public class PlayerControler : Pokemon
         {
             skillObj = Instantiate(Skill01, rigidbody2D.position, Quaternion.identity, Skill01.isNotMoveWithPlayer ? null : transform);
         }
-        playerSubSkillList.CallSubSkill(Skill01);
+        playerSubSkillList.CallSubSkill(skillObj);
         skillObj.player = this;
     }
 
@@ -1301,7 +1359,7 @@ public class PlayerControler : Pokemon
         {
             skillObj = Instantiate(Skill02, rigidbody2D.position, Quaternion.identity, Skill02.isNotMoveWithPlayer?null:transform);
         }
-        playerSubSkillList.CallSubSkill(Skill02);
+        playerSubSkillList.CallSubSkill(skillObj);
         skillObj.player = this;
     }
 
@@ -1331,7 +1389,7 @@ public class PlayerControler : Pokemon
         {
             skillObj = Instantiate(Skill03, rigidbody2D.position, Quaternion.identity, Skill03.isNotMoveWithPlayer ? null : transform);
         }
-        playerSubSkillList.CallSubSkill(Skill03);
+        playerSubSkillList.CallSubSkill(skillObj);
         skillObj.player = this;
     }
 
@@ -1361,7 +1419,7 @@ public class PlayerControler : Pokemon
         {
             skillObj = Instantiate(Skill04, rigidbody2D.position, Quaternion.identity, Skill04.isNotMoveWithPlayer ? null : transform);
         }
-        playerSubSkillList.CallSubSkill(Skill04);
+        playerSubSkillList.CallSubSkill(skillObj);
         skillObj.player = this;
     }
 

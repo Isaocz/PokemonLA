@@ -22,7 +22,7 @@ public class NormalGress : MonoBehaviour
             if (other.GetComponent<PlayerControler>() != null)
             {
                 animator.SetTrigger("PlayerIn");
-                other.GetComponent<PlayerControler>().InGressCount++;
+                other.GetComponent<PlayerControler>().InGressCount.Add(gameObject);
             }
         }
         if (other.transform.tag == "NPC")
@@ -39,7 +39,7 @@ public class NormalGress : MonoBehaviour
         if (other.transform.tag == "Player")
         {
             animator.SetTrigger("PlayerOut");
-            other.GetComponent<PlayerControler>().InGressCount--;
+            other.GetComponent<PlayerControler>().InGressCount.Remove(gameObject);
         }
         if (other.transform.tag == "NPC")
         {
@@ -49,4 +49,20 @@ public class NormalGress : MonoBehaviour
             }
         }
     }
+
+
+    public void GrassDie()
+    {
+        animator.SetTrigger("Die");
+        transform.GetChild(1).gameObject.SetActive(true);
+        transform.GetChild(1).parent = transform.parent;
+    }
+
+    public void DestroySelf()
+    {
+        Destroy(gameObject);
+    }
+
+
+
 }

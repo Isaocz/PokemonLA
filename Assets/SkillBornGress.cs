@@ -6,6 +6,8 @@ public class SkillBornGress : MonoBehaviour
 {
     public GameObject PS;
     public GameObject Gress;
+    public bool isNotEmpty;
+
 
     private void Start()
     {
@@ -17,4 +19,7 @@ public class SkillBornGress : MonoBehaviour
         Instantiate(Gress , transform.position , Quaternion.identity );
         Destroy(gameObject);
     }
+
+
+
 }

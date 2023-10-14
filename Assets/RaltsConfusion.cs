@@ -26,7 +26,7 @@ public class RaltsConfusion : Projectile
         if (ExitTime >= 0)
         {
             ExitTime -= Time.deltaTime;
-            if (ExitTime > 3.0f) { CircleS.color = CircleS.color + new Color(0, 0, 0, 2f * Time.deltaTime);Debug.Log(CircleS.color + "+" + CircleS.gameObject); }
+            if (ExitTime > 3.0f) { CircleS.color = CircleS.color + new Color(0, 0, 0, 2f * Time.deltaTime);}
         }
         else
         {

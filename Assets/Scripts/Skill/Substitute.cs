@@ -15,6 +15,76 @@ public class Substitute : MonoBehaviour
     float InvincileTimer = 0.8f;
     Animator animator;
 
+
+    //当前宝可梦处于青草场地中
+    public bool isInGrassyTerrain
+    {
+        get { return isinGrassyTerrain; }
+        set { isinGrassyTerrain = value; }
+    }
+    bool isinGrassyTerrain = false;
+
+    //当前宝可梦处于精神场地中Psychic Terrain
+    public bool isInPsychicTerrain
+    {
+        get { return isinPsychicTerrain; }
+        set { isinPsychicTerrain = value; }
+    }
+    bool isinPsychicTerrain = false;
+
+    //当前宝可梦处于电气场地中Electric Terrain
+    public bool isInElectricTerrain
+    {
+        get { return isinElectricTerrain; }
+        set { isinElectricTerrain = value; }
+    }
+    bool isinElectricTerrain = false;
+
+    //当前宝可梦处于薄雾场地中Misty Terrain
+    public bool isInMistyTerrain
+    {
+        get { return isinMistyTerrain; }
+        set { isinMistyTerrain = value; }
+    }
+    bool isinMistyTerrain = false;
+
+
+
+    //当前宝可梦处超级于青草场地中
+    public bool isInSuperGrassyTerrain
+    {
+        get { return isinSuperGrassyTerrain; }
+        set { isinSuperGrassyTerrain = value; }
+    }
+    bool isinSuperGrassyTerrain = false;
+
+    //当前宝可梦处于超级精神场地中Psychic Terrain
+    public bool isInSuperPsychicTerrain
+    {
+        get { return isinSuperPsychicTerrain; }
+        set { isinSuperPsychicTerrain = value; }
+    }
+    bool isinSuperPsychicTerrain = false;
+
+    //当前宝可梦处于超级电气场地中Electric Terrain
+    public bool isInSuperElectricTerrain
+    {
+        get { return isinSuperElectricTerrain; }
+        set { isinSuperElectricTerrain = value; }
+    }
+    bool isinSuperElectricTerrain = false;
+
+    //当前宝可梦处于超级薄雾场地中Misty Terrain
+    public bool isInSuperMistyTerrain
+    {
+        get { return isinSuperMistyTerrain; }
+        set { isinSuperMistyTerrain = value; }
+    }
+    bool isinSuperMistyTerrain = false;
+
+
+
+
     public void SetSubstitute(int maxHP,PlayerControler player)
     {
         MaxHP = maxHP;
@@ -51,12 +121,30 @@ public class Substitute : MonoBehaviour
 
                     if ((int)SkillType != 19)
                     {
-                        NowHp = Mathf.Clamp(NowHp + (int)((ChangePoint / ParentPlayer.DefAbilityPoint + ChangePointSp / ParentPlayer.SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][ParentPlayer.PlayerType01] * Type.TYPE[(int)SkillType][ParentPlayer.PlayerType02] * (ParentPlayer.PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][ParentPlayer.PlayerTeraType] : Type.TYPE[(int)SkillType][ParentPlayer.PlayerTeraTypeJOR])) * ((ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType])))), (NowHp > 1) ? (ParentPlayer.playerData.isEndure ? 1 : 0) : 0, MaxHP);
-                        Debug.Log("xxxxx" + ((int)((ChangePoint / ParentPlayer.DefAbilityPoint + ChangePointSp / ParentPlayer.SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][ParentPlayer.PlayerType01] * Type.TYPE[(int)SkillType][ParentPlayer.PlayerType02] * (ParentPlayer.PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][ParentPlayer.PlayerTeraType] : Type.TYPE[(int)SkillType][ParentPlayer.PlayerTeraTypeJOR])) * ((ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType]))))));
+                        if (!isInPsychicTerrain) {
+                            NowHp = Mathf.Clamp(NowHp + (int)((ChangePoint / ParentPlayer.DefAbilityPoint + ChangePointSp / ParentPlayer.SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][ParentPlayer.PlayerType01] * Type.TYPE[(int)SkillType][ParentPlayer.PlayerType02] * (ParentPlayer.PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][ParentPlayer.PlayerTeraType] : Type.TYPE[(int)SkillType][ParentPlayer.PlayerTeraTypeJOR])) * ((ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType])))), (NowHp > 1) ? (ParentPlayer.playerData.isEndure ? 1 : 0) : 0, MaxHP);
+                        }
+                        else
+                        {
+                            if ((int)((ChangePoint / ParentPlayer.DefAbilityPoint + ChangePointSp / ParentPlayer.SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][ParentPlayer.PlayerType01] * Type.TYPE[(int)SkillType][ParentPlayer.PlayerType02] * (ParentPlayer.PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][ParentPlayer.PlayerTeraType] : Type.TYPE[(int)SkillType][ParentPlayer.PlayerTeraTypeJOR])) * ((ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType])))) > (int)(MaxHP / 10))
+                            {
+                                NowHp = Mathf.Clamp(NowHp + (int)((ChangePoint / ParentPlayer.DefAbilityPoint + ChangePointSp / ParentPlayer.SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][ParentPlayer.PlayerType01] * Type.TYPE[(int)SkillType][ParentPlayer.PlayerType02] * (ParentPlayer.PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][ParentPlayer.PlayerTeraType] : Type.TYPE[(int)SkillType][ParentPlayer.PlayerTeraTypeJOR])) * ((ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (ParentPlayer.playerData.TypeDefAlways[(int)SkillType] + ParentPlayer.playerData.TypeDefJustOneRoom[(int)SkillType])))), (NowHp > 1) ? (ParentPlayer.playerData.isEndure ? 1 : 0) : 0, MaxHP);
+                            }
+                        }
                     }
                     else
                     {
-                        NowHp = Mathf.Clamp(NowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (NowHp > 1) ? (ParentPlayer.playerData.isEndure ? 1 : 0) : 0, MaxHP);
+                        if (!isInPsychicTerrain)
+                        {
+                            NowHp = Mathf.Clamp(NowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (NowHp > 1) ? (ParentPlayer.playerData.isEndure ? 1 : 0) : 0, MaxHP);
+                        }
+                        else
+                        {
+                            if ((int)Mathf.Clamp((int)ChangePoint, -100000, -1) > (int)(MaxHP / 10))
+                            {
+                                NowHp = Mathf.Clamp(NowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (NowHp > 1) ? (ParentPlayer.playerData.isEndure ? 1 : 0) : 0, MaxHP);
+                            }
+                        }
                     }
                     uIHealth.Per = (float)NowHp / (float)MaxHP;
                     uIHealth.ChangeHpDown();

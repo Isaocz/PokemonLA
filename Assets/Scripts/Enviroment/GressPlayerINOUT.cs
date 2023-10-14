@@ -49,7 +49,7 @@ public class GressPlayerINOUT : MonoBehaviour
                 animator.SetTrigger("PlayerIn");
                 player = other.GetComponent<PlayerControler>();
                 CreatNewItem();
-                other.GetComponent<PlayerControler>().InGressCount++;
+                other.GetComponent<PlayerControler>().InGressCount.Add(gameObject);
             }
         }
         
@@ -59,7 +59,19 @@ public class GressPlayerINOUT : MonoBehaviour
         if (other.transform.tag == "Player")
         {
             animator.SetTrigger("PlayerOut");
-            other.GetComponent<PlayerControler>().InGressCount--;
+            other.GetComponent<PlayerControler>().InGressCount.Remove(gameObject);
         }
+    }
+
+
+    public void GrassDie()
+    {
+        animator.SetTrigger("Die");
+        transform.GetChild(1).gameObject.SetActive(true);
+    }
+
+    public void DestroySelf()
+    {
+        Destroy(gameObject);
     }
 }

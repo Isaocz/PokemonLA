@@ -257,11 +257,25 @@ public class Empty : Pokemon
             {
                 if (SkillType != 19)
                 {
-                    EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000);
+                    if (!isInPsychicTerrain) { EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000);}
+                    else
+                    {
+                        if((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000) > (int)(maxHP / 10))
+                        {
+                            EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000);
+                        }
+                    }
                 }
                 else
                 {
-                    EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, 100000);
+                    if (!isInPsychicTerrain) { EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, 100000); }
+                    else
+                    {
+                        if ((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, 100000) > (int)(maxHP / 10))
+                        {
+                            EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, 100000);
+                        }
+                    }
                 }
                 EmptySleepRemove();
 
@@ -546,6 +560,7 @@ public class Empty : Pokemon
         if (Weather.GlobalWeather.isHail) { EmptyHail(); }
         if (Weather.GlobalWeather.isSandstorm) { EmptySandStorm(); }
         if (isEmptyCurseDone) { EmptyCurseDmage(); }
+        if (isInMistyTerrain) { EmptyGrassyTerrainHeal(); }
     }
 
 
@@ -706,6 +721,29 @@ public class Empty : Pokemon
     }
     //=========================诅咒事件========================
 
+
+    //=========================青草场地回血事件========================
+    /// <summary>
+    /// 敌人的青草场地回血计时器，每计时5s青草场地回血一次
+    /// </summary>
+    protected float EmptyGrassyTerrainTimer;
+    /// <summary>
+    /// 根据青草场地时间敌人回血
+    /// </summary>
+    void EmptyGrassyTerrainHeal()
+    {
+        if (EmptyGrassyTerrainTimer == 0)
+        {
+            PokemonHpChange(null, this.gameObject, 0, 0, (int)Mathf.Clamp(( (float)maxHP / 16), 1, 10), Type.TypeEnum.IgnoreType);
+        }
+        EmptyGrassyTerrainTimer += Time.deltaTime;
+        if (EmptyGrassyTerrainTimer >= 5)
+        {
+            EmptyGrassyTerrainTimer = 0;
+        }
+
+    }
+    //=========================青草场地回血事件========================
 
 
 

@@ -72,7 +72,7 @@ public class Skill : MonoBehaviour
     public enum SkillTagEnum
     {
         接触类,非接触类,爪类,牙类,声音类,连续多次使用类,恢复HP类,吸取HP类,降低使用者能力类,反作用力伤害类,爆炸类,
-        拳类,波动和波导类,粉末类,球和弹类,心灵攻击类,跳舞类,风类,切割类,天气类,场地类,防住类,压击类,绑紧类,雾类,
+        拳类,波动和波导类,粉末类,球和弹类,心灵攻击类,跳舞类,风类,切割类,天气类,场地类,防住类,压击类,绑紧类,雾类,脚踢类,
     }
 
     //表示技能生成时是否生成于玩家所面对方向，如为Fales生成在玩家所面对的方向，如为true生成在玩家位置（多用于自我buff类技能）
@@ -128,6 +128,36 @@ public class Skill : MonoBehaviour
         //实例化
         Instantiate(CTEffect, target.transform.position + Vector3.right*Random.Range(-0.5f,0.5f) + Vector3.up * Random.Range(0.0f, 0.8f), Quaternion.identity , target.transform).SetActive(true);
     }
+
+
+
+    private void Awake()
+    {
+        Invoke("SkillStart", 0.05f);
+    }
+
+    void SkillStart()
+    {
+        if (player.isInSuperPsychicTerrain)
+        {
+            TraceEffect TE = null;
+            foreach (Transform t in transform)
+            {
+                if (t.GetComponent<TraceEffect>())
+                {
+                    TE = t.GetComponent<TraceEffect>();
+                    break;
+                }
+            }
+            if (TE == null) { TE = GetComponent<TraceEffect>(); }
+            if (TE != null)
+            {
+                TE.distance += 1.3f;
+            }
+        }
+    }
+
+    
 
 
 
@@ -307,13 +337,13 @@ public class Skill : MonoBehaviour
     {
         if (player != null)
         {
-            if (player.playerData.IsPassiveGetList[26] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.6f)
+            if (player.playerData.IsPassiveGetList[26])
             {
                 if (SkillTag != null)
                 {
                     foreach (Skill.SkillTagEnum i in SkillTag)
                     {
-                        if (i == Skill.SkillTagEnum.接触类) { target.EmptyToxicDone(1, 30); }
+                        if (i == Skill.SkillTagEnum.接触类) { target.EmptyToxicDone(1, 30 , 0.4f + (float)player.LuckPoint); }
                     }
                 }
             }

@@ -54,7 +54,7 @@ public class WillOWisp : Projectile
             if(other.tag == "Empty" && other.gameObject != empty.gameObject)
             {
                 Empty e = other.GetComponent<Empty>();
-                e.EmptyBurnDone(0.4f , 10f);
+                e.EmptyBurnDone(0.4f , 10f , 1);
                 Pokemon.PokemonHpChange(null, e.gameObject, 0, 1, 0, Type.TypeEnum.IgnoreType);
                 
             }

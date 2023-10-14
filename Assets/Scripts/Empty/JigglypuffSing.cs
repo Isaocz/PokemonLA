@@ -27,7 +27,7 @@ public class JigglypuffSing : MonoBehaviour
             }
         }   
         if(ParentEmpty.isEmptyInfatuationDone && (other.tag == "Empty") && other.gameObject != ParentEmpty.gameObject){
-            other.GetComponent<Empty>().EmptySleepDone(0.1f, 10);
+            other.GetComponent<Empty>().EmptySleepDone(0.1f, 10 ,1);
         }
     }
 

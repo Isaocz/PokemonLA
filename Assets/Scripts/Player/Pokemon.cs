@@ -27,6 +27,77 @@ public class Pokemon : MonoBehaviour
     protected float StateInvincileTimer = 0.0f;
     protected bool isStateInvincible = false;
 
+
+    //当前宝可梦处于青草场地中
+    public bool isInGrassyTerrain
+    {
+        get { return isinGrassyTerrain; }
+        set { isinGrassyTerrain = value; }
+    }
+    bool isinGrassyTerrain = false;
+
+    //当前宝可梦处于精神场地中Psychic Terrain
+    public bool isInPsychicTerrain
+    {
+        get { return isinPsychicTerrain; }
+        set { isinPsychicTerrain = value; }
+    }
+    bool isinPsychicTerrain = false;
+
+    //当前宝可梦处于电气场地中Electric Terrain
+    public bool isInElectricTerrain
+    {
+        get { return isinElectricTerrain; }
+        set { isinElectricTerrain = value; }
+    }
+    bool isinElectricTerrain = false;
+
+    //当前宝可梦处于薄雾场地中Misty Terrain
+    public bool isInMistyTerrain
+    {
+        get { return isinMistyTerrain; }
+        set { isinMistyTerrain = value; }
+    }
+    bool isinMistyTerrain = false;
+
+
+
+    //当前宝可梦处超级于青草场地中
+    public bool isInSuperGrassyTerrain
+    {
+        get { return isinSuperGrassyTerrain; }
+        set { isinSuperGrassyTerrain = value; }
+    }
+    bool isinSuperGrassyTerrain = false;
+
+    //当前宝可梦处于超级精神场地中Psychic Terrain
+    public bool isInSuperPsychicTerrain
+    {
+        get { return isinSuperPsychicTerrain; }
+        set { isinSuperPsychicTerrain = value; }
+    }
+    bool isinSuperPsychicTerrain = false;
+
+    //当前宝可梦处于超级电气场地中Electric Terrain
+    public bool isInSuperElectricTerrain
+    {
+        get { return isinSuperElectricTerrain; }
+        set { isinSuperElectricTerrain = value; }
+    }
+    bool isinSuperElectricTerrain = false;
+
+    //当前宝可梦处于超级薄雾场地中Misty Terrain
+    public bool isInSuperMistyTerrain
+    {
+        get { return isinSuperMistyTerrain; }
+        set { isinSuperMistyTerrain = value; }
+    }
+    bool isinSuperMistyTerrain = false;
+
+
+
+
+
     [Tooltip("pokemon主体的渲染组件集")]
     public List<SpriteRenderer> skinRenderers;
 
@@ -203,9 +274,8 @@ public class Pokemon : MonoBehaviour
     {
         
         if (GetComponent<Empty>() != null && isColdDown != 0) { FrozenPer += 0.25f * isColdDown; }
-        Debug.Log(FrozenPer);
         if (!isFrozenDef && Random.Range(0.0f , 1.0f) <= FrozenPer ) {
-            if (!isFrozenDone)
+            if (!isInMistyTerrain && !isFrozenDone)
             {
                 EmptyFrozenPointFloat += FrozenPoint * FrozenResistance;
                 if (!isFrozenStart && EmptyFrozenPointFloat < 1)
@@ -390,36 +460,39 @@ public class Pokemon : MonoBehaviour
 
     //===========================================================================敌人中毒的函数=====================================================================================
     //调用此函数时，如果还未开始中毒，开始中毒
-    public void EmptyToxicDone(float ToxicPoint , float ToxicTime)
+    public void EmptyToxicDone(float ToxicPoint , float ToxicTime , float ToxicPer)
     {
-        Empty EmptyObj = GetComponent<Empty>();
-        if (!isToxicDef && EmptyObj.EmptyType01 != Type.TypeEnum.Poison && EmptyObj.EmptyType01 != Type.TypeEnum.Steel && EmptyObj.EmptyType02 != Type.TypeEnum.Poison && EmptyObj.EmptyType02 != Type.TypeEnum.Steel && !isToxicDone)
+        if (!isToxicDef && Random.Range(0.0f, 1.0f) <= ToxicPer)
         {
-            ToxicPointFloat += ToxicPoint * ToxicResistance;
-            if (!isToxicStart && ToxicPointFloat < 1)
+            Empty EmptyObj = GetComponent<Empty>();
+            if (!isInMistyTerrain && !isToxicDef && EmptyObj.EmptyType01 != Type.TypeEnum.Poison && EmptyObj.EmptyType01 != Type.TypeEnum.Steel && EmptyObj.EmptyType02 != Type.TypeEnum.Poison && EmptyObj.EmptyType02 != Type.TypeEnum.Steel && !isToxicDone)
             {
-                playerUIState.StatePlus(3);
-                playerUIState.StateSlowUP(3, ToxicPointFloat);
-                isToxicStart = true;
-            }
-            else if (isToxicStart && ToxicPointFloat < 1)
-            {
-                playerUIState.StateSlowUP(3, ToxicPointFloat);
-            }
-            else if (ToxicPointFloat >= 1 && !isToxicDone)
-            {
-                if (!isToxicStart)
+                ToxicPointFloat += ToxicPoint * ToxicResistance;
+                if (!isToxicStart && ToxicPointFloat < 1)
                 {
                     playerUIState.StatePlus(3);
                     playerUIState.StateSlowUP(3, ToxicPointFloat);
                     isToxicStart = true;
                 }
-                isToxicDone = true;
-                playerUIState.StateSlowUP(3, ToxicPointFloat);
-                MarterialChangeToToxic();
-                Invoke("EmptyToxicRemove" , ToxicTime);
-                EmptyObj.SpAAbilityPoint /= 2;
+                else if (isToxicStart && ToxicPointFloat < 1)
+                {
+                    playerUIState.StateSlowUP(3, ToxicPointFloat);
+                }
+                else if (ToxicPointFloat >= 1 && !isToxicDone)
+                {
+                    if (!isToxicStart)
+                    {
+                        playerUIState.StatePlus(3);
+                        playerUIState.StateSlowUP(3, ToxicPointFloat);
+                        isToxicStart = true;
+                    }
+                    isToxicDone = true;
+                    playerUIState.StateSlowUP(3, ToxicPointFloat);
+                    MarterialChangeToToxic();
+                    Invoke("EmptyToxicRemove", ToxicTime);
+                    EmptyObj.SpAAbilityPoint /= 2;
 
+                }
             }
         }
     }
@@ -445,35 +518,38 @@ public class Pokemon : MonoBehaviour
 
     //===========================================================================敌人烧伤的函数=====================================================================================
     //调用此函数时，如果还未开始烧伤，开始烧伤
-    public void EmptyBurnDone(float BurnPoint , float BurnTime)
+    public void EmptyBurnDone(float BurnPoint , float BurnTime , float BurnPer)
     {
-        Empty EmptyObj = GetComponent<Empty>();
-        if (!isToxicDef && EmptyObj.EmptyType01 != Type.TypeEnum.Fire && EmptyObj.EmptyType02 != Type.TypeEnum.Fire && !isBurnDone)
+        if (!isBurnDef && Random.Range(0.0f, 1.0f) <= BurnPer)
         {
-            BurnPointFloat += BurnPoint * BurnResistance;
-            if (!isBurnStart && BurnPointFloat < 1)
+            Empty EmptyObj = GetComponent<Empty>();
+            if (!isInMistyTerrain && !isBurnDef && EmptyObj.EmptyType01 != Type.TypeEnum.Fire && EmptyObj.EmptyType02 != Type.TypeEnum.Fire && !isBurnDone)
             {
-                playerUIState.StatePlus(5);
-                playerUIState.StateSlowUP(5, BurnPointFloat);
-                isBurnStart = true;
-            }
-            else if (isBurnStart && BurnPointFloat < 1)
-            {
-                playerUIState.StateSlowUP(5, BurnPointFloat);
-            }
-            else if (BurnPointFloat >= 1 && !isBurnDone)
-            {
-                if (!isBurnStart)
+                BurnPointFloat += BurnPoint * BurnResistance;
+                if (!isBurnStart && BurnPointFloat < 1)
                 {
                     playerUIState.StatePlus(5);
                     playerUIState.StateSlowUP(5, BurnPointFloat);
                     isBurnStart = true;
                 }
-                isBurnDone = true;
-                playerUIState.StateSlowUP(5, BurnPointFloat);
-                MarterialChangeToBurn();
-                Invoke("EmptyBurnRemove", BurnTime);
-                EmptyObj.AtkAbilityPoint /= 2;
+                else if (isBurnStart && BurnPointFloat < 1)
+                {
+                    playerUIState.StateSlowUP(5, BurnPointFloat);
+                }
+                else if (BurnPointFloat >= 1 && !isBurnDone)
+                {
+                    if (!isBurnStart)
+                    {
+                        playerUIState.StatePlus(5);
+                        playerUIState.StateSlowUP(5, BurnPointFloat);
+                        isBurnStart = true;
+                    }
+                    isBurnDone = true;
+                    playerUIState.StateSlowUP(5, BurnPointFloat);
+                    MarterialChangeToBurn();
+                    Invoke("EmptyBurnRemove", BurnTime);
+                    EmptyObj.AtkAbilityPoint /= 2;
+                }
             }
         }
     }
@@ -495,34 +571,37 @@ public class Pokemon : MonoBehaviour
 
     //===========================================================================敌人睡眠的函数=====================================================================================
     //调用此函数时，如果还未开始睡眠，开始睡眠
-    public void EmptySleepDone(float SleepPoint, float SleepTime)
+    public void EmptySleepDone(float SleepPoint, float SleepTime , float SleepPer)
     {
-        Empty EmptyObj = GetComponent<Empty>();
-        if (!isSleepDef && !isSleepDone)
+        if (!isSleepDef && Random.Range(0.0f, 1.0f) <= SleepPer)
         {
-            SleepPointFloat += SleepPoint * SleepResistance;
-            if (!isSleepStart && SleepPointFloat < 1)
+            Empty EmptyObj = GetComponent<Empty>();
+            if (!isInMistyTerrain && !isSleepDef && !isSleepDone && !isInElectricTerrain)
             {
-                playerUIState.StatePlus(6);
-                playerUIState.StateSlowUP(6, SleepPointFloat);
-                isSleepStart = true;
-            }
-            else if (isSleepStart && SleepPointFloat < 1)
-            {
-                playerUIState.StateSlowUP(6, SleepPointFloat);
-            }
-            else if (SleepPointFloat >= 1 && !isSleepDone)
-            {
-                if (!isSleepStart)
+                SleepPointFloat += SleepPoint * SleepResistance;
+                if (!isSleepStart && SleepPointFloat < 1)
                 {
                     playerUIState.StatePlus(6);
                     playerUIState.StateSlowUP(6, SleepPointFloat);
                     isSleepStart = true;
                 }
-                isSleepDone = true;
-                playerUIState.StateSlowUP(6, SleepPointFloat);
-                MarterialChangeToSleep();
-                Invoke("EmptySleepRemove", SleepTime);
+                else if (isSleepStart && SleepPointFloat < 1)
+                {
+                    playerUIState.StateSlowUP(6, SleepPointFloat);
+                }
+                else if (SleepPointFloat >= 1 && !isSleepDone)
+                {
+                    if (!isSleepStart)
+                    {
+                        playerUIState.StatePlus(6);
+                        playerUIState.StateSlowUP(6, SleepPointFloat);
+                        isSleepStart = true;
+                    }
+                    isSleepDone = true;
+                    playerUIState.StateSlowUP(6, SleepPointFloat);
+                    MarterialChangeToSleep();
+                    Invoke("EmptySleepRemove", SleepTime);
+                }
             }
         }
     }
@@ -547,37 +626,40 @@ public class Pokemon : MonoBehaviour
 
     //===========================================================================敌人麻痹的函数=====================================================================================
     //调用此函数时，如果还未开始麻痹，开始麻痹
-    public void EmptyParalysisDone(float ParalysisPoint, float ParalysisTime)
+    public void EmptyParalysisDone(float ParalysisPoint, float ParalysisTime , float ParalysisPer)
     {
-        Empty EmptyObj = GetComponent<Empty>();
-        if (!isParalysisDef && EmptyObj.EmptyType01 != Type.TypeEnum.Electric && EmptyObj.EmptyType02 != Type.TypeEnum.Electric)
+        if (!isParalysisDef && Random.Range(0.0f, 1.0f) <= ParalysisPer + ((isInSuperElectricTerrain) ? 0.2f : 1))
         {
-            if (!isParalysisDone)
+            Empty EmptyObj = GetComponent<Empty>();
+            if (!isInMistyTerrain && !isParalysisDef && EmptyObj.EmptyType01 != Type.TypeEnum.Electric && EmptyObj.EmptyType02 != Type.TypeEnum.Electric)
             {
-                ParalysisPointFloat += ParalysisPoint * ParalysisResistance;
-                if (!isParalysisStart && ParalysisPointFloat < 1)
+                if (!isParalysisDone)
                 {
-                    playerUIState.StatePlus(4);
-                    playerUIState.StateSlowUP(4, ParalysisPointFloat);
-                    isParalysisStart = true;
-                }
-                else if (isParalysisStart && ParalysisPointFloat < 1)
-                {
-                    playerUIState.StateSlowUP(4, ParalysisPointFloat);
-                }
-                else if (ParalysisPointFloat >= 1 && !isParalysisDone)
-                {
-                    if (!isParalysisStart)
+                    ParalysisPointFloat += (ParalysisPoint + ((isInSuperElectricTerrain) ? 0.3f : 1)) * ParalysisResistance ;
+                    if (!isParalysisStart && ParalysisPointFloat < 1)
                     {
                         playerUIState.StatePlus(4);
                         playerUIState.StateSlowUP(4, ParalysisPointFloat);
                         isParalysisStart = true;
                     }
-                    isParalysisDone = true;
-                    playerUIState.StateSlowUP(4, ParalysisPointFloat);
-                    MarterialChangeToParalysis();
-                    speed *= 0.8f;
-                    Invoke("EmptyParalysisRemove", ParalysisTime);
+                    else if (isParalysisStart && ParalysisPointFloat < 1)
+                    {
+                        playerUIState.StateSlowUP(4, ParalysisPointFloat);
+                    }
+                    else if (ParalysisPointFloat >= 1 && !isParalysisDone)
+                    {
+                        if (!isParalysisStart)
+                        {
+                            playerUIState.StatePlus(4);
+                            playerUIState.StateSlowUP(4, ParalysisPointFloat);
+                            isParalysisStart = true;
+                        }
+                        isParalysisDone = true;
+                        playerUIState.StateSlowUP(4, ParalysisPointFloat);
+                        MarterialChangeToParalysis();
+                        speed *= 0.8f;
+                        Invoke("EmptyParalysisRemove", ParalysisTime);
+                    }
                 }
             }
         }
@@ -638,7 +720,7 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未混乱，状态变为混论
     public void EmptyConfusion(float ConfusionTimer, float ConfusionPoint)
     {
-        if (!isEmptyConfusionDone)
+        if (!isInMistyTerrain && !isEmptyConfusionDone)
         {
             EmptyConfusionPoint += ConfusionPoint * OtherStateResistance;
             //Debug.Log(EmptyConfusionPoint);
@@ -1352,47 +1434,47 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始中毒，开始中毒
     public void ToxicFloatPlus(float ToxicPoint)
     {
-        if (!isStateInvincible && !isToxicDef)
-        {
-            ToxicPointFloat += ToxicPoint;
-            ToxicPointFloat = (ToxicPointFloat > 1 ? 1 : ToxicPointFloat);
-            if (!isToxicStart && ToxicPointFloat < 1)
+            if (!isInMistyTerrain && !isStateInvincible && !isToxicDef)
             {
-                playerUIState.StatePlus(3);
-                playerUIState.StateSlowUP(3, ToxicPointFloat);
-                isToxicStart = true;
-            }
-            else if (isToxicStart && ToxicPointFloat < 1)
-            {
-                playerUIState.StateSlowUP(3, ToxicPointFloat);
-            }
-            else if (ToxicPointFloat >= 1 && !isToxicDone)
-            {
-                if (!isToxicStart)
+                ToxicPointFloat += ToxicPoint;
+                ToxicPointFloat = (ToxicPointFloat > 1 ? 1 : ToxicPointFloat);
+                if (!isToxicStart && ToxicPointFloat < 1)
                 {
                     playerUIState.StatePlus(3);
                     playerUIState.StateSlowUP(3, ToxicPointFloat);
                     isToxicStart = true;
                 }
-                isToxicDone = true;
-                playerUIState.StateSlowUP(3, ToxicPointFloat);
-                if (transform.GetComponent<PlayerControler>() != null)
+                else if (isToxicStart && ToxicPointFloat < 1)
                 {
-                    PlayerControler player = transform.GetComponent<PlayerControler>();
-                    player.KnockOutPoint = 1;
-                    //player.ChangeHp((float)(-player.maxHp / 20), 0, 0);
-                    player.playerData.SpABounsAlways--;
-                    SpAHWBeforeChange = player.SpAAbilityPoint * 0.3f;
-                    player.playerData.SpAHardWorkAlways -= SpAHWBeforeChange;
-                    player.ReFreshAbllityPoint();
+                    playerUIState.StateSlowUP(3, ToxicPointFloat);
                 }
-                MarterialChangeToToxic();
-            }
-            if(GetComponent<PlayerControler>() != null)
-            {
-                isStateInvincible = true;
-                StateInvincileTimer = TimeStateInvincible;
-            }
+                else if (ToxicPointFloat >= 1 && !isToxicDone)
+                {
+                    if (!isToxicStart)
+                    {
+                        playerUIState.StatePlus(3);
+                        playerUIState.StateSlowUP(3, ToxicPointFloat);
+                        isToxicStart = true;
+                    }
+                    isToxicDone = true;
+                    playerUIState.StateSlowUP(3, ToxicPointFloat);
+                    if (transform.GetComponent<PlayerControler>() != null)
+                    {
+                        PlayerControler player = transform.GetComponent<PlayerControler>();
+                        player.KnockOutPoint = 1;
+                        //player.ChangeHp((float)(-player.maxHp / 20), 0, 0);
+                        player.playerData.SpABounsAlways--;
+                        SpAHWBeforeChange = player.SpAAbilityPoint * 0.3f;
+                        player.playerData.SpAHardWorkAlways -= SpAHWBeforeChange;
+                        player.ReFreshAbllityPoint();
+                    }
+                    MarterialChangeToToxic();
+                }
+                if (GetComponent<PlayerControler>() != null)
+                {
+                    isStateInvincible = true;
+                    StateInvincileTimer = TimeStateInvincible;
+                }
         }
     }
 
@@ -1443,9 +1525,9 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始中毒，开始中毒
     public void ParalysisFloatPlus(float ParalysisPoint)
     {
-        if (!isStateInvincible && !isParalysisDef)
+        if (!isInMistyTerrain && !isStateInvincible && !isParalysisDef)
         {
-            ParalysisPointFloat += ParalysisPoint;
+            ParalysisPointFloat += ParalysisPoint + ((isInSuperElectricTerrain) ? 0.3f : 1);
             ParalysisPointFloat = (ParalysisPointFloat > 1 ? 1 : ParalysisPointFloat);
 
             if (!isParalysisStart && ParalysisPointFloat < 1)
@@ -1544,7 +1626,7 @@ public class Pokemon : MonoBehaviour
     public void BurnFloatPlus(float BurnPoint)
     {
 
-        if (!isStateInvincible && !isBurnDef)
+        if (!isInMistyTerrain && !isStateInvincible && !isBurnDef)
         {
             BurnPointFloat += BurnPoint;
             BurnPointFloat = (BurnPointFloat > 1 ? 1 : BurnPointFloat);
@@ -1629,7 +1711,7 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始中毒，开始中毒
     public void SleepFloatPlus(float SleepPoint)
     {
-        if (!isStateInvincible && !isSleepDef)
+        if (!isInMistyTerrain && !isStateInvincible && !isSleepDef && !isInElectricTerrain)
         {
             SleepPointFloat += SleepPoint;
             SleepPointFloat = (SleepPointFloat > 1 ? 1 : SleepPointFloat);
@@ -1711,7 +1793,7 @@ public class Pokemon : MonoBehaviour
     public void ConfusionFloatPlus(float ConfusionPoint)
     {
 
-        if (!isStateInvincible && !isConfusionDef && !isConfusionDone)
+        if (!isInMistyTerrain && !isStateInvincible && !isConfusionDef && !isConfusionDone)
         {
             ConfusionPointFloat += ConfusionPoint;
             ConfusionPointFloat = (ConfusionPointFloat > 1 ? 1 : ConfusionPointFloat);
@@ -1843,6 +1925,16 @@ public class Pokemon : MonoBehaviour
         int AttackerSpA = 1;
         int AttackerLevel = 1;
         float EmptyTypeAlpha = 1;
+
+        //和场地有关的伤害加成
+        float TerrainAlpha = 1;
+        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInGrassyTerrain && SkillType == Type.TypeEnum.Grass) { TerrainAlpha *= 1.3f; }
+        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInElectricTerrain && SkillType == Type.TypeEnum.Electric) { TerrainAlpha *= 1.3f; }
+        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInPsychicTerrain && SkillType == Type.TypeEnum.Psychic) { TerrainAlpha *= 1.3f; }
+        if (Attacked != null && Attacked.GetComponent<Pokemon>() != null && Attacked.GetComponent<Pokemon>().isInMistyTerrain && SkillType == Type.TypeEnum.Dragon) { TerrainAlpha *= 0.5f; }
+        if (Attacked != null && Attacked.GetComponent<Substitute>() != null && Attacked.GetComponent<Substitute>().isInMistyTerrain && SkillType == Type.TypeEnum.Dragon) { TerrainAlpha *= 0.5f; }
+
+
         if (Attacker != null)
         {
             
@@ -1877,16 +1969,13 @@ public class Pokemon : MonoBehaviour
                 if (SkillType != Type.TypeEnum.IgnoreType)
                 {
                     EmptyAttacked.EmptyHpChange(
-                    ((AtkPower == 0) ? 0 : (Mathf.Clamp((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2) , 1 , 10000))),
-                    ((SpAPower == 0) ? 0 : (Mathf.Clamp((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.SpdAbilityPoint * WeatherSpDAlpha + 2) , 1 , 10000))),
+                    ((AtkPower == 0) ? 0 : (Mathf.Clamp((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha * TerrainAlpha  * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2) , 1 , 10000))),
+                    ((SpAPower == 0) ? 0 : (Mathf.Clamp((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha * TerrainAlpha  * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.SpdAbilityPoint * WeatherSpDAlpha + 2) , 1 , 10000))),
                     (int)SkillType);
-                    if (SpAPower == 0)
-                    {
-                        Debug.Log((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) + " + " + (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2));
-                    }
-                    else if (AtkPower == 0) {
-                        Debug.Log((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) + " + " + (250 * EmptyAttacked.SpdAbilityPoint * WeatherDefAlpha + 2));
-                    }
+                    
+                    //if (SpAPower == 0){ Debug.Log((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) + " + " + (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2)); }
+                    //else if (AtkPower == 0) {  Debug.Log((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) + " + " + (250 * EmptyAttacked.SpdAbilityPoint * WeatherDefAlpha + 2)); }
+
                 }
                 else
                 {
@@ -1904,8 +1993,8 @@ public class Pokemon : MonoBehaviour
             if (HpUpValue == 0)
             {
                 PlayerAttacked.ChangeHp(
-                         ((AtkPower == 0) ? 0 : ( Mathf.Clamp((-AtkPower * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),
-                         ((SpAPower == 0) ? 0 : ( Mathf.Clamp((-SpAPower * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),
+                         ((AtkPower == 0) ? 0 : ( Mathf.Clamp((-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),
+                         ((SpAPower == 0) ? 0 : ( Mathf.Clamp((-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),
                         (int)SkillType);
             }
             else
@@ -1919,8 +2008,8 @@ public class Pokemon : MonoBehaviour
             if (HpUpValue == 0)
             {
                 SubstotuteAttacked.SubStituteChangeHp(
-                     ((AtkPower == 0) ? 0 : Mathf.Clamp( (-AtkPower * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250) , -10000 , -1 ) ),
-                     ((SpAPower == 0) ? 0 : Mathf.Clamp( (-SpAPower * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250) , -10000 , -1 ) ),
+                     ((AtkPower == 0) ? 0 : Mathf.Clamp( (-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250) , -10000 , -1 ) ),
+                     ((SpAPower == 0) ? 0 : Mathf.Clamp( (-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250) , -10000 , -1 ) ),
                     (int)SkillType);
             }
         }
