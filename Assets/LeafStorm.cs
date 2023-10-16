@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LeafStorm : Skill
 {
-    public float zAngle;
+    public SubLeafStorm SubLS;
     private bool isDown;
     // Start is called before the first frame update
     void Start()
@@ -16,10 +16,9 @@ public class LeafStorm : Skill
     void Update()
     {
         StartExistenceTimer();
-        transform.RotateAround(transform.position, Vector3.forward, zAngle);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Empty"))
         {
@@ -27,17 +26,23 @@ public class LeafStorm : Skill
             if (target != null)
             {
                 HitAndKo(target);
-                if (!isDown)
+                if (!isDown && player.playerData.SpABounsJustOneRoom > -8)
                 {
-                    if (SkillFrom == 0)
-                    {
-                        player.playerData.SpABounsJustOneRoom -= 2;
-                    }
-                    else if (SkillFrom == 2)
-                    {
-                        player.playerData.SpABounsJustOneRoom -= 1;
-                    }
+                    player.playerData.SpABounsJustOneRoom -= 2;
+                    player.ReFreshAbllityPoint();
                     isDown = true;
+                }
+            }
+        }
+        if (SkillFrom == 2) {
+            if (collision.CompareTag("Grass"))
+            {
+                NormalGress n = collision.GetComponent<NormalGress>();
+                GressPlayerINOUT g = collision.GetComponent<GressPlayerINOUT>();
+                if (collision.gameObject.tag == "Grass")
+                {
+                    if (n != null && !n.isDie) { Instantiate(SubLS, collision.transform.position, transform.rotation).GetComponent<SubLeafStorm>().player = player; n.GrassDie(); }
+                    if (g != null && !g.isDie) { Instantiate(SubLS, collision.transform.position, transform.rotation).GetComponent<SubLeafStorm>().player = player; g.GrassDie(); }
                 }
             }
         }

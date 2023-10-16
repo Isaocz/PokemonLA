@@ -16,17 +16,33 @@ public class DazzlingGleam : Skill
         StartExistenceTimer();
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision != null && collision.tag == "Empty")
+        {
+            Empty target = collision.GetComponent<Empty>();
+            if (target != null) {
+                HitAndKo(target);
+            }
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision != null && collision.tag == "Empty")
         {
             Empty target = collision.GetComponent<Empty>();
-            //强化会造成混乱效果1秒
-            if(SkillFrom == 2)
+            if (target != null)
             {
-                target.EmptyConfusion(1f, 1);
+                if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.5f)
+                {
+                    player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.蓝色增加特攻型);
+                }
+                else
+                {
+                    player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.浅粉色普通型);
+                }
             }
-            HitAndKo(target);
         }
     }
 }

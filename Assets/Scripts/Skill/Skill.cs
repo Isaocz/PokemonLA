@@ -48,6 +48,7 @@ public class Skill : MonoBehaviour
 
     //代表会心一击等级的变量
     public int CTLevel;
+    public int CTDamage;
     //表示该技能是否经过PPUP
     public bool isPPUP
     {
@@ -72,7 +73,7 @@ public class Skill : MonoBehaviour
     public enum SkillTagEnum
     {
         接触类,非接触类,爪类,牙类,声音类,连续多次使用类,恢复HP类,吸取HP类,降低使用者能力类,反作用力伤害类,爆炸类,
-        拳类,波动和波导类,粉末类,球和弹类,心灵攻击类,跳舞类,风类,切割类,天气类,场地类,防住类,压击类,绑紧类,雾类,脚踢类,
+        拳类,波动和波导类,粉末类,球和弹类,心灵攻击类,跳舞类,风类,切割类,天气类,场地类,防住类,压击类,绑紧类,雾类,脚踢类,激光类,
     }
 
     //表示技能生成时是否生成于玩家所面对方向，如为Fales生成在玩家所面对的方向，如为true生成在玩家位置（多用于自我buff类技能）
@@ -256,12 +257,12 @@ public class Skill : MonoBehaviour
                             Transform notFollowBaby = Baby.Find("NotFollowBaby");
                             GameObject bulletGraze = notFollowBaby.Find("BulletGraze(Clone)").gameObject;
                             float dmgImprovement = bulletGraze.GetComponent<BulletGraze>().DamageImprovement;
-                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * 1.5f * (Mathf.Pow(1.2f, CTLevel) * dmgImprovement), 0, (Type.TypeEnum)SkillType);
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * 1.5f * (Mathf.Pow(1.2f, CTDamage) * dmgImprovement), 0, (Type.TypeEnum)SkillType);
                             GetCTEffect(target);
                         }
                         else
                         {
-                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * 1.5f * (Mathf.Pow(1.2f, CTLevel)), 0, (Type.TypeEnum)SkillType);
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * 1.5f * (Mathf.Pow(1.2f, CTDamage)), 0, (Type.TypeEnum)SkillType);
                             GetCTEffect(target);
                             //Debug.Log(player);
                         }
@@ -305,12 +306,12 @@ public class Skill : MonoBehaviour
                             Transform notFollowBaby = Baby.Find("NotFollowBaby");
                             GameObject bulletGraze = notFollowBaby.Find("BulletGraze(Clone)").gameObject;
                             float dmgImprovement = bulletGraze.GetComponent<BulletGraze>().DamageImprovement;
-                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * 1.5f * (Mathf.Pow(1.2f, CTLevel) * dmgImprovement), 0, 0, (Type.TypeEnum)SkillType);
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * 1.5f * (Mathf.Pow(1.2f, CTDamage) * dmgImprovement), 0, 0, (Type.TypeEnum)SkillType);
                             GetCTEffect(target);
                         }
                         else
                         {
-                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * 1.5f * (Mathf.Pow(1.2f, CTLevel)), 0, 0, (Type.TypeEnum)SkillType);
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * 1.5f * (Mathf.Pow(1.2f, CTDamage)), 0, 0, (Type.TypeEnum)SkillType);
                             GetCTEffect(target);
                             //Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? (( target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1 ) : 1)) ) + 2, 0, SkillType);
                         }

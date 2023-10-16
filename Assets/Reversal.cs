@@ -30,10 +30,10 @@ public class Reversal : Skill
     {
         if (PlayerHPPer >= 0.6875f) { Damage = 20; }
         else if (PlayerHPPer >= 0.3542f && PlayerHPPer < 0.6875f) { Damage = 40; if (SkillFrom == 2) { CTLevel++; } }
-        else if (PlayerHPPer >= 0.2083f && PlayerHPPer < 0.3542f) { Damage = 80; if (SkillFrom == 2) { CTLevel++; } }
-        else if (PlayerHPPer >= 0.1042f && PlayerHPPer < 0.2083f) { Damage = 100; if (SkillFrom == 2) { CTLevel++; } }
-        else if (PlayerHPPer >= 0.0417f && PlayerHPPer < 0.1042f) { Damage = 150; if (SkillFrom == 2) { CTLevel += 2; } }
-        else if (PlayerHPPer < 0.0417f) { Damage = 200; if (SkillFrom == 2) { CTLevel += 2; } }
+        else if (PlayerHPPer >= 0.2083f && PlayerHPPer < 0.3542f) { Damage = 80; if (SkillFrom == 2) { CTLevel++; CTDamage++; } }
+        else if (PlayerHPPer >= 0.1042f && PlayerHPPer < 0.2083f) { Damage = 100; if (SkillFrom == 2) { CTLevel++; CTDamage++; } }
+        else if (PlayerHPPer >= 0.0417f && PlayerHPPer < 0.1042f) { Damage = 150; if (SkillFrom == 2) { CTLevel += 2; CTDamage++; } }
+        else if (PlayerHPPer < 0.0417f) { Damage = 200; if (SkillFrom == 2) { CTLevel += 2; CTDamage += 2; } }
     }
 
     //当飞弹与目标碰撞时，如果目标时敌人，获取敌人的血量，并使敌人扣血

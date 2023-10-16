@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class UIKeyBoard : MonoBehaviour
 {
+
+    public GameObject SettingPanel;
+
     public static UIKeyBoard instance;
 
     public Text skill1KeyText;
@@ -28,6 +31,11 @@ public class UIKeyBoard : MonoBehaviour
     {
         instance = this;
         ResetRegister();
+    }
+
+    private void Start()
+    {
+        SettingPanel.SetActive(false);
     }
 
     private void Update()

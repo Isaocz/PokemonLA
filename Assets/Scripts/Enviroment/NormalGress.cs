@@ -7,6 +7,7 @@ public class NormalGress : MonoBehaviour
 
     Animator animator;
     PlayerControler player;
+    public bool isDie;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +54,7 @@ public class NormalGress : MonoBehaviour
 
     public void GrassDie()
     {
+        isDie = true;
         animator.SetTrigger("Die");
         transform.GetChild(1).gameObject.SetActive(true);
         transform.GetChild(1).parent = transform.parent;

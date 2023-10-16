@@ -55,6 +55,7 @@ public class SuperPower : Skill
                     player.playerData.DefBounsJustOneRoom -= N;
                     player.ReFreshAbllityPoint();
                     CTLevel += N;
+                    CTDamage += N;
                     HitAndKo(target);
                     
                 }
