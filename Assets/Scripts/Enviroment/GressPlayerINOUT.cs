@@ -11,6 +11,7 @@ public class GressPlayerINOUT : MonoBehaviour
     public GameObject StartDust;
     bool isVisit;
     PlayerControler player;
+    public bool isDie;
 
     // Start is called before the first frame update
     void Start()
@@ -66,6 +67,7 @@ public class GressPlayerINOUT : MonoBehaviour
 
     public void GrassDie()
     {
+        isDie = true;
         animator.SetTrigger("Die");
         transform.GetChild(1).gameObject.SetActive(true);
     }

@@ -1363,7 +1363,7 @@ public class Pokemon : MonoBehaviour
     //===========================================================================改变速度的函数=====================================================================================
 
     //一个变量代表速度是否被改变，一个代表改变的倍率
-    bool isSpeedChange;
+    public bool isSpeedChange;
 
     //调用此函数时，如果速度还未被改变，改变速度并改变颜色，状态变为被改变
     public void SpeedChange()
@@ -1419,6 +1419,72 @@ public class Pokemon : MonoBehaviour
     }
 
     //===========================================================================改变速度的函数=====================================================================================
+
+
+    //===========================================================================冰冻的函数=====================================================================================
+
+
+    //一个变量代表是否冰冻，一个代表冰冻的程度
+    public bool isPlayerFrozenDone;
+    public bool isPlayerFrozenStart;
+    public float PlayerFrozenPointFloat;
+
+    //调用此函数时，如果还未开始冰冻，开始冰冻
+    public void PlayerFrozenFloatPlus(float FrozenPoint)
+    {
+        if (!isInMistyTerrain && !isStateInvincible && !isFrozenDef)
+        {
+            PlayerFrozenPointFloat += FrozenPoint;
+            PlayerFrozenPointFloat = (PlayerFrozenPointFloat > 1 ? 1 : PlayerFrozenPointFloat);
+            if (!isPlayerFrozenStart && PlayerFrozenPointFloat < 1)
+            {
+                playerUIState.StatePlus(2);
+                playerUIState.StateSlowUP(2, PlayerFrozenPointFloat);
+                isPlayerFrozenStart = true;
+            }
+            else if (isPlayerFrozenStart && PlayerFrozenPointFloat < 1)
+            {
+                playerUIState.StateSlowUP(3, PlayerFrozenPointFloat);
+            }
+            else if (PlayerFrozenPointFloat >= 1 && !isPlayerFrozenDone)
+            {
+                if (!isPlayerFrozenStart)
+                {
+                    playerUIState.StatePlus(2);
+                    playerUIState.StateSlowUP(2, PlayerFrozenPointFloat);
+                    isPlayerFrozenStart = true;
+                }
+                isPlayerFrozenDone = true;
+                playerUIState.StateSlowUP(2, PlayerFrozenPointFloat);
+                MarterialChangeToFrozen();
+            }
+            if (GetComponent<PlayerControler>() != null)
+            {
+                isStateInvincible = true;
+                StateInvincileTimer = TimeStateInvincible;
+            }
+        }
+    }
+
+    //只可被上一个函数延迟调用，代表解冻的函数
+    public void PlayerFrozenRemove()
+    {
+        if (isPlayerFrozenStart)
+        {
+            PlayerFrozenPointFloat = 0;
+            playerUIState.StateSlowUP(2, 0);
+            playerUIState.StateDestory(2);
+            isPlayerFrozenStart = false;
+            isPlayerFrozenDone = false;
+            MarterialChangeToNurmal();
+
+        }
+    }
+
+    //===========================================================================中毒的函数=====================================================================================
+
+
+
 
 
     //===========================================================================中毒的函数=====================================================================================

@@ -232,6 +232,7 @@ public class PlayerControler : Pokemon
     public int NatureIndex;
 
     public bool isCanNotMove;
+    public bool isCanNotTurnDirection;
     public bool isInvincibleAlways;
 
     bool isDie;
@@ -715,8 +716,11 @@ public class PlayerControler : Pokemon
                     look.Set(0, 1);
                 }
             }
-            animator.SetFloat("LookX", look.x);
-            animator.SetFloat("LookY", look.y);
+
+            if (!isCanNotTurnDirection) {
+                animator.SetFloat("LookX", look.x);
+                animator.SetFloat("LookY", look.y);
+            }
             animator.SetFloat("Speed", move.magnitude);
         }
     }

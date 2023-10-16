@@ -95,18 +95,18 @@ public class BlizzardCastform : Projectile
         else
         {
             if (!empty.isEmptyConfusionDone) {
-                b4.gameObject.SetActive(true);
                 if (b1 != null) { b1.transform.position = Quaternion.AngleAxis(RangeTimer * (empty.isSilence ? 0.4f : 1) * (isDoubleTeam ? 80 : 110) + 0, Vector3.forward) * Vector3.right * 4f + transform.position; }
                 if (b2 != null) { b2.transform.position = Quaternion.AngleAxis(RangeTimer * (empty.isSilence ? 0.4f : 1) * (isDoubleTeam ? 80 : 110) + 90, Vector3.forward) * Vector3.right * 4f + transform.position; }
                 if (b3 != null) { b3.transform.position = Quaternion.AngleAxis(RangeTimer * (empty.isSilence ? 0.4f : 1) * (isDoubleTeam ? 80 : 110) + 180, Vector3.forward) * Vector3.right * 4f + transform.position; }
-                if (b4 != null) { b4.transform.position = Quaternion.AngleAxis(RangeTimer * (empty.isSilence ? 0.4f : 1) * (isDoubleTeam ? 80 : 110) + 270, Vector3.forward) * Vector3.right * 4f + transform.position; }
+                if (b4 != null) { b4.gameObject.SetActive(true); b4.transform.position = Quaternion.AngleAxis(RangeTimer * (empty.isSilence ? 0.4f : 1) * (isDoubleTeam ? 80 : 110) + 270, Vector3.forward) * Vector3.right * 4f + transform.position; }
             }
             else
             {
-                b4.gameObject.SetActive(false);
                 if (b1 != null) { b1.transform.position = Quaternion.AngleAxis(RangeTimer * (empty.isSilence ? 0.4f : 1) * (isDoubleTeam ? 80 : 110) + -30, Vector3.forward) * Vector3.right * 4f + transform.position; }
                 if (b2 != null) { b2.transform.position = Quaternion.AngleAxis(RangeTimer * (empty.isSilence ? 0.4f : 1) * (isDoubleTeam ? 80 : 110) + 90, Vector3.forward) * Vector3.right * 4f + transform.position; }
                 if (b3 != null) { b3.transform.position = Quaternion.AngleAxis(RangeTimer * (empty.isSilence ? 0.4f : 1) * (isDoubleTeam ? 80 : 110) + 210, Vector3.forward) * Vector3.right * 4f + transform.position; }
+                if (b4 != null) { b4.gameObject.SetActive(false); }
+
             }
         }
         if (RangeTimer > 18) { Destroy(gameObject); }
