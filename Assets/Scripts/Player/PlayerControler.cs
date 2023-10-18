@@ -906,14 +906,16 @@ public class PlayerControler : Pokemon
         else
         {
             Type.TypeEnum enumVaue = (Type.TypeEnum)SkillType;
-            ChangePoint = ChangePoint * ( (Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water )? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f ) : 1 )
+            ChangePoint = ChangePoint * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
                 * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
                 * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
-                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)
+                * (playerData.IsPassiveGetList[58] ? 1.5f : 1f);
             ChangePointSp = ChangePointSp * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
                 * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
                 * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
-                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)
+                * (playerData.IsPassiveGetList[58] ? 1.5f : 1f);
             ChangePoint = ChangePoint * (isReflect ? 0.75f : 1);
             ChangePointSp = ChangePointSp * (isLightScreen ? 0.75f : 1);
             //如果无敌结束，不无敌的话变为不无敌状态，无敌时间计时器时间设置为无敌时间
