@@ -21,11 +21,11 @@ public class BodySlamCollider : MonoBehaviour
                 ParentBodySlam.HitAndKo(e);
                 if (ParentBodySlam.SkillFrom == 2)
                 {
-                    e.EmptyParalysisDone(1, 10, 0.5f - ((float)ParentBodySlam.player.LuckPoint / 30));
+                    e.EmptyParalysisDone(1, 10, 0.5f + ((float)ParentBodySlam.player.LuckPoint / 30));
                 }
                 else
                 {
-                    e.EmptyParalysisDone(1, 10, 0.3f - ((float)ParentBodySlam.player.LuckPoint / 30));
+                    e.EmptyParalysisDone(1, 10, 0.3f + ((float)ParentBodySlam.player.LuckPoint / 30));
                 }
 
             }

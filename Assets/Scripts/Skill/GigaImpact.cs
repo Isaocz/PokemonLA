@@ -66,7 +66,5 @@ public class GigaImpact : Skill
     private void OnDestroy()
     {
         player.isCanNotMove = false;
-
-
     }
 }

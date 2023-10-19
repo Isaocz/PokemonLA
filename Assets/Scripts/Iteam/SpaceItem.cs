@@ -8,6 +8,8 @@ public class SpaceItem : IteamPickUp
     public Sprite UIImage;
     public int ItemNum;
 
+    public int FlingDamage;
+
 
 
     private void FixedUpdate()
