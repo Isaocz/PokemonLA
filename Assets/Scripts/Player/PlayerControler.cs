@@ -463,7 +463,7 @@ public class PlayerControler : Pokemon
                 }
             }
             //如果技能1在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
-            if (isSkill01CD && ((Skill01.useSkillConditions(this))))
+            if (isSkill01CD  /* && ((Skill01.useSkillConditions(this))) */ )
             {
                 Skill01Timer += Time.deltaTime;
                 if (Skill01Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
@@ -488,7 +488,7 @@ public class PlayerControler : Pokemon
                 }
             }
             //如果技能2在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
-            if (isSkill02CD && ((Skill02.useSkillConditions(this))))
+            if (isSkill02CD  /*  && ((Skill02.useSkillConditions(this))) */  )
             {
                 Skill02Timer += Time.deltaTime;
                 if (Skill02Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
@@ -513,7 +513,7 @@ public class PlayerControler : Pokemon
                 }
             }
             //如果技能3在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
-            if (isSkill03CD && ((Skill03.useSkillConditions(this))))
+            if (isSkill03CD  /*  && ((Skill03.useSkillConditions(this)))  */  )
             {
                 Skill03Timer += Time.deltaTime;
                 if (Skill03Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
@@ -525,20 +525,23 @@ public class PlayerControler : Pokemon
 
             //当按下r键时发射skill04
 
-            if (Input.GetKeyDown(UIKeyBoard.GetKeybind("Skill4")) && isSkill04CD == false && Skill04 != null && !isSkill)
-            {
-                if ((Skill04.useSkillConditions(this)))
+            if (Input.GetKeyDown(UIKeyBoard.GetKeybind("Skill4")) && isSkill04CD == false) {
+                if (Input.GetKeyDown(UIKeyBoard.GetKeybind("Skill4")) && isSkill04CD == false && Skill04 != null && !isSkill)
                 {
-                    //当动画进行到第8帧时会发射技能4，并技能4进入CD
-                    animator.SetTrigger("Skill");
-                    isSkill04CD = true;
-                    isSkill = true;
-                    isSkill04lunch = true;
-                    skillBar04.isCDStart = true;
+                    
+                    if ((Skill04.useSkillConditions(this)))
+                    {
+                        //当动画进行到第8帧时会发射技能4，并技能4进入CD
+                        animator.SetTrigger("Skill");
+                        isSkill04CD = true;
+                        isSkill = true;
+                        isSkill04lunch = true;
+                        skillBar04.isCDStart = true;
+                    }
                 }
             }
             //如果技能1在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
-            if (isSkill04CD && ((Skill04.useSkillConditions(this))))
+            if (isSkill04CD  /*  && ((Skill04.useSkillConditions(this)))  */ )
             {
                 Skill04Timer += Time.deltaTime;
                 if (Skill04Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1) )* (1 - ((float)SpeedAbilityPoint / 500)))

@@ -94,7 +94,8 @@ public class Pokemon : MonoBehaviour
     }
     bool isinSuperMistyTerrain = false;
 
-
+    //处于神秘守护状态
+    public bool isSafeguard;
 
 
 
@@ -628,7 +629,7 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始麻痹，开始麻痹
     public void EmptyParalysisDone(float ParalysisPoint, float ParalysisTime , float ParalysisPer)
     {
-        if (!isParalysisDef && Random.Range(0.0f, 1.0f) <= ParalysisPer + ((isInSuperElectricTerrain) ? 0.2f : 1))
+        if (!isParalysisDef && Random.Range(0.0f, 1.0f) <= ParalysisPer + ((isInSuperElectricTerrain) ? 0.2f : 0))
         {
             Empty EmptyObj = GetComponent<Empty>();
             if (!isInMistyTerrain && !isParalysisDef && EmptyObj.EmptyType01 != Type.TypeEnum.Electric && EmptyObj.EmptyType02 != Type.TypeEnum.Electric)
@@ -1432,7 +1433,7 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始冰冻，开始冰冻
     public void PlayerFrozenFloatPlus(float FrozenPoint)
     {
-        if (!isInMistyTerrain && !isStateInvincible && !isFrozenDef)
+        if (!isInMistyTerrain && !isStateInvincible && !isFrozenDef && !isSafeguard)
         {
             PlayerFrozenPointFloat += FrozenPoint;
             PlayerFrozenPointFloat = (PlayerFrozenPointFloat > 1 ? 1 : PlayerFrozenPointFloat);
@@ -1500,7 +1501,7 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始中毒，开始中毒
     public void ToxicFloatPlus(float ToxicPoint)
     {
-            if (!isInMistyTerrain && !isStateInvincible && !isToxicDef)
+            if (!isInMistyTerrain && !isStateInvincible && !isToxicDef && !isSafeguard)
             {
                 ToxicPointFloat += ToxicPoint;
                 ToxicPointFloat = (ToxicPointFloat > 1 ? 1 : ToxicPointFloat);
@@ -1591,7 +1592,7 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始中毒，开始中毒
     public void ParalysisFloatPlus(float ParalysisPoint)
     {
-        if (!isInMistyTerrain && !isStateInvincible && !isParalysisDef)
+        if (!isInMistyTerrain && !isStateInvincible && !isParalysisDef && !isSafeguard)
         {
             ParalysisPointFloat += ParalysisPoint + ((isInSuperElectricTerrain) ? 0.3f : 1);
             ParalysisPointFloat = (ParalysisPointFloat > 1 ? 1 : ParalysisPointFloat);
@@ -1692,7 +1693,7 @@ public class Pokemon : MonoBehaviour
     public void BurnFloatPlus(float BurnPoint)
     {
 
-        if (!isInMistyTerrain && !isStateInvincible && !isBurnDef)
+        if (!isInMistyTerrain && !isStateInvincible && !isBurnDef && !isSafeguard)
         {
             BurnPointFloat += BurnPoint;
             BurnPointFloat = (BurnPointFloat > 1 ? 1 : BurnPointFloat);
@@ -1777,7 +1778,7 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始中毒，开始中毒
     public void SleepFloatPlus(float SleepPoint)
     {
-        if (!isInMistyTerrain && !isStateInvincible && !isSleepDef && !isInElectricTerrain)
+        if (!isInMistyTerrain && !isStateInvincible && !isSleepDef && !isInElectricTerrain && !isSafeguard)
         {
             SleepPointFloat += SleepPoint;
             SleepPointFloat = (SleepPointFloat > 1 ? 1 : SleepPointFloat);
@@ -1859,7 +1860,7 @@ public class Pokemon : MonoBehaviour
     public void ConfusionFloatPlus(float ConfusionPoint)
     {
 
-        if (!isInMistyTerrain && !isStateInvincible && !isConfusionDef && !isConfusionDone)
+        if (!isInMistyTerrain && !isStateInvincible && !isConfusionDef && !isConfusionDone && !isSafeguard)
         {
             ConfusionPointFloat += ConfusionPoint;
             ConfusionPointFloat = (ConfusionPointFloat > 1 ? 1 : ConfusionPointFloat);

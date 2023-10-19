@@ -79,7 +79,7 @@ public class GigaDrain : GrassSkill
                 Empty target = other.GetComponent<Empty>();
                 int hp = target.EmptyHp;
                 HitAndKo(target);
-                Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, Mathf.Clamp((int)((float)(hp - target.EmptyHp) * DrainPer), 1, 100), Type.TypeEnum.IgnoreType);
+                Drain(hp,target.EmptyHp,DrainPer);
                 DrainPS();
                 BallBreak();
             }

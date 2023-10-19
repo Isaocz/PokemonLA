@@ -393,10 +393,26 @@ public class Skill : MonoBehaviour
 
     public bool useSkillConditions(PlayerControler player)
     {
+        //为梦话或者打鼾
         if( SkillIndex == 53 || SkillIndex == 54 || SkillIndex == 55 || SkillIndex == 56)
         {
             return SleepCanUseSkill(player);
         }
+        //为投掷
+        else if (SkillIndex == 303)
+        {
+
+            if (player.spaceItem == null) { return false; }
+            else { return true; }
+        }
+        //为投掷精通
+        else if (SkillIndex == 304)
+        {
+
+            if (Mathf.Ceil(12 + player.maxHp * 0.06f) > player.Hp - 1) { return false; }
+            else { return true; }
+        }
+        //为其他技能
         else
         {
             return NormalSkill(player);
@@ -417,6 +433,23 @@ public class Skill : MonoBehaviour
     }
 
     //==========================有关技能的条件判定=================================
+
+
+
+    //==================================百分比吸血========================================
+    /// <summary>
+    /// 吸血百分比的补正
+    /// </summary>
+    public float DrainBounsPer;
+    public void Drain(int TargetHpBefore , int TargetHpAfter , float DrainPer)
+    {
+        if (TargetHpAfter < TargetHpBefore)
+        {
+            Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, Mathf.Clamp((int)((float)(TargetHpBefore - TargetHpAfter) * (DrainPer + DrainBounsPer)), 1, 100), Type.TypeEnum.IgnoreType);
+        }
+    }
+
+    //==============================================================================
 
 
 }

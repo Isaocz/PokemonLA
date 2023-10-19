@@ -56,7 +56,7 @@ public class DrainingKiss : Skill
             Empty target = other.GetComponent<Empty>();
             int hp = target.EmptyHp;
             HitAndKo(target);
-            Pokemon.PokemonHpChange(null , player.gameObject , 0 , 0 , Mathf.Clamp( (int)((float)(hp-target.EmptyHp)*0.75f) ,1,100) , Type.TypeEnum.IgnoreType );
+            Drain(hp,target.EmptyHp,0.75f);
             isCanNotMove = true;
             DrainingKissOverPS.gameObject.SetActive(true);
             DrainingKissOverPS.Play();
