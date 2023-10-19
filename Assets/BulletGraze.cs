@@ -12,8 +12,14 @@ public class BulletGraze : MonoBehaviour
     public AudioClip Graze;
     private AudioSource audioSource;
 
+    public static BulletGraze instance;
+
     private List<GameObject> projectelList = new List<GameObject>();// 用于记录进入触发器的Projectel
 
+    private void Awake()
+    {
+        instance = this;
+    }
     private void Start()
     {
         DamageImprovement = 1f;

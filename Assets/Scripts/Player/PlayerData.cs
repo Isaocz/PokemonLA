@@ -520,7 +520,7 @@ public class PlayerData : MonoBehaviour
                 //梦幻道具：禁草
                 break;
             case 58:
-                //梦幻道具：单词修改
+                //梦幻道具：过载
                 break;
 
 
