@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class EeveeControler : PlayerControler
 {
-    public Skill Splash;
-    public Skill Playnice;
-    public Skill RapidSpin;
+    public Skill Tackle;
+    public Skill Growl;
+    public Skill SandAttack;
     public Skill TestSkill01;
 
-
+    
 
     // Start is called before the first frame update
     void Start()
@@ -33,9 +33,9 @@ public class EeveeControler : PlayerControler
         Instance();
         InstanceNewSkillPanel();
 
-        Skill01 = Splash;
-        Skill02 = Playnice;
-        Skill03 = RapidSpin;
+        Skill01 = Tackle;
+        Skill02 = Growl;
+        Skill03 = SandAttack;
         Skill04 = TestSkill01;
 
         skillBar01.GetSkill(Skill01);
