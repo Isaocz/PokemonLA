@@ -51,6 +51,7 @@ public class Mew : Empty
     public GameObject UseSkillPrefab;
     public GameObject Phase3OrbRotate;
     public GameObject ElectricBallPrefab;//¼¼ÄÜ21
+    public GameObject ElectricBallp2;
     public GameObject TimeStopEffect;
     public GameObject TrailEffect;
     public GameObject TrailEffect2;
@@ -329,9 +330,9 @@ public class Mew : Empty
                     if (validPosition)
                     {
                         spawnedPositions.Add(spawnPosition);
-                        GameObject Curse = Instantiate(CursePrefab, spawnPosition, Quaternion.identity);
-                        Curse.GetComponent<Curse>().empty = this;
-                        Destroy(Curse, 4f);
+                        GameObject ebp2 = Instantiate(ElectricBallp2, spawnPosition, Quaternion.identity);
+                        ebp2.GetComponent<ElectroBallp2>().empty = this;
+                        Destroy(ebp2, 4f);
                     }
                 }
             }
