@@ -4,27 +4,39 @@ using UnityEngine;
 
 public class SubZenHeadbutt : SubSkill
 {
-    TraceEffect TE;
+    List<TraceEffect> TE = new List<TraceEffect>{};
+    bool isDamagePlus;
 
     // Start is called before the first frame update
     void Start()
     {
-        foreach (Transform t in MainSkill.transform)
+
+        Invoke("DamgaePlus" , 0.2f);
+    }
+
+    void DamgaePlus() {
+
+        for (int i = 0; i < MainSkill.transform.childCount; i++)
         {
-            if (t.GetComponent<TraceEffect>()) {
-                TE = t.GetComponent<TraceEffect>();
-                break; 
+            Debug.Log(MainSkill.transform.childCount);
+            if (MainSkill.transform.GetChild(i).GetComponent<TraceEffect>())
+            {
+                TE.Add(MainSkill.transform.GetChild(i).GetComponent<TraceEffect>());
             }
         }
-        if (TE == null) { TE = MainSkill.GetComponent<TraceEffect>(); }
-        if (TE != null)
+        if (MainSkill.GetComponent<TraceEffect>() != null) { TE.Add(MainSkill.GetComponent<TraceEffect>()); }
+        for (int i = 0; i < TE.Count; i++)
         {
-            TE.distance += 1.3f;
-            if (MainSkill.Damage != 0) { MainSkill.Damage += 20f; }
-            if (MainSkill.SpDamage != 0) { MainSkill.SpDamage += 20f; }
-            player.RemoveASubSkill(subskill);
+            TE[i].distance += 1.3f;
+            if (!isDamagePlus) {
+                isDamagePlus = true;
+                if (MainSkill.Damage != 0) { MainSkill.Damage += 20f; }
+                if (MainSkill.SpDamage != 0) { MainSkill.SpDamage += 20f; }
+            }
+            if (i == TE.Count - 1) {
+                player.RemoveASubSkill(subskill);
+            }
         }
         Destroy(gameObject);
-
     }
 }

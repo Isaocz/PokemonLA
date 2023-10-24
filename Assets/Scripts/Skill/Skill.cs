@@ -172,6 +172,7 @@ public class Skill : MonoBehaviour
         if (isMultipleDamage)
         {
             RestoreTargetListCD();
+            
         }
 
         if (ExistenceTime <= 0)

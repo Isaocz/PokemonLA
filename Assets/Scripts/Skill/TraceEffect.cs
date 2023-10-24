@@ -9,13 +9,25 @@ public class TraceEffect : MonoBehaviour
     float timer;//计时器
     public float Waittime = 0.5f;//开始追踪时间
     public float distance;//跟踪距离
-    private float angle_fix = 80f;//每次修正的角度
+    public float angle_fix;//每次修正的角度
     private float angle_differ = 10;//允许的差异角度
+    /// <summary>
+    /// 追踪是否触发
+    /// </summary>
+    public bool isTEDone
+    {
+        get { return istedone; }
+        set { istedone = value; }
+    }
+    bool istedone;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        if (angle_fix == 0)
+        {
+            angle_fix = 80;
+        }
     }
 
     // Update is called once per frame
@@ -30,6 +42,7 @@ public class TraceEffect : MonoBehaviour
             //检测到敌人时则执行追踪
             if (enemy != null)
             {
+                istedone = true;
                 //对需要追踪物体和自身间的角度求解运算
                 Vector2 row = (enemy.transform.position - transform.position).normalized;
                 //获取两物体间夹角
@@ -55,6 +68,10 @@ public class TraceEffect : MonoBehaviour
                     transform.rotation = reAngle;
                 }
 
+            }
+            else
+            {
+                istedone = false;
             }
         }
     }
