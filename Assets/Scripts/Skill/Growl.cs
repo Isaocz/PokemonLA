@@ -30,9 +30,10 @@ public class Growl : Skill
                 infnum.Add(target.AtkEmptyPoint);
                 influence.Add(target);
                 target.LevelChange(-1, "Atk");
+                target.AtkDown(0);
                 if(SkillFrom == 2)
                 {
-                    target.LevelChange(-1, "Atk");
+                    target.EmptyConfusion(5f,1);
                 }
             }
         }
@@ -43,6 +44,7 @@ public class Growl : Skill
         for(int i = 0; i < influence.Count; i++)
         {
             influence[i].AtkEmptyPoint = infnum[i];
+            influence[i].AtkDownRemove();
         }
     }
 }

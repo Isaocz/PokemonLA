@@ -53,7 +53,7 @@ public class KnockOff : Skill
 
     private void OnDestroy()
     {
-        if (isKnockOffHitDone && PlayerHP > player.Hp)
+        if (SkillFrom == 2 && isKnockOffHitDone && PlayerHP > player.Hp)
         {
             Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, (PlayerHP - player.Hp) / 2, Type.TypeEnum.No);
         }

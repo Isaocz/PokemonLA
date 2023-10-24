@@ -6,41 +6,61 @@ public class StoredPowerEffect : Skill
 {
     private float moveSpeed;
     private float timer;
-    public Empty target;
+    StoredPower ParentSP;
+    int D;
+    Vector3 targetPos;
+    bool isCanNotMove;
+    TraceEffect te;
 
     // Start is called before the first frame update
     void Start()
     {
+        ParentSP = transform.parent.GetComponent<StoredPower>();
+        player = ParentSP.player;
+        SpDamage = ParentSP.SpDamage;
+        D = (int)transform.parent.rotation.eulerAngles.z;
         timer = 0f;
+        targetPos =  ((transform.parent.position + Quaternion.AngleAxis(D, Vector3.forward) * Vector3.right * 20 ) - transform.position).normalized;
+        if (SkillFrom == 2) { te = GetComponent<TraceEffect>(); }
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer += 3 * Time.deltaTime;
-        moveSpeed = Mathf.Exp(timer);
-        Vector3 targetPos = target ? target.transform.position : transform.position;
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
-
-        if (timer >= 5f)
+        if (SkillFrom == 2) { te.moveSpeed = moveSpeed * 0.6f; }
+        if (!isCanNotMove) {
+            timer += 3 * Time.deltaTime;
+            moveSpeed = Mathf.Exp(timer);
+            transform.position += ((te.isTEDone)?0: moveSpeed) * targetPos * Time.deltaTime;
+            if (timer >= 4f)
+            {
+                isCanNotMove = true;
+            }
+        }
+        else
         {
-            Destroy(gameObject);
+            moveSpeed = 0;
+            StartExistenceTimer();
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Empty"))
         {
-            Empty enemy = collision.GetComponent<Empty>();
+
+            Empty target = collision.GetComponent<Empty>();
             if (target != null)
             {
-                HitAndKo(enemy);
-                Destroy(gameObject);
+                SpDamage = ParentSP.SpDamage;
+                HitAndKo(target);
+                isCanNotMove = true;
+                GetComponent<Collider2D>().enabled = false;
             }
         }
-        if ((collision.CompareTag("Enviroment") || collision.CompareTag("Room")) && SkillFrom != 2)
+        if ((collision.CompareTag("Enviroment") || collision.CompareTag("Room")))
         {
-            Destroy(gameObject);
+            isCanNotMove = true;
+            GetComponent<Collider2D>().enabled = false;
         }
     }
 }
