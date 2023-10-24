@@ -32,6 +32,15 @@ public class ElectroBallEmpty : Projectile
             Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Fire);
             if (playerControler != null)
             {
+                int rate = (int)(empty.speed / playerControler.speed);
+                switch (rate)
+                {
+                    case 1: SpDmage = 60; break;
+                    case 2: SpDmage = 80; break;
+                    case 3: SpDmage = 120; break;
+                    case 4: SpDmage = 150; break;
+                    default: SpDmage = 40; break;
+                }
                 playerControler.KnockOutPoint = 2.5f;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                 playerControler.ParalysisFloatPlus(0.35f);

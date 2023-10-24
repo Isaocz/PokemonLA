@@ -30,55 +30,30 @@ public class QuickAttack : Skill
 
     void Dash()
     {
-        Vector3 dashPosition;
-        //使用射线判断瞬移路径上是否有障碍物，有则被阻碍
-        RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, Direction, dashAmount, LayerMask.GetMask("Room", "Enviroment", "Water"));
-        if (raycastHit2D.collider)
-        {
-            //射线与物体碰撞的点即为瞬移的最终位置
-            dashPosition = raycastHit2D.point;
-        }
-        else
-        {
-            dashPosition = player.transform.position + (Vector3)Direction * dashAmount;
+        Vector3 dashPosition = player.transform.position + (Vector3)Direction * dashAmount;
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(dashPosition, 1f);
+        foreach (Collider2D collider in colliders)
+        {//这里是检测水面，如果落点不是水面、墙、障碍，则检测位移前方是否有墙。如果落点是，则检测墙和水，这样可以让玩家位移过水面但是位移不过墙，同时不会传送进水面
+            if (collider.CompareTag("Room") || collider.CompareTag("Enviroment") || collider.CompareTag("Water"))
+            {
+                RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, Direction, dashAmount, LayerMask.GetMask("Room", "Enviroment", "Water"));
+                if (raycastHit2D.collider)
+                {
+                    dashPosition = raycastHit2D.point;
+                }
+                break;
+            }
+            else
+            {
+                RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, Direction, dashAmount, LayerMask.GetMask("Room", "Enviroment"));
+                if (raycastHit2D.collider)
+                {
+                    dashPosition = raycastHit2D.point;
+                }
+            }
         }
 
         StartCoroutine(DashMovement(dashPosition));
-        RaycastHit2D raycastHitEmpty = Physics2D.Raycast(transform.position, Direction, dashAmount, LayerMask.GetMask("Empty", "EmptyFly"));
-        RaycastHit2D raycastHitEmptyUp = Physics2D.Raycast(transform.position + Vector3.up * 0.3f, Direction, dashAmount, LayerMask.GetMask("Empty", "EmptyFly"));
-        RaycastHit2D raycastHitEmptyDown = Physics2D.Raycast(transform.position - Vector3.up * 0.3f, Direction, dashAmount, LayerMask.GetMask("Empty", "EmptyFly"));
-
-        //检测路径上是否有敌人
-        if (raycastHitEmpty || raycastHitEmptyUp || raycastHitEmptyDown)
-        {
-            if (raycastHitEmpty.collider != null || raycastHitEmpty.collider.gameObject.CompareTag("Empty"))
-            {
-                Empty enemy = raycastHitEmpty.collider.GetComponent<Empty>();
-                if (enemy != null && !enemylist.Contains(enemy))
-                    enemylist.Add(enemy);
-            }
-            if (raycastHitEmptyUp.collider!= null || raycastHitEmptyUp.collider.gameObject.CompareTag("Empty"))
-            {
-                Empty enemy = raycastHitEmpty.collider.GetComponent<Empty>();
-                if (enemy != null && !enemylist.Contains(enemy))
-                    enemylist.Add(enemy);
-            }
-            if (raycastHitEmptyDown.collider != null || raycastHitEmptyDown.collider.gameObject.CompareTag("Empty"))
-            {
-                Empty enemy = raycastHitEmpty.collider.GetComponent<Empty>();
-                if (enemy != null && !enemylist.Contains(enemy))
-                    enemylist.Add(enemy);
-            }
-        }
-        if (enemylist.Count != 0)
-        {
-            for (int i = 0; i < enemylist.Count; i++)
-            {
-                HitAndKo(enemylist[i]);
-            }
-        }
-    
-
 }
     void Update()
     {
@@ -96,6 +71,21 @@ public class QuickAttack : Skill
             }
 
             player.isInvincible = true;
+
+            //对路径上的敌人造成伤害
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(player.transform.position, 1f);
+            foreach (Collider2D collider in colliders)
+            {
+                if (collider.CompareTag("Empty"))
+                {
+                    Empty enemy = collider.GetComponent<Empty>();
+                    if(enemy != null && !enemylist.Contains(enemy))
+                    {
+                        enemylist.Add(enemy);
+                        HitAndKo(enemy);
+                    }
+                }
+            }
         }
     }
 
