@@ -5,7 +5,6 @@ using UnityEngine;
 public class HyperVoice : Skill
 {
 
-
     // Update is called once per frame
     void Update()
     {
