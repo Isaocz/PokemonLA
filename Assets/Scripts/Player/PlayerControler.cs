@@ -246,6 +246,14 @@ public class PlayerControler : Pokemon
     }
     bool isRapidspin = false;
 
+    //处于接棒状态
+    public bool isBatonPass
+    {
+        get { return isbatonPass; }
+        set { isbatonPass = value; }
+    }
+    bool isbatonPass = false;
+
 
 
     //处于草丛中 当isInGress==0时代表不在草中 每和一片草碰撞+1
@@ -645,7 +653,8 @@ public class PlayerControler : Pokemon
         if (!isStrengthAndTeraTypeBeRestore)
         {
             TeraTypeJORChange(0);
-            playerData.RestoreJORSata();
+            if (!isBatonPass) {
+                playerData.RestoreJORSata(); }
             isStrengthAndTeraTypeBeRestore = true;
             ReFreshAbllityPoint();
         }

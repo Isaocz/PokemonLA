@@ -90,13 +90,13 @@ public class EnergyBall : GrassSkill
             {
                 Empty target = other.GetComponent<Empty>();
                 HitAndKo(target);
-                BornGrass();
-                if (SkillFrom == 2) { BallBreak(); }
+                BallBreak();
+                if (SkillFrom == 2) {  BornGrass(); }
             }
             else if (other.tag == "Room" || other.tag == "Enviroment")
             {
-                BornGrass();
-                if (SkillFrom == 2) { BallBreak(); }
+                BallBreak();
+                if (SkillFrom == 2) { BornGrass(); }
             }
         }
     }

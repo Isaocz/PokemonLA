@@ -35,10 +35,8 @@ public class Kricketot : Empty
         rigidbody2D = GetComponent<Rigidbody2D>();
         if (isBeCall)
         {
-            DefAbilityPoint /= 2;
-            SpdAbilityPoint /= 2;
-            DefDown(0);
-            SpDDown(0);
+            DefChange(-2, 0.0f);
+            SpDChange(-2, 0.0f);
         }
     }
 

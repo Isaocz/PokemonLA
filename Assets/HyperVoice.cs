@@ -16,6 +16,7 @@ public class HyperVoice : Skill
         if (target != null)
         {
             HitAndKo(target);
+            if (SkillFrom == 2) { target.EmptyConfusion(5,1); }
         }
     }
 }

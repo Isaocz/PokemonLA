@@ -45,10 +45,8 @@ public class StonjournerPowerPoint : MonoBehaviour
             if (ParentStonjourner != null && !BuffList.Contains(e) && e.gameObject != ParentStonjourner.gameObject)
             {
                 BuffList.Add(e);
-                e.AtkAbilityPoint = e.AtkAbilityPoint * 1.5f ;
-                e.SpAAbilityPoint = e.SpAAbilityPoint * 1.5f ;
-                e.AtkUP(0);
-                e.SpAUP(0);
+                e.AtkChange(2,0.0f);
+                e.SpAChange(2, 0.0f);
             }
 
         }
@@ -63,10 +61,8 @@ public class StonjournerPowerPoint : MonoBehaviour
             if (ParentStonjourner != null && BuffList.Contains(e) && e.gameObject != ParentStonjourner.gameObject)
             {
                 BuffList.Remove(e);
-                e.AtkAbilityPoint = e.AtkAbilityPoint / 1.5f;
-                e.SpAAbilityPoint = e.SpAAbilityPoint / 1.5f;
-                e.AtkUpRemove();
-                e.SpAUpRemove();
+                e.AtkChange(-2 , 0);
+                e.SpAChange(-2, 0.0f);
             }
 
         }
@@ -88,10 +84,9 @@ public class StonjournerPowerPoint : MonoBehaviour
     {
         foreach (Empty e in BuffList)
         {
-            e.AtkAbilityPoint = e.AtkAbilityPoint / 1.5f;
-            e.SpAAbilityPoint = e.SpAAbilityPoint / 1.5f;
-            e.AtkUpRemove();
-            e.SpAUpRemove();
+            
+            e.AtkChange(-2, 0);
+            e.SpAChange(-2, 0);
         }
         BuffList.Clear();
     }

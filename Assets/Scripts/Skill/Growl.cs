@@ -8,7 +8,6 @@ using UnityEngine;
 public class Growl : Skill
 {
     List<Empty> influence = new List<Empty>();
-    List<int> infnum = new List<int>();
     // Start is called before the first frame update
     void Start()
     {
@@ -27,10 +26,8 @@ public class Growl : Skill
             Empty target = other.GetComponent<Empty>();
             if (target != influence.Find(t => t))
             {
-                infnum.Add(target.AtkEmptyPoint);
                 influence.Add(target);
-                target.LevelChange(-1, "Atk");
-                target.AtkDown(0);
+                target.AtkChange(-1,6.0f);
                 if(SkillFrom == 2)
                 {
                     target.EmptyConfusion(5f,1);
@@ -39,12 +36,4 @@ public class Growl : Skill
         }
     }
 
-    void OnDestroy()
-    {
-        for(int i = 0; i < influence.Count; i++)
-        {
-            influence[i].AtkEmptyPoint = infnum[i];
-            influence[i].AtkDownRemove();
-        }
-    }
 }

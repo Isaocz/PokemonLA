@@ -1,0 +1,208 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4124784987621927746
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4124784987621927759}
+  - component: {fileID: 5555010100847774424}
+  - component: {fileID: 1761519564295553950}
+  - component: {fileID: 1460028591976996513}
+  m_Layer: 0
+  m_Name: TailWhipPlus
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4124784987621927759
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4124784987621927746}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 9145363043728558397}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5555010100847774424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4124784987621927746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 889d5e064f1c7764481281d163413ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FadeInTime: 0.1
+  FadeOutTime: 0.1
+  StartDelay: 0
+  EmptySkillDuration: 0
+--- !u!58 &1761519564295553950
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4124784987621927746}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.5}
+  serializedVersion: 2
+  m_Radius: 2.5
+--- !u!114 &1460028591976996513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4124784987621927746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 990bc462739d5e943b8d0460566fcd63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SkillIndex: 316
+  player: {fileID: 0}
+  baby: {fileID: 0}
+  ExistenceTime: 1.2
+  Damage: 0
+  SpDamage: 0
+  IsDamageChangeable: 0
+  animator: {fileID: 0}
+  MaxRange: 0
+  SkillType: 1
+  SkillName: TailWhip
+  SkillChineseName: "\u6447\u5C3E\u5DF4"
+  SkillDiscribe: "\u53EF\u7231\u5730\u5DE6\u53F3\u6447\u6643\u5C3E\u5DF4\uFF0C\u8BF1\u4F7F\u5BF9\u624B\u758F\u5FFD\u5927\u610F\u3002\u4F1A\u5728\u4E00\u6BB5\u65F6\u95F4\u5185\u964D\u4F4E\u5BF9\u624B\u7684\u9632\u5FA1\uFF0C\u4F46\u662F\u5728\u6447\u5C3E\u5DF4\u671F\u95F4\u65E0\u6CD5\u5206\u5FC3\u79FB\u52A8\u3002"
+  PlusSkillDiscribe: "\u8D85\u7EA7\u53EF\u7231\u6447\u5C3E\u5DF4\uFF0C\u5728\u8F83\u77ED\u65F6\u95F4\u5185\u8BA9\u5BF9\u624B\u7740\u8FF7\u3002"
+  PlusSkill: {fileID: 0}
+  MinusSkill: {fileID: 1460028591976996513, guid: 98e573a1a19145549a7ad34a058ea92f, type: 3}
+  KOPoint: 0
+  ColdDown: 4.2
+  CTLevel: 0
+  CTDamage: 0
+  SkillQualityLevel: 2
+  SkillFrom: 2
+  SkillTag: 1b000000
+  isNotDirection: 1
+  DirctionDistance: 0
+  isNotMoveWithPlayer: 0
+  isMultipleDamage: 0
+  MultipleDamageCDTime: 0
+  isImmediately: 0
+  DrainBounsPer: 0
+--- !u!1001 &2761186410239089400
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4124784987621927759}
+    m_Modifications:
+    - target: {fileID: 6393826497442010050, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: Duration
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010050, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: FadeInTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010050, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: FadeOutTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.a
+      value: 0.29803923
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010055, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Name
+      value: SkillRangeCircle
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+--- !u!4 &9145363043728558397 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+  m_PrefabInstance: {fileID: 2761186410239089400}
+  m_PrefabAsset: {fileID: 0}

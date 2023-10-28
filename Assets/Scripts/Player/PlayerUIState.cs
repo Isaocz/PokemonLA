@@ -50,37 +50,22 @@ public class PlayerUIState : MonoBehaviour
     Image InfatuationObj;
     bool IsInfatuation;
 
-    public Image AtkUpImage;
-    Image AtkUpObj;
-    bool IsAtkUp;
+    public AbllityChangeUI AtkChangeImage;
+    AbllityChangeUI AtkChangeObj;
+    int AtkChangeLevel;
 
-    public Image AtkDownImage;
-    Image AtkDownObj;
-    bool IsAtkDown;
+    public AbllityChangeUI DefChangeImage;
+    AbllityChangeUI DefChangeObj;
+    int DefChangeLevel;
 
-    public Image DefUpImage;
-    Image DefUpObj;
-    bool IsDefUp;
+    public AbllityChangeUI SpAChangeImage;
+    AbllityChangeUI SpAChangeObj;
+    int SpAChangeLevel;
 
-    public Image DefDownImage;
-    Image DefDownObj;
-    bool IsDefDown;
+    public AbllityChangeUI SpDChangeImage;
+    AbllityChangeUI SpDChangeObj;
+    int SpDChangeLevel;
 
-    public Image SpAUpImage;
-    Image SpAUpObj;
-    bool IsSpAUp;
-
-    public Image SpADownImage;
-    Image SpADownObj;
-    bool IsSpADown;
-
-    public Image SpDUpImage;
-    Image SpDUpObj;
-    bool IsSpDUp;
-
-    public Image SpDDownImage;
-    Image SpDDownObj;
-    bool IsSpDDown;
 
     public Image ColdImage;
     Image ColdObj;
@@ -105,14 +90,10 @@ public class PlayerUIState : MonoBehaviour
         IsConfusion = OtherState.IsConfusion;
 
         IsInfatuation = OtherState.IsInfatuation;
-        IsAtkUp = OtherState.IsAtkUp;
-        IsAtkDown = OtherState.IsAtkDown;
-        IsDefUp = OtherState.IsDefUp;
-        IsDefDown = OtherState.IsDefDown;
-        IsSpAUp = OtherState.IsSpAUp;
-        IsSpADown = OtherState.IsSpADown;
-        IsSpDUp = OtherState.IsSpDUp;
-        IsSpDDown = OtherState.IsSpDDown;
+        AtkChangeLevel = OtherState.AtkChangeLevel;
+        DefChangeLevel = OtherState.DefChangeLevel;
+        SpAChangeLevel = OtherState.SpAChangeLevel;
+        SpDChangeLevel = OtherState.SpDChangeLevel;
         IsCold = OtherState.IsCold;
         IsCurse = OtherState.IsCurse;
         for (int i = 0; i < transform.childCount; i++) {
@@ -137,14 +118,10 @@ public class PlayerUIState : MonoBehaviour
             if (IsConfusion && s == ConfusionImage.sprite) { ConfusionObj = transform.GetChild(i).GetComponent<Image>(); }
 
             if (IsInfatuation && s == InfatuationImage.sprite) { InfatuationObj = transform.GetChild(i).GetComponent<Image>(); }
-            if (IsAtkUp && s == AtkUpImage.sprite) { AtkUpObj = transform.GetChild(i).GetComponent<Image>(); }
-            if (IsAtkDown && s == AtkDownImage.sprite) { AtkDownObj = transform.GetChild(i).GetComponent<Image>(); }
-            if (IsDefUp && s == DefUpImage.sprite) { DefUpObj = transform.GetChild(i).GetComponent<Image>(); }
-            if (IsDefDown && s == DefDownImage.sprite) { DefDownObj = transform.GetChild(i).GetComponent<Image>(); }
-            if (IsSpAUp && s == SpAUpImage.sprite) { SpAUpObj = transform.GetChild(i).GetComponent<Image>(); }
-            if (IsSpADown && s == SpADownImage.sprite) { SpADownObj = transform.GetChild(i).GetComponent<Image>(); }
-            if (IsSpDUp && s == SpDUpImage.sprite) { SpDUpObj = transform.GetChild(i).GetComponent<Image>(); }
-            if (IsSpDDown && s == SpDDownImage.sprite) { SpDDownObj = transform.GetChild(i).GetComponent<Image>(); }
+            if (AtkChangeLevel != 0 && s == AtkChangeImage.AbllityChangeImage.sprite) { AtkChangeObj = transform.GetChild(i).GetComponent<AbllityChangeUI>(); }
+            if (DefChangeLevel != 0 && s == DefChangeImage.AbllityChangeImage.sprite) { DefChangeObj = transform.GetChild(i).GetComponent<AbllityChangeUI>(); }
+            if (SpAChangeLevel != 0 && s == SpAChangeImage.AbllityChangeImage.sprite) { SpAChangeObj = transform.GetChild(i).GetComponent<AbllityChangeUI>(); }
+            if (SpDChangeLevel != 0 && s == SpDChangeImage.AbllityChangeImage.sprite) { SpDChangeObj = transform.GetChild(i).GetComponent<AbllityChangeUI>(); }
             if (IsCold && s == ColdImage.sprite) { ColdObj = transform.GetChild(i).GetComponent<Image>(); }
             if (IsCurse && s == CurseImage.sprite) { CurseObj = transform.GetChild(i).GetComponent<Image>(); }
 
@@ -152,11 +129,11 @@ public class PlayerUIState : MonoBehaviour
     }
 
     /// <summary>
-    /// 0¼õËÙ 1ÖÂÃ¤ 2±ù¶³ 3ÖÐ¶¾ 4Âé±Ô 5ÉÕÉË 6Ë¯Ãß 7¿Ö¾å 8ÆøÊÆÍ·´÷ 9»ìÂÒ 10×ÅÃÔ 11¹¥»÷ÉÏÉý 12¹¥»÷ÏÂ½µ 13·ÀÓùÉÏÉý 14·ÀÓùÏÂ½µ 15ÌØ¹¥ÉÏÉý 16ÌØ¹¥ÏÂ½µ 17ÌØ·ÀÉÏÉý 18ÌØ·ÀÏÂ½µ 19º®Àä 20:×çÖä
+    /// 0¼õËÙ 1ÖÂÃ¤ 2±ù¶³ 3ÖÐ¶¾ 4Âé±Ô 5ÉÕÉË 6Ë¯Ãß 7¿Ö¾å 8ÆøÊÆÍ·´÷ 9»ìÂÒ 10×ÅÃÔ 11º®Àä 12:×çÖä
     /// </summary>
     /// <param name="StateNum"></param>
     // Start is called before the first frame update
-    public void StatePlus(int StateNum)
+    public void StatePlus(int StateNum )
     {
         switch (StateNum) {
             case 0:
@@ -238,69 +215,13 @@ public class PlayerUIState : MonoBehaviour
                 }
                 break;
             case 11:
-                if (!IsAtkUp)
-                {
-                    AtkUpObj = Instantiate(AtkUpImage, transform.position, Quaternion.identity, transform);
-                    IsAtkUp = true;
-                }
-                break;
-            case 12:
-                if (!IsAtkDown)
-                {
-                    AtkDownObj = Instantiate(AtkDownImage, transform.position, Quaternion.identity, transform);
-                    IsAtkDown = true;
-                }
-                break;
-            case 13:
-                if (!IsDefUp)
-                {
-                    DefUpObj = Instantiate(DefUpImage, transform.position, Quaternion.identity, transform);
-                    IsDefUp = true;
-                }
-                break;
-            case 14:
-                if (!IsDefDown)
-                {
-                    DefDownObj = Instantiate(DefDownImage, transform.position, Quaternion.identity, transform);
-                    IsDefDown = true;
-                }
-                break;
-            case 15:
-                if (!IsSpAUp)
-                {
-                    SpAUpObj = Instantiate(SpAUpImage, transform.position, Quaternion.identity, transform);
-                    IsSpAUp = true;
-                }
-                break;
-            case 16:
-                if (!IsSpADown)
-                {
-                    SpADownObj = Instantiate(SpADownImage, transform.position, Quaternion.identity, transform);
-                    IsSpADown = true;
-                }
-                break;
-            case 17:
-                if (!IsSpDUp)
-                {
-                    SpDUpObj = Instantiate(SpDUpImage, transform.position, Quaternion.identity, transform);
-                    IsSpDUp = true;
-                }
-                break;
-            case 18:
-                if (!IsSpDDown)
-                {
-                    SpDDownObj = Instantiate(SpDDownImage, transform.position, Quaternion.identity, transform);
-                    IsSpDDown = true;
-                }
-                break;
-            case 19:
                 if (!IsCold)
                 {
                     ColdObj = Instantiate(ColdImage, transform.position, Quaternion.identity, transform);
                     IsCold = true;
                 }
                 break;
-            case 20:
+            case 12:
                 if (!IsCurse)
                 {
                     CurseObj = Instantiate(CurseImage, transform.position, Quaternion.identity, transform);
@@ -311,7 +232,75 @@ public class PlayerUIState : MonoBehaviour
     }
 
     /// <summary>
-    ///  0¼õËÙ 1ÖÂÃ¤ 2±ù¶³ 3ÖÐ¶¾ 4Âé±Ô 5ÉÕÉË 6Ë¯Ãß 7¿Ö¾å 8ÆøÊÆÍ·´÷ 9»ìÂÒ 10×ÅÃÔ 11¹¥»÷ÉÏÉý 12¹¥»÷ÏÂ½µ 13·ÀÓùÉÏÉý 14·ÀÓùÏÂ½µ 15ÌØ¹¥ÉÏÉý 16ÌØ¹¥ÏÂ½µ 17ÌØ·ÀÉÏÉý 18ÌØ·ÀÏÂ½µ
+    /// 0¹¥»÷¸Ä±ä 1·ÀÓù¸Ä±ä 2ÌØ¹¥¸Ä±ä 3ÌØ·À¸Ä±ä
+    /// </summary>
+    /// <param name="AbllityIndex"></param>
+    /// <param name="ChangeLevel"></param>
+    public void AbllityChange(int AbllityIndex , int ChangeLevel)
+    {
+        switch (AbllityIndex){
+            case 0:
+                if (ChangeLevel == 0) 
+                {
+                    Destroy(AtkChangeObj.gameObject);
+                    AtkChangeLevel = 0;
+                }
+                else
+                {
+                    if (AtkChangeLevel == 0 && AtkChangeObj == null) { AtkChangeObj = Instantiate(AtkChangeImage, transform.position, Quaternion.identity, transform); }
+                    AtkChangeLevel = ChangeLevel;
+                    AtkChangeObj.AbllityLevel = AtkChangeLevel;
+                    AtkChangeObj.ChangeAblityLevel();
+                }
+                break;
+            case 1:
+                if (ChangeLevel == 0)
+                {
+                    Destroy(DefChangeObj.gameObject);
+                    DefChangeLevel = 0;
+                }
+                else
+                {
+                    if (DefChangeLevel == 0 && DefChangeObj == null) { DefChangeObj = Instantiate(DefChangeImage, transform.position, Quaternion.identity, transform); }
+                    DefChangeLevel = ChangeLevel;
+                    DefChangeObj.AbllityLevel = DefChangeLevel;
+                    DefChangeObj.ChangeAblityLevel();
+                }
+                break;
+            case 2:
+                if (ChangeLevel == 0)
+                {
+                    Destroy(SpAChangeObj.gameObject);
+                    SpAChangeLevel = 0;
+                }
+                else
+                {
+                    if (SpAChangeLevel == 0 && SpAChangeObj == null) { SpAChangeObj = Instantiate(SpAChangeImage, transform.position, Quaternion.identity, transform); }
+                    SpAChangeLevel = ChangeLevel;
+                    SpAChangeObj.AbllityLevel = SpAChangeLevel;
+                    SpAChangeObj.ChangeAblityLevel();
+                }
+                break;
+            case 3:
+                if (ChangeLevel == 0)
+                {
+                    Destroy(SpDChangeObj.gameObject);
+                    SpDChangeLevel = 0;
+                }
+                else
+                {
+                    if (SpDChangeLevel == 0 && SpDChangeObj == null) { SpDChangeObj = Instantiate(SpDChangeImage, transform.position, Quaternion.identity, transform); }
+                    SpDChangeLevel = ChangeLevel;
+                    SpDChangeObj.AbllityLevel = SpDChangeLevel;
+                    SpDChangeObj.ChangeAblityLevel();
+                }
+                break;
+        }
+    }
+
+
+    /// <summary>
+    ///  0¼õËÙ 1ÖÂÃ¤ 2±ù¶³ 3ÖÐ¶¾ 4Âé±Ô 5ÉÕÉË 6Ë¯Ãß 7¿Ö¾å 8ÆøÊÆÍ·´÷ 9»ìÂÒ 10×ÅÃÔ  11º®Àä 12:×çÖä
     /// </summary>
     /// <param name="StateNum"></param>
     public void StateDestory(int StateNum)
@@ -396,69 +385,13 @@ public class PlayerUIState : MonoBehaviour
                 }
                 break;
             case 11:
-                if (IsAtkUp)
-                {
-                    Destroy(AtkUpObj.gameObject);
-                    IsAtkUp = false;
-                }
-                break;
-            case 12:
-                if (IsAtkDown)
-                {
-                    Destroy(AtkDownObj.gameObject);
-                    IsAtkDown = false;
-                }
-                break;
-            case 13:
-                if (IsDefUp)
-                {
-                    Destroy(DefUpObj.gameObject);
-                    IsDefUp = false;
-                }
-                break;
-            case 14:
-                if (IsDefDown)
-                {
-                    Destroy(DefDownObj.gameObject);
-                    IsDefDown = false;
-                }
-                break;
-            case 15:
-                if (IsSpAUp)
-                {
-                    Destroy(SpAUpObj.gameObject);
-                    IsSpAUp = false;
-                }
-                break;
-            case 16:
-                if (IsSpADown)
-                {
-                    Destroy(SpADownObj.gameObject);
-                    IsSpADown = false;
-                }
-                break;
-            case 17:
-                if (IsSpDUp)
-                {
-                    Destroy(SpDUpObj.gameObject);
-                    IsSpDUp = false;
-                }
-                break;
-            case 18:
-                if (IsSpDDown)
-                {
-                    Destroy(SpDDownObj.gameObject);
-                    IsSpDDown = false;
-                }
-                break;
-            case 19:
                 if (IsCold)
                 {
                     Destroy(ColdObj.gameObject);
                     IsCold = false;
                 }
                 break;
-            case 20:
+            case 12:
                 if (IsCurse)
                 {
                     Destroy(CurseObj.gameObject);
@@ -538,7 +471,7 @@ public class PlayerUIState : MonoBehaviour
                     InfatuationObj.transform.GetChild(0).GetComponent<Image>().rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - Per) * OrangenalSize);
                 }
                 break;
-            case 20:
+            case 12:
                 if (IsCurse)
                 {
                     float OrangenalSize = CurseObj.rectTransform.rect.height;

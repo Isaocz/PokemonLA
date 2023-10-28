@@ -57,11 +57,7 @@ public class Swagger : Skill
                 GameObject AngryEffect = PublicEffect.StaticPublicEffectList.ReturnAPublicEffect(2);
                 Instantiate(AngryEffect, e.transform.position + Vector3.up * 1.5f, Quaternion.identity).SetActive(true);
                 if (SkillFrom == 2) { e.EmptyInfatuation(2.5f, 1); }
-                if (e.AtkAbilityPoint == e.AbilityForLevel(e.Emptylevel , e.AtkEmptyPoint))
-                {
-                    e.AtkAbilityPoint *= 1.2f;
-                    e.AtkUP(0);
-                }
+                e.AtkChange(2, 10.0f);
             }
         }
 
