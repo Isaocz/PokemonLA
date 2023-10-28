@@ -30,8 +30,11 @@ public class BabyDollEyes : Skill
             Empty enemy = collision.GetComponent<Empty>();
             if (enemy && !enemies.Contains(enemy))
             {
-                enemy.LevelChange(-1, "Atk");
-                enemy.AtkDown(2f);
+                //之前
+                //enemy.LevelChange(-1, "Atk");
+                //enemy.AtkDown(2f);
+                //现在
+                enemy.AtkChange(-1,2.0f);
                 enemies.Add(enemy);
             }
         }
