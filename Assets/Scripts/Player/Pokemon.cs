@@ -271,11 +271,11 @@ public class Pokemon : MonoBehaviour
     float SpeedBefoerChange;
 
     //调用此函数时，如果还未被冰冻，冰冻，状态变为被冰冻
-    public void Frozen(float FrozenTime , float FrozenPoint , float FrozenPer)
+    public void Frozen(float FrozenTime, float FrozenPoint, float FrozenPer)
     {
-        
+
         if (GetComponent<Empty>() != null && isColdDown != 0) { FrozenPer += 0.25f * isColdDown; }
-        if (!isFrozenDef && Random.Range(0.0f , 1.0f) <= FrozenPer ) {
+        if (!isFrozenDef && Random.Range(0.0f, 1.0f) <= FrozenPer) {
             if (!isInMistyTerrain && !isFrozenDone)
             {
                 EmptyFrozenPointFloat += FrozenPoint * FrozenResistance;
@@ -312,7 +312,7 @@ public class Pokemon : MonoBehaviour
                             A.speed = 0;
                         }
                     }
-                    Invoke("FrozenRemove", FrozenTime*FrozenResistance);
+                    Invoke("FrozenRemove", FrozenTime * FrozenResistance);
                 }
             }
         }
@@ -355,7 +355,7 @@ public class Pokemon : MonoBehaviour
     float EmptyFearPointFloat;
 
     //调用此函数时，如果还未害怕，状态变为害怕
-    public void Fear(float FearTime , float FearPoint)
+    public void Fear(float FearTime, float FearPoint)
     {
         if (!isFearDone)
         {
@@ -404,7 +404,7 @@ public class Pokemon : MonoBehaviour
 
 
     //===========================================================================敌人致盲的函数=====================================================================================
-    
+
     public bool isBlindDone = false;
     public bool isBlindStart = false;
     float EmptyBlindPoint;
@@ -461,7 +461,7 @@ public class Pokemon : MonoBehaviour
 
     //===========================================================================敌人中毒的函数=====================================================================================
     //调用此函数时，如果还未开始中毒，开始中毒
-    public void EmptyToxicDone(float ToxicPoint , float ToxicTime , float ToxicPer)
+    public void EmptyToxicDone(float ToxicPoint, float ToxicTime, float ToxicPer)
     {
         if (!isToxicDef && Random.Range(0.0f, 1.0f) <= ToxicPer)
         {
@@ -491,7 +491,7 @@ public class Pokemon : MonoBehaviour
                     playerUIState.StateSlowUP(3, ToxicPointFloat);
                     MarterialChangeToToxic();
                     Invoke("EmptyToxicRemove", ToxicTime);
-                    EmptyObj.SpAAbilityPoint /= 2;
+                    EmptyObj.SpAChange(-2,0.0f);
 
                 }
             }
@@ -508,7 +508,7 @@ public class Pokemon : MonoBehaviour
             isToxicDone = false;
             playerUIState.StateDestory(3);
             MarterialChangeToNurmal();
-            GetComponent<Empty>().SpAAbilityPoint *= 2;
+            GetComponent<Empty>().SpAChange(2, 0.0f);
         }
     }
 
@@ -519,7 +519,7 @@ public class Pokemon : MonoBehaviour
 
     //===========================================================================敌人烧伤的函数=====================================================================================
     //调用此函数时，如果还未开始烧伤，开始烧伤
-    public void EmptyBurnDone(float BurnPoint , float BurnTime , float BurnPer)
+    public void EmptyBurnDone(float BurnPoint, float BurnTime, float BurnPer)
     {
         if (!isBurnDef && Random.Range(0.0f, 1.0f) <= BurnPer)
         {
@@ -549,7 +549,7 @@ public class Pokemon : MonoBehaviour
                     playerUIState.StateSlowUP(5, BurnPointFloat);
                     MarterialChangeToBurn();
                     Invoke("EmptyBurnRemove", BurnTime);
-                    EmptyObj.AtkAbilityPoint /= 2;
+                    EmptyObj.AtkChange(-2 , 0.0f);
                 }
             }
         }
@@ -564,7 +564,7 @@ public class Pokemon : MonoBehaviour
             isBurnDone = false;
             playerUIState.StateDestory(5);
             MarterialChangeToNurmal();
-            GetComponent<Empty>().AtkAbilityPoint *= 2;
+            GetComponent<Empty>().AtkChange(2, 0.0f);
         }
     }
 
@@ -572,7 +572,7 @@ public class Pokemon : MonoBehaviour
 
     //===========================================================================敌人睡眠的函数=====================================================================================
     //调用此函数时，如果还未开始睡眠，开始睡眠
-    public void EmptySleepDone(float SleepPoint, float SleepTime , float SleepPer)
+    public void EmptySleepDone(float SleepPoint, float SleepTime, float SleepPer)
     {
         if (!isSleepDef && Random.Range(0.0f, 1.0f) <= SleepPer)
         {
@@ -627,7 +627,7 @@ public class Pokemon : MonoBehaviour
 
     //===========================================================================敌人麻痹的函数=====================================================================================
     //调用此函数时，如果还未开始麻痹，开始麻痹
-    public void EmptyParalysisDone(float ParalysisPoint, float ParalysisTime , float ParalysisPer)
+    public void EmptyParalysisDone(float ParalysisPoint, float ParalysisTime, float ParalysisPer)
     {
         if (!isParalysisDef && Random.Range(0.0f, 1.0f) <= ParalysisPer + ((isInSuperElectricTerrain) ? 0.2f : 0))
         {
@@ -636,7 +636,7 @@ public class Pokemon : MonoBehaviour
             {
                 if (!isParalysisDone)
                 {
-                    ParalysisPointFloat += (ParalysisPoint + ((isInSuperElectricTerrain) ? 0.3f : 1)) * ParalysisResistance ;
+                    ParalysisPointFloat += (ParalysisPoint + ((isInSuperElectricTerrain) ? 0.3f : 1)) * ParalysisResistance;
                     if (!isParalysisStart && ParalysisPointFloat < 1)
                     {
                         playerUIState.StatePlus(4);
@@ -817,7 +817,7 @@ public class Pokemon : MonoBehaviour
                 playerUIState.StateSlowUP(10, EmptyInfatuationPoint);
                 MarterialChangeToInfatuation();
                 Empty Boss = GetComponent<Empty>();
-                if(Boss != null && Boss.isBoos)
+                if (Boss != null && Boss.isBoos)
                 {
                     Boss.speed *= 0.5f;
                 }
@@ -853,391 +853,198 @@ public class Pokemon : MonoBehaviour
 
 
 
-
-
-
-
-
-
-
-    //===========================================================================敌人攻击力提升的函数=====================================================================================
-
-    /// <summary>
-    /// 代表攻击力是否提升
-    /// </summary>
-    bool isAtkUp;
-
-    /// <summary>
-    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果攻击力未被提升，状态变为攻击力被提升
-    /// </summary>
-    /// <param name="Time"> 提升的时间，如果为零时间为无限，需要手动Remove </param>
-    public void AtkUP( float Time )
-    {
-        if (GetComponent<Empty>() != null)
-        {
-            isAtkUp = true;
-            playerUIState.StatePlus(11);
-            if (Time != 0) { Invoke("AtkUpRemove", Time); }
-        }
-    }
-    /// <summary>
-    /// 如果AtkUP( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在攻击力恢复时调用此函数
-    /// </summary>
-    public void AtkUpRemove()
-    {
-        if (isAtkUp)
-        {
-            if (GetComponent<Empty>() != null)
-            {
-                isAtkUp = false;
-                playerUIState.StateDestory(11);
-            }
-        }
-    }
     /// <summary>
     /// 能力变化的函数，level是能力变化等级，type是能力变化类型
     /// </summary>
     /// <param name="level"></param>
     /// <param name="type"></param>
+
     public void LevelChange(int level, string type)
     {
+        Empty PokemonEmpty = GetComponent<Empty>();
+        if (PokemonEmpty != null)
+        {
+            if (type == "Atk")
+            {
+                if (level > 0) { PokemonEmpty.AtkAbilityPoint = PokemonEmpty.AbilityForLevel(PokemonEmpty.Emptylevel , PokemonEmpty.AtkEmptyPoint) * Mathf.Pow(1.2f, level); }
+                else { PokemonEmpty.AtkAbilityPoint = PokemonEmpty.AbilityForLevel(PokemonEmpty.Emptylevel, PokemonEmpty.AtkEmptyPoint) * Mathf.Pow(0.8f, -level); }
+            }
+            if (type == "Def")
+            {
+                if (level > 0) { PokemonEmpty.DefAbilityPoint = PokemonEmpty.AbilityForLevel(PokemonEmpty.Emptylevel, PokemonEmpty.DefEmptyPoint) * Mathf.Pow(1.2f, level); }
+                else { PokemonEmpty.DefAbilityPoint = PokemonEmpty.AbilityForLevel(PokemonEmpty.Emptylevel, PokemonEmpty.DefEmptyPoint) * Mathf.Pow(0.8f, -level); }
+            }
+            if (type == "SpA")
+            {
+                if (level > 0) { PokemonEmpty.SpAAbilityPoint = PokemonEmpty.AbilityForLevel(PokemonEmpty.Emptylevel, PokemonEmpty.SpAEmptyPoint) * Mathf.Pow(1.2f, level); }
+                else { PokemonEmpty.SpAAbilityPoint = PokemonEmpty.AbilityForLevel(PokemonEmpty.Emptylevel, PokemonEmpty.SpAEmptyPoint) * Mathf.Pow(0.8f, -level); }
+            }
+            if (type == "SpD")
+            {
+                if (level > 0) { PokemonEmpty.SpdAbilityPoint = PokemonEmpty.AbilityForLevel(PokemonEmpty.Emptylevel, PokemonEmpty.SpdEmptyPoint) * Mathf.Pow(1.2f, level); }
+                else { PokemonEmpty.SpdAbilityPoint = PokemonEmpty.AbilityForLevel(PokemonEmpty.Emptylevel, PokemonEmpty.SpdEmptyPoint) * Mathf.Pow(0.8f, -level); }
+            }
+        }
+    }
+
+
+    //===========================================================================敌人攻击力改变的函数=====================================================================================
+    /// <summary>
+    /// 当前的攻击力等级
+    /// </summary>
+    public int AtkUpLevel
+    {
+        get { return atkChangeLevel; }
+        set{ atkChangeLevel = value; }
+    }
+    int atkChangeLevel = 0;
+
+    /// <summary>
+    /// 改变敌人攻击力的方法，ChangeLevel代表改变的等级，ChangeTime代表改变的时间，如果ChangeTime == 0，那么攻击力改变状态不会随着时间消失，需要手动改变
+    /// </summary>
+    /// <param name="ChangeLevel"></param>
+    /// <param name="ChangeTime"></param>
+    public void AtkChange(int ChangeLevel ,  float ChangeTime)
+    {
         if (GetComponent<Empty>() != null)
         {
-            if(type == "Atk")
-            {
-                switch (level)
+            AtkUpLevel += ChangeLevel;
+            playerUIState.AbllityChange(0,AtkUpLevel);
+            LevelChange(AtkUpLevel, "Atk");
+            if (ChangeTime != 0) {
+                Timer.Start(this, ChangeTime, () =>
                 {
-                    case 1:gameObject.GetComponent<Empty>().AtkAbilityPoint = (int)(gameObject.GetComponent<Empty>().AtkAbilityPoint * 1.2);break;
-                    case 2:gameObject.GetComponent<Empty>().AtkAbilityPoint = (int)(gameObject.GetComponent<Empty>().AtkAbilityPoint * 1.2 * 1.2);break;
-                    case 3:gameObject.GetComponent<Empty>().AtkAbilityPoint = (int)(gameObject.GetComponent<Empty>().AtkAbilityPoint * 1.2 * 1.2 * 1.2);break;
-                    case -1:gameObject.GetComponent<Empty>().AtkAbilityPoint = (int)(gameObject.GetComponent<Empty>().AtkAbilityPoint * 0.8); break;
-                    case -2:gameObject.GetComponent<Empty>().AtkAbilityPoint = (int)(gameObject.GetComponent<Empty>().AtkAbilityPoint * 0.8 * 0.8); break;
-                    case -3:gameObject.GetComponent<Empty>().AtkAbilityPoint = (int)(gameObject.GetComponent<Empty>().AtkAbilityPoint * 0.8 * 0.8 * 0.8); break;
-                }
+                    AtkUpLevel -= ChangeLevel;
+                    playerUIState.AbllityChange(0, AtkUpLevel);
+                    LevelChange(AtkUpLevel, "Atk");
+                });
             }
-            if(type == "Def")
+        }
+    }
+
+    //===========================================================================敌人攻击力改变的函数=====================================================================================
+
+
+
+
+
+    //===========================================================================敌人防御力改变的函数=====================================================================================
+    /// <summary>
+    /// 当前的防御力等级
+    /// </summary>
+    public int DefUpLevel
+    {
+        get { return defChangeLevel; }
+        set { defChangeLevel = value; }
+    }
+    int defChangeLevel = 0;
+    /// <summary>
+    /// 改变敌人防御力的方法，ChangeLevel代表改变的等级，ChangeTime代表改变的时间，如果ChangeTime == 0，那么防御力改变状态不会随着时间消失，需要手动改变
+    /// </summary>
+    /// <param name="ChangeLevel"></param>
+    /// <param name="ChangeTime"></param>
+    public void DefChange(int ChangeLevel, float ChangeTime)
+    {
+        if (GetComponent<Empty>() != null)
+        {
+            DefUpLevel += ChangeLevel;
+            playerUIState.AbllityChange(1, DefUpLevel);
+            LevelChange(DefUpLevel, "Def");
+            if (ChangeTime != 0)
             {
-                switch (level)
+                Timer.Start(this, ChangeTime, () =>
                 {
-                    case 1:gameObject.GetComponent<Empty>().DefAbilityPoint = (int)(gameObject.GetComponent<Empty>().DefAbilityPoint * 1.2);break;
-                    case 2:gameObject.GetComponent<Empty>().DefAbilityPoint = (int)(gameObject.GetComponent<Empty>().DefAbilityPoint * 1.2 * 1.2); break;
-                    case 3:gameObject.GetComponent<Empty>().DefAbilityPoint = (int)(gameObject.GetComponent<Empty>().DefAbilityPoint * 1.2 * 1.2 * 1.2); break;
-                    case -1:gameObject.GetComponent<Empty>().DefAbilityPoint = (int)(gameObject.GetComponent<Empty>().DefAbilityPoint * 0.8); break;
-                    case -2:gameObject.GetComponent<Empty>().DefAbilityPoint = (int)(gameObject.GetComponent<Empty>().DefAbilityPoint * 0.8 * 0.8); break;
-                    case -3:gameObject.GetComponent<Empty>().DefAbilityPoint = (int)(gameObject.GetComponent<Empty>().DefAbilityPoint * 0.8 * 0.8 * 0.8); break;
-                }
+                    DefUpLevel -= ChangeLevel;
+                    playerUIState.AbllityChange(1, DefUpLevel);
+                    LevelChange(DefUpLevel, "Def");
+                });
             }
-            if(type == "SpA")
+        }
+    }
+
+    //===========================================================================敌人防御力改变的函数=====================================================================================
+
+
+
+
+
+
+    //===========================================================================敌人特攻力改变的函数=====================================================================================
+    /// <summary>
+    /// 当前的特攻力等级
+    /// </summary>
+    public int SpAUpLevel
+    {
+        get { return spAChangeLevel; }
+        set { spAChangeLevel = value; }
+    }
+    int spAChangeLevel = 0;
+    /// <summary>
+    /// 改变敌人特攻力的方法，ChangeLevel代表改变的等级，ChangeTime代表改变的时间，如果ChangeTime == 0，那么特攻力改变状态不会随着时间消失，需要手动改变
+    /// </summary>
+    /// <param name="ChangeLevel"></param>
+    /// <param name="ChangeTime"></param>
+    public void SpAChange(int ChangeLevel, float ChangeTime)
+    {
+        if (GetComponent<Empty>() != null)
+        {
+            SpAUpLevel += ChangeLevel;
+            playerUIState.AbllityChange(2, SpAUpLevel);
+            LevelChange(SpAUpLevel, "SpA");
+            if (ChangeTime != 0)
             {
-                switch (level)
+                Timer.Start(this, ChangeTime, () =>
                 {
-                    case 1:gameObject.GetComponent<Empty>().SpAAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpAAbilityPoint * 1.2); break;
-                    case 2:gameObject.GetComponent<Empty>().SpAAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpAAbilityPoint * 1.2 * 1.2); break;
-                    case 3:gameObject.GetComponent<Empty>().SpAAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpAAbilityPoint * 1.2 * 1.2 * 1.2); break;
-                    case -1:gameObject.GetComponent<Empty>().SpAAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpAAbilityPoint * 0.8); break;
-                    case -2:gameObject.GetComponent<Empty>().SpAAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpAAbilityPoint * 0.8 * 0.8); break;
-                    case -3:gameObject.GetComponent<Empty>().SpAAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpAAbilityPoint * 0.8 * 0.8 * 0.8); break;
-                }
+                    SpAUpLevel -= ChangeLevel;
+                    playerUIState.AbllityChange(2, SpAUpLevel);
+                    LevelChange(SpAUpLevel, "SpA");
+                });
             }
-            if(type == "SpD")
+        }
+    }
+
+    //===========================================================================敌人特攻力改变的函数=====================================================================================
+
+
+
+
+
+    //===========================================================================敌人特防力改变的函数=====================================================================================
+    /// <summary>
+    /// 当前的特防力等级
+    /// </summary>
+    public int SpDUpLevel
+    {
+        get { return spDChangeLevel; }
+        set { spDChangeLevel = value; }
+    }
+    int spDChangeLevel = 0;
+    /// <summary>
+    /// 改变敌人特防力的方法，ChangeLevel代表改变的等级，ChangeTime代表改变的时间，如果ChangeTime == 0，那么特防力改变状态不会随着时间消失，需要手动改变
+    /// </summary>
+    /// <param name="ChangeLevel"></param>
+    /// <param name="ChangeTime"></param>
+    public void SpDChange(int ChangeLevel, float ChangeTime)
+    {
+        if (GetComponent<Empty>() != null)
+        {
+            SpDUpLevel += ChangeLevel;
+            playerUIState.AbllityChange(3, SpDUpLevel);
+            LevelChange(SpDUpLevel, "SpD");
+            if (ChangeTime != 0)
             {
-                switch (level)
+                Timer.Start(this, ChangeTime, () =>
                 {
-                    case 1:gameObject.GetComponent<Empty>().SpdAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpdAbilityPoint * 1.2); break;
-                    case 2:gameObject.GetComponent<Empty>().SpdAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpdAbilityPoint * 1.2 * 1.2); break;
-                    case 3:gameObject.GetComponent<Empty>().SpdAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpdAbilityPoint * 1.2 * 1.2 * 1.2); break;
-                    case -1:gameObject.GetComponent<Empty>().SpdAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpdAbilityPoint * 0.8); break;
-                    case -2:gameObject.GetComponent<Empty>().SpdAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpdAbilityPoint * 0.8 * 0.8); break;
-                    case -3:gameObject.GetComponent<Empty>().SpdAbilityPoint = (int)(gameObject.GetComponent<Empty>().SpdAbilityPoint * 0.8 * 0.8 * 0.8); break;
-                }
+                    SpDUpLevel -= ChangeLevel;
+                    playerUIState.AbllityChange(3, SpDUpLevel);
+                    LevelChange(SpDUpLevel, "SpD");
+                });
             }
         }
     }
 
-    //===========================================================================敌人攻击力提升的函数=====================================================================================
+    //===========================================================================敌人特防力改变的函数=====================================================================================
 
-
-
-
-    //===========================================================================敌人攻击力下降的函数=====================================================================================
-
-    /// <summary>
-    /// 代表攻击力是否下降
-    /// </summary>
-    bool isAtkDown;
-
-    /// <summary>
-    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果攻击力未被下降，状态变为攻击力被下降
-    /// </summary>
-    /// <param name="Time"> 下降的时间，如果为零时间为无限，需要手动Remove </param>
-    public void AtkDown(float Time)
-    {
-        if (GetComponent<Empty>() != null)
-        {
-            isAtkDown = true;
-            playerUIState.StatePlus(12);
-            if (Time != 0) { Invoke("AtkDownRemove", Time); }
-        }
-    }
-    /// <summary>
-    /// 如果AtkDown( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在攻击力恢复时调用此函数
-    /// </summary>
-    public void AtkDownRemove()
-    {
-        if (isAtkDown)
-        {
-            if (GetComponent<Empty>() != null)
-            {
-                isAtkDown = false;
-                playerUIState.StateDestory(12);
-            }
-        }
-    }
-
-    //===========================================================================敌人攻击力下降的函数=====================================================================================
-
-
-    //===========================================================================敌人防御力提升的函数=====================================================================================
-
-    /// <summary>
-    /// 代表防御力是否提升
-    /// </summary>
-    bool isDefUp;
-
-    /// <summary>
-    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果防御力未被提升，状态变为防御力被提升
-    /// </summary>
-    /// <param name="Time"> 提升的时间，如果为零时间为无限，需要手动Remove </param>
-    public void DefUP(float Time)
-    {
-        if (GetComponent<Empty>() != null)
-        {
-            isDefUp = true;
-            playerUIState.StatePlus(13);
-            if (Time != 0) { Invoke("DefUpRemove", Time); }
-        }
-    }
-    /// <summary>
-    /// 如果DefUP( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在防御力恢复时调用此函数
-    /// </summary>
-    public void DefUpRemove()
-    {
-        if (isDefUp)
-        {
-            if (GetComponent<Empty>() != null)
-            {
-                isDefUp = false;
-                playerUIState.StateDestory(13);
-            }
-        }
-    }
-
-    //===========================================================================敌人防御力提升的函数=====================================================================================
-
-
-
-
-    //===========================================================================敌人防御力下降的函数=====================================================================================
-
-    /// <summary>
-    /// 代表防御力是否下降
-    /// </summary>
-    bool isDefDown;
-
-    /// <summary>
-    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果防御力未被下降，状态变为防御力被下降
-    /// </summary>
-    /// <param name="Time"> 下降的时间，如果为零时间为无限，需要手动Remove </param>
-    public void DefDown(float Time)
-    {
-        if (GetComponent<Empty>() != null)
-        {
-            isDefDown = true;
-            playerUIState.StatePlus(14);
-            if (Time != 0) { Invoke("DefDownRemove", Time); }
-
-        }
-    }
-    /// <summary>
-    /// 如果DefDown( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在防御力恢复时调用此函数
-    /// </summary>
-    public void DefDownRemove()
-    {
-        if (isDefDown)
-        {
-            if (GetComponent<Empty>() != null)
-            {
-                isDefDown = false;
-                playerUIState.StateDestory(14);
-            }
-        }
-    }
-
-    //===========================================================================敌人防御力下降的函数=====================================================================================
-
-
-
-
-    //===========================================================================敌人特攻力提升的函数=====================================================================================
-
-    /// <summary>
-    /// 代表特攻力是否提升
-    /// </summary>
-    bool isSpAUp;
-
-    /// <summary>
-    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果特攻力未被提升，状态变为特攻力被提升
-    /// </summary>
-    /// <param name="Time"> 提升的时间，如果为零时间为无限，需要手动Remove </param>
-    public void SpAUP(float Time)
-    {
-        if (GetComponent<Empty>() != null)
-        {
-            isSpAUp = true;
-            playerUIState.StatePlus(15);
-            if (Time != 0) { Invoke("SpAUpRemove", Time); }
-
-        }
-    }
-    /// <summary>
-    /// 如果SpAUP( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在特攻力恢复时调用此函数
-    /// </summary>
-    public void SpAUpRemove()
-    {
-        if (isSpAUp)
-        {
-            if (GetComponent<Empty>() != null)
-            {
-                isSpAUp = false;
-                playerUIState.StateDestory(15);
-            }
-        }
-    }
-
-    //===========================================================================敌人特攻力提升的函数=====================================================================================
-
-
-
-
-    //===========================================================================敌人特攻力下降的函数=====================================================================================
-
-    /// <summary>
-    /// 代表特攻力是否下降
-    /// </summary>
-    bool isSpADown;
-
-    /// <summary>
-    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果特攻力未被下降，状态变为特攻力被下降
-    /// </summary>
-    /// <param name="Time"> 下降的时间，如果为零时间为无限，需要手动Remove </param>
-    public void SpADown(float Time)
-    {
-        if (GetComponent<Empty>() != null)
-        {
-            isSpADown = true;
-            playerUIState.StatePlus(16);
-            if (Time != 0) { Invoke("SpADownRemove", Time); }
-
-        }
-    }
-    /// <summary>
-    /// 如果SpADown( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在特攻力恢复时调用此函数
-    /// </summary>
-    public void SpADownRemove()
-    {
-        if (isSpADown)
-        {
-            if (GetComponent<Empty>() != null)
-            {
-                isSpADown = false;
-                playerUIState.StateDestory(16);
-            }
-        }
-    }
-
-    //===========================================================================敌人特攻力下降的函数=====================================================================================
-
-
-
-
-    //===========================================================================敌人特防力提升的函数=====================================================================================
-
-    /// <summary>
-    /// 代表特防力是否提升
-    /// </summary>
-    bool isSpDUP;
-
-    /// <summary>
-    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果特防力未被提升，状态变为特防力被提升
-    /// </summary>
-    /// <param name="Time"> 提升的时间，如果为零时间为无限，需要手动Remove </param>
-    public void SpDUP(float Time)
-    {
-        if (GetComponent<Empty>() != null)
-        {
-            isSpDUP = true;
-            playerUIState.StatePlus(17);
-            if (Time != 0) { Invoke("SpDUpRemove", Time); }
-
-        }
-    }
-    /// <summary>
-    /// 如果SpDUP( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在特防力恢复时调用此函数
-    /// </summary>
-    public void SpDUpRemove()
-    {
-        if (isSpDUP)
-        {
-            if (GetComponent<Empty>() != null)
-            {
-                isSpDUP = false;
-                playerUIState.StateDestory(17);
-            }
-        }
-    }
-
-    //===========================================================================敌人特防力提升的函数=====================================================================================
-
-
-
-
-    //===========================================================================敌人特防力下降的函数=====================================================================================
-
-    /// <summary>
-    /// 代表特防力是否下降
-    /// </summary>
-    public bool isSpdDown;
-
-    /// <summary>
-    /// 此方法并不会直接改变敌人的数值，仅是给敌人添加一个UI标志.调用此函数时，如果特防力未被下降，状态变为特防力被下降
-    /// </summary>
-    /// <param name="Time"> 下降的时间，如果为零时间为无限，需要手动Remove </param>
-    public void SpDDown(float Time)
-    {
-        if (GetComponent<Empty>() != null)
-        {
-            isSpdDown = true;
-            playerUIState.StatePlus(18);
-            if (Time != 0) { Invoke("SpDDownRemove", Time); }
-
-        }
-    }
-    /// <summary>
-    /// 如果SpDDown( float Time )的Time不等于0，不需要调用此函数，如果Time等于0，需要在特防力恢复时调用此函数
-    /// </summary>
-    public void SpDDownRemove()
-    {
-        if (isSpdDown)
-        {
-            if (GetComponent<Empty>() != null)
-            {
-                isSpdDown = false;
-                playerUIState.StateDestory(18);
-            }
-        }
-    }
-
-    //===========================================================================敌人特防力下降的函数=====================================================================================
 
 
 
@@ -1257,7 +1064,7 @@ public class Pokemon : MonoBehaviour
         if (GetComponent<Empty>() != null)
         {
             isColdDown += 1;
-            playerUIState.StatePlus(19);
+            playerUIState.StatePlus(11);
             if (Time != 0) { Invoke("ColdRemove", Time); }
         }
     }
@@ -1271,7 +1078,7 @@ public class Pokemon : MonoBehaviour
             if (GetComponent<Empty>() != null)
             {
                 isColdDown = 0;
-                playerUIState.StateDestory(19);
+                playerUIState.StateDestory(11);
             }
         }
     }
@@ -1301,24 +1108,24 @@ public class Pokemon : MonoBehaviour
             EmptyCursePoint += CursePoint * OtherStateResistance;
             if (!isEmptyCurseStart && EmptyCursePoint < 1)
             {
-                playerUIState.StatePlus(20);
-                playerUIState.StateSlowUP(20, EmptyCursePoint);
+                playerUIState.StatePlus(12);
+                playerUIState.StateSlowUP(12, EmptyCursePoint);
                 isEmptyCurseStart = true;
             }
             else if (isEmptyCurseStart && EmptyCursePoint < 1)
             {
-                playerUIState.StateSlowUP(20, EmptyCursePoint);
+                playerUIState.StateSlowUP(12, EmptyCursePoint);
             }
             else if (EmptyCursePoint >= 1 && !isEmptyCurseDone)
             {
                 if (!isEmptyCurseStart)
                 {
-                    playerUIState.StatePlus(20);
-                    playerUIState.StateSlowUP(20, EmptyCursePoint);
+                    playerUIState.StatePlus(12);
+                    playerUIState.StateSlowUP(12, EmptyCursePoint);
                     isEmptyCurseStart = true;
                 }
                 isEmptyCurseDone = true;
-                playerUIState.StateSlowUP(20, EmptyCursePoint);
+                playerUIState.StateSlowUP(12, EmptyCursePoint);
                 if (CurseTimer != 0) { Invoke("EmptyCurseRemove", CurseTimer); }
             }
         }
@@ -1330,10 +1137,10 @@ public class Pokemon : MonoBehaviour
         if (isEmptyCurseDone)
         {
             EmptyCursePoint = 0;
-            playerUIState.StateSlowUP(20, 0);
+            playerUIState.StateSlowUP(12, 0);
             isEmptyCurseStart = false;
             isEmptyCurseDone = false;
-            playerUIState.StateDestory(20);
+            playerUIState.StateDestory(12);
         }
     }
 

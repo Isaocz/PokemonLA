@@ -34,6 +34,7 @@ Transform:
   - {fileID: 939630388907183477}
   - {fileID: 2142640640724312873}
   - {fileID: 4236522330418450300}
+  - {fileID: 3103162189283883065}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -61,23 +62,24 @@ MonoBehaviour:
   SkillType: 1
   SkillName: Wish
   SkillChineseName: "\u7948\u613F"
-  SkillDiscribe: "\u57285\u79D2\u540E\u56DE\u590D\u81EA\u5DF1\u6700\u5927\u751F\u547D\u503C\u7684\u56DB\u5206\u4E4B\u4E00"
+  SkillDiscribe: "\u57285\u79D2\u540E\u56DE\u590D\u81EA\u5DF1\u6700\u5927\u751F\u547D\u503C\u7684\u56DB\u5206\u4E4B\u4E00\u3002\u5728\u8BB8\u613F\u7684\u671F\u95F4\u5982\u679C\u5927\u5E45\u79FB\u52A8\u5C31\u4F1A\u56E0\u4E3A\u4E0D\u591F\u8654\u8BDA\u800C\u8BB8\u613F\u5931\u8D25\uFF01"
   PlusSkillDiscribe: 
   PlusSkill: {fileID: 803697370042339730, guid: 004e6d1cbebfa8c448cfb60dfd122632, type: 3}
   MinusSkill: {fileID: 0}
   KOPoint: 0
-  ColdDown: 50
+  ColdDown: 80
   CTLevel: 0
   CTDamage: 0
   SkillQualityLevel: 3
   SkillFrom: 0
-  SkillTag: 
+  SkillTag: 06000000
   isNotDirection: 1
   DirctionDistance: 0
   isNotMoveWithPlayer: 0
   isMultipleDamage: 0
   MultipleDamageCDTime: 0
   isImmediately: 0
+  DrainBounsPer: 0
 --- !u!114 &2155274952506698512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 162063fff3390954d9e76d35e3ded550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scaleDuration: 5
+  scaleDuration: 2
   initialScale: {x: 1, y: 1, z: 0}
   targetScale: {x: 0, y: 0, z: 0}
 --- !u!1 &1144700832556283078
@@ -110,7 +112,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4236522330418450300
 Transform:
   m_ObjectHideFlags: 0
@@ -148,7 +150,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 5.02
+    scalar: 0.02
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -5103,7 +5105,7 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0.02
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!114 &1708584868790117798
@@ -5119,8 +5121,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  time: 0.5
-  waittime: 4.5
+  time: 0.3
+  waittime: 1.7
   alpha: 1
 --- !u!1 &5160453131592041552
 GameObject:
@@ -5326,7 +5328,7 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0.02
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!114 &3745371978078851468
@@ -5342,8 +5344,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  time: 0.5
-  waittime: 4.5
+  time: 0.3
+  waittime: 1.7
   alpha: 1
 --- !u!1 &7223634654121203712
 GameObject:
@@ -5549,7 +5551,7 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0.02
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!114 &7657147206813991397
@@ -5565,8 +5567,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  time: 0.5
-  waittime: 4.5
+  time: 0.3
+  waittime: 1.7
   alpha: 1
 --- !u!1 &8522416919622961392
 GameObject:
@@ -5772,7 +5774,7 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0.02
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!114 &3535924114684668355
@@ -5788,6 +5790,64 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  time: 0.5
-  waittime: 4.5
+  time: 0.3
+  waittime: 1.7
   alpha: 1
+--- !u!1001 &8334978474971409404
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 9179012006657578517}
+    m_Modifications:
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+--- !u!4 &3103162189283883065 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+  m_PrefabInstance: {fileID: 8334978474971409404}
+  m_PrefabAsset: {fileID: 0}

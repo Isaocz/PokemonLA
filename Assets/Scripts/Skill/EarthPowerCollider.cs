@@ -26,10 +26,9 @@ public class EarthPowerCollider : MonoBehaviour
                 ParentEarthPower.HitAndKo(e);
                 if (!Empties.Contains(e)) {
                     Empties.Add(e);
-                    if (Random.Range(0.0f, 1.0f) + ((float)ParentEarthPower.player.LuckPoint / 30) > 0.9f && !e.isSpdDown)
+                    if (Random.Range(0.0f, 1.0f) + ((float)ParentEarthPower.player.LuckPoint / 30) > 0.9f )
                     {
-                        e.SpDDown(0);
-                        e.SpdAbilityPoint = (int)(e.SpdAbilityPoint * 0.8f);
+                        e.SpDChange(-1, 0.0f);
                     }
                 }
             }

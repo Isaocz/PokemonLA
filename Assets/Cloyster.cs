@@ -35,7 +35,7 @@ public class Cloyster : Empty
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator.SetFloat("isClosing" , 1);
         DefAbilityPoint /= 2;
-        DefDown(0);
+        DefChange(-1, 0.0f);
     }
 
 
@@ -165,16 +165,14 @@ public class Cloyster : Empty
     public void Close()
     {
         animator.SetFloat("isClosing", -1);
-        DefAbilityPoint *= 2;
-        DefDownRemove();
+        DefChange(1, 0.0f);
         Invincible = true;
     }
 
     public void Open()
     {
         animator.SetFloat("isClosing", 1);
-        DefAbilityPoint /= 2;
-        DefDown(0);
+        DefChange(-1,0.0f);
         Invincible = false;
     }
 

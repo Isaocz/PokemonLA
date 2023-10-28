@@ -31,22 +31,10 @@ public class Charm : Skill
             Empty target = other.GetComponent<Empty>();
             if (!AtkDownTargetList.Contains(target))
             {
-                Debug.Log(target.AtkAbilityPoint + "+" + target);
                 AtkDownTargetList.Add(target);
-                target.AtkDown(0);
-                target.AtkAbilityPoint *= 0.6f;
+                target.AtkChange(-2, 3.5f);
                 
             }    
-        }
-    }
-
-    private void OnDestroy()
-    {
-        for (int i = 0 ; i < AtkDownTargetList.Count; i++)
-        {
-            AtkDownTargetList[i].AtkDownRemove();
-            AtkDownTargetList[i].AtkAbilityPoint /= 0.6f;
-            Debug.Log(AtkDownTargetList[i].AtkAbilityPoint + "+" + AtkDownTargetList[i]);
         }
     }
 }

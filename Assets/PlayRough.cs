@@ -47,8 +47,7 @@ public class PlayRough : Skill
             }
             if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.9f)
             {
-                target.AtkAbilityPoint *= 0.8f;
-                target.AtkDown(0);
+                target.AtkChange(-1, 0.0f);
             }
         }
     }

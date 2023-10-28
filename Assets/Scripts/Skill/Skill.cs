@@ -39,7 +39,7 @@ public class Skill : MonoBehaviour
     public Skill MinusSkill;
 
     //一个布尔值表示攻击是否已发生，用于非多段伤害
-    bool isHitDone = false;
+    protected bool isHitDone = false;
 
 
     //声明2个变量，表示技能的冷却时间，以及技能可以击退敌人的距离
@@ -73,7 +73,7 @@ public class Skill : MonoBehaviour
     public enum SkillTagEnum
     {
         接触类,非接触类,爪类,牙类,声音类,连续多次使用类,恢复HP类,吸取HP类,降低使用者能力类,反作用力伤害类,爆炸类,
-        拳类,波动和波导类,粉末类,球和弹类,心灵攻击类,跳舞类,风类,切割类,天气类,场地类,防住类,压击类,绑紧类,雾类,脚踢类,激光类,
+        拳类,波动和波导类,粉末类,球和弹类,心灵攻击类,跳舞类,风类,切割类,天气类,场地类,防住类,压击类,绑紧类,雾类,脚踢类,激光类,尾巴类,
     }
 
     //表示技能生成时是否生成于玩家所面对方向，如为Fales生成在玩家所面对的方向，如为true生成在玩家位置（多用于自我buff类技能）

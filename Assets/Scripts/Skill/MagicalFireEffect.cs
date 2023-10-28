@@ -24,7 +24,7 @@ public class MagicalFireEffect : MonoBehaviour
             if (collision.tag == "Empty") {
                 Empty target = collision.GetComponent<Empty>();
                 transform.parent.GetComponent<MagicalFire>().HitAndKo(target);
-                target.LevelChange(-1, "SpA");
+                target.SpAChange(-1, 0.0f);
             }
         }
     }

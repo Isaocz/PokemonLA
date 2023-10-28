@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CalmMind : Skill
 {
+
+    public SubZenHeadbutt SubCM;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +18,7 @@ public class CalmMind : Skill
         {
             player.playerData.SpDBounsJustOneRoom += 1;
         }
+        if (SkillFrom == 2) { player.AddASubSkill(SubCM); }
     }
 
     // Update is called once per frame

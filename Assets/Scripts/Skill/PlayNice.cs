@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayNice : Skill
 {
     List<Empty> influence = new List<Empty>();
-    List<int> infnum = new List<int>();
     // Start is called before the first frame update
     void Awake()
     {
@@ -27,14 +26,12 @@ public class PlayNice : Skill
             //对目标只造成一次降攻
             if (target != influence.Find(t => t))
             {
-                target.AtkDown(0);
-                infnum.Add(target.AtkEmptyPoint);
+                target.AtkChange(-1,0.0f);
                 influence.Add(target);
-                target.LevelChange(-1, "Atk");
                 if(SkillFrom == 2)
                 {
-                    target.LevelChange(-1, "Atk");
-                    target.LevelChange(-1, "SpA");
+                    target.AtkChange(-1, 0.0f);
+                    target.SpAChange(-1, 0.0f);
                 }
             }
         }
@@ -45,8 +42,12 @@ public class PlayNice : Skill
         //结束时恢复攻击力
         for (int i = 0; i < influence.Count; i++)
         {
-            influence[i].AtkDownRemove();
-            influence[i].AtkEmptyPoint = infnum[i];
+            influence[i].AtkChange(1,0.0f);
+            if (SkillFrom == 2)
+            {
+                influence[i].AtkChange(1, 0.0f);
+                influence[i].SpAChange(1, 0.0f);
+            }
         }
     }
 }

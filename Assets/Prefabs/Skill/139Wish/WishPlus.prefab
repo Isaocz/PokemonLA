@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3762447741414141349
 Transform:
   m_ObjectHideFlags: 0
@@ -55,7 +55,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 5.02
+    scalar: 0.02
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -4840,6 +4840,7 @@ Transform:
   - {fileID: 285974214489829292}
   - {fileID: 1387654709470282224}
   - {fileID: 3762447741414141349}
+  - {fileID: 8124113114131636933}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4867,17 +4868,17 @@ MonoBehaviour:
   SkillType: 1
   SkillName: Wish
   SkillChineseName: "\u7948\u613F"
-  SkillDiscribe: "\u57285\u79D2\u540E\u56DE\u590D\u81EA\u5DF1\u6700\u5927\u751F\u547D\u503C\u7684\u56DB\u5206\u4E4B\u4E00"
-  PlusSkillDiscribe: "\u56DE\u590D\u91CF\u53D8\u4E3A\u6700\u5927\u751F\u547D\u503C\u76842/5"
+  SkillDiscribe: "\u57285\u79D2\u540E\u56DE\u590D\u81EA\u5DF1\u6700\u5927\u751F\u547D\u503C\u7684\u56DB\u5206\u4E4B\u4E00\u3002\u5728\u8BB8\u613F\u7684\u671F\u95F4\u5982\u679C\u5927\u5E45\u79FB\u52A8\u5C31\u4F1A\u56E0\u4E3A\u4E0D\u591F\u8654\u8BDA\u800C\u8BB8\u613F\u5931\u8D25\uFF01"
+  PlusSkillDiscribe: "\u56DE\u590D\u91CF\u53D8\u5F97\u66F4\u591A\uFF0C\u5728\u8BB8\u613F\u65F6\u53EF\u4EE5\u79FB\u52A8\u7684\u8303\u56F4\u7565\u5FAE\u6269\u5927\u3002"
   PlusSkill: {fileID: 0}
   MinusSkill: {fileID: 421806383074505547, guid: 897f611988bcf7440afdf27493446f78, type: 3}
   KOPoint: 0
-  ColdDown: 50
+  ColdDown: 80
   CTLevel: 0
   CTDamage: 0
   SkillQualityLevel: 4
   SkillFrom: 2
-  SkillTag: 
+  SkillTag: 06000000
   isNotDirection: 1
   DirctionDistance: 0
   isNotMoveWithPlayer: 0
@@ -4897,7 +4898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 162063fff3390954d9e76d35e3ded550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scaleDuration: 5
+  scaleDuration: 2
   initialScale: {x: 1, y: 1, z: 0}
   targetScale: {x: 0, y: 0, z: 0}
 --- !u!1 &2218947493380349492
@@ -5104,7 +5105,7 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0.02
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!114 &1822792602709673855
@@ -5120,8 +5121,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  time: 0.5
-  waittime: 4.5
+  time: 0.3
+  waittime: 1.7
   alpha: 1
 --- !u!1 &5287327240008722057
 GameObject:
@@ -5327,7 +5328,7 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0.02
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!114 &4397759728394466133
@@ -5343,8 +5344,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  time: 0.5
-  waittime: 4.5
+  time: 0.3
+  waittime: 1.7
   alpha: 1
 --- !u!1 &7692783296223607513
 GameObject:
@@ -5550,7 +5551,7 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0.02
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!114 &7259351820565881660
@@ -5566,8 +5567,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  time: 0.5
-  waittime: 4.5
+  time: 0.3
+  waittime: 1.7
   alpha: 1
 --- !u!1 &8698832271014636073
 GameObject:
@@ -5773,7 +5774,7 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0.02
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!114 &4607148247434890010
@@ -5789,6 +5790,92 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  time: 0.5
-  waittime: 4.5
+  time: 0.3
+  waittime: 1.7
   alpha: 1
+--- !u!1001 &2883933820613718272
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8187445294534833356}
+    m_Modifications:
+    - target: {fileID: 6393826497442010050, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: Duration
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010052, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393826497442010055, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+      propertyPath: m_Name
+      value: SkillRangeCircle
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+--- !u!4 &8124113114131636933 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6393826497442010053, guid: f0a3c735034224d41a7db50c6f76170f, type: 3}
+  m_PrefabInstance: {fileID: 2883933820613718272}
+  m_PrefabAsset: {fileID: 0}

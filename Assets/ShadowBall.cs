@@ -5,28 +5,89 @@ using UnityEngine;
 public class ShadowBall : Skill
 {
     public float moveSpeed;
-    void Update()
+    // Start is called before the first frame update
+
+    Vector2 direction;
+    Vector3 StartPostion;
+    bool isCanNotMove;
+    GameObject OverPS1;
+    bool isSpAUp;
+
+
+
+    // Start is called before the first frame update
+    void Start()
     {
-        transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
+        animator = GetComponent<Animator>();
+        direction = (transform.rotation * Vector2.right).normalized;
+        StartPostion = transform.position;
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+        OverPS1 = transform.GetChild(3).gameObject;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+
+    private void FixedUpdate()
     {
-        if (collision.CompareTag("Empty"))
+        if (!isCanNotMove)
         {
-            Empty target = collision.GetComponent<Empty>();
-            if (target != null)
+            Vector3 postion = transform.position;
+            postion.x += direction.x * moveSpeed * Time.deltaTime;
+            postion.y += direction.y * moveSpeed * Time.deltaTime;
+            transform.position = postion;
+            if ((StartPostion - transform.position).magnitude > MaxRange)
             {
-                HitAndKo(target);
-                if(Random.Range(0f,1f) + (float)player.LuckPoint/30 > 0.8f)
-                {
-                    target.SpdAbilityPoint -= 1;
-                }
+                BallBreak();
+
             }
         }
-        if (collision.CompareTag("Enviroment") || collision.CompareTag("Room"))
+    }
+
+
+    void BallBreak()
+    {
+        if (!isCanNotMove)
         {
-            Destroy(gameObject);
+            transform.GetComponent<Collider2D>().enabled = false;
+            animator.SetTrigger("Over");
+            isCanNotMove = true;
+        }
+    }
+
+
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.isTrigger == false)
+        {
+
+            if (other.tag == "Empty")
+            {
+
+                Empty target = other.GetComponent<Empty>();
+                if (target != null) {
+                    HitAndKo(target);
+                    if (Random.Range(0f, 1f) + (float)player.LuckPoint / 30 > 0.8f)
+                    {
+                        target.SpAChange(-1,0.0f);
+                    }
+                }
+                BallBreak();
+            }
+            else if (other.tag == "Room")
+            {
+                BallBreak();
+            }
+            else if (other.tag == "Enviroment")
+            {
+                if (SkillFrom != 2)
+                {
+                    BallBreak();
+                }
+                else
+                {
+                    if (!isSpAUp) { SpDamage += 20; moveSpeed += 2.5f; isSpAUp = true; }
+                }
+            }
         }
     }
 }
