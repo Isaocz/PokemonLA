@@ -10,6 +10,8 @@ public class MagicalFire : Skill
     private Rigidbody2D rb;
     private Vector2 moveDirection;
 
+    public bool isSpDownDone;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();

@@ -12,6 +12,15 @@ public class FairyButterfly : MonoBehaviour
     public FairyButterfly.ButterflyType BFType;
     SpriteRenderer BFSprite;
 
+
+    public bool isInfatuation
+    {
+        get { return isinfatuation; }
+        set { isinfatuation = value; }
+    }
+    bool isinfatuation = false;
+
+
     public enum ButterflyType
     {
         浅粉色普通型,
@@ -101,6 +110,7 @@ public class FairyButterfly : MonoBehaviour
             Empty e = other.GetComponent<Empty>();
             if (e != null && !e.Invincible)
             {
+                if (isinfatuation) { e.EmptyInfatuation(15,0.4f); }
                 if (player.SpAAbilityPoint >= player.AtkAbilityPoint)
                 {
                     Pokemon.PokemonHpChange(player.gameObject , e.gameObject , 0 , ((BFType == ButterflyType.红色慢速攻击型) ? 30 : 15), 0 , Type.TypeEnum.Fairy);

@@ -339,6 +339,23 @@ public class Skill : MonoBehaviour
         }
     }
 
+    protected int Count1_3()
+    {
+        float p = Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 30);
+        if (p >= 0 && p <= 0.65f)
+        {
+            return 1;
+        }
+        else if (p >= 0.65f && p <= 0.90f)
+        {
+            return 2;
+        }
+        else
+        {
+            return 3;
+        }
+    }
+
     //=================================多次攻击的次数判定===========================================
 
 
@@ -364,9 +381,24 @@ public class Skill : MonoBehaviour
         //为投掷精通
         else if (SkillIndex == 304)
         {
-
             if (Mathf.Ceil(12 + player.maxHp * 0.06f) > player.Hp - 1) { return false; }
             else { return true; }
+        }
+        //为珍藏或者珍藏精通
+        else if (SkillIndex == 317 || SkillIndex == 318)
+        {
+            if (((player.Skill01 == null) || (player.Skill01 != null && player.Skill01.SkillIndex != 317 && player.Skill01.SkillIndex != 318 && player.isSkill01CD) || (player.Skill01 != null && ( player.Skill01.SkillIndex == 317 || player.Skill01.SkillIndex == 318 ))) &&
+                ((player.Skill02 == null) || (player.Skill02 != null && player.Skill02.SkillIndex != 317 && player.Skill02.SkillIndex != 318 && player.isSkill02CD) || (player.Skill02 != null && (player.Skill02.SkillIndex == 317 || player.Skill02.SkillIndex == 318))) &&
+                ((player.Skill03 == null) || (player.Skill03 != null && player.Skill03.SkillIndex != 317 && player.Skill03.SkillIndex != 318 && player.isSkill03CD) || (player.Skill03 != null && (player.Skill03.SkillIndex == 317 || player.Skill03.SkillIndex == 318))) &&
+                ((player.Skill04 == null) || (player.Skill04 != null && player.Skill04.SkillIndex != 317 && player.Skill04.SkillIndex != 318 && player.isSkill04CD) || (player.Skill04 != null && (player.Skill04.SkillIndex == 317 || player.Skill04.SkillIndex == 318))) 
+                )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         //为其他技能
         else

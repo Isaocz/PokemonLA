@@ -169,7 +169,7 @@ public class PlayerControler : Pokemon
     //声明一个游戏对象，表示玩家的技能1,以及技能1的冷却计时器和技能1是否冷却,是否在使用技能
     public Skill Skill01;
     float Skill01Timer = 0;
-    bool isSkill01CD = false;
+    public bool isSkill01CD = false;
     bool isSkill01lunch = false;
     bool isSkill = false;
     public SkillBar01 skillBar01;
@@ -177,21 +177,21 @@ public class PlayerControler : Pokemon
     //声明一个游戏对象，表示玩家的技能1,以及技能1的冷却计时器和技能1是否冷却,是否在使用技能
     public Skill Skill02;
     float Skill02Timer = 0;
-    bool isSkill02CD = false;
+    public bool isSkill02CD = false;
     bool isSkill02lunch = false;
     public SkillBar01 skillBar02;
 
     //声明一个游戏对象，表示玩家的技能1,以及技能1的冷却计时器和技能1是否冷却,是否在使用技能
     public Skill Skill03;
     float Skill03Timer = 0;
-    bool isSkill03CD = false;
+    public bool isSkill03CD = false;
     bool isSkill03lunch = false;
     public SkillBar01 skillBar03;
 
     //声明一个游戏对象，表示玩家的技能1,以及技能1的冷却计时器和技能1是否冷却,是否在使用技能
     public Skill Skill04;
     float Skill04Timer = 0;
-    bool isSkill04CD = false;
+    public bool isSkill04CD = false;
     bool isSkill04lunch = false;
     public SkillBar01 skillBar04;
 
