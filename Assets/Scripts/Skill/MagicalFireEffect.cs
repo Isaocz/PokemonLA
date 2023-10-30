@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class MagicalFireEffect : MonoBehaviour
 {
+
+    MagicalFire ParentMF;
+
     void Start()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    { 
-
+        ParentMF = transform.parent.GetComponent<MagicalFire>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -23,8 +20,11 @@ public class MagicalFireEffect : MonoBehaviour
             Destroy(this.gameObject);
             if (collision.tag == "Empty") {
                 Empty target = collision.GetComponent<Empty>();
-                transform.parent.GetComponent<MagicalFire>().HitAndKo(target);
-                target.SpAChange(-1, 0.0f);
+                ParentMF.HitAndKo(target);
+                if (!ParentMF.isSpDownDone) { target.SpAChange(-1, 0.0f); ParentMF.isSpDownDone = true; }
+                if (ParentMF.SkillFrom == 2) {
+                    target.EmptyBurnDone(0.4f, 10.0f, 0.1f + ((float)ParentMF.player.LuckPoint / 30.0f));
+                }
             }
         }
     }

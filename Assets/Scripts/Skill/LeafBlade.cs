@@ -9,10 +9,12 @@ public class LeafBlade : Skill
     private bool changingSpeed = false;
     private Empty targetEnemy;
     private float attackDetectionDelay = 1f;
-    private float moveSpeed = 12f; // 控制移动速度
+    private float moveSpeed = 14f; // 控制移动速度
     private float timer;
     private float atkTimer = 1f;
     private int Counts;
+
+    bool isCountPlus;
 
     private void Start()
     {
@@ -69,12 +71,33 @@ public class LeafBlade : Skill
                 Invoke("ChangeDirection", attackDetectionDelay);
             }
         }
+        if (SkillFrom == 2 && attackCount >= 1 && !isCountPlus)
+        {
+            if (other.tag == "Grass")
+            {
+                NormalGress n = other.GetComponent<NormalGress>();
+                GressPlayerINOUT g = other.GetComponent<GressPlayerINOUT>();
+                if (n != null)
+                {
+                    Counts++;
+                    isCountPlus = true;
+                    n.GrassDie();
+                }
+                if (g != null)
+                {
+                    Counts++;
+                    isCountPlus = true;
+                    g.GrassDie();
+                }
+            }
+        }
     }
 
     private void ChangeDirection()
     {
         if (targetEnemy != null)
         {
+            isCountPlus = false;
             Vector3 directionToEnemy = (targetEnemy.transform.position - transform.position).normalized;
             transform.right = directionToEnemy;
             Invoke("ResumeMoving", attackDetectionDelay);
