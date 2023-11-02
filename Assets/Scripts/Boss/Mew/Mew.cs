@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class Mew : Empty
 {
@@ -92,6 +93,7 @@ public class Mew : Empty
     public int currentPhase = 1; // 当前阶段
     public bool LaserChange = false;
     private float skillTimer = 0f; // 技能计时器
+    private bool isReset;
     private List<GameObject> heartStamps = new List<GameObject>();//对HeartStamp进行存储
     private float MoreAttackTimer = -4f;//二阶段更多技能计时器
     private bool isPhase3 = false;
@@ -119,10 +121,36 @@ public class Mew : Empty
     private float HpTimer = 191f;
     private float HpTiming = 191f;
     
-    //死亡动画
+    //死亡判定
     public bool MewBossKilled = false;
 
-    // Start is called before the first frame update
+    //颜色
+    private Color[] colors = new Color[]
+{
+        new Color(0.7176471f, 0.6901961f, 0.6666667f, 0.5882353f), // Normal
+        new Color(1, 0.75f, 0.175f, 0.7803922f), // Fighting
+        new Color(0.678f,0.643f,0.91f,0.5882353f), // Flying
+        new Color(0.875f,0.385f,0.733f,0.5882353f), // Poison
+        new Color(0.81f,0.702f,0.51f,0.7058824f), // Ground
+        new Color(0.68f, 0.54f,0.2636614f,0.702f), // Rock
+        new Color(0.9f,0.945f,0.506f,0.5882353f), // Bug
+        new Color(0.92f,0.31f,0.43f,0.627451f), // Ghost
+        new Color(0.765f,0.64f,0.5f,0.53f), // Steel
+        new Color(1,0.95f,0,0.6862745f), // Fire
+        new Color(0.54f,0.75f,0.8903922f,0.5882353f), // Water
+        new Color(0.69f,0.87f,0.54f,0.5882353f), // Grass
+        new Color(0.96f,0.93f,0.63f,0.5882353f), // Electric
+        new Color(0.86f,0.50f,0.655f,0.5882353f), // Psychic
+        new Color(0.495f,0.765f,0.895f,0.5882353f), // Ice
+        new Color(0.845f,0.553f,0.5137255f,0.682353f), // Dragon
+        new Color(1,0.498f,0.53104f,0.8313726f), // Dark
+        new Color(0.823f,0.87f,0.95f,0.5882353f), // Fairy
+};
+    private Type.TypeEnum SkillType;
+    public Material src1;
+    public Material src2;
+    public float intensity = 1f;
+
     void Start()
     {
         //Audio
@@ -157,6 +185,7 @@ public class Mew : Empty
 
         //入场
         ClearProjectile();
+        isReset = false;
 
         //删除所有环境对象
         Transform grandParent = transform.parent.parent;
@@ -166,7 +195,18 @@ public class Mew : Empty
         {
             for (int i = 0; i < enviroment.childCount; i++)
             {
-                Destroy(enviroment.GetChild(i).gameObject);
+                if (enviroment.tag == "Grass")
+                {
+                    NormalGress grass = enviroment.GetComponent<NormalGress>();
+                    if (grass != null)
+                    {
+                        grass.GrassDie();
+                    }
+                }
+                else
+                {
+                    Destroy(enviroment.GetChild(i).gameObject);
+                }
             }
         }
     }
@@ -227,6 +267,7 @@ public class Mew : Empty
                             {
                                 if (!roomCreated && currentPhase == 1)
                                 {
+                                    isReset = false;
                                     turningPhase = true;
                                     ClearStatusEffects();
                                     StopAllCoroutines();//停止所有技能释放
@@ -263,6 +304,7 @@ public class Mew : Empty
                     }
                 }
             }
+            ChangeColor();
             if (UsedMeanLook)
             {
                 MeanLookTimer += Time.deltaTime;
@@ -276,6 +318,7 @@ public class Mew : Empty
     }
     void Phase1()
     {
+        ResetSkillTimer();
         if (skillTimer <= 0f)
         {
             int randomSkillIndex = Random.Range(1, 19);
@@ -287,6 +330,7 @@ public class Mew : Empty
     }
     void Phase2()
     {
+        ResetSkillTimer();
         if (skillTimer <= 0f)
         {
             // 随机选择一个技能释放
@@ -512,6 +556,7 @@ public class Mew : Empty
                 }
                 break;
             case 9://技能9：爱心印章
+                SkillType = Type.TypeEnum.Fairy;
                 StartCoroutine(ReleaseHeartStamp());
                 IEnumerator ReleaseHeartStamp()
                 {
@@ -542,7 +587,7 @@ public class Mew : Empty
                 }
                 break;
             case 10://技能10：鳞射
-                // 生成ScaleShot
+                SkillType = Type.TypeEnum.Dragon;
                 StartCoroutine(ReleaseScaleShoot());
                 IEnumerator ReleaseScaleShoot()
                 {
@@ -581,6 +626,7 @@ public class Mew : Empty
                     //防止连续使用两次黑色目光
                     return;
                 }
+                SkillType = Type.TypeEnum.Dark;
                 GameObject MeanLookse = Instantiate(MeanLookSE, transform.position, Quaternion.identity);
                 Destroy(MeanLookse, 1f);
                 StartCoroutine(ReleaseMeanLook());
@@ -923,6 +969,43 @@ public class Mew : Empty
             case 20: skillTimer = 6f; break;
         }
     }
+
+    void ChangeColor()
+    {
+        float factor = Mathf.Pow(2, intensity);
+        switch (SkillType)
+        {
+            case Type.TypeEnum.Normal: src1.SetColor("_Color",new Color(colors[0].r * factor, colors[0].g * factor, colors[0].b * factor, 1)); src2.SetColor("_Color", new Color(colors[0].r * factor, colors[0].g * factor, colors[0].b * factor, 1)); break;
+            case Type.TypeEnum.Fighting: src1.SetColor("_Color", new Color(colors[1].r * factor, colors[1].g * factor, colors[1].b * factor, 1)); src2.SetColor("_Color", new Color(colors[1].r * factor, colors[1].g * factor, colors[1].b * factor, 1)); break;
+            case Type.TypeEnum.Flying: src1.SetColor("_Color", new Color(colors[2].r * factor, colors[2].g * factor, colors[2].b * factor, 1)); src2.SetColor("_Color", new Color(colors[2].r * factor, colors[2].g * factor, colors[2].b * factor, 1)); break;
+            case Type.TypeEnum.Poison: src1.SetColor("_Color", new Color(colors[3].r * factor, colors[3].g * factor, colors[3].b * factor, 1)); src2.SetColor("_Color", new Color(colors[3].r * factor, colors[3].g * factor, colors[3].b * factor, 1)); break;
+            case Type.TypeEnum.Ground: src1.SetColor("_Color", new Color(colors[4].r * factor, colors[4].g * factor, colors[4].b * factor, 1)); src2.SetColor("_Color", new Color(colors[4].r * factor, colors[4].g * factor, colors[4].b * factor, 1)); break;
+            case Type.TypeEnum.Rock: src1.SetColor("_Color", new Color(colors[5].r * factor, colors[5].g * factor, colors[5].b * factor, 1)); src2.SetColor("_Color", new Color(colors[5].r * factor, colors[5].g * factor, colors[5].b * factor, 1)); break;
+            case Type.TypeEnum.Bug: src1.SetColor("_Color", new Color(colors[6].r * factor, colors[6].g * factor, colors[6].b * factor, 1)); src2.SetColor("_Color", new Color(colors[6].r * factor, colors[6].g * factor, colors[6].b * factor, 1)); break;
+            case Type.TypeEnum.Ghost: src1.SetColor("_Color", new Color(colors[7].r * factor, colors[7].g * factor, colors[7].b * factor, 1)); src2.SetColor("_Color", new Color(colors[7].r * factor, colors[7].g * factor, colors[7].b * factor, 1)); break;
+            case Type.TypeEnum.Steel: src1.SetColor("_Color", new Color(colors[8].r * factor, colors[8].g * factor, colors[8].b * factor, 1)); src2.SetColor("_Color", new Color(colors[8].r * factor, colors[8].g * factor, colors[8].b * factor, 1)); break;
+            case Type.TypeEnum.Fire: src1.SetColor("_Color", new Color(colors[9].r * factor, colors[9].g * factor, colors[9].b * factor, 1)); src2.SetColor("_Color", new Color(colors[9].r * factor, colors[9].g * factor, colors[9].b * factor, 1)); break;
+            case Type.TypeEnum.Water: src1.SetColor("_Color", new Color(colors[10].r * factor, colors[10].g * factor, colors[10].b * factor, 1)); src2.SetColor("_Color", new Color(colors[10].r * factor, colors[10].g * factor, colors[10].b * factor, 1)); break;
+            case Type.TypeEnum.Grass: src1.SetColor("_Color", new Color(colors[11].r * factor, colors[11].g * factor, colors[11].b * factor, 1)); src2.SetColor("_Color", new Color(colors[11].r * factor, colors[11].g * factor, colors[11].b * factor, 1)); break;
+            case Type.TypeEnum.Electric: src1.SetColor("_Color", new Color(colors[12].r * factor, colors[12].g * factor, colors[12].b * factor, 1)); src2.SetColor("_Color", new Color(colors[12].r * factor, colors[12].g * factor, colors[12].b * factor, 1)); break;
+            case Type.TypeEnum.Psychic: src1.SetColor("_Color", new Color(colors[13].r * factor, colors[13].g * factor, colors[13].b * factor, 1)); src2.SetColor("_Color", new Color(colors[13].r * factor, colors[13].g * factor, colors[13].b * factor, 1)); break;
+            case Type.TypeEnum.Ice: src1.SetColor("_Color", new Color(colors[14].r * factor, colors[14].g * factor, colors[14].b * factor, 1)); src2.SetColor("_Color", new Color(colors[14].r * factor, colors[14].g * factor, colors[14].b * factor, 1)); break;
+            case Type.TypeEnum.Dragon: src1.SetColor("_Color", new Color(colors[15].r * factor, colors[15].g * factor, colors[15].b * factor, 1)); src2.SetColor("_Color", new Color(colors[15].r * factor, colors[15].g * factor, colors[15].b * factor, 1)); break;
+            case Type.TypeEnum.Dark: src1.SetColor("_Color", new Color(colors[16].r * factor, colors[16].g * factor, colors[16].b * factor, 1)); src2.SetColor("_Color", new Color(colors[16].r * factor, colors[16].g * factor, colors[16].b * factor, 1)); break;
+            case Type.TypeEnum.Fairy: src1.SetColor("_Color", new Color(colors[17].r * factor, colors[17].g * factor, colors[17].b * factor, 1)); src2.SetColor("_Color", new Color(colors[17].r * factor, colors[17].g * factor, colors[17].b * factor, 1)); break;
+            default: src1.SetColor("_Color", Color.white); src2.SetColor("_Color", Color.white); break;
+        }
+        
+    }
+
+    void ResetSkillTimer()
+    {//为了让入场和转阶段没这么突然
+        if (!isReset)
+        {
+            skillTimer = 3f;
+            isReset = true;
+        }
+    }
     void RamdomTeleport()
     {
         bool collided = false;
@@ -1030,7 +1113,8 @@ public class Mew : Empty
         {
             RamdomTeleport();
         }
-        UseSkillMask(randomSkillIndex);
+        ChangeType(randomSkillIndex);
+        UseSkillMask();
         yield return new WaitForSeconds(0.5f);
         UseSkill(randomSkillIndex);
         SkillTimerUpdate(randomSkillIndex, 1);
@@ -1051,7 +1135,8 @@ public class Mew : Empty
         {
             RamdomTeleport();
         }
-        UseSkillMask(randomSkillIndex);
+        ChangeType(randomSkillIndex);
+        UseSkillMask();
         yield return new WaitForSeconds(0.5f);
         UseSkill(randomSkillIndex);
         SkillTimerUpdate(randomSkillIndex, 2);
@@ -1077,7 +1162,8 @@ public class Mew : Empty
         //清除子弹
         ClearProjectile();
         yield return new WaitForSeconds(1f);
-        UseSkillMask(1);
+        SkillType = Type.TypeEnum.Grass;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         for (int j = 0; j < 2; j++)
         {
@@ -1093,7 +1179,8 @@ public class Mew : Empty
             yield return new WaitForSeconds(2f);
         }//技能1：魔法叶
         yield return new WaitForSeconds(1f);
-        UseSkillMask(3);
+        SkillType = Type.TypeEnum.Fire;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         for (int j = 0; j < 10; j++)
         {
@@ -1111,7 +1198,8 @@ public class Mew : Empty
             yield return new WaitForSeconds(0.4f);
         }//技能2：磷火
         yield return new WaitForSeconds(2.6f);
-        UseSkillMask(5);
+        SkillType = Type.TypeEnum.Normal;
+        UseSkillMask();
         yield return new WaitForSeconds(0.5f);
         //创建6条激光
         for (int j = 0; j < 3; j++)
@@ -1141,7 +1229,8 @@ public class Mew : Empty
             }
             yield return new WaitForSeconds(2.5f);
         }
-        UseSkillMask(6);
+        SkillType = Type.TypeEnum.Ghost;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < 4; i++)
         {
@@ -1158,7 +1247,8 @@ public class Mew : Empty
             }
             yield return new WaitForSeconds(0.6f);
         }
-        UseSkillMask(7);
+        SkillType = Type.TypeEnum.Fire;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         float angleIncrement = 360f / 8;
         float rotationSpeed = 30f;
@@ -1180,7 +1270,8 @@ public class Mew : Empty
             }
             yield return new WaitForSeconds(0.8f);
         }
-        UseSkillMask(8);
+        SkillType = Type.TypeEnum.Ice;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         Time.timeScale = 0;
         GameObject timestopEffect = Instantiate(TimeStopEffect, player.transform.position, Quaternion.identity);
@@ -1217,7 +1308,8 @@ public class Mew : Empty
         Destroy(timestopEffect);
         Time.timeScale = 1;
         yield return new WaitForSeconds(4f);
-        UseSkillMask(9);
+        SkillType = Type.TypeEnum.Fairy;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         for (int j = 0; j < 6; j++)
         {
@@ -1237,7 +1329,8 @@ public class Mew : Empty
             }
             yield return new WaitForSeconds(1f);
         }
-        UseSkillMask(10);
+        SkillType = Type.TypeEnum.Dragon;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         for (int j = 0; j < 5; j++)
         {
@@ -1249,7 +1342,8 @@ public class Mew : Empty
             Destroy(reticle2, 2f);
             if (j == 4)
             {
-                UseSkillMask(11);
+                SkillType = Type.TypeEnum.Dark;
+                UseSkillMask();
                 UseSkill(11);
             }
             yield return new WaitForSeconds(1.5f);
@@ -1272,7 +1366,8 @@ public class Mew : Empty
             }
         }
         yield return new WaitForSeconds(1.5f);
-        UseSkillMask(13);
+        SkillType = Type.TypeEnum.Grass;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < 60; i++)
         {
@@ -1296,7 +1391,8 @@ public class Mew : Empty
             LeafBlade2.GetComponent<LeafBladeEmpty>().SetTarget(player.gameObject);
             yield return new WaitForSeconds(0.17f);
         }
-        UseSkillMask(15);
+        SkillType = Type.TypeEnum.Flying;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < 13; i++)
         {
@@ -1305,7 +1401,8 @@ public class Mew : Empty
             yield return new WaitForSeconds(0.3f);
         }
         yield return new WaitForSeconds(0.5f);
-        UseSkillMask(16);
+        SkillType = Type.TypeEnum.Steel;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         float angleIncrement4 = 7f;
         float angle4 = 0f;
@@ -1329,14 +1426,16 @@ public class Mew : Empty
             yield return new WaitForSeconds(0.07f);
         }
         yield return new WaitForSeconds(2.5f);
-        UseSkillMask(17);
+        SkillType = Type.TypeEnum.Bug;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < 25; i++)
         {
             Vector3 randomPosition = mapCenter + new Vector3(Random.Range(-24.0f, 24.0f), Random.Range(-14.0f, 14.0f), 0);
             Instantiate(StickyWebPrefab, randomPosition, Quaternion.identity);
         }
-        UseSkillMask(18);
+        SkillType = Type.TypeEnum.Poison;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         float angle5 = 0f;
         for (int i = 0; i < 6; i++)
@@ -1354,7 +1453,8 @@ public class Mew : Empty
             yield return new WaitForSeconds(0.8f);
         }
         yield return new WaitForSeconds(3f);
-        UseSkillMask(19);
+        SkillType = Type.TypeEnum.Fire;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         int numPoints = 8; // 五角星上的点数
         radius = 12f; // 五角星的顶点到中心的距离
@@ -1412,6 +1512,7 @@ public class Mew : Empty
         yield return new WaitForSeconds(4f);
         //三阶段-第二部分
         //首先先圆形释放会给玩家造成伤害的假心，期间不断释放魔法叶
+        SkillType = Type.TypeEnum.Grass;
         StartCoroutine(MagicalLeaf(3));
         yield return new WaitForSeconds(2f);
         for (int j = 0; j < 7; j++)
@@ -1433,7 +1534,8 @@ public class Mew : Empty
         //其次释放电球，释放冰冻光束
         StartCoroutine(ElectricBall());
         yield return new WaitForSeconds(4f);
-        UseSkillMask(2);
+        SkillType = Type.TypeEnum.Ice;
+        UseSkillMask();
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < 100; i++)
         {
@@ -1443,9 +1545,11 @@ public class Mew : Empty
             Destroy(trail, 2f);
             yield return new WaitForSeconds(0.04f);
         }
+        SkillType = Type.TypeEnum.Electric;
         yield return new WaitForSeconds(5f);
 
         //释放魔法叶，同时释放假药
+        SkillType = Type.TypeEnum.Grass;
         StartCoroutine(MagicalLeaf(6));
         for (int i = 0; i < 40; i++)
         {
@@ -1669,33 +1773,59 @@ public class Mew : Empty
         EmptyHp = 0;
         EmptyDie();
     }
-    private void UseSkillMask(int randomSkillIndex)
+
+    private void ChangeType(int randomIndex)
+    {
+        switch(randomIndex)
+        {
+            case 1: SkillType = Type.TypeEnum.Grass; break;
+            case 2: SkillType = Type.TypeEnum.Ice; break;
+            case 3: SkillType = Type.TypeEnum.Fire; break;
+            case 4: SkillType = Type.TypeEnum.Normal; break;
+            case 5: SkillType = Type.TypeEnum.Normal; break;
+            case 6: SkillType = Type.TypeEnum.Ghost; break;
+            case 7: SkillType = Type.TypeEnum.Fire; break;
+            case 8: SkillType = Type.TypeEnum.Ice; break;
+            case 9: SkillType = Type.TypeEnum.Fairy; break;
+            case 10: SkillType = Type.TypeEnum.Dragon;break;
+            case 11: SkillType = Type.TypeEnum.Dark;break;
+            case 12: SkillType = Type.TypeEnum.Fairy;break;
+            case 13: SkillType = Type.TypeEnum.Grass; break;
+            case 14: SkillType = Type.TypeEnum.Rock; break;
+            case 15: SkillType = Type.TypeEnum.Flying; break;
+            case 16: SkillType = Type.TypeEnum.Steel; break;
+            case 17: SkillType = Type.TypeEnum.Bug; break;
+            case 18: SkillType = Type.TypeEnum.Poison;break;
+            case 19: SkillType = Type.TypeEnum.Fire;break;
+            case 20: SkillType = Type.TypeEnum.Fighting;break;
+        }
+    }
+    private void UseSkillMask()
     {
         GameObject useskillprefab = Instantiate(UseSkillPrefab, transform.position, Quaternion.identity);
         UseSkill useskillmask = useskillprefab.GetComponent<UseSkill>();
         useskillmask.originalColor = Color.white;
-        switch (randomSkillIndex)
+        switch (SkillType)
         {
-            case 1: useskillmask.targetColor = Color.green; break;
-            case 2: useskillmask.targetColor = Color.cyan; break;
-            case 3: useskillmask.targetColor = new Color(0.2f, 0f, 0.2f); break;//紫黑色
-            case 4: useskillmask.targetColor = new Color(1f, 0.75f, 0.8f); break;//粉色
-            case 5: useskillmask.targetColor = new Color(0.5f, 0f, 0.5f); useskillmask.originalColor = Color.red; break;
-            case 6: useskillmask.targetColor = new Color(0.5f, 0f, 0.5f); break;
-            case 7: useskillmask.targetColor = Color.red; break;
-            case 8: useskillmask.targetColor = Color.cyan; break;
-            case 9: useskillmask.targetColor = new Color(1f, 0f, 0.6f); break;//洋红色
-            case 10: useskillmask.targetColor = new Color(0f, 0f, 0.5f); break;//深蓝色
-            case 11: useskillmask.targetColor = Color.black; break;
-            case 12: useskillmask.targetColor = new Color(1f, 0.75f, 0.8f); break;
-            case 13: useskillmask.targetColor = Color.green; break;
-            case 14: useskillmask.targetColor = new Color(0.7f, 0.5f, 0.3f); break;//浅棕色
-            case 15: useskillmask.targetColor = Color.cyan; break;
-            case 16: useskillmask.targetColor = Color.grey; break;
-            case 17: useskillmask.targetColor = new Color(0.5f, 1f, 0.5f); break;//浅绿色
-            case 18: useskillmask.targetColor = new Color(0.5f, 0f, 0.5f); break;//紫色
-            case 19: useskillmask.targetColor = Color.red; break;
-            case 20: useskillmask.targetColor = new Color(1f, 0.5f, 0f); break;
+            case Type.TypeEnum.Normal: useskillmask.targetColor = colors[0]; break;
+            case Type.TypeEnum.Fighting: useskillmask.targetColor = colors[1]; break;
+            case Type.TypeEnum.Flying: useskillmask.targetColor = colors[2]; break;
+            case Type.TypeEnum.Poison: useskillmask.targetColor = colors[3]; break;
+            case Type.TypeEnum.Ground: useskillmask.targetColor = colors[4]; break;
+            case Type.TypeEnum.Rock: useskillmask.targetColor = colors[5]; break;
+            case Type.TypeEnum.Bug: useskillmask.targetColor = colors[6]; break;
+            case Type.TypeEnum.Ghost: useskillmask.targetColor = colors[7]; break;
+            case Type.TypeEnum.Steel: useskillmask.targetColor = colors[8]; break;
+            case Type.TypeEnum.Fire: useskillmask.targetColor = colors[9]; break;
+            case Type.TypeEnum.Water: useskillmask.targetColor = colors[10]; break;
+            case Type.TypeEnum.Grass: useskillmask.targetColor = colors[11]; break;
+            case Type.TypeEnum.Electric: useskillmask.targetColor = colors[12]; break;
+            case Type.TypeEnum.Psychic: useskillmask.targetColor = colors[13]; break;
+            case Type.TypeEnum.Ice: useskillmask.targetColor = colors[14]; break;
+            case Type.TypeEnum.Dragon: useskillmask.targetColor = colors[15]; break;
+            case Type.TypeEnum.Dark: useskillmask.targetColor = colors[16]; break;
+            case Type.TypeEnum.Fairy: useskillmask.targetColor = colors[17]; break;
+            default: useskillmask.targetColor = Color.white; break;
         }
     }
     void ClearStatusEffects()
