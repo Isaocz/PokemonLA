@@ -29,7 +29,7 @@ public class StoredPower : Skill
             float angle = i * angleStep + transform.rotation.eulerAngles.z - 90;
             Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * 1.0f;
             GameObject storedpower;
-            if (SkillFrom == 0)
+            if (SkillFrom != 2)
             {
                 storedpower = Instantiate(storedPower, spawnPos, transform.rotation,transform);
             }

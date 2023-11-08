@@ -359,12 +359,13 @@ public class Mew : Empty
                 {
                     position = Random.insideUnitCircle * 20f;
                     Vector3 spawnPosition = player.transform.position + new Vector3(position.x, position.y + 0.5f, 0f);
+                    float distanceToPlayer = Vector2.Distance(position, player.transform.position);
 
                     // 检查新位置是否与已生成的位置过近
                     validPosition = true;
                     foreach (Vector3 spawnedPos in spawnedPositions)
                     {
-                        if (Vector3.Distance(spawnPosition, spawnedPos) < 4f)
+                        if (Vector3.Distance(spawnPosition, spawnedPos) < 4f && distanceToPlayer < 4f)
                         {
                             validPosition = false;
                             break;

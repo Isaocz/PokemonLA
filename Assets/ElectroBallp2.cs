@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ElectroBallp2 : Projectile
 {
+    List<PlayerControler> playerlist = new List<PlayerControler>();
     // Start is called before the first frame update
     void Start()
     {
@@ -16,8 +17,9 @@ public class ElectroBallp2 : Projectile
         if (collision.CompareTag("Player"))
         {
             PlayerControler player = collision.GetComponent<PlayerControler>();
-            if (player != null)
+            if (player != null && !playerlist.Contains(player))
             {
+                playerlist.Add(player);
                 int rate = (int)(empty.speed / player.speed);
                 switch (rate)
                 {
@@ -29,7 +31,6 @@ public class ElectroBallp2 : Projectile
                 }
                 
                 Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Electric);
-                player.ParalysisFloatPlus(0.25f);
                 player.KnockOutPoint = 1.5f;
                 player.KnockOutDirection = (player.transform.position - transform.position).normalized;
             }
