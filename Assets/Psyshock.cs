@@ -87,17 +87,27 @@ public class Psyshock : Skill
                         }
                     }
                 }
-                if (nearestEnemy != null)//甚至扇形范围内没有敌怪
-                {
+                if (nearestEnemy != null)
+                {//扇形范围内有敌怪（被阻碍），则对应障碍物
                     lineRenderer.SetPosition(0, transform.position);
                     lineRenderer.SetPosition(1, hitPosition);
                     summonPoint = hitPosition;
                 }
                 else
-                {
-                    lineRenderer.SetPosition(0, transform.position);
-                    lineRenderer.SetPosition(1, transform.position + transform.right * 10);
-                    summonPoint = transform.position + transform.right * 10;
+                {//扇形范围内没有敌怪，但是直线距离可能有障碍物
+                    RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, 10f, LayerMask.GetMask("Enviroment", "Room"));
+                    if (hit)
+                    {
+                        lineRenderer.SetPosition(0, transform.position);
+                        lineRenderer.SetPosition(1, hit.point);
+                        summonPoint = hit.point;
+                    }
+                    else
+                    {
+                        lineRenderer.SetPosition(0, transform.position);
+                        lineRenderer.SetPosition(1, transform.position + transform.right * 10);
+                        summonPoint = transform.position + transform.right * 10;
+                    }
                 }
             }
             
