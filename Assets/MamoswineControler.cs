@@ -60,11 +60,12 @@ public class MamoswineControler : PlayerControler
 
         //GetSkillLevel = new int[] {  8, 20, 23, 25, 10000 };
 
-        Invoke("LearIceFang", 0.01f);
+        Invoke("LearDoubleHit", 0.01f);
 
+        JudgeEvolutionForEachLevel = NotJudgeEvolution;
     }
 
-    void LearIceFang()
+    void LearDoubleHitg()
     {
         if (Skill01 != DoubleHit && Skill02 != DoubleHit && Skill03 != DoubleHit && Skill04 != DoubleHit)
         {

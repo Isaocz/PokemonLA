@@ -34,7 +34,9 @@ public class XszControler : PlayerControler
         skillBar04.GetSkill(Skill04);
         PlayerType01 = 5;
         PlayerType02 = 15;
-        
+
+
+        JudgeEvolutionForEachLevel = NotJudgeEvolution;
     }
 
     private void Update()

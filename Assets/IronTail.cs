@@ -17,7 +17,7 @@ public class IronTail : Skill
 
         transform.rotation = Quaternion.AngleAxis(180,Vector3.forward) * transform.rotation;
         Direction = Quaternion.AngleAxis(transform.rotation.eulerAngles.z , Vector3.forward) * Vector3.right;
-        transform.position = player.transform.position + (Vector3.up * 0.4f) + (Direction * DirctionDistance) + (Direction * (player.PlayerBodySize == 0 ? 0 : 0.6f));
+        transform.position = player.transform.position + (Vector3.up * 0.4f) + (Direction * DirctionDistance) + new Vector3(Direction.x + player.SkillOffsetforBodySize[1] , Direction.y + player.SkillOffsetforBodySize[2], 0) ;
     }
 
 

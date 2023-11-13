@@ -197,7 +197,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1875857443089687044}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.5, y: 1, z: 0}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1875857441496681498}
@@ -252,7 +252,6 @@ MonoBehaviour:
   isEmptyConfusionStart: 0
   isEmptyInfatuationDone: 0
   isEmptyInfatuationStart: 0
-  isSpdDown: 0
   isColdDown: 0
   isEmptyCurseDone: 0
   isEmptyCurseStart: 0
@@ -282,7 +281,11 @@ MonoBehaviour:
   ConfusionPointFloat: 0
   PlayerNameChinese: "\u957F\u6BDB\u732A"
   PlayerHead: {fileID: 21300000, guid: 126768e5b19258b44a3008bd7a9bab4e, type: 3}
-  PlayerBodySize: 0
+  PlayerBodySize: 1
+  SkillOffsetforBodySize:
+  - 0.4
+  - 0
+  - 0
   EvolutionPlayer: {fileID: 833132030415140494, guid: 59f751ec929bf7f4b9516c840c356b98, type: 3}
   isEvolution: 0
   isNeedInherit: 1
@@ -308,12 +311,16 @@ MonoBehaviour:
   PlayerTeraType: 0
   PlayerTeraTypeJOR: 0
   Skill01: {fileID: 0}
+  isSkill01CD: 0
   skillBar01: {fileID: 1240993255}
   Skill02: {fileID: 0}
+  isSkill02CD: 0
   skillBar02: {fileID: 85098161}
   Skill03: {fileID: 0}
+  isSkill03CD: 0
   skillBar03: {fileID: 1486305139}
   Skill04: {fileID: 0}
+  isSkill04CD: 0
   skillBar04: {fileID: 1682247264}
   spaceItem: {fileID: 0}
   SpaceItemList: {fileID: 5737730519587534542, guid: 93be979584e48314195d8dd0aa6cf5a8, type: 3}
@@ -417,18 +424,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.354019}
+  m_Offset: {x: 0, y: 0.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.4873016, y: 0.011111163}
-    oldSize: {x: 1.4, y: 1}
+    pivot: {x: 0.5015873, y: 0.0015420181}
+    oldSize: {x: 1.16, y: 1.4}
     newSize: {x: 0.35, y: 0.25}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.6039822, y: 0.28338802}
+  m_Size: {x: 0.7, y: 0.7}
   m_EdgeRadius: 0.2
 --- !u!50 &1875857443089687042
 Rigidbody2D:

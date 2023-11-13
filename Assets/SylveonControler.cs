@@ -7,9 +7,8 @@ public class SylveonControler : PlayerControler
     public Skill Tackle;
     public Skill Growl;
     public Skill SandAttack;
-    public Skill TestSkill01;
-
-
+    public Skill DisarmingVoice;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -33,10 +32,14 @@ public class SylveonControler : PlayerControler
         Instance();
         InstanceNewSkillPanel();
 
-        Skill01 = Tackle;
-        Skill02 = Growl;
-        Skill03 = SandAttack;
-        Skill04 = TestSkill01;
+
+        if (!isNeedInherit)
+        {
+            Skill01 = Tackle;
+            Skill02 = Growl;
+            Skill03 = SandAttack;
+        }
+
 
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);
@@ -45,6 +48,17 @@ public class SylveonControler : PlayerControler
         PlayerType01 = 18;
         PlayerType02 = 0;
 
+        Invoke("LearDisarmingVoice", 0.01f);
+
+        JudgeEvolutionForEachLevel = NotJudgeEvolution;
+    }
+
+    void LearDisarmingVoice()
+    {
+        if (Skill01.SkillIndex != 325 && Skill01.SkillIndex != 326 && Skill02.SkillIndex != 325 && Skill02.SkillIndex != 326 && Skill03.SkillIndex != 325 && Skill03.SkillIndex != 326 && Skill04.SkillIndex != 325 && Skill04.SkillIndex != 326)
+        {
+            LearnNewSkillByOtherWay(DisarmingVoice);
+        }
     }
 
     private void Update()

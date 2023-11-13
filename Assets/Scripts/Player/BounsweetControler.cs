@@ -43,7 +43,10 @@ public class BounsweetControler : PlayerControler
         skillBar04.GetSkill(Skill04);
         PlayerType01 = 12;
         PlayerType02 = 0;
-        
+
+
+
+        JudgeEvolutionForEachLevel = NotJudgeEvolution;
     }
 
     private void Update()

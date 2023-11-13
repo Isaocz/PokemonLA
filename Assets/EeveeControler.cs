@@ -45,6 +45,7 @@ public class EeveeControler : PlayerControler
         PlayerType01 = 1;
         PlayerType02 = 0;
 
+        JudgeEvolutionForEachLevel = JudgeSylveonEvolution;
     }
 
     private void Update()
@@ -52,11 +53,23 @@ public class EeveeControler : PlayerControler
         UpdatePlayer();
         StateMaterialChange();
         /*
+        //测试时为了方便进化，大于五级就进化
         if (!isEvolution && LevelForSkill >= 5)
         {
             EvolutionStart();
         }
         */
+
+
+    }
+
+    //学会妖精系技能，努力值总和大于40，可以进化为仙子伊布
+    bool JudgeSylveonEvolution()
+    {
+        if (((Skill01 != null && Skill01.SkillType == 18) ||(Skill02 != null && Skill02.SkillType == 18) ||(Skill03 != null && Skill03.SkillType == 18 )|| (Skill04 != null && Skill04.SkillType == 18)) &&
+            ((playerData.AtkHardWorkAlways + playerData.DefHardWorkAlways + playerData.HPHardWorkAlways + playerData.LuckHardWorkAlways + playerData.MoveSpeHardWorkAlways + playerData.SpAHardWorkAlways + playerData.SpDHardWorkAlways + playerData.SpeHardWorkAlways) >= 40) )
+            { return true; }
+        else{ return false; }
     }
 
     private void FixedUpdate()
