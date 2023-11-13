@@ -2,19 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class SecredFireEmpty : Projectile
 {
     private Rigidbody2D rb;
-    private Vector3 tangentDirection;
+    private Vector3 moveDirection;
     private float speed;
     private float acceleration;
 
     public void Initialize(Vector3 centerPosition, float radius)
     {
         Vector3 directionToCenter = centerPosition - transform.position;
-        Vector3 tangent = new Vector3(-directionToCenter.y, directionToCenter.x).normalized;
-        tangentDirection = tangent * Mathf.Sign(Vector3.Dot(tangent, directionToCenter)) * -1;
+        Vector3 perpendicularDirection = new Vector3(-directionToCenter.y, directionToCenter.x).normalized * radius;
+        Vector3 targetPosition = centerPosition + perpendicularDirection;
+        moveDirection = (targetPosition - transform.position).normalized;
         speed = 5f;
         acceleration = 2f;
         StartCoroutine(StartMovingAfterDelay(3f));
@@ -23,7 +25,7 @@ public class SecredFireEmpty : Projectile
     private IEnumerator StartMovingAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        rb.velocity = tangentDirection * speed;
+        rb.velocity = moveDirection * speed;
     }
 
     private void Start()

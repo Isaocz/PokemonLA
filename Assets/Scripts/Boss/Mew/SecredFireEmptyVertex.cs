@@ -16,7 +16,7 @@ public class SecredFireEmptyVertex : Projectile
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
         direction = (player.position - transform.position).normalized;
-        speed = 7f;
+        speed = 9f;
         acceleration = 3f;
         StartCoroutine(StartMovingAfterDelay(1.5f));
         Destroy(gameObject, 6.5f);
