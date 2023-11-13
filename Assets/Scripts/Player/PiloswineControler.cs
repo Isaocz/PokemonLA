@@ -7,16 +7,6 @@ public class PiloswineControler : PlayerControler
 
     public Skill Tackle;
     public Skill MudSlup;
-    //public Skill PowderSnow;
-    //public Skill Flail;
-    //public Skill IceShard;
-    //public Skill Endure;
-    //public Skill Mist;
-    //public Skill IcyWind;
-    //public Skill Earthquake;
-    //public Skill Amnesia;
-    //public Skill Blizzard;
-    //public Skill TakeDown;
     public Skill IceFang;
     //需要修改
     //public Skill TeraBlast;
@@ -26,6 +16,9 @@ public class PiloswineControler : PlayerControler
     //public Skill SandAttack;
     //甜冷美后
     //public Skill Splash;
+
+
+
 
 
     // Start is called before the first frame update
@@ -56,9 +49,9 @@ public class PiloswineControler : PlayerControler
         PlayerType02 = 15;
 
 
+        JudgeEvolutionForEachLevel = NotJudgeEvolution;
 
-
-
+        
 
         //GetSkillLevel = new int[] {  8, 20, 23, 25, 10000 };
 
@@ -68,7 +61,7 @@ public class PiloswineControler : PlayerControler
 
     void LearIceFang()
     {
-        if (Skill01 != IceFang && Skill02 != IceFang && Skill03 != IceFang && Skill04 != IceFang)
+        if (Skill01.SkillIndex != 15 && Skill01.SkillIndex != 16 && Skill02.SkillIndex != 15 && Skill02.SkillIndex != 16 && Skill03.SkillIndex != 15 && Skill03.SkillIndex != 16 && Skill04.SkillIndex != 15 && Skill04.SkillIndex != 16)
         {
             LearnNewSkillByOtherWay(IceFang);
         }

@@ -14,7 +14,7 @@ public class LittleTreeBeKickDown : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             PlayerControler Player = other.gameObject.GetComponent<PlayerControler>();
-            if (Player != null && Player.PlayerBodySize == 1)
+            if (Player != null && Player.PlayerBodySize == 2)
             {
                 GetComponent<Animator>().SetTrigger("KickDown");
                 Instantiate(PS1, transform.position, Quaternion.identity);

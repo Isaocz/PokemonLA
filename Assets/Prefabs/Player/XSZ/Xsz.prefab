@@ -328,6 +328,7 @@ MonoBehaviour:
   SleepResistance: 0
   OtherStateResistance: 0
   TimeStateInvincible: 1.2
+  isSafeguard: 0
   skinRenderers: []
   animator: {fileID: 0}
   playerUIState: {fileID: 2920480468782632842}
@@ -342,10 +343,13 @@ MonoBehaviour:
   isEmptyConfusionStart: 0
   isEmptyInfatuationDone: 0
   isEmptyInfatuationStart: 0
-  isSpdDown: 0
   isColdDown: 0
   isEmptyCurseDone: 0
   isEmptyCurseStart: 0
+  isSpeedChange: 0
+  isPlayerFrozenDone: 0
+  isPlayerFrozenStart: 0
+  PlayerFrozenPointFloat: 0
   isToxicDef: 0
   isToxicDone: 0
   isToxicStart: 0
@@ -369,6 +373,10 @@ MonoBehaviour:
   PlayerNameChinese: "\u5C0F\u5C71\u732A"
   PlayerHead: {fileID: 21300000, guid: 50925643f8b730742979258a0532c4c9, type: 3}
   PlayerBodySize: 0
+  SkillOffsetforBodySize:
+  - 0.4
+  - 0
+  - 0
   EvolutionPlayer: {fileID: 1875857443089687047, guid: 4fc471a0c985e7b40806b82bb607aec0, type: 3}
   isEvolution: 0
   isNeedInherit: 0
@@ -394,12 +402,16 @@ MonoBehaviour:
   PlayerTeraType: 0
   PlayerTeraTypeJOR: 0
   Skill01: {fileID: 0}
+  isSkill01CD: 0
   skillBar01: {fileID: 3176039081491093657}
   Skill02: {fileID: 0}
+  isSkill02CD: 0
   skillBar02: {fileID: 3176039082377784271}
   Skill03: {fileID: 0}
+  isSkill03CD: 0
   skillBar03: {fileID: 3176039081212109325}
   Skill04: {fileID: 0}
+  isSkill04CD: 0
   skillBar04: {fileID: 3176039081821199134}
   spaceItem: {fileID: 0}
   SpaceItemList: {fileID: 5737730519587534542, guid: 93be979584e48314195d8dd0aa6cf5a8, type: 3}
@@ -423,6 +435,7 @@ MonoBehaviour:
   ButterflyManger: {fileID: 0}
   NatureIndex: 0
   isCanNotMove: 0
+  isCanNotTurnDirection: 0
   isInvincibleAlways: 0
   EvolutionSkill: {fileID: 0}
   isReflect: 0

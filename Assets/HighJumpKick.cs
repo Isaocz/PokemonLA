@@ -107,6 +107,9 @@ public class HighJumpKick : Skill
                 CollidorOffset = 0.4023046f; CollidorRadiusH = 0.6039822f; CollidorRadiusV = 0.2549849f;
                 break;
             case 1:
+                CollidorOffset = 0.5f; CollidorRadiusH = 0.7f; CollidorRadiusV = 0.7f;
+                break;
+            case 2:
                 CollidorOffset = 0.7f; CollidorRadiusH = 1.3f; CollidorRadiusV = 1.1f;
                 break;
         }
