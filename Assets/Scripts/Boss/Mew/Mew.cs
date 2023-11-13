@@ -146,7 +146,7 @@ public class Mew : Empty
         new Color(1,0.498f,0.53104f,0.8313726f), // Dark
         new Color(0.823f,0.87f,0.95f,0.5882353f), // Fairy
 };
-    private Type.TypeEnum SkillType;
+    public Type.TypeEnum SkillType;
     public Material src1;
     public Material src2;
     public float intensity = 1f;
@@ -359,12 +359,13 @@ public class Mew : Empty
                 {
                     position = Random.insideUnitCircle * 20f;
                     Vector3 spawnPosition = player.transform.position + new Vector3(position.x, position.y + 0.5f, 0f);
+                    float distanceToPlayer = Vector2.Distance(position, player.transform.position);
 
                     // 检查新位置是否与已生成的位置过近
                     validPosition = true;
                     foreach (Vector3 spawnedPos in spawnedPositions)
                     {
-                        if (Vector3.Distance(spawnPosition, spawnedPos) < 4f)
+                        if (Vector3.Distance(spawnPosition, spawnedPos) < 4f && distanceToPlayer < 4f)
                         {
                             validPosition = false;
                             break;
@@ -831,11 +832,10 @@ public class Mew : Empty
                 StartCoroutine(ReleaseScaredFire());
                 IEnumerator ReleaseScaredFire()
                 {
-                    int numPoints = 5; // 五角星上的点数
-                    float radius = 15f; // 五角星的顶点到中心的距离
+                    int numPoints = 6; // 星上的点数
+                    float radius = 15f; // 星的顶点到中心的距离
 
                     Vector3[] starVertices = new Vector3[numPoints];
-                    Vector3[] secredFirePositions = new Vector3[numPoints * 14]; // 存储SecredFire的位置
 
                     // 创建五角星的顶点坐标
                     for (int i = 0; i < numPoints; i++)
@@ -855,14 +855,12 @@ public class Mew : Empty
 
                         GameObject secredFireCenter = Instantiate(SecredFireCentrePrefab, center, Quaternion.identity);
                         secredFireCenter.GetComponent<SecredFireEmpryCentre>().empty = this;
-                        secredFirePositions[numPoints * 12 + i] = center;
                     }
                     // 在每个五角星顶点生成SecredFire
                     for (int i = 0; i < numPoints; i++)
                     {
                         GameObject secredFireVertex = Instantiate(SecredFireVertexPrefab, starVertices[i], Quaternion.identity);
                         secredFireVertex.GetComponent<SecredFireEmptyVertex>().empty = this;
-                        secredFirePositions[numPoints * 12 + numPoints + i] = starVertices[i];
                     }
 
                     // 在每条线上均匀分布生成SecredFire
@@ -880,10 +878,8 @@ public class Mew : Empty
                         {
                             Vector3 secredFirePosition = startPoint + direction * (j * step);
                             SecredFireEmpty secredFire = Instantiate(SecredFirePrefab, secredFirePosition, Quaternion.identity).GetComponent<SecredFireEmpty>();
-                            secredFirePositions[(i * 12) + j] = secredFirePosition;
                             secredFire.empty = this;
-                            secredFire.Initialize(player.transform.position, 2f);
-                            yield return null;
+                            secredFire.Initialize(player.transform.position, 3f);
                         }
                     }
                     yield return null;
@@ -973,27 +969,35 @@ public class Mew : Empty
     void ChangeColor()
     {
         float factor = Mathf.Pow(2, intensity);
-        switch (SkillType)
+        if (!isFinal)
         {
-            case Type.TypeEnum.Normal: src1.SetColor("_Color",new Color(colors[0].r * factor, colors[0].g * factor, colors[0].b * factor, 1)); src2.SetColor("_Color", new Color(colors[0].r * factor, colors[0].g * factor, colors[0].b * factor, 1)); break;
-            case Type.TypeEnum.Fighting: src1.SetColor("_Color", new Color(colors[1].r * factor, colors[1].g * factor, colors[1].b * factor, 1)); src2.SetColor("_Color", new Color(colors[1].r * factor, colors[1].g * factor, colors[1].b * factor, 1)); break;
-            case Type.TypeEnum.Flying: src1.SetColor("_Color", new Color(colors[2].r * factor, colors[2].g * factor, colors[2].b * factor, 1)); src2.SetColor("_Color", new Color(colors[2].r * factor, colors[2].g * factor, colors[2].b * factor, 1)); break;
-            case Type.TypeEnum.Poison: src1.SetColor("_Color", new Color(colors[3].r * factor, colors[3].g * factor, colors[3].b * factor, 1)); src2.SetColor("_Color", new Color(colors[3].r * factor, colors[3].g * factor, colors[3].b * factor, 1)); break;
-            case Type.TypeEnum.Ground: src1.SetColor("_Color", new Color(colors[4].r * factor, colors[4].g * factor, colors[4].b * factor, 1)); src2.SetColor("_Color", new Color(colors[4].r * factor, colors[4].g * factor, colors[4].b * factor, 1)); break;
-            case Type.TypeEnum.Rock: src1.SetColor("_Color", new Color(colors[5].r * factor, colors[5].g * factor, colors[5].b * factor, 1)); src2.SetColor("_Color", new Color(colors[5].r * factor, colors[5].g * factor, colors[5].b * factor, 1)); break;
-            case Type.TypeEnum.Bug: src1.SetColor("_Color", new Color(colors[6].r * factor, colors[6].g * factor, colors[6].b * factor, 1)); src2.SetColor("_Color", new Color(colors[6].r * factor, colors[6].g * factor, colors[6].b * factor, 1)); break;
-            case Type.TypeEnum.Ghost: src1.SetColor("_Color", new Color(colors[7].r * factor, colors[7].g * factor, colors[7].b * factor, 1)); src2.SetColor("_Color", new Color(colors[7].r * factor, colors[7].g * factor, colors[7].b * factor, 1)); break;
-            case Type.TypeEnum.Steel: src1.SetColor("_Color", new Color(colors[8].r * factor, colors[8].g * factor, colors[8].b * factor, 1)); src2.SetColor("_Color", new Color(colors[8].r * factor, colors[8].g * factor, colors[8].b * factor, 1)); break;
-            case Type.TypeEnum.Fire: src1.SetColor("_Color", new Color(colors[9].r * factor, colors[9].g * factor, colors[9].b * factor, 1)); src2.SetColor("_Color", new Color(colors[9].r * factor, colors[9].g * factor, colors[9].b * factor, 1)); break;
-            case Type.TypeEnum.Water: src1.SetColor("_Color", new Color(colors[10].r * factor, colors[10].g * factor, colors[10].b * factor, 1)); src2.SetColor("_Color", new Color(colors[10].r * factor, colors[10].g * factor, colors[10].b * factor, 1)); break;
-            case Type.TypeEnum.Grass: src1.SetColor("_Color", new Color(colors[11].r * factor, colors[11].g * factor, colors[11].b * factor, 1)); src2.SetColor("_Color", new Color(colors[11].r * factor, colors[11].g * factor, colors[11].b * factor, 1)); break;
-            case Type.TypeEnum.Electric: src1.SetColor("_Color", new Color(colors[12].r * factor, colors[12].g * factor, colors[12].b * factor, 1)); src2.SetColor("_Color", new Color(colors[12].r * factor, colors[12].g * factor, colors[12].b * factor, 1)); break;
-            case Type.TypeEnum.Psychic: src1.SetColor("_Color", new Color(colors[13].r * factor, colors[13].g * factor, colors[13].b * factor, 1)); src2.SetColor("_Color", new Color(colors[13].r * factor, colors[13].g * factor, colors[13].b * factor, 1)); break;
-            case Type.TypeEnum.Ice: src1.SetColor("_Color", new Color(colors[14].r * factor, colors[14].g * factor, colors[14].b * factor, 1)); src2.SetColor("_Color", new Color(colors[14].r * factor, colors[14].g * factor, colors[14].b * factor, 1)); break;
-            case Type.TypeEnum.Dragon: src1.SetColor("_Color", new Color(colors[15].r * factor, colors[15].g * factor, colors[15].b * factor, 1)); src2.SetColor("_Color", new Color(colors[15].r * factor, colors[15].g * factor, colors[15].b * factor, 1)); break;
-            case Type.TypeEnum.Dark: src1.SetColor("_Color", new Color(colors[16].r * factor, colors[16].g * factor, colors[16].b * factor, 1)); src2.SetColor("_Color", new Color(colors[16].r * factor, colors[16].g * factor, colors[16].b * factor, 1)); break;
-            case Type.TypeEnum.Fairy: src1.SetColor("_Color", new Color(colors[17].r * factor, colors[17].g * factor, colors[17].b * factor, 1)); src2.SetColor("_Color", new Color(colors[17].r * factor, colors[17].g * factor, colors[17].b * factor, 1)); break;
-            default: src1.SetColor("_Color", Color.white); src2.SetColor("_Color", Color.white); break;
+            switch (SkillType)
+            {
+                case Type.TypeEnum.Normal: src1.SetColor("_Color", new Color(colors[0].r * factor, colors[0].g * factor, colors[0].b * factor, 1)); src2.SetColor("_Color", new Color(colors[0].r * factor, colors[0].g * factor, colors[0].b * factor, 1)); break;
+                case Type.TypeEnum.Fighting: src1.SetColor("_Color", new Color(colors[1].r * factor, colors[1].g * factor, colors[1].b * factor, 1)); src2.SetColor("_Color", new Color(colors[1].r * factor, colors[1].g * factor, colors[1].b * factor, 1)); break;
+                case Type.TypeEnum.Flying: src1.SetColor("_Color", new Color(colors[2].r * factor, colors[2].g * factor, colors[2].b * factor, 1)); src2.SetColor("_Color", new Color(colors[2].r * factor, colors[2].g * factor, colors[2].b * factor, 1)); break;
+                case Type.TypeEnum.Poison: src1.SetColor("_Color", new Color(colors[3].r * factor, colors[3].g * factor, colors[3].b * factor, 1)); src2.SetColor("_Color", new Color(colors[3].r * factor, colors[3].g * factor, colors[3].b * factor, 1)); break;
+                case Type.TypeEnum.Ground: src1.SetColor("_Color", new Color(colors[4].r * factor, colors[4].g * factor, colors[4].b * factor, 1)); src2.SetColor("_Color", new Color(colors[4].r * factor, colors[4].g * factor, colors[4].b * factor, 1)); break;
+                case Type.TypeEnum.Rock: src1.SetColor("_Color", new Color(colors[5].r * factor, colors[5].g * factor, colors[5].b * factor, 1)); src2.SetColor("_Color", new Color(colors[5].r * factor, colors[5].g * factor, colors[5].b * factor, 1)); break;
+                case Type.TypeEnum.Bug: src1.SetColor("_Color", new Color(colors[6].r * factor, colors[6].g * factor, colors[6].b * factor, 1)); src2.SetColor("_Color", new Color(colors[6].r * factor, colors[6].g * factor, colors[6].b * factor, 1)); break;
+                case Type.TypeEnum.Ghost: src1.SetColor("_Color", new Color(colors[7].r * factor, colors[7].g * factor, colors[7].b * factor, 1)); src2.SetColor("_Color", new Color(colors[7].r * factor, colors[7].g * factor, colors[7].b * factor, 1)); break;
+                case Type.TypeEnum.Steel: src1.SetColor("_Color", new Color(colors[8].r * factor, colors[8].g * factor, colors[8].b * factor, 1)); src2.SetColor("_Color", new Color(colors[8].r * factor, colors[8].g * factor, colors[8].b * factor, 1)); break;
+                case Type.TypeEnum.Fire: src1.SetColor("_Color", new Color(colors[9].r * factor, colors[9].g * factor, colors[9].b * factor, 1)); src2.SetColor("_Color", new Color(colors[9].r * factor, colors[9].g * factor, colors[9].b * factor, 1)); break;
+                case Type.TypeEnum.Water: src1.SetColor("_Color", new Color(colors[10].r * factor, colors[10].g * factor, colors[10].b * factor, 1)); src2.SetColor("_Color", new Color(colors[10].r * factor, colors[10].g * factor, colors[10].b * factor, 1)); break;
+                case Type.TypeEnum.Grass: src1.SetColor("_Color", new Color(colors[11].r * factor, colors[11].g * factor, colors[11].b * factor, 1)); src2.SetColor("_Color", new Color(colors[11].r * factor, colors[11].g * factor, colors[11].b * factor, 1)); break;
+                case Type.TypeEnum.Electric: src1.SetColor("_Color", new Color(colors[12].r * factor, colors[12].g * factor, colors[12].b * factor, 1)); src2.SetColor("_Color", new Color(colors[12].r * factor, colors[12].g * factor, colors[12].b * factor, 1)); break;
+                case Type.TypeEnum.Psychic: src1.SetColor("_Color", new Color(colors[13].r * factor, colors[13].g * factor, colors[13].b * factor, 1)); src2.SetColor("_Color", new Color(colors[13].r * factor, colors[13].g * factor, colors[13].b * factor, 1)); break;
+                case Type.TypeEnum.Ice: src1.SetColor("_Color", new Color(colors[14].r * factor, colors[14].g * factor, colors[14].b * factor, 1)); src2.SetColor("_Color", new Color(colors[14].r * factor, colors[14].g * factor, colors[14].b * factor, 1)); break;
+                case Type.TypeEnum.Dragon: src1.SetColor("_Color", new Color(colors[15].r * factor, colors[15].g * factor, colors[15].b * factor, 1)); src2.SetColor("_Color", new Color(colors[15].r * factor, colors[15].g * factor, colors[15].b * factor, 1)); break;
+                case Type.TypeEnum.Dark: src1.SetColor("_Color", new Color(colors[16].r * factor, colors[16].g * factor, colors[16].b * factor, 1)); src2.SetColor("_Color", new Color(colors[16].r * factor, colors[16].g * factor, colors[16].b * factor, 1)); break;
+                case Type.TypeEnum.Fairy: src1.SetColor("_Color", new Color(colors[17].r * factor, colors[17].g * factor, colors[17].b * factor, 1)); src2.SetColor("_Color", new Color(colors[17].r * factor, colors[17].g * factor, colors[17].b * factor, 1)); break;
+                default: src1.SetColor("_Color", Color.white); src2.SetColor("_Color", Color.white); break;
+            }
+        }
+        else
+        {
+            src1.SetColor("_Color", new Color(Mathf.PingPong(Time.time, 1), Mathf.PingPong(Time.time + 0.5f, 1), Mathf.PingPong(Time.time + 1f, 1)));
+            src2.SetColor("_Color", src1.color);
         }
         
     }
@@ -1459,7 +1463,6 @@ public class Mew : Empty
         int numPoints = 8; // 五角星上的点数
         radius = 12f; // 五角星的顶点到中心的距离
         Vector3[] starVertices = new Vector3[numPoints];
-        Vector3[] secredFirePositions = new Vector3[numPoints * 14]; // 存储SecredFire的位置
 
         // 创建五角星的顶点坐标
         for (int i = 0; i < numPoints; i++)
@@ -1479,14 +1482,12 @@ public class Mew : Empty
 
             GameObject secredFireCenter = Instantiate(SecredFireCentrePrefab, center, Quaternion.identity);
             secredFireCenter.GetComponent<SecredFireEmpryCentre>().empty = this;
-            secredFirePositions[numPoints * 12 + i] = center;
         }
         // 在每个五角星顶点生成SecredFire
         for (int i = 0; i < numPoints; i++)
         {
             GameObject secredFireVertex = Instantiate(SecredFireVertexPrefab, starVertices[i], Quaternion.identity);
             secredFireVertex.GetComponent<SecredFireEmptyVertex>().empty = this;
-            secredFirePositions[numPoints * 12 + numPoints + i] = starVertices[i];
         }
 
         // 在每条线上均匀分布生成SecredFire
@@ -1504,9 +1505,8 @@ public class Mew : Empty
             {
                 Vector3 secredFirePosition = startPoint + direction * (j * step);
                 SecredFireEmpty secredFire = Instantiate(SecredFirePrefab, secredFirePosition, Quaternion.identity).GetComponent<SecredFireEmpty>();
-                secredFirePositions[(i * 12) + j] = secredFirePosition;
                 secredFire.empty = this;
-                secredFire.Initialize(player.transform.position, 2f);
+                secredFire.Initialize(player.transform.position, 3f);
             }
         }
         yield return new WaitForSeconds(4f);
