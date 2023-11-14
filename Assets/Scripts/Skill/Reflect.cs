@@ -39,20 +39,25 @@ public class Reflect : Skill
     {
         if (SkillFrom == 2 && other.tag == "PlayerProjectel")
         {
-            TraceEffect t = other.GetComponent<TraceEffect>();
-            Debug.Log(t);
-            if (t == null)
+            bool isTraceSkill = false;
+            for (int i=0; i < SkillTag.Length;i++)
             {
-                foreach(GameObject child in other.transform)
-                {
-                    t = child.GetComponent<TraceEffect>();
-                    Debug.Log(t);
-                }
+                if (SkillTag[i] == SkillTagEnum.带有跟踪效果或类似效果的技能) { isTraceSkill = true; }
             }
-            if (t != null)
-            {
-                t.moveSpeed *= 1.5f;
-                t.distance = Mathf.Clamp(t.distance * 2, 0, 10);
+            if (isTraceSkill) {
+                TraceEffect t = other.GetComponent<TraceEffect>();
+                if (t == null)
+                {
+                    foreach (GameObject child in other.transform)
+                    {
+                        t = child.GetComponent<TraceEffect>();
+                    }
+                }
+                if (t != null)
+                {
+                    t.moveSpeed *= 1.5f;
+                    t.distance = Mathf.Clamp(t.distance * 2, 0, 10);
+                }
             }
         }
     }

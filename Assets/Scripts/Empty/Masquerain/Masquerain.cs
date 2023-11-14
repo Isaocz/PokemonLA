@@ -345,7 +345,7 @@ public class Masquerain : Empty
                     {
 
                         airSlash.LaunchNotForce(dir, 10);
-                        rigidbody2D.AddForce(-dir * 1600);
+                        if (rigidbody2D !=null) { rigidbody2D.AddForce(-dir * 1600); }
                     }
                 });
             });

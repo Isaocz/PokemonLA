@@ -59,7 +59,7 @@ public class AirSlash : Projectile
             if (other.tag == ("Player") && !empty.isEmptyInfatuationDone)
             {
                 PlayerControler playerControler = other.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, 0, SpDmage, 0, Type.TypeEnum.Flying);
+                Pokemon.PokemonHpChange((empty==null?null: empty.gameObject), other.gameObject, 0, SpDmage, 0, Type.TypeEnum.Flying);
                 if (playerControler != null)
                 {
                     playerControler.KnockOutPoint = 5;

@@ -8,6 +8,7 @@ public class Psyshock : Skill
 {
     private LineRenderer lineRenderer;
     private bool isSummon;
+    bool isPSHitDone;
     private Vector3 summonPoint;
 
     public GameObject PsyshockSE;
@@ -62,7 +63,7 @@ public class Psyshock : Skill
                 if (nearestEnemy != null)
                 {
                     Empty target = nearestEnemy.GetComponent<Empty>();
-                    HitAndKo(target);
+                    PsychockHitAndKo(target);
                     lineRenderer.SetPosition(0, transform.position);
                     lineRenderer.SetPosition(1, target.transform.position);
                     summonPoint = target.transform.position;
@@ -122,11 +123,12 @@ public class Psyshock : Skill
             summonPsyshockSE();
             isSummon = true;
         }
+
     }
 
     void Skill0()
     {//激光效果
-        RaycastHit2D hitinfo = Physics2D.Raycast(transform.position, transform.right, 10, LayerMask.GetMask("Empty", "EmptyFly", "Enviroment", "Room"));
+        RaycastHit2D hitinfo = Physics2D.Raycast(transform.position, transform.right, 10, LayerMask.GetMask("Empty", "EmptyFly", "EmptyJump", "Enviroment", "Room"));
         Vector2 EndPoint = hitinfo.point;
         //如果击中敌方宝可梦，则造成伤害
         if (hitinfo)
@@ -134,7 +136,7 @@ public class Psyshock : Skill
             if (hitinfo.collider != null && hitinfo.collider.gameObject.tag == "Empty")
             {
                 Empty target = hitinfo.collider.GetComponent<Empty>();
-                HitAndKo(target);
+                PsychockHitAndKo(target);
             }
             //如果有击中对象，将起始点和终点分别对应
             lineRenderer.SetPosition(0, transform.position);
@@ -152,7 +154,59 @@ public class Psyshock : Skill
 
     void summonPsyshockSE()
     {
-        GameObject psyshockSE = Instantiate(PsyshockSE, summonPoint, Quaternion.identity);
-        psyshockSE.GetComponent<PsyshockSE>().player = player;
+        if (isPSHitDone) {
+            GameObject psyshockSE = Instantiate(PsyshockSE, summonPoint, Quaternion.identity);
+            psyshockSE.GetComponent<PsyshockSE>().player = player;
+            psyshockSE.GetComponent<PsyshockSE>().SpDamage = SpDamage / 2;
+        }
     }
+
+
+
+
+    public void PsychockHitAndKo(Empty target)
+    {
+        isPSHitDone = true;
+        if (!isHitDone)
+        {
+            isHitDone = true;
+            float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1) * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+
+            if (player != null)
+            {
+                if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
+                {
+                    target.EmptyHpChange((SpDamage * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.SpAAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? ((target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1))) + 2, 0, SkillType);
+                }
+                else
+                {
+                    target.EmptyHpChange((SpDamage * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.SpAAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? ((target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1))) + 2, 0, SkillType);
+                    GetCTEffect(target);
+                }
+            }
+            else if (baby != null)
+            {
+                Pokemon.PokemonHpChange(baby.gameObject, target.gameObject, Damage, 0, 0, (Type.TypeEnum)SkillType);
+                Debug.Log(baby);
+            }
+            target.EmptyKnockOut(KOPoint);
+            HitEvent(target);
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
