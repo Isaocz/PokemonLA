@@ -31,10 +31,12 @@ public class PlayRough : Skill
             HitAndKo(target);
             if (SkillFrom == 2)
             {
-                player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.红色慢速攻击型);
+                if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 < 0.8f) { player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.红色慢速攻击型); }
+                else { player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.橙色增加攻击型); }
                 if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.8f)
                 {
-                    player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.红色慢速攻击型);
+                    if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 < 0.8f) { player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.红色慢速攻击型); }
+                    else { player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.橙色增加攻击型); }
                 }
             }
             if (animator != null) { animator.SetTrigger("Hit"); }

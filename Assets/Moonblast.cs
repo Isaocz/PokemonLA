@@ -14,6 +14,7 @@ public class Moonblast : Skill
     private bool canBFborn;
     void Start()
     {
+        animator = GetComponent<Animator>();
         GameObject Mask = Instantiate(mask, player.transform);
         Destroy(Mask, maskDuration);
         alltime = ExistenceTime;
@@ -25,7 +26,7 @@ public class Moonblast : Skill
     void Update()
     {
         StartExistenceTimer();
-        if (!ishit)
+        if (!ishit && ExistenceTime > 0.3f)
         {
             moveSpeed = initialSpeed * ExistenceTime / alltime;
             transform.Translate(moveSpeed * Vector3.right * Time.deltaTime);
@@ -34,15 +35,20 @@ public class Moonblast : Skill
         {
             if (!timeChange)
             {
-                Destroy(gameObject, 0.3f);
+                animator.SetTrigger("Over");
                 timeChange = true;
             }
             if (canBFborn)
             {
-                switch (Random.Range(0, 2))
+                if (SkillFrom == 2)
                 {
-                    case 0: player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.浅粉色普通型); break;
-                    case 1: player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.蓝色增加特攻型); break;
+                    if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 < 0.8f) { player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.浅粉色普通型); }
+                    else { player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.蓝色增加特攻型); }
+                    if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.8f)
+                    {
+                        if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 < 0.8f) { player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.浅粉色普通型); }
+                        else { player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.蓝色增加特攻型); }
+                    }
                 }
                 canBFborn = false;
             }
@@ -51,32 +57,30 @@ public class Moonblast : Skill
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Empty"))
-        {
-            Empty enemy = collision.GetComponent<Empty>();
-            if (enemy != null)
+        if (!collision.isTrigger) {
+            if (collision.CompareTag("Empty"))
             {
-                HitAndKo(enemy);
-                if(Random.Range(0f,1f) + player.LuckPoint/ 30f > 0.8f)
+                Empty enemy = collision.GetComponent<Empty>();
+                if (enemy != null)
                 {
-                    enemy.SpDChange(-1, 3f);
-                }
-                transform.GetChild(0).gameObject.SetActive(false);
-                transform.GetChild(1).gameObject.SetActive(true);
-                ishit = true;
-                timeChange = false;
-                if(SkillFrom == 2)
-                {
-                    canBFborn = true;
+                    HitAndKo(enemy);
+                    if (Random.Range(0f, 1f) + player.LuckPoint / 30f > 0.8f)
+                    {
+                        enemy.SpDChange(-1, 0f);
+                    }
+                    ishit = true;
+                    timeChange = false;
+                    if (SkillFrom == 2)
+                    {
+                        canBFborn = true;
+                    }
                 }
             }
-        }
-        if(collision.CompareTag("Enviroment") || collision.CompareTag("Room"))
-        {
-            transform.GetChild(0).gameObject.SetActive(false);
-            transform.GetChild(1).gameObject.SetActive(true);
-            ishit = true;
-            timeChange = false;
+            if (collision.CompareTag("Enviroment") || collision.CompareTag("Room"))
+            {
+                ishit = true;
+                timeChange = false;
+            }
         }
     }
 }

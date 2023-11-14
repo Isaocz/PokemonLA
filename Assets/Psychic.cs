@@ -10,15 +10,19 @@ public class Psychic : Skill
     void Start()
     {
         ishit = false;
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!ishit)
+        StartExistenceTimer();
+        if (!ishit && ExistenceTime >= 0.3f)
         {
-            StartExistenceTimer();
             transform.Translate(moveSpeed * Time.deltaTime * Vector3.right);
+        }else
+        {
+            animator.SetTrigger("Over");
         }
     }
 
@@ -31,21 +35,16 @@ public class Psychic : Skill
             {
                 HitAndKo(enemy);
                 ishit = true;
-
-                transform.GetChild(0).gameObject.SetActive(false);
-                transform.GetChild(1).gameObject.SetActive(true);
-                Destroy(gameObject, 1f);
+                animator.SetTrigger("Over");
 
                 if (Random.Range(0f, 1f) + player.LuckPoint / 30f > 0.8)
-                    enemy.SpDChange(-1, 4f);
+                    enemy.SpDChange(-1, 0f);
             }
         }
         if((collision.CompareTag("Enviroment") || collision.CompareTag("Room")) && !ishit)
         {
             ishit = true;
-            transform.GetChild(0).gameObject.SetActive(false);
-            transform.GetChild(1).gameObject.SetActive(true);
-            Destroy(gameObject, 1f);
+            animator.SetTrigger("Over");
         }
     }
 }
