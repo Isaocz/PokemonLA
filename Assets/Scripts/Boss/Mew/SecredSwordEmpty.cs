@@ -1,31 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SecredSwordEmpty : Projectile
 {
-    private PlayerControler player;
     private float angle;
     private float radius;
     private Vector3 position;
     private float timer;
-    private Transform target;
+    private float randomangle;
+    private GameObject target;
     private Vector3 target2;
-    private Vector3 initialDirection;
-    public void Initialize(float Angle, float Radius, GameObject Target)
+    public void Initialize(float Angle, float Radius, GameObject Target, float randomAngle)
     {
         angle = Angle;
         radius = Radius;
-        target = Target.transform;
+        target = Target;
+        randomangle = randomAngle;
     }
     void Start()
     {
-        position = target.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
+        position = target.transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
         Destroy(gameObject, 3f);
         Invoke("RecordPosition", 1.7f);
-
-        initialDirection = Quaternion.Euler(0f, 0f, angle) * Vector2.right * -1;
     }
 
     // Update is called once per frame
@@ -34,9 +31,12 @@ public class SecredSwordEmpty : Projectile
         timer += Time.deltaTime;
         if(timer < 1.7f)
         {
-            position = target.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
+            float t = (1 - Mathf.Exp(-2 * timer)) / (1 + Mathf.Exp(-2 * timer));//用双曲正切函数来表示0-1转换的过程
+            float currentAngle = Mathf.Lerp(angle, angle + randomangle, t);
+
+            position = target.transform.position + Quaternion.Euler(0f, 0f, currentAngle) * Vector2.right * radius;
             transform.position = position;
-            transform.right = initialDirection;
+            transform.right = Quaternion.Euler(0f, 0f, currentAngle) * Vector2.right * -1;
         }
         else
         {
@@ -46,7 +46,7 @@ public class SecredSwordEmpty : Projectile
     }
     void RecordPosition()
     {
-        target2 = target.position;
+        target2 = target.transform.position;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

@@ -17,7 +17,7 @@ public class MagicalLeafEmpty : Projectile
     {
         target = Target.transform;
     }
-    private void Start()
+    private void OnEnable()
     {
         timer = lifetime; // 初始化计时器
     }
@@ -38,7 +38,7 @@ public class MagicalLeafEmpty : Projectile
 
         if (timer <= 0f)
         {
-            Destroy(gameObject); // 在计时结束后销毁魔法叶子对象
+            ObjectPoolManager.ReturnObjectToPool(gameObject); // 在计时结束后销毁魔法叶子对象
         }
     }
 
@@ -55,7 +55,7 @@ public class MagicalLeafEmpty : Projectile
                 playerControler.KnockOutPoint = 2.5f;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
             }
-            Destroy(gameObject); // 在碰撞后销毁魔法叶子对象
+            ObjectPoolManager.ReturnObjectToPool(gameObject); // 在碰撞后销毁魔法叶子对象
         }
     }
 }

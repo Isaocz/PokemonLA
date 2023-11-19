@@ -11,6 +11,7 @@ public class IcicleSpearEmpty : Projectile
 
     private void Start()
     {
+        isMoving = false;
         StartCoroutine(MoveToCenter());
     }
 

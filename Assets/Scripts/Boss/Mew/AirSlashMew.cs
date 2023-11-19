@@ -14,6 +14,7 @@ public class AirSlashMew : Projectile
     // Start is called before the first frame update
     void Start()
     {
+        timer = 0f;
         target = GameObject.FindWithTag("Player").transform;
         //º∆À„≥ØœÚ
         Vector3 direction = target.position - transform.position;
@@ -53,7 +54,7 @@ public class AirSlashMew : Projectile
             //º∆À„Ω«∂»
             float splitangle =angle + i * (360f / numSplitAirSlashes);
             //’ŸªΩÀÈ∆¨
-            GameObject splitAirSlash = Instantiate(SplitAirSlashPrefab, transform.position, Quaternion.Euler(0f, 0f, splitangle));
+            GameObject splitAirSlash = ObjectPoolManager.SpawnObject(SplitAirSlashPrefab, transform.position, Quaternion.Euler(0f, 0f, splitangle));
             splitAirSlash.GetComponent<SplitAirSlash>().empty = empty;
         }
     }

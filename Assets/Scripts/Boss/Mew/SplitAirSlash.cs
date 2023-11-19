@@ -7,9 +7,9 @@ public class SplitAirSlash : Projectile
     public float SplitAirSlashSpeed = 10f;
     
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
-        Destroy(gameObject,4f);
+        ObjectPoolManager.ReturnObjectToPool(gameObject,4f);
     }
 
     // Update is called once per frame
