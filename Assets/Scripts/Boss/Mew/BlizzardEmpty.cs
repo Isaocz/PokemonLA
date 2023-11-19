@@ -5,20 +5,27 @@ using UnityEngine;
 
 public class BlizzardEmpty : Projectile
 {
+    bool isInitialiazed;
+    private float timer;
+    public float delay = 0.5f;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
-        
+        if (!isInitialiazed)
+        {
+            timer = 0;
+            isInitialiazed = true;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        timer += Time.deltaTime; 
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag =="Player")
+        if (collision.tag =="Player" && timer > delay)
         {
             // 对玩家造成伤害
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();

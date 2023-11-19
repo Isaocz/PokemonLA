@@ -10,10 +10,10 @@ public class ScaleShotEmpty : Projectile
     private float timer; // ¼ÆÊ±Æ÷
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         timer = 0f;
-        Destroy(gameObject, 10f);
+        ObjectPoolManager.ReturnObjectToPool(gameObject, 10f);
     }
 
     // Update is called once per frame

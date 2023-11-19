@@ -1,20 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MakeItRainEmpty : Projectile
 {
     private Vector3 direction;
-    private float movespeed = 5f;
+    private float movespeed;
     // Start is called before the first frame update
     public void MIRrotate(Vector3 Direction)
     {
         direction = Direction;
     }
-    void Start()
+    void OnEnable()
     {
-        Destroy(gameObject, 7f);
+        movespeed = 5f;
+        ObjectPoolManager.ReturnObjectToPool(gameObject, 7f);
     }
 
     // Update is called once per frame
@@ -35,7 +35,7 @@ public class MakeItRainEmpty : Projectile
                 playerControler.KnockOutPoint = 1f;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
             }
-            Destroy(gameObject);
+            ObjectPoolManager.ReturnObjectToPool(gameObject);
             playerControler.ChangeMoney(1);
             
         }

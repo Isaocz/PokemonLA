@@ -11,7 +11,7 @@ public class SecredFireEmptyVertex : Projectile
     private float speed;
     private float acceleration;
 
-    private void Start()
+    private void OnEnable()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
@@ -19,7 +19,7 @@ public class SecredFireEmptyVertex : Projectile
         speed = 9f;
         acceleration = 3f;
         StartCoroutine(StartMovingAfterDelay(1.5f));
-        Destroy(gameObject, 6.5f);
+        ObjectPoolManager.ReturnObjectToPool(gameObject, 6.5f);
     }
 
     private IEnumerator StartMovingAfterDelay(float delay)
