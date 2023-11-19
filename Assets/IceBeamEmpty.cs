@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class IceBeamEmpty : Projectile
 {
-    private void Start()
+    private void OnEnable()
     {
-        Destroy(gameObject,1f);
+        ObjectPoolManager.ReturnObjectToPool(gameObject,1f);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

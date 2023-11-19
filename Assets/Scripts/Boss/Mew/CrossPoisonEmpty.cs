@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CrossPoisonEmpty : Projectile
 {
-    private float LaunchSpeed = 8f;
-    private float BackSpeed = 4f;
+    public float LaunchSpeed = 8f;
+    public float BackSpeed = 4f;
+    private int phase;
     Vector3 direction;
     Vector3 Backdirection;
     private Rigidbody2D rb;
@@ -14,24 +14,48 @@ public class CrossPoisonEmpty : Projectile
     private bool canHurt;
     private float timer;
 
-    // Start is called before the first frame update
-    public void CProtate(Vector3 Direction)
+    /// <summary>
+    /// 初始化十字毒刃
+    /// </summary>
+    /// <param name="Direction">方向</param>
+    /// <param name="Phase">阶段，可去除</param>
+    public void Initialize(Vector3 Direction, int Phase)
     {
         direction = Direction;
+        phase = Phase;
+    }
+    public void Initialize(Vector3 Direction)
+    {
+        direction = Direction;
+        phase = 1;
     }
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        Destroy(gameObject, 15f);
+        Destroy(gameObject, 13f);
         canHurt = false;
-        Backdirection = (-direction);
+        timer = 0f;
+        if (phase == 3)
+        {
+            float floatingX = Random.Range(-0.5f, 0.5f);
+            float floatingY = Random.Range(-0.5f, 0.5f);
+            Backdirection = ((-direction) + new Vector3(floatingX, floatingY, 0)).normalized;
+            LaunchSpeed = LaunchSpeed * 1.2f;
+            BackSpeed = BackSpeed * 1.2f;
+        }
+        else
+        {
+            Backdirection = (-direction);
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
         timer += Time.deltaTime;
-        if (timer < 3f)
+        if (timer < ((phase == 3) ? (3f / 1.2f) : 3f))  
         {
             rb.velocity = direction * LaunchSpeed;
             //发射时不能伤害玩家

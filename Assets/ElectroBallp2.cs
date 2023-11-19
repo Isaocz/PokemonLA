@@ -5,16 +5,23 @@ using UnityEngine;
 public class ElectroBallp2 : Projectile
 {
     List<PlayerControler> playerlist = new List<PlayerControler>();
+    float timer;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
-        Destroy(gameObject, 3.5f);
+        ObjectPoolManager.ReturnObjectToPool(gameObject, 3f);
+        timer = 0f;
+        playerlist.Clear();
     }
 
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    void Update()
     {
-        if (collision.CompareTag("Player"))
+        timer += Time.deltaTime;
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player") && timer > 2f && timer < 2.2f)
         {
             PlayerControler player = collision.GetComponent<PlayerControler>();
             if (player != null && !playerlist.Contains(player))

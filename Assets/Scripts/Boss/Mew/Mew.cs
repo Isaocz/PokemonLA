@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class Mew : Empty
 {
@@ -27,7 +26,6 @@ public class Mew : Empty
     public float summonRadius = 5f;
     public float delayBetweenExecutions = 1f;
     public GameObject HeartStampPrefab;//技能9
-    public float HeartStampRadius=1.5f;
     public int heartStampCount = 8;
     public GameObject reticlePrefab; //Reticle预制体
     public GameObject ScaleShotPrefab; //技能10
@@ -94,7 +92,11 @@ public class Mew : Empty
     public bool LaserChange = false;
     private float skillTimer = 0f; // 技能计时器
     private bool isReset;
-    private List<GameObject> heartStamps = new List<GameObject>();//对HeartStamp进行存储
+    private bool isTeleport;
+    public float teleportTime;
+    private float teleportTimer = 0f;
+    Vector3 targetPosition;
+    Vector3 currentPosition;
     private float MoreAttackTimer = -4f;//二阶段更多技能计时器
     private bool isPhase3 = false;
     private bool isDying = false;//结算
@@ -150,7 +152,6 @@ public class Mew : Empty
     public Material src1;
     public Material src2;
     public float intensity = 1f;
-
     void Start()
     {
         //Audio
@@ -187,6 +188,12 @@ public class Mew : Empty
         ClearProjectile();
         isReset = false;
 
+        //预热对象池：魔法叶、叶刃、淘金潮、神圣之火
+        ObjectPoolManager.PreheatPool(magicalLeafPrefab, 16);
+        ObjectPoolManager.PreheatPool(LeafBladePrefab, 50);
+        ObjectPoolManager.PreheatPool(MakeItRainPrefab, 80);
+        ObjectPoolManager.PreheatPool(SecredFirePrefab, 60);
+
         //删除所有环境对象
         Transform grandParent = transform.parent.parent;
         Transform enviroment = grandParent.Find("Enviroment");
@@ -219,7 +226,6 @@ public class Mew : Empty
         {
             if (currentPhase == 3)//三阶段判定
             {
-                bgmScript.ChangeBGMINSIST();
                 Phase3();
                 HpTiming -= Time.deltaTime;
                 uIHealth.Per = HpTiming / HpTimer;
@@ -245,11 +251,14 @@ public class Mew : Empty
                         player.transform.position = Vector3.MoveTowards(player.transform.position, targetPosition, 7f * Time.deltaTime);
                     }
                 }
-                if (HpTiming <= 0f && isDying == false)
+                if (HpTiming <= 0f)
                 {
-                    isDying = true;
-                    ClearProjectile();
-                    StartCoroutine(Phase3End());
+                    if (!isDying)
+                    {
+                        isDying = true;
+                        ClearProjectile();
+                        StartCoroutine(Phase3End());
+                    }
                 }
             }
             else
@@ -263,20 +272,24 @@ public class Mew : Empty
                     switch (currentPhase)
                     {
                         case 1:
-                            if (!UsedMeanLook && EmptyHp < maxHP / 2)
+                            if (EmptyHp < maxHP / 2)
                             {
-                                if (!roomCreated && currentPhase == 1)
+                                Invincible = true;
+                                if (!UsedMeanLook)
                                 {
-                                    isReset = false;
-                                    turningPhase = true;
-                                    ClearStatusEffects();
-                                    StopAllCoroutines();//停止所有技能释放
-                                    EmptyHp = maxHP;
-                                    player.Hp = player.maxHp;
-                                    uIHealth.Per = EmptyHp / maxHP;
-                                    StartCoroutine(Phase2Start());
+                                    if (!roomCreated && currentPhase == 1)
+                                    {
+                                        isReset = false;
+                                        turningPhase = true;
+                                        ClearStatusEffects();
+                                        StopAllCoroutines();//停止所有技能释放
+                                        EmptyHp = maxHP;
+                                        player.Hp = player.maxHp;
+                                        uIHealth.Per = EmptyHp / maxHP;
+                                        StartCoroutine(Phase2Start());
+                                    }
+                                    currentPhase++;
                                 }
-                                currentPhase++;
                             }
                             else if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
                             {
@@ -289,6 +302,7 @@ public class Mew : Empty
                             {
                                 ClearStatusEffects();
                                 StopAllCoroutines();
+                                player.Hp = (player.Hp < player.maxHp / 2) ? (player.Hp + player.maxHp / 2) : player.maxHp;
                                 EmptyHp = maxHP;
                                 uIHealth.Per = EmptyHp / maxHP;
                                 uIHealth.ChangeHpUp();
@@ -336,7 +350,20 @@ public class Mew : Empty
             // 随机选择一个技能释放
             int randomSkillIndex = Random.Range(1, 21);
             StartCoroutine(Phase2Skill(randomSkillIndex));
+            targetPosition = RamdomTeleport();
+            currentPosition = transform.position;
             SkillTimerUpdate(randomSkillIndex, 2);
+        }
+        if (isTeleport)
+        {
+            teleportTimer += Time.deltaTime;
+            float t = Mathf.Clamp01(Mathf.Sin(teleportTimer / teleportTime * Mathf.PI * 0.5f));
+            transform.position = Vector3.Lerp(currentPosition, targetPosition, t);
+            if(teleportTimer >= teleportTime)
+            {
+                isTeleport = false;
+                teleportTimer = 0f;
+            }
         }
 
         // 技能计时器递减
@@ -375,9 +402,8 @@ public class Mew : Empty
                     if (validPosition)
                     {
                         spawnedPositions.Add(spawnPosition);
-                        GameObject ebp2 = Instantiate(ElectricBallp2, spawnPosition, Quaternion.identity);
+                        GameObject ebp2 = ObjectPoolManager.SpawnObject(ElectricBallp2, spawnPosition, Quaternion.identity);
                         ebp2.GetComponent<ElectroBallp2>().empty = this;
-                        Destroy(ebp2, 4f);
                     }
                 }
             }
@@ -388,6 +414,7 @@ public class Mew : Empty
     {
         if (isPhase3)
         {
+            bgmScript.ChangeBGMINSIST();
             Invincible = true;
             isPhase3 = false;
             StartCoroutine(Phase3Skill());
@@ -414,10 +441,10 @@ public class Mew : Empty
                     for (int i = 0; i < Leafnum; i++)
                     {
                         // 在Mew位置实例化魔法叶
-                        GameObject magicalLeaf = Instantiate(magicalLeafPrefab, transform.position, Quaternion.identity);
+                        GameObject magicalLeaf = ObjectPoolManager.SpawnObject(magicalLeafPrefab, transform.position, Quaternion.identity);
                         magicalLeaf.GetComponent<MagicalLeafEmpty>().SetTarget(AtkTarget);
                         magicalLeaf.GetComponent<MagicalLeafEmpty>().empty = this;
-                        Destroy(magicalLeaf, 6f); // 6秒后销毁魔法叶对象
+                        ObjectPoolManager.ReturnObjectToPool(magicalLeaf, 6f); // 6秒后销毁魔法叶对象
                         yield return new WaitForSeconds(delayBetweenLeaves);
                     }
                 }
@@ -454,29 +481,26 @@ public class Mew : Empty
                             WillOWispEmpty willOWisp = Instantiate(WillOWispPrefab, spawnPos, Quaternion.identity).GetComponent<WillOWispEmpty>();
                             Vector3 direction = (spawnPos - transform.position).normalized;
                             willOWisp.Initialize(moveSpeed, direction); // 设置WillOWisp的移动速度
-                            willOWisp.mew = this.gameObject;
-                            Destroy(willOWisp, 4f);
+                            willOWisp.empty = this;
                         }
                         yield return new WaitForSeconds(WaitingWillOWisp);
                     }
                 }
                 break;
             case 4://技能4：和睦相处
-                GameObject PlayNice = Instantiate(PlayNicePrefab, transform.position, Quaternion.identity);
+                GameObject PlayNice = ObjectPoolManager.SpawnObject(PlayNicePrefab, transform.position, Quaternion.identity);
                 ClearStatusEffects();
-                Destroy(PlayNice, 5f);
+                ObjectPoolManager.ReturnObjectToPool(PlayNice, 5f);
                 break;
             case 5://技能5：太晶爆发
                 //释放3道激光，分别位于90度、210度、330度的位置
-                transform.position = mapCenter;
-                //创建三条激光
                 float[] angles = { 90f, 210f, 330f };
                 for (int i = 0; i < angles.Length; i++)
                 {
                     //计算激光的起始点和终点
                     float angle = angles[i];
-                    Vector3 startPoint = mapCenter;
-                    Vector3 endPoint = mapCenter + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
+                    Vector3 startPoint = transform.position;
+                    Vector3 endPoint = transform.position + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
                     TeraBlastEmpty Terablast = Instantiate(TeraBlastPrefab, startPoint, Quaternion.identity).GetComponent<TeraBlastEmpty>();
                     Terablast.SetEndpoints(startPoint, endPoint, angle);
                     Terablast.SetColors(Color.yellow, Color.red);
@@ -493,9 +517,9 @@ public class Mew : Empty
                 {
                     for (int i = 0; i < 4; i++)
                     {
-                        GameObject Curse = Instantiate(CursePrefab, AtkTarget.transform.position, Quaternion.identity);
+                        GameObject Curse = ObjectPoolManager.SpawnObject(CursePrefab, AtkTarget.transform.position, Quaternion.identity);
                         Curse.GetComponent<Curse>().empty = this;
-                        Destroy(Curse, 4f);
+                        ObjectPoolManager.ReturnObjectToPool(Curse, 4f);
                         yield return new WaitForSeconds(0.6f);
                     }
                 }
@@ -519,10 +543,10 @@ public class Mew : Empty
                             float angle = i * angleIncrement;
                             Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
 
-                            MagicalFireEmpty magicalFire = Instantiate(MagicalFirePrefab, transform.position, rotation).GetComponent<MagicalFireEmpty>();
+                            MagicalFireEmpty magicalFire = ObjectPoolManager.SpawnObject(MagicalFirePrefab, transform.position, rotation).GetComponent<MagicalFireEmpty>();
                             magicalFire.ps(transform.position, rotationSpeed);
                             magicalFire.empty = this;
-                            Destroy(magicalFire, 7f);
+                            ObjectPoolManager.ReturnObjectToPool(magicalFire.gameObject, 7f);
 
                         }
                         yield return new WaitForSeconds(intervalTime);
@@ -573,15 +597,11 @@ public class Mew : Empty
                         for (int i = 0; i < heartStampCount; i++)
                         {
                             float angle = i * angleIncrement;
-                            Vector3 heartStampPosition = transform.position + new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle), 0f) * HeartStampRadius;
-
-                            HeartStampEmpty heartStamp = Instantiate(HeartStampPrefab, heartStampPosition, Quaternion.identity).GetComponent<HeartStampEmpty>();
+                            Vector3 heartStampPosition = transform.position;
+                            Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+                            HeartStampEmpty heartStamp = ObjectPoolManager.SpawnObject(HeartStampPrefab, heartStampPosition, rotation).GetComponent<HeartStampEmpty>();
+                            heartStamp.phrase = 2;
                             heartStamp.empty = this;
-                            heartStamps.Add(heartStamp.gameObject);
-                            if (heartStamp != null)
-                            {
-                                heartStamp.SetTarget(AtkTarget.transform.position);
-                            }
                         }
                         yield return new WaitForSeconds(intervalTime);
                     }
@@ -601,8 +621,8 @@ public class Mew : Empty
                     {
                         Vector3 randomPoint = (Vector2)AtkTarget.transform.position + Random.insideUnitCircle.normalized * 3f;
                         // 创建Reticle并设置位置
-                        GameObject reticle = Instantiate(reticlePrefab, randomPoint, Quaternion.identity);
-                        Destroy(reticle, 2f);
+                        GameObject reticle = ObjectPoolManager.SpawnObject(reticlePrefab, randomPoint, Quaternion.identity);
+                        ObjectPoolManager.ReturnObjectToPool(reticle, 2f);
                         yield return new WaitForSeconds(1.5f);
                         for (int i = 0; i < scaleShotCount; i++)
                         {
@@ -613,9 +633,9 @@ public class Mew : Empty
                             Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
 
                             // 创建ScaleShot
-                            GameObject scaleShot = Instantiate(ScaleShotPrefab, scaleShotPosition, rotation);
-                            GameObject trail3 = Instantiate(TrailEffect3, scaleShotPosition, Quaternion.Euler(0, 0, angle));
-                            Destroy(trail3, 1f);
+                            GameObject scaleShot = ObjectPoolManager.SpawnObject(ScaleShotPrefab, scaleShotPosition, rotation);
+                            GameObject trail3 = ObjectPoolManager.SpawnObject(TrailEffect3, scaleShotPosition, Quaternion.Euler(0, 0, angle));
+                            ObjectPoolManager.ReturnObjectToPool(trail3, 1f);
                             scaleShot.GetComponent<ScaleShotEmpty>().empty = this;
                         }
                     }
@@ -636,30 +656,13 @@ public class Mew : Empty
                     yield return new WaitForSeconds(1f);
                     GameObject blackCircle = Instantiate(MeanLookPrefab, player.transform.position, Quaternion.identity);
                     UsedMeanLook = true;
-
-                    // 获取黑色目光的半径
-                    float circleRadius = blackCircle.GetComponent<CircleCollider2D>().radius;
-
-                    // 在黑色目光内限制玩家的移动
-                    while (blackCircle != null)
-                    {
-                        // 计算玩家与黑色目光的距离
-                        float distance = Vector2.Distance(player.transform.position, blackCircle.transform.position);
-
-                        if (distance > circleRadius)
-                        {
-                            // 如果玩家距离黑色目光的距离大于圆半径，则将玩家移动回黑色目光的范围内
-                            Vector3 direction = (player.transform.position - blackCircle.transform.position).normalized;
-                            player.transform.position = blackCircle.transform.position + direction * circleRadius;
-                        }
-
-                        yield return null;
-                    }
+                    
                 }
                 break;
             case 12://技能12：魔法闪耀
-                GameObject dazzlingGleam = Instantiate(DazzlingGleamPrefab, transform.position, Quaternion.identity);
-                Destroy(dazzlingGleam, 5f);
+                SkillType = Type.TypeEnum.Fairy;
+                GameObject dazzlingGleam = ObjectPoolManager.SpawnObject(DazzlingGleamPrefab, transform.position, Quaternion.identity);
+                ObjectPoolManager.ReturnObjectToPool(dazzlingGleam, 5f);
                 // 在3.5秒后对圈内的玩家造成伤害
                 StartCoroutine(DamagePlayersWithDelay());
                 IEnumerator DamagePlayersWithDelay()
@@ -682,6 +685,7 @@ public class Mew : Empty
                 }
                 break;
             case 13://技能13：叶刃
+                SkillType = Type.TypeEnum.Grass;
                 StartCoroutine(ReleaseLeafBlade());
                 IEnumerator ReleaseLeafBlade()
                 {
@@ -695,8 +699,8 @@ public class Mew : Empty
                     for (int i = 0; i < shootCount; i++)
                     {
                         // 实例化LeafBlade
-                        GameObject LeafBlade = Instantiate(LeafBladePrefab, transform.position, Quaternion.identity);
-                        LeafBlade.GetComponent<LeafBladeEmpty>().SetTarget(AtkTarget);
+                        GameObject LeafBlade = ObjectPoolManager.SpawnObject(LeafBladePrefab, transform.position, Quaternion.identity);
+                        LeafBlade.GetComponent<LeafBladeEmpty>().Initialize(AtkTarget.transform, currentPhase, 0);
                         LeafBlade.GetComponent<LeafBladeEmpty>().empty = this;
                         // 等待发射间隔
                         yield return new WaitForSeconds(shootInterval);
@@ -708,6 +712,7 @@ public class Mew : Empty
                 {
                     return;
                 }
+                SkillType = Type.TypeEnum.Rock;
                 StartCoroutine(ReleaseStoneEdge());
                 IEnumerator ReleaseStoneEdge()
                 {
@@ -727,7 +732,7 @@ public class Mew : Empty
                                 reticleSpawnPosition = new Vector3(startX, mapCenter.y, mapCenter.z);
                                 // 生成Reticle
                                 GameObject reticle = Instantiate(reticlePrefab, reticleSpawnPosition, Quaternion.identity);
-                                Destroy(reticle, 2f);
+                                ObjectPoolManager.ReturnObjectToPool(reticle, 2f);
                                 //生成尖石
                                 Vector3 StoneEdgeSpawnPosition = new Vector3(reticleSpawnPosition.x, reticleSpawnPosition.y + 14f, reticleSpawnPosition.z);
                                 GameObject stoneEdge = Instantiate(stoneEdgePrefab, StoneEdgeSpawnPosition, Quaternion.identity);
@@ -739,6 +744,7 @@ public class Mew : Empty
                 }
                 break;
             case 15://技能15：空气之刃
+                SkillType = Type.TypeEnum.Flying;
                 StartCoroutine(ReleaseAirSlash());
                 IEnumerator ReleaseAirSlash()
                 {
@@ -759,19 +765,19 @@ public class Mew : Empty
                 }
                 break;
             case 16://技能16：淘金潮
+                SkillType = Type.TypeEnum.Steel;
                 StartCoroutine(ReleaseMakeItRain());
                 IEnumerator ReleaseMakeItRain()
                 {
-                    transform.position = mapCenter;
                     float angle = 0f;
                     float angleIncrement = 8f;
-                    for (int i = 0; i < 100; i++)
+                    for (int i = 0; i < 80; i++)
                     {
                         for (int j = 0; j < 3; j++)
                         {
                             float currentAngle = angle + j * 120f;
                             Vector3 direction = Quaternion.Euler(0f, 0f, currentAngle) * Vector3.up;
-                            MakeItRainEmpty makeitrain = Instantiate(MakeItRainPrefab, transform.position, Quaternion.identity).GetComponent<MakeItRainEmpty>();
+                            MakeItRainEmpty makeitrain = ObjectPoolManager.SpawnObject(MakeItRainPrefab, transform.position, Quaternion.identity).GetComponent<MakeItRainEmpty>();
                             makeitrain.MIRrotate(direction);
                             makeitrain.empty = this;
                         }
@@ -781,6 +787,7 @@ public class Mew : Empty
                 }
                 break;
             case 17://技能17：黏黏网
+                SkillType = Type.TypeEnum.Bug;
                 if (currentPhase == 1)
                 {
                     for (int i = 0; i < 5; i++)
@@ -799,6 +806,7 @@ public class Mew : Empty
                 }
                 break;
             case 18://技能18：十字毒刃
+                SkillType = Type.TypeEnum.Poison;
                 StartCoroutine(ReleaseCrossPoison());
                 IEnumerator ReleaseCrossPoison()
                 {
@@ -819,7 +827,7 @@ public class Mew : Empty
                             float currentAngle = angle + j * 90f;
                             Vector3 direction = Quaternion.Euler(0f, 0f, currentAngle) * Vector3.up;
                             CrossPoisonEmpty crossPoison = Instantiate(CrossPoisonPrefab, transform.position, Quaternion.identity).GetComponent<CrossPoisonEmpty>();
-                            crossPoison.CProtate(direction);
+                            crossPoison.Initialize(direction);
                             crossPoison.empty = this;
                         }
                         //技能间隔等待时间
@@ -829,6 +837,7 @@ public class Mew : Empty
                 }
                 break;
             case 19://技能19：神圣之火
+                SkillType = Type.TypeEnum.Fire;
                 StartCoroutine(ReleaseScaredFire());
                 IEnumerator ReleaseScaredFire()
                 {
@@ -853,13 +862,13 @@ public class Mew : Empty
 
                         Vector3 center = (startPoint + endPoint) / 2f;
 
-                        GameObject secredFireCenter = Instantiate(SecredFireCentrePrefab, center, Quaternion.identity);
+                        GameObject secredFireCenter = ObjectPoolManager.SpawnObject(SecredFireCentrePrefab, center, Quaternion.identity);
                         secredFireCenter.GetComponent<SecredFireEmpryCentre>().empty = this;
                     }
                     // 在每个五角星顶点生成SecredFire
                     for (int i = 0; i < numPoints; i++)
                     {
-                        GameObject secredFireVertex = Instantiate(SecredFireVertexPrefab, starVertices[i], Quaternion.identity);
+                        GameObject secredFireVertex = ObjectPoolManager.SpawnObject(SecredFireVertexPrefab, starVertices[i], Quaternion.identity);
                         secredFireVertex.GetComponent<SecredFireEmptyVertex>().empty = this;
                     }
 
@@ -877,7 +886,7 @@ public class Mew : Empty
                         for (int j = 0; j < 12; j++)
                         {
                             Vector3 secredFirePosition = startPoint + direction * (j * step);
-                            SecredFireEmpty secredFire = Instantiate(SecredFirePrefab, secredFirePosition, Quaternion.identity).GetComponent<SecredFireEmpty>();
+                            SecredFireEmpty secredFire = ObjectPoolManager.SpawnObject(SecredFirePrefab, secredFirePosition, Quaternion.identity).GetComponent<SecredFireEmpty>();
                             secredFire.empty = this;
                             secredFire.Initialize(player.transform.position, 3f);
                         }
@@ -886,12 +895,23 @@ public class Mew : Empty
                 }
                 break;
             case 20://技能20：圣剑
+                SkillType = Type.TypeEnum.Fighting;
+                int Times;
+                if(currentPhase == 3)
+                {
+                    Times = 4;
+                }
+                else
+                {
+                    Times = 3;
+                }
                 StartCoroutine(ReleaseSecredSword());
                 IEnumerator ReleaseSecredSword()
                 {   
-                    for(int i = 0;i<3; i++)  
+                    for(int i = 0;i<Times; i++)  
                     {
                         Instantiate(reticle2Prefab, AtkTarget.transform.position, Quaternion.identity);
+                        float randomAngle = Random.Range(180f, 480f);
                         for(int j = 0; j < 6; j++)
                         {
                             float angle = j * 60;
@@ -899,7 +919,7 @@ public class Mew : Empty
                             Vector3 spawnPos = AtkTarget.transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
                             SecredSwordEmpty secredSword = Instantiate(SecredSwordPrefab, spawnPos, Quaternion.identity).GetComponent<SecredSwordEmpty>();
                             secredSword.empty = this;
-                            secredSword.Initialize(angle, radius, AtkTarget);
+                            secredSword.Initialize(angle, radius, AtkTarget, randomAngle);
                             
                         }
                         yield return new WaitForSeconds(3f);
@@ -908,59 +928,30 @@ public class Mew : Empty
                 }
                 break;
         }
-        //二阶段总共移除的技能：暴风雪（2）、和睦相处（4）、咒术（6）和尖石攻击（14）
+        //二阶段总共移除的技能：暴风雪（2）、咒术（6）和尖石攻击（14）
     }
     void SkillTimerUpdate(int skillindex, int stage)//技能重置时间调整
     {
         switch (skillindex)
         {
-            case 1:skillTimer = 2.4f;
-                break;
-            case 2:
-                if (stage == 1)
-                    skillTimer = 1.5f;
-                break;
-            case 3:
-                if (stage == 1)
-                    skillTimer = 3f;
-                else
-                    skillTimer = 3.5f;
-                break;
-            case 4:if (stage == 1)
-                    skillTimer = 2f;
-                else skillTimer = 1.5f;
-                break;
-            case 5:if (stage == 1) skillTimer = 4.7f;
-                else skillTimer = 9.2f;
-                break;
+            case 1:skillTimer = 2.4f;break;
+            case 2:if (stage == 1) skillTimer = 1.5f;break;
+            case 3:if (stage == 1) skillTimer = 3f;else skillTimer = 3.5f;break;
+            case 4:if (stage == 1)skillTimer = 2f;else skillTimer = 1.5f;break;
+            case 5:if (stage == 1) skillTimer = 4.7f;else skillTimer = 9.2f;break;
             case 6:if (stage == 1)skillTimer = 2.9f;break;
-            case 7:if (stage == 1) skillTimer = 2.6f;
-                else skillTimer = 3.6f; 
-                break;
-            case 8: if (stage == 1) skillTimer = 5.5f;
-                else skillTimer = 4.4f; 
-                    break;
-            case 9:  skillTimer = 4.8f; break;
-            case 10: if (stage == 1) skillTimer = 4.3f;
-                else skillTimer = 3f;
-                break;
-            case 11: if (stage == 1) skillTimer = 2f;
-                else if (stage == 2) skillTimer = 1.7f;
-                break;
+            case 7:if (stage == 1) skillTimer = 2.6f;else skillTimer = 3.6f; break;
+            case 8: if (stage == 1) skillTimer = 5.5f;else skillTimer = 4.4f; break;
+            case 9: skillTimer = 4.8f; break;
+            case 10: if (stage == 1) skillTimer = 4.3f;else skillTimer = 3f;break;
+            case 11: if (stage == 1 && !UsedMeanLook) skillTimer = 2f;else if (stage == 2 && !UsedMeanLook) skillTimer = 1.7f;break;
             case 12: skillTimer = 3.7f; break;
-            case 13: if (stage == 1) skillTimer = 3.3f;
-                else skillTimer = 3.2f;
-                break;
+            case 13: if (stage == 1) skillTimer = 3.3f;else skillTimer = 3.2f;break;
             case 14: if (stage == 1) skillTimer = 10f; break;
-            case 15: if(stage == 1) skillTimer = 4.2f;
-                else skillTimer = 5f;
-                break;
-            case 16: skillTimer = 9f; break;
-            case 17: skillTimer = 1.8f;
-                break;
-            case 18: if (stage == 1) skillTimer = 10f;
-                else skillTimer = 6.5f;
-                break;
+            case 15: if(stage == 1) skillTimer = 4.2f; else skillTimer = 5f;break;
+            case 16: skillTimer = 7.6f; break;
+            case 17: skillTimer = 1.8f;break;
+            case 18: if (stage == 1) skillTimer = 10f;else skillTimer = 6.5f;break;
             case 19: skillTimer = 6f; break;
             case 20: skillTimer = 6f; break;
         }
@@ -1010,7 +1001,7 @@ public class Mew : Empty
             isReset = true;
         }
     }
-    void RamdomTeleport()
+    Vector3 RamdomTeleport()
     {
         bool collided = false;
         Vector3 randomPosition;
@@ -1018,8 +1009,8 @@ public class Mew : Empty
         if (teleportAttempts > 150)
         {
             // 如果尝试次数超过150次，则取消随机传送
-            Debug.Log("没有成功找到合适的传送位置");
-            return;
+            Debug.LogWarning("没有成功找到合适的传送位置");
+            return Vector3.zero;
         }
         //一阶段随机传送：地图内随机位置
         if (currentPhase == 1)
@@ -1047,18 +1038,13 @@ public class Mew : Empty
             if (collided)
             {
                 //如果相撞重新寻找位置
-                RamdomTeleport();
+                return RamdomTeleport();
             }
-            else
-            {
-                //反之进行瞬间移动
-                transform.position = randomPosition;
-                //更新计数器
-                teleportAttempts = 0;
-            }
+            teleportAttempts = 0;
+            return randomPosition;
         }
-        //二阶段随机传送：玩家周围（受替身影响）
-        if(currentPhase == 2)
+        //二阶段高速移动：玩家周围（受替身影响）
+        else if (currentPhase == 2)
         {
             float minDistance = 5f;
             float maxDistance = 10f;
@@ -1081,16 +1067,13 @@ public class Mew : Empty
             if (collided)
             {
                 //如果相撞重新寻找位置
-                RamdomTeleport();
+                return RamdomTeleport();
             }
-            else
-            {
-                //反之进行瞬间移动
-                transform.position = randomPosition;
-                //更新计数器
-                teleportAttempts = 0;
-            }
+            teleportAttempts = 0;
+            //反之进行高速移动
+            return randomPosition;
         }
+        return Vector3.zero;
     }
     bool IsInMapBounds(Vector3 position)
     {
@@ -1115,7 +1098,7 @@ public class Mew : Empty
         }
         else
         {
-            RamdomTeleport();
+            transform.position = RamdomTeleport();
         }
         ChangeType(randomSkillIndex);
         UseSkillMask();
@@ -1125,20 +1108,13 @@ public class Mew : Empty
     }
     private IEnumerator Phase2Skill(int randomSkillIndex)
     {
-        if (randomSkillIndex == 2 || randomSkillIndex == 4 || randomSkillIndex == 6 || randomSkillIndex == 14)
+        if (randomSkillIndex == 2 || randomSkillIndex == 6 || randomSkillIndex == 14)
         {
             yield break;
         }
         animator.SetTrigger("Teleport");
         yield return new WaitForSeconds(0.5f);
-        if (randomSkillIndex == 5 || randomSkillIndex == 16)
-        {
-            transform.position = mapCenter;
-        }
-        else
-        {
-            RamdomTeleport();
-        }
+        isTeleport = true;
         ChangeType(randomSkillIndex);
         UseSkillMask();
         yield return new WaitForSeconds(0.5f);
@@ -1175,7 +1151,7 @@ public class Mew : Empty
             {
                 float angle = i * (360f / 8);
                 Vector2 spawnPosition = transform.position + (Quaternion.Euler(0f, 0f, angle) * Vector2.right * 2f);
-                GameObject magicalleaf = Instantiate(magicalLeafPrefab, spawnPosition, Quaternion.identity);
+                GameObject magicalleaf = ObjectPoolManager.SpawnObject(magicalLeafPrefab, spawnPosition, Quaternion.identity);
                 magicalleaf.GetComponent<MagicalLeafEmpty>().SetTarget(player.gameObject);
                 magicalleaf.GetComponent<MagicalLeafEmpty>().empty = this;
                 Destroy(magicalleaf, 6f);
@@ -1188,16 +1164,16 @@ public class Mew : Empty
         yield return new WaitForSeconds(1f);
         for (int j = 0; j < 10; j++)
         {
-            float increaseAngle = 7f;
+            float increaseAngle = Random.Range(0f, 14f);
             float angleStep = 360f / 20;
             for (int i = 0; i < 20; i++)
             {
                 float angle = j * increaseAngle + i * angleStep; 
                 Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * WillOWispRadius;
-                WillOWispEmpty willOwisp = Instantiate(WillOWispPrefab, spawnPos, Quaternion.identity).GetComponent<WillOWispEmpty>();
+                WillOWispEmpty willOwisp = ObjectPoolManager.SpawnObject(WillOWispPrefab, spawnPos, Quaternion.identity).GetComponent<WillOWispEmpty>();
                 Vector3 direction = (spawnPos - transform.position).normalized;
                 willOwisp.Initialize(8f, direction); 
-                willOwisp.mew = gameObject;
+                willOwisp.empty = this;
             }
             yield return new WaitForSeconds(0.4f);
         }//技能2：磷火
@@ -1208,20 +1184,12 @@ public class Mew : Empty
         //创建6条激光
         for (int j = 0; j < 3; j++)
         {
-            float[] angles = {30f, 90f, 150f, 210f, 270f ,330f };
-            LaserChange = false;
-            if (j == 1)
-            {
-                angles[0] = 15f;
-                angles[1] = 75f;
-                angles[2] = 135f;
-                angles[3] = 195f;
-                angles[4] = 255f;
-                angles[5] = 315f;
-                LaserChange = true;
-            }
+            float[] angles = new float[6];
+            LaserChange = j == 1 ? true : false;
+            float randomAngle = Random.Range(0f, 30f);
             for (int i = 0; i < angles.Length; i++)
             {
+                angles[i] = randomAngle + 60f * i;
                 //计算激光的起始点和终点
                 float angle = angles[i];
                 Vector3 startPoint = mapCenter;
@@ -1233,24 +1201,26 @@ public class Mew : Empty
             }
             yield return new WaitForSeconds(2.5f);
         }
+
         SkillType = Type.TypeEnum.Ghost;
         UseSkillMask();
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < 4; i++)
         {
-            GameObject playercurse = Instantiate(CursePrefab, player.transform.position, Quaternion.identity);
+            GameObject playercurse = ObjectPoolManager.SpawnObject(CursePrefab, player.transform.position, Quaternion.identity);
             playercurse.GetComponent<Curse>().empty = this;
             Destroy(playercurse, 4f);
             for (int j = 0; j < 12; j++)
             {
                 Vector2 position = UnityEngine.Random.insideUnitCircle * 20f;
                 Vector3 spawnPosition = transform.position + new Vector3(position.x, position.y + 0.5f, 0f);
-                GameObject Curse = Instantiate(CursePrefab, spawnPosition, Quaternion.identity);
+                GameObject Curse = ObjectPoolManager.SpawnObject(CursePrefab, spawnPosition, Quaternion.identity);
                 Curse.GetComponent<Curse>().empty = this;
-                Destroy(Curse, 4f);
+                ObjectPoolManager.ReturnObjectToPool(Curse, 4f);
             }
             yield return new WaitForSeconds(0.6f);
         }
+
         SkillType = Type.TypeEnum.Fire;
         UseSkillMask();
         yield return new WaitForSeconds(1f);
@@ -1267,18 +1237,19 @@ public class Mew : Empty
                 float angle = i * angleIncrement;
                 Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
 
-                MagicalFireEmpty magicalFire = Instantiate(MagicalFirePrefab, transform.position, rotation).GetComponent<MagicalFireEmpty>();
+                MagicalFireEmpty magicalFire = ObjectPoolManager.SpawnObject(MagicalFirePrefab, transform.position, rotation).GetComponent<MagicalFireEmpty>();
                 magicalFire.ps(transform.position, rotationSpeed);
                 magicalFire.empty = this;
 
             }
             yield return new WaitForSeconds(0.8f);
         }
+
         SkillType = Type.TypeEnum.Ice;
         UseSkillMask();
         yield return new WaitForSeconds(1f);
         Time.timeScale = 0;
-        GameObject timestopEffect = Instantiate(TimeStopEffect, player.transform.position, Quaternion.identity);
+        GameObject timestopEffect = ObjectPoolManager.SpawnObject(TimeStopEffect, player.transform.position, Quaternion.identity);
         int icicleCount = 8;
         int realIcicleCount = 8;
         float radius = 7f;
@@ -1287,9 +1258,9 @@ public class Mew : Empty
             switch (j)
             {
                 case 0:realIcicleCount = 8;icicleCount = 8;radius = 8f;break;
-                case 1:realIcicleCount = 18;icicleCount = 24; radius = 14f;break;
+                case 1:realIcicleCount = 24;icicleCount = 32; radius = 14f;break;
                 case 2:realIcicleCount = 12;icicleCount = 12;radius = 20f;break;
-                case 3:realIcicleCount = 24;icicleCount = 32;radius = 26f;break;
+                case 3:realIcicleCount = 36;icicleCount = 48;radius = 26f;break;
                 case 4:realIcicleCount = 16;icicleCount = 16;radius = 32f;break;
             }
             int randomangle = Random.Range(0, 360);
@@ -1312,41 +1283,47 @@ public class Mew : Empty
         Destroy(timestopEffect);
         Time.timeScale = 1;
         yield return new WaitForSeconds(4f);
-        SkillType = Type.TypeEnum.Fairy;
+
+        SkillType = Type.TypeEnum.Psychic;
         UseSkillMask();
         yield return new WaitForSeconds(1f);
-        for (int j = 0; j < 6; j++)
+        for (int j = 0; j < 4; j++)
         {
             float angleIncrement2 = 360f / heartStampCount;
             for (int i = 0; i < heartStampCount; i++)
             {
                 float angle = i * angleIncrement2;
-                Vector3 heartStampPosition = transform.position + new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle), 0f) * HeartStampRadius;
-
-                HeartStampEmpty heartStamp = Instantiate(HeartStampPrefab, heartStampPosition, Quaternion.identity).GetComponent<HeartStampEmpty>();
+                Vector3 heartStampPosition = transform.position;
+                Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+                HeartStampEmpty heartStamp = ObjectPoolManager.SpawnObject(HeartStampPrefab, heartStampPosition, rotation).GetComponent<HeartStampEmpty>();
+                heartStamp.phrase = 2;
                 heartStamp.empty = this;
-                heartStamps.Add(heartStamp.gameObject);
-                if (heartStamp != null)
-                {
-                    heartStamp.SetTarget(player.transform.position);
-                }
             }
-            yield return new WaitForSeconds(1f);
+            for (int i = 0; i < 16; i++)
+            {
+                float angle = i * 360f / 16;
+                Vector3 heartStampPosition = transform.position;
+                Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+                HeartStampEmpty heartStamp = ObjectPoolManager.SpawnObject(HeartStampPrefab, heartStampPosition, rotation).GetComponent<HeartStampEmpty>();
+                heartStamp.phrase = 3;
+                heartStamp.empty = this;
+            }
+            yield return new WaitForSeconds(1.5f);
         }
+
         SkillType = Type.TypeEnum.Dragon;
         UseSkillMask();
         yield return new WaitForSeconds(1f);
         for (int j = 0; j < 5; j++)
         {
             Vector3 randomPoint = (Vector2)player.transform.position + Random.insideUnitCircle.normalized * 3f;
-            GameObject reticle = Instantiate(reticlePrefab, randomPoint, Quaternion.identity);
+            GameObject reticle = ObjectPoolManager.SpawnObject(reticlePrefab, randomPoint, Quaternion.identity);
             Vector3 randomPoint2 = (Vector2)player.transform.position + Random.insideUnitCircle.normalized * 3f;
-            GameObject reticle2 = Instantiate(reticlePrefab, randomPoint2, Quaternion.identity);
-            Destroy(reticle, 2f);
-            Destroy(reticle2, 2f);
+            GameObject reticle2 = ObjectPoolManager.SpawnObject(reticlePrefab, randomPoint2, Quaternion.identity);
+            ObjectPoolManager.ReturnObjectToPool(reticle, 2f);
+            ObjectPoolManager.ReturnObjectToPool(reticle2, 2f);
             if (j == 4)
             {
-                SkillType = Type.TypeEnum.Dark;
                 UseSkillMask();
                 UseSkill(11);
             }
@@ -1359,12 +1336,12 @@ public class Mew : Empty
                 float angle = i * angleIncrement3;
                 Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
 
-                GameObject scaleShot = Instantiate(ScaleShotPrefab, scaleShotPosition, rotation);
-                GameObject scaleShot2 = Instantiate(ScaleShotPrefab, scaleShotPosition2, rotation);
-                GameObject trail3 = Instantiate(TrailEffect3, scaleShotPosition, Quaternion.Euler(0, 0, angle));
-                Destroy(trail3, 1f);
-                GameObject trail32 = Instantiate(TrailEffect3, scaleShotPosition2, Quaternion.Euler(0, 0, angle));
-                Destroy(trail32, 1f);
+                GameObject scaleShot = ObjectPoolManager.SpawnObject(ScaleShotPrefab, scaleShotPosition, rotation);
+                GameObject scaleShot2 = ObjectPoolManager.SpawnObject(ScaleShotPrefab, scaleShotPosition2, rotation);
+                GameObject trail3 = ObjectPoolManager.SpawnObject(TrailEffect3, scaleShotPosition, Quaternion.Euler(0, 0, angle));
+                ObjectPoolManager.ReturnObjectToPool(trail3, 1f);
+                GameObject trail32 = ObjectPoolManager.SpawnObject(TrailEffect3, scaleShotPosition2, Quaternion.Euler(0, 0, angle));
+                ObjectPoolManager.ReturnObjectToPool(trail32, 1f);
                 scaleShot.GetComponent<ScaleShotEmpty>().empty = this;
                 scaleShot2.GetComponent<ScaleShotEmpty>().empty = this;
             }
@@ -1373,27 +1350,20 @@ public class Mew : Empty
         SkillType = Type.TypeEnum.Grass;
         UseSkillMask();
         yield return new WaitForSeconds(1f);
-        for (int i = 0; i < 60; i++)
+
+        Vector3 bladePosition = transform.position;
+
+        for (int i = 0; i < 40; i++)
         {
-            Vector3 bladePosition = transform.position;
-
-            Vector3 directionToPlayer = (player.transform.position - bladePosition).normalized;
-            Vector3 perpendicularDirection = new Vector3(directionToPlayer.y, -directionToPlayer.x, 0f);
-
-            Vector3 offset = perpendicularDirection * 1f;
-            Vector3 bladePosition1 = bladePosition + offset;
-            Vector3 bladePosition2 = bladePosition - offset;
-
-            GameObject LeafBlade1 = Instantiate(LeafBladePrefab, bladePosition1, Quaternion.identity);
-            GameObject LeafBlade2 = Instantiate(LeafBladePrefab, bladePosition2, Quaternion.identity);
-            GameObject LeafBlade = Instantiate(LeafBladePrefab, transform.position, Quaternion.identity);
-            LeafBlade.GetComponent<LeafBladeEmpty>().empty = this;
-            LeafBlade1.GetComponent<LeafBladeEmpty>().empty = this;
-            LeafBlade2.GetComponent<LeafBladeEmpty>().empty = this;
-            LeafBlade.GetComponent<LeafBladeEmpty>().SetTarget(player.gameObject);
-            LeafBlade1.GetComponent<LeafBladeEmpty>().SetTarget(player.gameObject);
-            LeafBlade2.GetComponent<LeafBladeEmpty>().SetTarget(player.gameObject);
-            yield return new WaitForSeconds(0.17f);
+            for (int j = 0; j < 3; j++)
+            {
+                GameObject leafBlade = ObjectPoolManager.SpawnObject(LeafBladePrefab, transform.position, Quaternion.identity);
+                leafBlade.transform.position = bladePosition;
+                LeafBladeEmpty Leafblade = leafBlade.GetComponent<LeafBladeEmpty>();
+                Leafblade.empty = this;
+                Leafblade.Initialize(player.gameObject.transform, currentPhase, j);
+            }
+            yield return new WaitForSeconds(0.21f);
         }
         SkillType = Type.TypeEnum.Flying;
         UseSkillMask();
@@ -1408,24 +1378,22 @@ public class Mew : Empty
         SkillType = Type.TypeEnum.Steel;
         UseSkillMask();
         yield return new WaitForSeconds(1f);
-        float angleIncrement4 = 7f;
+        float angleIncrement4 = 10f;
         float angle4 = 0f;
-        for (int i = 0; i < 150; i++)
+        for (int i = 0; i < 180; i++)
         {
             for (int j = 0; j < 4; j++)
             {
                 float currentAngle = angle4 + j * 90f;
                 Vector3 direction = Quaternion.Euler(0f, 0f, currentAngle) * Vector3.up;
-                MakeItRainEmpty makeitrain = Instantiate(MakeItRainPrefab, transform.position, Quaternion.identity).GetComponent<MakeItRainEmpty>();
+                MakeItRainEmpty makeitrain = ObjectPoolManager.SpawnObject(MakeItRainPrefab, transform.position, Quaternion.identity).GetComponent<MakeItRainEmpty>();
                 makeitrain.MIRrotate(direction);
                 makeitrain.empty = this;
             }
             angle4 += angleIncrement4;
-            if (i > 50) 
-            {
-                float decreasedAngle = (i - 50) / 100f * Mathf.PI;
-                angleIncrement4 = 7f * Mathf.Cos(decreasedAngle);
-            }
+
+            float decreasedAngle = (i - 50) / 100f * Mathf.PI;
+            angleIncrement4 = 21f * Mathf.Cos(decreasedAngle);
 
             yield return new WaitForSeconds(0.07f);
         }
@@ -1441,22 +1409,20 @@ public class Mew : Empty
         SkillType = Type.TypeEnum.Poison;
         UseSkillMask();
         yield return new WaitForSeconds(1f);
-        float angle5 = 0f;
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 5; i++)
         {
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < 8; j++)
             {
-                float currentAngle = angle5 + j * 90f;
+                float currentAngle = j * 45f;
                 Vector3 direction = Quaternion.Euler(0f, 0f, currentAngle) * Vector3.up;
                 CrossPoisonEmpty crossPoison = Instantiate(CrossPoisonPrefab, transform.position, Quaternion.identity).GetComponent<CrossPoisonEmpty>();
-                crossPoison.CProtate(direction);
+                crossPoison.Initialize(direction, 3);
                 crossPoison.empty = this;
             }
             //技能间隔等待时间
-            angle5 += 60f;
             yield return new WaitForSeconds(0.8f);
         }
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(7f);
         SkillType = Type.TypeEnum.Fire;
         UseSkillMask();
         yield return new WaitForSeconds(1f);
@@ -1480,13 +1446,13 @@ public class Mew : Empty
 
             Vector3 center = (startPoint + endPoint) / 2f;
 
-            GameObject secredFireCenter = Instantiate(SecredFireCentrePrefab, center, Quaternion.identity);
+            GameObject secredFireCenter = ObjectPoolManager.SpawnObject(SecredFireCentrePrefab, center, Quaternion.identity);
             secredFireCenter.GetComponent<SecredFireEmpryCentre>().empty = this;
         }
         // 在每个五角星顶点生成SecredFire
         for (int i = 0; i < numPoints; i++)
         {
-            GameObject secredFireVertex = Instantiate(SecredFireVertexPrefab, starVertices[i], Quaternion.identity);
+            GameObject secredFireVertex = ObjectPoolManager.SpawnObject(SecredFireVertexPrefab, starVertices[i], Quaternion.identity);
             secredFireVertex.GetComponent<SecredFireEmptyVertex>().empty = this;
         }
 
@@ -1504,17 +1470,16 @@ public class Mew : Empty
             for (int j = 0; j < 12; j++)
             {
                 Vector3 secredFirePosition = startPoint + direction * (j * step);
-                SecredFireEmpty secredFire = Instantiate(SecredFirePrefab, secredFirePosition, Quaternion.identity).GetComponent<SecredFireEmpty>();
+                SecredFireEmpty secredFire = ObjectPoolManager.SpawnObject(SecredFirePrefab, secredFirePosition, Quaternion.identity).GetComponent<SecredFireEmpty>();
                 secredFire.empty = this;
                 secredFire.Initialize(player.transform.position, 3f);
             }
         }
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(5f);
         //三阶段-第二部分
-        //首先先圆形释放会给玩家造成伤害的假心，期间不断释放魔法叶
-        SkillType = Type.TypeEnum.Grass;
-        StartCoroutine(MagicalLeaf(3));
-        yield return new WaitForSeconds(2f);
+        //首先先圆形释放会给玩家造成伤害的假心
+        SkillType = Type.TypeEnum.Fighting;
+        UseSkill(20);
         for (int j = 0; j < 7; j++)
         {
             float increaseAngle = 9f;
@@ -1534,49 +1499,46 @@ public class Mew : Empty
         //其次释放电球，释放冰冻光束
         StartCoroutine(ElectricBall());
         yield return new WaitForSeconds(4f);
-        SkillType = Type.TypeEnum.Ice;
-        UseSkillMask();
-        yield return new WaitForSeconds(1f);
-        for (int i = 0; i < 100; i++)
-        {
-            float angle = i * 11f;
-            GameObject trail = Instantiate(TrailEffect, transform.position, Quaternion.Euler(0, 0, angle));
-            StartCoroutine(IceBeam(i));
-            Destroy(trail, 2f);
-            yield return new WaitForSeconds(0.04f);
-        }
-        SkillType = Type.TypeEnum.Electric;
-        yield return new WaitForSeconds(5f);
-
-        //释放魔法叶，同时释放假药
-        SkillType = Type.TypeEnum.Grass;
-        StartCoroutine(MagicalLeaf(6));
-        for (int i = 0; i < 40; i++)
+        //释放假药
+        for (int i = 0; i < 50; i++)
         {
             Vector2 randomPosition = RandomPosition();
             int randomIndex = Random.Range(1, 7);
             GameObject RandomFake = null;
             switch (randomIndex)
             {
-                case 1:RandomFake = FakePotionPrefab;break;
-                case 2:RandomFake = FakeAntidote;break;
-                case 3:RandomFake = FakeAwakening;break;
-                case 4:RandomFake = FakeBurnHeal; break;
-                case 5:RandomFake = FakeIceHeal; break;
-                case 6:RandomFake = FakeParalyzeHeal; break;
+                case 1: RandomFake = FakePotionPrefab; break;
+                case 2: RandomFake = FakeAntidote; break;
+                case 3: RandomFake = FakeAwakening; break;
+                case 4: RandomFake = FakeBurnHeal; break;
+                case 5: RandomFake = FakeIceHeal; break;
+                case 6: RandomFake = FakeParalyzeHeal; break;
             }
             GameObject fakepotion = Instantiate(RandomFake, randomPosition, Quaternion.identity);
             Destroy(fakepotion, 20f);
         }
-        yield return new WaitForSeconds(19f);
+        SkillType = Type.TypeEnum.Ice;
+        UseSkillMask();
+        yield return new WaitForSeconds(1f);
+        for (int i = 0; i < 240; i++)
+        {
+            float timer;
+            timer = i < 100 ? 0.04f : 0.12f;
+            float angle = i * 11f;
+            GameObject trail = ObjectPoolManager.SpawnObject(TrailEffect, transform.position, Quaternion.Euler(0, 0, angle));
+            StartCoroutine(IceBeam(i));
+            ObjectPoolManager.ReturnObjectToPool(trail, 2f);
+            yield return new WaitForSeconds(timer);
+        }
+        yield return new WaitForSeconds(2f);
         //最终技能
-        GameObject MeanLookse = Instantiate(MeanLookSE, transform.position, Quaternion.identity);
-        Destroy(MeanLookse, 1f);
+        GameObject MeanLookse = ObjectPoolManager.SpawnObject(MeanLookSE, transform.position, Quaternion.identity);
+        ObjectPoolManager.ReturnObjectToPool(MeanLookse, 1f);
         yield return new WaitForSeconds(1f);
         isFinal = true;
         GameObject meanlookfinal = Instantiate(Meanlookfinal, transform.position, Quaternion.identity);
-        StartCoroutine(ShootSwords(359, 3, 0.1f, false));
-        yield return new WaitForSeconds(20f);
+        StartCoroutine(ShootSwords(324, 3, 0.1f, false));
+        yield return new WaitForSeconds(17f);
         StartCoroutine(ShootSwords(6, 8, 3f, true));
         yield return new WaitForSeconds(19f);
         Destroy(meanlookfinal, 1f);
@@ -1585,25 +1547,16 @@ public class Mew : Empty
     //第三阶段电球
     private IEnumerator ElectricBall()
     {
-        for(int j = 0; j < 4; j++)
+        for(int i = 0; i < 3; i++)
         {
-            for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
             {
-                float angle = i * 45f;
+                float angle = j * 45f;
                 Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+                float speed = (i % 2 == 0) ? 15f : -15f;
                 ElectroBallEmpty electricBall = Instantiate(ElectricBallPrefab, transform.position, rotation).GetComponent<ElectroBallEmpty>();
-                electricBall.Initialize(transform.position, 15f);
+                electricBall.Initialize(transform.position, speed);
                 electricBall.empty = this;
-
-            }
-            for (int i = 0; i < 8; i++)
-            {
-                float angle = i * 45f;
-                Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
-                ElectroBallEmpty electricBall = Instantiate(ElectricBallPrefab, transform.position, rotation).GetComponent<ElectroBallEmpty>();
-                electricBall.Initialize(transform.position, -15f);
-                electricBall.empty = this;
-
             }
             yield return new WaitForSeconds(8f);
         }
@@ -1613,20 +1566,8 @@ public class Mew : Empty
     {
         yield return new WaitForSeconds(2f);
         float angle = i * 11f;
-        GameObject icebeam = Instantiate(IceBeamPrefab, transform.position, Quaternion.Euler(0, 0, angle));
+        GameObject icebeam = ObjectPoolManager.SpawnObject(IceBeamPrefab, transform.position, Quaternion.Euler(0, 0, angle));
         icebeam.GetComponent<IceBeamEmpty>().empty = this;
-    }
-    //第三阶段的魔法叶
-    private IEnumerator MagicalLeaf(int times)
-    {
-        for(int i = 0; i < times; i++)
-        {
-            GameObject magicalleaf = Instantiate(magicalLeafPrefab, transform.position, Quaternion.identity);
-            magicalleaf.GetComponent<MagicalLeafEmpty>().SetTarget(player.gameObject);
-            magicalleaf.GetComponent<MagicalLeafEmpty>().empty = this;
-            Destroy(magicalleaf, 6f);
-            yield return new WaitForSeconds(3f);
-        }
     }
 
     private IEnumerator ShootSwords(int shootTimes, int shootAmounts, float intervalTime, bool needTrail)
@@ -1641,8 +1582,8 @@ public class Mew : Empty
                 Vector2 spawnPosition = mapCenter + (Quaternion.Euler(0f, 0f, currentAngle) * Vector2.right * 20f);
                 if (needTrail)
                 {
-                    GameObject trail = Instantiate(TrailEffect2, transform.position, Quaternion.Euler(0, 0, currentAngle));
-                    Destroy(trail, 1f);
+                    GameObject trail = ObjectPoolManager.SpawnObject(TrailEffect2, transform.position, Quaternion.Euler(0, 0, currentAngle));
+                    ObjectPoolManager.ReturnObjectToPool(trail, 1f);
                 }
                 GameObject swords = Instantiate(Swords, spawnPosition, Quaternion.identity);
                 SwordsMew swordsmew = swords.GetComponent<SwordsMew>();
@@ -1680,7 +1621,6 @@ public class Mew : Empty
     private IEnumerator Phase2Start()
     {
         //清除所有的子弹
-        Invincible = true;
         uIHealth.ChangeHpUp();
         ClearProjectile();
 
@@ -1712,7 +1652,6 @@ public class Mew : Empty
             {
                 Vector3 secredFirePosition = startPoint + direction * (j * step);
                 GameObject willowispprefab = Instantiate(WillOWispPrefab, secredFirePosition, Quaternion.identity);
-                Destroy(willowispprefab, 4f);
                 yield return null;
             }
         }
@@ -1742,6 +1681,13 @@ public class Mew : Empty
         cinemachineController = FindObjectOfType<CameraController>();
         cinemachineController.MewCameraFollow();
         cameraAdapt.HideCameraMasks();
+
+        //四个围绕着的球
+        for (int i = 0; i < 4; i++)
+        {
+            transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
+        }
+
         yield return new WaitForSeconds(1.5f);
         turningPhase = false;
         Invincible = false;
@@ -1767,6 +1713,9 @@ public class Mew : Empty
         cameraAdapt.ShowCameraMasks();
         Camera.transform.position = GetCameraPostion;
         UISkillButton.Instance.isEscEnable = true;
+
+        //清除对象池内所有对象
+        ObjectPoolManager.DestoryObjectInPool(true);
 
         //梦幻嘎掉
         Invincible = false;
@@ -1800,6 +1749,7 @@ public class Mew : Empty
             case 20: SkillType = Type.TypeEnum.Fighting;break;
         }
     }
+
     private void UseSkillMask()
     {
         GameObject useskillprefab = Instantiate(UseSkillPrefab, transform.position, Quaternion.identity);

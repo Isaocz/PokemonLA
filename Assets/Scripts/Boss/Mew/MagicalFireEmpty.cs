@@ -9,9 +9,9 @@ public class MagicalFireEmpty : Projectile
     float rotationspeed;
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
-        Destroy(gameObject, 7f);
+        ObjectPoolManager.ReturnObjectToPool(gameObject, 7f);
     }
 
     // Update is called once per frame
