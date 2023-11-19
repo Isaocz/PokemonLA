@@ -28,10 +28,10 @@ public class SecredFireEmpty : Projectile
         rb.velocity = moveDirection * speed;
     }
 
-    private void Start()
+    private void OnEnable()
     {
         rb = GetComponent<Rigidbody2D>();
-        Destroy(gameObject, 8f);
+        ObjectPoolManager.ReturnObjectToPool(gameObject, 8f);
     }
     private void FixedUpdate()
     {

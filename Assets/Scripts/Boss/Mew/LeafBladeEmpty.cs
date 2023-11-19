@@ -5,31 +5,69 @@ using UnityEngine;
 public class LeafBladeEmpty : Projectile
 {
     public float moveSpeed = 10f;
-    public Mew mew;
+    public float radius;
     private Transform target; //目标
+    private int phase;
+    private int mode;
 
-    // Start is called before the first frame update
-    public void SetTarget(GameObject Target)
+    private bool isInitialized;
+
+    /// <summary>
+    /// 初始化叶刃
+    /// </summary>
+    /// <param name="Target">玩家（目标位置）</param>
+    /// <param name="currentPhase">梦幻的当前阶段</param>
+    /// <param name="blademode">叶刃发射的方向模式</param>
+    public void Initialize(Transform Target, int currentPhase, int blademode)
     {
-        target = Target.transform;
+        target = Target;
+        phase = currentPhase;
+        mode = blademode;
     }
-    void Start()
+    void OnEnable()
     {
-        Vector3 direction = target.position - transform.position;
-        Destroy(gameObject, 5f);
-
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, angle);
-        if(mew.currentPhase == 3)
-        {
-            moveSpeed = 20f;
-        }
+        isInitialized = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-            transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
+        if (!isInitialized)
+        {
+            isInitialized = true;
+            Vector3 direction = target.position - transform.position;
+            Vector3 perpendicularDirection;
+            Vector3 targetPosition;
+            Vector3 moveDirection;
+            switch (mode)
+            {
+                case 2:
+                    perpendicularDirection = new Vector3(-direction.y, direction.x).normalized * radius;
+                    targetPosition = target.position + perpendicularDirection;
+                    moveDirection = (targetPosition - transform.position).normalized;
+                    break;
+                case 1:
+                    perpendicularDirection = new Vector3(-direction.y, direction.x).normalized * radius;
+                    targetPosition = target.position - perpendicularDirection;
+                    moveDirection = (targetPosition - transform.position).normalized;
+                    break;
+                case 0:
+                default:
+                    moveDirection = direction;
+                    break;
+            }
+            ObjectPoolManager.ReturnObjectToPool(gameObject, 5f);
+
+            float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            if (phase == 3)
+            {
+                moveSpeed = 20f;
+            }
+        }
+
+
+        transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

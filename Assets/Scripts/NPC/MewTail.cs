@@ -30,7 +30,12 @@ public class MewTail : MonoBehaviour
 
 
 
-
+        //关于禁草道具的一些解释：由于让所有的草都消失了，所以如果不让他直接出来感觉会很怪……所以直接让梦幻出现（未测试）
+        if (FindObjectOfType<PlayerControler>().playerData.IsPassiveGetList[57])
+        {
+            Instantiate(MewNPC, transform.position + Vector3.up * 0.8f, Quaternion.identity, transform.parent);
+            Destroy(gameObject);
+        }
 
         switch (Random.Range(0,4))
         {

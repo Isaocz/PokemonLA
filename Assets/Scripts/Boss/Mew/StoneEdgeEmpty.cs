@@ -7,13 +7,12 @@ public class StoneEdgeEmpty : Projectile
 {
     public float Stonespeed = 13f;
     float timer = 0f;
-    // Start is called before the first frame update
+
     void Start()
     {
         Destroy(gameObject, 7f);
     }
 
-    // Update is called once per frame
     void Update()
     {
         timer += Time.deltaTime;

@@ -11,7 +11,7 @@ public class SecredFireEmpryCentre : Projectile
     private float speed;
     private float acceleration;
 
-    private void Start()
+    private void OnEnable()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
@@ -19,7 +19,7 @@ public class SecredFireEmpryCentre : Projectile
         speed = 10f;
         acceleration = 5f;
         StartCoroutine(StartMovingAfterDelay(4.5f));
-        Destroy(gameObject, 9.5f);
+        ObjectPoolManager.ReturnObjectToPool(gameObject, 9.5f);
     }
 
     private IEnumerator StartMovingAfterDelay(float delay)

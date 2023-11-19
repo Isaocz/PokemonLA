@@ -2,15 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WillOWispEmpty : MonoBehaviour
+public class WillOWispEmpty : Projectile
 {
     private float moveSpeed;
     private Vector3 moveDirection;
-    public GameObject mew;
 
-    public int SpAPower;
-
-    private void Start()
+    private void OnEnable()
     {
         Destroy(gameObject,4f);
     }
@@ -23,7 +20,7 @@ public class WillOWispEmpty : MonoBehaviour
         if (collision.tag == "Player")
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(mew, collision.gameObject, 0, SpAPower, 0, Type.TypeEnum.Fire);
+            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Fire);
             if (playerControler != null)
             {
                 //playerControler.ChangeHp(0, -(SpDmage * empty.SpAAbilityPoint * WeatherAlpha * (2 * empty.Emptylevel + 10) / 250), 11);

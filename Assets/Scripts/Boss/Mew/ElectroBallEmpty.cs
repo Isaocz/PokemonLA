@@ -10,7 +10,7 @@ public class ElectroBallEmpty : Projectile
     float rotationspeed;
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         Destroy(gameObject, 20f);
     }

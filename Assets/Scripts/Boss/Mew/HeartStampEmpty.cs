@@ -4,39 +4,54 @@ using UnityEngine;
 
 public class HeartStampEmpty : Projectile
 {
-    private Vector3 position;
-    private Vector3 moveDirection;
+    private Transform target;
+    private Vector3 direction;
+    private float angle;
+    private bool isRotate;
     public float moveSpeed;
-    public float timer;
-    private float time;
+    public float time;
+    public int phrase;
+    private float timer;
     private float currentSpeed;
-    // Start is called before the first frame update
-    public void SetTarget(Vector3 target)
+
+    private void OnEnable()
     {
-        position = target;
-        moveDirection = (position - transform.position).normalized;
-    }
-    private void Start()
-    {
-        Destroy(gameObject, 10f);
+        ObjectPoolManager.ReturnObjectToPool(gameObject, 8f);
+        isRotate = false;
+        timer = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        time += Time.deltaTime;
-        if (time < timer)
+        timer += Time.deltaTime;
+        if(timer <= 0.5f)
         {
-            currentSpeed = moveSpeed * time / timer ;
+            if(phrase == 3)
+            {
+                currentSpeed = 10f;
+            }
+            else
+            {
+                currentSpeed = 5f;
+            }
+        }
+        else if (timer < time && timer > 0.5f)
+        {
+            currentSpeed = 0f;
         }
         else
         {
             currentSpeed = moveSpeed;
         }
-
-        if (position != null)
+        transform.Translate(Vector3.up * currentSpeed * Time.deltaTime);
+        if (!isRotate && timer > 1f)
         {
-            transform.Translate(moveDirection * currentSpeed * Time.deltaTime);
+            target = GameObject.FindWithTag("Player").transform;
+            direction = target.position - transform.position;
+            angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+            isRotate = true;
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
