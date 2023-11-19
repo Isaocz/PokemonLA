@@ -61,7 +61,7 @@ public class PiloswineControler : PlayerControler
 
     void LearIceFang()
     {
-        if (Skill01.SkillIndex != 15 && Skill01.SkillIndex != 16 && Skill02.SkillIndex != 15 && Skill02.SkillIndex != 16 && Skill03.SkillIndex != 15 && Skill03.SkillIndex != 16 && Skill04.SkillIndex != 15 && Skill04.SkillIndex != 16)
+        if ((Skill01==null || Skill01.SkillIndex != 15 && Skill01.SkillIndex != 16) && ( Skill02==null || Skill02.SkillIndex != 15 && Skill02.SkillIndex != 16) && (Skill03 == null || Skill03.SkillIndex != 15 && Skill03.SkillIndex != 16) && (Skill04 == null || Skill04.SkillIndex != 15 && Skill04.SkillIndex != 16))
         {
             LearnNewSkillByOtherWay(IceFang);
         }

@@ -27,6 +27,7 @@ public class BounsweetControler : PlayerControler
             21567, 22128, 22695, 23271, 23852, 24441, 25038, 25641, 26253, 26870,
             27495, 28128, 28767, 29415, 30068, 30729, 31398, 32073, 32757 };
 
+        if (PlayerAbility == 0) { PlayerAbility = PlayerAbilityList.Ò¶×Ó·ÀÊØ; }
 
 
         Instance();

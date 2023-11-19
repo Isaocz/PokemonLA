@@ -24,6 +24,6 @@ public class UISkillButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isEscEnable && Input.GetKeyDown(UIKeyBoard.GetKeybind("OpenMenu"))) { SkillButton.onClick.Invoke(); }
+        if (isEscEnable && Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("OpenMenu"))) { SkillButton.onClick.Invoke(); }
     }
 }

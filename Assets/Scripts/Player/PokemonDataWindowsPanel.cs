@@ -14,6 +14,7 @@ public class PokemonDataWindowsPanel : MonoBehaviour
     GameObject StrengthDataUI;
     GameObject TypeDefUI;
     Text NatureText;
+    Text AbilityText;
 
     private void Awake()
     {
@@ -36,7 +37,8 @@ public class PokemonDataWindowsPanel : MonoBehaviour
         StateUI = transform.GetChild(3).gameObject;
         StrengthDataUI = transform.GetChild(4).gameObject;
         TypeDefUI = transform.GetChild(5).gameObject;
-        NatureText = transform.GetChild(6).gameObject.GetComponent<Text>(); ;
+        NatureText = transform.GetChild(6).gameObject.GetComponent<Text>();
+        AbilityText = transform.GetChild(7).gameObject.GetComponent<Text>();
 
         GetHead();
         GetTypeMark();
@@ -45,7 +47,7 @@ public class PokemonDataWindowsPanel : MonoBehaviour
         GetPlayerStrengthData();
         GetTypeDefUI();
         GetNature();
-        
+        GetAbility();
     }
 
     void GetHead()
@@ -217,6 +219,33 @@ public class PokemonDataWindowsPanel : MonoBehaviour
             case 22: NatureText.text = "性格：爽朗"; NatureDescribe.FirstText = "攻击速度更容易成长！"; NatureDescribe.DescribeText = "但是特攻不容易成长"; break;
             case 23: NatureText.text = "性格：天真"; NatureDescribe.FirstText = "攻击速度更容易成长！"; NatureDescribe.DescribeText = "但是特防不容易成长"; break;
             case 24: NatureText.text = "性格：认真"; NatureDescribe.FirstText = "很不错的性格！";       NatureDescribe.DescribeText = "能力值不会受到性格影响"; break;
+
+        }
+    }
+
+
+    void GetAbility()
+    {
+        UICallDescribe AbilityDescribe = AbilityText.GetComponent<UICallDescribe>();
+        PlayerControler playerControler = player.GetComponent<PlayerControler>();
+        if ((int)playerControler.PlayerAbility == 0) { AbilityText.gameObject.SetActive(false); }
+        else { AbilityText.gameObject.SetActive(true); }
+        switch ((int)playerControler.PlayerAbility)
+        {
+
+            case 1: AbilityText.text = "特性：迟钝"; AbilityDescribe.TwoMode = true; AbilityDescribe.FirstText = "当异常状态的进度被连续累积时，两次累积之间的时间间隔变长。"; AbilityDescribe.DescribeText = "并且当使用了接触类招式后，一小段时间异常状态的进度不会累积。"; break;
+            case 2: AbilityText.text = "特性：雪隐";  AbilityDescribe.DescribeText = "使用了冰属性技能后，一小段时间内大幅提升移动速度。"; break;
+            case 3: AbilityText.text = "特性：厚脂肪";  AbilityDescribe.DescribeText = "111"; break;
+            case 4: AbilityText.text = "特性：叶子防守";  AbilityDescribe.DescribeText = "晴天或者处于草丛中时异常状态的进度不会累积。"; break;
+            case 5: AbilityText.text = "特性：甜幕";  AbilityDescribe.DescribeText = "111"; break;
+            case 6: AbilityText.text = "特性：女王的威严";  AbilityDescribe.DescribeText = "111"; break;
+            case 7: AbilityText.text = "特性：逃跑";  AbilityDescribe.DescribeText = "移动速度变得更快"; break;
+            case 8: AbilityText.text = "特性：适应力";  AbilityDescribe.DescribeText = "与自身同属性的招式威力会变得更高。"; break;
+            case 9: AbilityText.text = "特性：危险预知";  AbilityDescribe.DescribeText = "111"; break;
+            case 10: AbilityText.text = "特性：迷人之躯";  AbilityDescribe.DescribeText = "当接触类招式命中后，有概率累计目标的着迷进度。"; break;
+            case 11: AbilityText.text = "特性：妖精皮肤";  AbilityDescribe.DescribeText = "111"; break;
+
+
 
         }
     }

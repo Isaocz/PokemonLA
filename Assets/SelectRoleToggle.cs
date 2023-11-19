@@ -1,0 +1,31 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class SelectRoleToggle : MonoBehaviour
+{
+    public Image image;
+    bool isOn;
+    public Sprite SpriteNormal;
+    public Sprite SpriteHL;
+
+
+
+    public void ChangeSprite()
+    {
+        if (isOn) { isOn = false; image.sprite = SpriteNormal; }
+        else { isOn = true; image.sprite = SpriteHL; }
+    }
+
+    public void _OnMouseEnter()
+    {
+        image.sprite = SpriteHL;
+    }
+
+    public void _OnMouseExit()
+    {
+        if (!isOn) { image.sprite = SpriteNormal; }
+    }
+    
+}

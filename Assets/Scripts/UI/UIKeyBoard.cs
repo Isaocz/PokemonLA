@@ -20,8 +20,8 @@ public class UIKeyBoard : MonoBehaviour
     public Text DownKeyText;
     public Text LeftKeyText;
     public Text RightKeyText;
+    public Text MapKeyText;
 
-    private Dictionary<string, KeyCode> keybinds = new Dictionary<string, KeyCode>();
 
     private bool isBinding = false;
     private string bindingKeyName;
@@ -30,12 +30,22 @@ public class UIKeyBoard : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        ResetRegister();
+        UpdateSkillKeyText(skill1KeyText, "Skill1");
+        UpdateSkillKeyText(skill2KeyText, "Skill2");
+        UpdateSkillKeyText(skill3KeyText, "Skill3");
+        UpdateSkillKeyText(skill4KeyText, "Skill4");
+        UpdateSkillKeyText(UseItemKeyText, "UseItem");
+        UpdateSkillKeyText(OpenMenuKeyText, "OpenMenu");
+        UpdateSkillKeyText(UpKeyText, "Up");
+        UpdateSkillKeyText(DownKeyText, "Down");
+        UpdateSkillKeyText(LeftKeyText, "Left");
+        UpdateSkillKeyText(RightKeyText, "Right");
+        UpdateSkillKeyText(MapKeyText, "Map");
     }
 
     private void Start()
     {
-        SettingPanel.SetActive(false);
+        //SettingPanel.SetActive(false);
     }
 
     private void Update()
@@ -48,11 +58,18 @@ public class UIKeyBoard : MonoBehaviour
                 {
                     if (Input.GetKeyDown(keyCode))
                     {
-                        keybinds[bindingKeyName] = keyCode;
-                        UpdateSkillKeyText(text, bindingKeyName);
-                        isBinding = false;
-                        UISkillButton.Instance.isEscEnable = true;
-                        break;
+                        bool isRepeat = false;
+                        foreach (KeyCode k in InitializePlayerSetting.GlobalPlayerSetting.keybinds.Values)
+                        {
+                            if (k == keyCode) { isRepeat = true;break; }
+                        }
+                        if (!isRepeat) {
+                            InitializePlayerSetting.GlobalPlayerSetting.ChangeKey(bindingKeyName, keyCode);
+                            UpdateSkillKeyText(text, bindingKeyName);
+                            isBinding = false;
+                            UISkillButton.Instance.isEscEnable = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -80,52 +97,16 @@ public class UIKeyBoard : MonoBehaviour
             case "Down":text = DownKeyText; break;
             case "Left":text = LeftKeyText; break;
             case "Right":text = RightKeyText; break;
+            case "Map":text = MapKeyText; break;
         }
     }
     //更新按钮的文本
     private void UpdateSkillKeyText(Text KeyText, string keyname)
     {
-        KeyText.text = keybinds[keyname].ToString(); // 根据名称更新对应按键的文本
-    }
-    /// <summary>
-    /// 将按键写在Dirctionary上
-    /// </summary>
-    /// <param name="keyName"></param>
-    /// <param name="defaultKeyCode"></param>
-    public void RegisterKeybind(string keyName, KeyCode defaultKeyCode)
-    {
-        if (!keybinds.ContainsKey(keyName))
-        {
-            keybinds.Add(keyName, defaultKeyCode);
-        }
-    }
-    /// <summary>
-    /// 获取注册的键位
-    /// </summary>
-    /// <param name="keyName">注册的键位名</param>
-    /// <returns>返回键位</returns>
-    public static KeyCode GetKeybind(string keyName)
-    {
-        if (instance != null && instance.keybinds.ContainsKey(keyName))
-        {
-            return instance.keybinds[keyName];
-        }
-        return KeyCode.None;
+        KeyText.text = InitializePlayerSetting.GlobalPlayerSetting.keybinds[keyname].ToString(); // 根据名称更新对应按键的文本
     }
 
-    private void ResetRegister()
-    {
-        RegisterKeybind("Skill1", KeyCode.Q); // 注册默认的技能按键
-        RegisterKeybind("Skill2", KeyCode.W);
-        RegisterKeybind("Skill3", KeyCode.E);
-        RegisterKeybind("Skill4", KeyCode.R);
-        RegisterKeybind("UseItem", KeyCode.Space);
-        RegisterKeybind("OpenMenu", KeyCode.Escape);
-        RegisterKeybind("Up", KeyCode.UpArrow);
-        RegisterKeybind("Down", KeyCode.DownArrow);
-        RegisterKeybind("Left", KeyCode.LeftArrow);
-        RegisterKeybind("Right", KeyCode.RightArrow);
-    }
+
 
     public void Skill1KeyBoard()
     {
@@ -166,5 +147,10 @@ public class UIKeyBoard : MonoBehaviour
     public void RightKeyBoard()
     {
         OpenKeybindUI("Right");
+    }
+
+    public void MapKeyBoard()
+    {
+        OpenKeybindUI("Map");
     }
 }

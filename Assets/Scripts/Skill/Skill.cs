@@ -92,6 +92,7 @@ public class Skill : MonoBehaviour
     //表示技能生成是否需要抬手，比如位移类技能需要在摁下摁键的那一刻开始位移，而射弹类节能会有一个抬手前摇
     public bool isImmediately;
 
+    
 
     //用于多端攻击的构造体
     protected struct EmptyList
@@ -120,6 +121,7 @@ public class Skill : MonoBehaviour
         }
     }
 
+    
 
     //生成技能的暴击特效
     protected void GetCTEffect(Empty target)
@@ -139,6 +141,7 @@ public class Skill : MonoBehaviour
 
     void SkillStart()
     {
+        Debug.Log(111);
         if (player.isInSuperPsychicTerrain)
         {
             bool isTraceSkill = false;
@@ -164,17 +167,24 @@ public class Skill : MonoBehaviour
                 }
             }
         }
+        if (SkillType == 15 && player.PlayerAbility == PlayerControler.PlayerAbilityList.雪隐)
+        {
+            player.TriggerSnowCloak();
+        }
+        if (player.PlayerAbility == PlayerControler.PlayerAbilityList.迟钝)
+        {
+            bool isTouch = false;
+            foreach (Skill.SkillTagEnum i in SkillTag){  if (i == Skill.SkillTagEnum.接触类) { isTouch = true; break; } }
+            if (isTouch) { player.TriggerOblivious(); }
+        }
     }
-
-    
-
-
 
     //引用于所有技能的Update函数，当存在时间耗尽时技能消失
     public void StartExistenceTimer()
     {
         ResetPlayer();
         ExistenceTime -= Time.deltaTime;
+        //if (!isStartMDone) { SkillStart(); }
 
         //多段攻击开始冷却之后开始计时
         if (isMultipleDamage)
@@ -306,9 +316,15 @@ public class Skill : MonoBehaviour
             {
                 if (SkillTag != null)
                 {
+                    bool isTouch = false;
                     foreach (Skill.SkillTagEnum i in SkillTag)
                     {
-                        if (i == Skill.SkillTagEnum.接触类) { target.EmptyToxicDone(1, 30 , 0.4f + (float)player.LuckPoint); }
+                        if (i == Skill.SkillTagEnum.接触类) { isTouch = true;break; }
+                    }
+                    if (isTouch)
+                    {
+                        target.EmptyToxicDone(1, 30, 0.4f + (float)player.LuckPoint);
+                        if ( player.PlayerAbility == PlayerControler.PlayerAbilityList.迷人之躯 && Random.Range(0.0f,1.0f) + ((float)player.LuckPoint/30) > 0.9f ) { target.EmptyInfatuation(15, 0.5f); }
                     }
                 }
             }
