@@ -55,7 +55,7 @@ public class SylveonControler : PlayerControler
 
     void LearDisarmingVoice()
     {
-        if (Skill01.SkillIndex != 325 && Skill01.SkillIndex != 326 && Skill02.SkillIndex != 325 && Skill02.SkillIndex != 326 && Skill03.SkillIndex != 325 && Skill03.SkillIndex != 326 && Skill04.SkillIndex != 325 && Skill04.SkillIndex != 326)
+        if ((Skill01 == null || Skill01.SkillIndex != 325 && Skill01.SkillIndex != 326) && (Skill02 == null || Skill02.SkillIndex != 325 && Skill02.SkillIndex != 326) && (Skill03 == null || Skill03.SkillIndex != 325 && Skill03.SkillIndex != 326) && (Skill04 == null || Skill04.SkillIndex != 325 && Skill04.SkillIndex != 326))
         {
             LearnNewSkillByOtherWay(DisarmingVoice);
         }

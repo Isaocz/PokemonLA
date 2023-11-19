@@ -1172,11 +1172,13 @@ public class Pokemon : MonoBehaviour
 
     //一个变量代表速度是否被改变，一个代表改变的倍率
     public bool isSpeedChange;
+    public bool isSppedDownDef { get { return issppedDownDef; } set { issppedDownDef = value; } }
+    bool issppedDownDef;
 
     //调用此函数时，如果速度还未被改变，改变速度并改变颜色，状态变为被改变
     public void SpeedChange()
     {
-        if (!isSpeedChange)
+        if (!isSpeedChange && !isSppedDownDef &&!isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
         {
             PlayerData Pdata = GetComponent<PlayerData>();
             if (Pdata != null && !Pdata.isMist)
@@ -1240,7 +1242,7 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始冰冻，开始冰冻
     public void PlayerFrozenFloatPlus(float FrozenPoint)
     {
-        if (!isInMistyTerrain && !isStateInvincible && !isFrozenDef && !isSafeguard)
+        if (!isInMistyTerrain && !isStateInvincible && !isFrozenDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
         {
             PlayerFrozenPointFloat += FrozenPoint;
             PlayerFrozenPointFloat = (PlayerFrozenPointFloat > 1 ? 1 : PlayerFrozenPointFloat);
@@ -1308,7 +1310,7 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始中毒，开始中毒
     public void ToxicFloatPlus(float ToxicPoint)
     {
-            if (!isInMistyTerrain && !isStateInvincible && !isToxicDef && !isSafeguard)
+            if (!isInMistyTerrain && !isStateInvincible && !isToxicDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
             {
                 ToxicPointFloat += ToxicPoint;
                 ToxicPointFloat = (ToxicPointFloat > 1 ? 1 : ToxicPointFloat);
@@ -1399,7 +1401,7 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始中毒，开始中毒
     public void ParalysisFloatPlus(float ParalysisPoint)
     {
-        if (!isInMistyTerrain && !isStateInvincible && !isParalysisDef && !isSafeguard)
+        if (!isInMistyTerrain && !isStateInvincible && !isParalysisDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
         {
             ParalysisPointFloat += ParalysisPoint + ((isInSuperElectricTerrain) ? 0.3f : 1);
             ParalysisPointFloat = (ParalysisPointFloat > 1 ? 1 : ParalysisPointFloat);
@@ -1500,7 +1502,7 @@ public class Pokemon : MonoBehaviour
     public void BurnFloatPlus(float BurnPoint)
     {
 
-        if (!isInMistyTerrain && !isStateInvincible && !isBurnDef && !isSafeguard)
+        if (!isInMistyTerrain && !isStateInvincible && !isBurnDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
         {
             BurnPointFloat += BurnPoint;
             BurnPointFloat = (BurnPointFloat > 1 ? 1 : BurnPointFloat);
@@ -1585,7 +1587,7 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始中毒，开始中毒
     public void SleepFloatPlus(float SleepPoint)
     {
-        if (!isInMistyTerrain && !isStateInvincible && !isSleepDef && !isInElectricTerrain && !isSafeguard)
+        if (!isInMistyTerrain && !isStateInvincible && !isSleepDef && !isInElectricTerrain && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
         {
             SleepPointFloat += SleepPoint;
             SleepPointFloat = (SleepPointFloat > 1 ? 1 : SleepPointFloat);
@@ -1654,7 +1656,7 @@ public class Pokemon : MonoBehaviour
         }
     }
 
-    //===========================================================================睡眠的函数=====================================================================================
+    //===========================================================================混乱的函数=====================================================================================
 
 
     //一个变量代表是否混乱，一个代表混乱的程度
@@ -1667,7 +1669,7 @@ public class Pokemon : MonoBehaviour
     public void ConfusionFloatPlus(float ConfusionPoint)
     {
 
-        if (!isInMistyTerrain && !isStateInvincible && !isConfusionDef && !isConfusionDone && !isSafeguard)
+        if (!isInMistyTerrain && !isStateInvincible && !isConfusionDef && !isConfusionDone && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
         {
             ConfusionPointFloat += ConfusionPoint;
             ConfusionPointFloat = (ConfusionPointFloat > 1 ? 1 : ConfusionPointFloat);
@@ -1773,6 +1775,21 @@ public class Pokemon : MonoBehaviour
     //===========================================================================进化时复制目前状态的函数=====================================================================================
 
 
+
+
+
+    //=================================特性=========================================
+    public bool isSnowCloakTrigger { get { return issnowCloakTrigger; } set { issnowCloakTrigger = value; } }
+    bool issnowCloakTrigger;
+    public bool isObliviousTrigger { get { return isobliviousTrigger; } set { isobliviousTrigger = value; } }
+    bool isobliviousTrigger;
+    public bool isLeafGuardTrigger { get { return isleafGuardTrigger; } set { isleafGuardTrigger = value; } }
+    bool isleafGuardTrigger;
+    //=================================特性=========================================
+
+
+
+
     //***************************************************************************对自己的函数*********************************************************************************
 
 
@@ -1821,7 +1838,7 @@ public class Pokemon : MonoBehaviour
             }
             if (PlayerAttacker != null) {
                 AttackerATK = PlayerAttacker.AtkAbilityPoint; AttackerSpA = PlayerAttacker.SpAAbilityPoint; AttackerLevel = PlayerAttacker.Level;
-                EmptyTypeAlpha = ((int)SkillType == PlayerAttacker.PlayerType01 ? 1.5f : 1) * ((int)SkillType == PlayerAttacker.PlayerType02 ? 1.5f : 1) * (PlayerAttacker.PlayerTeraTypeJOR == 0 ? ((int)SkillType == PlayerAttacker.PlayerTeraType ? 1.5f : 1) : ((int)SkillType == PlayerAttacker.PlayerTeraTypeJOR ? 1.5f : 1));
+                EmptyTypeAlpha = ((int)SkillType == PlayerAttacker.PlayerType01 ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) * ((int)SkillType == PlayerAttacker.PlayerType02 ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) * (PlayerAttacker.PlayerTeraTypeJOR == 0 ? ((int)SkillType == PlayerAttacker.PlayerTeraType ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) : ((int)SkillType == PlayerAttacker.PlayerTeraTypeJOR ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1));
             }
             if (FollowBabyAttacker != null) { AttackerATK = FollowBabyAttacker.BabyAtk(); AttackerSpA = FollowBabyAttacker.BabySpA(); AttackerLevel = FollowBabyAttacker.BabyLevel(); }
         }
@@ -1890,6 +1907,9 @@ public class Pokemon : MonoBehaviour
     }
 
     //***************************************************************************对全体的函数*********************************************************************************
+
+
+
 
 
 }

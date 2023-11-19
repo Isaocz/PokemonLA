@@ -81,7 +81,7 @@ public class UiMiniMap : MonoBehaviour
     void Update()
     {
         //NowMark.rectTransform.anchoredPosition = new Vector3((MainCamera.transform.position.x / 30.0f) * 8.2f, ((MainCamera.transform.position.y - 0.7f) / 24.0f) * 8.2f, 0);
-        if (Input.GetKey(KeyCode.Tab))
+        if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Map")))
         {
             MiniMapBackGround.transform.parent.GetComponent<Image>().color = new Vector4(255, 255, 255, 0);
             MiniMapBackGround.color = new Vector4(255,255,255,0);

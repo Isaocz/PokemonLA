@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class IsaoTalk : MonoBehaviour
 {
-
+    public AudioSource StartPanelBGM;
     bool isLight;
     Image TalkPanel;
     Text TalkTitle1;
@@ -23,7 +23,7 @@ public class IsaoTalk : MonoBehaviour
         TalkText2 = transform.GetChild(1).GetComponent<Text>();
         TalkTitle1 = transform.GetChild(2).GetComponent<Text>();
         TalkTitle2 = transform.GetChild(3).GetComponent<Text>();
-
+        AudioM.GlobalAudioM.SetBgmVolume(0);
     }
     
     void FalseTalk()
@@ -40,8 +40,13 @@ public class IsaoTalk : MonoBehaviour
             TalkText2.color -= new Color(0, 0, 0, 3f * Time.deltaTime);
             TalkTitle1.color -= new Color(0, 0, 0, 3f * Time.deltaTime);
             TalkTitle2.color -= new Color(0, 0, 0, 3f * Time.deltaTime);
+            AudioM.GlobalAudioM.SetBgmVolume(InitializePlayerSetting.GlobalPlayerSetting.BGMVolumeValue);
+            AudioM.GlobalAudioM.SetSEVolume(InitializePlayerSetting.GlobalPlayerSetting.SEVolumeValue);
             if (TalkPanel.color.a <= 0.05)
             {
+                StartPanelBGM.Play();
+                AudioM.GlobalAudioM.SetBgmVolume(InitializePlayerSetting.GlobalPlayerSetting.BGMVolumeValue);
+                AudioM.GlobalAudioM.SetSEVolume(InitializePlayerSetting.GlobalPlayerSetting.SEVolumeValue);
                 gameObject.SetActive(false);
                 SceneManager.LoadSceneAsync(1);
             }

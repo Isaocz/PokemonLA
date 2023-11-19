@@ -172,6 +172,33 @@ public class PlayerControler : Pokemon
     public int PlayerTeraTypeJOR;
 
 
+    //角色的特性列表
+    public enum PlayerAbilityList
+    {
+        无特性 = 0,
+        迟钝 = 1,
+        雪隐 = 2,
+        厚脂肪 = 3,
+        叶子防守 = 4,
+        甜幕 = 5,
+        女王的威严 = 6,
+        逃跑 = 7,
+        适应力 = 8,
+        危险预知 = 9,
+        迷人之躯 = 10,
+        妖精皮肤 = 11,
+    }
+    //当前角色可以获得特性
+    public PlayerAbilityList playerAbility01;
+    public PlayerAbilityList playerAbility02;
+    public PlayerAbilityList playerAbilityDream;
+
+    //对于这个角色目前的特性
+    public PlayerAbilityList PlayerAbility { get { return playerAbility; } set { playerAbility = value; } }    PlayerAbilityList playerAbility;
+
+
+
+
     //声明一个游戏对象，表示玩家的技能1,以及技能1的冷却计时器和技能1是否冷却,是否在使用技能
     public Skill Skill01;
     float Skill01Timer = 0;
@@ -327,6 +354,9 @@ public class PlayerControler : Pokemon
         UIHeadIcon.StaticHeadIcon.ChangeHeadIcon(PlayerHead);
         ComeInANewRoomEvent += ChangeRoomBgm;
         isCanNotUseSpaceItem = false;
+
+        if (PlayerAbility == PlayerAbilityList.迟钝) { TimeStateInvincible *= 1.6f; }
+        if (PlayerAbility == PlayerAbilityList.逃跑) { playerData.MoveSpwBounsAlways += 1; ReFreshAbllityPoint(); }
     }
 
 
@@ -350,6 +380,8 @@ public class PlayerControler : Pokemon
     {
         if (!isDie)
         {
+            //触发特性
+            UpdateAbility();
 
             //随时间掉血或者改变状态的函数
             if (isInGrassyTerrain) {  PlayerGrassyTerrainHeal(); }
@@ -361,20 +393,20 @@ public class PlayerControler : Pokemon
 
             Vector2 MoveSpeed = Vector2.zero;
 
-            if (Input.GetKey(UIKeyBoard.GetKeybind("Left")))
+            if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Left")))
             {
                 MoveSpeed.x = -1f * (isConfusionDone ? -1 : 1);
             }
-            else if (Input.GetKey(UIKeyBoard.GetKeybind("Right")))
+            else if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Right")))
             {
                 MoveSpeed.x = 1f * (isConfusionDone ? -1 : 1);
             }
 
-            if (Input.GetKey(UIKeyBoard.GetKeybind("Up")))
+            if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Up")))
             {
                 MoveSpeed.y = 1f * (isConfusionDone ? -1 : 1);
             }
-            else if (Input.GetKey(UIKeyBoard.GetKeybind("Down")))
+            else if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Down")))
             {
                 MoveSpeed.y = -1f * (isConfusionDone ? -1 : 1);
             }
@@ -468,7 +500,7 @@ public class PlayerControler : Pokemon
 
             //当按下q键时发射skill01
 
-            if (Input.GetKeyDown(UIKeyBoard.GetKeybind("Skill1")) && isSkill01CD == false && Skill01 != null && !isSkill )
+            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill1")) && isSkill01CD == false && Skill01 != null && !isSkill )
             {
                 if ((Skill01.useSkillConditions(this))) {
                     //当动画进行到第8帧时会发射技能1，并技能1进入CD
@@ -492,7 +524,7 @@ public class PlayerControler : Pokemon
 
             //当按下w键时发射skill02
 
-            if (Input.GetKeyDown(UIKeyBoard.GetKeybind("Skill2")) && isSkill02CD == false && Skill02 != null  && !isSkill)
+            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill2")) && isSkill02CD == false && Skill02 != null  && !isSkill)
             {
                 if ((Skill02.useSkillConditions(this)))
                 {
@@ -517,7 +549,7 @@ public class PlayerControler : Pokemon
 
             //当按下e键时发射skill03
 
-            if (Input.GetKeyDown(UIKeyBoard.GetKeybind("Skill3")) && isSkill03CD == false && Skill03 != null  && !isSkill)
+            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill3")) && isSkill03CD == false && Skill03 != null  && !isSkill)
             {
                 if ((Skill03.useSkillConditions(this)))
                 {
@@ -542,19 +574,17 @@ public class PlayerControler : Pokemon
 
             //当按下r键时发射skill04
 
-            if (Input.GetKeyDown(UIKeyBoard.GetKeybind("Skill4")) && isSkill04CD == false) {
-                if (Input.GetKeyDown(UIKeyBoard.GetKeybind("Skill4")) && isSkill04CD == false && Skill04 != null && !isSkill)
+            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill4")) && isSkill04CD == false && Skill04 != null && !isSkill)
+            {
+
+                if ((Skill04.useSkillConditions(this)))
                 {
-                    
-                    if ((Skill04.useSkillConditions(this)))
-                    {
-                        //当动画进行到第8帧时会发射技能4，并技能4进入CD
-                        animator.SetTrigger("Skill");
-                        isSkill04CD = true;
-                        isSkill = true;
-                        isSkill04lunch = true;
-                        skillBar04.isCDStart = true;
-                    }
+                    //当动画进行到第8帧时会发射技能4，并技能4进入CD
+                    animator.SetTrigger("Skill");
+                    isSkill04CD = true;
+                    isSkill = true;
+                    isSkill04lunch = true;
+                    skillBar04.isCDStart = true;
                 }
             }
             //如果技能1在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
@@ -594,7 +624,7 @@ public class PlayerControler : Pokemon
             }
 
 
-            if (isSpaceItemCanBeUse && Input.GetKeyDown(UIKeyBoard.GetKeybind("UseItem")) && !isCanNotUseSpaceItem && spaceItem != null)
+            if (isSpaceItemCanBeUse && Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("UseItem")) && !isCanNotUseSpaceItem && spaceItem != null)
             {
                 if (UseSpaceItem.UseSpaceItemConditions(this)) {
                     spaceitemUseUI.UIAnimationStart(spaceItem.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite);
@@ -764,10 +794,13 @@ public class PlayerControler : Pokemon
 
     public void Evolution()
     {
+        RemoveSnowCloak();
+        RemoveOblivious();
         PlayerControler e =  Instantiate(EvolutionPlayer , transform.position , Quaternion.identity);
         animator.updateMode = AnimatorUpdateMode.Normal;
         Time.timeScale = 1;
         e.isSpaceItemCanBeUse = true;
+        e.playerAbility = playerAbility;
         e.uIPanelGwtNewSkill = uIPanelGwtNewSkill;
         e.Skill01 = Skill01;
         e.Skill02 = Skill02;
@@ -1645,4 +1678,84 @@ public class PlayerControler : Pokemon
         return new Vector2(speed * horizontal, speed * vertical);
     }
     // == 对外接口 == 
+
+
+
+
+
+
+
+
+
+    //===========================所有触发特性时使用的函数======================================
+
+
+    //--雪隐
+    public void TriggerSnowCloak()
+    {
+        if (!isSnowCloakTrigger) {
+            isSnowCloakTrigger = true;
+            playerData.MoveSpeBounsJustOneRoom += 2;
+            ReFreshAbllityPoint();
+            Invoke("RemoveSnowCloak" , 2.0f);
+        }
+    }
+
+    void RemoveSnowCloak()
+    {
+        if (isSnowCloakTrigger) {
+            isSnowCloakTrigger = false;
+            playerData.MoveSpeBounsJustOneRoom -= 2;
+            ReFreshAbllityPoint();
+        }
+    }
+
+
+
+
+    //--迟钝
+    public void TriggerOblivious()
+    {
+        if (!isObliviousTrigger)
+        {
+            isObliviousTrigger = true;
+            Invoke("RemoveOblivious", 1.0f);
+        }
+    }
+
+    void RemoveOblivious()
+    {
+        if (isObliviousTrigger)
+        {
+            isObliviousTrigger = false;
+        }
+    }
+    
+
+
+    //--叶子防守
+    void TriggerLeafGuard()
+    {
+        if (playerAbility == PlayerAbilityList.叶子防守)
+        {
+            if (InGressCount.Count != 0 || Weather.GlobalWeather.isSunny || Weather.GlobalWeather.isSunnyPlus)
+            {
+                isLeafGuardTrigger = true;
+            }
+            else
+            {
+                isLeafGuardTrigger = false;
+            }
+        }
+    }
+
+    //在Update中触发的特性
+    void UpdateAbility()
+    {
+        TriggerLeafGuard();
+    }
+
+
+
+    //===========================所有触发特性时使用的函数======================================
 }
