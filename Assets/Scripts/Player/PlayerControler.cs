@@ -623,7 +623,7 @@ public class PlayerControler : Pokemon
                 }
             }
 
-
+            
             if (isSpaceItemCanBeUse && Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("UseItem")) && !isCanNotUseSpaceItem && spaceItem != null)
             {
                 if (UseSpaceItem.UseSpaceItemConditions(this)) {
@@ -800,7 +800,12 @@ public class PlayerControler : Pokemon
         animator.updateMode = AnimatorUpdateMode.Normal;
         Time.timeScale = 1;
         e.isSpaceItemCanBeUse = true;
-        e.playerAbility = playerAbility;
+
+        if (playerAbility == playerAbility01) { e.playerAbility = e.playerAbility01; }
+        else if (playerAbility == playerAbility02) { e.playerAbility = e.playerAbility02; }
+        else if (playerAbility == playerAbilityDream) { e.playerAbility = e.playerAbilityDream; }
+        else { e.playerAbility = playerAbility; }
+
         e.uIPanelGwtNewSkill = uIPanelGwtNewSkill;
         e.Skill01 = Skill01;
         e.Skill02 = Skill02;

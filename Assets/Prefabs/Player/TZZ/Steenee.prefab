@@ -134,7 +134,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6249658965343522989}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.40859994, z: 0}
+  m_LocalPosition: {x: 0, y: -0.30659994, z: 0}
   m_LocalScale: {x: 0.6033164, y: 0.6457648, z: 0.600439}
   m_Children: []
   m_Father: {fileID: 6249658966115042221}
@@ -270,7 +270,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6249658965871029958}
   m_Layer: 0
-  m_Name: BounsweetSpriteParent
+  m_Name: SteeneeSpriteParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -303,10 +303,10 @@ GameObject:
   - component: {fileID: 6249658966115042217}
   - component: {fileID: 6249658966115042222}
   - component: {fileID: 6249658966115042216}
-  - component: {fileID: 6249658966115042223}
   - component: {fileID: 6249658966115042218}
   - component: {fileID: 6249658966115042219}
   - component: {fileID: 6249658966115042212}
+  - component: {fileID: 239738831}
   m_Layer: 8
   m_Name: Steenee
   m_TagString: Player
@@ -391,7 +391,7 @@ Animator:
   m_GameObject: {fileID: 6249658966115042220}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b686aab3598939f429481595ff90f0f9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -400,143 +400,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6249658966115042223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6249658966115042220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa18a46670f9a2d47be5810749cad267, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NormalMaterial: {fileID: 2100000, guid: b3561bc8940b4354bb645b4ec8b64fd3, type: 2}
-  FrozenMaterial: {fileID: 2100000, guid: 5621402ffca87244a96d4dd5a467a62c, type: 2}
-  SpeedDownMaterial: {fileID: 2100000, guid: a29ae9cd7deb811449a0e250d0e533b2, type: 2}
-  ToxicMaterial: {fileID: 2100000, guid: 296f83a3541c1b24485906af3dff32b2, type: 2}
-  ParalysisMaterial: {fileID: 2100000, guid: 0f06f7a11b286104ba4dbc36c80da013, type: 2}
-  BurnMaterial: {fileID: 2100000, guid: 46e9e683ceef1af4ba339da5f01bb0a0, type: 2}
-  SleepMaterial: {fileID: 2100000, guid: 5bfe3122f137b5a4aa634772d5bccad1, type: 2}
-  FearMaterial: {fileID: 2100000, guid: 9d22d74762a5c0148a4cb1ecfaa4e840, type: 2}
-  InfatuationMaterial: {fileID: 2100000, guid: 2310fa42f7ef9434d8b100c9292ab5fd, type: 2}
-  FrozenResistance: 0
-  ToxicResistance: 0
-  ParalysisResistance: 0
-  BurnResistance: 0
-  SleepResistance: 0
-  OtherStateResistance: 0
-  TimeStateInvincible: 1.2
-  isSafeguard: 0
-  skinRenderers: []
-  animator: {fileID: 0}
-  playerUIState: {fileID: 3868217168742406409}
-  speed: 0
-  isEmptyFrozenDone: 0
-  isFrozenDef: 0
-  isFearDone: 0
-  isFearStart: 0
-  isBlindDone: 0
-  isBlindStart: 0
-  isEmptyConfusionDone: 0
-  isEmptyConfusionStart: 0
-  isEmptyInfatuationDone: 0
-  isEmptyInfatuationStart: 0
-  isSpdDown: 0
-  isColdDown: 0
-  isEmptyCurseDone: 0
-  isEmptyCurseStart: 0
-  isSpeedChange: 0
-  isPlayerFrozenDone: 0
-  isPlayerFrozenStart: 0
-  PlayerFrozenPointFloat: 0
-  isToxicDef: 0
-  isToxicDone: 0
-  isToxicStart: 0
-  ToxicPointFloat: 0
-  isParalysisDef: 0
-  isParalysisDone: 0
-  isParalysisStart: 0
-  ParalysisPointFloat: 0
-  isBurnDef: 0
-  isBurnDone: 0
-  isBurnStart: 0
-  BurnPointFloat: 0
-  isSleepDef: 0
-  isSleepDone: 0
-  isSleepStart: 0
-  SleepPointFloat: 0
-  isConfusionDef: 0
-  isConfusionDone: 0
-  isConfusionStart: 0
-  ConfusionPointFloat: 0
-  PlayerNameChinese: "\u751C\u7AF9\u7AF9"
-  PlayerHead: {fileID: 21300000, guid: b28f3fa1ea8a99343abb9f2c1b4fccab, type: 3}
-  PlayerBodySize: 0
-  EvolutionPlayer: {fileID: 0}
-  isEvolution: 0
-  isNeedInherit: 0
-  EvolutionAnimation: {fileID: 6057199217460903694, guid: afeee74c45e19064ab516730b168c3ff, type: 3}
-  look: {x: 0, y: -1}
-  maxHp: 0
-  maxEx: 0
-  Level: 5
-  LevelForSkill: 5
-  iCount: 0
-  TimeInvincible: 1.2
-  isInvincible: 0
-  HpPlayerPoint: 42
-  AtkPlayerPoint: 30
-  SpAPlayerPoint: 38
-  DefPlayerPoint: 30
-  SpdPlayerPoint: 38
-  SpeedPlayerPoint: 32
-  MoveSpePlayerPoint: 6
-  LuckPlayerPoint: 0
-  PlayerType01: 0
-  PlayerType02: 0
-  PlayerTeraType: 0
-  PlayerTeraTypeJOR: 0
-  Skill01: {fileID: 0}
-  skillBar01: {fileID: 6057663879541861742}
-  Skill02: {fileID: 0}
-  skillBar02: {fileID: 6057663880403148344}
-  Skill03: {fileID: 0}
-  skillBar03: {fileID: 6057663879287248890}
-  Skill04: {fileID: 0}
-  skillBar04: {fileID: 6057663879888219881}
-  spaceItem: {fileID: 0}
-  SpaceItemList: {fileID: 5737730519587534542, guid: 93be979584e48314195d8dd0aa6cf5a8, type: 3}
-  SpaceItemImage: {fileID: 4674623314632316859}
-  GetSkillLevel: 3
-  uIPanelGwtNewSkill: {fileID: 0}
-  NowRoom: {x: 0, y: 0, z: 0}
-  InANewRoom: 1
-  NewRoomTimer: 0
-  spaceitemUseUI: {fileID: 177606732814782477}
-  PassiveItemGetUI: {fileID: 6428613938401894793}
-  isTP: 0
-  isTPMove: 0
-  LuckPoint: 0
-  isSpaceItemCanBeUse: 0
-  playerData: {fileID: 0}
-  playerSkillList: {fileID: 0}
-  playerSubSkillList: {fileID: 0}
-  FollowBaby: {fileID: 0}
-  NotFollowBaby: {fileID: 0}
-  ButterflyManger: {fileID: 0}
-  NatureIndex: 0
-  isCanNotMove: 0
-  isCanNotTurnDirection: 0
-  isInvincibleAlways: 0
-  EvolutionSkill: {fileID: 0}
-  isReflect: 0
-  isLightScreen: 0
-  Splash: {fileID: 1682553479186110878, guid: fb3a9e759189ce44eb5db929e9adf784, type: 3}
-  Playnice: {fileID: 5802712570413950528, guid: 67b7d2214aef99a40946579adef0b98d, type: 3}
-  RapidSpin: {fileID: 2565654828128499493, guid: 129b4eebe1ef3c448a1f710d8d338c5a, type: 3}
-  TestSkill01: {fileID: 0}
 --- !u!114 &6249658966115042218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -678,6 +541,153 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SubSList: []
+--- !u!114 &239738831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6249658966115042220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6daa57478c84ce54193098af6d21e160, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NormalMaterial: {fileID: 2100000, guid: b3561bc8940b4354bb645b4ec8b64fd3, type: 2}
+  FrozenMaterial: {fileID: 2100000, guid: 5621402ffca87244a96d4dd5a467a62c, type: 2}
+  SpeedDownMaterial: {fileID: 2100000, guid: a29ae9cd7deb811449a0e250d0e533b2, type: 2}
+  ToxicMaterial: {fileID: 2100000, guid: 296f83a3541c1b24485906af3dff32b2, type: 2}
+  ParalysisMaterial: {fileID: 2100000, guid: 0f06f7a11b286104ba4dbc36c80da013, type: 2}
+  BurnMaterial: {fileID: 2100000, guid: 46e9e683ceef1af4ba339da5f01bb0a0, type: 2}
+  SleepMaterial: {fileID: 2100000, guid: 5bfe3122f137b5a4aa634772d5bccad1, type: 2}
+  FearMaterial: {fileID: 2100000, guid: 9d22d74762a5c0148a4cb1ecfaa4e840, type: 2}
+  InfatuationMaterial: {fileID: 2100000, guid: 2310fa42f7ef9434d8b100c9292ab5fd, type: 2}
+  FrozenResistance: 0
+  ToxicResistance: 0
+  ParalysisResistance: 0
+  BurnResistance: 0
+  SleepResistance: 0
+  OtherStateResistance: 0
+  TimeStateInvincible: 1.2
+  isSafeguard: 0
+  skinRenderers: []
+  animator: {fileID: 0}
+  playerUIState: {fileID: 3868217168742406409}
+  speed: 0
+  isEmptyFrozenDone: 0
+  isFrozenDef: 0
+  isFearDone: 0
+  isFearStart: 0
+  isBlindDone: 0
+  isBlindStart: 0
+  isEmptyConfusionDone: 0
+  isEmptyConfusionStart: 0
+  isEmptyInfatuationDone: 0
+  isEmptyInfatuationStart: 0
+  isColdDown: 0
+  isEmptyCurseDone: 0
+  isEmptyCurseStart: 0
+  isSpeedChange: 0
+  isPlayerFrozenDone: 0
+  isPlayerFrozenStart: 0
+  PlayerFrozenPointFloat: 0
+  isToxicDef: 0
+  isToxicDone: 0
+  isToxicStart: 0
+  ToxicPointFloat: 0
+  isParalysisDef: 0
+  isParalysisDone: 0
+  isParalysisStart: 0
+  ParalysisPointFloat: 0
+  isBurnDef: 0
+  isBurnDone: 0
+  isBurnStart: 0
+  BurnPointFloat: 0
+  isSleepDef: 0
+  isSleepDone: 0
+  isSleepStart: 0
+  SleepPointFloat: 0
+  isConfusionDef: 0
+  isConfusionDone: 0
+  isConfusionStart: 0
+  ConfusionPointFloat: 0
+  PlayerNameChinese: "\u751C\u821E\u59AE"
+  PlayerHead: {fileID: 21300000, guid: 7b812f4df4be50e4c987a9302373d90d, type: 3}
+  PlayerBodySize: 0
+  SkillOffsetforBodySize:
+  - 0.4
+  - 0
+  - 0
+  EvolutionPlayer: {fileID: 0}
+  isEvolution: 0
+  isNeedInherit: 1
+  EvolutionAnimation: {fileID: 6057199217460903694, guid: afeee74c45e19064ab516730b168c3ff, type: 3}
+  look: {x: 0, y: -1}
+  maxHp: 0
+  maxEx: 0
+  Level: 0
+  LevelForSkill: 0
+  iCount: 0
+  TimeInvincible: 1.2
+  isInvincible: 0
+  HpPlayerPoint: 52
+  AtkPlayerPoint: 40
+  SpAPlayerPoint: 40
+  DefPlayerPoint: 48
+  SpdPlayerPoint: 48
+  SpeedPlayerPoint: 62
+  MoveSpePlayerPoint: 6
+  LuckPlayerPoint: 0
+  PlayerType01: 0
+  PlayerType02: 0
+  PlayerTeraType: 0
+  PlayerTeraTypeJOR: 0
+  playerAbility01: 4
+  playerAbility02: 1
+  playerAbilityDream: 5
+  Skill01: {fileID: 0}
+  isSkill01CD: 0
+  skillBar01: {fileID: 6057663879541861742}
+  Skill02: {fileID: 0}
+  isSkill02CD: 0
+  skillBar02: {fileID: 6057663880403148344}
+  Skill03: {fileID: 0}
+  isSkill03CD: 0
+  skillBar03: {fileID: 6057663879287248890}
+  Skill04: {fileID: 0}
+  isSkill04CD: 0
+  skillBar04: {fileID: 6057663879888219881}
+  spaceItem: {fileID: 0}
+  SpaceItemList: {fileID: 5737730519587534542, guid: 93be979584e48314195d8dd0aa6cf5a8, type: 3}
+  SpaceItemImage: {fileID: 4674623314632316859}
+  GetSkillLevel: 4
+  uIPanelGwtNewSkill: {fileID: 0}
+  NowRoom: {x: 0, y: 0, z: 0}
+  InANewRoom: 1
+  NewRoomTimer: 0
+  spaceitemUseUI: {fileID: 177606732814782477}
+  PassiveItemGetUI: {fileID: 6428613938401894793}
+  isTP: 0
+  isTPMove: 0
+  LuckPoint: 0
+  isSpaceItemCanBeUse: 0
+  playerData: {fileID: 0}
+  playerSkillList: {fileID: 0}
+  playerSubSkillList: {fileID: 0}
+  FollowBaby: {fileID: 0}
+  NotFollowBaby: {fileID: 0}
+  ButterflyManger: {fileID: 0}
+  NatureIndex: 0
+  isCanNotMove: 0
+  isCanNotTurnDirection: 0
+  isInvincibleAlways: 0
+  EvolutionSkill: {fileID: 0}
+  isReflect: 0
+  isLightScreen: 0
+  Splash: {fileID: 1682553479186110878, guid: fb3a9e759189ce44eb5db929e9adf784, type: 3}
+  Playnice: {fileID: 5802712570413950528, guid: 67b7d2214aef99a40946579adef0b98d, type: 3}
+  RapidSpin: {fileID: 2565654828128499493, guid: 129b4eebe1ef3c448a1f710d8d338c5a, type: 3}
+  TestSkill01: {fileID: 31271946034189237, guid: ae2645eb5425bfb408f6922c7d72e70d, type: 3}
 --- !u!1 &6249658966419751157
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,7 +713,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6249658966419751157}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.365, z: 0}
+  m_LocalPosition: {x: 0, y: -0.263, z: 0}
   m_LocalScale: {x: 0.5429858, y: 0.58118933, z: 0.600439}
   m_Children: []
   m_Father: {fileID: 6249658966115042221}
@@ -772,7 +782,7 @@ GameObject:
   - component: {fileID: 6249658967260210121}
   - component: {fileID: 6249658967260210122}
   m_Layer: 0
-  m_Name: BounsweetSprite
+  m_Name: SteeneeSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -833,12 +843,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: f32c62c03f756fe4e9f0fa5ecac01015, type: 3}
+  m_Sprite: {fileID: -3474580930065576084, guid: 49e90fd205a9d8b4185f71e2040aabe0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.6071428, y: 1.6071428}
+  m_Size: {x: 2.3714285, y: 2.3714285}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -999,6 +1009,10 @@ PrefabInstance:
     - target: {fileID: 1303256019705253178, guid: 39c31a964fe98bb43bde8991b5548fe6, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 1.395
+      objectReference: {fileID: 0}
+    - target: {fileID: 4421838723877225698, guid: 39c31a964fe98bb43bde8991b5548fe6, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39c31a964fe98bb43bde8991b5548fe6, type: 3}

@@ -54,12 +54,10 @@ public class BounsweetControler : PlayerControler
     {
         UpdatePlayer();
         StateMaterialChange();
-        /*
-        if (!isEvolution && LevelForSkill >= 5)
+        if (!isEvolution && LevelForSkill >= 18)
         {
             EvolutionStart();
         }
-        */
     }
 
     private void FixedUpdate()
