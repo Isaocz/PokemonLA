@@ -9,6 +9,8 @@ public class TestSkill : Skill
     bool isCanNotMove;
     bool isTestHitDone;
 
+    public bool ProjectileMode;
+
     [Header("ÊÇ·ñ±ù¶³")]
     public bool isFroze;
     public float FrozeTime;
@@ -53,12 +55,26 @@ public class TestSkill : Skill
     public bool isCurse;
     public float CurseTime;
 
+    [Header("ÊÇ·ñ±»¹¥»÷ÏÂ½µ")]
+    public bool isAtkDown;
+    public float AtkDownTime;
+
     // Start is called before the first frame update
     void Start()
     {
         direction = (transform.rotation * Vector2.right).normalized;
         StartPostion = transform.position;
         transform.rotation = Quaternion.Euler(Vector3.zero);
+        if (!ProjectileMode)
+        {
+            GameObject EmptyParent = MapCreater.StaticMap.RRoom[player.NowRoom].transform.GetChild(3).gameObject;
+            for (int i = 0; i < EmptyParent.transform.childCount; i++)
+            {
+                Empty e = EmptyParent.transform.GetChild(i).GetComponent<Empty>();
+                if ( e != null ) { StateDone(e); }
+            }
+            Destroy(gameObject);
+        }
     }
 
     private void Update()
@@ -88,25 +104,35 @@ public class TestSkill : Skill
     {
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            isCanNotMove = true;
-            isTestHitDone = true;
-            if (isFroze) { target.Frozen(FrozeTime, 1, 1); }
-            if (isBurn) { target.EmptyBurnDone(1,BurnTime,1) ; }
-            if (isParalysis) { target.EmptyParalysisDone(1 , ParalysisTime, 1) ; }
-            if (isToxic) { target.EmptyToxicDone(1, ToxicTime , 1) ; }
-            if (isSleep) { target.EmptySleepDone(1, SleepTime , 1) ; }
-            if (isFear) { target.Fear(FearTime,1) ; }
-            if (isBlind) { target.Blind(BlindTime,1) ; }
-            if (isConfusion) { target.EmptyConfusion(ConfusionTime , 1) ; }
-            if (isInfatuation) { target.EmptyInfatuation(InfatuationTime , 1) ; }
-            if (isCold) { target.Cold(ColdTime) ; }
-            if (isCurse) { target.EmptyCurse(CurseTime,1) ; }
+            if (ProjectileMode)
+            {
+                Empty target = other.GetComponent<Empty>();
+                isCanNotMove = true;
+                isTestHitDone = true;
+                StateDone(target);
+            }
         }
-        else if (other.tag == "Room" )
+        else if (other.tag == "Room")
         {
             isCanNotMove = true;
             isTestHitDone = true;
         }
+
+    }
+
+    void StateDone( Empty target )
+    {
+        if (isFroze) { target.Frozen(FrozeTime, 10, 1); }
+        if (isBurn) { target.EmptyBurnDone(1, BurnTime, 1); }
+        if (isParalysis) { target.EmptyParalysisDone(10, ParalysisTime, 1); }
+        if (isToxic) { target.EmptyToxicDone(10, ToxicTime, 1); }
+        if (isSleep) { target.EmptySleepDone(10, SleepTime, 1); }
+        if (isFear) { target.Fear(FearTime, 10); }
+        if (isBlind) { target.Blind(BlindTime, 10); }
+        if (isConfusion) { target.EmptyConfusion(ConfusionTime, 10); }
+        if (isInfatuation) { target.EmptyInfatuation(InfatuationTime, 10); }
+        if (isCold) { target.Cold(ColdTime); }
+        if (isCurse) { target.EmptyCurse(CurseTime, 10); }
+        if (isAtkDown) { target.AtkChange(-1, 20); }
     }
 }

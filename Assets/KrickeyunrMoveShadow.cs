@@ -13,8 +13,8 @@ public class KrickeyunrMoveShadow : MonoBehaviour
     void Update()
     {
 
-        sprite01.color -= new Color(0,0,0,Time.deltaTime*2.1f);
-        sprite02.color -= new Color(0,0,0,Time.deltaTime*2.1f);
+        sprite01.color -= new Color(0,0,0,Time.deltaTime*1.7f);
+        sprite02.color -= new Color(0,0,0,Time.deltaTime* 1.7f);
         if (sprite01.color.a < 0.05f)
         {
             Destroy(gameObject);
