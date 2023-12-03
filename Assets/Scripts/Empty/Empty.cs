@@ -5,6 +5,9 @@ using UnityEngine;
 public class EnumMultiAttribute : PropertyAttribute { }
 public class Empty : Pokemon
 {
+
+    Room ParentPokemonRoom;
+
     //攻击到玩家时造成的击退值声明4个变量，一个代表对玩家造成的伤害，一个代表击退值，一个表示移动的距离,一个表示移动速度，一个表示初始血量
     public float Knock = 5f;
     //敌人的当前血量和最大血量
@@ -141,6 +144,13 @@ public class Empty : Pokemon
     public bool isShadow;
 
 
+    //当敌人身体有多个部分时（如三地鼠的多个地鼠 ， 大岩蛇的多个体节） ， 把每一个身体部分放入该List；
+    public List<SubEmptyBody> SubEmptyBodyList
+    {
+        get { return subEmptyBodyList; }
+        set { subEmptyBodyList = value; }
+    }
+    List<SubEmptyBody> subEmptyBodyList = new List<SubEmptyBody> { };
 
 
 
@@ -161,6 +171,7 @@ public class Empty : Pokemon
     /// <returns></returns>
     protected int SetLevel(int PlayerLevel,int MaxLevel)
     {
+        if (transform.parent.parent.GetComponent<Room>() != null) { ParentPokemonRoom = transform.parent.parent.GetComponent<Room>(); }
         FirstSpeed = speed;
         int OutPut;
         if (!isBoos)
@@ -554,6 +565,7 @@ public class Empty : Pokemon
 
     public void UpdateEmptyChangeHP()
     {
+        if (isShake) { ShakeUpdate(); }
         if (isToxicDone) { EmptyToxic(); }
         if (isBurnDone) { EmptyBurn(); }
         if (isParalysisDone) { EmptyParalysisJudge(); } else { isCanNotMoveWhenParalysis = false; }
@@ -837,6 +849,119 @@ public class Empty : Pokemon
         }
         
     }
+
+
+
+
+
+
+
+    //===================================多身体构造的敌人（三地鼠 ， 大岩蛇等）使用的函数===========================================
+
+
+    public void UpdataMulitBodyEmptyState()
+    {
+
+
+        bool isOnixSubsititue = false;
+        bool isOnixInGrassyTerrain = false;
+        bool isOnixInPsychicTerrain = false;
+        bool isOnixInElectricTerrain = false;
+        bool isOnixInMistyTerrain = false;
+        bool isOnixSuperInGrassyTerrain = false;
+        bool isOnixSuperInPsychicTerrain = false;
+        bool isOnixSuperInElectricTerrain = false;
+        bool isOnixSuperInMistyTerrain = false;
+        bool isOnixSpeedChange = false;
+
+
+        foreach (OnixBodyShadow b in SubEmptyBodyList)
+        {
+            if (b.isSubsititue) { isOnixSubsititue = true; SubsititueTarget = b.SubsititueTarget; }
+            if (b.isInGrassyTerrain) { isOnixInGrassyTerrain = true; }
+            if (b.isInPsychicTerrain) { isOnixInPsychicTerrain = true; }
+            if (b.isInElectricTerrain) { isOnixInElectricTerrain = true; }
+            if (b.isInMistyTerrain) { isOnixInMistyTerrain = true; }
+            if (b.isInSuperGrassyTerrain) { isOnixSuperInGrassyTerrain = true; }
+            if (b.isInSuperPsychicTerrain) { isOnixSuperInPsychicTerrain = true; }
+            if (b.isInSuperElectricTerrain) { isOnixSuperInElectricTerrain = true; }
+            if (b.isInSuperMistyTerrain) { isOnixSuperInMistyTerrain = true; }
+            if (b.isSpeedChange) { isOnixSpeedChange = true; }
+        }
+
+        if (isOnixSubsititue) { isSubsititue = true; } else { isSubsititue = false; SubsititueTarget = null; }
+        if (isOnixInGrassyTerrain) { isInGrassyTerrain = true; } else { isInGrassyTerrain = false; }
+        if (isOnixInPsychicTerrain) { isInPsychicTerrain = true; } else { isInPsychicTerrain = false; }
+        if (isOnixInElectricTerrain) { isInElectricTerrain = true; } else { isInElectricTerrain = false; }
+        if (isOnixInMistyTerrain) { isInMistyTerrain = true; } else { isInMistyTerrain = false; }
+        if (isOnixSuperInGrassyTerrain) { isInSuperGrassyTerrain = true; } else { isInSuperGrassyTerrain = false; }
+        if (isOnixSuperInPsychicTerrain) { isInSuperPsychicTerrain = true; } else { isInSuperPsychicTerrain = false; }
+        if (isOnixSuperInElectricTerrain) { isInSuperElectricTerrain = true; } else { isInSuperElectricTerrain = false; }
+        if (isOnixSuperInMistyTerrain) { isInSuperMistyTerrain = true; } else { isInSuperMistyTerrain = false; }
+        if (isOnixSpeedChange) { SpeedChange(); } else { SpeedRemove01(0); }
+
+
+    }
+
+    //===================================多身体构造的敌人（三地鼠 ， 大岩蛇等）使用的函数===========================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    void ShakeUpdate()
+    {
+        if (isShake)
+        {
+            ShakeTime -= Time.deltaTime;
+            CSTimer += Time.deltaTime;
+            if (CSTimer >= 0.05f) { CSTimer = 0; ShakePower = -ShakePower; }
+            if (isHorizontalShake)
+            {
+                ParentPokemonRoom.transform.GetChild(0).position += Time.deltaTime * ShakePower * Vector3.right;
+                ParentPokemonRoom.transform.GetChild(1).position += Time.deltaTime * ShakePower * Vector3.right;
+                ParentPokemonRoom.transform.GetChild(2).position += Time.deltaTime * ShakePower * Vector3.right;
+                ParentPokemonRoom.transform.GetChild(6).position += Time.deltaTime * ShakePower * Vector3.right;
+            }
+            else
+            {
+                ParentPokemonRoom.transform.GetChild(0).position += Time.deltaTime * ShakePower * Vector3.up;
+                ParentPokemonRoom.transform.GetChild(1).position += Time.deltaTime * ShakePower * Vector3.up;
+                ParentPokemonRoom.transform.GetChild(2).position += Time.deltaTime * ShakePower * Vector3.up;
+                ParentPokemonRoom.transform.GetChild(6).position += Time.deltaTime * ShakePower * Vector3.up;
+            }
+            if (ShakeTime <= 0) { isShake = false; ShakeTime = 0; isHorizontalShake = false; ShakePower = 0; CSTimer = 0; 
+                ParentPokemonRoom.transform.GetChild(0).localPosition = Vector3.zero;
+                ParentPokemonRoom.transform.GetChild(1).localPosition = Vector3.zero;
+                ParentPokemonRoom.transform.GetChild(2).localPosition = Vector3.zero;
+                ParentPokemonRoom.transform.GetChild(6).localPosition = Vector3.zero;
+            }
+        }
+    }
+
+    //=================镜头摇晃======================
+    bool isShake;
+    float ShakeTime;
+    float CSTimer;
+    bool isHorizontalShake;
+    float ShakePower;
+    Vector3 PRoomNowPosition;
+
+    public void CameraShake(float time, float Power, bool isHorizontal)
+    {
+        if (!isShake) { isShake = true; ShakeTime = time; isHorizontalShake = isHorizontal; ShakePower = Power;  }
+    }
+
 
 
 

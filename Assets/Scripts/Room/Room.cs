@@ -66,6 +66,15 @@ public class Room : MonoBehaviour
     GridGraph RoomGraph;
     float GraphUpdateTimer;
 
+    /// <summary>
+    /// 房间的四壁是否是墙 顺序依次为  0：U   1：D   2：R   3：L
+    /// </summary>
+    public List<bool> isWallAround
+    {
+        get { return iswallAround; }
+        set { iswallAround = value; }
+    }
+    List<bool> iswallAround = new List<bool> { false, false, false, false };
 
 
     private void Start()
@@ -237,19 +246,19 @@ public class Room : MonoBehaviour
            
         if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.up)) 
         {     
-            GameObject Wallup = Instantiate(WallU.gameObject, new Vector3(transform.position.x + WallU.Offset.x, transform.position.y + WallU.Offset.y, 0), Quaternion.identity,transform.GetChild(1));        
+            GameObject Wallup = Instantiate(WallU.gameObject, new Vector3(transform.position.x + WallU.Offset.x, transform.position.y + WallU.Offset.y, 0), Quaternion.identity,transform.GetChild(1));  isWallAround[0] = true;      
         }
         else if (mapCreater.PCRoomPoint == NowRoomPoint + Vector3Int.up)       
         {        
-            GameObject gatewayup = Instantiate(PCGateWayUp, new Vector3(transform.position.x, transform.position.y + 6.7f, 0), Quaternion.identity,gameObject.transform);                 
+            GameObject gatewayup = Instantiate(PCGateWayUp, new Vector3(transform.position.x, transform.position.y + 6.7f, 0), Quaternion.identity,gameObject.transform); isWallAround[0] = false;
         }
         else if (mapCreater.StoreRoomPoint == NowRoomPoint + Vector3Int.up)
         {
-            GameObject gatewayup = Instantiate(StoreGateWayUp, new Vector3(transform.position.x, transform.position.y + 6.7f, 0), Quaternion.identity, gameObject.transform);
+            GameObject gatewayup = Instantiate(StoreGateWayUp, new Vector3(transform.position.x, transform.position.y + 6.7f, 0), Quaternion.identity, gameObject.transform); isWallAround[0] = false;
         }
         else if (mapCreater.BossRoomPoint == NowRoomPoint + Vector3Int.up)
         {
-            GameObject gatewayup = Instantiate(BossGateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity , gameObject.transform);
+            GameObject gatewayup = Instantiate(BossGateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity , gameObject.transform); isWallAround[0] = false;
         }
         else if (NowRoomPoint + Vector3Int.up != Vector3Int.zero && ((mapCreater.SkillShopRoomPoint == NowRoomPoint + Vector3Int.up)
             || (mapCreater.MewRoomPoint == NowRoomPoint + Vector3Int.up)
@@ -257,12 +266,12 @@ public class Room : MonoBehaviour
             || (mapCreater.MintRoomPoint == NowRoomPoint + Vector3Int.up)
             || (mapCreater.BerryTreeRoomPoint == NowRoomPoint + Vector3Int.up) ))
         {
-            GameObject gatewayup = Instantiate(LockedGateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform);
+            GameObject gatewayup = Instantiate(LockedGateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform); isWallAround[0] = false;
             gatewayup.GetComponent<LockedDoorSetText>().SetLockedDoorText(mapCreater, NowRoomPoint + Vector3Int.up);
         }
         else
         {            
-            GameObject gatewayup = Instantiate(GateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform);              
+            GameObject gatewayup = Instantiate(GateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform); isWallAround[0] = false;
         }
 
 
@@ -272,11 +281,11 @@ public class Room : MonoBehaviour
             
         if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.down))       
         {        
-            GameObject Walldown = Instantiate(WallD.gameObject, new Vector3(transform.position.x + WallD.Offset.x, transform.position.y + WallD.Offset.y, 0), Quaternion.identity, transform.GetChild(1));      
+            GameObject Walldown = Instantiate(WallD.gameObject, new Vector3(transform.position.x + WallD.Offset.x, transform.position.y + WallD.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); isWallAround[1] = true;
         }
         else if (mapCreater.BossRoomPoint == NowRoomPoint + Vector3Int.down)
         {
-            Instantiate(BossGateWayDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity , transform);
+            Instantiate(BossGateWayDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity , transform); isWallAround[1] = false;
         }
         else if (NowRoomPoint + Vector3Int.down != Vector3Int.zero && ((mapCreater.SkillShopRoomPoint == NowRoomPoint + Vector3Int.down)
     || (mapCreater.MewRoomPoint == NowRoomPoint + Vector3Int.down)
@@ -285,11 +294,11 @@ public class Room : MonoBehaviour
     || (mapCreater.BerryTreeRoomPoint == NowRoomPoint + Vector3Int.down)))
         {
             GameObject gatewayup = Instantiate(LockedGateWayDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity, transform);
-            gatewayup.GetComponent<LockedDoorSetText>().SetLockedDoorText(mapCreater, NowRoomPoint + Vector3Int.down);
+            gatewayup.GetComponent<LockedDoorSetText>().SetLockedDoorText(mapCreater, NowRoomPoint + Vector3Int.down); isWallAround[1] = false;
         }
         else         
         {       
-            GameObject gatewaydown = Instantiate(GateWayDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity, gameObject.transform);       
+            GameObject gatewaydown = Instantiate(GateWayDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity, gameObject.transform); isWallAround[1] = false;
         }
 
 
@@ -300,19 +309,19 @@ public class Room : MonoBehaviour
             
         if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.left))        
         {       
-            GameObject Wallleft = Instantiate(WallL.gameObject, new Vector3(transform.position.x + WallL.Offset.x, transform.position.y + WallL.Offset.y, 0), Quaternion.identity, transform.GetChild(1));    
+            GameObject Wallleft = Instantiate(WallL.gameObject, new Vector3(transform.position.x + WallL.Offset.x, transform.position.y + WallL.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); isWallAround[3] = true;
         }        
         else if (mapCreater.PCRoomPoint == NowRoomPoint + Vector3Int.left)          
         {    
-            GameObject gatewayleft = Instantiate(PCGateWayLeft, new Vector3(transform.position.x - 13.8f, transform.position.y -2.84f, 0), Quaternion.identity, gameObject.transform);   
+            GameObject gatewayleft = Instantiate(PCGateWayLeft, new Vector3(transform.position.x - 13.8f, transform.position.y -2.84f, 0), Quaternion.identity, gameObject.transform); isWallAround[3] = false;
         }
         else if (mapCreater.StoreRoomPoint == NowRoomPoint + Vector3Int.left)
         {
-            GameObject gatewayleft = Instantiate(StoreGateWayLeft, new Vector3(transform.position.x - 14.1f, transform.position.y - 2.84f, 0), Quaternion.identity, gameObject.transform);
+            GameObject gatewayleft = Instantiate(StoreGateWayLeft, new Vector3(transform.position.x - 14.1f, transform.position.y - 2.84f, 0), Quaternion.identity, gameObject.transform); isWallAround[3] = false;
         }
         else if (mapCreater.BossRoomPoint == NowRoomPoint + Vector3Int.left)
         {
-            GameObject gatewayleft = Instantiate(BossGateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90),transform);
+            GameObject gatewayleft = Instantiate(BossGateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90),transform); isWallAround[3] = false;
         }
         else if (NowRoomPoint + Vector3Int.left != Vector3Int.zero && ((mapCreater.SkillShopRoomPoint == NowRoomPoint + Vector3Int.left)
     || (mapCreater.MewRoomPoint == NowRoomPoint + Vector3Int.left)
@@ -320,13 +329,13 @@ public class Room : MonoBehaviour
     || (mapCreater.MintRoomPoint == NowRoomPoint + Vector3Int.left)
     || (mapCreater.BerryTreeRoomPoint == NowRoomPoint + Vector3Int.left)))
         {
-            GameObject gatewayup = Instantiate(LockedGateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.identity, gameObject.transform);
+            GameObject gatewayup = Instantiate(LockedGateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.identity, gameObject.transform); isWallAround[3] = false;
             gatewayup.GetComponent<LockedDoorSetText>().SetLockedDoorText(mapCreater, NowRoomPoint + Vector3Int.left);
         }
         else
             {
-                GameObject gatewayleft = Instantiate(GateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform);
-            }
+                GameObject gatewayleft = Instantiate(GateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isWallAround[3] = false;
+        }
 
 
 
@@ -336,19 +345,19 @@ public class Room : MonoBehaviour
            
         if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.right))          
         {         
-            GameObject Wallright = Instantiate(WallR.gameObject, new Vector3(transform.position.x + WallR.Offset.x, transform.position.y + WallR.Offset.y, 0), Quaternion.identity, transform.GetChild(1));           
+            GameObject Wallright = Instantiate(WallR.gameObject, new Vector3(transform.position.x + WallR.Offset.x, transform.position.y + WallR.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); isWallAround[2] = true;
         }               
         else if (mapCreater.PCRoomPoint == NowRoomPoint + Vector3Int.right)
             {
-                GameObject gatewayright = Instantiate(PCGateWayRight, new Vector3(transform.position.x+13.8f, transform.position.y - 2.84f, 0), Quaternion.identity, gameObject.transform);
-            }
+                GameObject gatewayright = Instantiate(PCGateWayRight, new Vector3(transform.position.x+13.8f, transform.position.y - 2.84f, 0), Quaternion.identity, gameObject.transform); isWallAround[2] = false;
+        }
         else if (mapCreater.StoreRoomPoint == NowRoomPoint + Vector3Int.right)
         {
-            GameObject gatewayright = Instantiate(StoreGateWayRight, new Vector3(transform.position.x + 14.1f, transform.position.y - 2.84f, 0), Quaternion.identity, gameObject.transform);
+            GameObject gatewayright = Instantiate(StoreGateWayRight, new Vector3(transform.position.x + 14.1f, transform.position.y - 2.84f, 0), Quaternion.identity, gameObject.transform); isWallAround[2] = false;
         }
         else if (mapCreater.BossRoomPoint == NowRoomPoint + Vector3Int.right)
         {
-            Instantiate(BossGateWayRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), transform);
+            Instantiate(BossGateWayRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), transform); isWallAround[2] = false;
         }
         else if (NowRoomPoint + Vector3Int.right != Vector3Int.zero && ((mapCreater.SkillShopRoomPoint == NowRoomPoint + Vector3Int.right)
     || (mapCreater.MewRoomPoint == NowRoomPoint + Vector3Int.right)
@@ -356,13 +365,13 @@ public class Room : MonoBehaviour
     || (mapCreater.MintRoomPoint == NowRoomPoint + Vector3Int.right)
     || (mapCreater.BerryTreeRoomPoint == NowRoomPoint + Vector3Int.right)))
         {
-            GameObject gatewayup = Instantiate(LockedGateWayRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.identity, gameObject.transform);
+            GameObject gatewayup = Instantiate(LockedGateWayRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.identity, gameObject.transform); isWallAround[2] = false;
             gatewayup.GetComponent<LockedDoorSetText>().SetLockedDoorText(mapCreater, NowRoomPoint + Vector3Int.right);
         }
         else
             {
-                GameObject gatewayright = Instantiate(GateWayRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform);
-            }
+                GameObject gatewayright = Instantiate(GateWayRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isWallAround[2] = false;
+        }
 
         }
 
@@ -382,12 +391,12 @@ public class Room : MonoBehaviour
 
         if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.up))
         {
-            if (!isNextFloorDoorExit && Random.Range(0.0f, 1.0f) > NextFloorPer) { GameObject gatewayup = Instantiate(bossRoom.NextFloorDoorUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform); isNextFloorDoorExit = true; }
-            else { GameObject Wallup = Instantiate(WallU.gameObject, new Vector3(transform.position.x + WallU.Offset.x, transform.position.y + WallU.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); NextFloorPer -= 0.25f; }
+            if (!isNextFloorDoorExit && Random.Range(0.0f, 1.0f) > NextFloorPer) { GameObject gatewayup = Instantiate(bossRoom.NextFloorDoorUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform); isNextFloorDoorExit = true; isWallAround[0] = false; }
+            else { GameObject Wallup = Instantiate(WallU.gameObject, new Vector3(transform.position.x + WallU.Offset.x, transform.position.y + WallU.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); NextFloorPer -= 0.25f; isWallAround[0] = true; }
         }
         else
         {
-            GameObject gatewayup = Instantiate(GateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform);
+            GameObject gatewayup = Instantiate(GateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform); isWallAround[0] = false;
         }
 
 
@@ -397,12 +406,12 @@ public class Room : MonoBehaviour
 
         if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.down))
         {
-            if (!isNextFloorDoorExit && Random.Range(0.0f, 1.0f) > NextFloorPer) { GameObject gatewaydown = Instantiate(bossRoom.NextFloorDoorDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity, gameObject.transform); isNextFloorDoorExit = true; }
-            else { GameObject Walldown = Instantiate(WallD.gameObject, new Vector3(transform.position.x + WallD.Offset.x, transform.position.y + WallD.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); NextFloorPer -= 0.25f; }
+            if (!isNextFloorDoorExit && Random.Range(0.0f, 1.0f) > NextFloorPer) { GameObject gatewaydown = Instantiate(bossRoom.NextFloorDoorDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity, gameObject.transform); isNextFloorDoorExit = true; isWallAround[1] = false; }
+            else { GameObject Walldown = Instantiate(WallD.gameObject, new Vector3(transform.position.x + WallD.Offset.x, transform.position.y + WallD.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); NextFloorPer -= 0.25f; isWallAround[1] = true; }
         }
         else
         {
-            GameObject gatewaydown = Instantiate(GateWayDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity, gameObject.transform);
+            GameObject gatewaydown = Instantiate(GateWayDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity, gameObject.transform); isWallAround[1] = false;
         }
 
 
@@ -413,12 +422,12 @@ public class Room : MonoBehaviour
 
         if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.left))
         {
-            if (!isNextFloorDoorExit && Random.Range(0.0f, 1.0f) > NextFloorPer) { GameObject gatewayleft = Instantiate(bossRoom.NextFloorDoorLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isNextFloorDoorExit = true; }
-            else { GameObject Wallleft = Instantiate(WallL.gameObject, new Vector3(transform.position.x + WallL.Offset.x, transform.position.y + WallL.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); NextFloorPer -= 0.25f; }
+            if (!isNextFloorDoorExit && Random.Range(0.0f, 1.0f) > NextFloorPer) { GameObject gatewayleft = Instantiate(bossRoom.NextFloorDoorLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isNextFloorDoorExit = true; isWallAround[3] = false; }
+            else { GameObject Wallleft = Instantiate(WallL.gameObject, new Vector3(transform.position.x + WallL.Offset.x, transform.position.y + WallL.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); NextFloorPer -= 0.25f; isWallAround[3] = true; }
         }
         else
         {
-            GameObject gatewayleft = Instantiate(GateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform);
+            GameObject gatewayleft = Instantiate(GateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isWallAround[3] = false;
         }
 
 
@@ -429,12 +438,12 @@ public class Room : MonoBehaviour
 
         if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.right))
         {
-            if (!isNextFloorDoorExit && Random.Range(0.0f, 1.0f) > NextFloorPer) { GameObject gatewayright = Instantiate(bossRoom.NextFloorDoorRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isNextFloorDoorExit = true; }
-            else { GameObject Wallright = Instantiate(WallR.gameObject, new Vector3(transform.position.x + WallR.Offset.x, transform.position.y + WallR.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); NextFloorPer -= 0.25f; }
+            if (!isNextFloorDoorExit && Random.Range(0.0f, 1.0f) > NextFloorPer) { GameObject gatewayright = Instantiate(bossRoom.NextFloorDoorRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isNextFloorDoorExit = true; isWallAround[2] = false; }
+            else { GameObject Wallright = Instantiate(WallR.gameObject, new Vector3(transform.position.x + WallR.Offset.x, transform.position.y + WallR.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); NextFloorPer -= 0.25f; isWallAround[2] = true; }
         }
         else
         {
-            GameObject gatewayright = Instantiate(GateWayRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform);
+            GameObject gatewayright = Instantiate(GateWayRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isWallAround[2] = false;
         }
 
     }

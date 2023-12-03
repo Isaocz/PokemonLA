@@ -59,6 +59,18 @@ public class TestSkill : Skill
     public bool isAtkDown;
     public float AtkDownTime;
 
+    [Header("是否被防御下降")]
+    public bool isDefDown;
+    public float DefDownTime;
+
+    [Header("是否被特攻下降")]
+    public bool isSpADown;
+    public float SpADownTime;
+
+    [Header("是否被特防下降")]
+    public bool isSpDDown;
+    public float SpDDownTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -107,8 +119,8 @@ public class TestSkill : Skill
             if (ProjectileMode)
             {
                 Empty target = other.GetComponent<Empty>();
-                isCanNotMove = true;
-                isTestHitDone = true;
+                //isCanNotMove = true;
+                //isTestHitDone = true;
                 StateDone(target);
             }
         }
@@ -122,17 +134,20 @@ public class TestSkill : Skill
 
     void StateDone( Empty target )
     {
-        if (isFroze) { target.Frozen(FrozeTime, 10, 1); }
-        if (isBurn) { target.EmptyBurnDone(1, BurnTime, 1); }
-        if (isParalysis) { target.EmptyParalysisDone(10, ParalysisTime, 1); }
-        if (isToxic) { target.EmptyToxicDone(10, ToxicTime, 1); }
-        if (isSleep) { target.EmptySleepDone(10, SleepTime, 1); }
-        if (isFear) { target.Fear(FearTime, 10); }
-        if (isBlind) { target.Blind(BlindTime, 10); }
-        if (isConfusion) { target.EmptyConfusion(ConfusionTime, 10); }
-        if (isInfatuation) { target.EmptyInfatuation(InfatuationTime, 10); }
+        if (isFroze) { target.Frozen(FrozeTime, 0.5f, 1); }
+        if (isBurn) { target.EmptyBurnDone(0.5f, BurnTime, 1); }
+        if (isParalysis) { target.EmptyParalysisDone(0.5f, ParalysisTime, 1); }
+        if (isToxic) { target.EmptyToxicDone(0.5f, ToxicTime, 1); }
+        if (isSleep) { target.EmptySleepDone(0.5f, SleepTime, 1); }
+        if (isFear) { target.Fear(FearTime, 0.5f); }
+        if (isBlind) { target.Blind(BlindTime, 0.5f); }
+        if (isConfusion) {  target.EmptyConfusion(ConfusionTime, 0.5f);}
+        if (isInfatuation) { target.EmptyInfatuation(InfatuationTime, 0.5f ); }
         if (isCold) { target.Cold(ColdTime); }
-        if (isCurse) { target.EmptyCurse(CurseTime, 10); }
-        if (isAtkDown) { target.AtkChange(-1, 20); }
+        if (isCurse) { target.EmptyCurse(CurseTime, 0.5f); }
+        if (isAtkDown) { target.AtkChange(-1, AtkDownTime); }
+        if (isDefDown) { target.DefChange(-1, DefDownTime); }
+        if (isSpADown) { target.SpAChange(-1, SpADownTime); }
+        if (isSpDDown) { target.SpDChange(-1, SpDDownTime); }
     }
 }
