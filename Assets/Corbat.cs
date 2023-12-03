@@ -389,7 +389,6 @@ public class Corbat : Empty
     {
 
         ResetPlayer();
-        if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }
         if (!isDie && !isBorn)
         {
             EmptyBeKnock();

@@ -267,13 +267,25 @@ public class Pokemon : MonoBehaviour
     public bool isFrozenDef;
     bool isFrozenDone = false;
     bool isFrozenStart = false;
+    public float GetEmptyFrozenPointFloat
+    {
+        get { return EmptyFrozenPointFloat; }
+        set { EmptyFrozenPointFloat = value; }
+    }
     float EmptyFrozenPointFloat;
     float SpeedBefoerChange;
+    public float FrozenTimeFloat
+    {
+        get { return frozenTimeFloat; }
+        set { frozenTimeFloat = value; }
+    }
+    float frozenTimeFloat = 0.0f;
+
 
     //调用此函数时，如果还未被冰冻，冰冻，状态变为被冰冻
     public void Frozen(float FrozenTime, float FrozenPoint, float FrozenPer)
     {
-
+        FrozenTimeFloat = FrozenTime;
         if (GetComponent<Empty>() != null && isColdDown != 0) { FrozenPer += 0.25f * isColdDown; }
         if (!isFrozenDef && Random.Range(0.0f, 1.0f) <= FrozenPer) {
             if (!isInMistyTerrain && !isFrozenDone)
@@ -304,12 +316,14 @@ public class Pokemon : MonoBehaviour
                     speed = 0;
                     isEmptyFrozenDone = true;
                     animator.speed = 0;
+                    Debug.Log(animator.speed);
                     foreach (SpriteRenderer s in skinRenderers)
                     {
                         Animator A = s.gameObject.GetComponent<Animator>();
                         if (A != null)
                         {
                             A.speed = 0;
+                            
                         }
                     }
                     Invoke("FrozenRemove", FrozenTime * FrozenResistance);
@@ -343,6 +357,7 @@ public class Pokemon : MonoBehaviour
                     A.speed = 1;
                 }
             }
+            FrozenTimeFloat = 0;
         }
     }
 
@@ -352,12 +367,25 @@ public class Pokemon : MonoBehaviour
 
     public bool isFearDone = false;
     public bool isFearStart = false;
+    public bool isFearDef = false;
+    public float GetEmptyFearPointFloat
+    {
+        get { return EmptyFearPointFloat; }
+        set { EmptyFearPointFloat = value; }
+    }
     float EmptyFearPointFloat;
+    public float FearTimeFloat
+    {
+        get { return fearTimeFloat; }
+        set { fearTimeFloat = value; }
+    }
+    float fearTimeFloat = 0.0f;
 
     //调用此函数时，如果还未害怕，状态变为害怕
     public void Fear(float FearTime, float FearPoint)
     {
-        if (!isFearDone)
+        FearTimeFloat = FearTime;
+        if (!isFearDone && !isFearDef)
         {
             EmptyFearPointFloat += FearPoint * OtherStateResistance;
             if (!isFearStart && EmptyFearPointFloat < 1)
@@ -382,6 +410,7 @@ public class Pokemon : MonoBehaviour
                 playerUIState.StateSlowUP(7, EmptyFearPointFloat);
                 MarterialChangeToFear();
                 Invoke("FearRemove", FearTime);
+
             }
         }
 
@@ -397,6 +426,7 @@ public class Pokemon : MonoBehaviour
             isFearDone = false;
             playerUIState.StateDestory(7);
             MarterialChangeToNurmal();
+            FearTimeFloat = 0;
         }
     }
 
@@ -407,12 +437,20 @@ public class Pokemon : MonoBehaviour
 
     public bool isBlindDone = false;
     public bool isBlindStart = false;
-    float EmptyBlindPoint;
+    public bool isBlindDef = false;
+    public float EmptyBlindPoint;
+    public float BlindTimeFloat
+    {
+        get { return blindTimeFloat; }
+        set { blindTimeFloat = value; }
+    }
+    float blindTimeFloat = 0.0f;
 
     //调用此函数时，如果还未害怕，状态变为害怕
     public void Blind(float BlindTimer, float BlinderPoint)
     {
-        if (!isBlindDone)
+        BlindTimeFloat = BlindTimer;
+        if (!isBlindDone && !isBlindDef)
         {
             EmptyBlindPoint += BlinderPoint * OtherStateResistance;
             Debug.Log(EmptyBlindPoint);
@@ -437,7 +475,7 @@ public class Pokemon : MonoBehaviour
                 isBlindDone = true;
                 GetComponent<Empty>().isSilence = true;
                 playerUIState.StateSlowUP(1, EmptyBlindPoint);
-                if (BlindTimer != 0) { Invoke("BlindRemove", BlindTimer); }
+                if (BlindTimer != 0) { Invoke("BlindRemove", BlindTimer);  }
             }
         }
 
@@ -445,7 +483,7 @@ public class Pokemon : MonoBehaviour
     //只可被上一个函数延迟调用，代表速度害怕的函数
     public void BlindRemove()
     {
-        if (isBlindDone)
+        if (isBlindStart)
         {
             EmptyBlindPoint = 0;
             playerUIState.StateSlowUP(1, 0);
@@ -453,6 +491,7 @@ public class Pokemon : MonoBehaviour
             isBlindDone = false;
             GetComponent<Empty>().isSilence = false;
             playerUIState.StateDestory(1);
+            BlindTimeFloat = 0;
         }
     }
 
@@ -460,9 +499,16 @@ public class Pokemon : MonoBehaviour
 
 
     //===========================================================================敌人中毒的函数=====================================================================================
+    public float ToxicTimeFloat
+    {
+        get { return toxicTimeFloat; }
+        set { toxicTimeFloat = value; }
+    }
+    float toxicTimeFloat = 0.0f;
     //调用此函数时，如果还未开始中毒，开始中毒
     public void EmptyToxicDone(float ToxicPoint, float ToxicTime, float ToxicPer)
     {
+        ToxicTimeFloat = ToxicTime;
         if (!isToxicDef && Random.Range(0.0f, 1.0f) <= ToxicPer)
         {
             Empty EmptyObj = GetComponent<Empty>();
@@ -498,9 +544,9 @@ public class Pokemon : MonoBehaviour
         }
     }
 
-    void EmptyToxicRemove()
+    public void EmptyToxicRemove()
     {
-        if (isToxicDone)
+        if (isToxicStart)
         {
             ToxicPointFloat = 0;
             playerUIState.StateSlowUP(3, 0);
@@ -509,6 +555,7 @@ public class Pokemon : MonoBehaviour
             playerUIState.StateDestory(3);
             MarterialChangeToNurmal();
             GetComponent<Empty>().SpAChange(2, 0.0f);
+            ToxicTimeFloat = 0;
         }
     }
 
@@ -518,9 +565,16 @@ public class Pokemon : MonoBehaviour
 
 
     //===========================================================================敌人烧伤的函数=====================================================================================
+    public float BurnTimeFloat
+    {
+        get { return burnTimeFloat; }
+        set { burnTimeFloat = value; }
+    }
+    float burnTimeFloat = 0.0f;
     //调用此函数时，如果还未开始烧伤，开始烧伤
     public void EmptyBurnDone(float BurnPoint, float BurnTime, float BurnPer)
     {
+        BurnTimeFloat = BurnTime;
         if (!isBurnDef && Random.Range(0.0f, 1.0f) <= BurnPer)
         {
             Empty EmptyObj = GetComponent<Empty>();
@@ -556,7 +610,7 @@ public class Pokemon : MonoBehaviour
     }
     public void EmptyBurnRemove()
     {
-        if (isBurnDone)
+        if (isBurnStart)
         {
             BurnPointFloat = 0;
             playerUIState.StateSlowUP(5, 0);
@@ -565,15 +619,23 @@ public class Pokemon : MonoBehaviour
             playerUIState.StateDestory(5);
             MarterialChangeToNurmal();
             GetComponent<Empty>().AtkChange(2, 0.0f);
+            BurnTimeFloat = 0;
         }
     }
 
     //===========================================================================敌人烧伤的函数=====================================================================================
 
     //===========================================================================敌人睡眠的函数=====================================================================================
+    public float SleepTimeFloat
+    {
+        get { return sleepTimeFloat; }
+        set { sleepTimeFloat = value; }
+    }
+    float sleepTimeFloat = 0.0f;
     //调用此函数时，如果还未开始睡眠，开始睡眠
     public void EmptySleepDone(float SleepPoint, float SleepTime, float SleepPer)
     {
+        SleepTimeFloat = SleepTime;
         if (!isSleepDef && Random.Range(0.0f, 1.0f) <= SleepPer)
         {
             Empty EmptyObj = GetComponent<Empty>();
@@ -609,7 +671,7 @@ public class Pokemon : MonoBehaviour
     public void EmptySleepRemove()
     {
 
-        if (isSleepDone)
+        if (isSleepStart)
         {
 
             SleepPointFloat = 0;
@@ -618,6 +680,7 @@ public class Pokemon : MonoBehaviour
             isSleepDone = false;
             MarterialChangeToNurmal();
             playerUIState.StateDestory(6);
+            SleepTimeFloat = 0;
         }
     }
 
@@ -626,9 +689,16 @@ public class Pokemon : MonoBehaviour
 
 
     //===========================================================================敌人麻痹的函数=====================================================================================
+    public float ParalysisTimeFloat
+    {
+        get { return paralysisTimeFloat; }
+        set { paralysisTimeFloat = value; }
+    }
+    float paralysisTimeFloat = 0.0f;
     //调用此函数时，如果还未开始麻痹，开始麻痹
     public void EmptyParalysisDone(float ParalysisPoint, float ParalysisTime, float ParalysisPer)
     {
+        ParalysisTimeFloat = ParalysisTime;
         if (!isParalysisDef && Random.Range(0.0f, 1.0f) <= ParalysisPer + ((isInSuperElectricTerrain) ? 0.2f : 0))
         {
             Empty EmptyObj = GetComponent<Empty>();
@@ -636,7 +706,7 @@ public class Pokemon : MonoBehaviour
             {
                 if (!isParalysisDone)
                 {
-                    ParalysisPointFloat += (ParalysisPoint + ((isInSuperElectricTerrain) ? 0.3f : 1)) * ParalysisResistance;
+                    ParalysisPointFloat += (ParalysisPoint + ((isInSuperElectricTerrain) ? 0.3f : 0)) * ParalysisResistance;
                     if (!isParalysisStart && ParalysisPointFloat < 1)
                     {
                         playerUIState.StatePlus(4);
@@ -667,10 +737,11 @@ public class Pokemon : MonoBehaviour
     }
     public void EmptyParalysisRemove()
     {
+        paralysisTimeFloat = 0;
 
-        if (isParalysisDone)
+        if (isParalysisStart)
         {
-
+            Debug.Log("xxx");
             ParalysisPointFloat = 0;
             playerUIState.StateSlowUP(4, 0);
             isParalysisStart = false;
@@ -716,12 +787,20 @@ public class Pokemon : MonoBehaviour
 
     public bool isEmptyConfusionDone = false;
     public bool isEmptyConfusionStart = false;
-    float EmptyConfusionPoint;
+    public float EmptyConfusionPoint;
+    public float ConfusionTimeFloat
+    {
+        get { return confusionTimeFloat; }
+        set { confusionTimeFloat = value; }
+    }
+    float confusionTimeFloat = 0.0f;
 
     //调用此函数时，如果还未混乱，状态变为混论
     public void EmptyConfusion(float ConfusionTimer, float ConfusionPoint)
     {
-        if (!isInMistyTerrain && !isEmptyConfusionDone)
+        
+        ConfusionTimeFloat = ConfusionTimer;
+        if (!isInMistyTerrain && !isEmptyConfusionDone && !isConfusionDef)
         {
             EmptyConfusionPoint += ConfusionPoint * OtherStateResistance;
             //Debug.Log(EmptyConfusionPoint);
@@ -753,13 +832,14 @@ public class Pokemon : MonoBehaviour
     //只可被上一个函数延迟调用，代表移除混论的函数
     public void EmptyConfusionRemove()
     {
-        if (isEmptyConfusionDone)
+        if (isEmptyConfusionStart)
         {
             EmptyConfusionPoint = 0;
             playerUIState.StateSlowUP(9, 0);
             isEmptyConfusionStart = false;
             isEmptyConfusionDone = false;
             playerUIState.StateDestory(9);
+            ConfusionTimeFloat = 0;
         }
     }
 
@@ -783,7 +863,14 @@ public class Pokemon : MonoBehaviour
 
     public bool isEmptyInfatuationDone = false;
     public bool isEmptyInfatuationStart = false;
-    float EmptyInfatuationPoint;
+    public bool EmptyInfatuationDef = false;
+    public float EmptyInfatuationPoint;
+    public float InfatuationTimeFloat
+    {
+        get { return infatuationTimeFloat; }
+        set { infatuationTimeFloat = value; }
+    }
+    float infatuationTimeFloat = 0.0f;
 
     /// <summary>
     /// 调用此函数时，如果还未着迷，状态变为着迷
@@ -792,7 +879,8 @@ public class Pokemon : MonoBehaviour
     /// <param name="InfatuationPoint">着迷的点数</param>
     public void EmptyInfatuation(float InfatuationTimer, float InfatuationPoint)
     {
-        if (!isEmptyInfatuationDone)
+        InfatuationTimeFloat = InfatuationTimer;
+        if (!isEmptyInfatuationDone && !EmptyInfatuationDef)
         {
             EmptyInfatuationPoint += InfatuationPoint * OtherStateResistance;
             if (!isEmptyInfatuationStart && EmptyInfatuationPoint < 1)
@@ -829,8 +917,9 @@ public class Pokemon : MonoBehaviour
     //只可被上一个函数延迟调用，代表移除着迷的函数
     public void EmptyInfatuationRemove()
     {
-        if (isEmptyInfatuationDone)
+        if (isEmptyInfatuationStart)
         {
+            
             EmptyInfatuationPoint = 0;
             playerUIState.StateSlowUP(10, 0);
             isEmptyInfatuationStart = false;
@@ -842,6 +931,7 @@ public class Pokemon : MonoBehaviour
                 Boss.speed *= 2f;
             }
             playerUIState.StateDestory(10);
+            InfatuationTimeFloat = 0;
         }
     }
 
@@ -898,15 +988,16 @@ public class Pokemon : MonoBehaviour
         set{ atkChangeLevel = value; }
     }
     int atkChangeLevel = 0;
+    public bool isAtkChangeDef;
 
     /// <summary>
     /// 改变敌人攻击力的方法，ChangeLevel代表改变的等级，ChangeTime代表改变的时间，如果ChangeTime == 0，那么攻击力改变状态不会随着时间消失，需要手动改变
     /// </summary>
     /// <param name="ChangeLevel"></param>
     /// <param name="ChangeTime"></param>
-    public void AtkChange(int ChangeLevel ,  float ChangeTime)
+    public virtual void AtkChange(int ChangeLevel ,  float ChangeTime)
     {
-        if (GetComponent<Empty>() != null)
+        if (!isAtkChangeDef && GetComponent<Empty>() != null)
         {
             AtkUpLevel += ChangeLevel;
             playerUIState.AbllityChange(0,AtkUpLevel);
@@ -938,12 +1029,13 @@ public class Pokemon : MonoBehaviour
         set { defChangeLevel = value; }
     }
     int defChangeLevel = 0;
+    public bool isDefChangeDef;
     /// <summary>
     /// 改变敌人防御力的方法，ChangeLevel代表改变的等级，ChangeTime代表改变的时间，如果ChangeTime == 0，那么防御力改变状态不会随着时间消失，需要手动改变
     /// </summary>
     /// <param name="ChangeLevel"></param>
     /// <param name="ChangeTime"></param>
-    public void DefChange(int ChangeLevel, float ChangeTime)
+    public virtual void DefChange(int ChangeLevel, float ChangeTime)
     {
         if (GetComponent<Empty>() != null)
         {
@@ -979,12 +1071,13 @@ public class Pokemon : MonoBehaviour
         set { spAChangeLevel = value; }
     }
     int spAChangeLevel = 0;
+    public bool isSpAChangeDef;
     /// <summary>
     /// 改变敌人特攻力的方法，ChangeLevel代表改变的等级，ChangeTime代表改变的时间，如果ChangeTime == 0，那么特攻力改变状态不会随着时间消失，需要手动改变
     /// </summary>
     /// <param name="ChangeLevel"></param>
     /// <param name="ChangeTime"></param>
-    public void SpAChange(int ChangeLevel, float ChangeTime)
+    public virtual void SpAChange(int ChangeLevel, float ChangeTime)
     {
         if (GetComponent<Empty>() != null)
         {
@@ -1019,12 +1112,13 @@ public class Pokemon : MonoBehaviour
         set { spDChangeLevel = value; }
     }
     int spDChangeLevel = 0;
+    public bool isSpDChangeDef;
     /// <summary>
     /// 改变敌人特防力的方法，ChangeLevel代表改变的等级，ChangeTime代表改变的时间，如果ChangeTime == 0，那么特防力改变状态不会随着时间消失，需要手动改变
     /// </summary>
     /// <param name="ChangeLevel"></param>
     /// <param name="ChangeTime"></param>
-    public void SpDChange(int ChangeLevel, float ChangeTime)
+    public virtual void SpDChange(int ChangeLevel, float ChangeTime)
     {
         if (GetComponent<Empty>() != null)
         {
@@ -1054,12 +1148,13 @@ public class Pokemon : MonoBehaviour
     /// 代表是否寒冷
     /// </summary>
     public int isColdDown;
+    public bool isColdDef;
 
     /// <summary>
     /// 调用此函数时，如果未被寒冷，状态变为寒冷
     /// </summary>
     /// <param name="Time"> 下降的时间，如果为零时间为无限，需要手动Remove </param>
-    public void Cold(float Time)
+    public virtual void Cold(float Time)
     {
         if (GetComponent<Empty>() != null)
         {
@@ -1094,7 +1189,14 @@ public class Pokemon : MonoBehaviour
 
     public bool isEmptyCurseDone = false;
     public bool isEmptyCurseStart = false;
-    float EmptyCursePoint;
+    public bool EmptyCurseDef = false;
+    public float EmptyCursePoint;
+    public float CurseTimeFloat
+    {
+        get { return curseTimeFloat; }
+        set { curseTimeFloat = value; }
+    }
+    float curseTimeFloat = 0.0f;
 
     /// <summary>
     /// 调用此函数时，如果还未诅咒，状态变为诅咒
@@ -1103,7 +1205,8 @@ public class Pokemon : MonoBehaviour
     /// <param name="InfatuationPoint">诅咒的点数</param>
     public void EmptyCurse(float CurseTimer, float CursePoint)
     {
-        if (!isEmptyCurseDone)
+        CurseTimeFloat = CurseTimer;
+        if (!isEmptyCurseDone && !EmptyCurseDef)
         {
             EmptyCursePoint += CursePoint * OtherStateResistance;
             if (!isEmptyCurseStart && EmptyCursePoint < 1)
@@ -1134,13 +1237,14 @@ public class Pokemon : MonoBehaviour
     //只可被上一个函数延迟调用，代表移除诅咒的函数
     public void EmptyCurseRemove()
     {
-        if (isEmptyCurseDone)
+        if (isEmptyCurseStart)
         {
             EmptyCursePoint = 0;
             playerUIState.StateSlowUP(12, 0);
             isEmptyCurseStart = false;
             isEmptyCurseDone = false;
             playerUIState.StateDestory(12);
+            CurseTimeFloat = 0;
         }
     }
 
@@ -1901,6 +2005,145 @@ public class Pokemon : MonoBehaviour
                 SubstotuteAttacked.SubStituteChangeHp(
                      ((AtkPower == 0) ? 0 : Mathf.Clamp( (-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250) , -10000 , -1 ) ),
                      ((SpAPower == 0) ? 0 : Mathf.Clamp( (-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250) , -10000 , -1 ) ),
+                    (int)SkillType);
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 特殊攻击的种类:扑击
+    /// </summary>
+    public enum SpecialAttackTypes
+    {
+        BodyPress,
+    }
+
+
+    /// <summary>
+    /// 当造成某些特殊伤害时（如以防御力计算伤害的扑击等），调用此重载
+    /// </summary>
+    /// <param name="Attacker">攻击的制造者</param>
+    /// <param name="Attacked">被攻击者</param>
+    /// <param name="AtkPower">此次伤害的物理威力</param>
+    /// <param name="SpAPower">此次伤害的特攻威力</param>
+    /// <param name="HpUpValue">此次改变不是伤害</param>
+    /// <param name="SkillType">此次伤害的属性</param>
+    /// <param name="AttackTypes">特殊攻击的种类</param>
+    public static void PokemonHpChange(GameObject Attacker, GameObject Attacked, float AtkPower, float SpAPower, int HpUpValue, Type.TypeEnum SkillType , Pokemon.SpecialAttackTypes AttackTypes)
+    {
+        //决定攻击者
+        int AttackerATK = 1;
+        int AttackerSpA = 1;
+        int AttackerLevel = 1;
+        float EmptyTypeAlpha = 1;
+
+        //和场地有关的伤害加成
+        float TerrainAlpha = 1;
+        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInGrassyTerrain && SkillType == Type.TypeEnum.Grass) { TerrainAlpha *= 1.3f; }
+        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInElectricTerrain && SkillType == Type.TypeEnum.Electric) { TerrainAlpha *= 1.3f; }
+        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInPsychicTerrain && SkillType == Type.TypeEnum.Psychic) { TerrainAlpha *= 1.3f; }
+        if (Attacked != null && Attacked.GetComponent<Pokemon>() != null && Attacked.GetComponent<Pokemon>().isInMistyTerrain && SkillType == Type.TypeEnum.Dragon) { TerrainAlpha *= 0.5f; }
+        if (Attacked != null && Attacked.GetComponent<Substitute>() != null && Attacked.GetComponent<Substitute>().isInMistyTerrain && SkillType == Type.TypeEnum.Dragon) { TerrainAlpha *= 0.5f; }
+
+
+        if (Attacker != null)
+        {
+
+            Empty EmptyAttacker = Attacker.GetComponent<Empty>();
+            PlayerControler PlayerAttacker = Attacker.GetComponent<PlayerControler>();
+            FollowBaby FollowBabyAttacker = Attacker.GetComponent<FollowBaby>();
+            if (EmptyAttacker != null)
+            {
+                switch (AttackTypes) {
+                    case Pokemon.SpecialAttackTypes.BodyPress:
+                        AttackerATK = (int)EmptyAttacker.DefAbilityPoint; AttackerSpA = (int)EmptyAttacker.DefAbilityPoint;
+                        break;
+                }
+                AttackerLevel = EmptyAttacker.Emptylevel;
+                EmptyTypeAlpha = ((SkillType == EmptyAttacker.EmptyType01) || (SkillType == EmptyAttacker.EmptyType02)) ? 1.5f : 1;
+            }
+            if (PlayerAttacker != null)
+            {
+                switch (AttackTypes)
+                {
+                    case Pokemon.SpecialAttackTypes.BodyPress:
+                        AttackerATK = PlayerAttacker.DefAbilityPoint; AttackerSpA = PlayerAttacker.DefAbilityPoint;
+                        break;
+                }
+                AttackerLevel = PlayerAttacker.Level;
+                EmptyTypeAlpha = ((int)SkillType == PlayerAttacker.PlayerType01 ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) * ((int)SkillType == PlayerAttacker.PlayerType02 ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) * (PlayerAttacker.PlayerTeraTypeJOR == 0 ? ((int)SkillType == PlayerAttacker.PlayerTeraType ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) : ((int)SkillType == PlayerAttacker.PlayerTeraTypeJOR ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1));
+            }
+            if (FollowBabyAttacker != null) {
+                switch (AttackTypes)
+                {
+                    case Pokemon.SpecialAttackTypes.BodyPress:
+                        AttackerATK = FollowBabyAttacker.BabyDef();
+                        AttackerSpA = FollowBabyAttacker.BabyDef();
+                        break;
+                }
+                AttackerLevel = FollowBabyAttacker.BabyLevel(); }
+        }
+
+
+        //决定被攻击者
+        if (Attacked.GetComponent<Empty>() != null)
+        {
+            Empty EmptyAttacked = Attacked.GetComponent<Empty>();
+            if (HpUpValue == 0)
+            {
+                float WeatherDefAlpha = ((Weather.GlobalWeather.isSandstorm ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Rock || EmptyAttacked.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1));
+                float WeatherSpDAlpha = ((Weather.GlobalWeather.isHail ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Ice || EmptyAttacked.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1));
+                /*float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+                    * ((Weather.GlobalWeather.isRain && SkillType == Type.TypeEnum.Fire) ? 0.5f : 1)
+                    * ((Weather.GlobalWeather.isSunny && SkillType == Type.TypeEnum.Water) ? 0.5f : 1)
+                    * ((Weather.GlobalWeather.isSunny && SkillType == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+                */
+
+                if (SkillType != Type.TypeEnum.IgnoreType)
+                {
+                    EmptyAttacked.EmptyHpChange(
+                    ((AtkPower == 0) ? 0 : (Mathf.Clamp((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha * TerrainAlpha * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2), 1, 10000))),
+                    ((SpAPower == 0) ? 0 : (Mathf.Clamp((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha * TerrainAlpha * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.SpdAbilityPoint * WeatherSpDAlpha + 2), 1, 10000))),
+                    (int)SkillType);
+
+                    //if (SpAPower == 0){ Debug.Log((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) + " + " + (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2)); }
+                    //else if (AtkPower == 0) {  Debug.Log((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) + " + " + (250 * EmptyAttacked.SpdAbilityPoint * WeatherDefAlpha + 2)); }
+
+                }
+                else
+                {
+                    EmptyAttacked.EmptyHpChange(AtkPower, SpAPower, 19);
+                }
+            }
+            else
+            {
+                EmptyAttacked.EmptyHpChange(-HpUpValue, 0, 19);
+            }
+        }
+        if (Attacked.GetComponent<PlayerControler>() != null)
+        {
+            PlayerControler PlayerAttacked = Attacked.GetComponent<PlayerControler>();
+            if (HpUpValue == 0)
+            {
+                PlayerAttacked.ChangeHp(
+                         ((AtkPower == 0) ? 0 : (Mathf.Clamp((-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1))),
+                         ((SpAPower == 0) ? 0 : (Mathf.Clamp((-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1))),
+                        (int)SkillType);
+            }
+            else
+            {
+                PlayerAttacked.ChangeHp(HpUpValue, 0, 19);
+            }
+        }
+        if (Attacked.GetComponent<Substitute>() != null)
+        {
+            Substitute SubstotuteAttacked = Attacked.GetComponent<Substitute>();
+            if (HpUpValue == 0)
+            {
+                SubstotuteAttacked.SubStituteChangeHp(
+                     ((AtkPower == 0) ? 0 : Mathf.Clamp((-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250), -10000, -1)),
+                     ((SpAPower == 0) ? 0 : Mathf.Clamp((-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250), -10000, -1)),
                     (int)SkillType);
             }
         }

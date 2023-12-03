@@ -67,6 +67,7 @@ public class Projectile : MonoBehaviour
     }
     protected void MoveNotForce()
     {
+        //Debug.Log ((LunchDirection.x * Speed * Time.deltaTime).ToString() +  (LunchDirection.y * Speed * Time.deltaTime).ToString() + name );
         transform.position = transform.position + new Vector3(LunchDirection.x * Speed * Time.deltaTime , LunchDirection.y * Speed * Time.deltaTime, 0);
     }
 }

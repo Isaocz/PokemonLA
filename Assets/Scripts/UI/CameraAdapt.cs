@@ -6,7 +6,6 @@ public class CameraAdapt : MonoBehaviour
 {
 
     public float halfHeightPre = 10.7415f;
-
     float aimRatio;
     float halfWidth;
 
@@ -18,6 +17,9 @@ public class CameraAdapt : MonoBehaviour
     public GameObject cameraMaskUp; 
     public GameObject cameraMaskDown;
     public GameObject vcam;
+
+
+
 
     public void HideCameraMasks()
     {
@@ -86,4 +88,8 @@ public class CameraAdapt : MonoBehaviour
             GetComponent<Camera>().orthographicSize = halfWidth / winRatio;
         }
     }
+
+
+
+
 }
