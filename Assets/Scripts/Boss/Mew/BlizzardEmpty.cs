@@ -35,7 +35,7 @@ public class BlizzardEmpty : Projectile
                 playerControler.KnockOutPoint = 2.5f;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
             }
-            playerControler.Frozen(2f, 0.4f, 1);
+            playerControler.Frozen(1f, 0.6f, 0.3f);
         }
     }
 }
