@@ -165,6 +165,7 @@ public class Mew : Empty
     public Type.TypeEnum SkillType;
     public Material src1;
     public Material src2;
+    public Material src3;
     public float intensity = 1f;
     void Start()
     {
@@ -674,7 +675,7 @@ public class Mew : Empty
                             Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
 
                             MagicalFireEmpty magicalFire = ObjectPoolManager.SpawnObject(MagicalFirePrefab, transform.position, rotation).GetComponent<MagicalFireEmpty>();
-                            magicalFire.ps(transform.position, rotationSpeed);
+                            magicalFire.ps(transform.position, rotationSpeed, currentPhase);
                             magicalFire.empty = this;
                             ObjectPoolManager.ReturnObjectToPool(magicalFire.gameObject, 7f);
 
@@ -798,13 +799,13 @@ public class Mew : Empty
                 StartCoroutine(ReleaseScaleShoot());
                 IEnumerator ReleaseScaleShoot()
                 {
-                    int Times = 3;
-                    if (currentPhase != 1)
+                    if (currentPhase != 3)
                     {
-                        Times = 5;
-                    }
-                    for (int i = 0; i < (currentPhase == 3 ? 2 : 1); i++)
-                    {
+                        int Times = 3;
+                        if (currentPhase == 2)
+                        {
+                            Times = 5;
+                        }
                         for (int j = 0; j < Times; j++)
                         {
                             Vector3 randomPoint = (Vector2)AtkTarget.transform.position + Random.insideUnitCircle.normalized * 3f;
@@ -826,6 +827,69 @@ public class Mew : Empty
                                 ObjectPoolManager.ReturnObjectToPool(trail3, 1f);
                                 scaleShot.GetComponent<ScaleShotEmpty>().empty = this;
                             }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < 4; i++) 
+                        {
+                            Vector3[] SpawnPoints;
+                            float offset = 7f;
+                            if (i % 2 == 1)
+                            {
+                                SpawnPoints = new Vector3[]
+                                {
+                                    mapCenter,
+                                    new Vector3(mapCenter.x + offset, mapCenter.y + offset),
+                                    new Vector3(mapCenter.x + offset, mapCenter.y - offset),
+                                    new Vector3(mapCenter.x - offset, mapCenter.y + offset),
+                                    new Vector3(mapCenter.x - offset, mapCenter.y - offset),
+                                    new Vector3(mapCenter.x, mapCenter.y + 2 * offset),
+                                    new Vector3(mapCenter.x, mapCenter.y - 2 * offset),
+                                    new Vector3(mapCenter.x + 2 * offset, mapCenter.y),
+                                    new Vector3(mapCenter.x + 2 * offset, mapCenter.y),
+                                };
+                            }
+                            else
+                            {
+                                SpawnPoints = new Vector3[]
+                                {
+                                    new Vector3(mapCenter.x, mapCenter.y + offset),
+                                    new Vector3(mapCenter.x, mapCenter.y - offset),
+                                    new Vector3(mapCenter.x + offset, mapCenter.y),
+                                    new Vector3(mapCenter.x - offset, mapCenter.y),
+                                    new Vector3(mapCenter.x + 2 * offset, mapCenter.y + offset),
+                                    new Vector3(mapCenter.x - 2 * offset, mapCenter.y + offset),
+                                    new Vector3(mapCenter.x + 2 * offset, mapCenter.y - offset),
+                                    new Vector3(mapCenter.x - 2 * offset, mapCenter.y - offset),
+                                    new Vector3(mapCenter.x + offset, mapCenter.y + 2 * offset),
+                                    new Vector3(mapCenter.x + offset, mapCenter.y - 2 * offset),
+                                    new Vector3(mapCenter.x - offset, mapCenter.y + 2 * offset),
+                                    new Vector3(mapCenter.x - offset, mapCenter.y - 2 * offset),
+                                };
+                            }
+                            for (int j = 0; j < SpawnPoints.Length; j++)
+                            {
+                                Vector3 scaleShotPosition = SpawnPoints[j];
+                                GameObject reticle = ObjectPoolManager.SpawnObject(reticlePrefab, SpawnPoints[j], Quaternion.identity);
+                                ObjectPoolManager.ReturnObjectToPool(reticle, 2f);
+                                Timer.Start(this, 1.5f, () =>
+                                {
+                                    for (int k = 0; k < scaleShotCount; k++)
+                                    {
+                                        float angleIncrement = 360f / scaleShotCount;
+                                        float angle = k * angleIncrement;
+                                        Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+
+                                        // 创建ScaleShot
+                                        GameObject scaleShot = ObjectPoolManager.SpawnObject(ScaleShotPrefab, scaleShotPosition, rotation);
+                                        GameObject trail3 = ObjectPoolManager.SpawnObject(TrailEffect3, scaleShotPosition, Quaternion.Euler(0, 0, angle));
+                                        ObjectPoolManager.ReturnObjectToPool(trail3, 1f);
+                                        scaleShot.GetComponent<ScaleShotEmpty>().empty = this;
+                                    }
+                                });
+                            }
+                            yield return new WaitForSeconds(1.75f);
                         }
                     }
                 }
@@ -887,18 +951,17 @@ public class Mew : Empty
                     }
                     else if(currentPhase == 3)
                     {
-                        shootCount = 40;
-                        shootInterval = 0.21f;
+                        shootCount = 80;
+                        shootInterval = 0.1f;
                     }
                     for (int i = 0; i < shootCount; i++)
                     {
-                        for (int j = 0; j < (currentPhase == 3 ? 3 : 1); j++)
-                        {
-                            // 实例化LeafBlade
-                            GameObject LeafBlade = ObjectPoolManager.SpawnObject(LeafBladePrefab, transform.position, Quaternion.identity);
-                            LeafBlade.GetComponent<LeafBladeEmpty>().Initialize(AtkTarget.transform, currentPhase, currentPhase == 3 ? j : 0);
-                            LeafBlade.GetComponent<LeafBladeEmpty>().empty = this;
-                        }
+
+                        // 实例化LeafBlade
+                        GameObject LeafBlade = ObjectPoolManager.SpawnObject(LeafBladePrefab, transform.position, Quaternion.identity);
+                        LeafBlade.GetComponent<LeafBladeEmpty>().Initialize(AtkTarget.transform, currentPhase, currentPhase == 3 ? Random.Range(0, 3) : 0);
+                        LeafBlade.GetComponent<LeafBladeEmpty>().empty = this;
+
                         // 等待发射间隔
                         yield return new WaitForSeconds(shootInterval);
                     }
@@ -957,7 +1020,6 @@ public class Mew : Empty
                         intervalTime = 0.3f;
                         Times = 13;
                     }
-                    //每次释放空气之刃后等待1.3f
                     for(int i = 0;i< Times;i++)
                     {
                         GameObject airSlash = Instantiate(AirSlashPrefab, transform.position, Quaternion.identity);
@@ -990,12 +1052,12 @@ public class Mew : Empty
                             makeitrain.MIRrotate(direction);
                             makeitrain.empty = this;
                         }
-                        angle += angleIncrement;
-                        if(currentPhase ==3)
+                        if (currentPhase == 3) 
                         {
                             float decreasedAngle = (i - 50) / 100f * Mathf.PI;
-                            angleIncrement = 21f * Mathf.Cos(decreasedAngle);
+                            angleIncrement = Random.Range(15f, 30f) * Mathf.Cos(decreasedAngle);
                         }
+                        angle += angleIncrement;
                         yield return new WaitForSeconds(0.07f);
                     }
                 }
@@ -1218,33 +1280,135 @@ public class Mew : Empty
         float factor = Mathf.Pow(2, intensity);
         if (!isFinal)
         {
+            Material[] srcs = new Material[]
+            {
+                src1,
+                src2,
+                src3
+            };
             switch (SkillType)
             {
-                case Type.TypeEnum.Normal: src1.SetColor("_Color", new Color(colors[0].r * factor, colors[0].g * factor, colors[0].b * factor, 1)); src2.SetColor("_Color", new Color(colors[0].r * factor, colors[0].g * factor, colors[0].b * factor, 1)); break;
-                case Type.TypeEnum.Fighting: src1.SetColor("_Color", new Color(colors[1].r * factor, colors[1].g * factor, colors[1].b * factor, 1)); src2.SetColor("_Color", new Color(colors[1].r * factor, colors[1].g * factor, colors[1].b * factor, 1)); break;
-                case Type.TypeEnum.Flying: src1.SetColor("_Color", new Color(colors[2].r * factor, colors[2].g * factor, colors[2].b * factor, 1)); src2.SetColor("_Color", new Color(colors[2].r * factor, colors[2].g * factor, colors[2].b * factor, 1)); break;
-                case Type.TypeEnum.Poison: src1.SetColor("_Color", new Color(colors[3].r * factor, colors[3].g * factor, colors[3].b * factor, 1)); src2.SetColor("_Color", new Color(colors[3].r * factor, colors[3].g * factor, colors[3].b * factor, 1)); break;
-                case Type.TypeEnum.Ground: src1.SetColor("_Color", new Color(colors[4].r * factor, colors[4].g * factor, colors[4].b * factor, 1)); src2.SetColor("_Color", new Color(colors[4].r * factor, colors[4].g * factor, colors[4].b * factor, 1)); break;
-                case Type.TypeEnum.Rock: src1.SetColor("_Color", new Color(colors[5].r * factor, colors[5].g * factor, colors[5].b * factor, 1)); src2.SetColor("_Color", new Color(colors[5].r * factor, colors[5].g * factor, colors[5].b * factor, 1)); break;
-                case Type.TypeEnum.Bug: src1.SetColor("_Color", new Color(colors[6].r * factor, colors[6].g * factor, colors[6].b * factor, 1)); src2.SetColor("_Color", new Color(colors[6].r * factor, colors[6].g * factor, colors[6].b * factor, 1)); break;
-                case Type.TypeEnum.Ghost: src1.SetColor("_Color", new Color(colors[7].r * factor, colors[7].g * factor, colors[7].b * factor, 1)); src2.SetColor("_Color", new Color(colors[7].r * factor, colors[7].g * factor, colors[7].b * factor, 1)); break;
-                case Type.TypeEnum.Steel: src1.SetColor("_Color", new Color(colors[8].r * factor, colors[8].g * factor, colors[8].b * factor, 1)); src2.SetColor("_Color", new Color(colors[8].r * factor, colors[8].g * factor, colors[8].b * factor, 1)); break;
-                case Type.TypeEnum.Fire: src1.SetColor("_Color", new Color(colors[9].r * factor, colors[9].g * factor, colors[9].b * factor, 1)); src2.SetColor("_Color", new Color(colors[9].r * factor, colors[9].g * factor, colors[9].b * factor, 1)); break;
-                case Type.TypeEnum.Water: src1.SetColor("_Color", new Color(colors[10].r * factor, colors[10].g * factor, colors[10].b * factor, 1)); src2.SetColor("_Color", new Color(colors[10].r * factor, colors[10].g * factor, colors[10].b * factor, 1)); break;
-                case Type.TypeEnum.Grass: src1.SetColor("_Color", new Color(colors[11].r * factor, colors[11].g * factor, colors[11].b * factor, 1)); src2.SetColor("_Color", new Color(colors[11].r * factor, colors[11].g * factor, colors[11].b * factor, 1)); break;
-                case Type.TypeEnum.Electric: src1.SetColor("_Color", new Color(colors[12].r * factor, colors[12].g * factor, colors[12].b * factor, 1)); src2.SetColor("_Color", new Color(colors[12].r * factor, colors[12].g * factor, colors[12].b * factor, 1)); break;
-                case Type.TypeEnum.Psychic: src1.SetColor("_Color", new Color(colors[13].r * factor, colors[13].g * factor, colors[13].b * factor, 1)); src2.SetColor("_Color", new Color(colors[13].r * factor, colors[13].g * factor, colors[13].b * factor, 1)); break;
-                case Type.TypeEnum.Ice: src1.SetColor("_Color", new Color(colors[14].r * factor, colors[14].g * factor, colors[14].b * factor, 1)); src2.SetColor("_Color", new Color(colors[14].r * factor, colors[14].g * factor, colors[14].b * factor, 1)); break;
-                case Type.TypeEnum.Dragon: src1.SetColor("_Color", new Color(colors[15].r * factor, colors[15].g * factor, colors[15].b * factor, 1)); src2.SetColor("_Color", new Color(colors[15].r * factor, colors[15].g * factor, colors[15].b * factor, 1)); break;
-                case Type.TypeEnum.Dark: src1.SetColor("_Color", new Color(colors[16].r * factor, colors[16].g * factor, colors[16].b * factor, 1)); src2.SetColor("_Color", new Color(colors[16].r * factor, colors[16].g * factor, colors[16].b * factor, 1)); break;
-                case Type.TypeEnum.Fairy: src1.SetColor("_Color", new Color(colors[17].r * factor, colors[17].g * factor, colors[17].b * factor, 1)); src2.SetColor("_Color", new Color(colors[17].r * factor, colors[17].g * factor, colors[17].b * factor, 1)); break;
-                default: src1.SetColor("_Color", Color.white); src2.SetColor("_Color", Color.white); break;
+                case Type.TypeEnum.Normal:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[0].r * factor, colors[0].g * factor, colors[0].b * factor, 0));
+                    }
+                    break;
+                case Type.TypeEnum.Fighting:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[1].r * factor, colors[1].g * factor, colors[1].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Flying:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[2].r * factor, colors[2].g * factor, colors[2].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Poison:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[3].r * factor, colors[3].g * factor, colors[3].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Ground:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[4].r * factor, colors[4].g * factor, colors[4].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Rock:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[5].r * factor, colors[5].g * factor, colors[5].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Bug:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[6].r * factor, colors[6].g * factor, colors[6].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Ghost:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[7].r * factor, colors[7].g * factor, colors[7].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Steel:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[8].r * factor, colors[8].g * factor, colors[8].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Fire:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[9].r * factor, colors[9].g * factor, colors[9].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Water:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[10].r * factor, colors[10].g * factor, colors[10].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Grass:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[11].r * factor, colors[11].g * factor, colors[11].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Electric:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[12].r * factor, colors[12].g * factor, colors[12].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Psychic:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[13].r * factor, colors[13].g * factor, colors[13].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Ice:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[14].r * factor, colors[14].g * factor, colors[14].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Dragon:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[15].r * factor, colors[15].g * factor, colors[15].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Dark:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[16].r * factor, colors[16].g * factor, colors[16].b * factor, 1));
+                    }
+                    break;
+                case Type.TypeEnum.Fairy:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", new Color(colors[17].r * factor, colors[17].g * factor, colors[17].b * factor, 1));
+                    }
+                    break;
+                default:
+                    for (int i = 0; i < srcs.Length; i++)
+                    {
+                        srcs[i].SetColor("_Color", Color.white);
+                    }
+                    break;
             }
         }
         else
         {
             src1.SetColor("_Color", new Color(Mathf.PingPong(Time.time, 1), Mathf.PingPong(Time.time + 0.5f, 1), Mathf.PingPong(Time.time + 1f, 1)));
             src2.SetColor("_Color", src1.color);
+            src3.SetColor("_Color", src1.color);
         }
         
     }
@@ -1381,6 +1545,7 @@ public class Mew : Empty
     private IEnumerator Phase3Start()
     {//第三阶段不受替身影响！
         animator.SetTrigger("Teleport");
+        uIHealth.Fade(1f, false);
         yield return new WaitForSeconds(1f);
         transform.position = mapCenter;
         MewOrbRotate mewOrbRotate = Phase3OrbRotate.GetComponent<MewOrbRotate>();
@@ -1394,6 +1559,7 @@ public class Mew : Empty
         timebar3.sprite = TimeBar3;
         Image timebar4 = timeBar4.GetComponent<Image>();
         timebar4.sprite = TimeBar4;
+        uIHealth.Fade(1f, true);
         //清除子弹
         ClearProjectile();
     }
@@ -1403,6 +1569,7 @@ public class Mew : Empty
     {
         //首先先圆形释放会给玩家造成伤害的假心
         SkillType = Type.TypeEnum.Fighting;
+        TeleportEnd();
         UseSkill(20);
         for (int j = 0; j < 7; j++)
         {
@@ -1444,15 +1611,13 @@ public class Mew : Empty
         SkillType = Type.TypeEnum.Ice;
         TeleportEnd();
         yield return new WaitForSeconds(1f);
-        for (int i = 0; i < 240; i++)
+        for (int i = 0; i < 560; i++)
         {
-            float timer;
-            timer = i < 100 ? 0.04f : 0.12f;
             float angle = i * 11f;
             GameObject trail = ObjectPoolManager.SpawnObject(TrailEffect, transform.position, Quaternion.Euler(0, 0, angle));
             StartCoroutine(IceBeam(i));
             ObjectPoolManager.ReturnObjectToPool(trail, 2f);
-            yield return new WaitForSeconds(timer);
+            yield return new WaitForSeconds(0.04f);
         }
         yield return new WaitForSeconds(2f);
         //最终技能
@@ -1475,7 +1640,7 @@ public class Mew : Empty
         {
             for (int j = 0; j < 12; j++)
             {
-                float angle = j * 30f;
+                float angle = 10f * i + j * 30f;
                 Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
                 float speed = (j % 2 == 0) ? 15f : -15f;
                 ElectroBallEmpty electricBall = Instantiate(ElectricBallPrefab, transform.position, rotation).GetComponent<ElectroBallEmpty>();

@@ -6,6 +6,7 @@ public class ParAnimation : MonoBehaviour
 {
     public float radius = 2f;//半径
     public Color startColor;//起始颜色
+    public bool SlowDown;
 
     private float duration;//持续时间
     private float timer;//计时器
@@ -30,6 +31,14 @@ public class ParAnimation : MonoBehaviour
         {
             timer -= Time.deltaTime;
             timerrate = timer / duration;
+            if (SlowDown)
+            {
+                var velocityOverLifetime = particleSystem.velocityOverLifetime;
+                AnimationCurve curve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0)); // 定义一个简单的减速曲线
+                velocityOverLifetime.x = new ParticleSystem.MinMaxCurve(1f, curve);
+                velocityOverLifetime.y = new ParticleSystem.MinMaxCurve(1f, curve);
+                velocityOverLifetime.z = new ParticleSystem.MinMaxCurve(1f, curve);
+            }
         }
         else
         {
