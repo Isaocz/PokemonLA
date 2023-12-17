@@ -21,10 +21,11 @@ public class EmptyHpBar : MonoBehaviour
     bool isHpUp = false;
     bool isHpDown = false;
     Empty ParentEmpty;
-
-
-
-
+    Image[] images;
+    float fadetimer;
+    float fadeduration;
+    bool isFading;
+    bool fadeReverse;
 
 
     //获得血条的初始长度，既最大长度
@@ -33,6 +34,7 @@ public class EmptyHpBar : MonoBehaviour
     {
         originalSize = Mask.rectTransform.rect.width;
         ParentEmpty = transform.parent.parent.GetComponent<Empty>();
+        fadetimer = 0f;
     }
 
 
@@ -68,6 +70,28 @@ public class EmptyHpBar : MonoBehaviour
         {
             Mask.color = new Color((255 / 255f), (120 / 255f), (47 / 255f), (255 / 255f));
         }
+
+        if (isFading)
+        {
+            fadetimer += Time.deltaTime;
+            float t = fadetimer / fadeduration;
+            for (int i = 0; i < images.Length; i++)
+            {
+                if (fadeReverse)
+                {
+                    images[i].color = new Color(images[i].color.r, images[i].color.g, images[i].color.b, Mathf.Lerp(0f, 1f, t));
+                }
+                else
+                {
+                    images[i].color = new Color(images[i].color.r, images[i].color.g, images[i].color.b, Mathf.Lerp(1f, 0f, t));
+                }
+            }
+            if(fadetimer > fadeduration)
+            {
+                isFading = false;
+                fadetimer = 0f;
+            }
+        }
     }
 
     //两个函数分别为表示表示血条增加和血条减少的函数
@@ -86,5 +110,26 @@ public class EmptyHpBar : MonoBehaviour
         {
             isHpDown = false;
         }
+    }
+    /// <summary>
+    /// 血条渐入、渐出
+    /// </summary>
+    /// <param name="FadeDuration">淡入淡出持续时间</param>
+    /// <param name="Reverse">是则淡出，否则淡入</param>
+    public void Fade(float FadeDuration, bool Reverse)
+    {
+        images = new Image[]
+        {
+            Mask,
+            Mask.transform.parent.GetComponent<Image>(),
+            Mask.transform.parent.GetChild(0).GetComponent<Image>(),
+            Mask.transform.parent.GetChild(1).GetComponent<Image>(),
+            Mask.transform.parent.GetChild(2).GetComponent<Image>(),
+            Mask.transform.parent.GetChild(4).GetComponent<Image>(),
+            Mask.transform.GetChild(0).GetComponent<Image>()
+        };
+        isFading = true;
+        fadeduration = FadeDuration;
+        fadeReverse = Reverse;
     }
 }
