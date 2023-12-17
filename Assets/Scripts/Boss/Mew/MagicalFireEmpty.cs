@@ -7,6 +7,8 @@ public class MagicalFireEmpty : Projectile
     Vector3 mewposition;
     float speed= 7f;
     float rotationspeed;
+    float timer;
+    int stage;
 
     // Start is called before the first frame update
     void OnEnable()
@@ -20,6 +22,11 @@ public class MagicalFireEmpty : Projectile
         // 绕 Mew 旋转
         transform.RotateAround(mewposition, Vector3.forward, rotationspeed * Time.deltaTime);
 
+        if(stage == 3)
+        {
+            timer += Time.deltaTime;
+            speed = 9f * Mathf.Cos(timer / 7f * Mathf.PI);
+        }
         // 向外移动
         transform.Translate(Vector3.up * speed * Time.deltaTime);
     }
@@ -36,9 +43,10 @@ public class MagicalFireEmpty : Projectile
             }
         }
     }
-    public void ps(Vector3 mewPosition, float rotationSpeed)
+    public void ps(Vector3 mewPosition, float rotationSpeed, int currentStage)
     {
         mewposition = mewPosition;
         rotationspeed = rotationSpeed;
+        stage = currentStage;
     }
 }
