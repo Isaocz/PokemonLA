@@ -8,8 +8,8 @@ public class Onix : Empty
 
     public Vector2 Director;
     Vector3 TargetPosition;
-    float InvinicibleTimer;
-    float TimeInvinicible;
+    //float InvinicibleTimer;
+    //float TimeInvinicible;
     OnixBodyShadow OnixBodyTop;
     float CalibrationPositionTimer;
     Room ParentRoom;
@@ -149,7 +149,7 @@ public class Onix : Empty
                 MovePSList.Add(transform.GetChild(3).GetChild(0).GetChild(i).GetChild(0).GetChild(1).GetComponent<ParticleSystem>());
             }
         }
-        TimeInvinicible = 0.45f;
+        //TimeInvinicible = 0.45f;
         OnixBodyTop = SubEmptyBodyList[0].GetComponent<OnixBodyShadow>();
         for (int i = 0; i < SubEmptyBodyList.Count; i++)
         {
@@ -174,13 +174,13 @@ public class Onix : Empty
         ResetPlayer();
         if (!isDie && !isBorn)
         {
-            if (Invincible) {
+            /*if (Invincible) {
                 InvinicibleTimer += Time.deltaTime;
                 if (InvinicibleTimer >= TimeInvinicible) {
                     InvinicibleTimer = 0;
                     Invincible = false;
                 }
-            }
+            }*/
             if (isSpeedAChange)
             {
                 SpeedAChangeTimer += Time.deltaTime;
@@ -227,6 +227,7 @@ public class Onix : Empty
                 {
                     case State.NormalState:
                         CheckTurn();
+                        if (isCanHitAnimation) { isCanHitAnimation = false; }
                         OnixBodyTop.rigidbody2D.MovePosition(new Vector2(OnixBodyTop.rigidbody2D.position.x + Director.x * Time.deltaTime * speed * Mathf.Pow(1.3f, SpeedAlpha), OnixBodyTop.rigidbody2D.position.y + Director.y * Time.deltaTime * speed * Mathf.Pow(1.3f, SpeedAlpha)));
                         if (!isPSPlaying) { PlayAllPS(); }
                         if (SpeedAlpha <= -3 && !isSpeedAChange) { NowState = State.MoveIntoWallState; }
@@ -483,6 +484,7 @@ public class Onix : Empty
             if ( Mathf.Abs(b.transform.position.x - ParentRoom.transform.position.x) >= 12.5f || Mathf.Abs(b.transform.position.y - ParentRoom.transform.position.y) >= 7.0f) { x = false; }
         }
         if (x) { isAllBodyMoveOut = true; }
+        isCanHitAnimation = false;
     }
 
     /// <summary>
@@ -748,6 +750,7 @@ public class Onix : Empty
     bool isPSPlaying;
     public void EnableAllPS()
     {
+        Debug.Log("PS");
         foreach ( ParticleSystem p in MovePSList )
         {
             p.gameObject.SetActive(true);

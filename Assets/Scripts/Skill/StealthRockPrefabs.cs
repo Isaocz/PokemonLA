@@ -49,7 +49,7 @@ public class StealthRockPrefabs : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        Debug.Log("xxx");
+        //Debug.Log("xxx");
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
