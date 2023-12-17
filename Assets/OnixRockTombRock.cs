@@ -5,10 +5,13 @@ using UnityEngine;
 public class OnixRockTombRock : MonoBehaviour
 {
     public bool isBreak;
+    public bool isStealthRock;
+    public CrystalOnixStealthRock StealthRock;
 
     private void Start()
     {
-        Invoke("RockBreak", 30);
+        if (!isStealthRock) { Invoke("RockBreak", 30); }
+        else { Invoke("RockBreak", 4); }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -28,6 +31,7 @@ public class OnixRockTombRock : MonoBehaviour
             isBreak = true;
             GetComponent<Animator>().SetTrigger("Break");
             GetComponent<Collider2D>().enabled = false;
+            if (isStealthRock) { Instantiate(StealthRock , transform.position , Quaternion.identity);}
         }
     }
 

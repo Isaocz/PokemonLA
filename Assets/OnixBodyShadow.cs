@@ -155,6 +155,7 @@ public class OnixBodyShadow : SubEmptyBody
                     
                     if (isTopHead) {
                         ParentOnix.CameraShake(3.5f, 3.0f, true);
+                        ParentOnix.isCanHitAnimation = true; ;
                         ParentOnix.FallARockTomb();
                         ParentOnix.BornStoneEdge();
                         ParentOnix.ReserSubBosy();

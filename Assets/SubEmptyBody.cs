@@ -62,8 +62,12 @@ public class SubEmptyBody : Empty{
             StateMaterialChange();
             if (NowHP != EmptyHp)
             {
-                if (NowHP > EmptyHp) { Pokemon.PokemonHpChange(null, ParentEmpty.gameObject, NowHP - EmptyHp, 0, 0, Type.TypeEnum.IgnoreType); }
-                else { Pokemon.PokemonHpChange(null, ParentEmpty.gameObject, 0, 0, NowHP - EmptyHp, Type.TypeEnum.IgnoreType); }
+                if (!ParentEmpty.isSubBodyEmptyInvincible) {
+                    if (NowHP > EmptyHp) { Pokemon.PokemonHpChange(null, ParentEmpty.gameObject, NowHP - EmptyHp, 0, 0, Type.TypeEnum.IgnoreType); }
+                    else { Pokemon.PokemonHpChange(null, ParentEmpty.gameObject, 0, 0, NowHP - EmptyHp, Type.TypeEnum.IgnoreType); }
+                    ParentEmpty.isSubBodyEmptyInvincible = true;
+                    Timer.Start(this, 1.0f, () => { ParentEmpty.isSubBodyEmptyInvincible = false; });
+                }
                 NowHP = EmptyHp;
             }
 

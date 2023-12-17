@@ -51,6 +51,7 @@ public class Empty : Pokemon
     public float SpeedAbilityPoint { get { return SpeedAbility; } set { SpeedAbility = value; } }
     float SpeedAbility;
 
+    public bool isCanHitAnimation { get { return iscanHitAnimation; } set { iscanHitAnimation = value; } }bool iscanHitAnimation;
 
 
     /// <summary>
@@ -151,6 +152,17 @@ public class Empty : Pokemon
         set { subEmptyBodyList = value; }
     }
     List<SubEmptyBody> subEmptyBodyList = new List<SubEmptyBody> { };
+
+
+    /// <summary>
+    /// 仅对于有多体节的敌人使用，为了防止多体节被多次扣血，在短时间内让敌人无敌。
+    /// </summary>
+    public bool isSubBodyEmptyInvincible
+    {
+        get { return issubBodyEmptyInvincible; }
+        set { issubBodyEmptyInvincible = value; }
+    }
+    bool issubBodyEmptyInvincible;
 
 
 
@@ -299,7 +311,7 @@ public class Empty : Pokemon
             Debug.Log(Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000) + " + " + "Dmage:" + (int)(Dmage + SpDmage));
             if ((int)Dmage + (int)SpDmage > 0)
             {
-                animator.SetTrigger("Hit");
+                if (!isCanHitAnimation) { animator.SetTrigger("Hit"); }
                 //Debug.Log((float)EmptyHp / (float)maxHP + "=" + (float)EmptyHp + "/" + (float)maxHP);
                 uIHealth.Per = (float)EmptyHp / (float)maxHP;
                 uIHealth.ChangeHpDown();
@@ -875,7 +887,7 @@ public class Empty : Pokemon
         bool isOnixSpeedChange = false;
 
 
-        foreach (OnixBodyShadow b in SubEmptyBodyList)
+        foreach (SubEmptyBody b in SubEmptyBodyList)
         {
             if (b.isSubsititue) { isOnixSubsititue = true; SubsititueTarget = b.SubsititueTarget; }
             if (b.isInGrassyTerrain) { isOnixInGrassyTerrain = true; }

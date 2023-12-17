@@ -6,13 +6,14 @@ public class OnixRockTomb : MonoBehaviour
 {
     public OnixRockTombRock Stone;
     public Empty ParentOnix;
+    public bool isStealthRock;
 
 
 
 
     public void RockFallOver()
     {
-        Instantiate(Stone, transform.position, Quaternion.identity , transform.parent);
+        Instantiate(Stone, transform.position, Quaternion.identity , transform.parent).isStealthRock = isStealthRock;
         transform.GetChild(0).gameObject.SetActive(true);
         transform.GetChild(1).gameObject.SetActive(false);
         transform.GetChild(2).gameObject.SetActive(false);
