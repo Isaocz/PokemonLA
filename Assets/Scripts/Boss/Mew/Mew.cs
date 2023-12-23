@@ -44,6 +44,7 @@ public class Mew : Empty
     public GameObject SecredSwordPrefab;//技能20
     public GameObject Phase2Mask;
     public GameObject TeleportEndPrefab;
+    public GameObject EdgePar;//玩家越过边界的时候显示的粒子
     public GameObject Phase3OrbRotate;
     public GameObject ElectricBallPrefab;//技能21
     public GameObject ElectricBallp2;
@@ -259,6 +260,8 @@ public class Mew : Empty
                         Vector3 direction = (player.transform.position - transform.position).normalized;
                         Vector3 targetPosition = transform.position + direction * 19f;
                         player.transform.position = Vector3.MoveTowards(player.transform.position, targetPosition, 7f * Time.deltaTime);
+                        GameObject edgePar = Instantiate(EdgePar, player.transform.position, Quaternion.identity);
+                        Destroy(edgePar, 0.4f);
                     }
                 }
                 else
@@ -268,6 +271,8 @@ public class Mew : Empty
                         Vector3 direction = (player.transform.position - transform.position).normalized;
                         Vector3 targetPosition = transform.position + direction * 14f;
                         player.transform.position = Vector3.MoveTowards(player.transform.position, targetPosition, 7f * Time.deltaTime);
+                        GameObject edgePar = Instantiate(EdgePar, player.transform.position, Quaternion.identity);
+                        Destroy(edgePar, 0.4f);
                     }
                 }
                 if (HpTiming <= 0f)
@@ -285,7 +290,7 @@ public class Mew : Empty
                 AtkTarget = FindAtkTarget(40f);
                 UpdateEmptyChangeHP();
                 StateMaterialChange();
-                bgmScript.ChangeBGMToMew();
+                bgmScript.ChangeBGMToMew(currentPhase);
                 if (!turningPhase)
                 {
                     switch (currentPhase)
@@ -307,7 +312,6 @@ public class Mew : Empty
                                         uIHealth.Per = EmptyHp / maxHP;
                                         StartCoroutine(Phase2Start());
                                     }
-                                    currentPhase++;
                                 }
                             }
                             else if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
@@ -350,6 +354,8 @@ public class Mew : Empty
             }
         }
     }
+
+    #region 阶段ui
     void Phase1()
     {
         ResetSkillTimer();
@@ -436,7 +442,7 @@ public class Mew : Empty
 
         if (isPhase3)
         {
-            bgmScript.ChangeBGMINSIST();
+            bgmScript.ChangeBGMToMew(3);
             Invincible = true;
             isPhase3 = false;
             StartCoroutine(Phase3Start());
@@ -475,6 +481,11 @@ public class Mew : Empty
             skillTimer -= Time.deltaTime;
         }
     }
+
+    #endregion
+
+    #region 技能相关
+
     void UseSkill(int skillIndex)
     {
         Debug.Log("Boss used skill: " + skillIndex);
@@ -1274,7 +1285,18 @@ public class Mew : Empty
     {
         skillTimer = SkillTimer[skillindex][stage];
     }
+    void ResetSkillTimer()
+    {//为了让入场和转阶段没这么突然
+        if (!isReset)
+        {
+            skillTimer = 3f;
+            isReset = true;
+        }
+    }
 
+    #endregion
+
+    #region 更改颜色
     void ChangeColor()
     {
         float factor = Mathf.Pow(2, intensity);
@@ -1413,14 +1435,8 @@ public class Mew : Empty
         
     }
 
-    void ResetSkillTimer()
-    {//为了让入场和转阶段没这么突然
-        if (!isReset)
-        {
-            skillTimer = 3f;
-            isReset = true;
-        }
-    }
+    #endregion
+
     Vector3 RamdomTeleport()
     {
         bool collided = false;
@@ -1506,6 +1522,8 @@ public class Mew : Empty
         bool isInBounds = position.x >= minX && position.x <= maxX && position.y >= minY && position.y <= maxY;
         return isInBounds;
     }
+
+    #region 第一阶段
     private IEnumerator Phase1Skill(int randomSkillIndex)
     {
         animator.SetTrigger("Teleport");
@@ -1526,6 +1544,9 @@ public class Mew : Empty
         UseSkill(randomSkillIndex);
         SkillTimerUpdate(randomSkillIndex, 1);
     }
+    #endregion
+
+    #region 第二阶段
     private IEnumerator Phase2Skill(int randomSkillIndex)
     {
         if (randomSkillIndex == 2 || randomSkillIndex == 6 || randomSkillIndex == 14)
@@ -1542,12 +1563,97 @@ public class Mew : Empty
         SkillTimerUpdate(randomSkillIndex, 2);
     }
 
+    private IEnumerator Phase2Start()
+    {
+        //清除所有的子弹
+        uIHealth.ChangeHpUp();
+        ClearProjectile();
+
+        //制作一个黑色五角星
+        int numPoints = 5; // 五角星上的点数
+        float radius = 12f; // 五角星的顶点到中心的距离
+
+        Vector3[] starVertices = new Vector3[numPoints];
+
+        // 创建五角星的顶点坐标
+        for (int i = 0; i < numPoints; i++)
+        {
+            float angle = i * 2f * Mathf.PI / numPoints;
+            float x = radius * Mathf.Sin(angle) + player.transform.position.x;
+            float y = radius * Mathf.Cos(angle) + player.transform.position.y;
+            starVertices[i] = new Vector3(x, y, player.transform.position.z);
+        }
+        for (int i = 0; i < numPoints; i++)
+        {
+            Vector3 startPoint = starVertices[i];
+            Vector3 endPoint = starVertices[(i + 2) % numPoints];
+
+            float dist = Vector3.Distance(startPoint, endPoint);
+            float step = dist / 12f; // 生成点的距离间隔
+
+            Vector3 direction = (endPoint - startPoint).normalized;
+
+            for (int j = 0; j < 12; j++)
+            {
+                Vector3 secredFirePosition = startPoint + direction * (j * step);
+                GameObject willowispprefab = Instantiate(WillOWispPrefab, secredFirePosition, Quaternion.identity);
+                yield return null;
+            }
+        }
+        yield return new WaitForSeconds(1f);
+        GameObject phase2mask = Instantiate(Phase2Mask, transform.position, Quaternion.identity);
+        Destroy(phase2mask, 2.2f);
+        yield return new WaitForSeconds(1.1f);
+
+        //创建新的房间
+        GameObject newRoom = Instantiate(MewBossRoomPrefab, MewBossRoomPosition, Quaternion.identity);
+        mapCenter = MewBossRoomPosition + new Vector3(15f, 12f, 0f);
+        transform.position = MewBossRoomPosition + new Vector3(15f, 12f, 0f);
+        player.transform.position = MewBossRoomPosition;
+        transform.parent.parent.GetComponent<Room>().isClear = 0;
+        player.NowRoom = new Vector3Int(100, 100, 0);
+        player.InANewRoom = true;
+        player.NewRoomTimer = 0f;
+        currentPhase++;
+
+        Transform mewTransform = newRoom.transform.Find("Empty");
+        if (mewTransform != null)
+        {
+            //将梦幻移动到Empty子对象下
+            transform.SetParent(mewTransform);
+        }
+        //色相头，启动！
+        cameraAdapt.ActivateVcam();
+        cinemachineController = FindObjectOfType<CameraController>();
+        cinemachineController.MewCameraFollow();
+        cameraAdapt.HideCameraMasks();
+
+        //四个围绕着的球
+        for (int i = 0; i < 4; i++)
+        {
+            transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
+        }
+
+        yield return new WaitForSeconds(1.5f);
+        turningPhase = false;
+        Invincible = false;
+    }
+
+    #endregion
+
+    #region 第三阶段
     private IEnumerator Phase3Start()
     {//第三阶段不受替身影响！
         animator.SetTrigger("Teleport");
         uIHealth.Fade(1f, false);
         yield return new WaitForSeconds(1f);
         transform.position = mapCenter;
+        Transform uitext = player.transform.GetChild(2).GetChild(3);
+        if (uitext)
+        {
+            uitext.GetComponent<PlayerUIText>().SetText("禁止使用道具\n禁止打开菜单");
+        }
+        player.CanNotUseSpaceItem = true;//不允许玩家使用主动道具
         MewOrbRotate mewOrbRotate = Phase3OrbRotate.GetComponent<MewOrbRotate>();
         StartCoroutine(mewOrbRotate.ActivatePhase3Effect(1, 30, 20f));
         //修改ui
@@ -1707,81 +1813,6 @@ public class Mew : Empty
         return randomPos;
     }
 
-    private IEnumerator Phase2Start()
-    {
-        //清除所有的子弹
-        uIHealth.ChangeHpUp();
-        ClearProjectile();
-
-        //制作一个黑色五角星
-        int numPoints = 5; // 五角星上的点数
-        float radius = 12f; // 五角星的顶点到中心的距离
-
-        Vector3[] starVertices = new Vector3[numPoints];
-
-        // 创建五角星的顶点坐标
-        for (int i = 0; i < numPoints; i++)
-        {
-            float angle = i * 2f * Mathf.PI / numPoints;
-            float x = radius * Mathf.Sin(angle) + player.transform.position.x;
-            float y = radius * Mathf.Cos(angle) + player.transform.position.y;
-            starVertices[i] = new Vector3(x, y, player.transform.position.z);
-        }
-        for (int i = 0; i < numPoints; i++)
-        {
-            Vector3 startPoint = starVertices[i];
-            Vector3 endPoint = starVertices[(i + 2) % numPoints];
-
-            float dist = Vector3.Distance(startPoint, endPoint);
-            float step = dist / 12f; // 生成点的距离间隔
-
-            Vector3 direction = (endPoint - startPoint).normalized;
-
-            for (int j = 0; j < 12; j++)
-            {
-                Vector3 secredFirePosition = startPoint + direction * (j * step);
-                GameObject willowispprefab = Instantiate(WillOWispPrefab, secredFirePosition, Quaternion.identity);
-                yield return null;
-            }
-        }
-        yield return new WaitForSeconds(1f);
-        GameObject phase2mask = Instantiate(Phase2Mask, transform.position, Quaternion.identity);
-        Destroy(phase2mask, 2.2f);
-        yield return new WaitForSeconds(1.1f);
-
-        //创建新的房间
-        GameObject newRoom = Instantiate(MewBossRoomPrefab, MewBossRoomPosition, Quaternion.identity);
-        mapCenter = MewBossRoomPosition + new Vector3(15f, 12f, 0f);
-        transform.position = MewBossRoomPosition + new Vector3(15f, 12f, 0f);
-        player.transform.position = MewBossRoomPosition;
-        transform.parent.parent.GetComponent<Room>().isClear -= 1;
-        player.NowRoom = new Vector3Int(100, 100, 0);
-        player.InANewRoom = true;
-        player.NewRoomTimer = 0f;
-
-        Transform mewTransform = newRoom.transform.Find("Empty");
-        if (mewTransform != null)
-        {
-            //将梦幻移动到Empty子对象下
-            transform.SetParent(mewTransform);
-        }
-        //色相头，启动！
-        cameraAdapt.ActivateVcam();
-        cinemachineController = FindObjectOfType<CameraController>();
-        cinemachineController.MewCameraFollow();
-        cameraAdapt.HideCameraMasks();
-
-        //四个围绕着的球
-        for (int i = 0; i < 4; i++)
-        {
-            transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
-        }
-
-        yield return new WaitForSeconds(1.5f);
-        turningPhase = false;
-        Invincible = false;
-    }
-
     private IEnumerator Phase3End()
     {
         animator.SetTrigger("Die");
@@ -1808,10 +1839,13 @@ public class Mew : Empty
         ObjectPoolManager.DestoryObjectInPool(true);
 
         //梦幻嘎掉
+        player.CanNotUseSpaceItem = false;
         Invincible = false;
         EmptyHp = 0;
         EmptyDie();
     }
+
+    #endregion
 
     private void ChangeType(int randomIndex)
     {
