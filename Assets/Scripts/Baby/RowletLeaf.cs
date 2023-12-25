@@ -19,7 +19,7 @@ public class RowletLeaf : Projectile
     private void Update()
     {
         //this.transform.localScale += new Vector3(Time.deltaTime * 2, 0, 0);
-        DestoryProjectile(10);
+        DestoryByRange(10);
         if (isDestory)
         {
             CollisionDestory();

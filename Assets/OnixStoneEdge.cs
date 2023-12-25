@@ -25,7 +25,7 @@ public class OnixStoneEdge : Projectile
     {
 
         //this.transform.localScale += new Vector3(Time.deltaTime * 2, 0, 0);
-        DestoryProjectile(30);
+        DestoryByRange(30);
         if (isDestory)
         {
             if (transform.childCount > 1) { transform.GetChild(1).gameObject.SetActive(true); transform.GetChild(1).parent = null; }

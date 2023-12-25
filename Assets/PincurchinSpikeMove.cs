@@ -31,7 +31,7 @@ public class PincurchinSpikeMove : Projectile
     private void Update()
     {
         //this.transform.localScale += new Vector3(Time.deltaTime * 2, 0, 0);
-        DestoryProjectile(7.5f);
+        DestoryByRange(7.5f);
         if (spriteRenderer.color.a <= 0.5f)
         {
             PS.Stop();

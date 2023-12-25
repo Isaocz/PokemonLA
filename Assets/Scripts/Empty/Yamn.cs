@@ -21,7 +21,7 @@ public class Yamn : Projectile
     {
 
         transform.localScale = new Vector3(Mathf.Clamp(transform.lossyScale.x + Time.deltaTime, 0, 1), Mathf.Clamp(transform.lossyScale.y + 1.2f*Time.deltaTime, 0, 1.4f) , 1);
-        DestoryProjectile(10);
+        DestoryByRange(10);
         if (isDestory)
         {
             spriteRenderer.material.color = spriteRenderer.material.color - new Color(0, 0, 0, Time.deltaTime);

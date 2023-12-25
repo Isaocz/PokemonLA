@@ -5,6 +5,7 @@ using UnityEngine;
 public class EmptyTrace : MonoBehaviour
 {
     public float moveSpeed;//速度
+    public bool isCanNotMove;
     GameObject Player;
     GameObject Subsititute;
     GameObject InfatuationEnemy;//敌人对象
@@ -32,63 +33,63 @@ public class EmptyTrace : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        timer += Time.deltaTime;
-        transform.Translate(moveSpeed * Time.deltaTime, 0, 0);
-
-        
-        if (timer > Waittime)
-        {
-            //开始对敌人进行检测
-            if (ParentEmpty.isEmptyInfatuationDone)
-            {
-                OnArea();Target = InfatuationEnemy;
-            }else if (ParentEmpty.isSubsititue && ParentEmpty.SubsititueTarget != null && (transform.position - ParentEmpty.SubsititueTarget.transform.position).magnitude < distance)
-            {
-                Target = ParentEmpty.SubsititueTarget;
-            }
-            else if((transform.position - Player.transform.position).magnitude < distance)
-            {
-                Target = Player;
-            }
-            else
-            {
-                Target = null;
-            }
+        if (!isCanNotMove) {
+            timer += Time.deltaTime;
+            transform.Translate(moveSpeed * Time.deltaTime, 0, 0);
 
 
-            //检测到敌人时则执行追踪
-            if (Target != null)
+            if (timer > Waittime)
             {
-                //对需要追踪物体和自身间的角度求解运算
-                Vector2 row = (Target.transform.position - transform.position).normalized;
-                //获取两物体间夹角
-                float angle1 = Vector3.SignedAngle(Vector3.up, row, Vector3.forward);
-                //将夹角坐标和世界坐标的取值和范围对齐
-                angle1 = (angle1 + 270) % 360;
-                //获取弹幕自身世界坐标
-                float angle2 = transform.eulerAngles.z % 360;
-                //获取两个角度间的差异值并标准化
-                float angle3 = ((angle1 - angle2) + 360) % 360;
-
-
-                //对物体的角度做修正，使得物体x轴指向需要追踪的目标
-                //朝向需要追踪对象的方向调整角度，按照设定的值进行调整
-                if (angle3 < 180 - angle_differ)
+                //开始对敌人进行检测
+                if (ParentEmpty.isEmptyInfatuationDone)
                 {
-                    Quaternion reAngle = Quaternion.Euler(0, 0, transform.eulerAngles.z - Time.deltaTime * (angle_fix + timer * 100));
-                    transform.rotation = reAngle;
+                    OnArea(); Target = InfatuationEnemy;
+                } else if (ParentEmpty.isSubsititue && ParentEmpty.SubsititueTarget != null && (transform.position - ParentEmpty.SubsititueTarget.transform.position).magnitude < distance)
+                {
+                    Target = ParentEmpty.SubsititueTarget;
                 }
-                else if (angle3 > 180 + angle_differ)
+                else if ((transform.position - Player.transform.position).magnitude < distance)
                 {
-                    Quaternion reAngle = Quaternion.Euler(0, 0, transform.eulerAngles.z + Time.deltaTime * (angle_fix + timer * 100));
-                    transform.rotation = reAngle;
+                    Target = Player;
+                }
+                else
+                {
+                    Target = null;
                 }
 
+
+                //检测到敌人时则执行追踪
+                if (Target != null)
+                {
+                    //对需要追踪物体和自身间的角度求解运算
+                    Vector2 row = (Target.transform.position - transform.position).normalized;
+                    //获取两物体间夹角
+                    float angle1 = Vector3.SignedAngle(Vector3.up, row, Vector3.forward);
+                    //将夹角坐标和世界坐标的取值和范围对齐
+                    angle1 = (angle1 + 270) % 360;
+                    //获取弹幕自身世界坐标
+                    float angle2 = transform.eulerAngles.z % 360;
+                    //获取两个角度间的差异值并标准化
+                    float angle3 = ((angle1 - angle2) + 360) % 360;
+
+
+                    //对物体的角度做修正，使得物体x轴指向需要追踪的目标
+                    //朝向需要追踪对象的方向调整角度，按照设定的值进行调整
+                    if (angle3 < 180 - angle_differ)
+                    {
+                        Quaternion reAngle = Quaternion.Euler(0, 0, transform.eulerAngles.z - Time.deltaTime * (angle_fix + timer * 100));
+                        transform.rotation = reAngle;
+                    }
+                    else if (angle3 > 180 + angle_differ)
+                    {
+                        Quaternion reAngle = Quaternion.Euler(0, 0, transform.eulerAngles.z + Time.deltaTime * (angle_fix + timer * 100));
+                        transform.rotation = reAngle;
+                    }
+
+                }
             }
+
         }
-
-        
 
     }
 

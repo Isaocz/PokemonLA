@@ -32,7 +32,7 @@ public class AirSlash : Projectile
     {
 
         //this.transform.localScale += new Vector3(Time.deltaTime * 2, 0, 0);
-        DestoryProjectile(13);
+        DestoryByRange(13);
         if (isDestory)
         {
             animator.SetTrigger("Over");

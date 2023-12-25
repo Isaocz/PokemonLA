@@ -283,7 +283,7 @@ public class Empty : Pokemon
                     if (!isInPsychicTerrain) { EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000);}
                     else
                     {
-                        if((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000) > (int)(maxHP / 10))
+                        if(Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000)) > (int)(maxHP / 16))
                         {
                             EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000);
                         }
@@ -294,7 +294,7 @@ public class Empty : Pokemon
                     if (!isInPsychicTerrain) { EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, 100000); }
                     else
                     {
-                        if ((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, 100000) > (int)(maxHP / 10))
+                        if (Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, 100000)) > (int)(maxHP / 16))
                         {
                             EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, 100000);
                         }
