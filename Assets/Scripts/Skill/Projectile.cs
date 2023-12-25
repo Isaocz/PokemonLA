@@ -28,7 +28,7 @@ public class Projectile : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void DestoryProjectile(float ProjectileRange)
+    public void DestoryByRange(float ProjectileRange)
     {
         if ((transform.position - BornPosition).magnitude >= ProjectileRange)
         {
@@ -42,8 +42,8 @@ public class Projectile : MonoBehaviour
             }
 
         }
-
     }
+
 
     public void CollisionDestory()
     {

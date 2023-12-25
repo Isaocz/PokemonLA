@@ -993,7 +993,7 @@ public class PlayerControler : Pokemon
                     }
                     else
                     {
-                        if ((int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))) > (int)(maxHp / 10))
+                        if (Mathf.Abs((int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]))))) > (int)(maxHp / 16))
                         {
                             nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                         }
@@ -1007,7 +1007,7 @@ public class PlayerControler : Pokemon
                     }
                     else
                     {
-                        if (Mathf.Clamp((int)ChangePoint, -100000, -1) > (int)(maxHp / 10))
+                        if (Mathf.Abs(Mathf.Clamp((int)ChangePoint, -100000, -1)) > (int)(maxHp / 16))
                         {
                             nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                         }

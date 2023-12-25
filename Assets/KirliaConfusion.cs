@@ -31,7 +31,7 @@ public class KirliaConfusion : Projectile
 
     private void Update()
     {
-        DestoryProjectile(7.5f);
+        DestoryByRange(7.5f);
         if (spriteRenderer.color.a <= 0.5f)
         {
             Debug.Log("xxx");

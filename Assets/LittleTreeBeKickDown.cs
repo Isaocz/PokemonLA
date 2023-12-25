@@ -16,9 +16,7 @@ public class LittleTreeBeKickDown : MonoBehaviour
             PlayerControler Player = other.gameObject.GetComponent<PlayerControler>();
             if (Player != null && Player.PlayerBodySize == 2)
             {
-                GetComponent<Animator>().SetTrigger("KickDown");
-                Instantiate(PS1, transform.position, Quaternion.identity);
-                Instantiate(PS2, transform.position, Quaternion.identity);
+                BekickDown();
             }
         }
     }
@@ -26,6 +24,13 @@ public class LittleTreeBeKickDown : MonoBehaviour
     public void DestroySelf()
     {
         Destroy(gameObject);
+    }
+
+    public void BekickDown()
+    {
+        GetComponent<Animator>().SetTrigger("KickDown");
+        Instantiate(PS1, transform.position, Quaternion.identity);
+        Instantiate(PS2, transform.position, Quaternion.identity);
     }
 
 }

@@ -17,7 +17,7 @@ public class MareepWool : Projectile
 
     private void FixedUpdate()
     {
-        DestoryProjectile(5);
+        DestoryByRange(5);
         if (isDestory)
         {
             spriteRenderer.material.color = spriteRenderer.material.color - new Color(0, 0, 0, 0.2f * Time.deltaTime);

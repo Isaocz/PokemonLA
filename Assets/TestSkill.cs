@@ -134,14 +134,14 @@ public class TestSkill : Skill
 
     void StateDone( Empty target )
     {
-        if (isFroze) { target.Frozen(FrozeTime, 0.5f, 1); }
+        if (isFroze) { target.Frozen(FrozeTime, 50f, 1); }
         if (isBurn) { target.EmptyBurnDone(0.5f, BurnTime, 1); }
         if (isParalysis) { target.EmptyParalysisDone(0.5f, ParalysisTime, 1); }
         if (isToxic) { target.EmptyToxicDone(0.5f, ToxicTime, 1); }
-        if (isSleep) { target.EmptySleepDone(0.5f, SleepTime, 1); }
-        if (isFear) { target.Fear(FearTime, 0.5f); }
-        if (isBlind) { target.Blind(BlindTime, 0.5f); }
-        if (isConfusion) {  target.EmptyConfusion(ConfusionTime, 0.5f);}
+        if (isSleep) { target.EmptySleepDone(50f, SleepTime, 1); }
+        if (isFear) { target.Fear(FearTime, 50f); }
+        if (isBlind) { target.Blind(BlindTime, 50f); }
+        if (isConfusion) {  target.EmptyConfusion(ConfusionTime, 50f);}
         if (isInfatuation) { target.EmptyInfatuation(InfatuationTime, 0.5f ); }
         if (isCold) { target.Cold(ColdTime); }
         if (isCurse) { target.EmptyCurse(CurseTime, 0.5f); }
