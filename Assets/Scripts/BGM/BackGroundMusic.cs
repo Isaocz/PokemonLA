@@ -13,8 +13,9 @@ public class BackGroundMusic : MonoBehaviour
     public AudioClip Store;
     public AudioClip Boss;
     public AudioClip BossWin;
-    public AudioClip FightMew;
-    public AudioClip Kronos;
+    public AudioClip MewPhase1;
+    public AudioClip MewPhase2;
+    public AudioClip MewPhase3;
 
     public float transitionDuration = 1.0f; // 持续时间
     private float currentVolume = 0.0f; // 当前音量
@@ -56,17 +57,16 @@ public class BackGroundMusic : MonoBehaviour
     {
         if (BGM.clip != BossWin) { BGM.clip = BossWin; BGM.Play(); }
     }
-    public void ChangeBGMToMew()
+    public void ChangeBGMToMew(int phase)
     {
-        if (BGM.clip != FightMew) { BGM.clip =  FightMew; BGM.Play();}
-    }
-    public void ChangeBGMINSIST()
-    {
-        if (BGM.clip != Kronos)
+        switch (phase)
         {
-            BGM.clip = Kronos;
-            BGM.Play();
+            case 1: if (BGM.clip != MewPhase1) { BGM.clip = MewPhase1; BGM.Play(); } break;
+            case 2: if (BGM.clip != MewPhase2) { BGM.clip = MewPhase2; BGM.Play(); } break;
+            case 3: if (BGM.clip != MewPhase3) { BGM.clip = MewPhase3; BGM.Play(); } break;
+            default:break;
         }
+    
     }
     void Update()
     {
