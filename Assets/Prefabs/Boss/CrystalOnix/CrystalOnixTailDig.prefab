@@ -178,9 +178,10 @@ GameObject:
   - component: {fileID: 5617371207234917923}
   - component: {fileID: 5617371207234917925}
   - component: {fileID: 5617371207234917926}
-  m_Layer: 0
+  - component: {fileID: 7447429030964077861}
+  m_Layer: 9
   m_Name: CrystalOnixTailDig
-  m_TagString: Untagged
+  m_TagString: Empty
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -199,6 +200,7 @@ Transform:
   - {fileID: 5617371207901474530}
   - {fileID: 5617371207213245894}
   - {fileID: 5617371206128221370}
+  - {fileID: 4862456062307097917}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -260,6 +262,131 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ParentOnix: {fileID: 0}
+--- !u!114 &7447429030964077861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5617371207234917922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74f7c19defb77d64899d3dd2e55f0c85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NormalMaterial: {fileID: 2100000, guid: b3561bc8940b4354bb645b4ec8b64fd3, type: 2}
+  FrozenMaterial: {fileID: 2100000, guid: 5621402ffca87244a96d4dd5a467a62c, type: 2}
+  SpeedDownMaterial: {fileID: 2100000, guid: a29ae9cd7deb811449a0e250d0e533b2, type: 2}
+  ToxicMaterial: {fileID: 2100000, guid: 296f83a3541c1b24485906af3dff32b2, type: 2}
+  ParalysisMaterial: {fileID: 2100000, guid: 0f06f7a11b286104ba4dbc36c80da013, type: 2}
+  BurnMaterial: {fileID: 2100000, guid: 46e9e683ceef1af4ba339da5f01bb0a0, type: 2}
+  SleepMaterial: {fileID: 2100000, guid: 5bfe3122f137b5a4aa634772d5bccad1, type: 2}
+  FearMaterial: {fileID: 2100000, guid: 9d22d74762a5c0148a4cb1ecfaa4e840, type: 2}
+  InfatuationMaterial: {fileID: 2100000, guid: 2310fa42f7ef9434d8b100c9292ab5fd, type: 2}
+  FrozenResistance: 0
+  ToxicResistance: 0
+  ParalysisResistance: 0
+  BurnResistance: 0
+  SleepResistance: 0
+  OtherStateResistance: 0
+  TimeStateInvincible: 0.15
+  isSafeguard: 0
+  skinRenderers:
+  - {fileID: 5617371207901474531}
+  animator: {fileID: 0}
+  playerUIState: {fileID: 3637051173752222924}
+  speed: 0
+  isEmptyFrozenDone: 0
+  isFrozenDef: 0
+  isFearDone: 0
+  isFearStart: 0
+  isFearDef: 0
+  isBlindDone: 0
+  isBlindStart: 0
+  isBlindDef: 0
+  EmptyBlindPoint: 0
+  isEmptyConfusionDone: 0
+  isEmptyConfusionStart: 0
+  EmptyConfusionPoint: 0
+  isEmptyInfatuationDone: 0
+  isEmptyInfatuationStart: 0
+  EmptyInfatuationDef: 0
+  EmptyInfatuationPoint: 0
+  isAtkChangeDef: 0
+  isDefChangeDef: 0
+  isSpAChangeDef: 0
+  isSpDChangeDef: 0
+  isColdDown: 0
+  isColdDef: 0
+  isEmptyCurseDone: 0
+  isEmptyCurseStart: 0
+  EmptyCurseDef: 0
+  EmptyCursePoint: 0
+  isSpeedChange: 0
+  isPlayerFrozenDone: 0
+  isPlayerFrozenStart: 0
+  PlayerFrozenPointFloat: 0
+  isToxicDef: 0
+  isToxicDone: 0
+  isToxicStart: 0
+  ToxicPointFloat: 0
+  isParalysisDef: 0
+  isParalysisDone: 0
+  isParalysisStart: 0
+  ParalysisPointFloat: 0
+  isBurnDef: 0
+  isBurnDone: 0
+  isBurnStart: 0
+  BurnPointFloat: 0
+  isSleepDef: 0
+  isSleepDone: 0
+  isSleepStart: 0
+  SleepPointFloat: 0
+  isConfusionDef: 0
+  isConfusionDone: 0
+  isConfusionStart: 0
+  ConfusionPointFloat: 0
+  Knock: 0
+  EmptyHp: 0
+  maxHP: 0
+  Emptylevel: 0
+  isBorn: 0
+  uIHealth: {fileID: 887800013537033296}
+  EmptyType01: 6
+  EmptyType02: 5
+  HpEmptyPoint: 35
+  AtkEmptyPoint: 45
+  DefEmptyPoint: 45
+  SpAEmptyPoint: 30
+  SpdEmptyPoint: 160
+  SpeedEmptyPoint: 70
+  MaxLevel: 100
+  TypeDef: 000000000000000000000000000000000000000000000000ffffffff000000000000000000000000ffffffff030000000000000000000000000000000000000000000000000000000000000000000000
+  isDie: 0
+  isHit: 0
+  Exp: 0
+  BaseExp: 0
+  HWP: {x: 0, y: 0}
+  player: {fileID: 0}
+  rigidbody2D: {fileID: 0}
+  isSilence: 0
+  isBoos: 1
+  DropItem: {fileID: 0}
+  isHailDef: 0
+  isSandStormDef: 0
+  isShadow: 0
+  isCanNotMoveWhenParalysis: 0
+  ParentEmpty: {fileID: 0}
+  NowFrozenPoint: 0
+  NowToxicPoint: 0
+  NowParalysisPoint: 0
+  NowBurnPoint: 0
+  NowSleepPoint: 0
+  NowConfusionPoint: 0
+  NowFearPoint: 0
+  NowBlindPoint: 0
+  NowCursePoint: 0
+  NowInfatuationPoint: 0
 --- !u!1 &5617371207901474529
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,3 +470,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!1001 &2346132387919711248
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 5617371207234917924}
+    m_Modifications:
+    - target: {fileID: 4316564553461515562, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5529952408392898805, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7202884177668870445, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
+--- !u!224 &4862456062307097917 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7202884177668870445, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
+  m_PrefabInstance: {fileID: 2346132387919711248}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3637051173752222924 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1366354562257352924, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
+  m_PrefabInstance: {fileID: 2346132387919711248}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21cfa8ba11c643c4f958cdb5f1ccde6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &887800013537033296 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3232805603349393472, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
+  m_PrefabInstance: {fileID: 2346132387919711248}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6ca394f092f1f741ab36e4319f1fc41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
