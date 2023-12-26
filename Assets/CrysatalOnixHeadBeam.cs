@@ -36,6 +36,7 @@ public class CrysatalOnixHeadBeam : MonoBehaviour
             transform.position = ParentCrystalOnix.transform.parent.position - Vector3.right * 8.0f;
             animator.SetFloat("LookX", 1.0f);
         }
+        GetComponent<OnixTailSubEmpty>().ParentEmpty = ParentCrystalOnix;
     }
 
     // Update is called once per frame

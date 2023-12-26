@@ -5,6 +5,14 @@ using UnityEngine;
 public class OnixTailDig : MonoBehaviour
 {
     public Empty ParentOnix;
+    SubEmptyBody SubBody;
+
+    private void Start()
+    {
+        SubBody = transform.GetComponent<SubEmptyBody>();
+        SubBody.ParentEmpty = ParentOnix;
+    }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {

@@ -63,6 +63,7 @@ public class SubEmptyBody : Empty{
             if (NowHP != EmptyHp)
             {
                 if (!ParentEmpty.isSubBodyEmptyInvincible) {
+                    Debug.Log("Hit");
                     if (NowHP > EmptyHp) { Pokemon.PokemonHpChange(null, ParentEmpty.gameObject, NowHP - EmptyHp, 0, 0, Type.TypeEnum.IgnoreType); }
                     else { Pokemon.PokemonHpChange(null, ParentEmpty.gameObject, 0, 0, NowHP - EmptyHp, Type.TypeEnum.IgnoreType); }
                     ParentEmpty.isSubBodyEmptyInvincible = true;

@@ -311,7 +311,7 @@ public class Empty : Pokemon
             Debug.Log(Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000) + " + " + "Dmage:" + (int)(Dmage + SpDmage));
             if ((int)Dmage + (int)SpDmage > 0)
             {
-                if (!isCanHitAnimation) { animator.SetTrigger("Hit"); }
+                if (!isCanHitAnimation && animator != null) { animator.SetTrigger("Hit"); }
                 //Debug.Log((float)EmptyHp / (float)maxHP + "=" + (float)EmptyHp + "/" + (float)maxHP);
                 uIHealth.Per = (float)EmptyHp / (float)maxHP;
                 uIHealth.ChangeHpDown();
@@ -351,14 +351,15 @@ public class Empty : Pokemon
     {
         if (!isDie && isHit)
         {
-            KOTimer += Time.deltaTime;
-            Vector2 position = rigidbody2D.position;
-            Vector2 KODirection = new Vector2(player.transform.position.x - transform.position.x, player.transform.position.y - transform.position.y);
-            KODirection.Normalize();
-            position.x = position.x - KOPoint * KODirection.x * Time.deltaTime;
-            position.y = position.y - KOPoint * KODirection.y * Time.deltaTime;
-            rigidbody2D.position = position;
-
+            if (rigidbody2D != null) {
+                KOTimer += Time.deltaTime;
+                Vector2 position = rigidbody2D.position;
+                Vector2 KODirection = new Vector2(player.transform.position.x - transform.position.x, player.transform.position.y - transform.position.y);
+                KODirection.Normalize();
+                position.x = position.x - KOPoint * KODirection.x * Time.deltaTime;
+                position.y = position.y - KOPoint * KODirection.y * Time.deltaTime;
+                rigidbody2D.position = position;
+            }
         }
         if (KOTimer >= 0.15f)
         {
@@ -475,15 +476,17 @@ public class Empty : Pokemon
     {
         if (isBoos)
         {
-            Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-            Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-            Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+            Vector2 DropPosition = new Vector2(Mathf.Clamp(transform.position.x , transform.parent.position.x-12.0f , transform.parent.position.x + 12.0f) , Mathf.Clamp(transform.position.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f)   );
+            Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+            Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+            Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
         }
         else
         {
             if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 100 > 0.96f)
             {
-                Instantiate(DropItem, transform.position, Quaternion.identity, transform.parent);
+                Vector2 DropPosition = new Vector2(Mathf.Clamp(transform.position.x, transform.parent.position.x - 12.0f, transform.parent.position.x + 12.0f), Mathf.Clamp(transform.position.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f));
+                Instantiate(DropItem, DropPosition , Quaternion.identity, transform.parent);
             }
         }
     }
