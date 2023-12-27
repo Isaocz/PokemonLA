@@ -1,0 +1,66 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SolrockStoneEdge : Projectile
+{
+    // Start is called before the first frame update
+    bool isDestory;
+    ParticleSystem PS;
+
+
+    float StartTimer;
+
+    private void Awake()
+    {
+        AwakeProjectile();
+    }
+
+    private void Start()
+    {
+        PS = GetComponent<ParticleSystem>();
+    }
+
+    private void Update()
+    {
+
+        //this.transform.localScale += new Vector3(Time.deltaTime * 2, 0, 0);
+        DestoryByRange(15);
+        if (isDestory)
+        {
+            if (transform.childCount > 1) { transform.GetChild(1).gameObject.SetActive(true); transform.GetChild(1).parent = null; }
+            CollisionDestory();
+        }
+        else
+        {
+            MoveNotForce();
+        }
+
+
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == ("Player") || other.tag == ("Room") || other.tag == ("Enviroment"))
+        {
+            isDestory = true;
+            Destroy(rigidbody2D);
+            if (other.tag == ("Player"))
+            {
+                PlayerControler playerControler = other.GetComponent<PlayerControler>();
+                Pokemon.PokemonHpChange((empty == null ? null : empty.gameObject), other.gameObject, Dmage, 0, 0, Type.TypeEnum.Rock);
+                if (playerControler != null)
+                {
+                    playerControler.KnockOutPoint = 5;
+                    playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+                }
+            }
+        }
+        else if (empty != null && empty.isEmptyInfatuationDone && other.tag == "Empty" && other.gameObject != empty.gameObject)
+        {
+            Empty e = other.GetComponent<Empty>();
+            Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, Dmage, 0, 0, Type.TypeEnum.Rock);
+
+        }
+    }
+}
