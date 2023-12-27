@@ -39,6 +39,14 @@ public class Empty : Pokemon
     public int SpeedEmptyPoint;
     public int MaxLevel;
 
+    public enum EmptyAbillity
+    {
+        None,
+        RoughSkin,//´Ö²ÚÆ¤·ô
+        Levitate,//Æ¯¸¡
+    }
+    public EmptyAbillity Abillity;
+
     //ÄÜÁ¦Öµ
     public float AtkAbilityPoint { get { return AtkAbility; } set { AtkAbility = value; } }
     float AtkAbility;
