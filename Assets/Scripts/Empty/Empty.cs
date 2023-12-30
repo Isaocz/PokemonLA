@@ -428,6 +428,7 @@ public class Empty : Pokemon
             if (e != null)
             {
                 PokemonHpChange(this.gameObject, e.gameObject, 10, 0, 0, Type.TypeEnum.No);
+                e.EmptyKnockOut(Knock);
                 isInfatuationDmageDone = true;
             }
         }
