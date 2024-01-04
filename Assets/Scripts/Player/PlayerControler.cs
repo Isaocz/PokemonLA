@@ -1196,7 +1196,7 @@ public class PlayerControler : Pokemon
         if (ChangePoint > 0)
         {
             //改变经验值
-            nowEx = Mathf.Clamp((int)(nowEx + (ChangePoint * (playerData.IsPassiveGetList[12]?1.25:1) * (playerData.IsPassiveGetList[29] ? 1.25 : 1) )), 0, 80000);
+            nowEx = Mathf.Clamp((int)(nowEx + (ChangePoint * 1.3f * (playerData.IsPassiveGetList[12]?1.25:1) * (playerData.IsPassiveGetList[29] ? 1.25 : 1) )), 0, 80000);
 
             //如果当前经验值小于于最大经验值，向经验条UI输出变化结果
             if (nowEx < maxEx)
