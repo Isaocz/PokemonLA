@@ -6,6 +6,7 @@ public class LeafBladeEmpty : Projectile
 {
     public float moveSpeed = 10f;
     public float radius;
+    public GameObject Trail4;
     private Transform target; //Ä¿±ê
     private int phase;
     private int mode;
@@ -63,6 +64,8 @@ public class LeafBladeEmpty : Projectile
             if (phase == 3)
             {
                 moveSpeed = 20f;
+                GameObject trail4 = Instantiate(Trail4, transform.position, Quaternion.Euler(0f, 0f, angle));
+                Destroy(trail4, 0.5f);
             }
         }
 
