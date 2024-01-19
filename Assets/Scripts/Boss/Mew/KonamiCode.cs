@@ -7,6 +7,7 @@ public class KonamiCode : MonoBehaviour
     private KeyCode[] konamiCode = { KeyCode.UpArrow, KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.B, KeyCode.A, KeyCode.B, KeyCode.A };
     private int currentIndex = 0;
     public GameObject MewBossPrefab;
+    public GameObject StartEffect;
 
     void Update()
     {
@@ -33,8 +34,12 @@ public class KonamiCode : MonoBehaviour
     {
         // 在这里编写触发效果的代码
         Debug.Log("Konami Code triggered!");
-        GameObject MewBoss = Instantiate(MewBossPrefab, transform.position, Quaternion.identity, transform.parent);
-        Destroy(gameObject); // 销毁当前的MewNPC对象
+        Instantiate(StartEffect, transform.position, Quaternion.identity);
+        Timer.Start(this, 5f, () =>
+        {
+            GameObject MewBoss = Instantiate(MewBossPrefab, transform.position, Quaternion.identity, transform.parent);
+            Destroy(gameObject); // 销毁当前的MewNPC对象
+        });
     }
 }
 

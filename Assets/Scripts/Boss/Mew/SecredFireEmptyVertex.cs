@@ -5,19 +5,19 @@ using UnityEngine;
 
 public class SecredFireEmptyVertex : Projectile
 {
+    public GameObject Effects;
+
     private Transform player;
     private Rigidbody2D rb;
     private Vector3 direction;
     private float speed;
-    private float acceleration;
+    public float acceleration;
 
     private void OnEnable()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
         direction = (player.position - transform.position).normalized;
-        speed = 9f;
-        acceleration = 3f;
         StartCoroutine(StartMovingAfterDelay(1.5f));
         ObjectPoolManager.ReturnObjectToPool(gameObject, 6.5f);
     }
@@ -25,6 +25,8 @@ public class SecredFireEmptyVertex : Projectile
     private IEnumerator StartMovingAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
+        GameObject ef = Instantiate(Effects, transform.position, Quaternion.identity);
+        Destroy(ef, 1.4f);
         rb.velocity = direction * speed;
     }
 

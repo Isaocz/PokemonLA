@@ -970,7 +970,8 @@ public class Mew : Empty
 
                         // 实例化LeafBlade
                         GameObject LeafBlade = ObjectPoolManager.SpawnObject(LeafBladePrefab, transform.position, Quaternion.identity);
-                        LeafBlade.GetComponent<LeafBladeEmpty>().Initialize(AtkTarget.transform, currentPhase, currentPhase == 3 ? Random.Range(0, 3) : 0);
+                        int LFmode = Random.Range(0, 3);
+                        LeafBlade.GetComponent<LeafBladeEmpty>().Initialize(AtkTarget.transform, currentPhase, currentPhase == 3 ? LFmode : 0);
                         LeafBlade.GetComponent<LeafBladeEmpty>().empty = this;
 
                         // 等待发射间隔
