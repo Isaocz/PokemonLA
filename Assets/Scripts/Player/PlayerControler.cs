@@ -9,32 +9,63 @@ public class PlayerControler : Pokemon
     // Start is called before the first frame update
 
 
-    public string PlayerNameChinese;
-    public Sprite PlayerHead;
-    //0小体型 1中体型 2大体形
-    public int PlayerBodySize;
-    //根据角色体型大小，技能释放的位置，SkillOffsetforBodySize[0]为中心点y轴偏移量，SkillOffsetforBodySize[1]为x轴偏移量，SkillOffsetforBodySize[2]y轴偏移量，
-    public float[] SkillOffsetforBodySize;
 
-    //声明一个目前角色的进化型,一个布尔变量表示该宝可梦是否来自于进化
+
+
+
+    //=======================================角色的数据===================================
+    /// <summary>
+    /// 角色中文名
+    /// </summary>
+    public string PlayerNameChinese;
+    /// <summary>
+    /// 角色头像图标
+    /// </summary>
+    public Sprite PlayerHead;
+    /// <summary>
+    /// 角色体型 0小体型 1中体型 2大体形
+    /// </summary>
+    public int PlayerBodySize;
+    /// <summary>
+    /// 根据角色体型大小，技能释放的位置，SkillOffsetforBodySize[0]为中心点y轴偏移量，SkillOffsetforBodySize[1]为x轴偏移量，SkillOffsetforBodySize[2]y轴偏移量，
+    /// </summary>
+    public float[] SkillOffsetforBodySize;
+    /// <summary>
+    /// 目前角色的进化型
+    /// </summary>
     public PlayerControler EvolutionPlayer;
+    /// <summary>
+    /// 当前角色是否可以进化为下一阶段
+    /// </summary>
     public bool isEvolution;
+    /// <summary>
+    /// 一个布尔变量表示该宝可梦是否来自于进化
+    /// </summary>
     public bool isNeedInherit;
+    /// <summary>
+    /// 进化的粒子特效
+    /// </summary>
     public GameObject EvolutionAnimation;
     protected GameObject EvoAnimaObj;
+    /// <summary>
+    /// 角色是否可以进化的判定
+    /// </summary>
+    /// <returns></returns>
     public delegate bool JudgeEvolution();
     public JudgeEvolution JudgeEvolutionForEachLevel;
     protected bool NotJudgeEvolution() { return false; }
-
-
-    //声明一个2D刚体组件，以获得小山猪的刚体组件
+    /// <summary>
+    /// 声明一个2D刚体组件，以获得角色的刚体组件
+    /// </summary>
     new Rigidbody2D rigidbody2D;
-
-    //声明两个变量，获取按键信息
+    /// <summary>
+    /// 声明两个变量，获取方向键按键信息
+    /// </summary>
     private float horizontal;
     private float vertical;
-
-    //声明一个2D向量变量，以存储刚体的二维坐标
+    /// <summary>
+    /// 声明一个2D向量变量，以存储刚体的二维坐标
+    /// </summary>
     Vector2 position;
 
     public delegate void ComeInANewRoom(PlayerControler player);
@@ -515,7 +546,7 @@ public class PlayerControler : Pokemon
             if (isSkill01CD  /* && ((Skill01.useSkillConditions(this))) */ )
             {
                 Skill01Timer += Time.deltaTime;
-                if (Skill01Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
+                if (Skill01Timer >= GetSkillIndexCD(1))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
                 {
                     isSkill01CD = false;
                     Skill01Timer = 0;
@@ -540,7 +571,7 @@ public class PlayerControler : Pokemon
             if (isSkill02CD  /*  && ((Skill02.useSkillConditions(this))) */  )
             {
                 Skill02Timer += Time.deltaTime;
-                if (Skill02Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
+                if (Skill02Timer >= GetSkillIndexCD(2))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
                 {
                     isSkill02CD = false;
                     Skill02Timer = 0;
@@ -565,7 +596,7 @@ public class PlayerControler : Pokemon
             if (isSkill03CD  /*  && ((Skill03.useSkillConditions(this)))  */  )
             {
                 Skill03Timer += Time.deltaTime;
-                if (Skill03Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
+                if (Skill03Timer >= GetSkillIndexCD(3))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
                 {
                     isSkill03CD = false;
                     Skill03Timer = 0;
@@ -591,7 +622,7 @@ public class PlayerControler : Pokemon
             if (isSkill04CD  /*  && ((Skill04.useSkillConditions(this)))  */ )
             {
                 Skill04Timer += Time.deltaTime;
-                if (Skill04Timer >= (isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1) )* (1 - ((float)SpeedAbilityPoint / 500)))
+                if (Skill04Timer >= GetSkillIndexCD(4))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1) )* (1 - ((float)SpeedAbilityPoint / 500)))
                 {
                     isSkill04CD = false;
                     Skill04Timer = 0;
@@ -883,11 +914,77 @@ public class PlayerControler : Pokemon
     //刷新技能
     public void RefreshSkillCD()
     {
-        if (isSkill01CD) { Skill01Timer = (isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)); skillBar01.CDPlus((isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); }
-        if (isSkill02CD) { Skill02Timer = (isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)); skillBar02.CDPlus((isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); }
-        if (isSkill03CD) { Skill03Timer = (isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)); skillBar03.CDPlus((isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); }
-        if (isSkill04CD) { Skill04Timer = (isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)); skillBar04.CDPlus((isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); }
+        if (isSkill01CD) { Skill01Timer = GetSkillIndexCD(1); skillBar01.CDPlus(GetSkillIndexCD(1)); }
+        if (isSkill02CD) { Skill02Timer = GetSkillIndexCD(2); skillBar02.CDPlus(GetSkillIndexCD(2)); }
+        if (isSkill03CD) { Skill03Timer = GetSkillIndexCD(3); skillBar03.CDPlus(GetSkillIndexCD(3)); }
+        if (isSkill04CD) { Skill04Timer = GetSkillIndexCD(4); skillBar04.CDPlus(GetSkillIndexCD(4)); }
     }
+
+    /// <summary>
+    /// 获得某个技能的cd
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
+    public float GetSkillCD( Skill s) 
+    {
+        float Output = s.ColdDown;
+        if (s.SkillIndex == Skill01.SkillIndex)
+        {
+            Output = GetSkillIndexCD(1);
+        }
+        if (s.SkillIndex == Skill02.SkillIndex)
+        {
+            Output = GetSkillIndexCD(2);
+        }
+        if (s.SkillIndex == Skill03.SkillIndex)
+        {
+            Output = GetSkillIndexCD(3);
+        }
+        if (s.SkillIndex == Skill04.SkillIndex)
+        {
+            Output = GetSkillIndexCD(4);
+        }
+        return Output;
+    }
+
+
+    /// <summary>
+    /// 得到技能1,2,3,4的cd
+    /// </summary>
+    /// <param name="SkillIndex"></param>
+    /// <returns></returns>
+    public float GetSkillIndexCD(int SkillIndex)
+    {
+        float OutPut = 0.0f;
+        float Skill01CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500));
+        float Skill02CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill02.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500));
+        float Skill03CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill03.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500));
+        float Skill04CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill04.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500));
+        if (playerData.IsPassiveGetList[62]) 
+        {
+            OutPut = (Skill01CDTime + Skill02CDTime + Skill03CDTime + Skill04CDTime) / 4.0f;
+        }
+        else {
+            switch (SkillIndex)
+            {
+                case 1:
+                    OutPut = Skill01CDTime;
+                    break;
+                case 2:
+                    OutPut = Skill02CDTime;
+                    break;
+                case 3:
+                    OutPut = Skill03CDTime;
+                    break;
+                case 4:
+                    OutPut = Skill04CDTime;
+                    break;
+            }
+        }
+        return OutPut;
+    }
+
+
 
     //减少CD（int 减少第几号技能 ， float 减少的百分比（如果isTimeMode==true则减少固定时间） ，bool 是否为固定数量模式）
     public void MinusSkillCDTime( int SkillIndex , float MinusCDTimerPer , bool isTimeMode)
@@ -895,20 +992,20 @@ public class PlayerControler : Pokemon
         switch (SkillIndex)
         {
             case 1:
-                Skill01Timer += (isTimeMode? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill01.ColdDown * MinusCDTimerPer * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))); 
-                skillBar01.CDPlus((isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill01.ColdDown * MinusCDTimerPer * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))));
+                Skill01Timer += (isTimeMode? MinusCDTimerPer : GetSkillIndexCD(1)*MinusCDTimerPer ); 
+                skillBar01.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(1) * MinusCDTimerPer));
                 break;
             case 2:
-                Skill02Timer += (isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill02.ColdDown * MinusCDTimerPer * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)));
-                skillBar02.CDPlus((isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill02.ColdDown * MinusCDTimerPer * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))));
+                Skill02Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(2) * MinusCDTimerPer);
+                skillBar02.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(2) * MinusCDTimerPer));
                 break;
             case 3:
-                Skill03Timer += (isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill03.ColdDown * MinusCDTimerPer * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)));
-                skillBar03.CDPlus((isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill03.ColdDown * MinusCDTimerPer * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))));
+                Skill03Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(3) * MinusCDTimerPer);
+                skillBar03.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(3) * MinusCDTimerPer));
                 break;
             case 4:
-                Skill04Timer += (isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill04.ColdDown * MinusCDTimerPer * (Skill04.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)));
-                skillBar04.CDPlus((isTimeMode ? MinusCDTimerPer : (isParalysisDone ? 1.8f : 1.0f) * (Skill04.ColdDown * MinusCDTimerPer * (Skill04.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500))));
+                Skill04Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(4) * MinusCDTimerPer);
+                skillBar04.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(4) * MinusCDTimerPer));
                 break;
         }
     }
@@ -1349,6 +1446,22 @@ public class PlayerControler : Pokemon
         isSkill = false;
     }
 
+    /// <summary>
+    /// 小跟班跟随玩家射击
+    /// </summary>
+    void FollowBabyLunch(Vector2Int Dir)
+    {
+        for (int i = 0; i < FollowBaby.transform.childCount; i++)
+        {
+            FollowBaby b = FollowBaby.transform.GetChild(i).GetComponent<FollowBaby>();
+            if (b != null)
+            {
+                b.FollowBabyShot(Dir);
+            }
+        }
+    }
+
+
 
     //声明一个函数，当调用时发射技能01
     public void GetAnimationSkill01Launch()
@@ -1403,6 +1516,7 @@ public class PlayerControler : Pokemon
     protected void LaunchSkill01(Vector2 Direction)
     {
         Skill skillObj = null;
+        FollowBabyLunch(new Vector2Int((int)Direction.x , (int)Direction.y)) ;
         if (!Skill01.isNotDirection) {
             if (Direction.Equals(new Vector2(1, 0))) {
                 skillObj = Instantiate(Skill01, rigidbody2D.position + (Vector2.up * SkillOffsetforBodySize[0]) + (Direction * Skill01.DirctionDistance) + (Direction * SkillOffsetforBodySize[1]), Quaternion.Euler(0, 0, 0), Skill01.isNotMoveWithPlayer ? null : transform);
@@ -1430,6 +1544,7 @@ public class PlayerControler : Pokemon
     protected void LaunchSkill02(Vector2 Direction)
     {
         Skill skillObj = null;
+        FollowBabyLunch(new Vector2Int((int)Direction.x, (int)Direction.y));
         if (!Skill02.isNotDirection) {
             if (Direction.Equals(new Vector2(1, 0)))
             {
@@ -1459,6 +1574,7 @@ public class PlayerControler : Pokemon
     protected void LaunchSkill03(Vector2 Direction)
     {
         Skill skillObj = null;
+        FollowBabyLunch(new Vector2Int((int)Direction.x, (int)Direction.y));
         if (!Skill03.isNotDirection)
         {
             if (Direction.Equals(new Vector2(1, 0)))
@@ -1489,6 +1605,7 @@ public class PlayerControler : Pokemon
     protected void LaunchSkill04(Vector2 Direction)
     {
         Skill skillObj = null;
+        FollowBabyLunch(new Vector2Int((int)Direction.x, (int)Direction.y));
         if (!Skill04.isNotDirection)
         {
             if (Direction.Equals(new Vector2(1, 0)))

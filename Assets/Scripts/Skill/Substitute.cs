@@ -95,7 +95,7 @@ public class Substitute : MonoBehaviour
         animator.SetFloat("LookY" , (Random.Range(0.0f,1.0f)>0.5f?-1:1));
     }
 
-    public void SubStituteChangeHp(float ChangePoint, float ChangePointSp, int SkillType)
+    public virtual void SubStituteChangeHp(float ChangePoint, float ChangePointSp, int SkillType)
     {
         if (NowHp > 0) {
             if (ChangePoint < 0 || ChangePointSp < 0)

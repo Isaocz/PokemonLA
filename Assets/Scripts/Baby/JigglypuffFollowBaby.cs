@@ -26,7 +26,7 @@ public class JigglypuffFollowBaby : FollowBaby
             if (SweetKissCD >= 1.8f) { SweetKissCD = 0; isSweetKissLunch = false; }
         }
     }
-
+    public override void FollowBabyShot(Vector2Int Dir) { }
     private void OnTriggerStay2D(Collider2D other)
     {
         if (!isSweetKissLunch)

@@ -18,13 +18,18 @@ public class DrainPunchMakuhita : Projectile
             // 对玩家造成伤害
 
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            int BeforeHP = playerControler.Hp;
-            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Fighting);
-            Pokemon.PokemonHpChange(null, empty.gameObject, 0, 0, Mathf.Clamp((BeforeHP - playerControler.Hp) / 2, 1, 10000), Type.TypeEnum.IgnoreType);
+            int BeforeHP = -1;
             if (playerControler != null)
             {
+                BeforeHP = playerControler.Hp;
                 playerControler.KnockOutPoint = 9f;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+            }
+            
+            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Fighting);
+            if (BeforeHP != -1)
+            {
+                Pokemon.PokemonHpChange(null, empty.gameObject, 0, 0, Mathf.Clamp((BeforeHP - playerControler.Hp) / 2, 1, 10000), Type.TypeEnum.IgnoreType);
             }
 
         }

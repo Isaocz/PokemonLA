@@ -42,7 +42,7 @@ public class UIGetANewItem : MonoBehaviour
                 ItemClass = "冒险伙伴:";
                 break;
         }
-        UIImage.transform.GetChild(0).GetComponent<Text>().text = "获得了" + ItemClass;
+        UIImage.transform.GetChild(0).GetComponent<Text>().text = "获得了" + ItemClass; 
         UIImage.transform.GetChild(1).GetComponent<Text>().text = "「" + ItemName　+ "」";
         LayoutRebuilder.ForceRebuildLayoutImmediate(UIImage.rectTransform);
     }

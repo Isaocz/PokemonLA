@@ -75,14 +75,14 @@ public class Loudred : Empty
                     
                 }
                 StateTimer += Time.deltaTime;
-                if ( StateTimer >= 2.0f && NowState == State.Idle )
+                if ( StateTimer >= 6.0f && NowState == State.Idle )
                 {
                     NowState = State.Inhale;
                     animator.SetTrigger("Inhale");
                     NowInhale = Instantiate(Inhale, transform.position, Quaternion.Euler(0, 0, _mTool.Angle_360Y(Director,Vector2.right) - 45 ),transform);
                     NowInhale.ParentEmpty = this;
                 }
-                if (StateTimer >= 6.3f && NowState == State.Inhale)
+                if (StateTimer >= 10.3f && NowState == State.Inhale)
                 {
                     if (NowInhale) { Destroy(NowInhale.gameObject); }
                     NowState = State.HyperVoice;
@@ -104,7 +104,7 @@ public class Loudred : Empty
                     NowHyperVoice.empty = this;
                     
                 }
-                if (StateTimer >= 8.70f && NowState == State.HyperVoice)
+                if (StateTimer >= 12.70f && NowState == State.HyperVoice)
                 {
                     if (NowHyperVoice) { Destroy(NowHyperVoice.gameObject); }
                     StateTimer = 0.0f;

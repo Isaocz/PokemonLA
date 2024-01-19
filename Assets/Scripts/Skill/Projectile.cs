@@ -16,6 +16,7 @@ public class Projectile : MonoBehaviour
     protected Vector2 LunchDirection;
     public int Dmage;
     public int SpDmage;
+    public Type.TypeEnum ProType;
     
     // Start is called before the first frame update
 

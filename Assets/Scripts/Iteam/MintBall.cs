@@ -11,26 +11,26 @@ public class MintBall : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        int output = 20;
+        int output = 54;
         switch (MintType)
         {
             case 1:
-                output = Random.Range(0, 4);
+                output = Random.Range(34, 38);
                 break;
             case 2:
-                output = Random.Range(4, 8);
+                output = Random.Range(38, 42);
                 break;
             case 3:
-                output = Random.Range(8, 11);
+                output = Random.Range(42, 46);
                 break;
             case 4:
-                output = Random.Range(12, 16);
+                output = Random.Range(46, 50);
                 break;
             case 5:
-                output = Random.Range(16, 20);
+                output = Random.Range(50, 54);
                 break;
             case 6:
-                output = 20;
+                output = 54;
                 break;
         }
         GetComponent<PokemonBall>().PassiveDropIndex = output;

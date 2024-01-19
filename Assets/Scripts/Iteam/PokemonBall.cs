@@ -21,6 +21,9 @@ public class PokemonBall : IteamPickUp
 
     //public float PerMinusPoint;
 
+
+    public PassiveItemPool.PoolType ItemPoolType;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -56,7 +59,7 @@ public class PokemonBall : IteamPickUp
             }
             else
             {
-                if (PassiveDropIndex == -1) { PassiveDropIndex = passiveList.GetARandomItemIndex(0); }
+                if (PassiveDropIndex == -1) { PassiveDropIndex = passiveList.GetARandomItemIndex(0 , PassiveItemPool.RetunPool(ItemPoolType)); }
                 animator.SetTrigger("Item");
                 PassiveItemObj.GetComponent<SpriteRenderer>().sprite = passiveList.SpritesList[PassiveDropIndex];
                 PassiveItem = passiveList.transform.GetChild(PassiveDropIndex).GetComponent<PassiveItem>();

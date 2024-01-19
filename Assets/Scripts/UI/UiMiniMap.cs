@@ -34,7 +34,7 @@ public class UiMiniMap : MonoBehaviour
     // Start is called before the first frame update
     public void CreatMiniMap()
     {
-        MapCreater map = mapcreater.GetComponent<MapCreater>();
+        MapCreater map = MapCreater.StaticMap;
         foreach (Vector3Int item in map.VRoom.Keys)
         {
             if (item == map.PCRoomPoint)

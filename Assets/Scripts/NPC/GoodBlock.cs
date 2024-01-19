@@ -42,7 +42,7 @@ public class GoodBlock : MonoBehaviour
         if(Good.Price <= playerControler.Money)
         {
             playerControler.ChangeMoney(-Good.Price);
-            if (Good.ItemTag != 2)
+            if (Good.ItemTag != 2 && Good.ItemTag != 4)
             {
                 Instantiate(Good, ParentMeowth.transform.position + ParentMeowth.GoodInstancePlace, Quaternion.identity, ParentMeowth.transform.parent);
             }

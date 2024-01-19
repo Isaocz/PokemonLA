@@ -38,7 +38,7 @@ public class SkillShopStrengthenBlock : MonoBehaviour
         else { MSButtonDescribe.TwoMode = true; MSButtonDescribe.FirstText = "花费一个精通种子可以精通此技能"; MSButtonDescribe.DescribeText = "精通效果：" + BlockSkill.PlusSkill.PlusSkillDiscribe; }
 
         if (BlockSkill.isPPUP) { PPUPButtonDescribe.TwoMode = false; PPUPButtonDescribe.DescribeText = "该技能的冷却时间已经被强化"; }
-        else { PPUPButtonDescribe.TwoMode = true; PPUPButtonDescribe.FirstText = "花费一瓶PPUP可以强化此技能，大幅缩短该技能的冷却时间"; PPUPButtonDescribe.DescribeText = "该技能的冷却时间由" + (((StrengthenPanel.player.isParalysisDone ? 1.8f : 1.0f) * BlockSkill.ColdDown * (1 - ((float)(StrengthenPanel.player.SpeedAbilityPoint) / 500)))).ToString("#0.00") + "秒缩短为" + (((StrengthenPanel.player.isParalysisDone ? 1.8f : 1.0f) * BlockSkill.ColdDown * 0.625f * (1 - ((float)(StrengthenPanel.player.SpeedAbilityPoint) / 500)))).ToString("#0.00") + "秒"; }
+        else { PPUPButtonDescribe.TwoMode = true; PPUPButtonDescribe.FirstText = "花费一瓶PPUP可以强化此技能，大幅缩短该技能的冷却时间"; PPUPButtonDescribe.DescribeText = "该技能的冷却时间由" + StrengthenPanel.player.GetSkillCD(s).ToString("#0.00") + "秒缩短为" + (StrengthenPanel.player.GetSkillCD(s) * 0.625f).ToString("#0.00") + "秒"; }
     }
 
     public void StrengthenSkill(bool isMS)

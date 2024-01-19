@@ -29,4 +29,5 @@ public class Gimmighoul : FollowBaby
             BornAMoney = false;
         }
     }
+    public override void FollowBabyShot(Vector2Int Dir) { }
 }
