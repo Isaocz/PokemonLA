@@ -413,247 +413,321 @@ public class PlayerControler : Pokemon
         {
             //触发特性
             UpdateAbility();
+            UpdatePasssive();
 
             //随时间掉血或者改变状态的函数
-            if (isInGrassyTerrain) {  PlayerGrassyTerrainHeal(); }
-
-
-            UpdatePlayerChangeHP();
+            {
+                if (isInGrassyTerrain) { PlayerGrassyTerrainHeal(); }
+                UpdatePlayerChangeHP();
+            }
 
             //每帧获取一次十字键的按键信息
-
-            Vector2 MoveSpeed = Vector2.zero;
-
-            if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Left")))
             {
-                MoveSpeed.x = -1f * (isConfusionDone ? -1 : 1);
+                Vector2 MoveSpeed = Vector2.zero;
+
+
+                if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Left")))
+                {
+                    MoveSpeed.x = -1f * (isConfusionDone ? -1 : 1);
+                }
+                else if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Right")))
+                {
+                    MoveSpeed.x = 1f * (isConfusionDone ? -1 : 1);
+                }
+
+                if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Up")))
+                {
+                    MoveSpeed.y = 1f * (isConfusionDone ? -1 : 1);
+                }
+                else if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Down")))
+                {
+                    MoveSpeed.y = -1f * (isConfusionDone ? -1 : 1);
+                }
+
+                if (MoveSpeed != Vector2.zero)
+                {
+                    MoveSpeed = MoveSpeed.normalized * Mathf.Max(Mathf.Abs(MoveSpeed.x), Mathf.Abs(MoveSpeed.y));
+                }
+                horizontal = MoveSpeed.x;
+                vertical = MoveSpeed.y;
+
+                //Vector2 MoveSpeed = (new Vector2(Input.GetAxis("Horizontal") * (isConfusionDone ? -1 : 1), Input.GetAxis("Vertical") * (isConfusionDone ? -1 : 1))).normalized * (Mathf.Max(Mathf.Abs(Input.GetAxis("Horizontal")) , Mathf.Abs(Input.GetAxis("Vertical"))));
+                //horizontal = MoveSpeed.x;
+                //vertical = MoveSpeed.y;
+
+                /*
+                horizontal = Input.GetAxis("Horizontal") * (isConfusionDone ? -1 : 1);
+                vertical = Input.GetAxis("Vertical") * (isConfusionDone ? -1 : 1);
+                */
             }
-            else if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Right")))
-            {
-                MoveSpeed.x = 1f * (isConfusionDone ? -1 : 1);
-            }
-
-            if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Up")))
-            {
-                MoveSpeed.y = 1f * (isConfusionDone ? -1 : 1);
-            }
-            else if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Down")))
-            {
-                MoveSpeed.y = -1f * (isConfusionDone ? -1 : 1);
-            }
-
-            MoveSpeed = MoveSpeed.normalized * Mathf.Max(Mathf.Abs(MoveSpeed.x), Mathf.Abs(MoveSpeed.y));
-            horizontal = MoveSpeed.x;
-            vertical = MoveSpeed.y;
-
-            //Vector2 MoveSpeed = (new Vector2(Input.GetAxis("Horizontal") * (isConfusionDone ? -1 : 1), Input.GetAxis("Vertical") * (isConfusionDone ? -1 : 1))).normalized * (Mathf.Max(Mathf.Abs(Input.GetAxis("Horizontal")) , Mathf.Abs(Input.GetAxis("Vertical"))));
-            //horizontal = MoveSpeed.x;
-            //vertical = MoveSpeed.y;
-
-            /*
-            horizontal = Input.GetAxis("Horizontal") * (isConfusionDone ? -1 : 1);
-            vertical = Input.GetAxis("Vertical") * (isConfusionDone ? -1 : 1);
-            */
-
-
-
-
-
 
             //每帧检测一次当前是否为无敌状态，如果是，则计时器计时，如果计时器时间小于0，则变为不无敌状态
-            if (isInvincible)
             {
-                InvincileTimer -= Time.deltaTime;
-
-                //在无敌时间计时器运行的前0。15秒内被击退
-                if (InvincileTimer > TimeInvincible - 0.15f)
+                if (isInvincible)
                 {
-                    float CollidorOffset = 0;
-                    float CollidorRadiusH = 0;
-                    float CollidorRadiusV = 0;
-                    switch (PlayerBodySize)
-                    {
-                        case 0:
-                            CollidorOffset = 0.4023046f; CollidorRadiusH = 0.6039822f; CollidorRadiusV = 0.2549849f;
-                            break;
-                        case 1:
-                            CollidorOffset = 0.5f; CollidorRadiusH = 0.7f; CollidorRadiusV = 0.7f;
-                            break;
-                        case 2:
-                            CollidorOffset = 0.7f; CollidorRadiusH = 1.3f; CollidorRadiusV = 1.1f;
-                            break;
-                    }
-                    RaycastHit2D SearchED = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset) , Vector2.down,  CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
-                    RaycastHit2D SearchEU = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset) , Vector2.up,    CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
-                    RaycastHit2D SearchER = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset) , Vector2.right, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
-                    RaycastHit2D SearchEL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset) , Vector2.left,  CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
+                    InvincileTimer -= Time.deltaTime;
 
-                    if ((SearchED.collider != null && (SearchED.transform.tag == "Enviroment" || SearchED.transform.tag == "Room"))
-                        || (SearchEU.collider != null && (SearchEU.transform.tag == "Enviroment" || SearchEU.transform.tag == "Room"))
-                        || (SearchER.collider != null && (SearchER.transform.tag == "Enviroment" || SearchER.transform.tag == "Room"))
-                        || (SearchEL.collider != null && (SearchEL.transform.tag == "Enviroment" || SearchEL.transform.tag == "Room"))) { }
-                    else
+                    //在无敌时间计时器运行的前0。15秒内被击退
+                    if (InvincileTimer > TimeInvincible - 0.15f)
                     {
-                        Vector2 position = rigidbody2D.position;
-                        if (NowRoom != new Vector3Int(100, 100, 0))
+                        float CollidorOffset = 0;
+                        float CollidorRadiusH = 0;
+                        float CollidorRadiusV = 0;
+                        switch (PlayerBodySize)
                         {
-                            position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 12);
-                            position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 7.3f);
+                            case 0:
+                                CollidorOffset = 0.4023046f; CollidorRadiusH = 0.6039822f; CollidorRadiusV = 0.2549849f;
+                                break;
+                            case 1:
+                                CollidorOffset = 0.5f; CollidorRadiusH = 0.7f; CollidorRadiusV = 0.7f;
+                                break;
+                            case 2:
+                                CollidorOffset = 0.7f; CollidorRadiusH = 1.3f; CollidorRadiusV = 1.1f;
+                                break;
                         }
+                        RaycastHit2D SearchED = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.down, CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
+                        RaycastHit2D SearchEU = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.up, CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
+                        RaycastHit2D SearchER = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.right, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
+                        RaycastHit2D SearchEL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.left, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
+
+                        if ((SearchED.collider != null && (SearchED.transform.tag == "Enviroment" || SearchED.transform.tag == "Room"))
+                            || (SearchEU.collider != null && (SearchEU.transform.tag == "Enviroment" || SearchEU.transform.tag == "Room"))
+                            || (SearchER.collider != null && (SearchER.transform.tag == "Enviroment" || SearchER.transform.tag == "Room"))
+                            || (SearchEL.collider != null && (SearchEL.transform.tag == "Enviroment" || SearchEL.transform.tag == "Room"))) { }
                         else
                         {
-                            position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 41.5f);
-                            position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 33.5f);
+                            Vector2 position = rigidbody2D.position;
+                            if (NowRoom != new Vector3Int(100, 100, 0))
+                            {
+                                position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 12);
+                                position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 7.3f);
+                            }
+                            else
+                            {
+                                position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 41.5f);
+                                position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 33.5f);
+                            }
+                            rigidbody2D.position = position;
                         }
-                        rigidbody2D.position = position;
+                    }
+                    if (InvincileTimer <= 0)
+                    {
+                        isInvincible = false;
                     }
                 }
-                if (InvincileTimer <= 0)
-                {
-                    isInvincible = false;
-                }
             }
 
-
-
-
-
-            if (isStateInvincible)
+            //异常状态CD
             {
-                StateInvincileTimer -= Time.deltaTime;
-                if (StateInvincileTimer <= 0)
+                if (isStateInvincible)
                 {
-                    isStateInvincible = false;
+                    StateInvincileTimer -= Time.deltaTime;
+                    if (StateInvincileTimer <= 0)
+                    {
+                        isStateInvincible = false;
+                    }
                 }
             }
 
-
-
-            //当按下q键时发射skill01
-
-            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill1")) && isSkill01CD == false && Skill01 != null && !isSkill )
+            //技能冷却
             {
-                if ((Skill01.useSkillConditions(this))) {
-                    //当动画进行到第8帧时会发射技能1，并技能1进入CD
-                    animator.SetTrigger("Skill");
-                    isSkill01CD = true;
-                    isSkill = true;
-                    isSkill01lunch = true;
-                    skillBar01.isCDStart = true;
+                //如果技能1在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
+                if (isSkill01CD  /* && ((Skill01.useSkillConditions(this))) */ )
+                {
+                    Skill01Timer += Time.deltaTime;
+                    if (Skill01Timer >= GetSkillIndexCD(1))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
+                    {
+                        isSkill01CD = false;
+                        Skill01Timer = 0;
+                    }
+                }
+                //如果技能2在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
+                if (isSkill02CD  /*  && ((Skill02.useSkillConditions(this))) */  )
+                {
+                    Skill02Timer += Time.deltaTime;
+                    if (Skill02Timer >= GetSkillIndexCD(2))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
+                    {
+                        isSkill02CD = false;
+                        Skill02Timer = 0;
+                    }
+                }
+                //如果技能3在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
+                if (isSkill03CD  /*  && ((Skill03.useSkillConditions(this)))  */  )
+                {
+                    Skill03Timer += Time.deltaTime;
+                    if (Skill03Timer >= GetSkillIndexCD(3))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
+                    {
+                        isSkill03CD = false;
+                        Skill03Timer = 0;
+                    }
+                }
+                //如果技能1在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
+                if (isSkill04CD  /*  && ((Skill04.useSkillConditions(this)))  */ )
+                {
+                    Skill04Timer += Time.deltaTime;
+                    if (Skill04Timer >= GetSkillIndexCD(4))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1) )* (1 - ((float)SpeedAbilityPoint / 500)))
+                    {
+                        isSkill04CD = false;
+                        Skill04Timer = 0;
+                    }
                 }
             }
-            //如果技能1在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
-            if (isSkill01CD  /* && ((Skill01.useSkillConditions(this))) */ )
+
+            //使用技能
             {
-                Skill01Timer += Time.deltaTime;
-                if (Skill01Timer >= GetSkillIndexCD(1))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
+                //宝可梦战棋
+                if (playerData.IsPassiveGetList[66]) {
+                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill1")) ||
+                        Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill2")) ||
+                        Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill3")) ||
+                        Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill4"))
+                        )
+                    {
+                        switch (Random.Range(0,4))
+                        {
+                            case 0:
+                                if (isSkill01CD == false && Skill01 != null && !isSkill && (Skill01.useSkillConditions(this)))
+                                {
+                                    //当动画进行到第8帧时会发射技能1，并技能1进入CD
+                                    animator.SetTrigger("Skill");
+                                    isSkill01CD = true;
+                                    isSkill = true;
+                                    isSkill01lunch = true;
+                                    skillBar01.isCDStart = true;
+                                }
+                                break;
+                            case 1:
+                                if (isSkill02CD == false && Skill02 != null && !isSkill && (Skill02.useSkillConditions(this)))
+                                {
+                                    //当动画进行到第8帧时会发射技能2，并技能2进入CD
+                                    animator.SetTrigger("Skill");
+                                    isSkill02CD = true;
+                                    isSkill = true;
+                                    isSkill02lunch = true;
+                                    skillBar02.isCDStart = true;
+                                }
+                                break;
+                            case 2:
+                                if (isSkill02CD == false && Skill02 != null && !isSkill && (Skill02.useSkillConditions(this)))
+                                {
+                                    //当动画进行到第8帧时会发射技能3，并技能3进入CD
+                                    animator.SetTrigger("Skill");
+                                    isSkill03CD = true;
+                                    isSkill = true;
+                                    isSkill03lunch = true;
+                                    skillBar03.isCDStart = true;
+                                }
+                                break;
+                            case 3:
+                                if (isSkill01CD == false && Skill01 != null && !isSkill && (Skill01.useSkillConditions(this)))
+                                {
+                                    //当动画进行到第8帧时会发射技能4，并技能4进入CD
+                                    animator.SetTrigger("Skill");
+                                    isSkill04CD = true;
+                                    isSkill = true;
+                                    isSkill04lunch = true;
+                                    skillBar04.isCDStart = true;
+                                }
+                                break;
+                        }
+                    }
+                }
+                else
                 {
-                    isSkill01CD = false;
-                    Skill01Timer = 0;
+                    //当按下q键时发射skill01
+
+                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill1")) && isSkill01CD == false && Skill01 != null && !isSkill)
+                    {
+                        if ((Skill01.useSkillConditions(this)))
+                        {
+                            //当动画进行到第8帧时会发射技能1，并技能1进入CD
+                            animator.SetTrigger("Skill");
+                            isSkill01CD = true;
+                            isSkill = true;
+                            isSkill01lunch = true;
+                            skillBar01.isCDStart = true;
+                        }
+                    }
+
+
+                    //当按下w键时发射skill02
+
+                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill2")) && isSkill02CD == false && Skill02 != null && !isSkill)
+                    {
+                        if ((Skill02.useSkillConditions(this)))
+                        {
+                            //当动画进行到第8帧时会发射技能2，并技能2进入CD
+                            animator.SetTrigger("Skill");
+                            isSkill02CD = true;
+                            isSkill = true;
+                            isSkill02lunch = true;
+                            skillBar02.isCDStart = true;
+                        }
+                    }
+
+
+                    //当按下e键时发射skill03
+
+                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill3")) && isSkill03CD == false && Skill03 != null && !isSkill)
+                    {
+                        if ((Skill03.useSkillConditions(this)))
+                        {
+                            //当动画进行到第8帧时会发射技能3，并技能3进入CD
+                            animator.SetTrigger("Skill");
+                            isSkill03CD = true;
+                            isSkill = true;
+                            isSkill03lunch = true;
+                            skillBar03.isCDStart = true;
+                        }
+                    }
+
+
+                    //当按下r键时发射skill04
+
+                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill4")) && isSkill04CD == false && Skill04 != null && !isSkill)
+                    {
+
+                        if ((Skill04.useSkillConditions(this)))
+                        {
+                            //当动画进行到第8帧时会发射技能4，并技能4进入CD
+                            animator.SetTrigger("Skill");
+                            isSkill04CD = true;
+                            isSkill = true;
+                            isSkill04lunch = true;
+                            skillBar04.isCDStart = true;
+                        }
+                    }
                 }
             }
 
-            //当按下w键时发射skill02
-
-            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill2")) && isSkill02CD == false && Skill02 != null  && !isSkill)
+            //进入新房间
             {
-                if ((Skill02.useSkillConditions(this)))
+                if (InANewRoom == true)
                 {
-                    //当动画进行到第8帧时会发射技能2，并技能2进入CD
-                    animator.SetTrigger("Skill");
-                    isSkill02CD = true;
-                    isSkill = true;
-                    isSkill02lunch = true;
-                    skillBar02.isCDStart = true;
+                    NewRoomTimer += Time.deltaTime;
+
+                    RestoreStrengthAndTeraType();
+                    if (ComeInANewRoomEvent != null && !isComeInANewRoomEvent)
+                    {
+                        ComeInANewRoomEvent(this);
+                        isComeInANewRoomEvent = true;
+                    }
+                    ConfusionRemove();
+                    CheckStateInInputNewRoom();
+                    isSpaceItemCanBeUse = false;
+                    if (NewRoomTimer >= 1.2f)
+                    {
+                        isToxicDoneInNewRoom = false;
+                        isBornDoneInNewRoom = false;
+                        InANewRoom = false;
+                        isStrengthAndTeraTypeBeRestore = false;
+                        isComeInANewRoomEvent = false;
+                        NewRoomTimer = 0;
+                        isSpaceItemCanBeUse = true;
+                        CanNotUseSpaceItem = false;
+                    }
                 }
             }
-            //如果技能2在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
-            if (isSkill02CD  /*  && ((Skill02.useSkillConditions(this))) */  )
-            {
-                Skill02Timer += Time.deltaTime;
-                if (Skill02Timer >= GetSkillIndexCD(2))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
-                {
-                    isSkill02CD = false;
-                    Skill02Timer = 0;
-                }
-            }
-
-            //当按下e键时发射skill03
-
-            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill3")) && isSkill03CD == false && Skill03 != null  && !isSkill)
-            {
-                if ((Skill03.useSkillConditions(this)))
-                {
-                    //当动画进行到第8帧时会发射技能3，并技能3进入CD
-                    animator.SetTrigger("Skill");
-                    isSkill03CD = true;
-                    isSkill = true;
-                    isSkill03lunch = true;
-                    skillBar03.isCDStart = true;
-                }
-            }
-            //如果技能3在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
-            if (isSkill03CD  /*  && ((Skill03.useSkillConditions(this)))  */  )
-            {
-                Skill03Timer += Time.deltaTime;
-                if (Skill03Timer >= GetSkillIndexCD(3))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
-                {
-                    isSkill03CD = false;
-                    Skill03Timer = 0;
-                }
-            }
-
-            //当按下r键时发射skill04
-
-            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill4")) && isSkill04CD == false && Skill04 != null && !isSkill)
-            {
-
-                if ((Skill04.useSkillConditions(this)))
-                {
-                    //当动画进行到第8帧时会发射技能4，并技能4进入CD
-                    animator.SetTrigger("Skill");
-                    isSkill04CD = true;
-                    isSkill = true;
-                    isSkill04lunch = true;
-                    skillBar04.isCDStart = true;
-                }
-            }
-            //如果技能1在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
-            if (isSkill04CD  /*  && ((Skill04.useSkillConditions(this)))  */ )
-            {
-                Skill04Timer += Time.deltaTime;
-                if (Skill04Timer >= GetSkillIndexCD(4))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1) )* (1 - ((float)SpeedAbilityPoint / 500)))
-                {
-                    isSkill04CD = false;
-                    Skill04Timer = 0;
-                }
-            }
-            if (InANewRoom == true)
-            {
-                NewRoomTimer += Time.deltaTime;
-
-                RestoreStrengthAndTeraType();
-                if (ComeInANewRoomEvent != null && !isComeInANewRoomEvent)
-                {
-                    ComeInANewRoomEvent(this);
-                    isComeInANewRoomEvent = true;
-                }
-                ConfusionRemove();
-                CheckStateInInputNewRoom();
-                isSpaceItemCanBeUse = false;
-                if (NewRoomTimer >= 1.2f)
-                {
-                    isToxicDoneInNewRoom = false;
-                    isBornDoneInNewRoom = false;
-                    InANewRoom = false;
-                    isStrengthAndTeraTypeBeRestore = false;
-                    isComeInANewRoomEvent = false;
-                    NewRoomTimer = 0;
-                    isSpaceItemCanBeUse = true;
-                    CanNotUseSpaceItem = false;
-                }
-            }
-
             
             if (isSpaceItemCanBeUse && Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("UseItem")) && !isCanNotUseSpaceItem && spaceItem != null)
             {
@@ -669,6 +743,8 @@ public class PlayerControler : Pokemon
             }
         }
     }
+
+
 
     //=========================青草场地回血事件========================
     /// <summary>
@@ -1202,22 +1278,22 @@ public class PlayerControler : Pokemon
         if (HWP.y > 0) {
             switch (HWP.x) {
                 case 1:
-                    playerData.HPHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[18] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    playerData.HPHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[18] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
                     break;
                 case 2:
-                    playerData.AtkHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[19] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    playerData.AtkHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[19] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
                     break;
                 case 3:
-                    playerData.DefHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[20] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    playerData.DefHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[20] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
                     break;
                 case 4:
-                    playerData.SpAHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[21] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    playerData.SpAHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[21] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
                     break;
                 case 5:
-                    playerData.SpDHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[22] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    playerData.SpDHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[22] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
                     break;
                 case 6:
-                    playerData.SpeHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[23] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    playerData.SpeHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[23] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
                     break;
             }
         }
@@ -1880,4 +1956,31 @@ public class PlayerControler : Pokemon
 
 
     //===========================所有触发特性时使用的函数======================================
+
+
+
+
+
+
+
+
+    //===========================所有触发被动道具时使用的函数======================================
+
+
+    /// <summary>
+    /// 根据被动道具每帧调用的事件
+    /// </summary>
+    void UpdatePasssive()
+    {
+        //道具064 皮卡丘发电机
+        if (playerData.IsPassiveGetList[64])
+        {
+            if (!isCanNotMove && (horizontal != 0 || vertical != 0)) { playerData.AtkHardWorkJustOneRoom += Time.deltaTime * 0.25f; playerData.SpAHardWorkJustOneRoom += Time.deltaTime * 0.25f; }
+            else { playerData.AtkHardWorkJustOneRoom = Mathf.Clamp(playerData.AtkHardWorkJustOneRoom - Time.deltaTime * 0.5f , 0 , 10000); playerData.SpAHardWorkJustOneRoom = Mathf.Clamp(playerData.SpAHardWorkJustOneRoom - Time.deltaTime * 0.5f, 0, 10000); }
+            ReFreshAbllityPoint();
+        }
+    }
+
+    //===========================所有触发被动道具时使用的函数======================================
+
 }

@@ -325,6 +325,7 @@ public class PlayerData : MonoBehaviour
                 player.isParalysisDef = true;
                 player.isBurnDef = true;
                 player.isSleepDef = true;
+                player.isFrozenDef = true;
                 MoveSpwBounsAlways -= 3;
                 MoveSpeHardWorkAlways = 0;
                 break;
@@ -542,7 +543,37 @@ public class PlayerData : MonoBehaviour
                 //串联电路
                 break;
 
+            case 63:
+                //锐利之牙
+                break;
 
+            case 64:
+                //皮卡丘发电机
+                break;
+
+            case 65:
+                //胖丁麦克风
+                break;
+
+            case 66:
+                //宝可梦战棋
+                SpeBounsAlways += 3;
+                break;
+
+            case 67:
+                //宝可梦战棋
+                MoveSpwBounsAlways -= 1;
+                HPBounsAlways += 2;
+                player.ReFreshAbllityPoint();
+                player.ChangeHp(player.maxHp - player.Hp, 0, 0);
+                UIHealthBar.Instance.MaxHpText.text = player.maxHp.ToString();
+                break;
+
+            case 68:
+                //绝对睡眠枕头
+                player.ComeInANewRoomEvent += ComatosePillow;
+                ComatosePillow(player);
+                break;
 
             case 69:
                 //白索罗亚宝宝
@@ -582,6 +613,12 @@ public class PlayerData : MonoBehaviour
             case 83:
                 //深灰米果
                 SpDBounsAlways += 1;
+                break;
+
+            case 84:
+                //难吃宝芬
+                LuckBounsAlways -= 1;
+                LuckHardWorkAlways -= 5.0f;
                 break;
 
             case 85:
@@ -733,6 +770,24 @@ public class PlayerData : MonoBehaviour
     }
 
     //===================================================充电电池=================================================
+
+
+
+
+
+
+
+    //===================================================绝对睡眠枕头=================================================
+
+    void ComatosePillow(PlayerControler playerInput)
+    {
+        playerInput.SleepFloatPlus(1);
+    }
+    //===================================================绝对睡眠枕头=================================================
+
+
+
+
 
 
 
