@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class SecredFireEmpryCentre : Projectile
 {
+    public GameObject Effects;
+
     private Transform player;
     private Rigidbody2D rb;
     private Vector3 direction;
     private float speed;
-    private float acceleration;
+    public float acceleration;
 
     private void OnEnable()
     {
@@ -17,7 +19,6 @@ public class SecredFireEmpryCentre : Projectile
         rb = GetComponent<Rigidbody2D>();
         direction = (player.position - transform.position).normalized;
         speed = 10f;
-        acceleration = 5f;
         StartCoroutine(StartMovingAfterDelay(4.5f));
         ObjectPoolManager.ReturnObjectToPool(gameObject, 9.5f);
     }
@@ -25,6 +26,8 @@ public class SecredFireEmpryCentre : Projectile
     private IEnumerator StartMovingAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
+        GameObject ef = Instantiate(Effects, transform.position, Quaternion.identity);
+        Destroy(ef, 1.4f);
         rb.velocity = direction * speed;
     }
 
