@@ -26,7 +26,7 @@ public class RaltsConfusion : Projectile
         if (ExitTime >= 0)
         {
             ExitTime -= Time.deltaTime;
-            if (ExitTime > 3.0f) { CircleS.color = CircleS.color + new Color(0, 0, 0, 2f * Time.deltaTime);}
+            if (ExitTime > 1.2f) { CircleS.color = CircleS.color + new Color(0, 0, 0, 2f * Time.deltaTime);}
         }
         else
         {
@@ -44,6 +44,7 @@ public class RaltsConfusion : Projectile
 
             }
         }
+        
         //this.transform.localScale += new Vector3(Time.deltaTime * 2, 0, 0);
         if (isDestory)
         {

@@ -72,7 +72,7 @@ public class UIPanleSkillBar : MonoBehaviour
             else if (i == 8)  { NowObject.GetComponent<Text>().text = Type.TypeChineseName[PanleSkillBarColor]; }
             else if (i == 9)  { NowObject.GetComponent<Text>().text = (TargetSkill.Damage+TargetSkill.SpDamage).ToString(); }
             else if (i == 10) { NowObject.GetComponent<Text>().text = TargetSkill.KOPoint.ToString(); }
-            else if (i == 11) { NowObject.GetComponent<Text>().text = (((player.isParalysisDone ? 1.8f : 1.0f) * ( TargetSkill.ColdDown * (TargetSkill.isPPUP ? 0.625f : 1)) * (1 - ((float)player.SpeedAbilityPoint / 500)))).ToString("#0.00"); }
+            else if (i == 11) { NowObject.GetComponent<Text>().text = player.GetSkillCD(TargetSkill).ToString("#0.00"); }
 
             if (i == 0) { NowObject.GetComponent<Image>().color = Type.TypeColor[PanleSkillBarColor]; }
             else

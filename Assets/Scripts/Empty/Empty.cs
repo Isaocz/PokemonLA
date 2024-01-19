@@ -173,6 +173,13 @@ public class Empty : Pokemon
     bool issubBodyEmptyInvincible;
 
 
+    /// <summary>
+    /// 敌人是否持有道具
+    /// </summary>
+    public bool IsHaveDropItem { get { return isHaveDropItem; } set { isHaveDropItem = value; } }
+    bool isHaveDropItem;
+
+
 
     //=============================初始化敌人数据================================
 
@@ -217,6 +224,29 @@ public class Empty : Pokemon
     }
 
     /// <summary>
+    /// 确定敌人是否有道具
+    /// </summary>
+    void SetHaveDropItem()
+    {
+        if (!isBoos)
+        {
+            //携带探宝器更容易携带道具
+            if (!player.playerData.IsPassiveGetList[61]) {
+                isHaveDropItem = Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 100 > 0.96f;
+            }
+            else
+            {
+                isHaveDropItem = Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.90f;
+                if (isHaveDropItem) { playerUIState.StatePlus(13); }
+            }
+        }
+        else
+        {
+            isHaveDropItem = true;
+        }
+    }
+
+    /// <summary>
     /// ---start中调用---，根据种族值初始化敌人血量
     /// </summary>
     /// <param name="level"></param>
@@ -229,6 +259,7 @@ public class Empty : Pokemon
         }
         EmptyHp = (int)((level + 10 + (int)(((float)level * HpEmptyPoint * 2) / 100.0f))*(isBoos? BossBonus : 1));
         maxHP = EmptyHp;
+        SetHaveDropItem();
     }
 
     /// <summary>
@@ -483,20 +514,23 @@ public class Empty : Pokemon
 
     public void EmptyDrop()
     {
-        if (isBoos)
-        {
-            Vector2 DropPosition = new Vector2(Mathf.Clamp(transform.position.x , transform.parent.position.x-12.0f , transform.parent.position.x + 12.0f) , Mathf.Clamp(transform.position.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f)   );
-            Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-            Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-            Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-        }
-        else
-        {
-            if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 100 > 0.96f)
+        if (IsHaveDropItem) {
+            if (isBoos)
             {
                 Vector2 DropPosition = new Vector2(Mathf.Clamp(transform.position.x, transform.parent.position.x - 12.0f, transform.parent.position.x + 12.0f), Mathf.Clamp(transform.position.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f));
-                Instantiate(DropItem, DropPosition , Quaternion.identity, transform.parent);
+                Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+                Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+                Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
             }
+            else
+            {
+                Vector2 DropPosition = new Vector2(Mathf.Clamp(transform.position.x, transform.parent.position.x - 12.0f, transform.parent.position.x + 12.0f), Mathf.Clamp(transform.position.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f));
+                Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent);
+
+            }
+            IsHaveDropItem = false;
+            playerUIState.StateDestory(13);
+            DropItem = null;
         }
     }
 

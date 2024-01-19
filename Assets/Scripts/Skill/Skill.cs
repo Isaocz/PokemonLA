@@ -221,8 +221,10 @@ public class Skill : MonoBehaviour
     }
 
 
-
-    //对敌人target造成伤害和击退
+    /// <summary>
+    /// 对敌人target造成伤害和击退
+    /// </summary>
+    /// <param name="target"></param>
     public void HitAndKo(Empty target)
     {   
         EmptyList TCEell = new EmptyList(target, false, 0.0f);
@@ -311,30 +313,99 @@ public class Skill : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 造成伤害时发生的事件
+    /// </summary>
+    /// <param name="target"></param>
     public void HitEvent(Empty target)
     {
         if (player != null)
         {
-            if (player.playerData.IsPassiveGetList[26])
+            //是否是接触类技能
+            bool isTouch = false;
+            if (SkillTag != null)
             {
-                if (SkillTag != null)
+                foreach (Skill.SkillTagEnum i in SkillTag)
                 {
-                    bool isTouch = false;
-                    foreach (Skill.SkillTagEnum i in SkillTag)
-                    {
-                        if (i == Skill.SkillTagEnum.接触类) { isTouch = true;break; }
-                    }
-                    if (isTouch)
-                    {
-                        target.EmptyToxicDone(1, 30, 0.4f + (float)player.LuckPoint);
-                        if ( player.PlayerAbility == PlayerControler.PlayerAbilityList.迷人之躯 && Random.Range(0.0f,1.0f) + ((float)player.LuckPoint/30) > 0.9f ) { target.EmptyInfatuation(15, 0.5f); }
-                    }
+                    if (i == Skill.SkillTagEnum.接触类) { isTouch = true; break; }
                 }
             }
-            if (player.playerData.IsPassiveGetList[25] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.8f)
+
+            //是否是牙类技能
+            bool isBite = false;
+            if (SkillTag != null)
             {
-                target.Fear(3.0f, 1);
+                foreach (Skill.SkillTagEnum i in SkillTag)
+                {
+                    if (i == Skill.SkillTagEnum.牙类) { isBite = true; break; }
+                }
             }
+
+            //是否是爪类技能
+            bool isClaw = false;
+            if (SkillTag != null)
+            {
+                foreach (Skill.SkillTagEnum i in SkillTag)
+                {
+                    if (i == Skill.SkillTagEnum.爪类) { isClaw = true; break; }
+                }
+            }
+
+
+
+            //接触技能触发的事件
+            if (isTouch) {
+
+                //道具026 毒手
+                if (player.playerData.IsPassiveGetList[26])
+                {
+                    target.EmptyToxicDone(1, 30, 0.4f + (float)player.LuckPoint);
+                }
+
+                //道具059 金假牙
+                if (player.playerData.IsPassiveGetList[59] && Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 30) > 0.8f)
+                {
+                    Instantiate(PassiveItemGameObjList.ObjList.List[18] , transform.position , Quaternion.identity).GetComponent<RandomStarMoney>().isLunch = true;
+                }
+
+                //特性 迷人之躯
+                if (player.PlayerAbility == PlayerControler.PlayerAbilityList.迷人之躯 && Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 30) > 0.9f)
+                {
+                    target.EmptyInfatuation(15, 0.5f);
+                }
+
+            }
+
+            //牙技能触发的事件
+            if (isBite)
+            {
+                //道具63 锐利之牙
+                if (player.playerData.IsPassiveGetList[63] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 10 > 0.5f)
+                {
+                    target.Fear(3.0f, 1);
+                }
+            }
+
+            //爪技能触发的事件
+            if (isClaw)
+            {
+                //道具63 锐利之牙
+                if (player.playerData.IsPassiveGetList[63] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 10 > 0.5f)
+                {
+                    target.Fear(3.0f, 1);
+                }
+            }
+
+            //所有技能触发的事件
+            {
+                //道具025 王者之证
+                if (player.playerData.IsPassiveGetList[25] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.8f)
+                {
+                    target.Fear(3.0f, 1);
+                }
+            }
+
+
         }
     }
 

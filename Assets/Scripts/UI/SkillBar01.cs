@@ -54,9 +54,9 @@ public class SkillBar01 : MonoBehaviour
         
         if (isCDStart && skill != null)
         {
-            Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalsize - originalsize * (1/ ((player.isParalysisDone ? 1.8f : 1.0f) * ( SkillCdTime * (skill.isPPUP ? 0.625f : 1)) * (1 - ((float)player.SpeedAbilityPoint / 500))) ) * Timer);
+            Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalsize - originalsize * (1/ player.GetSkillCD(skill) ) * Timer);
             Timer += Time.deltaTime;
-            if (Timer > ((player.isParalysisDone ? 1.8f : 1.0f) * SkillCdTime * (1 - (player.SpeedAbilityPoint / 500)))) { isCDStart = false;Timer = 0; }
+            if (Timer > player.GetSkillCD(skill) ) { isCDStart = false;Timer = 0; }
         }
     }
     public void CDPlus(float CDPlusPoint)
@@ -64,7 +64,7 @@ public class SkillBar01 : MonoBehaviour
         if(isCDStart && skill != null)
         {
             Timer += CDPlusPoint;
-            Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalsize - originalsize * (1 / ((player.isParalysisDone ? 1.8f : 1.0f) * (SkillCdTime * (skill.isPPUP ? 0.625f : 1)) * (1 - ((float)player.SpeedAbilityPoint / 500)))) * Timer);
+            Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalsize - originalsize * (1 / player.GetSkillCD(skill)) * Timer);
             
         }
     }

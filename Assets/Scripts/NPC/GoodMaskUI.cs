@@ -76,13 +76,13 @@ public class GoodMaskUI : MonoBehaviour
         }
 
         GoodBlock PassiveItemGoodBlock = Instantiate(goodBlock, transform.position, Quaternion.identity, transform);
-        PassiveItemGoodBlock.Good = PassiveItemList.transform.GetChild(PassiveItemList.GetARandomItemIndex(0)).GetComponent<Item>();
+        PassiveItemGoodBlock.Good = PassiveItemList.transform.GetChild(PassiveItemList.GetARandomItemIndex(0 , PassiveItemPool.All )).GetComponent<Item>();
         PassiveItemGoodBlock.GoodsDescribeUI = uIDescribe;
 
         if (Random.Range(0.0f, 1.0f) >= 0.75f)
         {
             GoodBlock PassiveItemGoodBlock2 = Instantiate(goodBlock, transform.position, Quaternion.identity, transform);
-            PassiveItemGoodBlock2.Good = PassiveItemList.transform.GetChild(PassiveItemList.GetARandomItemIndex(0)).GetComponent<Item>();
+            PassiveItemGoodBlock2.Good = PassiveItemList.transform.GetChild(PassiveItemList.GetARandomItemIndex(0 , PassiveItemPool.All)).GetComponent<Item>();
             PassiveItemGoodBlock2.GoodsDescribeUI = uIDescribe;
         }
     }

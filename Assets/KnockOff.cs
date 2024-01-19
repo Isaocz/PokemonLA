@@ -26,24 +26,10 @@ public class KnockOff : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            if (target.DropItem != null)
+            if (target.IsHaveDropItem)
             {
-                if (target.isBoos)
-                {
-                    Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-                    Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-                    Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-                    Damage *= 1.5f;
-                }
-                else
-                {
-                    if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 100 > 0.96f)
-                    {
-                        Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent);
-                        Damage *= 1.5f;
-                    }
-                }
-                target.DropItem = null;
+                target.EmptyDrop();
+                Damage *= 1.5f;
             }
             Instantiate(TackleBlast, target.transform.position, Quaternion.identity);
             HitAndKo(target);

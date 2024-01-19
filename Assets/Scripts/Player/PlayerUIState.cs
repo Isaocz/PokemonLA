@@ -75,6 +75,10 @@ public class PlayerUIState : MonoBehaviour
     Image CurseObj;
     bool IsCurse;
 
+    public Image HaveItemImage;
+    Image HaveItemObj;
+    bool IsHaveItem;
+
 
     public void InstanceObjWhenEvlo(PlayerUIState OtherState)
     {
@@ -129,7 +133,7 @@ public class PlayerUIState : MonoBehaviour
     }
 
     /// <summary>
-    /// 0¼õËÙ 1ÖÂÃ¤ 2±ù¶³ 3ÖĞ¶¾ 4Âé±Ô 5ÉÕÉË 6Ë¯Ãß 7¿Ö¾å 8ÆøÊÆÍ·´÷ 9»ìÂÒ 10×ÅÃÔ 11º®Àä 12:×çÖä
+    /// 0¼õËÙ 1ÖÂÃ¤ 2±ù¶³ 3ÖĞ¶¾ 4Âé±Ô 5ÉÕÉË 6Ë¯Ãß 7¿Ö¾å 8ÆøÊÆÍ·´÷ 9»ìÂÒ 10×ÅÃÔ 11º®Àä 12:×çÖä 13:´øÓĞ³ÖÓĞÎï
     /// </summary>
     /// <param name="StateNum"></param>
     // Start is called before the first frame update
@@ -228,6 +232,13 @@ public class PlayerUIState : MonoBehaviour
                     IsCurse = true;
                 }
                 break;
+            case 13:
+                if (!IsHaveItem)
+                {
+                    HaveItemObj = Instantiate(HaveItemImage, transform.position, Quaternion.identity, transform);
+                    IsHaveItem = true;
+                }
+                break;
         }
     }
 
@@ -300,7 +311,7 @@ public class PlayerUIState : MonoBehaviour
 
 
     /// <summary>
-    ///  0¼õËÙ 1ÖÂÃ¤ 2±ù¶³ 3ÖĞ¶¾ 4Âé±Ô 5ÉÕÉË 6Ë¯Ãß 7¿Ö¾å 8ÆøÊÆÍ·´÷ 9»ìÂÒ 10×ÅÃÔ  11º®Àä 12:×çÖä
+    ///  0¼õËÙ 1ÖÂÃ¤ 2±ù¶³ 3ÖĞ¶¾ 4Âé±Ô 5ÉÕÉË 6Ë¯Ãß 7¿Ö¾å 8ÆøÊÆÍ·´÷ 9»ìÂÒ 10×ÅÃÔ  11º®Àä 12:×çÖä 13:´øÓĞ³ÖÓĞÎï
     /// </summary>
     /// <param name="StateNum"></param>
     public void StateDestory(int StateNum)
@@ -396,6 +407,13 @@ public class PlayerUIState : MonoBehaviour
                 {
                     Destroy(CurseObj.gameObject);
                     IsCurse = false;
+                }
+                break;
+            case 13:
+                if (IsHaveItem)
+                {
+                    Destroy(HaveItemObj.gameObject);
+                    IsHaveItem = false;
                 }
                 break;
 

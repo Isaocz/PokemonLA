@@ -15,9 +15,8 @@ public class WigglytuffTalkPanel : NPCTalkPanel
     // Start is called before the first frame update
     private void Awake()
     {
-
-
-        BabyIndex = Random.Range(0, FriendsBall.passiveList.SpritesList.Length);
+        BabyIndex = FriendsBall.passiveList.GetARandomItemIndex(0, PassiveItemPool.Baby );
+        if (FriendsBall.passiveList.transform.GetChild(BabyIndex).GetComponent<BabyPassiveItem>() == null ) { BabyIndex = 34; }
 
         TalkTextList = new string[] {
             "哈喽哈喽！这里是实惠培育屋咪！\n我是这里的负责人胖可丁儿老师。",
@@ -67,7 +66,7 @@ public class WigglytuffTalkPanel : NPCTalkPanel
     string GetPlayerParentName()
     {
         PlayerControler p = player;
-        while (p.EvolutionPlayer != null)
+        if (p.EvolutionPlayer != null)
         {
             p = player.EvolutionPlayer;
         }

@@ -45,7 +45,7 @@ public class PlayerData : MonoBehaviour
     public int[] TypeDefAlways = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     public int[] TypeDefJustOneRoom = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-    public bool[] IsPassiveGetList = new bool[100];
+    public bool[] IsPassiveGetList = new bool[500];
 
     PlayerControler player;
 
@@ -507,7 +507,7 @@ public class PlayerData : MonoBehaviour
 
 
 
-            //====================±¡ºÉ===========================
+            //====================ÃÎ»ÃµÀ¾ß===========================
             case 55:
                 //ÃÎ»ÃµÀ¾ß£ºÉÁË¸³çÐÄ£¨²Áµ¯£©
                 Instantiate(aGameObjectByPassiveItem(4), player.transform.position + new Vector3(0f, 0.5f, 0f), Quaternion.identity, player.NotFollowBaby.transform);
@@ -524,6 +524,123 @@ public class PlayerData : MonoBehaviour
                 break;
 
 
+            //====================µÀ¾ß===========================
+            case 59:
+                //½ð¼ÙÑÀ
+                break;
+
+            case 60:
+                //×ÔÐÐ³µ
+                MoveSpwBounsAlways += 1;
+                break;
+
+            case 61:
+                //Ì½±¦Æ÷
+                break;
+
+            case 62:
+                //´®ÁªµçÂ·
+                break;
+
+
+
+            case 69:
+                //°×Ë÷ÂÞÑÇ±¦±¦
+                Instantiate(aGameObjectByPassiveItem(6), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 70:
+                //Ð¡ÏÉÄÌ±¦±¦
+                Instantiate(aGameObjectByPassiveItem(7), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 71:
+                //²¨¿Ë±È±¦±¦
+                Instantiate(aGameObjectByPassiveItem(8), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 79:
+                //·ÉÔÆ±ù¼¤ÁÜ
+                MoveSpwBounsAlways += 1;
+                break;
+
+            case 80:
+                //·ßÅ­ÂøÍ·
+                AtkBounsAlways += 1;
+                break;
+
+            case 81:
+                //É­Ö®Ñò¸þ
+                SpABounsAlways += 1;
+                break;
+
+            case 82:
+                //¸ªÑ×ÏÉ±´
+                DefBounsAlways += 1;
+                break;
+
+            case 83:
+                //Éî»ÒÃ×¹û
+                SpDBounsAlways += 1;
+                break;
+
+            case 85:
+                //ßèßèÏÊÄÌ
+                HPBounsAlways += 1;
+                player.ReFreshAbllityPoint();
+                player.ChangeHp(player.maxHp - player.Hp, 0, 0);
+                UIHealthBar.Instance.MaxHpText.text = player.maxHp.ToString();
+                break;
+
+            case 86:
+                //´óÂíÈøÀ­´ï
+                SpeBounsAlways += 1;
+                break;
+
+            case 124:
+                //¾§¹âÑ¿±¦±¦
+                Instantiate(aGameObjectByPassiveItem(9), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 125:
+                //Ð¡¶àÁú±¦±¦
+                Instantiate(aGameObjectByPassiveItem(10), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 126:
+                //Ô¹Ó°ÍÞÍÞ±¦±¦
+                Instantiate(aGameObjectByPassiveItem(11), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 127:
+                //Ð¡ÔÆÈ¸±¦±¦
+                Instantiate(aGameObjectByPassiveItem(12), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 128:
+                //ÂêÉ¯ÄÇ±¦±¦
+                Instantiate(aGameObjectByPassiveItem(13), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 129:
+                //¹´»êÑÛ±¦±¦
+                Instantiate(aGameObjectByPassiveItem(14), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 130:
+                //é»¹ûÇò±¦±¦
+                Instantiate(aGameObjectByPassiveItem(15), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 131:
+                //ë¦×Ó²Ý±¦±¦
+                Instantiate(aGameObjectByPassiveItem(16), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 132:
+                //Ð¡´Å¹Ö±¦±¦
+                Instantiate(aGameObjectByPassiveItem(17), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
 
         }
 
@@ -623,10 +740,9 @@ public class PlayerData : MonoBehaviour
     //===================================================µ±±»¶¯µÀ¾ßÐèÒªÉú³ÉÊµÌåÊ±=================================================
 
 
-    public GameObject[] GameObjectList;
     GameObject aGameObjectByPassiveItem(int i)
     {
-        GameObject OutPutObj = GameObjectList[i];
+        GameObject OutPutObj = PassiveItemGameObjList.ObjList.List[i];
         return OutPutObj;
     }
 

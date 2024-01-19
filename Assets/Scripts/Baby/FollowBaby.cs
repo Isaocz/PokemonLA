@@ -7,7 +7,7 @@ public class FollowBaby : Baby
     // Start is called before the first frame update
 
     protected GameObject Target;
-    Animator animator;
+    protected Animator animator;
     Vector3 LastPosition;
     float Speed;
     public bool isInANewRoom;
@@ -42,7 +42,7 @@ public class FollowBaby : Baby
     // Update is called once per frame
     public void FollowBabyUpdate()
     {
-        if(isInANewRoom2 == false && TargetPlayer.InANewRoom == true) { isInANewRoom = true; isInANewRoom2 = true; }
+        if(isInANewRoom2 == false && TargetPlayer.InANewRoom == true) { isInANewRoom = true; isInANewRoom2 = true; InANewRoomEvent(); }
         if (isInANewRoom2 == true && TargetPlayer.InANewRoom == false) { isInANewRoom2 = false; }
         if (isInANewRoom == true) {  transform.position = TargetPlayer.transform.position; isInANewRoom = false; }
 
@@ -65,12 +65,23 @@ public class FollowBaby : Baby
             position.y += Time.deltaTime * direction.y * Speed;
             transform.position = position;
         }
-        if (LastPosition.x - transform.position.x > 0) { animator.SetFloat("LookX", 1); }
-        else if (LastPosition.x - transform.position.x < 0) { animator.SetFloat("LookX", -1); }
-        if (LastPosition.y - transform.position.y > 0) { animator.SetFloat("LookY", 1); }
-        else if (LastPosition.y - transform.position.y < 0) { animator.SetFloat("LookY", -1); }
+        if (LastPosition.x - transform.position.x > 0) { animator.SetFloat("LookX", -1); }
+        else if (LastPosition.x - transform.position.x < 0) { animator.SetFloat("LookX", 1); }
+        if (LastPosition.y - transform.position.y > 0) { animator.SetFloat("LookY", -1); }
+        else if (LastPosition.y - transform.position.y < 0) { animator.SetFloat("LookY", 1); }
         animator.SetFloat("Speed", (LastPosition - transform.position).magnitude);
         LastPosition = transform.position;
+
+    }
+    
+    public virtual void FollowBabyShot( Vector2Int Dir)
+    {
+        animator.SetFloat("LookX" , Dir.x);
+        animator.SetFloat("LookY" , Dir.y);
+    }
+
+    public virtual void InANewRoomEvent()
+    {
 
     }
 }

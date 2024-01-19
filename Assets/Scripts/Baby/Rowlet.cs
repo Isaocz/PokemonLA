@@ -48,4 +48,9 @@ public class Rowlet : FollowBaby
         }
     }
 
+    public override void FollowBabyShot(Vector2Int Dir)
+    {
+        
+    }
+
 }
