@@ -177,6 +177,13 @@ public class Skill : MonoBehaviour
             foreach (Skill.SkillTagEnum i in SkillTag){  if (i == Skill.SkillTagEnum.接触类) { isTouch = true; break; } }
             if (isTouch) { player.TriggerOblivious(); }
         }
+
+        //道具065 胖丁麦克风
+        if (player.playerData.IsPassiveGetList[65] && _mTool.ContainsSkillTag(SkillTag , SkillTagEnum.声音类) )
+        {
+            Instantiate( PassiveItemGameObjList.ObjList.List[19] , player.transform.position , Quaternion.identity , player.transform );
+        }
+
     }
 
     //引用于所有技能的Update函数，当存在时间耗尽时技能消失
