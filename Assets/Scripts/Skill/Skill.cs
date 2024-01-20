@@ -178,11 +178,54 @@ public class Skill : MonoBehaviour
             if (isTouch) { player.TriggerOblivious(); }
         }
 
-        //道具065 胖丁麦克风
-        if (player.playerData.IsPassiveGetList[65] && _mTool.ContainsSkillTag(SkillTag , SkillTagEnum.声音类) )
-        {
-            Instantiate( PassiveItemGameObjList.ObjList.List[19] , player.transform.position , Quaternion.identity , player.transform );
+
+        //声音类技能
+        if (_mTool.ContainsSkillTag(SkillTag, SkillTagEnum.声音类)){ 
+
+            //道具065 胖丁麦克风
+            if (player.playerData.IsPassiveGetList[65])
+            {
+                Instantiate(PassiveItemGameObjList.ObjList.List[19], player.transform.position, Quaternion.identity, player.transform);
+            }
+
+            //道具073 闪焰高歌
+            if (player.playerData.IsPassiveGetList[73])
+            {
+                TorchSongFire f01 = Instantiate(PassiveItemGameObjList.ObjList.List[21], player.transform.position + (Vector3)(Vector2.up * player.SkillOffsetforBodySize[0]) + (Vector3)player.look * 0.5f, Quaternion.identity).GetComponent<TorchSongFire>();
+                TorchSongFire f02 = Instantiate(PassiveItemGameObjList.ObjList.List[21], player.transform.position + (Vector3)(Vector2.up * player.SkillOffsetforBodySize[0]) + (Vector3)player.look * 0.5f, Quaternion.identity).GetComponent<TorchSongFire>();
+                TorchSongFire f03 = Instantiate(PassiveItemGameObjList.ObjList.List[21], player.transform.position + (Vector3)(Vector2.up * player.SkillOffsetforBodySize[0]) + (Vector3)player.look * 0.5f, Quaternion.identity).GetComponent<TorchSongFire>();
+                f01.LaunchNotForce((Vector3)player.look.normalized, 3.5f);
+                f02.LaunchNotForce((Quaternion.AngleAxis(30, Vector3.forward) * (Vector3)player.look).normalized, 3.5f);
+                f03.LaunchNotForce((Quaternion.AngleAxis(-30, Vector3.forward) * (Vector3)player.look).normalized, 3.5f);
+                f01.player = player;
+                f02.player = player;
+                f03.player = player;
+            }
         }
+
+        if (SkillType == (int)Type.TypeEnum.Water )
+        {
+            //道具074 润水发型
+            if (player.playerData.IsPassiveGetList[74])
+            {
+                player.MinusSkillCDTime(1 , 0.1f , false);
+                player.MinusSkillCDTime(2 , 0.1f , false);
+                player.MinusSkillCDTime(3 , 0.1f , false);
+                player.MinusSkillCDTime(4 , 0.1f , false);
+            }
+        }
+
+        if (player.playerData.IsPassiveGetList[78])
+        {
+            if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.85f)
+            {
+                ScalchopPro s01 = Instantiate(PassiveItemGameObjList.ObjList.List[23], player.transform.position + (Vector3)(Vector2.up * player.SkillOffsetforBodySize[0]) + (Vector3)player.look * 0.5f, Quaternion.identity).GetComponent<ScalchopPro>();
+                s01.player = player;
+                s01.LaunchNotForce(player.look , 9.0f);
+                s01.transform.rotation = Quaternion.Euler( 0 , 0 , _mTool.Angle_360Y(player.look , Vector2.right) );
+            }
+        }
+        
 
     }
 

@@ -412,9 +412,10 @@ public class PlayerControler : Pokemon
         if (!isDie)
         {
             //触发特性
-            UpdateAbility();
-            UpdatePasssive();
-
+            {
+                UpdateAbility();
+            }
+            
             //随时间掉血或者改变状态的函数
             {
                 if (isInGrassyTerrain) { PlayerGrassyTerrainHeal(); }
@@ -576,14 +577,15 @@ public class PlayerControler : Pokemon
             //使用技能
             {
                 //宝可梦战棋
-                if (playerData.IsPassiveGetList[66]) {
+                if (playerData.IsPassiveGetList[66])
+                {
                     if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill1")) ||
                         Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill2")) ||
                         Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill3")) ||
                         Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill4"))
                         )
                     {
-                        switch (Random.Range(0,4))
+                        switch (Random.Range(0, 4))
                         {
                             case 0:
                                 if (isSkill01CD == false && Skill01 != null && !isSkill && (Skill01.useSkillConditions(this)))
@@ -728,18 +730,26 @@ public class PlayerControler : Pokemon
                     }
                 }
             }
-            
-            if (isSpaceItemCanBeUse && Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("UseItem")) && !isCanNotUseSpaceItem && spaceItem != null)
+
+            //使用一次性道具
             {
-                if (UseSpaceItem.UseSpaceItemConditions(this)) {
-                    spaceitemUseUI.UIAnimationStart(spaceItem.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite);
-                    UseSpaceItem.UsedSpaceItem(this);
+                if (isSpaceItemCanBeUse && Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("UseItem")) && !isCanNotUseSpaceItem && spaceItem != null)
+                {
+                    if (UseSpaceItem.UseSpaceItemConditions(this))
+                    {
+                        spaceitemUseUI.UIAnimationStart(spaceItem.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite);
+                        UseSpaceItem.UsedSpaceItem(this);
+                    }
                 }
             }
 
-            if (UpdataPassiveItemEvent != null)
+            //触发被动道具效果
             {
-                UpdataPassiveItemEvent(ThisPlayer);
+                UpdatePasssive();
+                if (UpdataPassiveItemEvent != null)
+                {
+                    UpdataPassiveItemEvent(ThisPlayer);
+                }
             }
         }
     }
@@ -1101,11 +1111,27 @@ public class PlayerControler : Pokemon
 
 
 
+
+
+
+
+
+
+
+    //======================================死亡和改变生命值====================================================
+
+    /// <summary>
+    /// 气势头戴状态
+    /// </summary>
     public void EndureStart()
     {
         playerData.isEndure = true;
         playerUIState.StatePlus(8);
     }
+
+    /// <summary>
+    /// 结束气势头戴状态
+    /// </summary>
     public void EndureOver()
     {
         playerData.isEndure = false;
@@ -1113,16 +1139,22 @@ public class PlayerControler : Pokemon
 
     }
 
-    //声明一个改变生命的函数ChangeHp，改变的点数为ChangePoint，当改变点数为负时触发无敌时间，当改变点数为正时不触发无敌时间
-
     /// <summary>
     /// 玩家是否处于反射壁状态
     /// </summary>
     public bool isReflect;
+
     /// <summary>
     /// 玩家是否处于光墙状态
     /// </summary>
     public bool isLightScreen;
+
+    /// <summary>
+    ///声明一个改变生命的函数ChangeHp，改变的点数为ChangePoint，当改变点数为负时触发无敌时间，当改变点数为正时不触发无敌时间
+    /// </summary>
+    /// <param name="ChangePoint"></param>
+    /// <param name="ChangePointSp"></param>
+    /// <param name="SkillType"></param>
     public void ChangeHp(float ChangePoint , float ChangePointSp , int SkillType)
     {
 
@@ -1203,7 +1235,9 @@ public class PlayerControler : Pokemon
         }
     }
 
-
+    /// <summary>
+    /// 角色死亡
+    /// </summary>
     public void PlayerDie()
     {
         isDie = true; 
@@ -1211,20 +1245,42 @@ public class PlayerControler : Pokemon
         rigidbody2D.bodyType = RigidbodyType2D.Static;
     }
 
-
-
-
-
+    /// <summary>
+    /// 角色复活或者呼出死亡UI
+    /// </summary>
     public void CallDieMask()
     {
-        if (TPMask.In != null)
-        {
-            TPMask.In.BlackTime = 0;
-            TPMask.In.TPStart = true;
-            TPMask.In.transform.GetChild(0).gameObject.SetActive(true);
-            TPMask.In.transform.GetChild(0).GetComponent<DiePanel>().Die(PlayerNameChinese);
+        if (isDie) {
+            //道具072 复活化石
+            if (playerData.IsPassiveGetList[72])
+            {
+                animator.Play("Idle" , 0);
+                animator.ResetTrigger("Die");
+                isDie = false;
+                PokemonHpChange(null, this.gameObject, 0, 0, (int)(maxHp / 2.0f), Type.TypeEnum.IgnoreType);
+                rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+                playerData.IsPassiveGetList[72] = false;
+                spaceitemUseUI.UIAnimationStart(PassiveItemGameObjList.ObjList.List[20].GetComponent<SpriteRenderer>().sprite);
+                PlayerType01 = (int)Type.TypeEnum.Rock;
+            }
+            else {
+                if (TPMask.In != null)
+                {
+                    TPMask.In.BlackTime = 0;
+                    TPMask.In.TPStart = true;
+                    TPMask.In.transform.GetChild(0).gameObject.SetActive(true);
+                    TPMask.In.transform.GetChild(0).GetComponent<DiePanel>().Die(PlayerNameChinese);
+                }
+            }
         }
     }
+
+
+    //======================================死亡和改变生命值====================================================
+
+
+
+
 
 
 

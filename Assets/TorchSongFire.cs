@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TogepiFire : Projectile
+public class TorchSongFire : Projectile
 {
-    // Start is called before the first frame update
-
-
+    
     private void Awake()
     {
         AwakeProjectile();
@@ -18,6 +16,8 @@ public class TogepiFire : Projectile
     bool isCanNotMove;
     int DestoryTimer;
     float BornTimer;
+
+    public PlayerControler player;
 
     private void Start()
     {
@@ -68,7 +68,7 @@ public class TogepiFire : Projectile
             if (other.tag == "Empty")
             {
                 Empty target = other.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(Baby.gameObject, target.gameObject, Dmage, SpDmage, 0, ProType);
+                Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Dmage, SpDmage, 0, ProType);
             }
             gameObject.transform.localScale -= new Vector3(0.15f, 0.15f, 0.15f);
             if (gameObject.transform.localScale.x <= 0.3)
