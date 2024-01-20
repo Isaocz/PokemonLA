@@ -561,7 +561,7 @@ public class PlayerData : MonoBehaviour
                 break;
 
             case 67:
-                //±¶ø…√Œ’Ω∆Â
+                //≥¨∑ ªØ
                 MoveSpwBounsAlways -= 1;
                 HPBounsAlways += 2;
                 player.ReFreshAbllityPoint();
@@ -588,6 +588,36 @@ public class PlayerData : MonoBehaviour
             case 71:
                 //≤®øÀ±»±¶±¶
                 Instantiate(aGameObjectByPassiveItem(8), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 72:
+                //∏¥ªÓªØ Ø
+                break;
+
+            case 73:
+                //…¡—Ê∏ﬂ∏Ë
+                break;
+
+            case 74:
+                //»ÛÀÆ∑¢–Õ
+                break;
+
+
+            case 75:
+                //«ß±‰ÕÚª®
+                Instantiate(aGameObjectByPassiveItem(22), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 76:
+                //æ—…‰∂µ√±
+                player.ComeInANewRoomEvent += DecidueyeHood;
+                DecidueyeHood(player);
+                break;
+
+            case 77:
+                //ºƒ…˙ƒ¢πΩ
+                player.ComeInANewRoomEvent += ParasiticSpores;
+                ParasiticSpores(player);
                 break;
 
             case 79:
@@ -787,6 +817,38 @@ public class PlayerData : MonoBehaviour
 
 
 
+    //===================================================æ—…‰∂µ√±=================================================
+    void DecidueyeHood(PlayerControler playerInput)
+    {
+        GameObject EmptyFile = MapCreater.StaticMap.RRoom[player.NowRoom].transform.GetChild(3).gameObject;
+        for (int i = 0; i < EmptyFile.transform.childCount; i ++)
+        {
+            Empty e = EmptyFile.transform.GetChild(i).GetComponent<Empty>();
+            if (e != null)
+            {
+                e.Blind(5.0f, 5.0f);
+            }
+        }
+    }
+    //===================================================æ—…‰∂µ√±=================================================
+
+
+
+
+
+    //===================================================ºƒ…˙ƒ¢πΩ=================================================
+    void ParasiticSpores(PlayerControler playerInput)
+    {
+        if (playerInput.Hp >= player.maxHp/2)
+        {
+            Pokemon.PokemonHpChange(null , this.gameObject , playerInput.maxHp / 8 , 0 , 0 , Type.TypeEnum.IgnoreType);
+        }
+        else
+        {
+            Pokemon.PokemonHpChange(null, this.gameObject, 0, 0, playerInput.maxHp / 8, Type.TypeEnum.IgnoreType);
+        }
+    }
+    //===================================================ºƒ…˙ƒ¢πΩ=================================================
 
 
 
