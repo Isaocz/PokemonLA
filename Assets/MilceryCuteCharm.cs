@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MilceryCuteCharm : MonoBehaviour
 {
+
+    Baby ParentBaby;
+
     protected struct EmptyList
     {
 
@@ -24,7 +27,7 @@ public class MilceryCuteCharm : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        ParentBaby = transform.parent.GetComponent<Baby>();
     }
 
     private void Update()
@@ -59,7 +62,7 @@ public class MilceryCuteCharm : MonoBehaviour
 
         if (!TCEell.isMultipleDamageColdDown)
         {
-            target.EmptyInfatuation(30,0.35f);
+            target.EmptyInfatuation(30,((ParentBaby.player.playerData.IsPassiveGetList[87]) ? 0.75f : 0.35f) );
             TCEell.isMultipleDamageColdDown = true;
             TargetList[ListIndex] = TCEell; ;
         }

@@ -664,6 +664,15 @@ public class PlayerData : MonoBehaviour
                 SpeBounsAlways += 1;
                 break;
 
+            case 87:
+                //老大的眼镜
+                break;
+
+            case 88:
+                //亿奥斯能量
+                AeosEnergy(player);
+                break;
+
             case 124:
                 //晶光芽宝宝
                 Instantiate(aGameObjectByPassiveItem(9), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
@@ -849,6 +858,77 @@ public class PlayerData : MonoBehaviour
         }
     }
     //===================================================寄生蘑菇=================================================
+
+
+
+
+
+
+
+
+
+
+
+
+    //===================================================亿奥斯能量=================================================
+    void AeosEnergy(PlayerControler playerInput)
+    {
+        List<int> Index = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+        for (int x=0; x < 100; x++)
+        {
+            int r = Random.Range(0, 8);
+            int e = Index[r];
+            Index[r] = Index[7];
+            Index[7] = e;
+
+        }
+
+        for (int i = 0; i < 8; i++) 
+        {
+            AeosEnergyChangeAbility(playerInput , Index[i] , i%2 == 0 );
+        }
+    }
+
+    void AeosEnergyChangeAbility(PlayerControler playerInput , int i , bool UpOrDown)
+    {
+        switch (i)
+        {
+            case 1:
+                playerInput.playerData.HPBounsAlways += ((UpOrDown)? 1 : -1);
+                player.ReFreshAbllityPoint();
+                player.ChangeHp(player.maxHp - player.Hp, 0, 0);
+                UIHealthBar.Instance.MaxHpText.text = player.maxHp.ToString();
+                break;
+            case 2:
+                playerInput.playerData.AtkBounsAlways += ((UpOrDown) ? 1 : -1);
+                break;
+            case 3:
+                playerInput.playerData.DefBounsAlways += ((UpOrDown) ? 1 : -1);
+                break;
+            case 4:
+                playerInput.playerData.SpABounsAlways += ((UpOrDown) ? 1 : -1);
+                break;
+            case 5:
+                playerInput.playerData.SpDBounsAlways += ((UpOrDown) ? 1 : -1);
+                break;
+            case 6:
+                playerInput.playerData.SpeBounsAlways += ((UpOrDown) ? 1 : -1);
+                break;
+            case 7:
+                playerInput.playerData.MoveSpwBounsAlways += ((UpOrDown) ? 1 : -1);
+                break;
+            case 8:
+                playerInput.playerData.LuckBounsAlways += ((UpOrDown) ? 1 : -1);
+                break;
+        }
+    }
+    //===================================================亿奥斯能量=================================================
+
+
+
+
+
 
 
 

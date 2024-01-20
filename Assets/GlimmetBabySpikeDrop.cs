@@ -18,10 +18,10 @@ public class GlimmetBabySpikeDrop : Substitute
         if (!ParentGlimmet.isDropDone) {
             ParentGlimmet.isDropDone = true;
             Instantiate(ToxicSpike, transform.position, Quaternion.identity);
-            if (Random.Range(0.0f , 1.0f) > 0.5f) { Instantiate(ToxicSpike, transform.position + Vector3.up, Quaternion.identity); }
-            if (Random.Range(0.0f , 1.0f) > 0.5f) { Instantiate(ToxicSpike, transform.position + Vector3.down, Quaternion.identity); }
-            if (Random.Range(0.0f , 1.0f) > 0.5f) { Instantiate(ToxicSpike, transform.position + Vector3.right, Quaternion.identity); }
-            if (Random.Range(0.0f , 1.0f) > 0.5f) { Instantiate(ToxicSpike, transform.position + Vector3.left, Quaternion.identity); }
+            if (Random.Range(0.0f , 1.0f) > ((ParentGlimmet.player.playerData.IsPassiveGetList[87]) ? 0.2f : 0.5f)  ) { Instantiate(ToxicSpike, transform.position + Vector3.up, Quaternion.identity); }
+            if (Random.Range(0.0f , 1.0f) > ((ParentGlimmet.player.playerData.IsPassiveGetList[87]) ? 0.2f : 0.5f)  ) { Instantiate(ToxicSpike, transform.position + Vector3.down, Quaternion.identity); }
+            if (Random.Range(0.0f , 1.0f) > ((ParentGlimmet.player.playerData.IsPassiveGetList[87]) ? 0.2f : 0.5f)  ) { Instantiate(ToxicSpike, transform.position + Vector3.right, Quaternion.identity); }
+            if (Random.Range(0.0f , 1.0f) > ((ParentGlimmet.player.playerData.IsPassiveGetList[87]) ? 0.2f : 0.5f)  ) { Instantiate(ToxicSpike, transform.position + Vector3.left, Quaternion.identity); }
         }
     }
 }

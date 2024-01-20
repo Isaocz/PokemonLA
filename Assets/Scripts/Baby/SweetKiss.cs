@@ -45,7 +45,7 @@ public class SweetKiss : Projectile
                 {
                     isKissDone = true;
                     //Debug.Log(transform.gameObject);
-                    other.GetComponent<Empty>().EmptyConfusion(10, 0.4f);
+                    other.GetComponent<Empty>().EmptyConfusion( ((Baby.player.playerData.IsPassiveGetList[87]) ? 20.0f : 10.0f) , 0.4f);
                 }
             }
         }

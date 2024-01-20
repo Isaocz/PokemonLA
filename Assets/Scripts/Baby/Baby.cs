@@ -18,27 +18,27 @@ public class Baby : MonoBehaviour
 
     public int BabyAtk()
     {
-        return (BabySpeciesAtk * 2 * BabyLevel()) / 100 + 5;
+        return (int)((BabySpeciesAtk * 2 * BabyLevel() * ((player.playerData.IsPassiveGetList[87])? 1.5f : 1.0f) ) / 100 + 5);
     }
 
     public int BabyDef()
     {
-        return (BabySpeciesDef * 2 * BabyLevel()) / 100 + 5;
+        return (int)((BabySpeciesDef * 2 * BabyLevel() * ((player.playerData.IsPassiveGetList[87]) ? 1.5f : 1.0f)) / 100 + 5);
     }
 
     public int BabySpA()
     {
-        return (BabySpeciesSpA * 2 * BabyLevel()) / 100 + 5;
+        return (int)((BabySpeciesSpA * 2 * BabyLevel() * ((player.playerData.IsPassiveGetList[87]) ? 1.5f : 1.0f)) / 100 + 5);
     }
 
     public int BabySpD()
     {
-        return (BabySpeciesSpD * 2 * BabyLevel()) / 100 + 5;
+        return (int)((BabySpeciesSpD * 2 * BabyLevel() * ((player.playerData.IsPassiveGetList[87]) ? 1.5f : 1.0f)) / 100 + 5);
     }
 
     public int BabySpe()
     {
-        return (BabySpeciesSpe * 2 * BabyLevel()) / 100 + 5;
+        return (int)((BabySpeciesSpe * 2 * BabyLevel() * ((player.playerData.IsPassiveGetList[87]) ? 1.5f : 1.0f)) / 100 + 5);
     }
 
     // Start is called before the first frame update
