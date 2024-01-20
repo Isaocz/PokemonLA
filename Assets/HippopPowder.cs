@@ -9,6 +9,13 @@ public class HippopPowder : MonoBehaviour
 
     // Start is called before the first frame update
 
+    Baby ParentBaby;
+
+    private void Start()
+    {
+        ParentBaby = transform.parent.parent.GetComponent<Baby>();
+    }
+
     void OnParticleCollision(GameObject other)
     {
         if (other.tag == "Empty")
@@ -19,13 +26,13 @@ public class HippopPowder : MonoBehaviour
                 switch (PowderType)
                 {
                     case 0:
-                        e.EmptyToxicDone(0.15f , 20 , 1);
+                        e.EmptyToxicDone(  ((ParentBaby.player.playerData.IsPassiveGetList[87]) ? 0.3f : 0.15f)  , 20 , 1);
                         break;
                     case 1:
-                        e.EmptyParalysisDone(0.15f, 10f, 1);
+                        e.EmptyParalysisDone(((ParentBaby.player.playerData.IsPassiveGetList[87]) ? 0.3f : 0.15f), 10f, 1);
                         break;
                     case 2:
-                        e.EmptySleepDone(0.15f, 7.5f, 1);
+                        e.EmptySleepDone(((ParentBaby.player.playerData.IsPassiveGetList[87]) ? 0.3f : 0.15f), 7.5f, 1);
                         break;
                 }
             }

@@ -60,7 +60,7 @@ public class SableyeConfuseRay : Projectile
             Destroy(rigidbody2D);
             if (other.GetComponent<Empty>() != null)
             {
-                other.GetComponent<Empty>().EmptyConfusion(10,5);
+                other.GetComponent<Empty>().EmptyConfusion(  ((Baby.player.playerData.IsPassiveGetList[87]) ? 20.0f : 10.0f) , 5);
             }
         }
     }
