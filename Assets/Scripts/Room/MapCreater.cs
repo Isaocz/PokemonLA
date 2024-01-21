@@ -88,9 +88,15 @@ public class MapCreater : MonoBehaviour
 
 
 
+    //========================一些控制根据道具特性等生成地图的变量==============================
 
 
+    //道具099 皮皮鲸喷壶
+    public bool IsWailmerPail { get { return isWailmerPail; } set { isWailmerPail = value; } }
+    bool isWailmerPail;
 
+
+    //======================================================
 
 
 
@@ -103,9 +109,28 @@ public class MapCreater : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
+        //========================一些控制根据道具特性等生成地图的变量==============================
+
+        PlayerControler p = GameObject.FindObjectOfType<PlayerControler>();
+        PlayerData pd = p.GetComponent<PlayerData>();
+        //道具099 皮皮鲸喷壶
+        IsWailmerPail = pd.IsPassiveGetList[99];
+
+
+        //======================================================
+
+
+
+
+
+
+
+
+
+
         //根据当前层数设置地图
-        if(FloorNum.GlobalFloorNum != null)
+        if (FloorNum.GlobalFloorNum != null)
         {
             //如果本剧游戏中已生成过梦幻房间，那么每层生成的概率为12%，如果还未生成，生成概率为(0.12f * Mathf.Pow(1.5f, 当前层数 - 1)));
 
@@ -151,6 +176,20 @@ public class MapCreater : MonoBehaviour
         //生成地图
         CreateRoom();
         UiMiniMap.Instance.CreatMiniMap();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }

@@ -110,6 +110,9 @@ public class PlayerData : MonoBehaviour
         ThroatSprayUpDone = OtherData.ThroatSprayUpDone;
         ResurrectionFossilDone = OtherData.ResurrectionFossilDone;
         IsMasqueradeChangeTypeDone = OtherData.IsMasqueradeChangeTypeDone;
+        IsKingsShieldDone = OtherData.IsKingsShieldDone;
+        MetronomeSkillIndex = OtherData.MetronomeSkillIndex;
+        MetronomeCount = OtherData.MetronomeCount;
 
 
     }
@@ -701,14 +704,32 @@ public class PlayerData : MonoBehaviour
                 ResetSpAtkSpecsCount(player);
                 break;
 
+
+
+            case 91:
+                //飞水手里剑
+                break;
+
+            case 92:
+                //王者盾牌
+                player.ComeInANewRoomEvent += ResetKingsShieldDone;
+                ResetKingsShieldDone(player);
+                break;
+
             case 93:
                 //魔幻假面
                 player.ComeInANewRoomEvent += ResetMasqueradeChangeType;
                 ResetMasqueradeChangeType(player);
                 break;
 
-            case 91:
-                //飞水手里剑
+            case 94:
+                //葱有兵的剑
+                Instantiate(aGameObjectByPassiveItem(31), player.transform.position, Quaternion.identity, player.NotFollowBaby.transform);
+                break;
+
+            case 95:
+                //葱有兵的盾
+                Instantiate(aGameObjectByPassiveItem(32), player.transform.position, Quaternion.identity, player.NotFollowBaby.transform);
                 break;
 
             case 96:
@@ -723,7 +744,11 @@ public class PlayerData : MonoBehaviour
 
             case 98:
                 //98 轮滑鞋
-                MoveSpwBounsAlways += 1;
+                MoveSpwBounsAlways += 2;
+                break;
+
+            case 99:
+                //99 喷壶
                 break;
 
             case 100:
@@ -810,6 +835,10 @@ public class PlayerData : MonoBehaviour
                 SpeBounsAlways -= 2;
                 break;
 
+            case 114:
+                //114 节拍器
+                break;
+
             case 115:
                 //115 凸凸头盔
                 break;
@@ -824,12 +853,25 @@ public class PlayerData : MonoBehaviour
                 ResetThroatSpray(player);
                 break;
 
+            case 118:
+                //118 万能伞
+                break;
+
             case 119:
                 //119 机变骰子
                 break;
 
             case 120:
                 //120 密探斗篷
+                break;
+
+            case 121:
+                //121 谜芝果
+                EnigmaBerry();
+                break;
+
+            case 122:
+                //122 防尘护目镜
                 break;
 
             case 123:
@@ -881,6 +923,15 @@ public class PlayerData : MonoBehaviour
             case 132:
                 //小磁怪宝宝
                 Instantiate(aGameObjectByPassiveItem(17), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
+                break;
+
+            case 133:
+                //道具133 淘金滑板
+                MoveSpwBounsAlways += 2;
+                break;
+
+            case 134:
+                //道具134 国际刑警执照
                 break;
 
             case 135:
@@ -1267,6 +1318,118 @@ public class PlayerData : MonoBehaviour
     public bool ResurrectionFossilDone { get { return resurrectionFossilDone; } set { resurrectionFossilDone = value; } }
     bool resurrectionFossilDone;
     //===================================================复活化石==================================================
+
+
+
+
+
+
+
+
+
+
+
+
+    //=====================================================王者盾牌=========================================================
+    public bool IsKingsShieldDone { get { return isKingsShieldDone; } set { isKingsShieldDone = value; } }
+    bool isKingsShieldDone;
+
+    void ResetKingsShieldDone(PlayerControler playerInput)
+    {
+        playerInput.playerData.IsKingsShieldDone = true;
+        playerInput.playerData.DefBounsJustOneRoom += 2;
+        playerInput.playerData.SpDBounsJustOneRoom += 2;
+        playerInput.ReFreshAbllityPoint();
+    }
+
+    public void KingsShieldDone()
+    {
+        if (IsKingsShieldDone)
+        {
+            IsKingsShieldDone = false;
+            DefBounsJustOneRoom -= 2;
+            SpDBounsJustOneRoom -= 2;
+            player.ReFreshAbllityPoint();
+        }
+    }
+
+    //=====================================================王者盾牌=========================================================
+
+
+
+
+
+
+    //=====================================================节拍器=========================================================
+
+    public int MetronomeCount { get { return metronomeCount; } set { metronomeCount = value; } }
+    int metronomeCount;
+
+    public int MetronomeSkillIndex { get { return metronomeSkillIndex; } set { metronomeSkillIndex = value; } }
+    int metronomeSkillIndex;
+
+
+
+    //=====================================================节拍器=========================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //=====================================================谜芝果=========================================================
+    void EnigmaBerry()
+    {
+        List<int> NewTypeDefList = new List<int> 
+        { Random.Range(-1,2) , Random.Range(-1, 2), Random.Range(-1, 2), Random.Range(-1, 2), Random.Range(-1, 2), Random.Range(-1, 2),
+        Random.Range(-1,2) , Random.Range(-1, 2), Random.Range(-1, 2), Random.Range(-1, 2), Random.Range(-1, 2), Random.Range(-1, 2),
+        Random.Range(-1,2) , Random.Range(-1, 2), Random.Range(-1, 2), Random.Range(-1, 2), Random.Range(-1, 2), Random.Range(-1, 2)};
+        int TypeSum = 0;
+
+        Debug.Log(NewTypeDefList[0].ToString() + NewTypeDefList[1].ToString() + NewTypeDefList[2].ToString() + NewTypeDefList[3].ToString() + NewTypeDefList[4].ToString() + NewTypeDefList[5].ToString() +
+            NewTypeDefList[6].ToString() + NewTypeDefList[7].ToString() + NewTypeDefList[8].ToString() + NewTypeDefList[9].ToString() + NewTypeDefList[10].ToString() + NewTypeDefList[11].ToString() +
+            NewTypeDefList[12].ToString() + NewTypeDefList[13].ToString() + NewTypeDefList[14].ToString() + NewTypeDefList[15].ToString() + NewTypeDefList[16].ToString() + NewTypeDefList[17].ToString() );
+
+        for (int i = 1; i < 19; i++)
+        {
+
+            TypeSum += TypeDefAlways[i] + NewTypeDefList[i-1];
+            //Debug.Log(TypeSum.ToString() + NewTypeDefList[i - 1].ToString());
+        }
+
+        Debug.Log(TypeSum);
+
+        if (TypeSum != 0)
+        {
+            for (int j = 0; j < Mathf.Abs(TypeSum); j++)
+            {
+                NewTypeDefList[Random.Range(0, 18)] += ((TypeSum > 0)? -1 : +1);
+            }
+        }
+
+        Debug.Log(NewTypeDefList[0].ToString() + NewTypeDefList[1].ToString() + NewTypeDefList[2].ToString() + NewTypeDefList[3].ToString() + NewTypeDefList[4].ToString() + NewTypeDefList[5].ToString() +
+    NewTypeDefList[6].ToString() + NewTypeDefList[7].ToString() + NewTypeDefList[8].ToString() + NewTypeDefList[9].ToString() + NewTypeDefList[10].ToString() + NewTypeDefList[11].ToString() +
+    NewTypeDefList[12].ToString() + NewTypeDefList[13].ToString() + NewTypeDefList[14].ToString() + NewTypeDefList[15].ToString() + NewTypeDefList[16].ToString() + NewTypeDefList[17].ToString());
+
+        for (int i = 1; i < 19; i++)
+        {
+            TypeDefAlways[i] = NewTypeDefList[i - 1];
+        }
+    }
+    //=====================================================谜芝果=========================================================
+
+
+
 
 
 

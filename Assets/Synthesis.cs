@@ -8,16 +8,21 @@ public class Synthesis : Skill
     // Start is called before the first frame update
     void Start()
     {
-        if(Weather.GlobalWeather.isSunny || Weather.GlobalWeather.isSunnyPlus)
-        {
-            RecoveryAmount = 2 * player.maxHp / 3;
+        if (!player.playerData.IsPassiveGetList[118]  ) {
+            if (Weather.GlobalWeather.isSunny || Weather.GlobalWeather.isSunnyPlus)
+            {
+                RecoveryAmount = 2 * player.maxHp / 3;
+            }
+            else if (Weather.GlobalWeather.isSandstorm || Weather.GlobalWeather.isSandstormPlus || Weather.GlobalWeather.isRain || Weather.GlobalWeather.isRainPlus || Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus)
+            {
+                RecoveryAmount = player.maxHp / 4;
+            }
+            else { RecoveryAmount = player.maxHp / 2; }
         }
-        else if(Weather.GlobalWeather.isSandstorm||Weather.GlobalWeather.isSandstormPlus || Weather.GlobalWeather.isRain || Weather.GlobalWeather.isRainPlus || Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus)
+        else
         {
-            RecoveryAmount = player.maxHp / 4;
+            RecoveryAmount = player.maxHp / 2;
         }
-        else { RecoveryAmount = player.maxHp / 2; }
-
 
         if ( SkillFrom == 2 && player.InGressCount.Count != 0 )
         {
@@ -33,14 +38,25 @@ public class Synthesis : Skill
             player.BurnRemove();
 
 
-            if (Weather.GlobalWeather.isSunny || Weather.GlobalWeather.isSunnyPlus) { }
-            else if (Weather.GlobalWeather.isSandstorm || Weather.GlobalWeather.isSandstormPlus || Weather.GlobalWeather.isRain || Weather.GlobalWeather.isRainPlus || Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus)
+            if (!player.playerData.IsPassiveGetList[118])
             {
-                if (NowFrozenPoint > 0.2f) { player.PlayerFrozenFloatPlus(NowFrozenPoint - 0.2f); }
-                if (NowToxicPoint > 0.2f) { player.ToxicFloatPlus(NowToxicPoint - 0.2f); }
-                if (NowParalysisPoint > 0.2f) { player.ParalysisFloatPlus(NowParalysisPoint - 0.2f); }
-                if (NowSleepPoint > 0.2f) { player.SleepFloatPlus(NowSleepPoint - 0.2f); }
-                if (NowBurnPoint > 0.2f) { player.BurnFloatPlus(NowBurnPoint - 0.2f); }
+                if (Weather.GlobalWeather.isSunny || Weather.GlobalWeather.isSunnyPlus) { }
+                else if (Weather.GlobalWeather.isSandstorm || Weather.GlobalWeather.isSandstormPlus || Weather.GlobalWeather.isRain || Weather.GlobalWeather.isRainPlus || Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus)
+                {
+                    if (NowFrozenPoint > 0.2f) { player.PlayerFrozenFloatPlus(NowFrozenPoint - 0.2f); }
+                    if (NowToxicPoint > 0.2f) { player.ToxicFloatPlus(NowToxicPoint - 0.2f); }
+                    if (NowParalysisPoint > 0.2f) { player.ParalysisFloatPlus(NowParalysisPoint - 0.2f); }
+                    if (NowSleepPoint > 0.2f) { player.SleepFloatPlus(NowSleepPoint - 0.2f); }
+                    if (NowBurnPoint > 0.2f) { player.BurnFloatPlus(NowBurnPoint - 0.2f); }
+                }
+                else
+                {
+                    if (NowFrozenPoint > 0.5f) { player.PlayerFrozenFloatPlus(NowFrozenPoint - 0.5f); }
+                    if (NowToxicPoint > 0.5f) { player.ToxicFloatPlus(NowToxicPoint - 0.5f); }
+                    if (NowParalysisPoint > 0.5f) { player.ParalysisFloatPlus(NowParalysisPoint - 0.5f); }
+                    if (NowSleepPoint > 0.5f) { player.SleepFloatPlus(NowSleepPoint - 0.5f); }
+                    if (NowBurnPoint > 0.5f) { player.BurnFloatPlus(NowBurnPoint - 0.5f); }
+                }
             }
             else
             {

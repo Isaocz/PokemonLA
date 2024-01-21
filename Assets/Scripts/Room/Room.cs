@@ -209,6 +209,9 @@ public class Room : MonoBehaviour
             isItemDrop = true;
             Debug.Log(1);
             Instantiate( RandomDropItem , transform.position+DropItemPosion , Quaternion.identity , transform );
+            if (playerControler.playerData.IsPassiveGetList[134]) {
+                if (Random.Range(0.0f, 1.0f) + ((float)playerControler.LuckPoint / 30) >= 0.5f) { Instantiate(RandomDropItem, transform.position + DropItemPosion + Vector3.up * 0.2f, Quaternion.identity, transform); }
+            }
             if (playerControler.ClearThisRoomEvent != null)
             {
                 playerControler.ClearThisRoomEvent(playerControler);
