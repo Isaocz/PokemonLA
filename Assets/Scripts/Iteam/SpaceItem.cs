@@ -27,7 +27,7 @@ public class SpaceItem : IteamPickUp
         }
     }
 
-
+    
     //当物品和玩家碰撞时，捕获玩家的脚本，如果捕获不为空，物品进入可拾取状态
 
 

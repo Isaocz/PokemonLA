@@ -420,6 +420,25 @@ public class UseSpaceItem : MonoBehaviour
                 }
                 break;
 
+            //电气种子
+            case 67:
+                Instantiate(PassiveItemGameObjList.ObjList.List[27], player.transform.position, Quaternion.identity);
+                break;
+
+            //青草种子
+            case 68:
+                Instantiate(PassiveItemGameObjList.ObjList.List[28], player.transform.position, Quaternion.identity);
+                break;
+
+            //迷雾种子
+            case 69:
+                Instantiate(PassiveItemGameObjList.ObjList.List[29], player.transform.position, Quaternion.identity);
+                break;
+
+            //精神种子
+            case 70:
+                Instantiate(PassiveItemGameObjList.ObjList.List[30], player.transform.position, Quaternion.identity);
+                break;
 
         }
 
