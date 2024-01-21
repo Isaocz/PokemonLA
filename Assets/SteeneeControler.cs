@@ -29,7 +29,8 @@ public class SteeneeControler : PlayerControler
 
         if (PlayerAbility == 0) { PlayerAbility = PlayerAbilityList.Ò¶×Ó·ÀÊØ; }
 
-
+        PlayerType01 = 12;
+        PlayerType02 = 0;
         Instance();
         InstanceNewSkillPanel();
 
@@ -46,8 +47,7 @@ public class SteeneeControler : PlayerControler
         skillBar02.GetSkill(Skill02);
         skillBar03.GetSkill(Skill03);
         skillBar04.GetSkill(Skill04);
-        PlayerType01 = 12;
-        PlayerType02 = 0;
+
 
 
 

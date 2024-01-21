@@ -201,6 +201,22 @@ public class Skill : MonoBehaviour
                 f02.player = player;
                 f03.player = player;
             }
+
+            //道具117 爽喉喷雾
+            if (player.playerData.IsPassiveGetList[117])
+            {
+                player.playerData.PassiveItemThroatSpray();
+            }
+        }
+
+        //声音类技能
+        if (_mTool.ContainsSkillTag(SkillTag, SkillTagEnum.接触类))
+        {
+            //道具138 锐利之爪
+            if (player.playerData.IsPassiveGetList[138])
+            {
+                CTDamage++;CTLevel++;
+            }
         }
 
         if (SkillType == (int)Type.TypeEnum.Water )
@@ -215,6 +231,7 @@ public class Skill : MonoBehaviour
             }
         }
 
+        //道具078 贝壳刃
         if (player.playerData.IsPassiveGetList[78])
         {
             if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.85f)
@@ -225,8 +242,62 @@ public class Skill : MonoBehaviour
                 s01.transform.rotation = Quaternion.Euler( 0 , 0 , _mTool.Angle_360Y(player.look , Vector2.right) );
             }
         }
-        
 
+        //道具091 飞水手里剑
+        if (player.playerData.IsPassiveGetList[91])
+        {
+            ScalchopPro s01 = Instantiate(PassiveItemGameObjList.ObjList.List[24], player.transform.position + (Vector3)(Vector2.up * player.SkillOffsetforBodySize[0]) + (Vector3)player.look * 0.5f, Quaternion.identity).GetComponent<ScalchopPro>();
+            s01.player = player;
+            s01.LaunchNotForce(-player.look, 9.0f);
+        }
+
+        //道具093 魔幻假面
+        if (player.playerData.IsPassiveGetList[93])
+        {
+            player.playerData.MasqueradeChangeType((Type.TypeEnum)SkillType);
+        }
+
+        //道具096 冷静头脑
+        if (SkillType == 15 && player.playerData.IsPassiveGetList[96])
+        {
+            player.playerData.PassiveItemClamMind();
+        }
+
+        //道具103 冰萝卜
+        if (SkillType == 15 && player.playerData.IsPassiveGetList[103])
+        {
+            Damage *= 1.35f;SpDamage *= 1.35f;
+        }
+
+        //道具104 黑萝卜
+        if (SkillType == 8 && player.playerData.IsPassiveGetList[104])
+        {
+            Damage *= 1.35f; SpDamage *= 1.35f;
+
+        }
+        //道具106 恶之挂轴
+        if (SkillType == 17 && player.playerData.IsPassiveGetList[106])
+        {
+            Damage *= 1.35f; SpDamage *= 1.35f;
+        }
+
+        //道具107 水之挂轴
+        if (SkillType == 11 && player.playerData.IsPassiveGetList[107])
+        {
+            Damage *= 1.35f; SpDamage *= 1.35f;
+        }
+
+        //道具112 达人带
+        if (player.playerData.IsPassiveGetList[112])
+        {
+            CTDamage++;
+        }
+
+        //道具137 焦点镜
+        if (player.playerData.IsPassiveGetList[137])
+        {
+            CTLevel++;
+        }
     }
 
     //引用于所有技能的Update函数，当存在时间耗尽时技能消失
@@ -276,7 +347,9 @@ public class Skill : MonoBehaviour
     /// </summary>
     /// <param name="target"></param>
     public void HitAndKo(Empty target)
-    {   
+    {
+        BeforeHitEvent(target);
+
         EmptyList TCEell = new EmptyList(target, false, 0.0f);
         int ListIndex = 0;
 
@@ -298,6 +371,8 @@ public class Skill : MonoBehaviour
 
 
         if (!isHitDone || (isMultipleDamage && !TCEell.isMultipleDamageColdDown)) {
+
+            int BeforeHP = target.EmptyHp;
             if (Damage == 0)
             {
                 float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1) * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
@@ -358,6 +433,15 @@ public class Skill : MonoBehaviour
                 TargetList[ListIndex] = TCEell;
             }
             HitEvent(target);
+
+
+            //道具136 贝壳铃
+            if (player.playerData.IsPassiveGetList[136])
+            {
+                Drain(BeforeHP , target.EmptyHp , 0.1f);
+            }
+
+
         }
 
     }
@@ -409,7 +493,7 @@ public class Skill : MonoBehaviour
                 //道具026 毒手
                 if (player.playerData.IsPassiveGetList[26])
                 {
-                    target.EmptyToxicDone(1, 30, 0.4f + (float)player.LuckPoint);
+                    target.EmptyToxicDone(1, 30, 0.4f + (float)player.LuckPoint / 10);
                 }
 
                 //道具059 金假牙
@@ -430,7 +514,7 @@ public class Skill : MonoBehaviour
             if (isBite)
             {
                 //道具63 锐利之牙
-                if (player.playerData.IsPassiveGetList[63] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 10 > 0.5f)
+                if (player.playerData.IsPassiveGetList[63] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 10 > 0.4f)
                 {
                     target.Fear(3.0f, 1);
                 }
@@ -440,7 +524,7 @@ public class Skill : MonoBehaviour
             if (isClaw)
             {
                 //道具63 锐利之牙
-                if (player.playerData.IsPassiveGetList[63] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 10 > 0.5f)
+                if (player.playerData.IsPassiveGetList[63] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 10 > 0.4f)
                 {
                     target.Fear(3.0f, 1);
                 }
@@ -453,12 +537,33 @@ public class Skill : MonoBehaviour
                 {
                     target.Fear(3.0f, 1);
                 }
+
+                //道具097 毒锁链
+                if (player.playerData.IsPassiveGetList[97])
+                {
+                    target.EmptyToxicDone(1, 30, 0.2f + (float)player.LuckPoint / 30);
+                }
+
             }
 
 
         }
     }
 
+
+    /// <summary>
+    /// 造成伤害之前发生的事件
+    /// </summary>
+    /// <param name="target"></param>
+    public void BeforeHitEvent(Empty target)
+    {
+        //道具101 博士的面具
+        if (player.playerData.IsPassiveGetList[101] && target.isBlindDone)
+        {
+            Damage *= 1.5f;
+            SpDamage *= 1.5f;
+        }
+    }
 
 
     //=================================多次攻击的次数判定===========================================
@@ -469,38 +574,61 @@ public class Skill : MonoBehaviour
     protected int Count2_5()
     {
         float p = Random.Range(0.0f, 1.0f)+((float)player.LuckPoint/30);
-        if(p>=0 && p <= 0.35f)
-        {
-            return 2;
-        }
-        else if (p >= 0.35f && p <= 0.70f)
-        {
-            return 3;
-        }
-        else if (p >= 0.70f && p <= 0.85f)
-        {
-            return 4;
+        //道具119 机变骰子
+        if (player.playerData.IsPassiveGetList[119]) {
+            if (p >= 0 && p <= 0.4f)
+            {
+                return 4;
+            }
+            else
+            {
+                return 5;
+            }
         }
         else
         {
-            return 5;
+            if (p >= 0 && p <= 0.35f)
+            {
+                return 2;
+            }
+            else if (p >= 0.35f && p <= 0.70f)
+            {
+                return 3;
+            }
+            else if (p >= 0.70f && p <= 0.85f)
+            {
+                return 4;
+            }
+            else
+            {
+                return 5;
+            }
         }
     }
 
     protected int Count1_3()
     {
         float p = Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 30);
-        if (p >= 0 && p <= 0.65f)
+
+        //道具119 机变骰子
+        if (player.playerData.IsPassiveGetList[119])
         {
-            return 1;
-        }
-        else if (p >= 0.65f && p <= 0.90f)
-        {
-            return 2;
+            return 3;
         }
         else
         {
-            return 3;
+            if (p >= 0 && p <= 0.65f)
+            {
+                return 1;
+            }
+            else if (p >= 0.65f && p <= 0.90f)
+            {
+                return 2;
+            }
+            else
+            {
+                return 3;
+            }
         }
     }
 

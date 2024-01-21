@@ -1385,6 +1385,11 @@ public class Pokemon : MonoBehaviour
     {
         if (isPlayerFrozenStart)
         {
+            //道具135 清净坠饰
+            if (GetComponent<PlayerControler>().playerData.IsPassiveGetList[135])
+            {
+                GetComponent<PlayerControler>().ChangeHPW(new Vector2Int(Random.Range(1, 7), (int)(PlayerFrozenPointFloat * 4.0)));
+            }
             PlayerFrozenPointFloat = 0;
             playerUIState.StateSlowUP(2, 0);
             playerUIState.StateDestory(2);
@@ -1463,6 +1468,11 @@ public class Pokemon : MonoBehaviour
     {
         if (isToxicStart)
         {
+            //道具135 清净坠饰
+            if (GetComponent<PlayerControler>().playerData.IsPassiveGetList[135])
+            {
+                GetComponent<PlayerControler>().ChangeHPW(new Vector2Int(Random.Range(1, 7), (int)(ToxicPointFloat * 4.0)));
+            }
             ToxicPointFloat = 0;
             playerUIState.StateSlowUP(3, 0);
             playerUIState.StateDestory(3);
@@ -1561,6 +1571,11 @@ public class Pokemon : MonoBehaviour
     {
         if (isParalysisStart)
         {
+            //道具135 清净坠饰
+            if (GetComponent<PlayerControler>().playerData.IsPassiveGetList[135])
+            {
+                GetComponent<PlayerControler>().ChangeHPW(new Vector2Int(Random.Range(1, 7), (int)(ParalysisPointFloat * 4.0)));
+            }
             ParalysisPointFloat = 0;
             playerUIState.StateSlowUP(4, 0);
             playerUIState.StateDestory(4);
@@ -1656,7 +1671,11 @@ public class Pokemon : MonoBehaviour
     {
         if (isBurnStart)
         {
-            
+            //道具135 清净坠饰
+            if (GetComponent<PlayerControler>().playerData.IsPassiveGetList[135])
+            {
+                GetComponent<PlayerControler>().ChangeHPW(new Vector2Int(Random.Range(1, 7), (int)(BurnPointFloat * 4.0)));
+            }
             BurnPointFloat = 0;
             playerUIState.StateSlowUP(5, 0);
             playerUIState.StateDestory(5);
@@ -1738,7 +1757,12 @@ public class Pokemon : MonoBehaviour
     {
         if (isSleepStart)
         {
-            
+
+            //道具135 清净坠饰
+            if (GetComponent<PlayerControler>().playerData.IsPassiveGetList[135])
+            {
+                GetComponent<PlayerControler>().ChangeHPW(new Vector2Int(Random.Range(1, 7), (int)(SleepPointFloat * 4.0)));
+            }
             SleepPointFloat = 0;
             playerUIState.StateSlowUP(6, 0);
             animator.speed = 1;
@@ -1813,7 +1837,6 @@ public class Pokemon : MonoBehaviour
     {
         if (isConfusionStart)
         {
-
             ConfusionPointFloat = 0;
             playerUIState.StateSlowUP(9, 0);
             playerUIState.StateDestory(9);
@@ -1991,6 +2014,15 @@ public class Pokemon : MonoBehaviour
                          ((AtkPower == 0) ? 0 : ( Mathf.Clamp((-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),
                          ((SpAPower == 0) ? 0 : ( Mathf.Clamp((-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),
                         (int)SkillType);
+
+                if (PlayerAttacked.playerData.IsPassiveGetList[120] && Attacker != null)
+                {
+                    Empty EmptyAttacker = Attacker.GetComponent<Empty>();
+                    if (EmptyAttacker != null)
+                    {
+                        EmptyAttacker.Blind(3,5);
+                    }
+                }
             }
             else
             {
@@ -2095,6 +2127,7 @@ public class Pokemon : MonoBehaviour
                 float AbillityAlpha = 1;
                 if (Attacked.GetComponent<Empty>().Abillity == Empty.EmptyAbillity.Levitate && SkillType == Type.TypeEnum.Ground) { AbillityAlpha *= 0.64f; }
 
+
                 float WeatherDefAlpha = ((Weather.GlobalWeather.isSandstorm ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Rock || EmptyAttacked.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1));
                 float WeatherSpDAlpha = ((Weather.GlobalWeather.isHail ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Ice || EmptyAttacked.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1));
                 /*float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
@@ -2133,6 +2166,14 @@ public class Pokemon : MonoBehaviour
                          ((AtkPower == 0) ? 0 : (Mathf.Clamp((-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1))),
                          ((SpAPower == 0) ? 0 : (Mathf.Clamp((-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1))),
                         (int)SkillType);
+                if (PlayerAttacked.playerData.IsPassiveGetList[120])
+                {
+                    Empty EmptyAttacker = Attacker.GetComponent<Empty>();
+                    if (EmptyAttacker != null)
+                    {
+                        EmptyAttacker.Blind(3, 5);
+                    }
+                }
             }
             else
             {

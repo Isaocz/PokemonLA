@@ -431,6 +431,10 @@ public class Empty : Pokemon
             //playerControler.ChangeHp(-(10 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250 ) ,0, 0);
             playerControler.KnockOutPoint = Knock;
             playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+            if (playerControler.playerData.IsPassiveGetList[115])
+            {
+                PokemonHpChange(playerControler.gameObject, this.gameObject, 10, 0, 0, Type.TypeEnum.No);
+            }
         }
     }
 
@@ -495,6 +499,18 @@ public class Empty : Pokemon
                 player.ChangeHPW(HWP);
                 transform.parent.parent.GetComponent<Room>().isClear -= 1;
                 if (DestoryEvent != null) { DestoryEvent(); }
+                if (player.playerData.IsPassiveGetList[89] && player.playerData.AttackWeightCount < 6)
+                {
+                    player.playerData.AttackWeightCount++;
+                    player.playerData.AtkBounsJustOneRoom++;
+                    player.ReFreshAbllityPoint();
+                }
+                if (player.playerData.IsPassiveGetList[90] && player.playerData.SpAtkSpecsCount < 6)
+                {
+                    player.playerData.SpAtkSpecsCount++;
+                    player.playerData.SpABounsJustOneRoom++;
+                    player.ReFreshAbllityPoint();
+                }
             }
             isDie = true;
             animator.SetTrigger("Die");

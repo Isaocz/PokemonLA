@@ -30,7 +30,8 @@ public class EeveeControler : PlayerControler
 
         if (PlayerAbility == 0) { PlayerAbility = PlayerAbilityList.Ã”≈‹; }
 
-
+        PlayerType01 = 1;
+        PlayerType02 = 0;
         Instance();
         InstanceNewSkillPanel();
 
@@ -43,8 +44,7 @@ public class EeveeControler : PlayerControler
         skillBar02.GetSkill(Skill02);
         skillBar03.GetSkill(Skill03);
         skillBar04.GetSkill(Skill04);
-        PlayerType01 = 1;
-        PlayerType02 = 0;
+
 
         JudgeEvolutionForEachLevel = JudgeSylveonEvolution;
     }

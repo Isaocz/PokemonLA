@@ -433,6 +433,13 @@ public class UseSpaceItem : MonoBehaviour
                 if (i == 1) { player.ChangeHp(Mathf.Clamp(player.maxHp / 16, 1, 10), 0, 19); }
             }
         }
+        if (player.playerData.IsPassiveGetList[100] && spaceItem.ItemTypeTag != null)
+        {
+            foreach (int i in spaceItem.ItemTypeTag)
+            {
+                if (i == 1) { player.ChangeHPW(new Vector2Int(Random.Range(1, 7), 2)); }
+            }
+        }
     }
 
     static void EscapeRope(PlayerControler player)

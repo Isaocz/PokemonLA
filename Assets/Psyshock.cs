@@ -166,9 +166,12 @@ public class Psyshock : Skill
 
     public void PsychockHitAndKo(Empty target)
     {
+        BeforeHitEvent(target);
         isPSHitDone = true;
         if (!isHitDone)
         {
+
+            int BeforeHP = target.EmptyHp;
             isHitDone = true;
             float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1) * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
 
@@ -191,6 +194,12 @@ public class Psyshock : Skill
             }
             target.EmptyKnockOut(KOPoint);
             HitEvent(target);
+
+            //µ¿æﬂ136 ±¥ø«¡Â
+            if (player.playerData.IsPassiveGetList[136])
+            {
+                Drain(BeforeHP, target.EmptyHp, 0.1f);
+            }
         }
 
     }

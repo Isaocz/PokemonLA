@@ -6,6 +6,9 @@ public class PlayerData : MonoBehaviour
 {
     public PassiveList passiveList;
 
+    public Type.TypeEnum Type01Always;
+    public Type.TypeEnum Type02Always;
+
     public float HPHardWorkAlways;
     public float AtkHardWorkAlways;
     public float DefHardWorkAlways;
@@ -99,6 +102,14 @@ public class PlayerData : MonoBehaviour
         TypeDefJustOneRoom = OtherData.TypeDefJustOneRoom;
         IsPassiveGetList = OtherData.IsPassiveGetList;
         GetPassiveItemList = OtherData.GetPassiveItemList;
+
+        ViciousEventIndex = OtherData.ViciousEventIndex;
+        AttackWeightCount = OtherData.AttackWeightCount;
+        SpAtkSpecsCount = OtherData.SpAtkSpecsCount;
+        ClamMindUpDone = OtherData.ClamMindUpDone;
+        ThroatSprayUpDone = OtherData.ThroatSprayUpDone;
+        ResurrectionFossilDone = OtherData.ResurrectionFossilDone;
+        IsMasqueradeChangeTypeDone = OtherData.IsMasqueradeChangeTypeDone;
 
 
     }
@@ -208,6 +219,7 @@ public class PlayerData : MonoBehaviour
 
             case 6:
                 LuckBounsAlways += 1;
+                LuckHardWorkAlways += 2;
                 break;
 
             case 7:
@@ -620,6 +632,10 @@ public class PlayerData : MonoBehaviour
                 ParasiticSpores(player);
                 break;
 
+            case 78:
+                //±´¿ÇÈÐ
+                break;
+
             case 79:
                 //·ÉÔÆ±ù¼¤ÁÜ
                 MoveSpwBounsAlways += 1;
@@ -673,6 +689,155 @@ public class PlayerData : MonoBehaviour
                 AeosEnergy(player);
                 break;
 
+            case 89:
+                //ÃÍ¹¥ÑÆÁå
+                player.ComeInANewRoomEvent += ResetAttackWeightCount;
+                ResetAttackWeightCount(player);
+                break;
+
+            case 90:
+                //½ø»÷ÑÛ¾µ
+                player.ComeInANewRoomEvent += ResetSpAtkSpecsCount;
+                ResetSpAtkSpecsCount(player);
+                break;
+
+            case 93:
+                //Ä§»Ã¼ÙÃæ
+                player.ComeInANewRoomEvent += ResetMasqueradeChangeType;
+                ResetMasqueradeChangeType(player);
+                break;
+
+            case 91:
+                //·ÉË®ÊÖÀï½£
+                break;
+
+            case 96:
+                //96 Àä¾²Í·ÄÔ
+                player.ComeInANewRoomEvent += ResetClamMind;
+                ResetClamMind(player);
+                break;
+
+            case 97:
+                //97 ¶¾ËøÁ´
+                break;
+
+            case 98:
+                //98 ÂÖ»¬Ð¬
+                MoveSpwBounsAlways += 1;
+                break;
+
+            case 100:
+                //100 ±¦¿É·½¿éÌ××°
+                break;
+
+            case 101:
+                //101 ²©Ê¿µÄÃæÕÖ
+                break;
+
+            case 102:
+                //102ÂíÖ¾Ê¿µÄÇ©Ãû
+                LuckBounsAlways += 1;
+                LuckHardWorkAlways += 2;
+                break;
+
+            case 103:
+                //103 ±ùÂÜ²·
+                TypeDefAlways[15]++;
+                break;
+
+            case 104:
+                //104 ºÚÂÜ²·
+                TypeDefAlways[8]++;
+                break;
+
+            case 105:
+                //105 Ì«¾§Öé
+                if (player.PlayerType02 != (int)Type.TypeEnum.No) {
+                    switch (Random.Range(0, 2))
+                    {
+                        case 0:
+                            player.PlayerTeraType = player.PlayerType01;
+                            break;
+                        case 1:
+                            player.PlayerTeraType = player.PlayerType02;
+                            break;
+                    }
+                }
+                else
+                {
+                    player.PlayerTeraType = player.PlayerType01;
+                }
+                break;
+
+            case 106:
+                //106 ¶ñÖ®¹ÒÖá
+                TypeDefAlways[17]++;
+                break;
+
+            case 107:
+                //107 Ë®Ö®¹ÒÖá
+                TypeDefAlways[11]++;
+                break;
+
+            case 108:
+                //108 ±Ì²ÝÃæ¾ß
+                player.PlayerTeraType = (int)Type.TypeEnum.Grass;
+                break;
+
+            case 109:
+                //109 Ë®¾®Ãæ¾ß
+                player.PlayerTeraType = (int)Type.TypeEnum.Water;
+                break;
+
+            case 110:
+                //110 »ðÔîÃæ¾ß
+                player.PlayerTeraType = (int)Type.TypeEnum.Fire;
+                break;
+
+            case 111:
+                //111 ´¡Ê¯Ãæ¾ß
+                player.PlayerTeraType = (int)Type.TypeEnum.Rock;
+                break;
+
+            case 112:
+                //112 ´ïÈË´ø
+                break;
+
+            case 113:
+                //113 ºó¹¥Ö®Î²
+                DefBounsAlways += 1;
+                SpDBounsAlways += 1;
+                SpeBounsAlways -= 2;
+                break;
+
+            case 115:
+                //115 Í¹Í¹Í·¿ø
+                break;
+
+            case 116:
+                //116 ¶ñ×÷¾çÖ®ÐÄ
+                break;
+
+            case 117:
+                //117 Ë¬ºíÅçÎí
+                player.ComeInANewRoomEvent += ResetThroatSpray;
+                ResetThroatSpray(player);
+                break;
+
+            case 119:
+                //119 »ú±ä÷»×Ó
+                break;
+
+            case 120:
+                //120 ÃÜÌ½¶·Åñ
+                break;
+
+            case 123:
+                //123 Ê÷¹ûÖÖÖ²Åè
+                player.ComeInANewRoomEvent += BerryPotDropBerry;
+                BerryPotDropBerry(player);
+                break;
+
             case 124:
                 //¾§¹âÑ¿±¦±¦
                 Instantiate(aGameObjectByPassiveItem(9), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
@@ -718,17 +883,42 @@ public class PlayerData : MonoBehaviour
                 Instantiate(aGameObjectByPassiveItem(17), player.transform.position, Quaternion.identity, player.FollowBaby.transform);
                 break;
 
+            case 135:
+                //µÀ¾ß135 Çå¾»×¹ÊÎ
+                break;
+
+            case 136:
+                //µÀ¾ß136 ±´¿ÇÁå 
+                break;
+
+            case 137:
+                //µÀ¾ß137 ½¹µã¾µ
+                break;
+
+            case 138:
+                //µÀ¾ß138 ÈñÀûÖ®×¦
+                break;
+
         }
 
         player.ReFreshAbllityPoint();
         GetPassiveItemList.Add(ItemIndex);
         IsPassiveGetList[ItemIndex] = true;
 
+        //µÀ¾ß28 Ê÷¹ûÅëâ¿Ö¸ÄÏ
         if (IsPassiveGetList[28] && GetPassiveItem.ItemTypeTag != null)
         {
             foreach (int i in GetPassiveItem.ItemTypeTag)
             {
                 if (i == 1) { player.ChangeHp(Mathf.Clamp(player.maxHp / 16, 1, 10), 0, 19); }
+            }
+        }
+        //µÀ¾ß100 ±¦¿É·½¿éÌ××°
+        if (IsPassiveGetList[100] && GetPassiveItem.ItemTypeTag != null)
+        {
+            foreach (int i in GetPassiveItem.ItemTypeTag)
+            {
+                if (i == 1) { player.ChangeHPW(new Vector2Int(Random.Range(1, 7), 3)); }
             }
         }
     }
@@ -930,6 +1120,153 @@ public class PlayerData : MonoBehaviour
 
 
 
+
+
+
+
+
+    //===================================================ÃÍ¹¥ÑÆÁå=================================================
+
+    public int AttackWeightCount { get { return attackWeightCount; } set { attackWeightCount = value; } }
+    int attackWeightCount;
+    void ResetAttackWeightCount(PlayerControler playerInput)
+    {
+        playerInput.playerData.AttackWeightCount = 0;
+    }
+
+    //===================================================ÃÍ¹¥ÑÆÁå=================================================
+
+
+
+
+
+
+
+
+
+    //===================================================½ø»÷ÑÛ¾µ=================================================
+
+    public int SpAtkSpecsCount { get { return spAtkSpecsCount; } set { spAtkSpecsCount = value; } }
+    int spAtkSpecsCount;
+    void ResetSpAtkSpecsCount(PlayerControler playerInput)
+    {
+        playerInput.playerData.SpAtkSpecsCount = 0;
+    }
+
+    //===================================================½ø»÷ÑÛ¾µ=================================================
+
+
+
+
+
+
+    //===================================================Àä¾²Í·ÄÔ=================================================
+    public bool ClamMindUpDone { get { return clamMindUpDone; } set { clamMindUpDone = value; } }
+    bool clamMindUpDone;
+    public void PassiveItemClamMind()
+    {
+        if (!ClamMindUpDone)
+        {
+            ClamMindUpDone = true;
+            player.playerData.SpABounsJustOneRoom += 2;
+            player.ReFreshAbllityPoint();
+        }
+    }
+
+    void ResetClamMind(PlayerControler playerInput)
+    {
+        playerInput.playerData.ClamMindUpDone = false;
+    }
+
+    //===================================================Àä¾²Í·ÄÔ=================================================
+
+
+
+
+
+    //===================================================Ë¬ºíÅçÎí=================================================
+    public bool ThroatSprayUpDone { get { return throatSprayUpDone; } set { throatSprayUpDone = value; } }
+    bool throatSprayUpDone;
+    public void PassiveItemThroatSpray()
+    {
+        if (!ThroatSprayUpDone)
+        {
+            ThroatSprayUpDone = true;
+            player.playerData.SpABounsJustOneRoom += 2;
+            player.ReFreshAbllityPoint();
+        }
+    }
+
+    void ResetThroatSpray(PlayerControler playerInput)
+    {
+        playerInput.playerData.ThroatSprayUpDone = false;
+    }
+
+    //===================================================Ë¬ºíÅçÎí=================================================
+
+
+
+
+
+
+    //===================================================Ê÷¹ûÖÖÖ²Åè=================================================
+    void BerryPotDropBerry(PlayerControler playerInput)
+    {
+        if (Random.Range(0.0f , 1.0f) + (float)playerInput.LuckPoint / 30 > 0.7f)
+        {
+            if (Random.Range(0.0f, 1.0f) > 0.7f)
+            {
+                Instantiate( PassiveItemGameObjList.ObjList.List[25] , transform.position , Quaternion.identity ).GetComponent<HealthUpCCg>().isLunch = true;
+            }
+            else
+            {
+                Instantiate(PassiveItemGameObjList.ObjList.List[26], transform.position, Quaternion.identity).GetComponent<RandomBerryTypeDef>().isLunch = true;
+            }
+        }
+    }
+
+    //===================================================Ê÷¹ûÖÖÖ²Åè==================================================
+
+
+
+
+
+    //===================================================Ä§»Ã¼ÙÃæ==================================================
+    public bool IsMasqueradeChangeTypeDone { get { return isMasqueradeChangeTypeDone; } set { isMasqueradeChangeTypeDone = value; } }
+    bool isMasqueradeChangeTypeDone;
+
+    void ResetMasqueradeChangeType(PlayerControler playerInput)
+    {
+        if (isMasqueradeChangeTypeDone)
+        {
+            isMasqueradeChangeTypeDone = false;
+            playerInput.PlayerType01 = (int)playerInput.playerData.Type01Always;
+            playerInput.PlayerType02 = (int)playerInput.playerData.Type02Always;
+        }
+    }
+
+    public void MasqueradeChangeType(Type.TypeEnum t)
+    {
+        if (!isMasqueradeChangeTypeDone)
+        {
+            isMasqueradeChangeTypeDone = true;
+            player.PlayerType01 = (int)t;
+            player.PlayerType02 = 0;
+        }
+    }
+
+
+
+
+    //===================================================Ä§»Ã¼ÙÃæ==================================================
+
+
+
+
+    //===================================================¸´»î»¯Ê¯==================================================
+    public bool ResurrectionFossilDone { get { return resurrectionFossilDone; } set { resurrectionFossilDone = value; } }
+    bool resurrectionFossilDone;
+    //===================================================¸´»î»¯Ê¯==================================================
 
 
 
