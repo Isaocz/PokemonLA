@@ -63,7 +63,7 @@ public class EnergyBall : GrassSkill
         BornAGrass(transform.position + Vector3.left);
         BornAGrass(transform.position + Vector3.down);
         BornAGrass(transform.position + Vector3.up);
-        if ( Weather.GlobalWeather.isSunny || Weather.GlobalWeather.isSunnyPlus || player.isInGrassyTerrain)
+        if ((!player.playerData.IsPassiveGetList[118] && ( Weather.GlobalWeather.isSunny || Weather.GlobalWeather.isSunnyPlus )) || player.isInGrassyTerrain)
         {
             BornAGrass(transform.position + Vector3.right + Vector3.down);
             BornAGrass(transform.position + Vector3.left + Vector3.up);

@@ -42,7 +42,7 @@ public class SolarBlade : GrassSkill
 
 
 
-        if (Weather.GlobalWeather.isSunny || Weather.GlobalWeather.isSunnyPlus)
+        if (!player.playerData.IsPassiveGetList[118] && (Weather.GlobalWeather.isSunny || Weather.GlobalWeather.isSunnyPlus))
         {
             ExistenceTime = 1.05f;
             Destroy(OverVFX.gameObject);
@@ -121,7 +121,7 @@ public class SolarBlade : GrassSkill
             Empty target = collision.GetComponent<Empty>();
             if (target != null)
             {
-                if (Weather.GlobalWeather.isRain || Weather.GlobalWeather.isRainPlus || Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus || Weather.GlobalWeather.isSandstorm || Weather.GlobalWeather.isSandstormPlus)
+                if (!player.playerData.IsPassiveGetList[118] && (Weather.GlobalWeather.isRain || Weather.GlobalWeather.isRainPlus || Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus || Weather.GlobalWeather.isSandstorm || Weather.GlobalWeather.isSandstormPlus))
                 {
                     if (!isDamageDown)
                     {

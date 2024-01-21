@@ -1014,15 +1014,15 @@ public class PlayerControler : Pokemon
         else
         {
             Type.TypeEnum enumVaue = (Type.TypeEnum)SkillType;
-            ChangePoint = ChangePoint * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+            ChangePoint = ChangePoint * (playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
                 * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
                 * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
-                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)
+                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)))
                 * (playerData.IsPassiveGetList[58] ? 1.5f : 1f);
-            ChangePointSp = ChangePointSp * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+            ChangePointSp = ChangePointSp * (playerData.IsPassiveGetList[118] ? 1 : ( ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
                 * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
                 * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
-                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)
+                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1) ))
                 * (playerData.IsPassiveGetList[58] ? 1.5f : 1f);
             ChangePoint = ChangePoint * (isReflect ? 0.75f : 1);
             ChangePointSp = ChangePointSp * (isLightScreen ? 0.75f : 1);
@@ -1078,6 +1078,11 @@ public class PlayerControler : Pokemon
                     playerData.PassiveItemClamMind();
                 }
 
+                //道具092 王者盾牌
+                playerData.KingsShieldDone();
+
+                //道具133 淘金滑板
+                if (Random.Range(0.0f , 1.0f) > 0.5f ) { ChangeMoney(-1); }
 
                 //输出被击打的动画管理器参数
                 animator.SetTrigger("Hit");
@@ -2121,13 +2126,16 @@ public class PlayerControler : Pokemon
     {
         if (PlayerType01 != 15 && PlayerType02 != 15 && PlayerTeraType != 15 && PlayerTeraTypeJOR != 15)
         {
-            PlayerHailTimer += Time.deltaTime;
-            if (PlayerHailTimer >= 2)
+            if (!playerData.IsPassiveGetList[122])
             {
                 PlayerHailTimer += Time.deltaTime;
-                if (Weather.GlobalWeather.isHailPlus) { ChangeHp(Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 19); }
-                else { ChangeHp(Mathf.Clamp((((float)maxHp) / 16), 1, 8), 0, 19); }
-                PlayerHailTimer = 0;
+                if (PlayerHailTimer >= 2)
+                {
+                    PlayerHailTimer += Time.deltaTime;
+                    if (Weather.GlobalWeather.isHailPlus) { ChangeHp(Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 19); }
+                    else { ChangeHp(Mathf.Clamp((((float)maxHp) / 16), 1, 8), 0, 19); }
+                    PlayerHailTimer = 0;
+                }
             }
         }
     }
@@ -2146,13 +2154,15 @@ public class PlayerControler : Pokemon
     {
         if (PlayerType01 != 5 && PlayerType01 != 6 && PlayerType01 != 9 && PlayerType02 != 5 && PlayerType02 != 6 && PlayerType02 != 9 && PlayerTeraType != 5 && PlayerTeraType != 6 && PlayerTeraType != 9 && PlayerTeraTypeJOR != 5 && PlayerTeraTypeJOR != 6 && PlayerTeraTypeJOR != 9)
         {
-            PlayerSandStormTimer += Time.deltaTime;
-            if (PlayerSandStormTimer >= 2)
-            {
+            if (!playerData.IsPassiveGetList[122]) {
                 PlayerSandStormTimer += Time.deltaTime;
-                if (Weather.GlobalWeather.isSandstormPlus) { ChangeHp(-Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 19); }
-                else { ChangeHp(-Mathf.Clamp((((float)maxHp) / 16), 1, 8), 0, 19); }
-                PlayerSandStormTimer = 0;
+                if (PlayerSandStormTimer >= 2)
+                {
+                    PlayerSandStormTimer += Time.deltaTime;
+                    if (Weather.GlobalWeather.isSandstormPlus) { ChangeHp(-Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 19); }
+                    else { ChangeHp(-Mathf.Clamp((((float)maxHp) / 16), 1, 8), 0, 19); }
+                    PlayerSandStormTimer = 0;
+                }
             }
         }
     }

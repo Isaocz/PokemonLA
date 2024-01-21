@@ -298,6 +298,15 @@ public class Skill : MonoBehaviour
         {
             CTLevel++;
         }
+
+        //道具114 节拍器
+        if (player.playerData.IsPassiveGetList[114])
+        {
+            if (SkillIndex == player.playerData.MetronomeSkillIndex) { player.playerData.MetronomeCount++; }
+            else { player.playerData.MetronomeCount = 0; player.playerData.MetronomeSkillIndex = SkillIndex; }
+            Damage *= Mathf.Clamp(Mathf.Pow(1.2f, player.playerData.MetronomeCount) , 1.0f , 2.0f);
+            SpDamage *= Mathf.Clamp(Mathf.Pow(1.2f, player.playerData.MetronomeCount), 1.0f, 2.0f);
+        }
     }
 
     //引用于所有技能的Update函数，当存在时间耗尽时技能消失

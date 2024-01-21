@@ -54,7 +54,7 @@ public class SolarBeamPlayer : GrassSkill
         player.isCanNotTurnDirection = true;
         player.SpeedChange();
 
-        if (Weather.GlobalWeather.isSunny || Weather.GlobalWeather.isSunnyPlus)
+        if (!player.playerData.IsPassiveGetList[118] && (Weather.GlobalWeather.isSunny || Weather.GlobalWeather.isSunnyPlus))
         {
             LeserTimer = 1.45f;
             transform.GetChild(3).gameObject.SetActive(false);
@@ -158,7 +158,7 @@ public class SolarBeamPlayer : GrassSkill
                 Empty e = EndRay.collider.GetComponent<Empty>();
                 if (e != null) {
 
-                    if (Weather.GlobalWeather.isRain || Weather.GlobalWeather.isRainPlus || Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus || Weather.GlobalWeather.isSandstorm || Weather.GlobalWeather.isSandstormPlus)
+                    if (!player.playerData.IsPassiveGetList[118] && (Weather.GlobalWeather.isRain || Weather.GlobalWeather.isRainPlus || Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus || Weather.GlobalWeather.isSandstorm || Weather.GlobalWeather.isSandstormPlus))
                     {
                         if (!isSPDamageDown) {
                             isSPDamageDown = true;
