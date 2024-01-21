@@ -27,7 +27,8 @@ public class SylveonControler : PlayerControler
             19927, 20419, 20917, 21421, 21931, 22447, 22969, 23497, 24031, 24571,
             25117, 25669, 26227, 26791, 27361, 27937, 28519, 29107, 29701 };
 
-
+        PlayerType01 = 18;
+        PlayerType02 = 0;
 
         Instance();
         InstanceNewSkillPanel();
@@ -45,8 +46,7 @@ public class SylveonControler : PlayerControler
         skillBar02.GetSkill(Skill02);
         skillBar03.GetSkill(Skill03);
         skillBar04.GetSkill(Skill04);
-        PlayerType01 = 18;
-        PlayerType02 = 0;
+
 
         Invoke("LearDisarmingVoice", 0.01f);
 

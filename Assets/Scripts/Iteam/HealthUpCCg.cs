@@ -40,12 +40,23 @@ public class HealthUpCCg : IteamPickUp
         {
             Animator animator = targer.GetComponent<Animator>();
             playerControler.ChangeHp(ChangePoint + playerControler.maxHp * ChangePer, 0, 0);
+
+            //道具28 树果烹饪指南
             if (playerControler.playerData.IsPassiveGetList[28] && ItemTypeTag != null) {
                 foreach (int i in ItemTypeTag)
                 {
                     Debug.Log(1);
                     if (i == 1) { playerControler.ChangeHp(Mathf.Clamp(playerControler.maxHp / 16, 1, 10), 0, 19); }
+                }
             }
+            //道具100 宝可方块套装
+            if (playerControler.playerData.IsPassiveGetList[100] && ItemTypeTag != null)
+            {
+                foreach (int i in ItemTypeTag)
+                {
+                    Debug.Log(1);
+                    if (i == 1) { playerControler.ChangeHPW(new Vector2Int(Random.Range(1,7),1)); }
+                }
             }
             animator.SetTrigger("Eat");
             UIGetANewItem.UI.GetANewItem(ItemTag, ItemName);

@@ -339,7 +339,43 @@ public class PlayerControler : Pokemon
     }
     bool isCanNotUseSpaceItem = false;
 
+
+
+
+
+
+
+
+
+
+
+
+    //=================================初始化=====================================
+
+    /// <summary>
+    /// 声明一个根据等级计算当前最大生命值的函数
+    /// </summary>
+    /// <param name="level"></param>
+    protected void MaxHpForLevel(int level)
+    {
+        maxHp = level + 10 + (int)(((float)level * HpPlayerPoint * 2) / 100.0f);
+    }
+    /// <summary>
+    /// 初始化能力
+    /// </summary>
+    /// <param name="level"></param>
+    /// <param name="Ability"></param>
+    /// <returns></returns>
+    protected int AbilityForLevel(int level, int Ability)
+    {
+        return (Ability * 2 * level) / 100 + 5;
+    }
+
+
     //初始化玩家的必要函数
+    /// <summary>
+    /// 初始化
+    /// </summary>
     protected void Instance()
     {
         
@@ -388,7 +424,19 @@ public class PlayerControler : Pokemon
 
         if (PlayerAbility == PlayerAbilityList.迟钝) { TimeStateInvincible *= 1.6f; }
         if (PlayerAbility == PlayerAbilityList.逃跑) { playerData.MoveSpwBounsAlways += 1; ReFreshAbllityPoint(); }
+        if (playerData.ResurrectionFossilDone) { PlayerType01 = (int)Type.TypeEnum.Rock; }
+        playerData.Type01Always = (Type.TypeEnum)PlayerType01;
+        playerData.Type02Always = (Type.TypeEnum)PlayerType02;
     }
+
+
+    //=================================初始化=====================================
+
+
+
+
+
+
 
 
     protected void InstanceNewSkillPanel()
@@ -462,7 +510,7 @@ public class PlayerControler : Pokemon
                 */
             }
 
-            //每帧检测一次当前是否为无敌状态，如果是，则计时器计时，如果计时器时间小于0，则变为不无敌状态
+            //击退 每帧检测一次当前是否为无敌状态，如果是，则计时器计时，如果计时器时间小于0，则变为不无敌状态
             {
                 if (isInvincible)
                 {
@@ -500,13 +548,13 @@ public class PlayerControler : Pokemon
                             Vector2 position = rigidbody2D.position;
                             if (NowRoom != new Vector3Int(100, 100, 0))
                             {
-                                position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 12);
-                                position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 7.3f);
+                                position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 12);
+                                position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 7.3f);
                             }
                             else
                             {
-                                position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 41.5f);
-                                position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 33.5f);
+                                position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 41.5f);
+                                position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 33.5f);
                             }
                             rigidbody2D.position = position;
                         }
@@ -893,220 +941,11 @@ public class PlayerControler : Pokemon
         }
     }
 
-    public void ChangeEvoPanelText()
-    {
-        EvoAnimaObj.GetComponent<EvolutionPS>().ChangeText(PlayerNameChinese , EvolutionPlayer.PlayerNameChinese);
-    }
-
-    protected void EvolutionStart()
-    {
-        EvoAnimaObj = Instantiate(EvolutionAnimation, transform.position + Vector3.up * 0.5f, Quaternion.identity);
-        EvoAnimaObj.GetComponent<EvolutionPS>().Name = PlayerNameChinese;
-        UISkillButton.Instance.isEscEnable = false;
-        animator.updateMode = AnimatorUpdateMode.UnscaledTime;
-        Time.timeScale = 0;
-        animator.SetTrigger("Evolution");
-        isEvolution = true;
-    }
-
-    public void Evolution()
-    {
-        RemoveSnowCloak();
-        RemoveOblivious();
-        PlayerControler e =  Instantiate(EvolutionPlayer , transform.position , Quaternion.identity);
-        animator.updateMode = AnimatorUpdateMode.Normal;
-        Time.timeScale = 1;
-        e.isSpaceItemCanBeUse = true;
-
-        if (playerAbility == playerAbility01) { e.playerAbility = e.playerAbility01; }
-        else if (playerAbility == playerAbility02) { e.playerAbility = e.playerAbility02; }
-        else if (playerAbility == playerAbilityDream) { e.playerAbility = e.playerAbilityDream; }
-        else { e.playerAbility = playerAbility; }
-
-        e.uIPanelGwtNewSkill = uIPanelGwtNewSkill;
-        e.Skill01 = Skill01;
-        e.Skill02 = Skill02;
-        e.Skill03 = Skill03;
-        e.Skill04 = Skill04;
-        e.Ex = Ex;
-
-        e.Money = Money;
-        e.Stone = Stone;
-        e.Money = Money;
-        e.HeartScale = HeartScale;
-        e.PPUp = PPUp;
-        e.SeedofMastery = SeedofMastery;
-        e.Level = Level;
-        e.LevelForSkill = LevelForSkill;
-        e.NowRoom = NowRoom;
-        e.InANewRoom = InANewRoom;
-        CopyState(e);
-        /*
-        UnityEditorInternal.ComponentUtility.CopyComponent(playerData); 
-        UnityEditorInternal.ComponentUtility.PasteComponentValues(e.GetComponent<PlayerData>());
-        UnityEditorInternal.ComponentUtility.CopyComponent(playerSubSkillList); 
-        UnityEditorInternal.ComponentUtility.PasteComponentValues(e.GetComponent<SubSkillList>());
-        */
-        e.GetComponent<PlayerData>().CopyData(playerData);
-        e.GetComponent<SubSkillList>().CopyList(playerSubSkillList);
-
-        GameObject EBaby = e.transform.GetChild(5).gameObject;
-        if (transform.GetChild(5).GetChild(0).childCount > 0)
-        {
-            foreach (Transform baby in transform.GetChild(5).GetChild(0))
-            {
-                Instantiate(baby, baby.transform.position, Quaternion.identity, EBaby.transform.GetChild(0));
-            }
-        }
-        if (transform.GetChild(5).GetChild(1).childCount > 0)
-        {
-            foreach (Transform baby in transform.GetChild(5).GetChild(1))
-            {
-                Instantiate(baby, baby.transform.position, Quaternion.identity, EBaby.transform.GetChild(1));
-            }
-        }
-        if (transform.GetChild(5).GetChild(2).childCount > 0)
-        {
-            foreach (Transform baby in transform.GetChild(5).GetChild(2))
-            {
-                Instantiate(baby, baby.transform.position, Quaternion.identity, EBaby.transform.GetChild(2));
-            }
-        }
-
-        e.spaceItem = spaceItem;
-        e.NatureIndex = NatureIndex;
-        e.Hp = (e.Level + 10 + (int)(((float)Level * e.HpPlayerPoint * 2) / 100.0f)) - (maxHp - Hp);
-        Destroy(gameObject);
-        UISkillButton.Instance.isEscEnable = true;
-    }
-
-    public void AddASubSkill(SubSkill sub)
-    {
-        if (!playerSubSkillList.SubSList.Contains(sub))
-        {
-            playerSubSkillList.SubSList.Add(sub);
-        }
-    }
-
-    public void RemoveASubSkill(SubSkill sub)
-    {
-        Debug.Log(sub);
-        if (playerSubSkillList.SubSList.Contains(sub))
-        {
-            playerSubSkillList.SubSList.Remove(sub);
-        }
-    }
-
-    //刷新技能
-    public void RefreshSkillCD()
-    {
-        if (isSkill01CD) { Skill01Timer = GetSkillIndexCD(1); skillBar01.CDPlus(GetSkillIndexCD(1)); }
-        if (isSkill02CD) { Skill02Timer = GetSkillIndexCD(2); skillBar02.CDPlus(GetSkillIndexCD(2)); }
-        if (isSkill03CD) { Skill03Timer = GetSkillIndexCD(3); skillBar03.CDPlus(GetSkillIndexCD(3)); }
-        if (isSkill04CD) { Skill04Timer = GetSkillIndexCD(4); skillBar04.CDPlus(GetSkillIndexCD(4)); }
-    }
-
-    /// <summary>
-    /// 获得某个技能的cd
-    /// </summary>
-    /// <param name="s"></param>
-    /// <returns></returns>
-    public float GetSkillCD( Skill s) 
-    {
-        float Output = s.ColdDown;
-        if (s.SkillIndex == Skill01.SkillIndex)
-        {
-            Output = GetSkillIndexCD(1);
-        }
-        if (s.SkillIndex == Skill02.SkillIndex)
-        {
-            Output = GetSkillIndexCD(2);
-        }
-        if (s.SkillIndex == Skill03.SkillIndex)
-        {
-            Output = GetSkillIndexCD(3);
-        }
-        if (s.SkillIndex == Skill04.SkillIndex)
-        {
-            Output = GetSkillIndexCD(4);
-        }
-        return Output;
-    }
-
-
-    /// <summary>
-    /// 得到技能1,2,3,4的cd
-    /// </summary>
-    /// <param name="SkillIndex"></param>
-    /// <returns></returns>
-    public float GetSkillIndexCD(int SkillIndex)
-    {
-        float OutPut = 0.0f;
-        float Skill01CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500));
-        float Skill02CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill02.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500));
-        float Skill03CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill03.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500));
-        float Skill04CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill04.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500));
-        if (playerData.IsPassiveGetList[62]) 
-        {
-            OutPut = (Skill01CDTime + Skill02CDTime + Skill03CDTime + Skill04CDTime) / 4.0f;
-        }
-        else {
-            switch (SkillIndex)
-            {
-                case 1:
-                    OutPut = Skill01CDTime;
-                    break;
-                case 2:
-                    OutPut = Skill02CDTime;
-                    break;
-                case 3:
-                    OutPut = Skill03CDTime;
-                    break;
-                case 4:
-                    OutPut = Skill04CDTime;
-                    break;
-            }
-        }
-        return OutPut;
-    }
 
 
 
-    //减少CD（int 减少第几号技能 ， float 减少的百分比（如果isTimeMode==true则减少固定时间） ，bool 是否为固定数量模式）
-    public void MinusSkillCDTime( int SkillIndex , float MinusCDTimerPer , bool isTimeMode)
-    {
-        switch (SkillIndex)
-        {
-            case 1:
-                Skill01Timer += (isTimeMode? MinusCDTimerPer : GetSkillIndexCD(1)*MinusCDTimerPer ); 
-                skillBar01.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(1) * MinusCDTimerPer));
-                break;
-            case 2:
-                Skill02Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(2) * MinusCDTimerPer);
-                skillBar02.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(2) * MinusCDTimerPer));
-                break;
-            case 3:
-                Skill03Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(3) * MinusCDTimerPer);
-                skillBar03.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(3) * MinusCDTimerPer));
-                break;
-            case 4:
-                Skill04Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(4) * MinusCDTimerPer);
-                skillBar04.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(4) * MinusCDTimerPer));
-                break;
-        }
-    }
 
 
-    //声明一个根据等级计算当前最大生命值的函数
-    protected void MaxHpForLevel(int level)
-    {
-        maxHp = level + 10 + (int)(((float)level*HpPlayerPoint*2) / 100.0f);
-    }
-
-    protected int AbilityForLevel(int level , int Ability)
-    {
-        return (Ability * 2 * level) / 100 + 5;
-    }
 
 
 
@@ -1129,6 +968,7 @@ public class PlayerControler : Pokemon
         playerUIState.StatePlus(8);
     }
 
+
     /// <summary>
     /// 结束气势头戴状态
     /// </summary>
@@ -1139,15 +979,18 @@ public class PlayerControler : Pokemon
 
     }
 
+
     /// <summary>
     /// 玩家是否处于反射壁状态
     /// </summary>
     public bool isReflect;
 
+
     /// <summary>
     /// 玩家是否处于光墙状态
     /// </summary>
     public bool isLightScreen;
+
 
     /// <summary>
     ///声明一个改变生命的函数ChangeHp，改变的点数为ChangePoint，当改变点数为负时触发无敌时间，当改变点数为正时不触发无敌时间
@@ -1229,11 +1072,19 @@ public class PlayerControler : Pokemon
                 if(nowHp <= 0) { PlayerDie(); }
                 //血量上升时对血条UI输出当前血量，并调用血条上升的函数
 
+                //道具096 冷静头脑
+                if (playerData.IsPassiveGetList[96] && enumVaue == Type.TypeEnum.Ice)
+                {
+                    playerData.PassiveItemClamMind();
+                }
+
+
                 //输出被击打的动画管理器参数
                 animator.SetTrigger("Hit");
             }
         }
     }
+
 
     /// <summary>
     /// 角色死亡
@@ -1244,6 +1095,7 @@ public class PlayerControler : Pokemon
         animator.SetTrigger("Die");
         rigidbody2D.bodyType = RigidbodyType2D.Static;
     }
+
 
     /// <summary>
     /// 角色复活或者呼出死亡UI
@@ -1262,6 +1114,8 @@ public class PlayerControler : Pokemon
                 playerData.IsPassiveGetList[72] = false;
                 spaceitemUseUI.UIAnimationStart(PassiveItemGameObjList.ObjList.List[20].GetComponent<SpriteRenderer>().sprite);
                 PlayerType01 = (int)Type.TypeEnum.Rock;
+                playerData.Type01Always = Type.TypeEnum.Rock;
+                playerData.ResurrectionFossilDone = true;
             }
             else {
                 if (TPMask.In != null)
@@ -1284,7 +1138,20 @@ public class PlayerControler : Pokemon
 
 
 
-    //声明一个改变金钱的函数ChangeMoney
+
+
+
+
+
+
+
+
+    //======================================改变玩家持有物======================================
+
+    /// <summary>
+    /// 声明一个改变金钱的函数ChangeMoney
+    /// </summary>
+    /// <param name="ChangePoint"></param>
     public void ChangeMoney(int ChangePoint)
     {
 
@@ -1295,6 +1162,11 @@ public class PlayerControler : Pokemon
         
     }
 
+
+    /// <summary>
+    /// 声明一个改变石头的函数
+    /// </summary>
+    /// <param name="ChangePoint"></param>
     public void ChangeStone(int ChangePoint)
     {
 
@@ -1305,6 +1177,11 @@ public class PlayerControler : Pokemon
 
     }
 
+
+    /// <summary>
+    /// 声明一个改变心之鳞片的函数
+    /// </summary>
+    /// <param name="ChangePoint"></param>
     public void ChangeHearsScale(int ChangePoint)
     {
 
@@ -1312,6 +1189,11 @@ public class PlayerControler : Pokemon
         nowHeartScale = Mathf.Clamp(nowHeartScale + ChangePoint, 0, 99);
     }
 
+
+    /// <summary>
+    /// 声明一个改变PPUP的函数
+    /// </summary>
+    /// <param name="ChangePoint"></param>
     public void ChangePPUp(int ChangePoint)
     {
 
@@ -1319,6 +1201,11 @@ public class PlayerControler : Pokemon
         nowPPUp = Mathf.Clamp(nowPPUp + ChangePoint, 0, 99);
     }
 
+
+    /// <summary>
+    /// 声明一个改变精通种子的函数
+    /// </summary>
+    /// <param name="ChangePoint"></param>
     public void ChangeMSeed(int ChangePoint)
     {
 
@@ -1326,9 +1213,28 @@ public class PlayerControler : Pokemon
         nowSeedofMastery = Mathf.Clamp(nowSeedofMastery + ChangePoint, 0, 99);
     }
 
+    //======================================改变玩家持有物======================================
 
 
 
+
+
+
+
+
+
+
+
+
+
+    //====================================================角色成长====================================================
+
+
+
+    /// <summary>
+    /// 改变努力值
+    /// </summary>
+    /// <param name="HWP"></param>
     public void ChangeHPW(Vector2Int HWP)
     {
         if (HWP.y > 0) {
@@ -1415,9 +1321,10 @@ public class PlayerControler : Pokemon
 
 
 
-
-
-    //声明一个改变经验值的函数ChangeEx
+    /// <summary>
+    /// //声明一个改变经验值以及提升等级的函数ChangeEx
+    /// </summary>
+    /// <param name="ChangePoint"></param>
     public void ChangeEx(int ChangePoint)
     {
 
@@ -1470,6 +1377,10 @@ public class PlayerControler : Pokemon
 
     }
 
+
+    /// <summary>
+    /// 刷新角色能力值
+    /// </summary>
     public void ReFreshAbllityPoint()
     {
         MaxHpForLevel(Level);
@@ -1495,8 +1406,9 @@ public class PlayerControler : Pokemon
     }
 
 
-
-
+    /// <summary>
+    /// 根据提升等级学习新技能
+    /// </summary>
     public void LearnNewSkill()
     {
         if ((LevelForSkill-StartLevel) % GetSkillLevel == 0 && LevelForSkill != StartLevel)
@@ -1510,13 +1422,24 @@ public class PlayerControler : Pokemon
         }
     }
 
+
+    /// <summary>
+    /// 其他渠道学习新技能
+    /// </summary>
+    /// <param name="LearnSkill"></param>
     public void LearnNewSkillByOtherWay( Skill LearnSkill )
     {
         uIPanelGwtNewSkill.NewSkillPanzelJump(LearnSkill , false);
     }
 
 
-
+    /// <summary>
+    /// 获得新技能
+    /// </summary>
+    /// <param name="NewSkill"></param>
+    /// <param name="OldSkill"></param>
+    /// <param name="SkillNumber"></param>
+    /// <param name="isLearnSkill"></param>
     public void GetNewSkill(Skill NewSkill ,Skill OldSkill , int SkillNumber , bool isLearnSkill)
     {
         switch (SkillNumber)
@@ -1570,13 +1493,266 @@ public class PlayerControler : Pokemon
     }
 
 
+    /// <summary>
+    /// 更换进化界面中的角色名字
+    /// </summary>
+    public void ChangeEvoPanelText()
+    {
+        EvoAnimaObj.GetComponent<EvolutionPS>().ChangeText(PlayerNameChinese, EvolutionPlayer.PlayerNameChinese);
+    }
 
 
-    //声明一个函数，调用时结束表示正在使用技能，无法移动的状态
+    /// <summary>
+    /// 开始进化动画
+    /// </summary>
+    protected void EvolutionStart()
+    {
+        EvoAnimaObj = Instantiate(EvolutionAnimation, transform.position + Vector3.up * 0.5f, Quaternion.identity);
+        EvoAnimaObj.GetComponent<EvolutionPS>().Name = PlayerNameChinese;
+        UISkillButton.Instance.isEscEnable = false;
+        animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+        Time.timeScale = 0;
+        animator.SetTrigger("Evolution");
+        isEvolution = true;
+    }
+
+
+    /// <summary>
+    /// 进化完成
+    /// </summary>
+    public void Evolution()
+    {
+        RemoveSnowCloak();
+        RemoveOblivious();
+        PlayerControler e = Instantiate(EvolutionPlayer, transform.position, Quaternion.identity);
+        animator.updateMode = AnimatorUpdateMode.Normal;
+        Time.timeScale = 1;
+        e.isSpaceItemCanBeUse = true;
+
+        if (playerAbility == playerAbility01) { e.playerAbility = e.playerAbility01; }
+        else if (playerAbility == playerAbility02) { e.playerAbility = e.playerAbility02; }
+        else if (playerAbility == playerAbilityDream) { e.playerAbility = e.playerAbilityDream; }
+        else { e.playerAbility = playerAbility; }
+
+        e.uIPanelGwtNewSkill = uIPanelGwtNewSkill;
+        e.Skill01 = Skill01;
+        e.Skill02 = Skill02;
+        e.Skill03 = Skill03;
+        e.Skill04 = Skill04;
+        e.Ex = Ex;
+
+        e.Money = Money;
+        e.Stone = Stone;
+        e.Money = Money;
+        e.HeartScale = HeartScale;
+        e.PPUp = PPUp;
+        e.SeedofMastery = SeedofMastery;
+        e.Level = Level;
+        e.LevelForSkill = LevelForSkill;
+        e.NowRoom = NowRoom;
+        e.InANewRoom = InANewRoom;
+        CopyState(e);
+        /*
+        UnityEditorInternal.ComponentUtility.CopyComponent(playerData); 
+        UnityEditorInternal.ComponentUtility.PasteComponentValues(e.GetComponent<PlayerData>());
+        UnityEditorInternal.ComponentUtility.CopyComponent(playerSubSkillList); 
+        UnityEditorInternal.ComponentUtility.PasteComponentValues(e.GetComponent<SubSkillList>());
+        */
+        e.GetComponent<PlayerData>().CopyData(playerData);
+        e.GetComponent<SubSkillList>().CopyList(playerSubSkillList);
+
+        GameObject EBaby = e.transform.GetChild(5).gameObject;
+        if (transform.GetChild(5).GetChild(0).childCount > 0)
+        {
+            foreach (Transform baby in transform.GetChild(5).GetChild(0))
+            {
+                Instantiate(baby, baby.transform.position, Quaternion.identity, EBaby.transform.GetChild(0));
+            }
+        }
+        if (transform.GetChild(5).GetChild(1).childCount > 0)
+        {
+            foreach (Transform baby in transform.GetChild(5).GetChild(1))
+            {
+                Instantiate(baby, baby.transform.position, Quaternion.identity, EBaby.transform.GetChild(1));
+            }
+        }
+        if (transform.GetChild(5).GetChild(2).childCount > 0)
+        {
+            foreach (Transform baby in transform.GetChild(5).GetChild(2))
+            {
+                Instantiate(baby, baby.transform.position, Quaternion.identity, EBaby.transform.GetChild(2));
+            }
+        }
+
+        e.spaceItem = spaceItem;
+        e.NatureIndex = NatureIndex;
+        e.Hp = (e.Level + 10 + (int)(((float)Level * e.HpPlayerPoint * 2) / 100.0f)) - (maxHp - Hp);
+        Destroy(gameObject);
+        UISkillButton.Instance.isEscEnable = true;
+    }
+
+    //====================================================角色成长====================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //====================================================释放技能和技能冷却====================================================
+
+    /// <summary>
+    /// 添加副技能
+    /// </summary>
+    /// <param name="sub"></param>
+    public void AddASubSkill(SubSkill sub)
+    {
+        if (!playerSubSkillList.SubSList.Contains(sub))
+        {
+            playerSubSkillList.SubSList.Add(sub);
+        }
+    }
+
+
+    /// <summary>
+    /// 移除副技能
+    /// </summary>
+    /// <param name="sub"></param>
+    public void RemoveASubSkill(SubSkill sub)
+    {
+        Debug.Log(sub);
+        if (playerSubSkillList.SubSList.Contains(sub))
+        {
+            playerSubSkillList.SubSList.Remove(sub);
+        }
+    }
+
+
+    /// <summary>
+    /// 刷新技能
+    /// </summary>
+    public void RefreshSkillCD()
+    {
+        if (isSkill01CD) { Skill01Timer = GetSkillIndexCD(1); skillBar01.CDPlus(GetSkillIndexCD(1)); }
+        if (isSkill02CD) { Skill02Timer = GetSkillIndexCD(2); skillBar02.CDPlus(GetSkillIndexCD(2)); }
+        if (isSkill03CD) { Skill03Timer = GetSkillIndexCD(3); skillBar03.CDPlus(GetSkillIndexCD(3)); }
+        if (isSkill04CD) { Skill04Timer = GetSkillIndexCD(4); skillBar04.CDPlus(GetSkillIndexCD(4)); }
+    }
+
+
+    /// <summary>
+    /// 获得某个技能的cd
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
+    public float GetSkillCD(Skill s)
+    {
+        float Output = s.ColdDown;
+        if (s.SkillIndex == Skill01.SkillIndex)
+        {
+            Output = GetSkillIndexCD(1);
+        }
+        if (s.SkillIndex == Skill02.SkillIndex)
+        {
+            Output = GetSkillIndexCD(2);
+        }
+        if (s.SkillIndex == Skill03.SkillIndex)
+        {
+            Output = GetSkillIndexCD(3);
+        }
+        if (s.SkillIndex == Skill04.SkillIndex)
+        {
+            Output = GetSkillIndexCD(4);
+        }
+        return Output;
+    }
+
+
+    /// <summary>
+    /// 得到技能1,2,3,4的cd
+    /// </summary>
+    /// <param name="SkillIndex"></param>
+    /// <returns></returns>
+    public float GetSkillIndexCD(int SkillIndex)
+    {
+        float OutPut = 0.0f;
+        float Skill01CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill01.Damage == 0) && (Skill01.SpDamage == 0)) ?  0.5f : 1.0f);
+        float Skill02CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill02.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill02.Damage == 0) && (Skill02.SpDamage == 0)) ? 0.5f : 1.0f);
+        float Skill03CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill03.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill03.Damage == 0) && (Skill03.SpDamage == 0)) ? 0.5f : 1.0f);
+        float Skill04CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill04.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill04.Damage == 0) && (Skill04.SpDamage == 0)) ? 0.5f : 1.0f);
+        if (playerData.IsPassiveGetList[62])
+        {
+            OutPut = (Skill01CDTime + Skill02CDTime + Skill03CDTime + Skill04CDTime) / 4.0f;
+        }
+        else
+        {
+            switch (SkillIndex)
+            {
+                case 1:
+                    OutPut = Skill01CDTime;
+                    break;
+                case 2:
+                    OutPut = Skill02CDTime;
+                    break;
+                case 3:
+                    OutPut = Skill03CDTime;
+                    break;
+                case 4:
+                    OutPut = Skill04CDTime;
+                    break;
+            }
+        }
+        return OutPut;
+    }
+
+
+    /// <summary>
+    /// 减少CD（int 减少第几号技能 ， float 减少的百分比（如果isTimeMode==true则减少固定时间） ，bool 是否为固定数量模式）
+    /// </summary>
+    /// <param name="SkillIndex"></param>
+    /// <param name="MinusCDTimerPer"></param>
+    /// <param name="isTimeMode"></param>
+    public void MinusSkillCDTime(int SkillIndex, float MinusCDTimerPer, bool isTimeMode)
+    {
+        switch (SkillIndex)
+        {
+            case 1:
+                Skill01Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(1) * MinusCDTimerPer);
+                skillBar01.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(1) * MinusCDTimerPer));
+                break;
+            case 2:
+                Skill02Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(2) * MinusCDTimerPer);
+                skillBar02.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(2) * MinusCDTimerPer));
+                break;
+            case 3:
+                Skill03Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(3) * MinusCDTimerPer);
+                skillBar03.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(3) * MinusCDTimerPer));
+                break;
+            case 4:
+                Skill04Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(4) * MinusCDTimerPer);
+                skillBar04.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(4) * MinusCDTimerPer));
+                break;
+        }
+    }
+
+
+    /// <summary>
+    /// //声明一个函数，调用时结束表示正在使用技能，无法移动的状态
+    /// </summary>
     public void SkillNow()
     {
         isSkill = false;
     }
+
 
     /// <summary>
     /// 小跟班跟随玩家射击
@@ -1594,8 +1770,9 @@ public class PlayerControler : Pokemon
     }
 
 
-
-    //声明一个函数，当调用时发射技能01
+    /// <summary>
+    /// 声明一个函数，当调用时发射有前摇技能
+    /// </summary>
     public void GetAnimationSkill01Launch()
     {
         if (isSkill01lunch) {
@@ -1619,7 +1796,10 @@ public class PlayerControler : Pokemon
         }
     }
 
-    //声明一个函数，当调用时发射无前摇类技能
+
+    /// <summary>
+    /// 声明一个函数，当调用时发射无前摇类技能
+    /// </summary>
     public void GetAnimationSkill02Launch()
     {
         if (isSkill01lunch && Skill01.isImmediately)
@@ -1644,7 +1824,11 @@ public class PlayerControler : Pokemon
         }
     }
 
-    //声明一个函数，当调用此函数时根据招式方向生成技能1
+
+    /// <summary>
+    /// 声明一个函数，当调用此函数时根据招式方向生成技能1
+    /// </summary>
+    /// <param name="Direction"></param>
     protected void LaunchSkill01(Vector2 Direction)
     {
         Skill skillObj = null;
@@ -1673,6 +1857,11 @@ public class PlayerControler : Pokemon
         skillObj.player = this;
     }
 
+
+    /// <summary>
+    /// 声明一个函数，当调用此函数时根据招式方向生成技能2
+    /// </summary>
+    /// <param name="Direction"></param>
     protected void LaunchSkill02(Vector2 Direction)
     {
         Skill skillObj = null;
@@ -1703,6 +1892,11 @@ public class PlayerControler : Pokemon
         skillObj.player = this;
     }
 
+
+    /// <summary>
+    /// 声明一个函数，当调用此函数时根据招式方向生成技能3
+    /// </summary>
+    /// <param name="Direction"></param>
     protected void LaunchSkill03(Vector2 Direction)
     {
         Skill skillObj = null;
@@ -1734,6 +1928,11 @@ public class PlayerControler : Pokemon
         skillObj.player = this;
     }
 
+
+    /// <summary>
+    /// 声明一个函数，当调用此函数时根据招式方向生成技能4
+    /// </summary>
+    /// <param name="Direction"></param>
     protected void LaunchSkill04(Vector2 Direction)
     {
         Skill skillObj = null;
@@ -1765,7 +1964,26 @@ public class PlayerControler : Pokemon
         skillObj.player = this;
     }
 
+
+
+    //====================================================释放技能和技能冷却====================================================
+
+
+
+
+
+
+
+
+
+
+    //====================================================TP====================================================
+
     Vector3Int TpVector3;
+    /// <summary>
+    /// 输入开始tp
+    /// </summary>
+    /// <param name="TPVector3"></param>
     public void TP(Vector3Int TPVector3)
     {
         TpVector3 = TPVector3;
@@ -1774,12 +1992,18 @@ public class PlayerControler : Pokemon
         isTPMove = true;
     }
 
-    
+    /// <summary>
+    /// 开始黑屏
+    /// </summary>
     public void TPStart()
     {
         TPMask.In.TPStart = true;
         TPMask.In.BlackTime = 1.15f;
     }
+
+    /// <summary>
+    /// 移动
+    /// </summary>
     public void TPDoit()
     {
         gameObject.transform.position = new Vector3(30.0f * TpVector3.x, 24.0f * TpVector3.y - 2.0f, 0);
@@ -1790,11 +2014,20 @@ public class PlayerControler : Pokemon
         InANewRoom = true;
         UiMiniMap.Instance.SeeMapOver();
     }
+
+    /// <summary>
+    /// 结束黑屏
+    /// </summary>
     public void TPEnd()
     {
         isTP = false;
         isTPMove = false;
     }
+
+
+    //====================================================TP====================================================
+
+
 
     public void InstanceNature(int NatureIndex)
     {
@@ -2034,6 +2267,15 @@ public class PlayerControler : Pokemon
             if (!isCanNotMove && (horizontal != 0 || vertical != 0)) { playerData.AtkHardWorkJustOneRoom += Time.deltaTime * 0.25f; playerData.SpAHardWorkJustOneRoom += Time.deltaTime * 0.25f; }
             else { playerData.AtkHardWorkJustOneRoom = Mathf.Clamp(playerData.AtkHardWorkJustOneRoom - Time.deltaTime * 0.5f , 0 , 10000); playerData.SpAHardWorkJustOneRoom = Mathf.Clamp(playerData.SpAHardWorkJustOneRoom - Time.deltaTime * 0.5f, 0, 10000); }
             ReFreshAbllityPoint();
+        }
+
+        //道具096 冷静头脑
+        if (playerData.IsPassiveGetList[96])
+        {
+            if (Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus)
+            {
+                playerData.PassiveItemClamMind();
+            }
         }
     }
 
