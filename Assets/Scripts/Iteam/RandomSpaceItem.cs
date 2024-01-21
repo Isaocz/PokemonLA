@@ -10,7 +10,7 @@ public class RandomSpaceItem : MonoBehaviour
 
     private void Start()
     {
-        int RandomPoint = (int)(Random.Range(4.8f, 6.7f) * 10);//5.8f
+        int RandomPoint = (int)(Random.Range(4.8f, 7.1f) * 10);//5.8f
         if (RandomPoint <= 50) { RandomPoint -= 48; }
         OutPut = Instantiate(SpaceItemList.transform.GetChild(RandomPoint), transform.position, Quaternion.identity, transform).gameObject;
         OutPut.transform.parent = transform.parent;
