@@ -16,5 +16,13 @@ public class ToxicSpike : Spike
                 if (playerControler.isToxicDone && !isDamageUp) { Damage *= 2; isDamageUp = true; }
             }
         }
+        else if (other.tag == "Empty")
+        {
+            Empty target = other.GetComponent<Empty>();
+            if (target != null)
+            {
+                target.EmptyToxicDone(0.35f , 10 , 1);
+            }
+        }
     }
 }

@@ -93,7 +93,7 @@ public class Skill : MonoBehaviour
     public bool isImmediately;
 
     
-
+    
     //用于多端攻击的构造体
     protected struct EmptyList
     {
