@@ -218,6 +218,8 @@ public class PlayerControler : Pokemon
         危险预知 = 9,
         迷人之躯 = 10,
         妖精皮肤 = 11,
+        激流 = 12,
+        好胜 = 13,
     }
     //当前角色可以获得特性
     public PlayerAbilityList playerAbility01;
@@ -1662,19 +1664,19 @@ public class PlayerControler : Pokemon
     public float GetSkillCD(Skill s)
     {
         float Output = s.ColdDown;
-        if (s.SkillIndex == Skill01.SkillIndex)
+        if (Skill01 != null && s.SkillIndex == Skill01.SkillIndex)
         {
             Output = GetSkillIndexCD(1);
         }
-        if (s.SkillIndex == Skill02.SkillIndex)
+        if (Skill02 != null && s.SkillIndex == Skill02.SkillIndex)
         {
             Output = GetSkillIndexCD(2);
         }
-        if (s.SkillIndex == Skill03.SkillIndex)
+        if (Skill03 != null && s.SkillIndex == Skill03.SkillIndex)
         {
             Output = GetSkillIndexCD(3);
         }
-        if (s.SkillIndex == Skill04.SkillIndex)
+        if (Skill04 != null && s.SkillIndex == Skill04.SkillIndex)
         {
             Output = GetSkillIndexCD(4);
         }
@@ -1690,10 +1692,10 @@ public class PlayerControler : Pokemon
     public float GetSkillIndexCD(int SkillIndex)
     {
         float OutPut = 0.0f;
-        float Skill01CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill01.Damage == 0) && (Skill01.SpDamage == 0)) ?  0.5f : 1.0f);
-        float Skill02CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill02.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill02.Damage == 0) && (Skill02.SpDamage == 0)) ? 0.5f : 1.0f);
-        float Skill03CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill03.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill03.Damage == 0) && (Skill03.SpDamage == 0)) ? 0.5f : 1.0f);
-        float Skill04CDTime = (isParalysisDone ? 1.8f : 1.0f) * (Skill04.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill04.Damage == 0) && (Skill04.SpDamage == 0)) ? 0.5f : 1.0f);
+        float Skill01CDTime = (Skill01 == null) ? 0 : ((isParalysisDone ? 1.8f : 1.0f) * (Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill01.Damage == 0) && (Skill01.SpDamage == 0)) ?  0.5f : 1.0f));
+        float Skill02CDTime = (Skill02 == null) ? 0 : ((isParalysisDone ? 1.8f : 1.0f) * (Skill02.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill02.Damage == 0) && (Skill02.SpDamage == 0)) ? 0.5f : 1.0f));
+        float Skill03CDTime = (Skill03 == null) ? 0 : ((isParalysisDone ? 1.8f : 1.0f) * (Skill03.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill03.Damage == 0) && (Skill03.SpDamage == 0)) ? 0.5f : 1.0f));
+        float Skill04CDTime = (Skill04 == null) ? 0 : ((isParalysisDone ? 1.8f : 1.0f) * (Skill04.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill04.Damage == 0) && (Skill04.SpDamage == 0)) ? 0.5f : 1.0f));
         if (playerData.IsPassiveGetList[62])
         {
             OutPut = (Skill01CDTime + Skill02CDTime + Skill03CDTime + Skill04CDTime) / 4.0f;

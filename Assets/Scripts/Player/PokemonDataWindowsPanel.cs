@@ -244,6 +244,8 @@ public class PokemonDataWindowsPanel : MonoBehaviour
             case 9: AbilityText.text = "特性：危险预知";  AbilityDescribe.DescribeText = "111"; break;
             case 10: AbilityText.text = "特性：迷人之躯";  AbilityDescribe.DescribeText = "当接触类招式命中后，有概率累计目标的着迷进度。"; break;
             case 11: AbilityText.text = "特性：妖精皮肤";  AbilityDescribe.DescribeText = "111"; break;
+            case 12: AbilityText.text = "特性：激流";  AbilityDescribe.DescribeText = "111"; break;
+            case 13: AbilityText.text = "特性：好胜";  AbilityDescribe.DescribeText = "111"; break;
 
 
 
