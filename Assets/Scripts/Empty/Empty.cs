@@ -203,14 +203,15 @@ public class Empty : Pokemon
         int OutPut;
         if (!isBoos)
         {
-            OutPut = Mathf.Clamp( PlayerLevel + (player.playerData.IsPassiveGetList[29] ? (Random.Range(2, 5)) : (Random.Range(-2, 2))) , 1  , 100 );
+            OutPut = Mathf.Clamp( PlayerLevel + (player.playerData.IsPassiveGetList[29] ? 5 : 0) + (Random.Range(-2, 2)  ) , 1  , 100 );
             if (FloorNum.GlobalFloorNum != null)
             {
+                OutPut = Mathf.Clamp(OutPut + FloorNum.GlobalFloorNum.EmptyLevelAlpha[FloorNum.GlobalFloorNum.FloorNumber], 1, 100);
                 if (FloorNum.GlobalFloorNum.FloorNumber == 0)
                 {
                     if (Mathf.Abs(transform.parent.position.x / 30) + Mathf.Abs(transform.parent.position.y / 24) < 3)
                     {
-                        OutPut = Random.Range(2, 5);
+                        OutPut = Random.Range(1, 3);
                     }
                 }
             }
@@ -218,7 +219,7 @@ public class Empty : Pokemon
         }
         else
         {
-            OutPut = Mathf.Clamp(player.Level + (player.playerData.IsPassiveGetList[29] ? (Random.Range(2, 5)) : (Random.Range(-2, 2)) ), (player.playerData.IsPassiveGetList[29] ? 15 : 5), 100);
+            OutPut = Mathf.Clamp(player.Level + (player.playerData.IsPassiveGetList[29] ? 5 : 0) + (Random.Range(-2, 2) ), (player.playerData.IsPassiveGetList[29] ? 10 : 5), 100);
         }
         return OutPut;
     }

@@ -1,10 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NextFloorGateWay : GateWay
 {
     //声明一个布尔型变量，摄像机是否移动。一个计时器
+
+    
+    private void Start()
+    {
+        if (FloorNum.GlobalFloorNum != null) {
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = FloorNum.GlobalFloorNum.NextFloorText[FloorNum.GlobalFloorNum.FloorNumber];
+        }
+    }
+
 
 
 

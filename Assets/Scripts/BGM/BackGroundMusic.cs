@@ -9,6 +9,7 @@ public class BackGroundMusic : MonoBehaviour
     public static BackGroundMusic StaticBGM;
 
     public AudioClip MiSiRoTown;
+    public AudioClip CaveMusic;
     public AudioClip PC;
     public AudioClip Store;
     public AudioClip Boss;
@@ -35,7 +36,7 @@ public class BackGroundMusic : MonoBehaviour
 
     public void ChangeBGMToTown()
     {
-        if (BGM.clip != MiSiRoTown) { BGM.clip = MiSiRoTown; BGM.Play(); }
+        if (BGM.clip != TownMusic()) { BGM.clip = TownMusic(); BGM.Play(); }
     }
 
     public void ChangeBGMToPC()
@@ -100,4 +101,23 @@ public class BackGroundMusic : MonoBehaviour
 
         transitionTimer = 0.0f;
     }
+
+
+
+    AudioClip TownMusic()
+    {
+        AudioClip OutPut = MiSiRoTown;
+        switch (MapCreater.StaticMap.NowMapType)
+        {
+            case MapCreater.MapType.Forest:
+                OutPut = MiSiRoTown;
+                break;
+            case MapCreater.MapType.Cave:
+                OutPut = CaveMusic;
+                break;
+        }
+        return OutPut;
+    }
+
+
 }
