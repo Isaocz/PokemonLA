@@ -60,12 +60,12 @@ public class Diglett : Empty
                 if (!isUnderGround)
                 {
                     UpGroundTimer += Time.deltaTime;
-                    if (!isLunchMudShot && UpGroundTimer >= 2)
+                    if (!isLunchMudShot && UpGroundTimer >= 2 && UpGroundTimer <= 3.5f)
                     {
 
                         LunchMudShot();
                     }
-                    if (UpGroundTimer >= 5)
+                    if (UpGroundTimer >= 6)
                     {
                         isUnderGround = true;
                         UpGroundTimer = 0;

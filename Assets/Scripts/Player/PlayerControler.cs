@@ -429,6 +429,18 @@ public class PlayerControler : Pokemon
         if (playerData.ResurrectionFossilDone) { PlayerType01 = (int)Type.TypeEnum.Rock; }
         playerData.Type01Always = (Type.TypeEnum)PlayerType01;
         playerData.Type02Always = (Type.TypeEnum)PlayerType02;
+
+
+        if (!isEvolution && EvolutionSkill != null && (
+            Skill01.SkillIndex == EvolutionSkill.SkillIndex || Skill01.SkillIndex == EvolutionSkill.SkillIndex + 1 ||
+            Skill02.SkillIndex == EvolutionSkill.SkillIndex || Skill02.SkillIndex == EvolutionSkill.SkillIndex + 1 ||
+            Skill03.SkillIndex == EvolutionSkill.SkillIndex || Skill03.SkillIndex == EvolutionSkill.SkillIndex + 1 ||
+            Skill04.SkillIndex == EvolutionSkill.SkillIndex || Skill04.SkillIndex == EvolutionSkill.SkillIndex + 1
+
+            ))
+        {
+            isCanEvolution = true;
+        }
     }
 
 

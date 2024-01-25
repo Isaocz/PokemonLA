@@ -49,8 +49,8 @@ public class Kricketune : Empty
         EmptyHpForLevel(Emptylevel);
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);
         SpAAbilityPoint = AbilityForLevel(Emptylevel, SpAEmptyPoint);
-        DefAbilityPoint = AbilityForLevel(Emptylevel, DefEmptyPoint);
-        SpdAbilityPoint = AbilityForLevel(Emptylevel, SpdEmptyPoint);
+        DefAbilityPoint = AbilityForLevel(Emptylevel, DefEmptyPoint) * 1.5f;
+        SpdAbilityPoint = AbilityForLevel(Emptylevel, SpdEmptyPoint) * 1.5f;
         SpeedAbilityPoint = AbilityForLevel(Emptylevel, SpeedEmptyPoint);
         Exp = BaseExp * Emptylevel / 7;
 

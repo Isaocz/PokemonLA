@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class MapCreater : MonoBehaviour
 {
+    //地图的种类
+    public enum MapType
+    {
+        Forest,
+        Cave,
+        Snow,
+    }
+    public MapType NowMapType;
 
     public static MapCreater StaticMap; 
     //声明一个房间变量，表示基础的房间
