@@ -18,6 +18,7 @@ public class SceneLoadManger : MonoBehaviour
             Player = StartPanelPlayerData.PlayerData.Player;
             PlayerAbilityIndex = StartPanelPlayerData.PlayerData.PlayerAbilityIndex;
             PlayerControler p = Instantiate(Player, Vector3.zero, Quaternion.identity);
+            Debug.Log(Player);
             UIPanelGwtNewSkill.StaticUIGNS.SetPlayer(p);
             switch (PlayerAbilityIndex)
             {

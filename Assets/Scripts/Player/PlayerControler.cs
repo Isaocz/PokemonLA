@@ -1093,10 +1093,14 @@ public class PlayerControler : Pokemon
                 }
 
                 //道具092 王者盾牌
-                playerData.KingsShieldDone();
+                if(playerData.IsPassiveGetList[92]){
+                    playerData.KingsShieldDone();
+                }
 
                 //道具133 淘金滑板
-                if (Random.Range(0.0f , 1.0f) > 0.5f ) { ChangeMoney(-1); }
+                if(playerData.IsPassiveGetList[133]){
+                    if (Random.Range(0.0f, 1.0f) > 0.5f) { ChangeMoney(-1); }
+                }
 
                 //输出被击打的动画管理器参数
                 animator.SetTrigger("Hit");
@@ -2029,6 +2033,7 @@ public class PlayerControler : Pokemon
         GameObject Maincamera = GameObject.FindWithTag("MainCamera");
         Maincamera.transform.position = new Vector3(30.0f * TpVector3.x, 24.0f * TpVector3.y + 0.7f, -10);
         UiMiniMap.Instance.MiniMapMove(new Vector3(NowRoom.x - TpVector3.x, NowRoom.y - TpVector3.y, 0));
+        MapCreater.StaticMap.RRoom[NowRoom].GetAllItem();
         NowRoom = TpVector3;
         InANewRoom = true;
         UiMiniMap.Instance.SeeMapOver();

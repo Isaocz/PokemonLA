@@ -135,4 +135,16 @@ public class UiMiniMap : MonoBehaviour
             }
         }
     }
+
+
+    public void MiniMapItemMark(Vector3Int RoomName, List<IteamPickUp> ItemList)
+    {
+        MiniMapBlock b = transform.Find(RoomName.ToString()).GetComponent<MiniMapBlock>();
+        b.ClearAllItem();
+        for (int i = 0; i < Mathf.Min(4 , ItemList.Count); i++)
+        {
+            Debug.Log(ItemList[i]);
+            b.ChangeImageMark(ItemList[i].MiniMapBlockMark);
+        }
+    }
 }

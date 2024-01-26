@@ -66,6 +66,19 @@ public class Room : MonoBehaviour
     GridGraph RoomGraph;
     float GraphUpdateTimer;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     /// <summary>
     /// 房间的四壁是否是墙 顺序依次为  0：U   1：D   2：R   3：L
     /// </summary>
@@ -480,4 +493,68 @@ public class Room : MonoBehaviour
             }
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //========================================获得房屋内所有道具===========================================
+
+    public List<IteamPickUp> ItemList = new List<IteamPickUp> { };
+
+    public void GetAllItem()
+    {
+        ItemList.Clear();
+        if ( transform.GetChild(4).gameObject.activeInHierarchy && transform.GetChild(4).childCount > 0 )
+        {
+            for (int i = 0; i < transform.GetChild(4).childCount; i++)
+            {
+                IteamPickUp item = transform.GetChild(4).GetChild(i).GetComponent<IteamPickUp>();
+                if (item != null)
+                {
+                    ItemList.Add(item);
+                }
+            }
+        }
+        if (transform.GetChild(5).gameObject.activeInHierarchy && transform.GetChild(5).childCount > 0)
+        {
+            for (int i = 0; i < transform.GetChild(5).childCount; i++)
+            {
+                IteamPickUp item = transform.GetChild(5).GetChild(i).GetComponent<IteamPickUp>();
+                if (item != null)
+                {
+                    ItemList.Add(item);
+                }
+            }
+        }
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            IteamPickUp item = transform.GetChild(i).GetComponent<IteamPickUp>();
+            if (item != null)
+            {
+                if (item.GetComponent<PokemonBall>() != null && item.GetComponent<PokemonBall>().isEmpty) { Destroy(item.gameObject); }
+                else if (item.GetComponent<SkillBall>() != null && item.GetComponent<SkillBall>().isEmpty) { Destroy(item.gameObject); }
+                else { ItemList.Add(item); }
+                
+            }
+        }
+        UiMiniMap.Instance.MiniMapItemMark(new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f), 0) , ItemList );
+
+    }
+
+    //========================================获得房屋内所有道具===========================================
+
+
 }

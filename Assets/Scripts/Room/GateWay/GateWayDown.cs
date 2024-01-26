@@ -54,6 +54,7 @@ public class GateWayDown : GateWay
             Player.transform.position += new Vector3(0, -MoveDistance, 0);
             PlayerControler p = Player.GetComponent<PlayerControler>();
             if (p != null) {
+                MapCreater.StaticMap.RRoom[p.NowRoom].GetAllItem();
                 p.NowRoom = p.NowRoom + Vector3Int.down;
                 p.InANewRoom = true;
                 p.NewRoomTimer = 0f;

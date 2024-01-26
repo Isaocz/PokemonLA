@@ -22,6 +22,7 @@ public class IteamPickUp : Item
     public bool BanLunchLeft;
     int BanCount;
 
+    public MiniMapBlock.MiniMapBlockMarkType MiniMapBlockMark;
 
 
     // Start is called before the first frame update

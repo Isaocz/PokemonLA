@@ -60,10 +60,10 @@ public class Castform : Empty
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);
-        AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);
-        SpAAbilityPoint = AbilityForLevel(Emptylevel, SpAEmptyPoint);
-        DefAbilityPoint = AbilityForLevel(Emptylevel, DefEmptyPoint) * 1.5f;
-        SpdAbilityPoint = AbilityForLevel(Emptylevel, SpdEmptyPoint) * 1.5f;
+        AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint) * BossAtkBouns;
+        SpAAbilityPoint = AbilityForLevel(Emptylevel, SpAEmptyPoint) * BossAtkBouns;
+        DefAbilityPoint = AbilityForLevel(Emptylevel, DefEmptyPoint) * BossDefBouns;
+        SpdAbilityPoint = AbilityForLevel(Emptylevel, SpdEmptyPoint) * BossDefBouns;
         SpeedAbilityPoint = AbilityForLevel(Emptylevel, SpeedEmptyPoint);
         Exp = BaseExp * Emptylevel / 7;
 

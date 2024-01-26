@@ -54,6 +54,7 @@ public class GateWayRight : GateWay
             PlayerControler p = Player.GetComponent<PlayerControler>();
             if (p != null)
             {
+                MapCreater.StaticMap.RRoom[p.NowRoom].GetAllItem();
                 p.NowRoom = p.NowRoom + Vector3Int.right;
                 p.InANewRoom = true;
                 p.NewRoomTimer = 0f;
