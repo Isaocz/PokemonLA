@@ -180,6 +180,11 @@ public class Empty : Pokemon
     bool isHaveDropItem;
 
 
+    //Boss的防御和攻击加成。
+    protected float BossDefBouns = 1.5f;
+    protected float BossAtkBouns = 0.7f;
+
+
 
     //=============================初始化敌人数据================================
 

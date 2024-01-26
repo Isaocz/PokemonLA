@@ -22,6 +22,11 @@ public class PokemonBall : IteamPickUp
     //public float PerMinusPoint;
 
 
+    /// <summary>
+    /// æ´¡È«Ú «∑Òø’¡À
+    /// </summary>
+    public bool isEmpty;
+
     public PassiveItemPool.PoolType ItemPoolType;
 
     private void Start()
@@ -55,7 +60,8 @@ public class PokemonBall : IteamPickUp
             if (Random.Range(0.0f, 1.0f) <= (1-PassiveDropPer))
             {
                 animator.SetTrigger("Normal");
-                PokemonNormalOpen();                
+                PokemonNormalOpen();
+                isEmpty = true;
             }
             else
             {
@@ -84,6 +90,7 @@ public class PokemonBall : IteamPickUp
                 playerControler.animator.SetTrigger("Happy");
                 playerControler.PassiveItemGetUI.GetComponent<Image>().sprite = PassiveItemObj.GetComponent<SpriteRenderer>().sprite;
                 Destroy(PassiveItemObj);
+                isEmpty = true;
             }
         }
     }

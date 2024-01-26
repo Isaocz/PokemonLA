@@ -14,7 +14,10 @@ public class SkillBall : IteamPickUp
     PlayerControler playerControler;
     public Sprite[] SkillMachineSprite;
 
-
+    /// <summary>
+    /// æ´¡È«Ú «∑Òø’¡À
+    /// </summary>
+    public bool isEmpty;
 
     // Start is called before the first frame update
     void Start()
@@ -66,6 +69,7 @@ public class SkillBall : IteamPickUp
             isPickUp = true;
             if (isThereAreSkillMechine)
             {
+                isEmpty = true;
                 string SkillMachineName = "°∏";
                 if (GetSkill.SkillIndex % 10 < 10) { SkillMachineName += "0"; }
                 SkillMachineName += (GetSkill.SkillIndex).ToString() + (GetSkill.SkillChineseName).ToString() + "°π";
