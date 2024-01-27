@@ -64,7 +64,7 @@ public class PincurchinSpikeMove : Projectile
             if (other.tag == ("Player") && !empty.isEmptyInfatuationDone)
             {
                 PlayerControler playerControler = other.GetComponent<PlayerControler>();
-                if (empty.gameObject != null) { Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, Dmage, 0, 0, Type.TypeEnum.Electric); }
+                if (empty != null) { Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, Dmage, 0, 0, Type.TypeEnum.Electric); }
                 else { Pokemon.PokemonHpChange(null, other.gameObject, Dmage, 0, 0, Type.TypeEnum.Electric); }
                 if (playerControler != null)
                 {

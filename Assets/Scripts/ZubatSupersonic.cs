@@ -27,7 +27,7 @@ public class ZubatSupersonic : MonoBehaviour
             PlayerControler p = other.GetComponent<PlayerControler>();
             if (p != null)
             {
-                p.ConfusionFloatPlus(0.5f);
+                p.ConfusionFloatPlus(0.2f);
             }
         }
         if (ParentZubat.isEmptyInfatuationDone && other.tag == "Empty")

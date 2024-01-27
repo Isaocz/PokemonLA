@@ -59,6 +59,34 @@ public class UiMiniMap : MonoBehaviour
                 roomblock.rectTransform.anchoredPosition = new Vector3(item.x * 8.2f, item.y * 8.2f, 0);
                 roomblock.color = new Vector4(255, 255, 255, 0);
                 roomblock.transform.name = roomname;
+                if (map.SkillShopRoom != null && item == map.SkillShopRoomPoint)
+                {
+                    roomblock.GetComponent<MiniMapBlock>().ChangeRoomMark(1);
+                }
+                if (map.BabyCenterRoom != null && item == map.BabyCenterRoomPoint)
+                {
+                    roomblock.GetComponent<MiniMapBlock>().ChangeRoomMark(0);
+                }
+                if (map.MintRoom != null && item == map.MintRoomPoint)
+                {
+                    roomblock.GetComponent<MiniMapBlock>().ChangeRoomMark(2);
+                }
+                if (map.BerryTreeRoom != null && item == map.BerryTreeRoomPoint)
+                {
+                    roomblock.GetComponent<MiniMapBlock>().ChangeRoomMark(2);
+                }
+                if (map.MewRoomPoint != null && item == map.MewRoomPoint)
+                {
+                    roomblock.GetComponent<MiniMapBlock>().ChangeRoomMark(2);
+                }
+                if (item == map.BossRoomPoint)
+                {
+                    roomblock.GetComponent<MiniMapBlock>().ChangeRoomMark(3);
+                }
+                if ( item ==  Vector3Int.zero)
+                {
+                    roomblock.GetComponent<MiniMapBlock>().ChangeRoomMark(4);
+                }
             }
         }
         NowMark = Instantiate(MiniMapMark, new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);

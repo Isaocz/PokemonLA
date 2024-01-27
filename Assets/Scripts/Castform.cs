@@ -232,7 +232,7 @@ public class Castform : Empty
         if (!isDie && !isBorn)
         {
             
-
+            
 
         }
     }

@@ -109,8 +109,8 @@ public class Dig : Skill
     {
         ResetPlayer();
 
-        PlayerSpriteParent.transform.localScale = new Vector3(1, 1, 1);
-        PlayerSpriteParent.transform.localPosition = Vector3.zero;
+        PlayerSpriteParent.transform.localScale = player.PlayerLocalScal;
+        PlayerSpriteParent.transform.localPosition = player.PlayerLocalPosition;
         player.isCanNotMove = false;
         player.isInvincibleAlways = false;
         if (!player.isEvolution) {

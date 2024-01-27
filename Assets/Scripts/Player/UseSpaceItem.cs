@@ -579,6 +579,7 @@ public class UseSpaceItem : MonoBehaviour
             player.gameObject.layer = LayerMask.NameToLayer("PlayerFly");
             player.transform.position += new Vector3(0, 0.5f, 0);
             player.transform.GetChild(3).position = player.transform.GetChild(3).position + Vector3.up * 0.5f;
+            player.PlayerLocalPosition = player.transform.GetChild(3).localPosition;
             player.ComeInANewRoomEvent += RemoveFly;
         }
     }
@@ -588,6 +589,7 @@ public class UseSpaceItem : MonoBehaviour
             player.gameObject.layer = LayerMask.NameToLayer("Player");
             player.transform.position -= new Vector3(0, 0.5f, 0);
             player.transform.GetChild(3).position = player.transform.GetChild(3).position - Vector3.up * 0.5f;
+            player.PlayerLocalPosition = player.transform.GetChild(3).localPosition;
             player.ComeInANewRoomEvent -= RemoveFly;
         }
     }

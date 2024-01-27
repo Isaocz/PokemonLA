@@ -651,6 +651,9 @@ public class Empty : Pokemon
 
     public void UpdateEmptyChangeHP()
     {
+        if (rigidbody2D != null) {
+            rigidbody2D.velocity = Vector2.zero;
+        }
         if (isShake) { ShakeUpdate(); }
         if (isToxicDone) { EmptyToxic(); }
         if (isBurnDone) { EmptyBurn(); }

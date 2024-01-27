@@ -46,6 +46,13 @@ public class MiniMapBlock : MonoBehaviour
 
     Image Block;
 
+    public Sprite BabyRoomMark;
+    public Sprite SkillStoreMark;
+    public Sprite OtherRoomMark;
+    public Sprite BossRoomMark;
+    public Sprite StartRoomMark;
+
+
     private void Start()
     {
         Block = transform.GetComponent<Image>();
@@ -93,6 +100,34 @@ public class MiniMapBlock : MonoBehaviour
         i3.gameObject.SetActive(false);
         i4.sprite = null;
         i4.gameObject.SetActive(false);
+    }
+
+
+    /// <summary>
+    /// 0宝宝房 1技能商店 2其他 3boss 4初始房
+    /// </summary>
+    /// <param name="i"></param>
+    public void ChangeRoomMark( int i )
+    {
+        Block = transform.GetComponent<Image>();
+        switch (i)
+        {
+            case 0:
+                Block.sprite = BabyRoomMark;
+                break;
+            case 1:
+                Block.sprite = SkillStoreMark;
+                break;
+            case 2:
+                Block.sprite = OtherRoomMark;
+                break;
+            case 3:
+                Block.sprite = BossRoomMark;
+                break;
+            case 4:
+                Block.sprite = StartRoomMark;
+                break;
+        }
     }
 
 

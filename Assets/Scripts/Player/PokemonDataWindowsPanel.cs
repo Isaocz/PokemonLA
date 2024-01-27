@@ -26,6 +26,29 @@ public class PokemonDataWindowsPanel : MonoBehaviour
     private void OnEnable()
     {
         Invoke("RestorePokemonDataPanel", 0.0001f);
+        PlayerControler p = GameObject.FindObjectOfType<PlayerControler>();
+        if (p != null)
+        {
+            if (p.playerData == null) { p.playerData = p.transform.GetComponent<PlayerData>(); }
+            player = GameObject.FindObjectOfType<PlayerControler>();
+            HeadUI = transform.GetChild(0).gameObject;
+            TypeMarkUI = transform.GetChild(1).gameObject;
+            MoneyAndExpUI = transform.GetChild(2).gameObject;
+            StateUI = transform.GetChild(3).gameObject;
+            StrengthDataUI = transform.GetChild(4).gameObject;
+            TypeDefUI = transform.GetChild(5).gameObject;
+            NatureText = transform.GetChild(6).gameObject.GetComponent<Text>();
+            AbilityText = transform.GetChild(7).gameObject.GetComponent<Text>();
+
+            GetHead();
+            GetTypeMark();
+            GetMoneyAndExp();
+            GetState();
+            GetPlayerStrengthData();
+            GetTypeDefUI();
+            GetNature();
+            GetAbility();
+        }
     }
 
     public void RestorePokemonDataPanel()

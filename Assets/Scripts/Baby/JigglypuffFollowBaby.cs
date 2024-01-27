@@ -38,6 +38,7 @@ public class JigglypuffFollowBaby : FollowBaby
                 {
                     Projectile p = Instantiate(SweetKiss, transform.position, Quaternion.identity);
                     p.LaunchNotForce((new Vector2(other.transform.position.x - transform.position.x, other.transform.position.y - transform.position.y).normalized), 5);
+                    p.Baby = this;
                     isSweetKissLunch = true;
                 }
             }
