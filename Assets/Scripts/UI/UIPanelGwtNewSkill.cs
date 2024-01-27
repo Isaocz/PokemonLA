@@ -40,6 +40,19 @@ public class UIPanelGwtNewSkill : MonoBehaviour
         }
     }
 
+    private void ResetPlayer()
+    {
+        if (playerControler == null) {
+            playerControler = FindObjectOfType<PlayerControler>();
+            if (playerControler != null && playerControler.uIPanelGwtNewSkill == null)
+            {
+                playerControler.uIPanelGwtNewSkill = this;
+                transform.gameObject.SetActive(false);
+                transform.parent.gameObject.SetActive(false);
+            }
+        }
+    }
+
     public void SelectSkill( Skill skill01 , Skill skill02 , Skill skill03)
     {
         transform.parent.gameObject.SetActive(true);
@@ -55,10 +68,10 @@ public class UIPanelGwtNewSkill : MonoBehaviour
 
     public void NewSkillPanzelJump(Skill GetNewSkill , bool isLearnSkill)
     {
+        ResetPlayer();
         if (GetNewSkill.SkillFrom == 2)
         {
             IsLearnSkill = isLearnSkill;
-            //Debug.Log(GetNewSkill);
             if (GetNewSkill == playerControler.Skill01.PlusSkill)      { playerControler.GetNewSkill(GetNewSkill, playerControler.Skill01, 1, IsLearnSkill); }
             else if(GetNewSkill == playerControler.Skill02.PlusSkill) { playerControler.GetNewSkill(GetNewSkill, playerControler.Skill02, 2, IsLearnSkill); }
             else if(GetNewSkill == playerControler.Skill03.PlusSkill) { playerControler.GetNewSkill(GetNewSkill, playerControler.Skill03, 3, IsLearnSkill); }
