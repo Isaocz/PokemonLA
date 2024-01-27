@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class IsaoTalk : MonoBehaviour
 {
+
+    public float TalkTime;
     public AudioSource StartPanelBGM;
     bool isLight;
     Image TalkPanel;
@@ -17,7 +19,7 @@ public class IsaoTalk : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("FalseTalk", 7.5f);
+        Invoke("FalseTalk", TalkTime);
         TalkPanel = GetComponent<Image>();
         TalkText1 = transform.GetChild(0).GetComponent<Text>();
         TalkText2 = transform.GetChild(1).GetComponent<Text>();

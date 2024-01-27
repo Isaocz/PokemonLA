@@ -48,11 +48,18 @@ public class PassiveItemPool : MonoBehaviour
         BlackList = new List<int> { }
     };
 
+    public static ItemPool ExceptMewItem
+    = new ItemPool
+    {
+        WriteList = new List<int> { },
+        BlackList = new List<int> { 55 , 56 , 57 , 58 }
+    };
+
     public static ItemPool UltraBall
     = new ItemPool
     {
         WriteList = new List<int> { },
-        BlackList = new List<int> { 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, }
+        BlackList = new List<int> { 55, 56, 57, 58, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, }
     };
 
     public static ItemPool Mint

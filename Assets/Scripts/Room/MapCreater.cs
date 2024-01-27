@@ -207,19 +207,20 @@ public class MapCreater : MonoBehaviour
     //声明一个生成真实房间的函数
     void CreateRoom()
     {
-        if (!isReset)
+        if (!isReset) { BuildVRoom(); }
+        if (!isReset) { BuiledStoreRoom(); }
+        if (!isReset) { BuiledBossRoom(); }
+        if (!isReset) { BuiledBossRoom(); }
+        if (isReset && isBornMewRoom) { BuiledMewRoom(); }
+        if (isReset && isBornBabyCenterRoom) { BuiledBabyCenterRoom(); }
+        if (isReset && isBornMintRoom) { BuiledMintRoom(); }
+        if (isReset && isBornBerryTreeRoom) { BuiledBerryTreeRoom(); }
+
+        while ( !isPCRoomSpawn || !isStoreRoomSpawn || !isBossRoomSpawn  )
         {
-            //生成虚拟房间和PC房间和商店
-            BuildVRoom();
-            BuiledPCroom();
-            BuiledStoreRoom();
-            BuiledBossRoom();
-            BuiledSkillShopRoom();
-            if (isBornMewRoom) { BuiledMewRoom(); }
-            if (isBornBabyCenterRoom) { BuiledBabyCenterRoom(); }
-            if (isBornMintRoom) { BuiledMintRoom(); }
-            if (isBornBerryTreeRoom) { BuiledBerryTreeRoom(); }
+            ResetMap();
         }
+
         //遍历所有虚拟房间，如果该坐标不是特殊房间，在该坐标生成真实房间
         foreach (Vector3Int item in VRoom.Keys)
         {
@@ -268,10 +269,40 @@ public class MapCreater : MonoBehaviour
             Destroy(RRoom[k].gameObject);
             Debug.Log(RRoom[k].gameObject);
         }
-        isPCRoomSpawn = false; isStoreRoomSpawn = false; isBossRoomSpawn = false;
-        PCCreatCount = 0; StoreCreatCount = 0; BossRoomCreatCount = 0;
-        PCRoomPoint = Vector3Int.zero; StoreRoomPoint = Vector3Int.zero; BossRoomPoint = Vector3Int.zero; NowPoint = Vector3Int.zero;
-        SpawnR = 1.0f; SpawnChance = 1.0f;
+
+        //初始化
+        {
+            isPCRoomSpawn = false; isStoreRoomSpawn = false; isBossRoomSpawn = false;
+            PCCreatCount = 0; StoreCreatCount = 0; BossRoomCreatCount = 0;
+            PCRoomPoint = Vector3Int.zero; StoreRoomPoint = Vector3Int.zero; BossRoomPoint = Vector3Int.zero; NowPoint = Vector3Int.zero;
+            SpawnR = 1.0f; SpawnChance = 1.0f;
+
+            BabyCenterRoomPoint = new Vector3Int(10000, 10000, 0);
+            isBabyCenterRoomSpawn = false;
+            BabyCenterRoomCreatCount = 0;
+            isBornBabyCenterRoom = false;
+
+            BerryTreeRoomPoint = new Vector3Int(10000, 10000, 0);
+            isBerryTreeRoomSpawn = false;
+            BerryTreeRoomCreatCount = 0;
+            isBornBerryTreeRoom = false;
+
+            MewRoomPoint = new Vector3Int(10000, 10000, 0);
+            isMewRoomSpawn = false;
+            MewRoomCreatCount = 0;
+            isBornMewRoom = false;
+
+            MintRoomPoint = new Vector3Int(10000, 10000, 0);
+            isMintRoomSpawn = false;
+            MintRoomCreatCount = 0;
+            isBornMintRoom = false;
+
+            SkillShopRoomPoint = new Vector3Int(10000, 10000, 0);
+            SkillShopRoomCreatCount = 0;
+            isSkillShopRoomSpawn = false;
+        }
+
+
         VRoom.Clear(); RRoom.Clear();
         RRoom = new Dictionary<Vector3Int, Room> { };
         BuildVRoom();
