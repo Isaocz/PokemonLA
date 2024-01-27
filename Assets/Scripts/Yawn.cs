@@ -42,7 +42,7 @@ public class Yawn : Skill
             PlayerScaleTimer += Time.deltaTime;
             PlayerSpriteParent.transform.localScale = new Vector3(Mathf.Clamp(PlayerSpriteParent.transform.localScale.x + Time.deltaTime * 2, 0.7f, 1.0f), Mathf.Clamp(PlayerSpriteParent.transform.localScale.y - Time.deltaTime * 4, 1.0f, 1.6f), PlayerSpriteParent.transform.localScale.z);
         }
-        else if (PlayerScaleTimer >= 0.65f) { PlayerSpriteParent.transform.localScale = new Vector3(1, 1, 1); }
+        else if (PlayerScaleTimer >= 0.65f) { PlayerSpriteParent.transform.localScale = player.PlayerLocalScal; }
     }
 
     void ResetPlayer()

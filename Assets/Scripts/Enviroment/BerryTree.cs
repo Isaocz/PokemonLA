@@ -46,7 +46,7 @@ public class BerryTree : MonoBehaviour
         float PandomPoint = (player.playerData.IsPassiveGetList[0] ? (Random.Range(0.0f, 1.0f)) : (Random.Range(0.0f, 1.04f)));
         if (PandomPoint <= 0.5f)
         {
-            RandomBerryTypeDef b = Instantiate(Berry, transform.position + ((Quaternion.AngleAxis(r, Vector3.forward) * Vector3.right).normalized), Quaternion.identity, transform);
+            RandomBerryTypeDef b = Instantiate(Berry, transform.position + ((Quaternion.AngleAxis(r, Vector3.forward) * Vector3.right).normalized), Quaternion.identity, transform.parent.parent);
             b.isLunch = true;
             b.BanLunchUp = BanUp;
             b.BanLunchDown = BanDown;
@@ -55,7 +55,7 @@ public class BerryTree : MonoBehaviour
         }
         else if(PandomPoint > 0.5f && PandomPoint <= 0.97f)
         {
-            HealthUpCCg b = Instantiate(CCG, transform.position + ((Quaternion.AngleAxis(r, Vector3.forward) * Vector3.right).normalized), Quaternion.identity, transform);
+            HealthUpCCg b = Instantiate(CCG, transform.position + ((Quaternion.AngleAxis(r, Vector3.forward) * Vector3.right).normalized), Quaternion.identity, transform.parent.parent);
             b.isLunch = true;
             b.BanLunchUp = BanUp;
             b.BanLunchDown = BanDown;
@@ -64,7 +64,7 @@ public class BerryTree : MonoBehaviour
         }
         else if (PandomPoint > 0.97f && PandomPoint <= 1.0f)
         {
-            SpaceItem b = Instantiate(WY, transform.position + ((Quaternion.AngleAxis(r, Vector3.forward) * Vector3.right).normalized), Quaternion.identity, transform);
+            SpaceItem b = Instantiate(WY, transform.position + ((Quaternion.AngleAxis(r, Vector3.forward) * Vector3.right).normalized), Quaternion.identity, transform.parent.parent);
             b.isLunch = true;
             b.BanLunchUp = BanUp;
             b.BanLunchDown = BanDown;
@@ -73,7 +73,7 @@ public class BerryTree : MonoBehaviour
         }
         else
         {
-            PokemonBall b = Instantiate(PB, transform.position + ((Quaternion.AngleAxis(r, Vector3.forward) * Vector3.right).normalized), Quaternion.identity, transform);
+            PokemonBall b = Instantiate(PB, transform.position + ((Quaternion.AngleAxis(r, Vector3.forward) * Vector3.right).normalized), Quaternion.identity, transform.parent.parent);
             b.isLunch = true;
             b.BanLunchUp = BanUp;
             b.BanLunchDown = BanDown;

@@ -196,7 +196,7 @@ public class Kricketune : Empty
                     playerControler.KnockOutPoint = Knock;
                     playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                 }
-                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 90, 0, 0, Type.TypeEnum.Bug);
+                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 75, 0, 0, Type.TypeEnum.Bug);
             }
             else
             {

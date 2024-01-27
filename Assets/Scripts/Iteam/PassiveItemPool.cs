@@ -17,6 +17,7 @@ public class PassiveItemPool : MonoBehaviour
         UltraBall,
         Mint,
         Baby,
+        Store,
     }
 
     public static ItemPool RetunPool(PoolType type)
@@ -65,6 +66,19 @@ public class PassiveItemPool : MonoBehaviour
     = new ItemPool
     {
         WriteList = new List<int> { 30,31,32,34,69,70,71,124,125,126,127,128,129,130,131,132, },
+        BlackList = new List<int> { }
+    };
+
+    public static ItemPool Store
+    = new ItemPool
+    {
+        WriteList = new List<int> { 1  , 4  , 5  , 6  , 7  , 8  , 10 , 11 , 12 , 13 ,
+                                    14 , 16 , 17 , 18 , 19 , 20 , 21 , 22 , 23 , 25 ,
+                                    28 , 59 , 60 , 61 , 63 , 79 , 80 , 81 , 82 , 83 ,
+                                    84 , 85 , 86 , 89 , 90 , 98 , 99 , 100, 101, 102,
+                                    105, 112, 113, 114, 115, 117, 118, 119, 120, 121,
+                                    122, 123, 135, 136, 137, 138,
+        },
         BlackList = new List<int> { }
     };
 

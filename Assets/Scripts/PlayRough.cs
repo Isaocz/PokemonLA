@@ -44,7 +44,7 @@ public class PlayRough : Skill
             {
                 transform.GetChild(0).gameObject.SetActive(true);
                 transform.rotation = Quaternion.Euler(0, 0, 0);
-                transform.localScale = new Vector3(1, 1, 1);
+                transform.localScale = player.PlayerLocalScal;
                 transform.DetachChildren();
             }
             if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.9f)

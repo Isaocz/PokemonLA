@@ -41,10 +41,12 @@ public class SkillBar01 : MonoBehaviour
             }
             SkillCdTime = skill.ColdDown;
             SkillBarColor = skill.SkillType;
-            Mask.transform.parent.GetComponent<Image>().color = Type.TypeColor[SkillBarColor];
-            Mask.transform.parent.Find("Text").GetComponent<Text>().text = skill.SkillName;
-            Mask.transform.parent.Find("Text").GetComponent<Text>().color = Type.TypeColor[SkillBarColor] - new Vector4(0.3f, 0.3f, 0.3f, -1);
-            Mask.transform.parent.Find("TypeMark").GetComponent<UiSkillBarTypeMark>().ChangeTypeMark(SkillBarColor);
+            if (Mask != null) {
+                Mask.transform.parent.GetComponent<Image>().color = Type.TypeColor[SkillBarColor];
+                Mask.transform.parent.Find("Text").GetComponent<Text>().text = skill.SkillName;
+                Mask.transform.parent.Find("Text").GetComponent<Text>().color = Type.TypeColor[SkillBarColor] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                Mask.transform.parent.Find("TypeMark").GetComponent<UiSkillBarTypeMark>().ChangeTypeMark(SkillBarColor);
+            }
         }
     }
 

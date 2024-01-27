@@ -346,8 +346,26 @@ public class PlayerControler : Pokemon
 
 
 
+    /// <summary>
+    /// 角色图片的相对位置 ，在跳跃之后会恢复为此值
+    /// </summary>
+    public Vector3 PlayerLocalPosition
+    {
+        get { return playerLocalPosition; }
+        set { playerLocalPosition = value; }
+    }
+    Vector3 playerLocalPosition = Vector3.zero;
 
 
+    /// <summary>
+    /// 角色图片的相对缩放 ，在跳跃之后会恢复为此值
+    /// </summary>
+    public Vector3 PlayerLocalScal
+    {
+        get { return playerLocalScal; }
+        set { playerLocalScal = value; }
+    }
+    Vector3 playerLocalScal = new Vector3(1.0f , 1.0f , 1.0f);
 
 
 
@@ -441,6 +459,9 @@ public class PlayerControler : Pokemon
         {
             isCanEvolution = true;
         }
+
+        playerLocalPosition = transform.GetChild(3).localPosition;
+        playerLocalScal = transform.GetChild(3).localScale;
     }
 
 
@@ -2151,8 +2172,8 @@ public class PlayerControler : Pokemon
                 if (PlayerHailTimer >= 2)
                 {
                     PlayerHailTimer += Time.deltaTime;
-                    if (Weather.GlobalWeather.isHailPlus) { ChangeHp(Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 19); }
-                    else { ChangeHp(Mathf.Clamp((((float)maxHp) / 16), 1, 8), 0, 19); }
+                    if (Weather.GlobalWeather.isHailPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                    else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
                     PlayerHailTimer = 0;
                 }
             }
@@ -2178,8 +2199,8 @@ public class PlayerControler : Pokemon
                 if (PlayerSandStormTimer >= 2)
                 {
                     PlayerSandStormTimer += Time.deltaTime;
-                    if (Weather.GlobalWeather.isSandstormPlus) { ChangeHp(-Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 19); }
-                    else { ChangeHp(-Mathf.Clamp((((float)maxHp) / 16), 1, 8), 0, 19); }
+                    if (Weather.GlobalWeather.isSandstormPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                    else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
                     PlayerSandStormTimer = 0;
                 }
             }

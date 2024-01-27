@@ -69,7 +69,9 @@ public class PokemonBall : IteamPickUp
                 animator.SetTrigger("Item");
                 PassiveItemObj.GetComponent<SpriteRenderer>().sprite = passiveList.SpritesList[PassiveDropIndex];
                 PassiveItem = passiveList.transform.GetChild(PassiveDropIndex).GetComponent<PassiveItem>();
-                isThereArePassiveItem = true;
+
+                Timer.Start(this , 0.4f , ()=> { isThereArePassiveItem = true; });
+
             }
             isOpen = true;
         }

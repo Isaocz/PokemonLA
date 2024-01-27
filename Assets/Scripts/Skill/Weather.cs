@@ -284,9 +284,9 @@ public class Weather : MonoBehaviour
     //改变随天气改变属性的技能的属性
     void ChangeWeatherSkillType()
     {
-        if (player == null) { CheckPlayer(); } 
-        Debug.Log(player.Skill04.SkillIndex);
-        if (player.Skill01.SkillIndex == 309 || player.Skill01.SkillIndex == 310)
+        if (player == null) { CheckPlayer(); }
+        //Debug.Log(player.Skill04.SkillIndex);
+        if (player.Skill01 != null &&( player.Skill01.SkillIndex == 309 || player.Skill01.SkillIndex == 310))
         {
             if (isNormal) { player.Skill01.SkillType = 1; player.Skill01.SpDamage = 50; player.skillBar01.GetSkill(player.Skill01); }
             else if (!player.playerData.IsPassiveGetList[118] && (isSunny || isSunnyPlus)) { player.Skill01.SkillType = 10; player.Skill01.SpDamage = 100; player.skillBar01.GetSkill(player.Skill01); }
@@ -294,7 +294,7 @@ public class Weather : MonoBehaviour
             else if (isHail || isHailPlus) { player.Skill01.SkillType = 15; player.Skill01.SpDamage = 100; player.skillBar01.GetSkill(player.Skill01); }
             else if (isSandstorm || isSandstormPlus) { player.Skill01.SkillType = 6; player.Skill01.SpDamage = 100; player.skillBar01.GetSkill(player.Skill01); }
         }
-        else if (player.Skill02.SkillIndex == 309 || player.Skill02.SkillIndex == 310)
+        else if (player.Skill02 != null &&( player.Skill02.SkillIndex == 309 || player.Skill02.SkillIndex == 310))
         {
             if (isNormal) { player.Skill02.SkillType = 1; player.Skill02.SpDamage = 50; player.skillBar02.GetSkill(player.Skill02); }
             else if (!player.playerData.IsPassiveGetList[118] && (isSunny || isSunnyPlus)) { player.Skill02.SkillType = 10; player.Skill02.SpDamage = 100; player.skillBar02.GetSkill(player.Skill02); }
@@ -302,7 +302,7 @@ public class Weather : MonoBehaviour
             else if (isHail || isHailPlus) { player.Skill02.SkillType = 15; player.Skill02.SpDamage = 100; player.skillBar02.GetSkill(player.Skill02); }
             else if (isSandstorm || isSandstormPlus) { player.Skill02.SkillType = 6; player.Skill02.SpDamage = 100; player.skillBar02.GetSkill(player.Skill02); }
         }
-        else if (player.Skill03.SkillIndex == 309 || player.Skill03.SkillIndex == 310)
+        else if (player.Skill03 != null &&( player.Skill03.SkillIndex == 309 || player.Skill03.SkillIndex == 310))
         {
             if (isNormal) { player.Skill03.SkillType = 1; player.Skill03.SpDamage = 50; player.skillBar03.GetSkill(player.Skill03); }
             else if (!player.playerData.IsPassiveGetList[118] && (isSunny || isSunnyPlus)) { player.Skill03.SkillType = 10; player.Skill03.SpDamage = 100; player.skillBar03.GetSkill(player.Skill03); }
@@ -310,7 +310,7 @@ public class Weather : MonoBehaviour
             else if (isHail || isHailPlus) { player.Skill03.SkillType = 15; player.Skill03.SpDamage = 100; player.skillBar03.GetSkill(player.Skill03); }
             else if (isSandstorm || isSandstormPlus) { player.Skill03.SkillType = 6; player.Skill03.SpDamage = 100; player.skillBar03.GetSkill(player.Skill03); }
         }
-        else if (player.Skill04.SkillIndex == 309 || player.Skill04.SkillIndex == 310)
+        else if (player.Skill04 != null &&( player.Skill04.SkillIndex == 309 || player.Skill04.SkillIndex == 310))
         {
             if (isNormal) { player.Skill04.SkillType = 1; player.Skill04.SpDamage = 50; player.skillBar04.GetSkill(player.Skill04); }
             else if (!player.playerData.IsPassiveGetList[118] && (isSunny || isSunnyPlus)) { player.Skill04.SkillType = 10; player.Skill04.SpDamage = 100; player.skillBar04.GetSkill(player.Skill04); }

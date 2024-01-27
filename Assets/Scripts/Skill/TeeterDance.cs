@@ -18,7 +18,7 @@ public class TeeterDance : Skill
         player.look = new Vector2(0, -1);
         player.animator.SetFloat("LookX", 0);
         player.animator.SetFloat("LookY", -1);
-        StartP = player.transform.GetChild(3).position;
+        StartP = player.transform.GetChild(3).localPosition;
         StartS = player.transform.GetChild(3).localScale;
 
         GameObject EmptyFile = MapCreater.StaticMap.RRoom[player.NowRoom].transform.GetChild(3).gameObject;
@@ -76,8 +76,9 @@ public class TeeterDance : Skill
 
     private void OnDestroy()
     {
+        
         player.isCanNotMove = false;
-        player.transform.GetChild(3).position = StartP;
-        player.transform.GetChild(3).localScale = StartS;
+        player.transform.GetChild(3).localPosition = player.PlayerLocalPosition;
+        player.transform.GetChild(3).localScale = player.PlayerLocalScal;
     }
 }

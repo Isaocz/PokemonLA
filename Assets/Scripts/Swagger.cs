@@ -43,7 +43,7 @@ public class Swagger : Skill
     private void OnDestroy()
     {
         ResetPlayer();
-        PlayerSpriteParent.transform.localScale = new Vector3(1, 1, 1);
+        PlayerSpriteParent.transform.localScale = player.PlayerLocalScal; ;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

@@ -11,7 +11,7 @@ public class NextFloorGateWay : GateWay
     private void Start()
     {
         if (FloorNum.GlobalFloorNum != null) {
-            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = FloorNum.GlobalFloorNum.NextFloorText[FloorNum.GlobalFloorNum.FloorNumber];
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = FloorNum.GlobalFloorNum.NextFloorText[FloorNum.GlobalFloorNum.FloorNumber+1];
         }
     }
 
