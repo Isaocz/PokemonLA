@@ -68,7 +68,7 @@ public class EeveeControler : PlayerControler
     bool JudgeSylveonEvolution()
     {
         if (((Skill01 != null && Skill01.SkillType == 18) ||(Skill02 != null && Skill02.SkillType == 18) ||(Skill03 != null && Skill03.SkillType == 18 )|| (Skill04 != null && Skill04.SkillType == 18)) &&
-            ((playerData.AtkHardWorkAlways + playerData.DefHardWorkAlways + playerData.HPHardWorkAlways + playerData.LuckHardWorkAlways + playerData.MoveSpeHardWorkAlways + playerData.SpAHardWorkAlways + playerData.SpDHardWorkAlways + playerData.SpeHardWorkAlways) >= 40) )
+            ((playerData.AtkHardWorkAlways + playerData.DefHardWorkAlways + playerData.HPHardWorkAlways + playerData.LuckHardWorkAlways + playerData.MoveSpeHardWorkAlways + playerData.SpAHardWorkAlways + playerData.SpDHardWorkAlways + playerData.SpeHardWorkAlways) >= 30) )
             { return true; }
         else{ return false; }
     }

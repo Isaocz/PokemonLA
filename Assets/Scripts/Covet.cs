@@ -27,9 +27,9 @@ public class Covet : Skill
                     }
                     else
                     {
-                        if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 100 >  (SkillFrom == 2 ? 0.86 : 0.96f))
+                        if (target.IsHaveDropItem)
                         {
-                            Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent);
+                            target.EmptyDrop();
                         }
                     }
                     target.DropItem = null;

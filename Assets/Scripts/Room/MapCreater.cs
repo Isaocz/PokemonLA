@@ -152,6 +152,7 @@ public class MapCreater : MonoBehaviour
             isBornMintRoom = Random.Range(0.0f, 1.0f) <= (FloorNum.GlobalFloorNum.isMintRoomBeCreated ? 0 : (0.3f - 0.1f * (FloorNum.GlobalFloorNum.FloorNumber - 1)));
             //每层生成树果房的概率为8%
             isBornBerryTreeRoom = Random.Range(0.0f, 1.0f) <= 0.08f;
+            //Debug.Log(FloorNum.GlobalFloorNum.FloorNumber.ToString() + "+" + FloorNum.GlobalFloorNum.MapSize[FloorNum.GlobalFloorNum.FloorNumber].ToString()+ "+" + FloorNum.GlobalFloorNum.MapSize[0].ToString() + "+" + FloorNum.GlobalFloorNum.MapSize[1].ToString() + "+" + FloorNum.GlobalFloorNum.MapSize[2].ToString() );
             StepMin = FloorNum.GlobalFloorNum.MapSize[FloorNum.GlobalFloorNum.FloorNumber];
             BossRoom = BossRoomList[Random.Range(0, BossRoomList.Count)];
             while (FloorNum.GlobalFloorNum.isBossRoomBeCreated[BossRoom.GetComponent<BossRoom>().BossIndex])
@@ -280,22 +281,18 @@ public class MapCreater : MonoBehaviour
             BabyCenterRoomPoint = new Vector3Int(10000, 10000, 0);
             isBabyCenterRoomSpawn = false;
             BabyCenterRoomCreatCount = 0;
-            isBornBabyCenterRoom = false;
 
             BerryTreeRoomPoint = new Vector3Int(10000, 10000, 0);
             isBerryTreeRoomSpawn = false;
             BerryTreeRoomCreatCount = 0;
-            isBornBerryTreeRoom = false;
 
             MewRoomPoint = new Vector3Int(10000, 10000, 0);
             isMewRoomSpawn = false;
             MewRoomCreatCount = 0;
-            isBornMewRoom = false;
 
             MintRoomPoint = new Vector3Int(10000, 10000, 0);
             isMintRoomSpawn = false;
             MintRoomCreatCount = 0;
-            isBornMintRoom = false;
 
             SkillShopRoomPoint = new Vector3Int(10000, 10000, 0);
             SkillShopRoomCreatCount = 0;
@@ -340,7 +337,7 @@ public class MapCreater : MonoBehaviour
         if(!VRoom.ContainsKey(NowPoint)) { VRoom.Add(NowPoint, 0); }
 
         //当当前虚拟房间数大于需要生成的最小房间数时，房间生成概率降低10%
-        if(VRoom.Count > StepMin) { SpawnChance -= 0.1f; }
+        if(VRoom.Count > StepMin) { SpawnChance -= 0.12f; }
 
         //进行一次随机如果小于生成概率就随机向某个方向生成一个虚拟房间
         if (Random.Range(0.0f,1.0f) <= SpawnChance)

@@ -997,7 +997,7 @@ public class Pokemon : MonoBehaviour
     /// <param name="ChangeTime"></param>
     public virtual void AtkChange(int ChangeLevel ,  float ChangeTime)
     {
-        if (!isAtkChangeDef && GetComponent<Empty>() != null)
+        if (null != this && GetComponent<Empty>() != null && !isAtkChangeDef)
         {
             AtkUpLevel += ChangeLevel;
             playerUIState.AbllityChange(0,AtkUpLevel);
@@ -1037,7 +1037,7 @@ public class Pokemon : MonoBehaviour
     /// <param name="ChangeTime"></param>
     public virtual void DefChange(int ChangeLevel, float ChangeTime)
     {
-        if (GetComponent<Empty>() != null)
+        if (null != this && GetComponent<Empty>() != null && !isDefChangeDef)
         {
             DefUpLevel += ChangeLevel;
             playerUIState.AbllityChange(1, DefUpLevel);
@@ -1079,7 +1079,7 @@ public class Pokemon : MonoBehaviour
     /// <param name="ChangeTime"></param>
     public virtual void SpAChange(int ChangeLevel, float ChangeTime)
     {
-        if (GetComponent<Empty>() != null)
+        if (null != this && GetComponent<Empty>() != null && !isSpAChangeDef)
         {
             SpAUpLevel += ChangeLevel;
             playerUIState.AbllityChange(2, SpAUpLevel);
@@ -1120,7 +1120,7 @@ public class Pokemon : MonoBehaviour
     /// <param name="ChangeTime"></param>
     public virtual void SpDChange(int ChangeLevel, float ChangeTime)
     {
-        if (GetComponent<Empty>() != null)
+        if (null != this && GetComponent<Empty>() != null && !isSpDChangeDef)
         {
             SpDUpLevel += ChangeLevel;
             playerUIState.AbllityChange(3, SpDUpLevel);
@@ -2079,7 +2079,7 @@ public class Pokemon : MonoBehaviour
         if (Attacked != null && Attacked.GetComponent<Substitute>() != null && Attacked.GetComponent<Substitute>().isInMistyTerrain && SkillType == Type.TypeEnum.Dragon) { TerrainAlpha *= 0.5f; }
 
 
-        if (Attacker != null)
+        if (Attacker.gameObject != null || Attacker != null)
         {
 
             Empty EmptyAttacker = Attacker.GetComponent<Empty>();

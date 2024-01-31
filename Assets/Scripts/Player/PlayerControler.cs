@@ -450,10 +450,10 @@ public class PlayerControler : Pokemon
 
 
         if (!isEvolution && EvolutionSkill != null && (
-            Skill01.SkillIndex == EvolutionSkill.SkillIndex || Skill01.SkillIndex == EvolutionSkill.SkillIndex + 1 ||
-            Skill02.SkillIndex == EvolutionSkill.SkillIndex || Skill02.SkillIndex == EvolutionSkill.SkillIndex + 1 ||
-            Skill03.SkillIndex == EvolutionSkill.SkillIndex || Skill03.SkillIndex == EvolutionSkill.SkillIndex + 1 ||
-            Skill04.SkillIndex == EvolutionSkill.SkillIndex || Skill04.SkillIndex == EvolutionSkill.SkillIndex + 1
+            (Skill01 != null && (Skill01.SkillIndex == EvolutionSkill.SkillIndex || Skill01.SkillIndex == EvolutionSkill.SkillIndex + 1)) ||
+            (Skill02 != null && (Skill02.SkillIndex == EvolutionSkill.SkillIndex || Skill02.SkillIndex == EvolutionSkill.SkillIndex + 1)) ||
+            (Skill03 != null && (Skill03.SkillIndex == EvolutionSkill.SkillIndex || Skill03.SkillIndex == EvolutionSkill.SkillIndex + 1)) ||
+            (Skill04 != null && (Skill04.SkillIndex == EvolutionSkill.SkillIndex || Skill04.SkillIndex == EvolutionSkill.SkillIndex + 1))
 
             ))
         {

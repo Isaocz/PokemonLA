@@ -15,9 +15,9 @@ public class DiglettMudShot : MonoBehaviour
             if (other.tag == "Player" || other.tag == "Empty")
             {
                 isDmageDone = true;
-                if(EmptyDiglett == null)
+                if(null != EmptyDiglett)
                 {
-                    Pokemon.PokemonHpChange(EmptyDiglett.gameObject, other, 0, 55,0, Type.TypeEnum.Ground);
+                    Pokemon.PokemonHpChange(null, other, 0, 55,0, Type.TypeEnum.Ground);
                 }
                 else
                 {

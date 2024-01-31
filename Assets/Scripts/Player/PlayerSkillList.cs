@@ -129,7 +129,10 @@ public class PlayerSkillList : MonoBehaviour
     {
         for (int i = 0; i<SkillLearnList.Count;)
         {
-            if((player.Skill01 != null && SkillLearnList[i].SkillIndex == player.Skill01.SkillIndex) || (player.Skill02 != null && SkillLearnList[i].SkillIndex == player.Skill02.SkillIndex) || (player.Skill03 != null && SkillLearnList[i].SkillIndex == player.Skill03.SkillIndex) || (player.Skill04 != null && SkillLearnList[i].SkillIndex == player.Skill04.SkillIndex)) {
+            if(    (player.Skill01 != null && (SkillLearnList[i].SkillIndex == player.Skill01.SkillIndex) || (player.Skill01.PlusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.PlusSkill.SkillIndex) || (player.Skill01.MinusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.MinusSkill.SkillIndex))
+                || (player.Skill02 != null && (SkillLearnList[i].SkillIndex == player.Skill02.SkillIndex) || (player.Skill01.PlusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.PlusSkill.SkillIndex) || (player.Skill01.MinusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.MinusSkill.SkillIndex))
+                || (player.Skill03 != null && (SkillLearnList[i].SkillIndex == player.Skill03.SkillIndex) || (player.Skill01.PlusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.PlusSkill.SkillIndex) || (player.Skill01.MinusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.MinusSkill.SkillIndex))
+                || (player.Skill04 != null && (SkillLearnList[i].SkillIndex == player.Skill04.SkillIndex) || (player.Skill01.PlusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.PlusSkill.SkillIndex) || (player.Skill01.MinusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.MinusSkill.SkillIndex)) ){
                 SkillLearnList.Remove(SkillLearnList[i]);
             }
             else
