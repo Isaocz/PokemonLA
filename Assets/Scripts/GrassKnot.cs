@@ -59,8 +59,8 @@ public class GrassKnot : GrassSkill
             }
             if (TagetPositionList.Count >= 6)
             {
-                Damage = Power(MoveSpeed());
-                Debug.Log(Damage);
+                SpDamage = Power(MoveSpeed());
+                Debug.Log(SpDamage);
                 HitAndKo(Target);
                 Target = null;
                 OnKnotDestroy();
