@@ -44,6 +44,7 @@ public class SceneLoadManger : MonoBehaviour
 
     public void ReturnTitle()
     {
+        if (FloorNum.GlobalFloorNum != null) { FloorNum.GlobalFloorNum.InstanceFloorNum(); }
         SceneManager.LoadSceneAsync(1);
     }
 

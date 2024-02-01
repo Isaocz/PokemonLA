@@ -72,10 +72,10 @@ public class UIPanelGwtNewSkill : MonoBehaviour
         if (GetNewSkill.SkillFrom == 2)
         {
             IsLearnSkill = isLearnSkill;
-            if (GetNewSkill == playerControler.Skill01.PlusSkill)      { playerControler.GetNewSkill(GetNewSkill, playerControler.Skill01, 1, IsLearnSkill); }
-            else if(GetNewSkill == playerControler.Skill02.PlusSkill) { playerControler.GetNewSkill(GetNewSkill, playerControler.Skill02, 2, IsLearnSkill); }
-            else if(GetNewSkill == playerControler.Skill03.PlusSkill) { playerControler.GetNewSkill(GetNewSkill, playerControler.Skill03, 3, IsLearnSkill); }
-            else if(GetNewSkill == playerControler.Skill04.PlusSkill) { playerControler.GetNewSkill(GetNewSkill, playerControler.Skill04, 4, IsLearnSkill); }
+            if (playerControler.Skill01 != null &&  GetNewSkill == playerControler.Skill01.PlusSkill)      { playerControler.GetNewSkill(GetNewSkill, playerControler.Skill01, 1, IsLearnSkill); }
+            else if(playerControler.Skill02 != null && GetNewSkill == playerControler.Skill02.PlusSkill) { playerControler.GetNewSkill(GetNewSkill, playerControler.Skill02, 2, IsLearnSkill); }
+            else if(playerControler.Skill03 != null && GetNewSkill == playerControler.Skill03.PlusSkill) { playerControler.GetNewSkill(GetNewSkill, playerControler.Skill03, 3, IsLearnSkill); }
+            else if(playerControler.Skill04 != null && GetNewSkill == playerControler.Skill04.PlusSkill) { playerControler.GetNewSkill(GetNewSkill, playerControler.Skill04, 4, IsLearnSkill); }
             transform.parent.GetChild(4).gameObject.SetActive(true);
 
         }

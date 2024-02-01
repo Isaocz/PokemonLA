@@ -1627,6 +1627,7 @@ public class PlayerControler : Pokemon
                 Instantiate(baby, baby.transform.position, Quaternion.identity, EBaby.transform.GetChild(2));
             }
         }
+        e.PlayerTeraType = PlayerTeraType;
 
         e.spaceItem = spaceItem;
         e.NatureIndex = NatureIndex;

@@ -10,12 +10,12 @@ public class MewTalkPamel : NPCTalkPanel
     private void Awake()
     {
         TalkTextList = new string[] { "Miu! 你好厉害！居然能抓到我！","别小看我，我会好多厉害的技能呢！" ,"什么，你想要学习有趣的招式吗？\n嘿嘿，那我就交给你吧!","不想学习了吗？\n随时回来哦,还想和你一起玩！" };
-        if (FloorNum.GlobalFloorNum.isMewBeTalk) 
+        if (FloorNum.GlobalFloorNum != null && FloorNum.GlobalFloorNum.isMewBeTalk) 
         {
             TalkTextList = new string[] { "Miu! 又被你抓到了！", "你好聪明啊，不过肯定没有我会的招式多！", "想要继续学习招式吗\n嘿嘿，那我就交给你吧!", "不想学习了吗？\n随时回来哦,还想和你一起玩！" };
         }
         NPCTPAwake();
-        if (!FloorNum.GlobalFloorNum.isMewBeTalk)
+        if (FloorNum.GlobalFloorNum != null && !FloorNum.GlobalFloorNum.isMewBeTalk)
         {
             FloorNum.GlobalFloorNum.isMewBeTalk = true;
         }
