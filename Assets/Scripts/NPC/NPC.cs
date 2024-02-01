@@ -16,6 +16,8 @@ public class NPC : MonoBehaviour
         ZBotton = gameObject.transform.GetChild(3).gameObject;
         TalkPanel = gameObject.transform.GetChild(4).GetChild(0).gameObject.GetComponent<NPCTalkPanel>();
         animator = GetComponent<Animator>();
+        playerControler = GameObject.FindObjectOfType<PlayerControler>();
+
     }
 
     protected void NPCOnTriggerStay2D(Collider2D other)
@@ -43,6 +45,17 @@ public class NPC : MonoBehaviour
 
     protected void NPCUpdate()
     {
+        if (playerControler == null)
+        {
+            playerControler = GameObject.FindObjectOfType<PlayerControler>();
+        }
+        if (isInTrriger && (transform.position - playerControler.transform.position).magnitude >= 6.0f)
+        {
+            ZBotton.SetActive(false);
+            isInTrriger = false;
+            TalkPanel.PlayerExit();
+            playerControler.CanNotUseSpaceItem = false;
+        }
         if (isInTrriger && Input.GetKeyDown(KeyCode.Z) && !TalkPanel.isTalkPuse)
         {
             TalkPanel.player = playerControler;

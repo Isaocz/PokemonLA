@@ -15,6 +15,8 @@ public class Cloyster : Empty
     float BeamTimer;
     public CloysterAuroraBeamManger AuroraBeam;
 
+    float MustOpenTimer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -67,6 +69,7 @@ public class Cloyster : Empty
 
                 if (isClose)
                 {
+                    MustOpenTimer += Time.deltaTime;
                     BeamTimer = 0;
                     isBeam = false;
                     if (isHit && !isOpenTimePlus)
@@ -95,6 +98,14 @@ public class Cloyster : Empty
                     }
                 }
 
+                if (MustOpenTimer >= 20.0f)
+                {
+                    OpenTimer = 0;
+                    MustOpenTimer = 0;
+                    animator.SetTrigger("Open");
+                    isClose = false;
+                }
+
                 if (SearchPlayer.collider != null && ((!isEmptyInfatuationDone && SearchPlayer.transform.tag == "Player") || (isEmptyInfatuationDone && SearchPlayer.transform.tag == "Empty")))
                 {
                     if (!isBeam)
@@ -112,6 +123,7 @@ public class Cloyster : Empty
                             }
                             else
                             {
+                                MustOpenTimer = 0;
                                 OpenTimer = 0;
                                 animator.SetTrigger("Open");
                                 isClose = false;

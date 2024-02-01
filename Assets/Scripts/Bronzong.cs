@@ -205,7 +205,7 @@ public class Bronzong : Empty
                                         };
                                     }
                                 }
-                                if (!isAngry && EmptyHp <= maxHP * 0.95f)
+                                if (!isAngry && EmptyHp <= maxHP * 0.5f)
                                 {
                                     isAngry = true;
                                     Instantiate(PT, transform.position - 1.3f * Vector3.down, Quaternion.identity);

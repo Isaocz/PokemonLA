@@ -36,11 +36,13 @@ public class MewSelectSkillPanel : MonoBehaviour
         SetLNSSPanel();
     }
 
+
     public void SetLNSSPanel()
     {
         Skill01 = player.playerSkillList.RandomGetAMEWSkill();
         Skill02 = player.playerSkillList.RandomGetAMEWSkill();
         Skill03 = player.playerSkillList.RandomGetAMEWSkill();
+
         PokemonChineseName = player.PlayerNameChinese;
 
         if (Skill01 == null) { SkillBar01.gameObject.SetActive(false); Skill01ButtonText.transform.parent.gameObject.SetActive(false); }

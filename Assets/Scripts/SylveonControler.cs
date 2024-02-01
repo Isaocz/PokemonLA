@@ -29,7 +29,6 @@ public class SylveonControler : PlayerControler
 
         PlayerType01 = 18;
         PlayerType02 = 0;
-
         Instance();
         InstanceNewSkillPanel();
 

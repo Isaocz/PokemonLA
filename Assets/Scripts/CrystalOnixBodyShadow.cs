@@ -43,11 +43,10 @@ public class CrystalOnixBodyShadow : SubEmptyBody
     void Update()
     {
         SubEmptyBodyUpdate();
-        if (Shadow.transform.rotation.eulerAngles.z != 0)
+        if (Shadow.transform.rotation.eulerAngles.z != 0 || Shadow.transform.position != transform.position + Vector3.up * Y)
         {
             Shadow.transform.rotation = Quaternion.Euler(Vector3.zero);
             Shadow.transform.position = transform.position + Vector3.up * Y;
-
         }
         if (BodySprite.transform.rotation.eulerAngles.z != 0)
         {

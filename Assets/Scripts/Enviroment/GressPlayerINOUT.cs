@@ -32,7 +32,7 @@ public class GressPlayerINOUT : MonoBehaviour
         if (!isVisit)
         {
             isVisit = true;
-            if (Random.Range(0.000f, 1.000f) < (0.1f+(((float)player.LuckPoint))/30) )
+            if (Random.Range(0.000f, 1.000f) < (0.1f+(((float)player.LuckPoint))/60) )
             {
                 float JudgeF = Random.Range(0.0f, 1.0f);
                 if (JudgeF <= 1.0f && JudgeF > 0.8f) { LunchNewItem(RareCandy); }

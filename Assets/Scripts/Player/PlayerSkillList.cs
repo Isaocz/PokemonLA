@@ -331,7 +331,11 @@ public class PlayerSkillList : MonoBehaviour
         SkillMewList.Clear();
         for (int i = 0; i < SkillMewListBorn.Count; i++)
         {
-            if ((player.Skill01 == null || SkillMewListBorn[i].SkillIndex != player.Skill01.SkillIndex || SkillMewListBorn[i].SkillIndex+1 != player.Skill01.SkillIndex) && (player.Skill02 == null || SkillMewListBorn[i].SkillIndex != player.Skill02.SkillIndex || SkillMewListBorn[i].SkillIndex+1 != player.Skill02.SkillIndex) && (player.Skill03 == null || SkillMewListBorn[i].SkillIndex != player.Skill03.SkillIndex || SkillMewListBorn[i].SkillIndex+1 != player.Skill03.SkillIndex) && (player.Skill04 == null || SkillMewListBorn[i].SkillIndex != player.Skill04.SkillIndex || SkillMewListBorn[i].SkillIndex+1 != player.Skill04.SkillIndex))
+            if ((player.Skill01 == null || (SkillMewListBorn[i].SkillIndex != player.Skill01.SkillIndex && SkillMewListBorn[i].SkillIndex+1 != player.Skill01.SkillIndex))
+                && (player.Skill02 == null || (SkillMewListBorn[i].SkillIndex != player.Skill02.SkillIndex && SkillMewListBorn[i].SkillIndex+1 != player.Skill02.SkillIndex)) 
+                && (player.Skill03 == null || (SkillMewListBorn[i].SkillIndex != player.Skill03.SkillIndex && SkillMewListBorn[i].SkillIndex+1 != player.Skill03.SkillIndex))
+                && (player.Skill04 == null || (SkillMewListBorn[i].SkillIndex != player.Skill04.SkillIndex && SkillMewListBorn[i].SkillIndex+1 != player.Skill04.SkillIndex))
+                && (player.Skill04 == null || (SkillMewListBorn[i].SkillIndex != player.Skill04.SkillIndex && SkillMewListBorn[i].SkillIndex+1 != player.Skill04.SkillIndex)))
             {
                 SkillMewList.Add(SkillMewListBorn[i]);
             }

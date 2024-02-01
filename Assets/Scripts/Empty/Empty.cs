@@ -238,11 +238,11 @@ public class Empty : Pokemon
         {
             //携带探宝器更容易携带道具
             if (!player.playerData.IsPassiveGetList[61]) {
-                isHaveDropItem = Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 100 > 0.96f;
+                isHaveDropItem = Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 100 > 0.93f;
             }
             else
             {
-                isHaveDropItem = Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.90f;
+                isHaveDropItem = Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.85f;
                 if (isHaveDropItem) { playerUIState.StatePlus(13); }
             }
         }
@@ -328,20 +328,20 @@ public class Empty : Pokemon
                     if (!isInPsychicTerrain) { EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000);}
                     else
                     {
-                        if(Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000)) > (int)(maxHP / 16))
+                        if(Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000))) > (int)(maxHP / 16))
                         {
-                            EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000);
+                            EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000));
                         }
                     }
                 }
                 else
                 {
-                    if (!isInPsychicTerrain) { EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, 100000); }
+                    if (!isInPsychicTerrain) { EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000)); }
                     else
                     {
-                        if (Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, 100000)) > (int)(maxHP / 16))
+                        if (Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000))) > (int)(maxHP / 16))
                         {
-                            EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, 100000);
+                            EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000));
                         }
                     }
                 }
@@ -427,11 +427,11 @@ public class Empty : Pokemon
     /// ---OnColliderEnter2D中调用---，对于玩家造成触碰伤害
     /// </summary>
     /// <param name="player"></param>
-    public void EmptyTouchHit(GameObject player)
+    public void EmptyTouchHit(GameObject playerObj)
     {
         //如果触碰到的是玩家，使玩家扣除一点血量
-        PlayerControler playerControler = player.gameObject.GetComponent<PlayerControler>();
-        PokemonHpChange(this.gameObject, player, 10, 0, 0, Type.TypeEnum.No);
+        PlayerControler playerControler = playerObj.gameObject.GetComponent<PlayerControler>();
+        PokemonHpChange(this.gameObject, playerObj.gameObject, 10, 0, 0, Type.TypeEnum.No);
         if (playerControler != null)
         {
             //playerControler.ChangeHp(-(10 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250 ) ,0, 0);
@@ -501,7 +501,8 @@ public class Empty : Pokemon
             RemoveChild();
             if (!isDie)
             {
-                player.ChangeEx(Exp);
+                if (GetComponent<Collider2D>()) { GetComponent<Collider2D>().enabled = false; }
+                player.ChangeEx((int)(Exp * (isBoos ? 1.8f : 1.3f)));
                 player.ChangeHPW(HWP);
                 if (player.playerData.IsPassiveGetList[134] && (EmptyType01 == Type.TypeEnum.Dark || EmptyType02 == Type.TypeEnum.Dark) ) { player.ChangeHPW(HWP); }
                 transform.parent.parent.GetComponent<Room>().isClear -= 1;
@@ -541,7 +542,7 @@ public class Empty : Pokemon
             if (isBoos)
             {
                 Vector2 DropPosition = new Vector2(Mathf.Clamp(transform.position.x, transform.parent.position.x - 12.0f, transform.parent.position.x + 12.0f), Mathf.Clamp(transform.position.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f));
-                if (player.playerData.IsPassiveGetList[134]) {
+                if (!player.playerData.IsPassiveGetList[134]) {
                     Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
                     Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
                     Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
@@ -551,7 +552,7 @@ public class Empty : Pokemon
             {
 
                 Vector2 DropPosition = new Vector2(Mathf.Clamp(transform.position.x, transform.parent.position.x - 12.0f, transform.parent.position.x + 12.0f), Mathf.Clamp(transform.position.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f));
-                if (player.playerData.IsPassiveGetList[134]) {
+                if (!player.playerData.IsPassiveGetList[134]) {
                     Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent);
                 }
 

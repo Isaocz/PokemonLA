@@ -20,6 +20,8 @@ public class NPCTalkPanel : MonoBehaviour
         TalkInformation.text = TalkTextList[TalkIndex];
         ParentNPC = transform.parent.parent.GetComponent<NPC>();
         ParentNPC.playerControler.CanNotUseSpaceItem = true;
+        
+
     }
 
     protected void NPCTPContinue()
