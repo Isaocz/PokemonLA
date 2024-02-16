@@ -1024,11 +1024,13 @@ public class Mew : Empty
                     int Times = 3;
                     if (currentPhase == 2)
                     {
+                        AirSlashPrefab.GetComponent<AirSlashMew>().numSplitAirSlashes = 8;
                         intervalTime = 0.8f;
                         Times = 5;
                     }
                     else if(currentPhase ==3)
                     {
+                        AirSlashPrefab.GetComponent<AirSlashMew>().numSplitAirSlashes = 10;
                         intervalTime = 0.3f;
                         Times = 13;
                     }
@@ -1904,17 +1906,27 @@ public class Mew : Empty
     }
     void ClearStatusEffects()
     {
-        //清除所有debuff
+        //清除所有debuff，包括异常状态累计数
         EmptyCurseRemove();
+        EmptyCursePoint = 0;
         ColdRemove();
+        isColdDown = 0;
         EmptyConfusionRemove();
+        EmptyCursePoint = 0;
         EmptyInfatuationRemove();
+        EmptyInfatuationPoint = 0;
         EmptyParalysisRemove();
+        ParalysisPointFloat = 0;
         EmptySleepRemove();
+        SleepPointFloat = 0;
         EmptyBurnRemove();
+        BurnPointFloat = 0;
         BlindRemove();
+        EmptyBlindPoint = 0;
         FearRemove();
+        GetEmptyFearPointFloat = 0;
         FrozenRemove();
+        GetEmptyFrozenPointFloat = 0;
     }
 
     void ClearProjectile()
