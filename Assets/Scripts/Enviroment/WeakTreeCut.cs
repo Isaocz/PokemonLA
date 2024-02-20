@@ -67,4 +67,9 @@ public class WeakTreeCut : MonoBehaviour
         Destroy(gameObject);
         p.isInZ = false;
     }
+
+    public void SetZFalse()
+    {
+        ZButton.gameObject.SetActive(false);
+    }
 }

@@ -91,4 +91,14 @@ public class SwabluBaby : FollowBaby
     }
 
 
+    public override void InANewRoomEvent()
+    {
+        base.InANewRoomEvent();
+        Colision.transform.localPosition = Vector3.zero;
+        Shadow01.transform.localPosition = new Vector3(0, -0.81f, 0);
+        Shadow02.transform.localPosition = new Vector3(0, -0.7632998f, 0);
+        NowState = State.idle;
+        MoveSpeed = 12.0f;
+    }
+
 }

@@ -501,90 +501,90 @@ public class Onix : Empty
         {
             case 0:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r] , Quaternion.identity );
-                transform.position = MoveOutPosition[r] + Vector3.down * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.down * 4.0f;
                 SetNowDirAndSubBodyPos(new Vector2(-1, 1)); transform.position += Vector3.right * 2.0f;
                 break;
             case 1:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.identity);
-                transform.position = MoveOutPosition[r] + Vector3.down * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.down * 4.0f;
                 if (Random.Range(0.0f, 1.0f) > 0.5f) { SetNowDirAndSubBodyPos(new Vector2(1, 1)); transform.position += Vector3.left * 2.0f; } else { SetNowDirAndSubBodyPos(new Vector2(-1, 1)); transform.position += Vector3.right * 2.0f; }
                 break;
             case 2:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.identity);
-                transform.position = MoveOutPosition[r] + Vector3.down * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.down * 4.0f;
                 SetNowDirAndSubBodyPos(new Vector2(1, 1)); transform.position += Vector3.left * 2.0f;
                 break;
             case 3:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.identity);
-                transform.position = MoveOutPosition[r] + Vector3.down * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.down * 4.0f;
                 if (Random.Range(0.0f, 1.0f) > 0.5f) { SetNowDirAndSubBodyPos(new Vector2(1, 1)); transform.position += Vector3.left * 2.0f; } else { SetNowDirAndSubBodyPos(new Vector2(-1, 1)); transform.position += Vector3.right * 2.0f; }
                 break;
 
 
             case 4:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.Euler(0,0,180));
-                transform.position = MoveOutPosition[r] + Vector3.up * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.up * 4.0f;
                 SetNowDirAndSubBodyPos(new Vector2(-1, -1)); transform.position += Vector3.right * 1.5f;
                 break;
             case 5:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.Euler(0, 0, 180));
-                transform.position = MoveOutPosition[r] + Vector3.up * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.up * 4.0f;
                 if (Random.Range(0.0f, 1.0f) > 0.5f) { SetNowDirAndSubBodyPos(new Vector2(1, -1)); transform.position += Vector3.left * 1.5f; } else { SetNowDirAndSubBodyPos(new Vector2(-1, -1)); transform.position += Vector3.right * 1.5f; }
                 break;
             case 6:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.Euler(0, 0, 180));
-                transform.position = MoveOutPosition[r] + Vector3.up * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.up * 4.0f;
                 SetNowDirAndSubBodyPos(new Vector2(1, -1)); transform.position += Vector3.left * 1.5f;
                 break;
             case 7:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.Euler(0, 0, 180));
-                transform.position = MoveOutPosition[r] + Vector3.up * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.up * 4.0f;
                 if (Random.Range(0.0f, 1.0f) > 0.5f) { SetNowDirAndSubBodyPos(new Vector2(1, -1)); transform.position += Vector3.left * 1.5f; } else { SetNowDirAndSubBodyPos(new Vector2(-1, -1)); transform.position += Vector3.right * 1.5f; }
                 break;
 
 
             case 8:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.Euler(0, 0, 90));
-                transform.position = MoveOutPosition[r] + Vector3.right * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.right * 4.0f;
                 SetNowDirAndSubBodyPos(new Vector2(-1, -1)); transform.position += Vector3.up * 1.5f;
                 break;
             case 9:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.Euler(0, 0, 90));
-                transform.position = MoveOutPosition[r] + Vector3.right * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.right * 4.0f;
                 SetNowDirAndSubBodyPos(new Vector2(-1, 1)); transform.position += Vector3.down * 1.5f;
                 break;
 
 
             case 10:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.Euler(0, 0, -90));
-                transform.position = MoveOutPosition[r] + Vector3.left * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.left * 4.0f;
                 SetNowDirAndSubBodyPos(new Vector2(1, -1)); transform.position += Vector3.up * 1.5f;
                 break;
             case 11:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.Euler(0, 0, -90));
-                transform.position = MoveOutPosition[r] + Vector3.left * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.left * 4.0f;
                 SetNowDirAndSubBodyPos(new Vector2(1, 1)); transform.position += Vector3.down * 1.5f;
                 break;
 
 
             case 12:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.Euler(0, 0, 180));
-                transform.position = MoveOutPosition[r] + Vector3.up * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.up * 4.0f;
                 if (Random.Range(0.0f, 1.0f) > 0.5f) { SetNowDirAndSubBodyPos(new Vector2(1, -1)); transform.position += Vector3.left * 1.5f; } else { SetNowDirAndSubBodyPos(new Vector2(-1, -1)); transform.position += Vector3.right * 1.5f; }
                 break;
             case 13:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.identity);
-                transform.position = MoveOutPosition[r] + Vector3.down * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.down * 4.0f;
                 if (Random.Range(0.0f, 1.0f) > 0.5f) { SetNowDirAndSubBodyPos(new Vector2(1, 1)); transform.position += Vector3.left * 2.0f; } else { SetNowDirAndSubBodyPos(new Vector2(-1, 1)); transform.position += Vector3.right * 2.0f; }
                 break;
             case 14:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.Euler(0, 0, 90));
-                transform.position = MoveOutPosition[r] + Vector3.right * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.right * 4.0f;
                 if (Random.Range(0.0f, 1.0f) > 0.5f) { SetNowDirAndSubBodyPos(new Vector2(-1, 1)); transform.position += Vector3.down * 1.5f; } else { SetNowDirAndSubBodyPos(new Vector2(-1, -1)); transform.position += Vector3.up * 1.5f; }
                 break;
             case 15:
                 DigOutEffect = Instantiate(OnixBodyTop.GetComponent<OnixBodyShadow>().DigEffect, transform.parent.position + MoveOutPosition[r], Quaternion.Euler(0, 0, -90));
-                transform.position = MoveOutPosition[r] + Vector3.left * 4.0f;
+                transform.position = transform.parent.position + MoveOutPosition[r] + Vector3.left * 4.0f;
                 if (Random.Range(0.0f, 1.0f) > 0.5f) { SetNowDirAndSubBodyPos(new Vector2(1, -1)); transform.position += Vector3.up * 1.5f; } else { SetNowDirAndSubBodyPos(new Vector2(1, 1)); transform.position += Vector3.down * 1.5f; }
                 break;
                 //new Vector3(10.8f, -5.0f, 0) ,new Vector3(6.2f, -5.0f, 0) , new Vector3(-10.8f, -5.0f, 0) ,new Vector3(-6.2f, -5.0f, 0) ,

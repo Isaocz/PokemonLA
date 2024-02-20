@@ -6,7 +6,6 @@ public class UISkillPanel : MonoBehaviour
 {
 
 
-
     // Update is called once per frame
     void Update()
     {

@@ -8,14 +8,7 @@ public class PiloswineControler : PlayerControler
     public Skill Tackle;
     public Skill MudSlup;
     public Skill IceFang;
-    //需要修改
-    //public Skill TeraBlast;
     public Skill AncientPower;
-    //伊布
-    //public Skill Growl;
-    //public Skill SandAttack;
-    //甜冷美后
-    //public Skill Splash;
 
 
 

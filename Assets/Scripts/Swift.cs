@@ -73,7 +73,7 @@ public class Swift : Skill
                 isMove = false;
             }
         }
-        else if (collision.CompareTag("Room") || ((collision.CompareTag("Enviroment") ) && SkillFrom != 2))
+        else if (collision.CompareTag("Room") || ((collision.CompareTag("Enviroment"))) )
         {
             isHit = true;
             isMove = false;
