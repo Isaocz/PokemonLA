@@ -13,7 +13,7 @@ public class RandomSkillItem : MonoBehaviour
         float RandomPoint = (Random.Range(0.0f, 6.0f));
         if (RandomPoint < 6.0f && RandomPoint >= 5.0f)
         {
-            OutPut = Instantiate(SkillItemList.transform.GetChild(2), transform.position, Quaternion.identity, transform).gameObject;
+            OutPut = Instantiate(SkillItemList.transform.GetChild(0), transform.position, Quaternion.identity, transform).gameObject;
         }
         else if (RandomPoint <= 5.0f && RandomPoint >= 3.0f)
         {
@@ -21,7 +21,7 @@ public class RandomSkillItem : MonoBehaviour
         }
         else
         {
-            OutPut = Instantiate(SkillItemList.transform.GetChild(0), transform.position, Quaternion.identity, transform).gameObject;
+            OutPut = Instantiate(SkillItemList.transform.GetChild(2), transform.position, Quaternion.identity, transform).gameObject;
         }
         OutPut.transform.parent = transform.parent;
         if (isLunch) { OutPut.GetComponent<IteamPickUp>().isLunch = true; }

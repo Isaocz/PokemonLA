@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8009406432019539701}
   - component: {fileID: 111213947603669698}
-  - component: {fileID: 6235481055070180241}
   - component: {fileID: 5914156970836458668}
+  - component: {fileID: 1174336671195161160}
   m_Layer: 4
   m_Name: Spikes2
   m_TagString: Water
@@ -86,32 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &6235481055070180241
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1178088447944136884}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.06911051, y: -0.030150354}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.861779, y: 0.7657527}
-  m_EdgeRadius: 0
 --- !u!114 &5914156970836458668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,6 +99,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 4
+--- !u!58 &1174336671195161160
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178088447944136884}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.05}
+  serializedVersion: 2
+  m_Radius: 0.35
 --- !u!1 &9210673126050718703
 GameObject:
   m_ObjectHideFlags: 0

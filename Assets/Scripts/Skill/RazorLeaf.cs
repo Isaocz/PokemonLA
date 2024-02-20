@@ -47,8 +47,10 @@ public class RazorLeaf : Skill
     {
         if (!isCanNotMove)
         {
-            transform.GetChild(1).gameObject.SetActive(true);
-            transform.GetChild(1).parent = transform.parent;
+            if (transform.childCount > 1) {
+                transform.GetChild(1).gameObject.SetActive(true);
+                transform.GetChild(1).parent = transform.parent;
+            }
             transform.GetComponent<Collider2D>().enabled = false;
             Destroy(gameObject);
         }

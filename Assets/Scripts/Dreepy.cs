@@ -89,4 +89,17 @@ public class Dreepy : FollowBaby
             NowState = State.Return;
         }
     }
+
+
+
+
+    public override void InANewRoomEvent()
+    {
+        base.InANewRoomEvent();
+        Colision.transform.localPosition = Vector3.zero;
+        Shadow01.transform.localPosition = new Vector3(0, -0.985f, 0);
+        Shadow02.transform.localPosition = new Vector3(0, -0.9382998f, 0);
+        NowState = State.idle;
+    }
+
 }

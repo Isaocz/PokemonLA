@@ -135,7 +135,8 @@ public class UIExpBar : MonoBehaviour
 
             }
             player.LevelForSkill++;
-            player.LearnNewSkill();
+            Timer.Start(player , 0.01f , ()=> { if (!player.isEvolution) { player.LearnNewSkill(); } }   );
+            //player.LearnNewSkill();
         }
     }
 }

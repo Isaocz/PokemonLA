@@ -494,6 +494,8 @@ public class PlayerControler : Pokemon
     {
         if (!isDie)
         {
+            //检验时间是否停止，停止不进化
+
             //触发特性
             {
                 UpdateAbility();
@@ -569,10 +571,10 @@ public class PlayerControler : Pokemon
                                 CollidorOffset = 0.7f; CollidorRadiusH = 1.3f; CollidorRadiusV = 1.1f;
                                 break;
                         }
-                        RaycastHit2D SearchED = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.down, CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
-                        RaycastHit2D SearchEU = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.up, CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
-                        RaycastHit2D SearchER = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.right, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
-                        RaycastHit2D SearchEL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.left, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
+                        RaycastHit2D SearchED = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.down, CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
+                        RaycastHit2D SearchEU = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.up, CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
+                        RaycastHit2D SearchER = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.right, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
+                        RaycastHit2D SearchEL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.left, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
 
                         if ((SearchED.collider != null && (SearchED.transform.tag == "Enviroment" || SearchED.transform.tag == "Room"))
                             || (SearchEU.collider != null && (SearchEU.transform.tag == "Enviroment" || SearchEU.transform.tag == "Room"))
@@ -693,7 +695,7 @@ public class PlayerControler : Pokemon
                                 }
                                 break;
                             case 2:
-                                if (isSkill02CD == false && Skill02 != null && !isSkill && (Skill02.useSkillConditions(this)))
+                                if (isSkill03CD == false && Skill02 != null && !isSkill && (Skill02.useSkillConditions(this)))
                                 {
                                     //当动画进行到第8帧时会发射技能3，并技能3进入CD
                                     animator.SetTrigger("Skill");
@@ -704,7 +706,7 @@ public class PlayerControler : Pokemon
                                 }
                                 break;
                             case 3:
-                                if (isSkill01CD == false && Skill01 != null && !isSkill && (Skill01.useSkillConditions(this)))
+                                if (isSkill04CD == false && Skill01 != null && !isSkill && (Skill01.useSkillConditions(this)))
                                 {
                                     //当动画进行到第8帧时会发射技能4，并技能4进入CD
                                     animator.SetTrigger("Skill");
@@ -1100,9 +1102,11 @@ public class PlayerControler : Pokemon
                 InvincileTimer = TimeInvincible;
 
                 if (isSleepDone) { SleepRemove(); }
-                UIHealthBar.Instance.Per = (float)nowHp / (float)maxHp;
-                UIHealthBar.Instance.ChangeHpDown();
-                UIHealthBar.Instance.NowHpText.text = string.Format("{000}", nowHp);
+                if (UIHealthBar.Instance != null) {
+                    UIHealthBar.Instance.Per = (float)nowHp / (float)maxHp;
+                    UIHealthBar.Instance.ChangeHpDown();
+                    UIHealthBar.Instance.NowHpText.text = string.Format("{000}", nowHp);
+                }
 
                 if(nowHp <= 0) { PlayerDie(); }
                 //血量上升时对血条UI输出当前血量，并调用血条上升的函数
@@ -1412,7 +1416,7 @@ public class PlayerControler : Pokemon
                     UIHealthBar.Instance.ChangeHpUp();
 
                 }
-
+                
                 UIExpBar.Instance.Per = (float)nowEx / (float)maxEx;
                 UIExpBar.Instance.ExpUpOverflow();
             }
@@ -1556,6 +1560,7 @@ public class PlayerControler : Pokemon
         UISkillButton.Instance.isEscEnable = false;
         animator.updateMode = AnimatorUpdateMode.UnscaledTime;
         Time.timeScale = 0;
+        UISkillButton.Instance.isEscEnable = false;
         animator.SetTrigger("Evolution");
         isEvolution = true;
     }
@@ -1571,6 +1576,7 @@ public class PlayerControler : Pokemon
         PlayerControler e = Instantiate(EvolutionPlayer, transform.position, Quaternion.identity);
         animator.updateMode = AnimatorUpdateMode.Normal;
         Time.timeScale = 1;
+        UISkillButton.Instance.isEscEnable = true;
         e.isSpaceItemCanBeUse = true;
 
         if (playerAbility == playerAbility01) { e.playerAbility = e.playerAbility01; }
@@ -2170,11 +2176,11 @@ public class PlayerControler : Pokemon
             if (!playerData.IsPassiveGetList[122])
             {
                 PlayerHailTimer += Time.deltaTime;
-                if (PlayerHailTimer >= 2)
+                if (PlayerHailTimer >= 2.4f)
                 {
                     PlayerHailTimer += Time.deltaTime;
-                    if (Weather.GlobalWeather.isHailPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
-                    else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                    if (Weather.GlobalWeather.isHailPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                    else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
                     PlayerHailTimer = 0;
                 }
             }
@@ -2197,11 +2203,11 @@ public class PlayerControler : Pokemon
         {
             if (!playerData.IsPassiveGetList[122]) {
                 PlayerSandStormTimer += Time.deltaTime;
-                if (PlayerSandStormTimer >= 2)
+                if (PlayerSandStormTimer >= 2.4f)
                 {
                     PlayerSandStormTimer += Time.deltaTime;
-                    if (Weather.GlobalWeather.isSandstormPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
-                    else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 8), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                    if (Weather.GlobalWeather.isSandstormPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                    else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
                     PlayerSandStormTimer = 0;
                 }
             }
