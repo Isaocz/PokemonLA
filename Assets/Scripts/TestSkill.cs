@@ -116,6 +116,7 @@ public class TestSkill : Skill
     {
         if (other.tag == "Empty")
         {
+            Debug.Log("xxxxsa");
             if (ProjectileMode)
             {
                 Empty target = other.GetComponent<Empty>();

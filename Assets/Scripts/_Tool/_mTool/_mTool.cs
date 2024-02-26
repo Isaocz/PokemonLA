@@ -35,6 +35,33 @@ public class _mTool : MonoBehaviour
         return OutPut;
     }
 
+    /// <summary>
+    /// 输出目标向量的正规方向
+    /// </summary>
+    /// <returns></returns>
+    public static Vector2 MainVector2( Vector2 Input )
+    {
+        Vector2 OutPut = new Vector2(1,0);
+        float a = _mTool.Angle_360Y(Input, Vector2.right);
+        if (a >= 45 && a < 135)
+        {
+            OutPut = new Vector2(0, 1);
+        }
+        else if (a >= 135 && a < 225)
+        {
+            OutPut = new Vector2(-1, 0);
+        }
+        else if (a >= 225 && a < 315)
+        {
+            OutPut = new Vector2(0, -1);
+        }
+        else
+        {
+            OutPut = new Vector2(1, 0);
+        }
+        return OutPut;
+    }
+
     public static string[] Tips = new string[]
     {
         "某一属性的抵抗力每提升一级，受到该属性的伤害就会减少为原本的80%",

@@ -253,12 +253,14 @@ public class PlayerUIState : MonoBehaviour
             case 0:
                 if (ChangeLevel == 0) 
                 {
-                    Destroy(AtkChangeObj.gameObject);
+                    if (AtkChangeObj.gameObject != null) {
+                        Destroy(AtkChangeObj.gameObject);
+                    }
                     AtkChangeLevel = 0;
                 }
                 else
                 {
-                    if (AtkChangeLevel == 0 && AtkChangeObj == null) { AtkChangeObj = Instantiate(AtkChangeImage, transform.position, Quaternion.identity, transform); }
+                    if (/*AtkChangeLevel == 0 &&  */AtkChangeObj == null) { AtkChangeObj = Instantiate(AtkChangeImage, transform.position, Quaternion.identity, transform); }
                     AtkChangeLevel = ChangeLevel;
                     AtkChangeObj.AbllityLevel = AtkChangeLevel;
                     AtkChangeObj.ChangeAblityLevel();
@@ -267,12 +269,16 @@ public class PlayerUIState : MonoBehaviour
             case 1:
                 if (ChangeLevel == 0)
                 {
-                    Destroy(DefChangeObj.gameObject);
+                    if (DefChangeObj.gameObject != null)
+                    {
+                        Destroy(DefChangeObj.gameObject);
+                    }
                     DefChangeLevel = 0;
                 }
                 else
                 {
-                    if (DefChangeLevel == 0 && DefChangeObj == null) { DefChangeObj = Instantiate(DefChangeImage, transform.position, Quaternion.identity, transform); }
+                    if (/*DefChangeLevel == 0 && */ DefChangeObj == null) {  DefChangeObj = Instantiate(DefChangeImage, transform.position, Quaternion.identity, transform); }
+                    Debug.Log(DefChangeLevel);
                     DefChangeLevel = ChangeLevel;
                     DefChangeObj.AbllityLevel = DefChangeLevel;
                     DefChangeObj.ChangeAblityLevel();
@@ -281,12 +287,16 @@ public class PlayerUIState : MonoBehaviour
             case 2:
                 if (ChangeLevel == 0)
                 {
-                    Destroy(SpAChangeObj.gameObject);
+                    if (SpAChangeObj.gameObject != null)
+                    {
+                        Destroy(SpAChangeObj.gameObject);
+                    }
                     SpAChangeLevel = 0;
                 }
                 else
                 {
-                    if (SpAChangeLevel == 0 && SpAChangeObj == null) { SpAChangeObj = Instantiate(SpAChangeImage, transform.position, Quaternion.identity, transform); }
+                    if (/* SpAChangeLevel == 0 && */ SpAChangeObj == null) { SpAChangeObj = Instantiate(SpAChangeImage, transform.position, Quaternion.identity, transform); }
+                    Debug.Log(SpAChangeLevel);
                     SpAChangeLevel = ChangeLevel;
                     SpAChangeObj.AbllityLevel = SpAChangeLevel;
                     SpAChangeObj.ChangeAblityLevel();
@@ -295,12 +305,15 @@ public class PlayerUIState : MonoBehaviour
             case 3:
                 if (ChangeLevel == 0)
                 {
-                    Destroy(SpDChangeObj.gameObject);
+                    if (SpDChangeObj.gameObject != null)
+                    {
+                        Destroy(SpDChangeObj.gameObject);
+                    }
                     SpDChangeLevel = 0;
                 }
                 else
                 {
-                    if (SpDChangeLevel == 0 && SpDChangeObj == null) { SpDChangeObj = Instantiate(SpDChangeImage, transform.position, Quaternion.identity, transform); }
+                    if (/*SpDChangeLevel == 0 &&  */SpDChangeObj == null) { SpDChangeObj = Instantiate(SpDChangeImage, transform.position, Quaternion.identity, transform); }
                     SpDChangeLevel = ChangeLevel;
                     SpDChangeObj.AbllityLevel = SpDChangeLevel;
                     SpDChangeObj.ChangeAblityLevel();

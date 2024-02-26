@@ -8,4 +8,9 @@ public class DestoryState : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
+    public void RemoveChild()
+    {
+        transform.DetachChildren();
+    }
 }

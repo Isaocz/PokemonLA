@@ -36,4 +36,9 @@ public class SkillRangeCircle : MonoBehaviour
         if (Timer > Duration) { Destroy(gameObject); }
 
     }
+
+    public void DestroyCircle()
+    {
+        Timer = (StartDelay + Duration - FadeOutTime);
+    }
 }

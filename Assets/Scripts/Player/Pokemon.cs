@@ -989,6 +989,7 @@ public class Pokemon : MonoBehaviour
     }
     int atkChangeLevel = 0;
     public bool isAtkChangeDef;
+    List<Vector2> AtkTimeChange = new List<Vector2> { };
 
     /// <summary>
     /// 改变敌人攻击力的方法，ChangeLevel代表改变的等级，ChangeTime代表改变的时间，如果ChangeTime == 0，那么攻击力改变状态不会随着时间消失，需要手动改变
@@ -1003,14 +1004,31 @@ public class Pokemon : MonoBehaviour
             playerUIState.AbllityChange(0,AtkUpLevel);
             LevelChange(AtkUpLevel, "Atk");
             if (ChangeTime != 0) {
+                float UpIndex = Time.time;
+                AtkTimeChange.Add(new Vector2(UpIndex , ChangeLevel) );
                 Timer.Start(this, ChangeTime, () =>
                 {
-                    AtkUpLevel -= ChangeLevel;
-                    playerUIState.AbllityChange(0, AtkUpLevel);
-                    LevelChange(AtkUpLevel, "Atk");
+                    while (AtkTimeChange.Count != 0 && UpIndex > AtkTimeChange[0].x)
+                    {
+                        AtkTimeChange.Remove(AtkTimeChange[0]);
+                    }
+
+                    if (AtkTimeChange.Count != 0 && new Vector2(UpIndex, ChangeLevel) == AtkTimeChange[0])
+                    {
+                        AtkTimeChange.Remove(AtkTimeChange[0]);
+                        AtkUpLevel -= ChangeLevel;
+                        playerUIState.AbllityChange(0, AtkUpLevel);
+                        LevelChange(AtkUpLevel, "Atk");
+                    }
+
                 });
             }
         }
+    }
+
+    public virtual void ResetAtk()
+    {
+        AtkTimeChange.Clear();
     }
 
     //===========================================================================敌人攻击力改变的函数=====================================================================================
@@ -1030,6 +1048,8 @@ public class Pokemon : MonoBehaviour
     }
     int defChangeLevel = 0;
     public bool isDefChangeDef;
+    List<Vector2> DefTimeChange = new List<Vector2> { };
+
     /// <summary>
     /// 改变敌人防御力的方法，ChangeLevel代表改变的等级，ChangeTime代表改变的时间，如果ChangeTime == 0，那么防御力改变状态不会随着时间消失，需要手动改变
     /// </summary>
@@ -1044,14 +1064,31 @@ public class Pokemon : MonoBehaviour
             LevelChange(DefUpLevel, "Def");
             if (ChangeTime != 0)
             {
+                float UpIndex = Time.time;
+                DefTimeChange.Add(new Vector2(UpIndex, ChangeLevel));
                 Timer.Start(this, ChangeTime, () =>
                 {
-                    DefUpLevel -= ChangeLevel;
-                    playerUIState.AbllityChange(1, DefUpLevel);
-                    LevelChange(DefUpLevel, "Def");
+
+                    while (DefTimeChange.Count != 0 && UpIndex > DefTimeChange[0].x)
+                    {
+                        DefTimeChange.Remove(DefTimeChange[0]);
+                    }
+
+                    if (DefTimeChange.Count != 0 && new Vector2(UpIndex, ChangeLevel) == DefTimeChange[0])
+                    {
+                        DefTimeChange.Remove(DefTimeChange[0]);
+                        DefUpLevel -= ChangeLevel;
+                        playerUIState.AbllityChange(1, DefUpLevel);
+                        LevelChange(DefUpLevel, "Def");
+                    }
                 });
             }
         }
+    }
+
+    public virtual void ResetDef()
+    {
+        DefTimeChange.Clear();
     }
 
     //===========================================================================敌人防御力改变的函数=====================================================================================
@@ -1072,6 +1109,8 @@ public class Pokemon : MonoBehaviour
     }
     int spAChangeLevel = 0;
     public bool isSpAChangeDef;
+    List<Vector2> SpATimeChange = new List<Vector2> { };
+
     /// <summary>
     /// 改变敌人特攻力的方法，ChangeLevel代表改变的等级，ChangeTime代表改变的时间，如果ChangeTime == 0，那么特攻力改变状态不会随着时间消失，需要手动改变
     /// </summary>
@@ -1086,14 +1125,31 @@ public class Pokemon : MonoBehaviour
             LevelChange(SpAUpLevel, "SpA");
             if (ChangeTime != 0)
             {
+                float UpIndex = Time.time;
+                SpATimeChange.Add(new Vector2(UpIndex, ChangeLevel));
                 Timer.Start(this, ChangeTime, () =>
                 {
-                    SpAUpLevel -= ChangeLevel;
-                    playerUIState.AbllityChange(2, SpAUpLevel);
-                    LevelChange(SpAUpLevel, "SpA");
+
+                    while (SpATimeChange.Count != 0 && UpIndex > SpATimeChange[0].x)
+                    {
+                        SpATimeChange.Remove(SpATimeChange[0]);
+                    }
+
+                    if (SpATimeChange.Count != 0 && new Vector2(UpIndex, ChangeLevel) == SpATimeChange[0])
+                    {
+                        SpATimeChange.Remove(SpATimeChange[0]);
+                        SpAUpLevel -= ChangeLevel;
+                        playerUIState.AbllityChange(2, SpAUpLevel);
+                        LevelChange(SpAUpLevel, "SpA");
+                    }
                 });
             }
         }
+    }
+
+    public virtual void ResetSpA()
+    {
+        SpATimeChange.Clear();
     }
 
     //===========================================================================敌人特攻力改变的函数=====================================================================================
@@ -1113,6 +1169,8 @@ public class Pokemon : MonoBehaviour
     }
     int spDChangeLevel = 0;
     public bool isSpDChangeDef;
+    List<Vector2> SpDTimeChange = new List<Vector2> { };
+
     /// <summary>
     /// 改变敌人特防力的方法，ChangeLevel代表改变的等级，ChangeTime代表改变的时间，如果ChangeTime == 0，那么特防力改变状态不会随着时间消失，需要手动改变
     /// </summary>
@@ -1127,14 +1185,30 @@ public class Pokemon : MonoBehaviour
             LevelChange(SpDUpLevel, "SpD");
             if (ChangeTime != 0)
             {
+                float UpIndex = Time.time;
+                SpDTimeChange.Add(new Vector2(UpIndex, ChangeLevel));
                 Timer.Start(this, ChangeTime, () =>
                 {
-                    SpDUpLevel -= ChangeLevel;
-                    playerUIState.AbllityChange(3, SpDUpLevel);
-                    LevelChange(SpDUpLevel, "SpD");
+                    while (SpDTimeChange.Count != 0 && UpIndex > SpDTimeChange[0].x)
+                    {
+                        SpDTimeChange.Remove(SpDTimeChange[0]);
+                    }
+
+                    if (SpDTimeChange.Count != 0 && new Vector2(UpIndex, ChangeLevel) == SpDTimeChange[0])
+                    {
+                        SpDTimeChange.Remove(SpDTimeChange[0]);
+                        SpDUpLevel -= ChangeLevel;
+                        playerUIState.AbllityChange(3, SpDUpLevel);
+                        LevelChange(SpDUpLevel, "SpD");
+                    }
                 });
             }
         }
+    }
+
+    public virtual void ResetSpD()
+    {
+        SpDTimeChange.Clear();
     }
 
     //===========================================================================敌人特防力改变的函数=====================================================================================

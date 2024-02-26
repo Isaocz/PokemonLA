@@ -37,9 +37,9 @@ public class Haze : Skill
             Empty Target = other.GetComponent<Empty>();
             if (Target != null) {
                 if (Target.AtkUpLevel != 0) { Target.AtkChange(-Target.AtkUpLevel , 0); }
-                if (Target.DefUpLevel != 0) { Target.DefChange(-Target.DefUpLevel , 0); }
-                if (Target.SpAUpLevel != 0) { Target.SpAChange(-Target.SpAUpLevel , 0); }
-                if (Target.SpDUpLevel != 0) { Target.SpDChange(-Target.SpDUpLevel , 0); }
+                if (Target.DefUpLevel != 0) { Target.DefChange(-Target.DefUpLevel , 0);}
+                if (Target.SpAUpLevel != 0) { Target.SpAChange(-Target.SpAUpLevel , 0);  }
+                if (Target.SpDUpLevel != 0) { Target.SpDChange(-Target.SpDUpLevel , 0);  }
                 Target.SpeedAbilityPoint = Target.AbilityForLevel(Target.Emptylevel, Target.SpeedEmptyPoint);
                 Target.SpeedRemove01(0); 
 

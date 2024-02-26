@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class RapidSpinMoveStop : MonoBehaviour
 {
+
+    private void Start()
+    {
+        BoxCollider2D b1 = transform.GetComponent<BoxCollider2D>();
+        BoxCollider2D b2 = transform.parent.GetComponent<Skill>().player.GetComponent<BoxCollider2D>();
+        b1.offset = b2.offset;
+        b1.size = b2.size;
+        b1.edgeRadius = b2.edgeRadius + 0.15f;
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {       
         if ((other.tag == "Enviroment" || other.tag == "Room" || other.tag == "Water") && other.isTrigger == false)

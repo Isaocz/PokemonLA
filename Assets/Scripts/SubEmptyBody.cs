@@ -379,6 +379,11 @@ public class SubEmptyBody : Empty{
         }
     }
 
+    public override void ResetAtk()
+    {
+        ParentEmpty.ResetAtk();
+    }
+
     public override void DefChange(int ChangeLevel, float ChangeTime)
     {
         if (!isDefChangeDef && ParentEmpty.GetComponent<Empty>() != null)
