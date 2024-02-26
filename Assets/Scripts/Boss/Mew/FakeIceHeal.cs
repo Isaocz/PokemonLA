@@ -15,7 +15,6 @@ public class FakeIceHeal : MonoBehaviour
         if (playerControler != null)
         {
             playerControler.Frozen(2f, 1f, 1f);
-            playerControler.Cold(3f);
             Destroy(gameObject);
         }
     }

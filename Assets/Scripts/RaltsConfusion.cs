@@ -13,7 +13,7 @@ public class RaltsConfusion : Projectile
     private void Awake()
     {
         AwakeProjectile();
-        ExitTime = 3.5f;
+        ExitTime = 1.8f;
     }
 
     private void Start()

@@ -51,7 +51,7 @@ public class PrinplupControler : PlayerControler
         skillBar02.GetSkill(Skill02);
         skillBar03.GetSkill(Skill03);
         skillBar04.GetSkill(Skill04);
-        //Invoke("LearMetalClawg", 0.01f);
+        Invoke("LearMetalClawg", 0.01f);
 
         JudgeEvolutionForEachLevel = NotJudgeEvolution;
     }
@@ -59,7 +59,7 @@ public class PrinplupControler : PlayerControler
     void LearMetalClawg()
     {
         //¸ü»»½ðÊô×¦Index
-        if ((Skill01 == null || Skill01.SkillIndex != 15 && Skill01.SkillIndex != 16) && (Skill02 == null || Skill02.SkillIndex != 15 && Skill02.SkillIndex != 16) && (Skill03 == null || Skill03.SkillIndex != 15 && Skill03.SkillIndex != 16) && (Skill04 == null || Skill04.SkillIndex != 15 && Skill04.SkillIndex != 16))
+        if ((Skill01 == null || Skill01.SkillIndex != 383 && Skill01.SkillIndex != 384) && (Skill02 == null || Skill02.SkillIndex != 383 && Skill02.SkillIndex != 384) && (Skill03 == null || Skill03.SkillIndex != 383 && Skill03.SkillIndex != 384) && (Skill04 == null || Skill04.SkillIndex != 383 && Skill04.SkillIndex != 384))
         {
             LearnNewSkillByOtherWay(MetalClaw);
         }

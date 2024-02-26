@@ -48,7 +48,7 @@ public class GigaImpact : Skill
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Empty" || other.gameObject.tag == "Room" || other.gameObject.tag == "Enviroment")
+        if (other.gameObject.tag == "Empty" || other.gameObject.tag == "Room" || other.gameObject.tag == "Enviroment" || other.gameObject.tag == "Water")
         {
             isMoveOver = true;
             GetComponent<Animator>().SetTrigger("Over");

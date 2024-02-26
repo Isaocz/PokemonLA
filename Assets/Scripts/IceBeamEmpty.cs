@@ -19,7 +19,6 @@ public class IceBeamEmpty : Projectile
                 playerControler.KnockOutPoint = 2.5f;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                 playerControler.Frozen(0.5f, 1f, 0.6f);
-                playerControler.Cold(1f);
             }
         }
     }

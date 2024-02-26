@@ -355,7 +355,7 @@ public class Skill : MonoBehaviour
     /// 对敌人target造成伤害和击退
     /// </summary>
     /// <param name="target"></param>
-    public void HitAndKo(Empty target)
+    public virtual void HitAndKo(Empty target)
     {
         BeforeHitEvent(target);
 
@@ -450,6 +450,13 @@ public class Skill : MonoBehaviour
                 Drain(BeforeHP , target.EmptyHp , 0.1f);
             }
 
+            //招式378 羽栖+
+            {
+                if (player.Skill01.SkillIndex == 378 ) { player.MinusSkillCDTime(1,KOPoint,true); }
+                if (player.Skill02.SkillIndex == 378 ) { player.MinusSkillCDTime(2,KOPoint,true); }
+                if (player.Skill03.SkillIndex == 378 ) { player.MinusSkillCDTime(3,KOPoint,true); }
+                if (player.Skill04.SkillIndex == 378 ) { player.MinusSkillCDTime(4,KOPoint,true); }
+            }
 
         }
 
