@@ -6,6 +6,7 @@ public class WillOWispEmpty : Projectile
 {
     private float moveSpeed;
     private Vector3 moveDirection;
+    private float timer;
 
     private void OnEnable()
     {
@@ -13,7 +14,10 @@ public class WillOWispEmpty : Projectile
     }
     private void Update()
     {
-        transform.position += moveDirection * moveSpeed * Time.deltaTime;
+        float currentSpeed;
+        timer += Time.deltaTime;
+        currentSpeed = moveSpeed + timer;
+        transform.position += moveDirection * currentSpeed * Time.deltaTime;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
