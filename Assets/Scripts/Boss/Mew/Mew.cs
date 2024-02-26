@@ -1049,8 +1049,13 @@ public class Mew : Empty
                 {
                     float angle = 0f;
                     float angleIncrement = currentPhase == 3 ? 10f : 8f;
-                    int Degree = 80;
-                    int Times = 3;
+                    int Degree = 50;
+                    int Times = 2;
+                    if (currentPhase == 2)
+                    {
+                        Degree = 80;
+                        Times = 3;
+                    }
                     if(currentPhase == 3)
                     {
                         Degree = 180;

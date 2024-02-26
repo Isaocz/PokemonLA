@@ -43,27 +43,20 @@ public class KonamiCode : MonoBehaviour
         });
 
         //¥¥Ω®∆¡’œ
-        Vector3[] barrierPositions = new Vector3[]
+        Vector3[] barrierPositions = new Vector3[84];
+        Vector3 roomPosition = transform.parent.position;
+        for(int i = 0; i < 27; i++)
         {
-            new Vector3(-2f, 7.5f, 0f),
-            new Vector3(-1f, 7.5f, 0f),
-            new Vector3(0f, 7.5f, 0f),
-            new Vector3(1f, 7.5f, 0f),
-            new Vector3(2f, 7.5f, 0f),
-            new Vector3(-2f, -8.5f, 0f),
-            new Vector3(-1f, -8.5f, 0f),
-            new Vector3(0f, -8.5f, 0f),
-            new Vector3(1f, -8.5f, 0f),
-            new Vector3(2f, -8.5f, 0f),
-            new Vector3(13f, 0.5f, 0f),
-            new Vector3(13f, -0.5f, 0f),
-            new Vector3(13f, -1.5f, 0f),
-            new Vector3(13f, -2.5f, 0f),
-            new Vector3(-13f, 0.5f, 0f),
-            new Vector3(-13f, -0.5f, 0f),
-            new Vector3(-13f, -1.5f, 0f),
-            new Vector3(-13f, -2.5f, 0f)
-        };
+            float t = i - 13f;
+            barrierPositions[i] = roomPosition + new Vector3(t, 7.5f, 0f);
+            barrierPositions[i + 27] = roomPosition + new Vector3(t, -8.5f, 0f);
+        }
+        for(int i = 54; i < 69; i++)
+        {
+            float t = i - 61.5f;
+            barrierPositions[i] = roomPosition + new Vector3(-13f, t, 0f);
+            barrierPositions[i + 15] = roomPosition + new Vector3(13f, t, 0f);
+        }
         for (int i = 0; i < barrierPositions.Length; i++)
         {
 
