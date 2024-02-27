@@ -288,9 +288,16 @@ public class Empty : Pokemon
 
 
 
-    
+
 
     //====================敌人血量改变======================
+
+    /// <summary>
+    /// 敌人是否被刀背打击中
+    /// </summary>
+    public bool IsBeFalseSwipe { get { return isBeFalseSwipe; } set { isBeFalseSwipe = value; } }
+    bool isBeFalseSwipe;
+
     /// <summary>
     ///     //声明一个函数，改变敌人对象的血量
     /// </summary>
@@ -325,23 +332,23 @@ public class Empty : Pokemon
             {
                 if (SkillType != 19)
                 {
-                    if (!isInPsychicTerrain) { EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000);}
+                    if (!isInPsychicTerrain) { Debug.Log(IsBeFalseSwipe); EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000), (IsBeFalseSwipe ? 1 : 0), maxHP); }
                     else
                     {
                         if(Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000))) > (int)(maxHP / 16))
                         {
-                            EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000));
+                            EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP);
                         }
                     }
                 }
                 else
                 {
-                    if (!isInPsychicTerrain) { EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000)); }
+                    if (!isInPsychicTerrain) { EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP); }
                     else
                     {
                         if (Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000))) > (int)(maxHP / 16))
                         {
-                            EmptyHp -= Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000));
+                            EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP);
                         }
                     }
                 }
@@ -350,7 +357,7 @@ public class Empty : Pokemon
             }
             else
             {
-                EmptyHp = Mathf.Clamp(EmptyHp - (int)(Dmage + SpDmage), 0, maxHP);
+                EmptyHp = Mathf.Clamp(EmptyHp - (int)(Dmage + SpDmage), (IsBeFalseSwipe ? 1 : 0), maxHP);
             }
 
             Debug.Log(Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000) + " + " + "Dmage:" + (int)(Dmage + SpDmage));
@@ -365,6 +372,11 @@ public class Empty : Pokemon
             {
                 uIHealth.Per = (float)EmptyHp / (float)maxHP;
                 uIHealth.ChangeHpUp();
+            }
+
+            if (IsBeFalseSwipe)
+            {
+                IsBeFalseSwipe = false;
             }
         }
     }

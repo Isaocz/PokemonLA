@@ -31,6 +31,18 @@ public class Liquidation : Skill
         else
         {
             StartExistenceTimer();
+            if (ExistenceTime <= 0.15f && !isMoveOver)
+            {
+                isMoveOver = true;
+                GetComponent<Animator>().SetTrigger("Over");
+                var e1 = transform.GetChild(1).GetComponent<ParticleSystem>().main;
+                e1.loop = false;
+                var e2 = transform.GetChild(2).GetComponent<ParticleSystem>().main;
+                e2.loop = false;
+                GameObject g1 = transform.GetChild(1).gameObject; g1.transform.parent = null; g1.transform.localScale = new Vector3(1, 1, 1);
+                GameObject g2 = transform.GetChild(1).gameObject; g2.transform.parent = null; g2.transform.localScale = new Vector3(1, 1, 1);
+
+            }
         }
     }
 
@@ -40,19 +52,26 @@ public class Liquidation : Skill
     {
         if (other.gameObject.tag == "Empty" || other.gameObject.tag == "Room" || other.gameObject.tag == "Enviroment" || other.gameObject.tag == "Water")
         {
-            isMoveOver = true;
-            ExistenceTime = 0.01f;
-            GetComponent<Animator>().SetTrigger("Over");
-            transform.GetChild(1).GetComponent<ParticleSystem>().Stop();
-            transform.GetChild(2).GetComponent<ParticleSystem>().Stop();
-
+            if (!isMoveOver)
+            {
+                isMoveOver = true;
+                ExistenceTime = 0.1f;
+                GetComponent<Animator>().SetTrigger("Over");
+                var e1 = transform.GetChild(1).GetComponent<ParticleSystem>().main;
+                e1.loop = false;
+                var e2 = transform.GetChild(2).GetComponent<ParticleSystem>().main;
+                e2.loop = false;
+                GameObject g1 = transform.GetChild(1).gameObject; g1.transform.parent = null; g1.transform.localScale = new Vector3(1, 1, 1);
+                GameObject g2 = transform.GetChild(1).gameObject; g2.transform.parent = null; g2.transform.localScale = new Vector3(1, 1, 1);
+            }
             if (other.gameObject.tag == "Empty")
             {
                 Empty target = other.gameObject.GetComponent<Empty>();
-                if (target != null) {
+                if (target != null)
+                {
                     if (Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 30.0f) >= 0.8f)
                     {
-                        target.DefChange(-1,0);
+                        target.DefChange(-1, 0);
                     }
                     if (SkillFrom == 2 && target.isSpeedChange) { Damage *= 1.5f; }
                     Instantiate(TackleBlast, target.transform.position, Quaternion.identity).GetComponent<DestoryState>().RemoveChild();
