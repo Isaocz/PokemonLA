@@ -51,7 +51,7 @@ public class EmpolenoControler : PlayerControler
         skillBar02.GetSkill(Skill02);
         skillBar03.GetSkill(Skill03);
         skillBar04.GetSkill(Skill04);
-        //Invoke("LearAquaJet", 0.01f);
+        Invoke("LearAquaJet", 0.01f);
 
         JudgeEvolutionForEachLevel = NotJudgeEvolution;
 

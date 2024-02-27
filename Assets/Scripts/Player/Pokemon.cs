@@ -632,6 +632,12 @@ public class Pokemon : MonoBehaviour
         set { sleepTimeFloat = value; }
     }
     float sleepTimeFloat = 0.0f;
+    public bool IsInUproarState
+    {
+        get { return isInUproarState; }
+        set { isInUproarState = value; }
+    }
+    bool isInUproarState;
     //调用此函数时，如果还未开始睡眠，开始睡眠
     public void EmptySleepDone(float SleepPoint, float SleepTime, float SleepPer)
     {
@@ -639,7 +645,7 @@ public class Pokemon : MonoBehaviour
         if (!isSleepDef && Random.Range(0.0f, 1.0f) <= SleepPer)
         {
             Empty EmptyObj = GetComponent<Empty>();
-            if (!isInMistyTerrain && !isSleepDef && !isSleepDone && !isInElectricTerrain)
+            if (!isInMistyTerrain && !isSleepDef && !isSleepDone && !isInElectricTerrain && !isInUproarState)
             {
                 SleepPointFloat += SleepPoint * SleepResistance;
                 if (!isSleepStart && SleepPointFloat < 1)
@@ -1784,7 +1790,7 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始中毒，开始中毒
     public void SleepFloatPlus(float SleepPoint)
     {
-        if (!isInMistyTerrain && !isStateInvincible && !isSleepDef && !isInElectricTerrain && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
+        if (!isInMistyTerrain && !isStateInvincible && !isSleepDef && !isInElectricTerrain && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger && !IsInUproarState)
         {
             SleepPointFloat += SleepPoint;
             SleepPointFloat = (SleepPointFloat > 1 ? 1 : SleepPointFloat);

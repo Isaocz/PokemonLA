@@ -8,7 +8,7 @@ public class Rest : Skill
     void Start()
     {
 
-        player.ChangeHp(player.maxHp, 0, 0);
+
         if(SkillFrom == 2)
         {
             player.BurnRemove();
@@ -18,6 +18,7 @@ public class Rest : Skill
             //player.frozenRemove();
         }
         player.SleepFloatPlus(10);
+        if (player.isSleepDone) { player.ChangeHp(player.maxHp, 0, 0); }
     }
 
     private void Update()

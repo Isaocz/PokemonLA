@@ -307,6 +307,12 @@ public class Skill : MonoBehaviour
             Damage *= Mathf.Clamp(Mathf.Pow(1.2f, player.playerData.MetronomeCount) , 1.0f , 2.0f);
             SpDamage *= Mathf.Clamp(Mathf.Pow(1.2f, player.playerData.MetronomeCount), 1.0f, 2.0f);
         }
+
+        //特性12:激流
+        if (player.PlayerAbility == PlayerControler.PlayerAbilityList.激流 && SkillType == (int)Type.TypeEnum.Water && player.Hp < player.maxHp / 3.0f) { 
+            Damage *= 1.5f; 
+            SpDamage *= 1.5f; 
+        }
     }
 
     //引用于所有技能的Update函数，当存在时间耗尽时技能消失
