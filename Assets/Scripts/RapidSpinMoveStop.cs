@@ -11,7 +11,7 @@ public class RapidSpinMoveStop : MonoBehaviour
         BoxCollider2D b2 = transform.parent.GetComponent<Skill>().player.GetComponent<BoxCollider2D>();
         b1.offset = b2.offset;
         b1.size = b2.size;
-        b1.edgeRadius = b2.edgeRadius + 0.15f;
+        b1.edgeRadius = b2.edgeRadius + 0.1f;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

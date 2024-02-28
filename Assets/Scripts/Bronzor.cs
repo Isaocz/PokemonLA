@@ -71,7 +71,7 @@ public class Bronzor : Empty
 
                 StateTimer += Time.deltaTime;
                 //进入移动模式
-                if (StateTimer >= 1.5f && isInAttackState)
+                if (StateTimer >= 3.0f && isInAttackState)
                 {
                     isInAttackState = false;
                     StateTimer = 0;

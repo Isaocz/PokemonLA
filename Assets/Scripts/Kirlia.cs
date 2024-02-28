@@ -128,7 +128,7 @@ public class Kirlia : Empty
                     else if (isTP && !isDG && !isJump)
                     {
                         TPTimer += Time.deltaTime;
-                        if (TPTimer > 4.2f)
+                        if (TPTimer > 6.5f)
                         {
                             animator.SetTrigger("TP");
                             TPTimer = 0;
@@ -219,10 +219,12 @@ public class Kirlia : Empty
     {
         Vector3 TPPosition;
         TPPosition = (Vector3)TargetPosition + (new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), 0).normalized) * Random.Range(4.5f, 9f);
+        TPPosition = new Vector3( Mathf.Clamp(TPPosition.x , transform.parent.position.x-12.0f , transform.parent.position.x+12.0f), Mathf.Clamp(TPPosition.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f));
         int TPCount = 0;
-        while (!isThisPointEmpty(TPPosition) || Mathf.Abs(TPPosition.x - transform.position.x) >= 12 || Mathf.Abs(TPPosition.y - transform.position.y) >= 7)
+        while (!isThisPointEmpty(TPPosition) || Mathf.Abs(TPPosition.x - transform.parent.position.x) > 12 || Mathf.Abs(TPPosition.y - transform.parent.position.y) > 7)
         {
             TPPosition = (Vector3)TargetPosition + (new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), 0).normalized) * Random.Range(4.5f, 7.5f);
+            TPPosition = new Vector3(Mathf.Clamp(TPPosition.x, transform.parent.position.x - 12.0f, transform.parent.position.x + 12.0f), Mathf.Clamp(TPPosition.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f));
             Debug.Log(TPPosition);
             Debug.Log(!isThisPointEmpty(TPPosition) || Mathf.Abs(TPPosition.x) >= 12 || Mathf.Abs(TPPosition.y) >= 7);
             TPCount++;
