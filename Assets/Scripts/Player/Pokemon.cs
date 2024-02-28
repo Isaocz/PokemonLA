@@ -1597,7 +1597,7 @@ public class Pokemon : MonoBehaviour
     {
         if (!isInMistyTerrain && !isStateInvincible && !isParalysisDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
         {
-            ParalysisPointFloat += ParalysisPoint + ((isInSuperElectricTerrain) ? 0.3f : 1);
+            ParalysisPointFloat += ParalysisPoint + ((isInSuperElectricTerrain) ? 0.3f : 0);
             ParalysisPointFloat = (ParalysisPointFloat > 1 ? 1 : ParalysisPointFloat);
 
             if (!isParalysisStart && ParalysisPointFloat < 1)

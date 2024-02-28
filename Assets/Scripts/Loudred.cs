@@ -98,13 +98,15 @@ public class Loudred : Empty
                         animator.SetFloat("LookX", Director.x);
                         animator.SetFloat("LookY", Director.y);
                     }
-                    
+
+                    Timer.Start( this , 0.35f , ()=> { 
                     animator.SetTrigger("Roar");
                     NowHyperVoice = Instantiate(HyperVoice, transform.position + Vector3.up * 0.3f, Quaternion.Euler(0, 0, _mTool.Angle_360Y(Director, Vector2.right) - 45), transform);
                     NowHyperVoice.empty = this;
-                    
+                    });
+
                 }
-                if (StateTimer >= 12.70f && NowState == State.HyperVoice)
+                if (StateTimer >= 13.05f && NowState == State.HyperVoice)
                 {
                     if (NowHyperVoice) { Destroy(NowHyperVoice.gameObject); }
                     StateTimer = 0.0f;

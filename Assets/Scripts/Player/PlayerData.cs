@@ -876,7 +876,7 @@ public class PlayerData : MonoBehaviour
 
             case 123:
                 //123 树果种植盆
-                player.ComeInANewRoomEvent += BerryPotDropBerry;
+                player.ClearThisRoomEvent += BerryPotDropBerry;
                 BerryPotDropBerry(player);
                 break;
 
@@ -1263,9 +1263,9 @@ public class PlayerData : MonoBehaviour
     //===================================================树果种植盆=================================================
     void BerryPotDropBerry(PlayerControler playerInput)
     {
-        if (Random.Range(0.0f , 1.0f) + (float)playerInput.LuckPoint / 30 > 0.7f)
+        if (Random.Range(0.0f , 1.0f) + (float)playerInput.LuckPoint / 30 > 0.65f)
         {
-            if (Random.Range(0.0f, 1.0f) > 0.7f)
+            if (Random.Range(0.0f, 1.0f) > 0.6f)
             {
                 Instantiate( PassiveItemGameObjList.ObjList.List[25] , transform.position , Quaternion.identity ).GetComponent<HealthUpCCg>().isLunch = true;
             }

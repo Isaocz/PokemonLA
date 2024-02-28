@@ -44,7 +44,7 @@ public class PincurchinSpikeMove : Projectile
         }
         else
         {
-            L += Time.deltaTime * 0.8f;
+            L += Time.deltaTime * 1.3f;
             R += Time.deltaTime * RSpeed;
             transform.position = new Vector3(Mathf.Cos(R * Mathf.Deg2Rad) * L + StartPosition.x, Mathf.Sin(R * Mathf.Deg2Rad) * L + StartPosition.y, 0);
             //transform.rotation = Quaternion.AngleAxis(R, Vector3.forward) * Quaternion.Euler(0,0,0); 
