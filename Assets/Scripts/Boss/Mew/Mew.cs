@@ -1659,7 +1659,7 @@ public class Mew : Empty
         Transform uitext = player.transform.GetChild(2).GetChild(3);
         if (uitext)
         {
-            uitext.GetComponent<PlayerUIText>().SetText("禁止使用道具\n禁止打开菜单");
+            uitext.GetComponent<PlayerUIText>().SetText("禁止使用道具\n禁止打开菜单", true);
         }
         player.CanNotUseSpaceItem = true;//不允许玩家使用主动道具
         MewOrbRotate mewOrbRotate = Phase3OrbRotate.GetComponent<MewOrbRotate>();
