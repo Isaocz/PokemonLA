@@ -129,6 +129,8 @@ public class PlayerControler : Pokemon
     }
     int nowSeedofMastery;
 
+    public GameObject FloatingDamage;//造成伤害显示
+
     //声明一个整形表示当前等级最大经验值，一个整形变量表示等级，以及一个经验值表，一个整形变量现在经验值,以及一个整型变量代表现在经验值以用于其他函数
     protected int[] Exp;
     public int maxEx;
@@ -1040,8 +1042,9 @@ public class PlayerControler : Pokemon
 
         if (ChangePoint > 0 || ChangePointSp > 0)
         {
-            
+            int Recover = (int)(ChangePoint + ChangePointSp);
             nowHp = Mathf.Clamp(nowHp + (int)(ChangePoint+ChangePointSp), 0, maxHp);
+            DmgShow(Recover, Color.green);
 
             //血量上升时对血条UI输出当前血量，并调用血条上升的函数
             UIHealthBar.Instance.Per = (float)nowHp / (float)maxHp;
@@ -1074,13 +1077,19 @@ public class PlayerControler : Pokemon
                 {
                     if (!isInPsychicTerrain)
                     {
+                        int startHp = nowHp;
                         nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                        int allDmg = startHp - nowHp;
+                        DmgShow(allDmg, Color.red);
                     }
                     else
                     {
                         if (Mathf.Abs((int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]))))) > (int)(maxHp / 16))
                         {
+                            int startHp = nowHp;
                             nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                            int allDmg = startHp - nowHp;
+                            DmgShow(allDmg, Color.red);
                         }
                     }
                 }
@@ -1088,13 +1097,19 @@ public class PlayerControler : Pokemon
                 {
                     if (!isInPsychicTerrain)
                     {
+                        int startHp = nowHp;
                         nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                        int allDmg = startHp - nowHp;
+                        DmgShow(allDmg, Color.red);
                     }
                     else
                     {
                         if (Mathf.Abs(Mathf.Clamp((int)ChangePoint, -100000, -1)) > (int)(maxHp / 16))
                         {
+                            int startHp = nowHp;
                             nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                            int allDmg = startHp - nowHp;
+                            DmgShow(allDmg, Color.red);
                         }
                     }
                 }
@@ -1133,6 +1148,12 @@ public class PlayerControler : Pokemon
         }
     }
 
+    private void DmgShow(int dmg, Color color, bool crit = false)
+    {
+        GameObject fd = Instantiate(FloatingDamage, transform.position, Quaternion.identity) as GameObject;
+        fd.transform.GetChild(0).GetComponent<TextMesh>().text = dmg.ToString();
+        fd.transform.GetChild(0).GetComponent<TextMesh>().color = color;
+    }
 
     /// <summary>
     /// 角色死亡

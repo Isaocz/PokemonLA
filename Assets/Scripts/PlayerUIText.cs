@@ -10,6 +10,7 @@ public class PlayerUIText : MonoBehaviour
     Text uitext;
     float timer;
     bool Timing;
+    bool Shaking;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,8 +26,15 @@ public class PlayerUIText : MonoBehaviour
         if (!string.IsNullOrEmpty(uitext.text))
         {
             timer += Time.deltaTime;
-            float angle = Mathf.Sin(Time.time * 10f) * 10f;
-            transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            if (Shaking)
+            {
+                float angle = Mathf.Sin(Time.time * 10f) * 10f;
+                transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            }
+            else
+            {
+                transform.rotation = Quaternion.identity;
+            }
             if (!Timing)
             {
                 Timing = true;
@@ -51,15 +59,31 @@ public class PlayerUIText : MonoBehaviour
             else
             {
                 uitext.color = new Color(uitext.color.r, uitext.color.g, uitext.color.b, 0f);
+                if (Shaking)
+                {
+                    Shaking = false;
+                }
             }
         }
     }
 
-    public void SetText(string newText)
+    public void SetText(string newText, bool shake)
     {
         // …Ë÷√Œƒ±æ
         uitext.text = newText;
         timer = 0f;
         Timing = false;
+        if (shake)
+        {
+            Shaking = shake;
+        }
+    }
+
+    public void SetText(string newText)
+    {
+        uitext.text = newText;
+        timer = 0f;
+        Timing = false;
+        Shaking = false;
     }
 }

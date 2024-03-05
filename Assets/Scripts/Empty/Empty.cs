@@ -122,6 +122,11 @@ public class Empty : Pokemon
     /// </summary>
     public GameObject DropItem;
 
+    /// <summary>
+    /// 敌人受到的伤害显示
+    /// </summary>
+    public GameObject FloatingDmg;
+
     /*
     //表示敌人是否处于被白雾【精通】击中
     public bool isMistPlus;
@@ -330,34 +335,53 @@ public class Empty : Pokemon
             float typeDef = (TypeDef[SkillType] < 0 ? (Mathf.Pow(1.2f, -TypeDef[SkillType])) : 1) * (TypeDef[SkillType] > 0 ? (Mathf.Pow(0.8f, TypeDef[SkillType])) : 1);
             if (Dmage + SpDmage >= 0)
             {
+                int allDmg = 0;
                 if (SkillType != 19)
                 {
-                    if (!isInPsychicTerrain) { Debug.Log(IsBeFalseSwipe); EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000), (IsBeFalseSwipe ? 1 : 0), maxHP); }
+                    if (!isInPsychicTerrain) 
+                    { 
+                        Debug.Log(IsBeFalseSwipe);
+                        allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000);
+                        EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000), (IsBeFalseSwipe ? 1 : 0), maxHP); 
+                    }
                     else
                     {
                         if(Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000))) > (int)(maxHP / 16))
                         {
+                            allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000));
                             EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP);
                         }
                     }
                 }
                 else
                 {
-                    if (!isInPsychicTerrain) { EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP); }
+                    if (!isInPsychicTerrain) 
+                    {
+                        allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000));
+                        EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP); 
+                    }
                     else
                     {
                         if (Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000))) > (int)(maxHP / 16))
                         {
+                            allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000));
                             EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, (isBoos ? (maxHP / 6) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP);
                         }
                     }
                 }
+                GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
+                fd.transform.GetChild(0).GetComponent<TextMesh>().text = allDmg.ToString();
+                fd.transform.GetChild(0).GetComponent<TextMesh>().color = Color.red;
                 EmptySleepRemove();
 
             }
             else
             {
                 EmptyHp = Mathf.Clamp(EmptyHp - (int)(Dmage + SpDmage), (IsBeFalseSwipe ? 1 : 0), maxHP);
+                int allRecover = (int)(Dmage + SpDmage);
+                GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
+                fd.transform.GetChild(0).GetComponent<TextMesh>().text = allRecover.ToString();
+                fd.transform.GetChild(0).GetComponent<TextMesh>().color = Color.green;
             }
 
             Debug.Log(Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000) + " + " + "Dmage:" + (int)(Dmage + SpDmage));
