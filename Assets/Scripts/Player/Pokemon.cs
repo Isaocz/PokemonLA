@@ -2016,7 +2016,7 @@ public class Pokemon : MonoBehaviour
     /// <param name="HpUpValue">此次改变不是伤害，而是回复</param>
     /// <param name="SkillType">此次伤害的属性</param>
 
-    public static void PokemonHpChange(GameObject Attacker , GameObject Attacked , float AtkPower , float SpAPower ,int HpUpValue , Type.TypeEnum SkillType)
+    public static void PokemonHpChange(GameObject Attacker , GameObject Attacked , float AtkPower , float SpAPower ,int HpUpValue , Type.TypeEnum SkillType, bool Critial = false)
     {
         //决定攻击者
         int AttackerATK = 1;
@@ -2069,7 +2069,7 @@ public class Pokemon : MonoBehaviour
                     EmptyAttacked.EmptyHpChange(
                     ((AtkPower == 0) ? 0 : (Mathf.Clamp((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha * TerrainAlpha  * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2) , 1 , 10000))),
                     ((SpAPower == 0) ? 0 : (Mathf.Clamp((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha * TerrainAlpha  * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.SpdAbilityPoint * WeatherSpDAlpha + 2) , 1 , 10000))),
-                    (int)SkillType);
+                    (int)SkillType, Critial);
                     
                     //if (SpAPower == 0){ Debug.Log((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) + " + " + (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2)); }
                     //else if (AtkPower == 0) {  Debug.Log((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) + " + " + (250 * EmptyAttacked.SpdAbilityPoint * WeatherDefAlpha + 2)); }
@@ -2077,12 +2077,12 @@ public class Pokemon : MonoBehaviour
                 }
                 else
                 {
-                    EmptyAttacked.EmptyHpChange(AtkPower, SpAPower, 19);
+                    EmptyAttacked.EmptyHpChange(AtkPower, SpAPower, 19, Critial);
                 }
             }
             else
             {
-                EmptyAttacked.EmptyHpChange(-HpUpValue, 0, 19);
+                EmptyAttacked.EmptyHpChange(-HpUpValue, 0, 19, Critial);
             }
         }
         if (Attacked.GetComponent<PlayerControler>() != null)
@@ -2093,7 +2093,7 @@ public class Pokemon : MonoBehaviour
                 PlayerAttacked.ChangeHp(
                          ((AtkPower == 0) ? 0 : ( Mathf.Clamp((-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),
                          ((SpAPower == 0) ? 0 : ( Mathf.Clamp((-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),
-                        (int)SkillType);
+                        (int)SkillType, Critial);
 
                 if (PlayerAttacked.playerData.IsPassiveGetList[120] && Attacker != null)
                 {
@@ -2106,7 +2106,7 @@ public class Pokemon : MonoBehaviour
             }
             else
             {
-                PlayerAttacked.ChangeHp(HpUpValue, 0, 19);
+                PlayerAttacked.ChangeHp(HpUpValue, 0, 19, Critial);
             }
         }
         if(Attacked.GetComponent<Substitute>() != null)
