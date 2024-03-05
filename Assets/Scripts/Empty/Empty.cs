@@ -371,14 +371,21 @@ public class Empty : Pokemon
                 }
                 GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
                 fd.transform.GetChild(0).GetComponent<TextMesh>().text = allDmg.ToString();
-                fd.transform.GetChild(0).GetComponent<TextMesh>().color = Color.red;
+                if(Dmage > SpDmage)
+                {
+                    fd.transform.GetChild(0).GetComponent<TextMesh>().color = Color.red;
+                }
+                else
+                {
+                    fd.transform.GetChild(0).GetComponent<TextMesh>().color = new Color(0.654902f, 0f, 1f, 1f);
+                }
                 EmptySleepRemove();
 
             }
             else
             {
                 EmptyHp = Mathf.Clamp(EmptyHp - (int)(Dmage + SpDmage), (IsBeFalseSwipe ? 1 : 0), maxHP);
-                int allRecover = (int)(Dmage + SpDmage);
+                int allRecover = -(int)(Dmage + SpDmage);
                 GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
                 fd.transform.GetChild(0).GetComponent<TextMesh>().text = allRecover.ToString();
                 fd.transform.GetChild(0).GetComponent<TextMesh>().color = Color.green;
