@@ -1151,18 +1151,21 @@ public class PlayerControler : Pokemon
 
     private void DmgShow(int dmg, Color color, bool crit)
     {
-        GameObject fd = Instantiate(FloatingDamage, transform.position, Quaternion.identity);
-        fd.transform.GetChild(0).GetComponent<TextMeshPro>().text = dmg.ToString();
-        fd.transform.GetChild(0).GetComponent<TextMeshPro>().color = color;
-        if (crit)
+        if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage)
         {
-            fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineColor = Color.yellow;
-            fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineWidth = 0.15f;
-        }
-        else
-        {
-            fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineColor = Color.red;
-            fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineWidth = 0.07f;
+            GameObject fd = Instantiate(FloatingDamage, transform.position, Quaternion.identity);
+            fd.transform.GetChild(0).GetComponent<TextMeshPro>().text = dmg.ToString();
+            fd.transform.GetChild(0).GetComponent<TextMeshPro>().color = color;
+            if (crit)
+            {
+                fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineColor = Color.yellow;
+                fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineWidth = 0.15f;
+            }
+            else
+            {
+                fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineColor = Color.red;
+                fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineWidth = 0.07f;
+            }
         }
     }
 
