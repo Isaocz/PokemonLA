@@ -373,24 +373,13 @@ public class Empty : Pokemon
                 if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage)
                 {
                     GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
-                    fd.transform.GetChild(0).GetComponent<TextMeshPro>().text = allDmg.ToString();
                     if (Dmage > SpDmage)
                     {
-                        fd.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.red;
+                        fd.transform.GetComponent<damageShow>().SetText(allDmg, Crit, false, false);
                     }
                     else
                     {
-                        fd.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color(0.654902f, 0f, 1f, 1f);
-                    }
-                    if (Crit)
-                    {
-                        fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineColor = Color.yellow;
-                        fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineWidth = 0.15f;
-                    }
-                    else
-                    {
-                        fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineColor = Color.black;
-                        fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineWidth = 0.07f;
+                        fd.transform.GetComponent<damageShow>().SetText(allDmg, Crit, false, true);
                     }
                 }
                 EmptySleepRemove();
@@ -402,9 +391,8 @@ public class Empty : Pokemon
                 if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage)
                 {
                     int allRecover = -(int)(Dmage + SpDmage);
-                    GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
-                    fd.transform.GetChild(0).GetComponent<TextMeshPro>().text = allRecover.ToString();
-                    fd.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.green;
+                    GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity);
+                    fd.transform.GetComponent<damageShow>().SetText(allRecover, Crit, true, false);
                 }
             }
 
