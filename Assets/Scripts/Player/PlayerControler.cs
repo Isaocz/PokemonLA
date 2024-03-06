@@ -1045,7 +1045,7 @@ public class PlayerControler : Pokemon
         {
             int Recover = (int)(ChangePoint + ChangePointSp);
             nowHp = Mathf.Clamp(nowHp + (int)(ChangePoint+ChangePointSp), 0, maxHp);
-            DmgShow(Recover, Color.green, Crit);
+            DmgShow(Recover, true, Crit);
 
             //血量上升时对血条UI输出当前血量，并调用血条上升的函数
             UIHealthBar.Instance.Per = (float)nowHp / (float)maxHp;
@@ -1081,7 +1081,7 @@ public class PlayerControler : Pokemon
                         int startHp = nowHp;
                         nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                         int allDmg = startHp - nowHp;
-                        DmgShow(allDmg, Color.red, Crit);
+                        DmgShow(allDmg, false, Crit);
                     }
                     else
                     {
@@ -1090,7 +1090,7 @@ public class PlayerControler : Pokemon
                             int startHp = nowHp;
                             nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                             int allDmg = startHp - nowHp;
-                            DmgShow(allDmg, Color.red, Crit);
+                            DmgShow(allDmg, false, Crit);
                         }
                     }
                 }
@@ -1101,7 +1101,7 @@ public class PlayerControler : Pokemon
                         int startHp = nowHp;
                         nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                         int allDmg = startHp - nowHp;
-                        DmgShow(allDmg, Color.red, Crit);
+                        DmgShow(allDmg, false, Crit);
                     }
                     else
                     {
@@ -1110,7 +1110,7 @@ public class PlayerControler : Pokemon
                             int startHp = nowHp;
                             nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                             int allDmg = startHp - nowHp;
-                            DmgShow(allDmg, Color.red, Crit);
+                            DmgShow(allDmg, false, Crit);
                         }
                     }
                 }
@@ -1149,23 +1149,12 @@ public class PlayerControler : Pokemon
         }
     }
 
-    private void DmgShow(int dmg, Color color, bool crit)
+    private void DmgShow(int dmg, bool recover, bool crit, bool magic = false)
     {
         if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage)
         {
             GameObject fd = Instantiate(FloatingDamage, transform.position, Quaternion.identity);
-            fd.transform.GetChild(0).GetComponent<TextMeshPro>().text = dmg.ToString();
-            fd.transform.GetChild(0).GetComponent<TextMeshPro>().color = color;
-            if (crit)
-            {
-                fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineColor = Color.yellow;
-                fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineWidth = 0.15f;
-            }
-            else
-            {
-                fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineColor = Color.red;
-                fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineWidth = 0.07f;
-            }
+            fd.transform.GetComponent<damageShow>().SetText(dmg, crit, recover, magic, true);
         }
     }
 
