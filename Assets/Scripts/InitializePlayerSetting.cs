@@ -10,6 +10,7 @@ public class InitializePlayerSetting : MonoBehaviour
 
     public float BGMVolumeValue;
     public float SEVolumeValue;
+    public bool isShowDamage;
 
     public Dictionary<string, KeyCode> keybinds = new Dictionary<string, KeyCode>() {
             
@@ -72,7 +73,8 @@ public class InitializePlayerSetting : MonoBehaviour
             if (!PlayerPrefs.HasKey("SEVolume")) { PlayerPrefs.SetFloat("SEVolume", 1.0f); }
             SEVolumeValue = PlayerPrefs.GetFloat("SEVolume");
 
-
+            if (!PlayerPrefs.HasKey("ShowDamage")) { PlayerPrefs.SetInt("ShowDamage", 1); }
+            isShowDamage = intToBool(PlayerPrefs.GetInt("ShowDamage"));
 
             if (!PlayerPrefs.HasKey("Skill01Key")) { PlayerPrefs.SetInt("Skill01Key", 113); }
             keybinds["Skill1"] = (KeyCode)PlayerPrefs.GetInt("Skill01Key");
@@ -113,5 +115,14 @@ public class InitializePlayerSetting : MonoBehaviour
 
         }
 
+    }
+    int boolToInt(bool val)
+    {
+        return val ? 1 : 0;
+    }
+
+    bool intToBool(int val)
+    {
+        return val != 0;
     }
 }

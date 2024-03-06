@@ -370,25 +370,28 @@ public class Empty : Pokemon
                         }
                     }
                 }
-                GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
-                fd.transform.GetChild(0).GetComponent<TextMeshPro>().text = allDmg.ToString();
-                if(Dmage > SpDmage)
+                if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage)
                 {
-                    fd.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.red;
-                }
-                else
-                {
-                    fd.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color(0.654902f, 0f, 1f, 1f);
-                }
-                if (Crit)
-                {
-                    fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineColor = Color.yellow;
-                    fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineWidth = 0.15f;
-                }
-                else
-                {
-                    fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineColor = Color.black;
-                    fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineWidth = 0.07f;
+                    GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
+                    fd.transform.GetChild(0).GetComponent<TextMeshPro>().text = allDmg.ToString();
+                    if (Dmage > SpDmage)
+                    {
+                        fd.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.red;
+                    }
+                    else
+                    {
+                        fd.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color(0.654902f, 0f, 1f, 1f);
+                    }
+                    if (Crit)
+                    {
+                        fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineColor = Color.yellow;
+                        fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineWidth = 0.15f;
+                    }
+                    else
+                    {
+                        fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineColor = Color.black;
+                        fd.transform.GetChild(0).GetComponent<TextMeshPro>().outlineWidth = 0.07f;
+                    }
                 }
                 EmptySleepRemove();
 
@@ -396,10 +399,13 @@ public class Empty : Pokemon
             else
             {
                 EmptyHp = Mathf.Clamp(EmptyHp - (int)(Dmage + SpDmage), (IsBeFalseSwipe ? 1 : 0), maxHP);
-                int allRecover = -(int)(Dmage + SpDmage);
-                GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
-                fd.transform.GetChild(0).GetComponent<TextMeshPro>().text = allRecover.ToString();
-                fd.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.green;
+                if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage)
+                {
+                    int allRecover = -(int)(Dmage + SpDmage);
+                    GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
+                    fd.transform.GetChild(0).GetComponent<TextMeshPro>().text = allRecover.ToString();
+                    fd.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.green;
+                }
             }
 
             Debug.Log(Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000) + " + " + "Dmage:" + (int)(Dmage + SpDmage));
