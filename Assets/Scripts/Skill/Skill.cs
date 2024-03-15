@@ -458,10 +458,10 @@ public class Skill : MonoBehaviour
 
             //ÕÐÊ½378 ÓðÆÜ+
             {
-                if (player.Skill01.SkillIndex == 378 ) { player.MinusSkillCDTime(1,KOPoint,true); }
-                if (player.Skill02.SkillIndex == 378 ) { player.MinusSkillCDTime(2,KOPoint,true); }
-                if (player.Skill03.SkillIndex == 378 ) { player.MinusSkillCDTime(3,KOPoint,true); }
-                if (player.Skill04.SkillIndex == 378 ) { player.MinusSkillCDTime(4,KOPoint,true); }
+                if (player.Skill01 != null && player.Skill01.SkillIndex == 378 ) { player.MinusSkillCDTime(1,KOPoint,true); }
+                if (player.Skill02 != null && player.Skill02.SkillIndex == 378 ) { player.MinusSkillCDTime(2,KOPoint,true); }
+                if (player.Skill03 != null && player.Skill03.SkillIndex == 378 ) { player.MinusSkillCDTime(3,KOPoint,true); }
+                if (player.Skill04 != null && player.Skill04.SkillIndex == 378 ) { player.MinusSkillCDTime(4,KOPoint,true); }
             }
 
         }
