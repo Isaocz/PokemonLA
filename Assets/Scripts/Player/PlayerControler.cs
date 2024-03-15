@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using TMPro;
 
 public class PlayerControler : Pokemon
 {
@@ -1037,14 +1038,14 @@ public class PlayerControler : Pokemon
     /// <param name="ChangePoint"></param>
     /// <param name="ChangePointSp"></param>
     /// <param name="SkillType"></param>
-    public void ChangeHp(float ChangePoint , float ChangePointSp , int SkillType)
+    public void ChangeHp(float ChangePoint , float ChangePointSp , int SkillType, bool Crit = false)
     {
 
         if (ChangePoint > 0 || ChangePointSp > 0)
         {
             int Recover = (int)(ChangePoint + ChangePointSp);
             nowHp = Mathf.Clamp(nowHp + (int)(ChangePoint+ChangePointSp), 0, maxHp);
-            DmgShow(Recover, Color.green);
+            DmgShow(Recover, true, Crit);
 
             //血量上升时对血条UI输出当前血量，并调用血条上升的函数
             UIHealthBar.Instance.Per = (float)nowHp / (float)maxHp;
@@ -1080,7 +1081,7 @@ public class PlayerControler : Pokemon
                         int startHp = nowHp;
                         nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                         int allDmg = startHp - nowHp;
-                        DmgShow(allDmg, Color.red);
+                        DmgShow(allDmg, false, Crit);
                     }
                     else
                     {
@@ -1089,7 +1090,7 @@ public class PlayerControler : Pokemon
                             int startHp = nowHp;
                             nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                             int allDmg = startHp - nowHp;
-                            DmgShow(allDmg, Color.red);
+                            DmgShow(allDmg, false, Crit);
                         }
                     }
                 }
@@ -1100,7 +1101,7 @@ public class PlayerControler : Pokemon
                         int startHp = nowHp;
                         nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                         int allDmg = startHp - nowHp;
-                        DmgShow(allDmg, Color.red);
+                        DmgShow(allDmg, false, Crit);
                     }
                     else
                     {
@@ -1109,7 +1110,7 @@ public class PlayerControler : Pokemon
                             int startHp = nowHp;
                             nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                             int allDmg = startHp - nowHp;
-                            DmgShow(allDmg, Color.red);
+                            DmgShow(allDmg, false, Crit);
                         }
                     }
                 }
@@ -1148,11 +1149,13 @@ public class PlayerControler : Pokemon
         }
     }
 
-    private void DmgShow(int dmg, Color color, bool crit = false)
+    private void DmgShow(int dmg, bool recover, bool crit, bool magic = false)
     {
-        GameObject fd = Instantiate(FloatingDamage, transform.position, Quaternion.identity) as GameObject;
-        fd.transform.GetChild(0).GetComponent<TextMesh>().text = dmg.ToString();
-        fd.transform.GetChild(0).GetComponent<TextMesh>().color = color;
+        if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage)
+        {
+            GameObject fd = Instantiate(FloatingDamage, transform.position, Quaternion.identity);
+            fd.transform.GetComponent<damageShow>().SetText(dmg, crit, recover, magic, true);
+        }
     }
 
     /// <summary>
