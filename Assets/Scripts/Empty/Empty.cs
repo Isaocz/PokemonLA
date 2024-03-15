@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class EnumMultiAttribute : PropertyAttribute { }
@@ -309,7 +310,7 @@ public class Empty : Pokemon
     /// <param name="Dmage">ŒÔπ•…À∫¶</param>
     /// <param name="SpDmage">Ãÿπ•…À∫¶</param>
     /// <param name="SkillType">…À∫¶ Ù–‘£® ˝◊÷≤ŒøºType.cs£©</param>
-    public void EmptyHpChange(float  Dmage , float SpDmage , int SkillType)
+    public void EmptyHpChange(float  Dmage , float SpDmage , int SkillType, bool Crit = false)
     {
         if (isShadow && Dmage + SpDmage >= 0)
         {
@@ -369,15 +370,17 @@ public class Empty : Pokemon
                         }
                     }
                 }
-                GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
-                fd.transform.GetChild(0).GetComponent<TextMesh>().text = allDmg.ToString();
-                if(Dmage > SpDmage)
+                if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage)
                 {
-                    fd.transform.GetChild(0).GetComponent<TextMesh>().color = Color.red;
-                }
-                else
-                {
-                    fd.transform.GetChild(0).GetComponent<TextMesh>().color = new Color(0.654902f, 0f, 1f, 1f);
+                    GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
+                    if (Dmage > SpDmage)
+                    {
+                        fd.transform.GetComponent<damageShow>().SetText(allDmg, Crit, false, false);
+                    }
+                    else
+                    {
+                        fd.transform.GetComponent<damageShow>().SetText(allDmg, Crit, false, true);
+                    }
                 }
                 EmptySleepRemove();
 
@@ -385,10 +388,12 @@ public class Empty : Pokemon
             else
             {
                 EmptyHp = Mathf.Clamp(EmptyHp - (int)(Dmage + SpDmage), (IsBeFalseSwipe ? 1 : 0), maxHP);
-                int allRecover = -(int)(Dmage + SpDmage);
-                GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
-                fd.transform.GetChild(0).GetComponent<TextMesh>().text = allRecover.ToString();
-                fd.transform.GetChild(0).GetComponent<TextMesh>().color = Color.green;
+                if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage)
+                {
+                    int allRecover = -(int)(Dmage + SpDmage);
+                    GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity);
+                    fd.transform.GetComponent<damageShow>().SetText(allRecover, Crit, true, false);
+                }
             }
 
             Debug.Log(Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000) + " + " + "Dmage:" + (int)(Dmage + SpDmage));
