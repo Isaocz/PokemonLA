@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Type : MonoBehaviour
 {
+
     // Start is called before the first frame update
     public enum TypeEnum
     {
