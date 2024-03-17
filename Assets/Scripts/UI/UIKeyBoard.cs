@@ -21,6 +21,7 @@ public class UIKeyBoard : MonoBehaviour
     public Text LeftKeyText;
     public Text RightKeyText;
     public Text MapKeyText;
+    public Text ZKeyText;
 
 
     private bool isBinding = false;
@@ -41,10 +42,22 @@ public class UIKeyBoard : MonoBehaviour
         UpdateSkillKeyText(LeftKeyText, "Left");
         UpdateSkillKeyText(RightKeyText, "Right");
         UpdateSkillKeyText(MapKeyText, "Map");
+        UpdateSkillKeyText(ZKeyText, "Interact");
     }
 
     private void Start()
     {
+        if (SystemInfo.operatingSystemFamily != OperatingSystemFamily.Other)
+        {
+            gameObject.SetActive(true);
+            transform.parent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 2150);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+            transform.parent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 560);
+
+        }
         //SettingPanel.SetActive(false);
     }
 
@@ -98,6 +111,7 @@ public class UIKeyBoard : MonoBehaviour
             case "Left":text = LeftKeyText; break;
             case "Right":text = RightKeyText; break;
             case "Map":text = MapKeyText; break;
+            case "Interact": text = ZKeyText; break;
         }
     }
     //更新按钮的文本
@@ -152,5 +166,10 @@ public class UIKeyBoard : MonoBehaviour
     public void MapKeyBoard()
     {
         OpenKeybindUI("Map");
+    }
+
+    public void InteractKeyBoard()
+    {
+        OpenKeybindUI("Interact");
     }
 }

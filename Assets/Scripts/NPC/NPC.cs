@@ -56,7 +56,7 @@ public class NPC : MonoBehaviour
             TalkPanel.PlayerExit();
             playerControler.CanNotUseSpaceItem = false;
         }
-        if (isInTrriger && Input.GetKeyDown(KeyCode.Z) && !TalkPanel.isTalkPuse)
+        if (isInTrriger && ZButton.Z.IsZButtonDown && !TalkPanel.isTalkPuse)
         {
             TalkPanel.player = playerControler;
             TalkPanel.gameObject.SetActive(true);

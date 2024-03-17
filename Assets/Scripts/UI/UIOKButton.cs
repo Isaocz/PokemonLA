@@ -17,6 +17,6 @@ public class UIOKButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z)) { SkillButton.onClick.Invoke(); }
+        if (ZButton.Z.IsZButtonDown) { SkillButton.onClick.Invoke(); }
     }
 }

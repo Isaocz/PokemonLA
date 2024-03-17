@@ -77,30 +77,14 @@ public class Woobat : Empty
                 Vector2 PlayerMoveSpeed = Vector2.zero;
                 {
 
-
-                    if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Left")))
-                    {
-                        PlayerMoveSpeed.x = -1f * (isConfusionDone ? -1 : 1);
-                    }
-                    else if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Right")))
-                    {
-                        PlayerMoveSpeed.x = 1f * (isConfusionDone ? -1 : 1);
-                    }
-
-                    if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Up")))
-                    {
-                        PlayerMoveSpeed.y = 1f * (isConfusionDone ? -1 : 1);
-                    }
-                    else if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Down")))
-                    {
-                        PlayerMoveSpeed.y = -1f * (isConfusionDone ? -1 : 1);
-                    }
+                    PlayerMoveSpeed = new Vector2(player.PlayerMoveHorizontal, player.PlayerMoveHorizontal);
+                    
                     if (PlayerMoveSpeed != Vector2.zero)
                     {
                         PlayerMoveSpeed = ((PlayerMoveSpeed.normalized * Mathf.Max(Mathf.Abs(PlayerMoveSpeed.x), Mathf.Abs(PlayerMoveSpeed.y))).normalized) * 1.5f;
                     }
                 }
-                Director = (isEmptyConfusionDone || isEmptyInfatuationDone)? Director.normalized :( PlayerMoveSpeed + Director.normalized) / 2.5f;
+                Director = (isEmptyConfusionDone || isEmptyInfatuationDone)? Director.normalized :( 1.5f*PlayerMoveSpeed + Director.normalized) / 2.5f;
                 
 
                 rigidbody2D.MovePosition(new Vector2(transform.position.x + (isFearDone ? -1.0f : 1.0f) * Mathf.Clamp( Director.x * speed , -3.2f, 3.2f) * Time.deltaTime, transform.position.y + (isFearDone ? -1.0f : 1.0f) * Mathf.Clamp(Director.y * speed, -3.2f, 3.2f) * Time.deltaTime));

@@ -49,7 +49,7 @@ public class BossDoorBillboard : MonoBehaviour
 
     void Update()
     {
-        if (isInTrriger && Input.GetKeyDown(KeyCode.Z))
+        if (isInTrriger && ZButton.Z.IsZButtonDown)
         {
             if (TalkPanel.IsActive())
             {

@@ -24,7 +24,7 @@ public class MewTalkPamel : NPCTalkPanel
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (ZButton.Z.IsZButtonDown)
         {
             if (!isTalked) {
                 if (TalkIndex == 2 && isTalkPuse)

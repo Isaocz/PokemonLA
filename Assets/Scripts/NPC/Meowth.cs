@@ -48,7 +48,7 @@ public class Meowth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isInTrriger && Input.GetKeyDown(KeyCode.Z) && !isHi)
+        if(isInTrriger && ZButton.Z.IsZButtonDown && !isHi)
         {
             animator.SetTrigger("Hi"); isHi = true;
             TalkPanel.gameObject.SetActive(true);

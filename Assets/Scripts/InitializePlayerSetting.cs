@@ -12,6 +12,7 @@ public class InitializePlayerSetting : MonoBehaviour
     public float SEVolumeValue;
     public bool isShowDamage;
 
+
     public Dictionary<string, KeyCode> keybinds = new Dictionary<string, KeyCode>() {
             
         {"Skill1", KeyCode.Q},
@@ -25,6 +26,7 @@ public class InitializePlayerSetting : MonoBehaviour
         {"Left", KeyCode.LeftArrow},
         {"Right", KeyCode.RightArrow},
         {"Map", KeyCode.Tab},
+        {"Interact", KeyCode.Z},
 
     };
 
@@ -49,6 +51,7 @@ public class InitializePlayerSetting : MonoBehaviour
             case "Left": PlayerPrefs.SetInt("LeftKey", (int)k); break;
             case "Right": PlayerPrefs.SetInt("RightKey", (int)k); break;
             case "Map": PlayerPrefs.SetInt("MapKey", (int)k); break;
+            case "Interact": PlayerPrefs.SetInt("InteractKey", (int)k); break;
         }
     }
 
@@ -62,6 +65,21 @@ public class InitializePlayerSetting : MonoBehaviour
     void Start()
     {
         DontDestroyOnLoad(this);
+        if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.Other)
+        {
+            PlayerPrefs.SetInt("Skill01Key", 113);
+            PlayerPrefs.SetInt("Skill02Key", 119);
+            PlayerPrefs.SetInt("Skill03Key", 101);
+            PlayerPrefs.SetInt("Skill04Key", 114);
+            PlayerPrefs.SetInt("UseItemKey", 32);
+            PlayerPrefs.SetInt("OpenMenuKey", 27);
+            PlayerPrefs.SetInt("UpKey", 273);
+            PlayerPrefs.SetInt("DownKey", 274); 
+            PlayerPrefs.SetInt("LeftKey", 276);
+            PlayerPrefs.SetInt("RightKey", 275);
+            PlayerPrefs.SetInt("MapKey", 9);
+            PlayerPrefs.SetInt("InteractKey", 122);
+        }
         if (!isInitializition) {
 
             isInitializition = true;
@@ -113,6 +131,8 @@ public class InitializePlayerSetting : MonoBehaviour
             if (!PlayerPrefs.HasKey("MapKey")) { PlayerPrefs.SetInt("MapKey", 9); }
             keybinds["Map"] = (KeyCode)PlayerPrefs.GetInt("MapKey");
 
+            if (!PlayerPrefs.HasKey("InteractKey")) { PlayerPrefs.SetInt("InteractKey", 122); }
+            keybinds["Interact"] = (KeyCode)PlayerPrefs.GetInt("InteractKey");
         }
 
     }
