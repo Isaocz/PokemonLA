@@ -16,6 +16,10 @@ public class UiMiniMap : MonoBehaviour
     public Image MiniMapMark;
     public List<Image> VisitedRoomList = new List<Image>();
 
+    bool istouch;
+
+
+
     GameObject MainCamera;
     Image NowMark;
 
@@ -24,6 +28,17 @@ public class UiMiniMap : MonoBehaviour
         Instance = this;
     }
 
+    public void TouchMap(bool b)
+    {
+
+        if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.Other)
+        {
+            if (MoveStick.joystick != null && MoveStick.joystick.Horizontal == 0 && MoveStick.joystick.Vertical == 0)
+            {
+                istouch = b;
+            }
+        }
+    }
 
     private void Start()
     {
@@ -109,20 +124,30 @@ public class UiMiniMap : MonoBehaviour
     void Update()
     {
         //NowMark.rectTransform.anchoredPosition = new Vector3((MainCamera.transform.position.x / 30.0f) * 8.2f, ((MainCamera.transform.position.y - 0.7f) / 24.0f) * 8.2f, 0);
-        if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Map")))
+        if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Map")) || istouch)
         {
-            MiniMapBackGround.transform.parent.GetComponent<Image>().color = new Vector4(255, 255, 255, 0);
-            MiniMapBackGround.color = new Vector4(255,255,255,0);
-            MiniMapBackGround.GetComponent<Mask>().enabled = false;
-            MiniMapBackGround.rectTransform.localScale = new Vector3(3.4f, 3.4f, 0);
+            MapZoom();
         }
         else
         {
-            MiniMapBackGround.transform.parent.GetComponent<Image>().color = new Vector4(255, 255, 255, 255);
-            MiniMapBackGround.color = new Vector4(255, 255, 255, 255);
-            MiniMapBackGround.GetComponent<Mask>().enabled = true;
-            MiniMapBackGround.rectTransform.localScale = new Vector3(1, 1, 0);
+            MapZoomOver();
         }
+    }
+
+    public void MapZoom()
+    {
+        MiniMapBackGround.transform.parent.GetComponent<Image>().color = new Vector4(255, 255, 255, 0);
+        MiniMapBackGround.color = new Vector4(255, 255, 255, 0);
+        MiniMapBackGround.GetComponent<Mask>().enabled = false;
+        MiniMapBackGround.rectTransform.localScale = new Vector3(3.4f, 3.4f, 0);
+    }
+
+    public void MapZoomOver()
+    {
+        MiniMapBackGround.transform.parent.GetComponent<Image>().color = new Vector4(255, 255, 255, 255);
+        MiniMapBackGround.color = new Vector4(255, 255, 255, 255);
+        MiniMapBackGround.GetComponent<Mask>().enabled = true;
+        MiniMapBackGround.rectTransform.localScale = new Vector3(1, 1, 0);
     }
 
     public void SeeMapJustOneRoom()

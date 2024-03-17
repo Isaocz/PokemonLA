@@ -62,7 +62,9 @@ public class PlayerControler : Pokemon
     /// <summary>
     /// 声明两个变量，获取方向键按键信息
     /// </summary>
+    public float PlayerMoveHorizontal { get { return horizontal; } }
     private float horizontal;
+    public float PlayerMoveVertical { get { return vertical; } }
     private float vertical;
     /// <summary>
     /// 声明一个2D向量变量，以存储刚体的二维坐标
@@ -242,6 +244,8 @@ public class PlayerControler : Pokemon
     bool isSkill01lunch = false;
     bool isSkill = false;
     public SkillBar01 skillBar01;
+    public bool IsSkill01ButtonDown { get { return isSkill01ButtonDown; } set { isSkill01ButtonDown = value; } }
+    bool isSkill01ButtonDown;
 
     //声明一个游戏对象，表示玩家的技能1,以及技能1的冷却计时器和技能1是否冷却,是否在使用技能
     public Skill Skill02;
@@ -249,6 +253,8 @@ public class PlayerControler : Pokemon
     public bool isSkill02CD = false;
     bool isSkill02lunch = false;
     public SkillBar01 skillBar02;
+    public bool IsSkill02ButtonDown { get { return isSkill02ButtonDown; } set { isSkill02ButtonDown = value; } }
+    bool isSkill02ButtonDown;
 
     //声明一个游戏对象，表示玩家的技能1,以及技能1的冷却计时器和技能1是否冷却,是否在使用技能
     public Skill Skill03;
@@ -256,6 +262,8 @@ public class PlayerControler : Pokemon
     public bool isSkill03CD = false;
     bool isSkill03lunch = false;
     public SkillBar01 skillBar03;
+    public bool IsSkill03ButtonDown { get { return isSkill03ButtonDown; } set { isSkill03ButtonDown = value; } }
+    bool isSkill03ButtonDown;
 
     //声明一个游戏对象，表示玩家的技能1,以及技能1的冷却计时器和技能1是否冷却,是否在使用技能
     public Skill Skill04;
@@ -263,10 +271,16 @@ public class PlayerControler : Pokemon
     public bool isSkill04CD = false;
     bool isSkill04lunch = false;
     public SkillBar01 skillBar04;
+    public bool IsSkill04ButtonDown { get { return isSkill04ButtonDown; } set { isSkill04ButtonDown = value; } }
+    bool isSkill04ButtonDown;
 
     public GameObject spaceItem;
     public GameObject SpaceItemList;
     public Image SpaceItemImage;
+    public bool IsSpaceItemButtonDown { get { return isSpaceItemButtonDown; } set { isSpaceItemButtonDown = value; } }
+    bool isSpaceItemButtonDown;
+
+
 
 
     //声明一个数组型变量，用来储存角色学习新招式的等级,以及一个整形变量检测当前等级是否习得技能
@@ -497,6 +511,15 @@ public class PlayerControler : Pokemon
     {
         if (!isDie)
         {
+            //技能虚拟按钮
+            {
+                if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill1"))) { isSkill01ButtonDown = true; }
+                if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill2"))) { isSkill02ButtonDown = true; }
+                if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill3"))) { isSkill03ButtonDown = true; }
+                if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill4"))) { isSkill04ButtonDown = true; }
+                if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("UseItem"))) { isSpaceItemButtonDown = true; }
+            }
+
             //检验时间是否停止，停止不进化
 
             //触发特性
@@ -514,6 +537,25 @@ public class PlayerControler : Pokemon
             {
                 Vector2 MoveSpeed = Vector2.zero;
 
+                if (MoveStick.joystick.Horizontal != 0 || MoveStick.joystick.Vertical != 0)
+                {
+                    Vector2 StickVector = new Vector2(MoveStick.joystick.Horizontal, MoveStick.joystick.Vertical).normalized;
+                    float a = _mTool.Angle_360Y(StickVector, Vector2.right);
+                    MoveSpeed = Quaternion.AngleAxis(a , Vector3.forward) * Vector2.right;
+                    if (isConfusionDone) { MoveSpeed = -MoveSpeed;  }
+
+
+                    /*
+                    if (a > 22.5f && a <= 67.5f)        { MoveSpeed = new Vector2(1f, 1f); }
+                    else if (a > 67.5f && a <= 112.5f)  { MoveSpeed = new Vector2(0f, 1f); }
+                    else if (a > 112.5f && a <= 157.5f) { MoveSpeed = new Vector2(-1f, 1f); }
+                    else if (a > 157.5f && a <= 202.5f) { MoveSpeed = new Vector2(-1f, 0f); }
+                    else if (a > 202.5f && a <= 247.5f) { MoveSpeed = new Vector2(-1f, -1f); }
+                    else if (a > 247.5f && a <= 292.5f) { MoveSpeed = new Vector2(0f, -1f); }
+                    else if (a > 292.5f && a <= 337.5f) { MoveSpeed = new Vector2(1f, -1f); }
+                    else                                { MoveSpeed = new Vector2(1f, 0f); }
+                    */
+                }
 
                 if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Left")))
                 {
@@ -535,7 +577,7 @@ public class PlayerControler : Pokemon
 
                 if (MoveSpeed != Vector2.zero)
                 {
-                    MoveSpeed = MoveSpeed.normalized * Mathf.Max(Mathf.Abs(MoveSpeed.x), Mathf.Abs(MoveSpeed.y));
+                    MoveSpeed = MoveSpeed.normalized;
                 }
                 horizontal = MoveSpeed.x;
                 vertical = MoveSpeed.y;
@@ -667,11 +709,7 @@ public class PlayerControler : Pokemon
                 //宝可梦战棋
                 if (playerData.IsPassiveGetList[66])
                 {
-                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill1")) ||
-                        Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill2")) ||
-                        Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill3")) ||
-                        Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill4"))
-                        )
+                    if (isSkill01ButtonDown || isSkill02ButtonDown || isSkill03ButtonDown || isSkill04ButtonDown )
                     {
                         switch (Random.Range(0, 4))
                         {
@@ -726,7 +764,7 @@ public class PlayerControler : Pokemon
                 {
                     //当按下q键时发射skill01
 
-                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill1")) && isSkill01CD == false && Skill01 != null && !isSkill)
+                    if (isSkill01ButtonDown && isSkill01CD == false && Skill01 != null && !isSkill)
                     {
                         if ((Skill01.useSkillConditions(this)))
                         {
@@ -742,7 +780,7 @@ public class PlayerControler : Pokemon
 
                     //当按下w键时发射skill02
 
-                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill2")) && isSkill02CD == false && Skill02 != null && !isSkill)
+                    if (isSkill02ButtonDown && isSkill02CD == false && Skill02 != null && !isSkill)
                     {
                         if ((Skill02.useSkillConditions(this)))
                         {
@@ -758,7 +796,7 @@ public class PlayerControler : Pokemon
 
                     //当按下e键时发射skill03
 
-                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill3")) && isSkill03CD == false && Skill03 != null && !isSkill)
+                    if (isSkill03ButtonDown && isSkill03CD == false && Skill03 != null && !isSkill)
                     {
                         if ((Skill03.useSkillConditions(this)))
                         {
@@ -774,7 +812,7 @@ public class PlayerControler : Pokemon
 
                     //当按下r键时发射skill04
 
-                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill4")) && isSkill04CD == false && Skill04 != null && !isSkill)
+                    if (isSkill04ButtonDown && isSkill04CD == false && Skill04 != null && !isSkill)
                     {
 
                         if ((Skill04.useSkillConditions(this)))
@@ -821,7 +859,7 @@ public class PlayerControler : Pokemon
 
             //使用一次性道具
             {
-                if (isSpaceItemCanBeUse && Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("UseItem")) && !isCanNotUseSpaceItem && spaceItem != null)
+                if (isSpaceItemCanBeUse && isSpaceItemButtonDown && !isCanNotUseSpaceItem && spaceItem != null)
                 {
                     if (UseSpaceItem.UseSpaceItemConditions(this))
                     {
@@ -838,6 +876,15 @@ public class PlayerControler : Pokemon
                 {
                     UpdataPassiveItemEvent(ThisPlayer);
                 }
+            }
+
+            //重置虚拟按键按下状态
+            {
+                isSkill01ButtonDown = false;
+                isSkill02ButtonDown = false;
+                isSkill03ButtonDown = false;
+                isSkill04ButtonDown = false;
+                isSpaceItemButtonDown = false;
             }
         }
     }

@@ -48,7 +48,7 @@ public class Blissey : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isInTrriger && Input.GetKeyDown(KeyCode.Z) && !isHi && !isSleep)
+        if (isInTrriger && ZButton.Z.IsZButtonDown && !isHi && !isSleep)
         {
             playerControler.CanNotUseSpaceItem = true;
             animator.ResetTrigger("TalkEnd");
@@ -57,7 +57,7 @@ public class Blissey : MonoBehaviour
             isTalked = true;
             TalkPanel.gameObject.SetActive(true);
         }
-        else if(isSleep && isInTrriger && Input.GetKeyDown(KeyCode.Z) && !isHi)
+        else if(isSleep && isInTrriger && ZButton.Z.IsZButtonDown && !isHi)
         {
             playerControler.CanNotUseSpaceItem = true;
             TalkPanel.SleepTalk();

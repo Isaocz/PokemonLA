@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.InteropServices;
 
 public class _mTool : MonoBehaviour
 {
+
 
     public static float Angle_360(Vector3 from_, Vector3 to_)
     {
@@ -60,6 +62,8 @@ public class _mTool : MonoBehaviour
             OutPut = new Vector2(1, 0);
         }
         return OutPut;
+
+        
     }
 
     public static string[] Tips = new string[]
@@ -89,5 +93,14 @@ public class _mTool : MonoBehaviour
         "头目宝可梦有强大的生命力，在受到过高伤害时可以抵御一部分",
     };
 
+
+    [DllImport("user32.dll", EntryPoint = "keybd_event")]
+
+    public static extern void Keybd_event(
+        byte bvk,//虚拟键值 ESC键对应的是27
+        byte bScan,//0
+        int dwFlags,//0为按下，1按住，2释放
+        int dwExtraInfo//
+    );
 
 }

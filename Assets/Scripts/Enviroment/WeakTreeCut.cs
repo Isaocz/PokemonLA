@@ -5,7 +5,7 @@ using UnityEngine;
 public class WeakTreeCut : MonoBehaviour
 {
 
-    GameObject ZButton;
+    GameObject ZButtonObj;
     Animator animator;
     bool isBeCut;
 
@@ -17,7 +17,7 @@ public class WeakTreeCut : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ZButton = transform.GetChild(3).gameObject;
+        ZButtonObj = transform.GetChild(3).gameObject;
         animator = GetComponent<Animator>();
     }
 
@@ -32,8 +32,8 @@ public class WeakTreeCut : MonoBehaviour
         if(other.tag == "Player" && other.GetComponent<PlayerControler>() != null)
         {
 
-            ZButton.SetActive(true);
-            if (Input.GetKey(KeyCode.Z) && !isBeCut)
+            ZButtonObj.SetActive(true);
+            if (ZButton.Z.IsZButtonDown && !isBeCut)
             {
                 p = other.GetComponent<PlayerControler>();
                 if (p != null && !p.isInZ) {
@@ -58,7 +58,7 @@ public class WeakTreeCut : MonoBehaviour
     {
         if (other.tag == "Player" && other.GetComponent<PlayerControler>() != null)
         {
-            ZButton.SetActive(false);
+            ZButtonObj.SetActive(false);
         }
     }
 
@@ -70,6 +70,6 @@ public class WeakTreeCut : MonoBehaviour
 
     public void SetZFalse()
     {
-        ZButton.gameObject.SetActive(false);
+        ZButtonObj.gameObject.SetActive(false);
     }
 }

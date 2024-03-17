@@ -15,7 +15,7 @@ public class PCBookTalkPanel : NPCTalkPanel
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (ZButton.Z.IsZButtonDown)
         {
             TalkTextList = new string[] { Book() + _mTool.Tips[Random.Range(0, _mTool.Tips.Length)] + "¡£" };
             TalkInformation.text = TalkTextList[0];

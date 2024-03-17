@@ -102,11 +102,11 @@ public class BlisseyTalkUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z) && !isHeal && TalkIndex != 4)
+        if (ZButton.Z.IsZButtonDown && !isHeal && TalkIndex != 4)
         {
             TalkContinue();
         }
-        if (Input.GetKeyDown(KeyCode.Z) && TalkIndex == 4)
+        if (ZButton.Z.IsZButtonDown && TalkIndex == 4)
         {
             SleepTalkEnd();
         }

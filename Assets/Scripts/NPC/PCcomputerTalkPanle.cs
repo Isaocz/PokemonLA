@@ -75,7 +75,7 @@ public class PCcomputerTalkPanle : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (ZButton.Z.IsZButtonDown)
         {
             TalkContinue();
         }

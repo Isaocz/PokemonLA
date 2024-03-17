@@ -24,7 +24,7 @@ public class MewNPC : NPC
 
                 NPCUpdate();
             }
-            if (isInTrriger && Input.GetKeyDown(KeyCode.Z))
+            if (isInTrriger && ZButton.Z.IsZButtonDown)
             {
                 SelecrSkillPanel.player = playerControler;
             }

@@ -19,7 +19,7 @@ public class PCcomputer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isInTrriger && Input.GetKeyDown(KeyCode.Z))
+        if (isInTrriger && ZButton.Z.IsZButtonDown)
         {
             TalkPanel.gameObject.SetActive(true);
             player.CanNotUseSpaceItem = true;
