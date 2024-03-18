@@ -15,7 +15,7 @@ public class AndroidSkillButton : MonoBehaviour
         DontDestroyOnLoad(ParentCanvas.gameObject);
         if (SystemInfo.operatingSystemFamily != OperatingSystemFamily.Other)
         {
-            ParentCanvas.gameObject.SetActive(false);
+            //ParentCanvas.gameObject.SetActive(false);
         }
 
         Player = GameObject.FindObjectOfType<PlayerControler>();
@@ -23,15 +23,15 @@ public class AndroidSkillButton : MonoBehaviour
 
     private void FixedUpdate()
     {
-
+        if (ParentCanvas.worldCamera == null)
+        {
+            ParentCanvas.worldCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+        }
+        if (MapCreater.StaticMap == null) { if (isF) { isF = false; transform.GetChild(0).gameObject.SetActive(false); } }
+        else { if (!isF) { isF = true; transform.GetChild(0).gameObject.SetActive(true); } }
 
         if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.Other) {
-            if (ParentCanvas.worldCamera == null)
-            {
-                ParentCanvas.worldCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
-            }
-            if (MapCreater.StaticMap == null) { if (isF) { isF = false; transform.GetChild(0).gameObject.SetActive(false); } }
-            else { if (!isF) { isF = true; transform.GetChild(0).gameObject.SetActive(true); } }
+            
         }
     }
 
