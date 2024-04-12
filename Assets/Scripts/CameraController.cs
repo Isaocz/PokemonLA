@@ -2,6 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraController : MonoBehaviour
 {
@@ -11,10 +12,6 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
-        // 禁用摄像头跟随
-        virtualCamera.Follow = null;
-
-        // 获取玩家的Transform组件
         PlayerControler player = FindObjectOfType<PlayerControler>();
         if (player != null)
         {
@@ -22,12 +19,20 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        //Debug.Log("获取跟随：" + virtualCamera.Follow);
+    }
+
     public void MewCameraFollow()
     {
-        if (playerTransform != null)
+        //GameObject playergo = FindObjectOfType<PlayerControler>().gameObject;
+        //SceneManager.MoveGameObjectToScene(playergo, SceneManager.GetActiveScene());
+        PlayerControler player = FindObjectOfType<PlayerControler>();
+        if (player != null)
         {
             // 启用摄像头跟随
-            virtualCamera.Follow = playerTransform;
+            virtualCamera.Follow = player.transform;
 
             // 设置摄像头边界
             CameraPolygon cameraPolygon = cameraBounds.GetComponent<CameraPolygon>();
@@ -41,7 +46,14 @@ public class CameraController : MonoBehaviour
                     new Vector2(3045, 2388)
                 });
             }
+            else
+            {
+                Debug.LogWarning("未能正常设定范围");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("未能找到玩家");
         }
     }
-
 }
