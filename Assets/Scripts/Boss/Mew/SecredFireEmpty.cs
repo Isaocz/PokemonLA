@@ -9,7 +9,6 @@ public class SecredFireEmpty : Projectile
     private Rigidbody2D rb;
     private Vector3 moveDirection;
     private float speed;
-    private float acceleration;
 
     public void Initialize(Vector3 centerPosition, float radius)
     {
@@ -17,8 +16,8 @@ public class SecredFireEmpty : Projectile
         Vector3 perpendicularDirection = new Vector3(-directionToCenter.y, directionToCenter.x).normalized * radius;
         Vector3 targetPosition = centerPosition + perpendicularDirection;
         moveDirection = (targetPosition - transform.position).normalized;
-        speed = 5f;
-        acceleration = 2f;
+        float Distance = Vector3.Distance(transform.position, targetPosition);
+        speed = Distance / 1f;
         StartCoroutine(StartMovingAfterDelay(3f));
     }
 
@@ -33,10 +32,7 @@ public class SecredFireEmpty : Projectile
         rb = GetComponent<Rigidbody2D>();
         ObjectPoolManager.ReturnObjectToPool(gameObject, 8f);
     }
-    private void FixedUpdate()
-    {
-        speed += acceleration * Time.fixedDeltaTime;
-    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))

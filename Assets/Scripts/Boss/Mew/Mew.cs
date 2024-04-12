@@ -60,6 +60,7 @@ public class Mew : Empty
     public GameObject FakeAwakening;//假解眠药
     public GameObject FakeIceHeal;//假解冻药
     public GameObject FakeParalyzeHeal;//假解麻药
+    public GameObject Stellarize;
     public GameObject FakeLovePrefab;//假心
 
     //各个技能的冷却时间
@@ -107,7 +108,6 @@ public class Mew : Empty
     private float teleportTimer = 0f;
     Vector3 targetPosition;
     Vector3 currentPosition;
-    private float MoreAttackTimer = -4f;//二阶段更多技能计时器
     private bool isPhase3 = false;
     private int[] Phase3Skills = new int[]
     {
@@ -135,8 +135,8 @@ public class Mew : Empty
     private GameObject AtkTarget;
 
     //时间血量
-    private float HpTimer = 191f;
-    private float HpTiming = 191f;
+    private float HpTimer = 60f;
+    private float HpTiming = 60f;
     
     //死亡判定
     public static bool MewBossKilled = false;
@@ -337,7 +337,6 @@ public class Mew : Empty
                             {
                                 Phase2();
                             }
-                            MoreAttack();
                             break;
                     }
                 }
@@ -395,54 +394,12 @@ public class Mew : Empty
         // 技能计时器递减
         skillTimer -= Time.deltaTime;
     }
-    private void MoreAttack()//二阶段的额外攻击模式
-    {
-        List<Vector3> spawnedPositions = new List<Vector3>();
-
-        MoreAttackTimer += Time.deltaTime;
-        if (MoreAttackTimer > 2.5f)
-        {
-            for (int j = 0; j < 10; j++)
-            {
-                Vector3 position;
-                bool validPosition = false;
-
-                // 生成随机位置，直到找到一个合适的位置
-                while (!validPosition)
-                {
-                    position = Random.insideUnitCircle * 20f;
-                    Vector3 spawnPosition = player.transform.position + new Vector3(position.x, position.y + 0.5f, 0f);
-                    float distanceToPlayer = Vector2.Distance(position, player.transform.position);
-
-                    // 检查新位置是否与已生成的位置过近
-                    validPosition = true;
-                    foreach (Vector3 spawnedPos in spawnedPositions)
-                    {
-                        if (Vector3.Distance(spawnPosition, spawnedPos) < 4f && distanceToPlayer < 4f)
-                        {
-                            validPosition = false;
-                            break;
-                        }
-                    }
-
-                    if (validPosition)
-                    {
-                        spawnedPositions.Add(spawnPosition);
-                        GameObject ebp2 = ObjectPoolManager.SpawnObject(ElectricBallp2, spawnPosition, Quaternion.identity);
-                        ebp2.GetComponent<ElectroBallp2>().empty = this;
-                    }
-                }
-            }
-            MoreAttackTimer = 0f;
-        }
-    }
     void Phase3()
     {
         ResetSkillTimer();
 
         if (isPhase3)
         {
-            bgmScript.ChangeBGMToMew(3);
             Invincible = true;
             isPhase3 = false;
             StartCoroutine(Phase3Start());
@@ -450,37 +407,44 @@ public class Mew : Empty
 
         if (!isSkillFin)
         {
-            if (skillTimer <= 0f)
-            {
-                if (Phase3Skills.Length == 0)
-                {
-                    isSkillFin = true;
-                    StartCoroutine(Phase3Middle());
-                }
-                else
-                {
-                    int randomIndex = Random.Range(0, Phase3Skills.Length);
-                    int randomNumber = Phase3Skills[randomIndex];
-                    ChangeType(randomNumber);
-                    TeleportEnd();
-                    UseSkill(randomNumber);
-                    //使用技能后移除数组内的技能
-                    int[] LeftSkills = new int[Phase3Skills.Length - 1];
-                    for (int i = 0, j = 0; i < Phase3Skills.Length; i++)
-                    {
-                        if (i != randomIndex)
-                        {
-                            LeftSkills[j] = Phase3Skills[i];
-                            j++;
-                        }
-                    }
-                    Phase3Skills = LeftSkills;
-                    SkillTimerUpdate(randomNumber, 3);
-                }
-            }
-            skillTimer -= Time.deltaTime;
+            isSkillFin = true;
+            StartCoroutine(Phase3Middle());
         }
-    }
+            /*  TODO-时间太长了！！！
+            if (!isSkillFin)
+            {
+                if (skillTimer <= 0f)
+                {
+                    if (Phase3Skills.Length == 0)
+                    {
+                        isSkillFin = true;
+                        StartCoroutine(Phase3Middle());
+                    }
+                    else
+                    {
+                        int randomIndex = Random.Range(0, Phase3Skills.Length);
+                        int randomNumber = Phase3Skills[randomIndex];
+                        ChangeType(randomNumber);
+                        TeleportEnd();
+                        UseSkill(randomNumber);
+                        //使用技能后移除数组内的技能
+                        int[] LeftSkills = new int[Phase3Skills.Length - 1];
+                        for (int i = 0, j = 0; i < Phase3Skills.Length; i++)
+                        {
+                            if (i != randomIndex)
+                            {
+                                LeftSkills[j] = Phase3Skills[i];
+                                j++;
+                            }
+                        }
+                        Phase3Skills = LeftSkills;
+                        SkillTimerUpdate(randomNumber, 3);
+                    }
+                }
+                skillTimer -= Time.deltaTime;
+            }
+            */
+        }
 
     #endregion
 
@@ -1490,7 +1454,7 @@ public class Mew : Empty
         //二阶段高速移动：玩家周围（受替身影响）
         else if (currentPhase == 2)
         {
-            float minDistance = 5f;
+            float minDistance = 7f;
             float maxDistance = 10f;
             Vector3 randomDirection = Random.insideUnitCircle.normalized;
             float randomDistance = Random.Range(minDistance, maxDistance);
@@ -1681,24 +1645,30 @@ public class Mew : Empty
     //三阶段-第二部分
     private IEnumerator Phase3Middle() 
     {
+        yield return new WaitForSeconds(1f);
+        GameObject stellarize = Instantiate(Stellarize, transform.position, Quaternion.identity);
+        Destroy(stellarize, 1f);
+        yield return new WaitForSeconds(1.5f);
         //首先先圆形释放会给玩家造成伤害的假心
         SkillType = Type.TypeEnum.Fighting;
         TeleportEnd();
         UseSkill(20);
-        for (int j = 0; j < 7; j++)
+        for (int j = 0; j < 4; j++)
         {
             float increaseAngle = 9f;
             float angleStep = 360f / 16;
-            for (int i = 0; i < 32; i++)
+            for (int i = 0; i < 16; i++)
             {
                 float angle = j * increaseAngle + i * angleStep;
+                GameObject trail = ObjectPoolManager.SpawnObject(TrailEffect2, transform.position, Quaternion.Euler(0, 0, angle));
+                ObjectPoolManager.ReturnObjectToPool(trail, 1f);
                 Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * 1f;
                 FakeLove fakelove = Instantiate(FakeLovePrefab, spawnPos, Quaternion.identity).GetComponent<FakeLove>();
                 Vector3 direction = (spawnPos - transform.position).normalized;
                 fakelove.Initialize(4f, direction);
                 fakelove.mew = gameObject;
             }
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(2f);
         }
 
         //其次释放电球，释放冰冻光束
@@ -1720,12 +1690,12 @@ public class Mew : Empty
                 case 6: RandomFake = FakeParalyzeHeal; break;
             }
             GameObject fakepotion = Instantiate(RandomFake, randomPosition, Quaternion.identity);
-            Destroy(fakepotion, 20f);
+            Destroy(fakepotion, 11f);
         }
         SkillType = Type.TypeEnum.Ice;
         TeleportEnd();
         yield return new WaitForSeconds(1f);
-        for (int i = 0; i < 560; i++)
+        for (int i = 0; i < 250; i++)
         {
             float angle = i * 11f;
             GameObject trail = ObjectPoolManager.SpawnObject(TrailEffect, transform.position, Quaternion.Euler(0, 0, angle));
@@ -1740,9 +1710,9 @@ public class Mew : Empty
         yield return new WaitForSeconds(1f);
         isFinal = true;
         GameObject meanlookfinal = Instantiate(Meanlookfinal, transform.position, Quaternion.identity);
-        StartCoroutine(ShootSwords(324, 3, 0.1f, false));
-        yield return new WaitForSeconds(17f);
-        StartCoroutine(ShootSwords(6, 8, 3f, true));
+        StartCoroutine(ShootSwords(200, 3, 0.1f, false));
+        yield return new WaitForSeconds(10f);
+        StartCoroutine(ShootSwords(4, 6, 3f, true));
         yield return new WaitForSeconds(19f);
         Destroy(meanlookfinal, 1f);
     }
@@ -1750,7 +1720,7 @@ public class Mew : Empty
     //第三阶段电球
     private IEnumerator ElectricBall()
     {
-        for(int i = 0; i < 6; i++)
+        for(int i = 0; i < 4; i++)
         {
             for (int j = 0; j < 12; j++)
             {

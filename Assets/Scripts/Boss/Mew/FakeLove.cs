@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class FakeLove : Projectile
 {
-    public float moveSpeed;
+    public float CardinalSpeed;
+    private float timer;
     private Vector3 moveDirection;
     public GameObject mew;
     public int SpAPower;
@@ -15,7 +16,10 @@ public class FakeLove : Projectile
     }
     private void Update()
     {
-        transform.position += moveDirection * moveSpeed * Time.deltaTime;
+        timer += Time.deltaTime;
+        float currentSpeed;
+        currentSpeed = Mathf.Pow(CardinalSpeed, timer);
+        transform.position += moveDirection * currentSpeed * Time.deltaTime;
         // 计算旋转角度
         Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, moveDirection);
         // 应用旋转角度
@@ -38,7 +42,7 @@ public class FakeLove : Projectile
     }
     public void Initialize(float moveSpeed, Vector3 direction)
     {
-        this.moveSpeed = moveSpeed;
+        this.CardinalSpeed = moveSpeed;
         this.moveDirection = direction;
     }
 }

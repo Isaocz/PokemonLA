@@ -18,6 +18,7 @@ public class SecredFireEmptyVertex : Projectile
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
         direction = (player.position - transform.position).normalized;
+        speed = 8f;
         StartCoroutine(StartMovingAfterDelay(1.5f));
         ObjectPoolManager.ReturnObjectToPool(gameObject, 6.5f);
     }
