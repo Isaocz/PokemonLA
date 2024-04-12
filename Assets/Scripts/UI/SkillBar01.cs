@@ -70,4 +70,12 @@ public class SkillBar01 : MonoBehaviour
             
         }
     }
+
+    public void SetZero()
+    {
+        if (skill != null) {
+            Timer = 0;
+            Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalsize - originalsize * (1 / player.GetSkillCD(skill)) * Timer);
+        }
+    }
 }

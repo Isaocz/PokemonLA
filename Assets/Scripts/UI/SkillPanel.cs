@@ -5,6 +5,7 @@ using UnityEngine;
 public class SkillPanel : MonoBehaviour
 {
     public static SkillPanel StaticSkillPanel;
+    public PlayerControler player;
 
     UIPanleSkillBar uIPanleSkillBar01;
     UIPanleSkillBar uIPanleSkillBar02;
@@ -18,7 +19,7 @@ public class SkillPanel : MonoBehaviour
         uIPanleSkillBar02 = transform.GetChild(7).GetComponent<UIPanleSkillBar>();
         uIPanleSkillBar03 = transform.GetChild(8).GetComponent<UIPanleSkillBar>();
         uIPanleSkillBar04 = transform.GetChild(9).GetComponent<UIPanleSkillBar>();
-        PlayerControler player = FindObjectOfType<PlayerControler>();
+        player = FindObjectOfType<PlayerControler>();
         if (player != null) {
             if (player.Skill01 != null) { uIPanleSkillBar01.gameObject.SetActive(true); uIPanleSkillBar01.GetSkill_Panle(player.Skill01, player); }
             else { uIPanleSkillBar01.gameObject.SetActive(false); }

@@ -24,7 +24,24 @@ public class WeakTreeCut : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (ZButtonObj.activeInHierarchy && ZButton.Z.IsZButtonDown && !isBeCut)
+        {
+            if (p != null && !p.isInZ)
+            {
+                p.isInZ = true;
+                if (p.Stone > 0)
+                {
+                    animator.SetTrigger("Cut");
+                    p.ChangeStone(-1);
+                    isBeCut = true;
+                }
+                else if (p.Stone <= 0)
+                {
+                    UIGetANewItem.UI.JustSaySth(NoStoneString01, NoStoneString02);
+                    p.isInZ = false;
+                }
+            }
+        }
     }
 
     private void OnTriggerStay2D(Collider2D other)
@@ -33,23 +50,7 @@ public class WeakTreeCut : MonoBehaviour
         {
 
             ZButtonObj.SetActive(true);
-            if (ZButton.Z.IsZButtonDown && !isBeCut)
-            {
-                p = other.GetComponent<PlayerControler>();
-                if (p != null && !p.isInZ) {
-                    p.isInZ = true;
-                    if (p.Stone > 0)
-                    {
-                        animator.SetTrigger("Cut");
-                        p.ChangeStone(-1);
-                        isBeCut = true;
-                    } else if (p.Stone <= 0)
-                    {
-                        UIGetANewItem.UI.JustSaySth(NoStoneString01, NoStoneString02);
-                        p.isInZ = false;
-                    }
-                }
-            }
+            p = other.GetComponent<PlayerControler>();
         }
     }
 

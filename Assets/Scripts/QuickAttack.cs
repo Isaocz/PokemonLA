@@ -30,7 +30,7 @@ public class QuickAttack : Skill
 
     void Dash()
     {
-        Vector3 dashPosition = player.transform.position + (Vector3)Direction * dashAmount;
+        Vector3 dashPosition = new Vector3( Mathf.Clamp((player.transform.position + (Vector3)Direction * dashAmount).x, player.NowRoom.x*30 - 12.7f, player.NowRoom.x * 30 + 12.7f) , Mathf.Clamp((player.transform.position + (Vector3)Direction * dashAmount).y, player.NowRoom.y * 24 - 9.0f, player.NowRoom.y * 24 + 9.0f), 0);
         Collider2D[] colliders = Physics2D.OverlapCircleAll(dashPosition, 1f);
         foreach (Collider2D collider in colliders)
         {//这里是检测水面，如果落点不是水面、墙、障碍，则检测位移前方是否有墙。如果落点是，则检测墙和水，这样可以让玩家位移过水面但是位移不过墙，同时不会传送进水面

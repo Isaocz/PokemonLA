@@ -36,7 +36,7 @@ public class MewNPC : NPC
         isWillFly = true;
         SelecrSkillPanel.gameObject.SetActive(false);
         TalkPanel.gameObject.SetActive(false);
-        ZBotton.gameObject.SetActive(false);
+        ZBottonObj.gameObject.SetActive(false);
         animator.SetTrigger("Byebye");
     }
 

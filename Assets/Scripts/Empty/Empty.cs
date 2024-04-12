@@ -477,17 +477,20 @@ public class Empty : Pokemon
     /// <param name="player"></param>
     public void EmptyTouchHit(GameObject playerObj)
     {
-        //如果触碰到的是玩家，使玩家扣除一点血量
-        PlayerControler playerControler = playerObj.gameObject.GetComponent<PlayerControler>();
-        PokemonHpChange(this.gameObject, playerObj.gameObject, 10, 0, 0, Type.TypeEnum.No);
-        if (playerControler != null)
-        {
-            //playerControler.ChangeHp(-(10 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250 ) ,0, 0);
-            playerControler.KnockOutPoint = Knock;
-            playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
-            if (playerControler.playerData.IsPassiveGetList[115])
+        Debug.Log(playerObj.layer);
+        if (playerObj.layer != 23) {
+            //如果触碰到的是玩家，使玩家扣除一点血量
+            PlayerControler playerControler = playerObj.gameObject.GetComponent<PlayerControler>();
+            PokemonHpChange(this.gameObject, playerObj.gameObject, 10, 0, 0, Type.TypeEnum.No);
+            if (playerControler != null)
             {
-                PokemonHpChange(playerControler.gameObject, this.gameObject, 10, 0, 0, Type.TypeEnum.No);
+                //playerControler.ChangeHp(-(10 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250 ) ,0, 0);
+                playerControler.KnockOutPoint = Knock;
+                playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+                if (playerControler.playerData.IsPassiveGetList[115])
+                {
+                    PokemonHpChange(playerControler.gameObject, this.gameObject, 10, 0, 0, Type.TypeEnum.No);
+                }
             }
         }
     }

@@ -27,5 +27,10 @@ public class SelectRoleToggle : MonoBehaviour
     {
         if (!isOn) { image.sprite = SpriteNormal; }
     }
+
+    public void _OnScroll()
+    {
+        Debug.Log(1);
+    }
     
 }

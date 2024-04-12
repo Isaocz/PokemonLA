@@ -50,12 +50,12 @@ public class UIKeyBoard : MonoBehaviour
         if (SystemInfo.operatingSystemFamily != OperatingSystemFamily.Other)
         {
             gameObject.SetActive(true);
-            transform.parent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 2150);
+            transform.parent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 2553.556f);
         }
         else
         {
             gameObject.SetActive(false);
-            transform.parent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 560);
+            transform.parent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1410.359f);
 
         }
         //SettingPanel.SetActive(false);
@@ -117,9 +117,6 @@ public class UIKeyBoard : MonoBehaviour
     //更新按钮的文本
     private void UpdateSkillKeyText(Text KeyText, string keyname)
     {
-        Debug.Log(InitializePlayerSetting.GlobalPlayerSetting);
-        Debug.Log(KeyText);
-        Debug.Log(InitializePlayerSetting.GlobalPlayerSetting.keybinds[keyname]);
         KeyText.text = InitializePlayerSetting.GlobalPlayerSetting.keybinds[keyname].ToString(); // 根据名称更新对应按键的文本
     }
 

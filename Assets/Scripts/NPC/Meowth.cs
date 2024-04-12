@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Meowth : MonoBehaviour
 {
-    GameObject ZBotton;
+    GameObject ZBottonObj;
     MeowthTalkUI TalkPanel;
     Text TalkInformation;
     Animator animator;
@@ -16,7 +16,7 @@ public class Meowth : MonoBehaviour
 
     private void Start()
     {
-        ZBotton = gameObject.transform.GetChild(3).gameObject;
+        ZBottonObj = gameObject.transform.GetChild(3).gameObject;
         TalkPanel =  gameObject.transform.GetChild(2).GetChild(1).gameObject.GetComponent<MeowthTalkUI>();
         animator = GetComponent<Animator>();
         GoodInstancePlace = new Vector3(-1, -2.5f, 0);
@@ -29,7 +29,7 @@ public class Meowth : MonoBehaviour
             if (other.GetComponent<PlayerControler>() != null) {
                 playerControler = other.GetComponent<PlayerControler>();
             }
-            ZBotton.SetActive(true);
+            ZBottonObj.SetActive(true);
             isInTrriger = true;
         }
     }
@@ -37,7 +37,7 @@ public class Meowth : MonoBehaviour
     {
         if (other.tag == ("Player") && other.GetComponent<PlayerControler>() != null)
         {
-            ZBotton.SetActive(false);
+            ZBottonObj.SetActive(false);
             isInTrriger = false;
             TalkPanel.PlayerExit();
             isHi = false;
