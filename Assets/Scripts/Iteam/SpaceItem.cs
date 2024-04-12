@@ -11,7 +11,6 @@ public class SpaceItem : IteamPickUp
     public int FlingDamage;
 
 
-
     private void FixedUpdate()
     {
         if (!CanBePickUp)

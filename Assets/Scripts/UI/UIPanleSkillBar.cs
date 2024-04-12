@@ -97,20 +97,20 @@ public class UIPanleSkillBar : MonoBehaviour
             transform.GetChild(9).gameObject.SetActive(true);
         }
 
-        Text FromText = transform.GetChild(18).GetComponent<Text>();
+        Image FromText = transform.GetChild(18).GetComponent<Image>();
         UICallDescribe FromTextDiscrebe = transform.GetChild(18).GetComponent<UICallDescribe>();
         switch (PanelSkill.SkillFrom)
         {
             case 0:
-                FromText.text = "「天赋技能」";
+                FromText.GetComponent<SkillQuillityChange>().ChangetoNormal();
                 FromTextDiscrebe.TwoMode = false; FromTextDiscrebe.FirstText = ""; FromTextDiscrebe.DescribeText = "此技能可能会在灵感突发时精通";
                 break;
             case 1:
-                FromText.text = "「学习技能」";
+                FromText.GetComponent<SkillQuillityChange>().ChangetoStudy();
                 FromTextDiscrebe.TwoMode = false; FromTextDiscrebe.FirstText = ""; FromTextDiscrebe.DescribeText = "此技能来自于传授或者技能学习机，无法在灵感突发时精通";
                 break;
             case 2:
-                FromText.text = "「精通技能」";
+                FromText.GetComponent<SkillQuillityChange>().ChangetoPlus();
                 FromTextDiscrebe.TwoMode = true; FromTextDiscrebe.FirstText = "此技能已经精通！"; FromTextDiscrebe.DescribeText = "精通效果:" + PanelSkill.PlusSkillDiscribe;
                 break;
         }

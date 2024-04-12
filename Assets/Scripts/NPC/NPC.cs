@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class NPC : MonoBehaviour
 {
-    protected GameObject ZBotton;
+    protected GameObject ZBottonObj;
     public Animator animator;
     public PlayerControler playerControler;
     public NPCTalkPanel TalkPanel;
@@ -13,7 +13,7 @@ public class NPC : MonoBehaviour
 
     protected void NPCStart()
     {
-        ZBotton = gameObject.transform.GetChild(3).gameObject;
+        ZBottonObj = gameObject.transform.GetChild(3).gameObject;
         TalkPanel = gameObject.transform.GetChild(4).GetChild(0).gameObject.GetComponent<NPCTalkPanel>();
         animator = GetComponent<Animator>();
         playerControler = GameObject.FindObjectOfType<PlayerControler>();
@@ -27,7 +27,7 @@ public class NPC : MonoBehaviour
             if (other.GetComponent<PlayerControler>() != null) {
                 playerControler = other.GetComponent<PlayerControler>();
             }
-            ZBotton.SetActive(true);
+            ZBottonObj.SetActive(true);
             isInTrriger = true;
         }
     }
@@ -36,7 +36,7 @@ public class NPC : MonoBehaviour
     {
         if (other.tag == ("Player") && other.GetComponent<PlayerControler>() != null)
         {
-            ZBotton.SetActive(false);
+            ZBottonObj.SetActive(false);
             isInTrriger = false;
             TalkPanel.PlayerExit();
             playerControler.CanNotUseSpaceItem = false;
@@ -51,7 +51,7 @@ public class NPC : MonoBehaviour
         }
         if (isInTrriger && (transform.position - playerControler.transform.position).magnitude >= 6.0f)
         {
-            ZBotton.SetActive(false);
+            ZBottonObj.SetActive(false);
             isInTrriger = false;
             TalkPanel.PlayerExit();
             playerControler.CanNotUseSpaceItem = false;

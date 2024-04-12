@@ -18,11 +18,13 @@ public class ZButton : MonoBehaviour
     void Update()
     {
         
-        if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Interact"))) { isZButtonDown = true; }
+        
     }
+
 
     private void LateUpdate()
     {
         isZButtonDown = false;
+        if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Interact"))) { Debug.Log("zzz"); isZButtonDown = true; }
     }
 }

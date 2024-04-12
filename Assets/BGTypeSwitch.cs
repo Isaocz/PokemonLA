@@ -20,6 +20,6 @@ public class BGTypeSwitch : UISwitch
         base.SetSwitch(Index);
         PlayerPrefs.SetInt("BackGroundIndex", Index);
         InitializePlayerSetting.GlobalPlayerSetting.BGIndex = PlayerPrefs.GetInt("BackGroundIndex");
-        MainCamera.ChangeBG(Index);
+        if (MainCamera != null) { MainCamera.ChangeBG(Index); }
     }
 }

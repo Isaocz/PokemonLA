@@ -13,6 +13,14 @@ public class InitializePlayerSetting : MonoBehaviour
     public bool isShowDamage;
     public int BGIndex;
 
+    public bool isShowAndroidCtrInfo;
+
+
+    public float SkillButtonXOffset;
+    public float SkillButtonYOffset;
+    public float SkillButtonScale;
+    public int SkillButtonLayout;
+
 
     public Dictionary<string, KeyCode> keybinds = new Dictionary<string, KeyCode>() {
             
@@ -92,11 +100,32 @@ public class InitializePlayerSetting : MonoBehaviour
             if (!PlayerPrefs.HasKey("SEVolume")) { PlayerPrefs.SetFloat("SEVolume", 1.0f); }
             SEVolumeValue = PlayerPrefs.GetFloat("SEVolume");
 
+
+
             if (!PlayerPrefs.HasKey("ShowDamage")) { PlayerPrefs.SetInt("ShowDamage", 1); }
             isShowDamage = intToBool(PlayerPrefs.GetInt("ShowDamage"));
 
-            if (!PlayerPrefs.HasKey("BackGroundIndex")) { PlayerPrefs.SetInt("ShowDamage", 0); }
+            if (!PlayerPrefs.HasKey("BackGroundIndex")) { PlayerPrefs.SetInt("BackGroundIndex", 0); }
             BGIndex = PlayerPrefs.GetInt("BackGroundIndex");
+
+            if (!PlayerPrefs.HasKey("ShowAndroidCtrInfo")) { PlayerPrefs.SetInt("ShowAndroidCtrInfo", 0); }
+            isShowAndroidCtrInfo = intToBool(PlayerPrefs.GetInt("ShowAndroidCtrInfo"));
+
+
+
+            if (!PlayerPrefs.HasKey("SkillButtonXOffset")) { PlayerPrefs.SetFloat("SkillButtonXOffset", 0.0f); }
+            SkillButtonXOffset = PlayerPrefs.GetFloat("SkillButtonXOffset");
+
+            if (!PlayerPrefs.HasKey("SkillButtonYOffset")) { PlayerPrefs.SetFloat("SkillButtonYOffset", 0.0f); }
+            SkillButtonYOffset = PlayerPrefs.GetFloat("SkillButtonYOffset");
+
+            if (!PlayerPrefs.HasKey("SkillButtonScale")) { PlayerPrefs.SetFloat("SkillButtonScale", 0.0f); }
+            SkillButtonScale = PlayerPrefs.GetFloat("SkillButtonScale");
+
+            if (!PlayerPrefs.HasKey("SkillButtonLayout")) { PlayerPrefs.SetInt("SkillButtonLayout", 0); }
+            SkillButtonLayout = PlayerPrefs.GetInt("SkillButtonLayout");
+
+
 
             if (!PlayerPrefs.HasKey("Skill01Key")) { PlayerPrefs.SetInt("Skill01Key", 113); }
             keybinds["Skill1"] = (KeyCode)PlayerPrefs.GetInt("Skill01Key");

@@ -218,7 +218,7 @@ public class Kricketune : Empty
 
     public void BornBaby()
     {
-        if (ChildCount < 4 && Mathf.Abs(transform.position.y) < 9.2f)
+        if (ChildCount < 4 && Mathf.Abs(transform.position.y) < 9.4f)
         {
             if (isThisPointEmpty(transform.position + Vector3.right * 3) &&  isThisPointInRoom(transform.position + Vector3.right * 3)   )
             {

@@ -225,6 +225,8 @@ public class PlayerControler : Pokemon
         妖精皮肤 = 11,
         激流 = 12,
         好胜 = 13,
+        恒净之躯 = 14,
+        轻金属 = 15,
     }
     //当前角色可以获得特性
     public PlayerAbilityList playerAbility01;
@@ -239,6 +241,7 @@ public class PlayerControler : Pokemon
 
     //声明一个游戏对象，表示玩家的技能1,以及技能1的冷却计时器和技能1是否冷却,是否在使用技能
     public Skill Skill01;
+    public float _Skill01Timer { get { return Skill01Timer; } set { Skill01Timer = value; } }
     float Skill01Timer = 0;
     public bool isSkill01CD = false;
     bool isSkill01lunch = false;
@@ -249,6 +252,7 @@ public class PlayerControler : Pokemon
 
     //声明一个游戏对象，表示玩家的技能1,以及技能1的冷却计时器和技能1是否冷却,是否在使用技能
     public Skill Skill02;
+    public float _Skill02Timer { get { return Skill02Timer; } set { Skill02Timer = value; } }
     float Skill02Timer = 0;
     public bool isSkill02CD = false;
     bool isSkill02lunch = false;
@@ -258,6 +262,7 @@ public class PlayerControler : Pokemon
 
     //声明一个游戏对象，表示玩家的技能1,以及技能1的冷却计时器和技能1是否冷却,是否在使用技能
     public Skill Skill03;
+    public float _Skill03Timer { get { return Skill03Timer; } set { Skill03Timer = value; } }
     float Skill03Timer = 0;
     public bool isSkill03CD = false;
     bool isSkill03lunch = false;
@@ -267,6 +272,7 @@ public class PlayerControler : Pokemon
 
     //声明一个游戏对象，表示玩家的技能1,以及技能1的冷却计时器和技能1是否冷却,是否在使用技能
     public Skill Skill04;
+    public float _Skill04Timer { get { return Skill04Timer; } set { Skill04Timer = value; } }
     float Skill04Timer = 0;
     public bool isSkill04CD = false;
     bool isSkill04lunch = false;
@@ -536,25 +542,26 @@ public class PlayerControler : Pokemon
             //每帧获取一次十字键的按键信息
             {
                 Vector2 MoveSpeed = Vector2.zero;
+                if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.Other) {
+                    if (MoveStick.joystick != null && MoveStick.joystick.Horizontal != 0 || MoveStick.joystick.Vertical != 0)
+                    {
+                        Vector2 StickVector = new Vector2(MoveStick.joystick.Horizontal, MoveStick.joystick.Vertical).normalized;
+                        float a = _mTool.Angle_360Y(StickVector, Vector2.right);
+                        if (a > 22.5f && a <= 67.5f) { MoveSpeed = new Vector2(1f, 1f); }
+                        else if (a > 67.5f && a <= 112.5f) { MoveSpeed = new Vector2(0f, 1f); }
+                        else if (a > 112.5f && a <= 157.5f) { MoveSpeed = new Vector2(-1f, 1f); }
+                        else if (a > 157.5f && a <= 202.5f) { MoveSpeed = new Vector2(-1f, 0f); }
+                        else if (a > 202.5f && a <= 247.5f) { MoveSpeed = new Vector2(-1f, -1f); }
+                        else if (a > 247.5f && a <= 292.5f) { MoveSpeed = new Vector2(0f, -1f); }
+                        else if (a > 292.5f && a <= 337.5f) { MoveSpeed = new Vector2(1f, -1f); }
+                        else { MoveSpeed = new Vector2(1f, 0f); }
+                        if (isConfusionDone) { MoveSpeed = -MoveSpeed; }
 
-                if (MoveStick.joystick.Horizontal != 0 || MoveStick.joystick.Vertical != 0)
-                {
-                    Vector2 StickVector = new Vector2(MoveStick.joystick.Horizontal, MoveStick.joystick.Vertical).normalized;
-                    float a = _mTool.Angle_360Y(StickVector, Vector2.right);
-                    MoveSpeed = Quaternion.AngleAxis(a , Vector3.forward) * Vector2.right;
-                    if (isConfusionDone) { MoveSpeed = -MoveSpeed;  }
 
-
-                    /*
-                    if (a > 22.5f && a <= 67.5f)        { MoveSpeed = new Vector2(1f, 1f); }
-                    else if (a > 67.5f && a <= 112.5f)  { MoveSpeed = new Vector2(0f, 1f); }
-                    else if (a > 112.5f && a <= 157.5f) { MoveSpeed = new Vector2(-1f, 1f); }
-                    else if (a > 157.5f && a <= 202.5f) { MoveSpeed = new Vector2(-1f, 0f); }
-                    else if (a > 202.5f && a <= 247.5f) { MoveSpeed = new Vector2(-1f, -1f); }
-                    else if (a > 247.5f && a <= 292.5f) { MoveSpeed = new Vector2(0f, -1f); }
-                    else if (a > 292.5f && a <= 337.5f) { MoveSpeed = new Vector2(1f, -1f); }
-                    else                                { MoveSpeed = new Vector2(1f, 0f); }
-                    */
+                        /*
+                        MoveSpeed = Quaternion.AngleAxis(a, Vector3.forward) * Vector2.right;
+                        */
+                    }
                 }
 
                 if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Left")))
@@ -621,10 +628,10 @@ public class PlayerControler : Pokemon
                         RaycastHit2D SearchER = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.right, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
                         RaycastHit2D SearchEL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.left, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
 
-                        if ((SearchED.collider != null && (SearchED.transform.tag == "Enviroment" || SearchED.transform.tag == "Room"))
-                            || (SearchEU.collider != null && (SearchEU.transform.tag == "Enviroment" || SearchEU.transform.tag == "Room"))
-                            || (SearchER.collider != null && (SearchER.transform.tag == "Enviroment" || SearchER.transform.tag == "Room"))
-                            || (SearchEL.collider != null && (SearchEL.transform.tag == "Enviroment" || SearchEL.transform.tag == "Room"))) { }
+                        if ((SearchED.collider != null && (SearchED.transform.tag == "Enviroment" || SearchED.transform.tag == "Room" || SearchED.transform.tag == "Water"))
+                            || (SearchEU.collider != null && (SearchEU.transform.tag == "Enviroment" || SearchEU.transform.tag == "Room" || SearchEU.transform.tag == "Water"))
+                            || (SearchER.collider != null && (SearchER.transform.tag == "Enviroment" || SearchER.transform.tag == "Room" || SearchER.transform.tag == "Water"))
+                            || (SearchEL.collider != null && (SearchEL.transform.tag == "Enviroment" || SearchEL.transform.tag == "Room" || SearchEL.transform.tag == "Water"))) { }
                         else
                         {
                             Vector2 position = rigidbody2D.position;
@@ -2085,6 +2092,8 @@ public class PlayerControler : Pokemon
         playerSubSkillList.CallSubSkill(skillObj);
         skillObj.player = this;
     }
+
+
 
 
 

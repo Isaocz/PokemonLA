@@ -269,6 +269,8 @@ public class PokemonDataWindowsPanel : MonoBehaviour
             case 11: AbilityText.text = "特性：妖精皮肤";  AbilityDescribe.DescribeText = "111"; break;
             case 12: AbilityText.text = "特性：激流";  AbilityDescribe.DescribeText = "HP减少的时候，水属性的招式威力会提高。"; break;
             case 13: AbilityText.text = "特性：好胜";  AbilityDescribe.DescribeText = "111"; break;
+            case 14: AbilityText.text = "特性：恒净之躯"; AbilityDescribe.DescribeText = "111"; break;
+            case 15: AbilityText.text = "特性：轻金属"; AbilityDescribe.DescribeText = "111"; break;
 
 
 

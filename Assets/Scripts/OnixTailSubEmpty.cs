@@ -39,6 +39,24 @@ public class OnixTailSubEmpty : SubEmptyBody
 
     public void OnixTailDestroy()
     {
+        if ( ParentEmpty.isSubBodyEmptyInvincible ) { ParentEmpty.isSubBodyEmptyInvincible = false; }
+        if ( ParentEmpty.isFrozenDef) { ParentEmpty.isFrozenDef = false; }
+        if ( ParentEmpty.isBurnDef) { ParentEmpty.isBurnDef = false; }
+        if ( ParentEmpty.isSleepDef) { ParentEmpty.isSleepDef = false; }
+        if ( ParentEmpty.isParalysisDef) { ParentEmpty.isParalysisDef = false; }
+        if ( ParentEmpty.isToxicDef) { ParentEmpty.isToxicDef = false; }
+        if ( ParentEmpty.EmptyCurseDef) { ParentEmpty.EmptyCurseDef = false; }
+        if ( ParentEmpty.isConfusionDef) { ParentEmpty.isConfusionDef = false; }
+        if ( ParentEmpty.EmptyInfatuationDef) { ParentEmpty.EmptyInfatuationDef = false; }
+        if ( ParentEmpty.isBlindDef) { ParentEmpty.isBlindDef = false; }
+        if ( ParentEmpty.isFearDef) { ParentEmpty.isFearDef = false; }
+        if ( ParentEmpty.isAtkChangeDef) { ParentEmpty.isAtkChangeDef = false; }
+        if ( ParentEmpty.isDefChangeDef) { ParentEmpty.isDefChangeDef = false; }
+        if ( ParentEmpty.isSpAChangeDef) { ParentEmpty.isSpAChangeDef = false; }
+        if ( ParentEmpty.isSpDChangeDef) { ParentEmpty.isSpDChangeDef = false; }
+        if ( ParentEmpty.isColdDef) { ParentEmpty.isColdDef = false; }
+
+
         Destroy(gameObject);
     }
 

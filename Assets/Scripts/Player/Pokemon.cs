@@ -1426,36 +1426,40 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始冰冻，开始冰冻
     public void PlayerFrozenFloatPlus(float FrozenPoint)
     {
-        if (!isInMistyTerrain && !isStateInvincible && !isFrozenDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
+        PlayerControler playerchecktype = transform.GetComponent<PlayerControler>();
+        if (!(playerchecktype.PlayerType01 == (int)Type.TypeEnum.Ice || playerchecktype.PlayerType02 == (int)Type.TypeEnum.Ice || playerchecktype.PlayerTeraType == (int)Type.TypeEnum.Ice || playerchecktype.PlayerTeraTypeJOR == (int)Type.TypeEnum.Ice))
         {
-            PlayerFrozenPointFloat += FrozenPoint;
-            PlayerFrozenPointFloat = (PlayerFrozenPointFloat > 1 ? 1 : PlayerFrozenPointFloat);
-            if (!isPlayerFrozenStart && PlayerFrozenPointFloat < 1)
+            if (!isInMistyTerrain && !isStateInvincible && !isFrozenDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
             {
-                playerUIState.StatePlus(2);
-                playerUIState.StateSlowUP(2, PlayerFrozenPointFloat);
-                isPlayerFrozenStart = true;
-            }
-            else if (isPlayerFrozenStart && PlayerFrozenPointFloat < 1)
-            {
-                playerUIState.StateSlowUP(3, PlayerFrozenPointFloat);
-            }
-            else if (PlayerFrozenPointFloat >= 1 && !isPlayerFrozenDone)
-            {
-                if (!isPlayerFrozenStart)
+                PlayerFrozenPointFloat += FrozenPoint;
+                PlayerFrozenPointFloat = (PlayerFrozenPointFloat > 1 ? 1 : PlayerFrozenPointFloat);
+                if (!isPlayerFrozenStart && PlayerFrozenPointFloat < 1)
                 {
                     playerUIState.StatePlus(2);
                     playerUIState.StateSlowUP(2, PlayerFrozenPointFloat);
                     isPlayerFrozenStart = true;
                 }
-                isPlayerFrozenDone = true;
-                playerUIState.StateSlowUP(2, PlayerFrozenPointFloat);
-                MarterialChangeToFrozen();
-            }
-            if (GetComponent<PlayerControler>() != null)
-            {
-                isStateInvincible = true;
-                StateInvincileTimer = TimeStateInvincible;
+                else if (isPlayerFrozenStart && PlayerFrozenPointFloat < 1)
+                {
+                    playerUIState.StateSlowUP(3, PlayerFrozenPointFloat);
+                }
+                else if (PlayerFrozenPointFloat >= 1 && !isPlayerFrozenDone)
+                {
+                    if (!isPlayerFrozenStart)
+                    {
+                        playerUIState.StatePlus(2);
+                        playerUIState.StateSlowUP(2, PlayerFrozenPointFloat);
+                        isPlayerFrozenStart = true;
+                    }
+                    isPlayerFrozenDone = true;
+                    playerUIState.StateSlowUP(2, PlayerFrozenPointFloat);
+                    MarterialChangeToFrozen();
+                }
+                if (GetComponent<PlayerControler>() != null)
+                {
+                    isStateInvincible = true;
+                    StateInvincileTimer = TimeStateInvincible;
+                }
             }
         }
     }
@@ -1499,6 +1503,9 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始中毒，开始中毒
     public void ToxicFloatPlus(float ToxicPoint)
     {
+        PlayerControler playerchecktype = transform.GetComponent<PlayerControler>();
+        if (!(playerchecktype.PlayerType01 == (int)Type.TypeEnum.Poison || playerchecktype.PlayerType02 == (int)Type.TypeEnum.Poison || playerchecktype.PlayerTeraType == (int)Type.TypeEnum.Poison || playerchecktype.PlayerTeraTypeJOR == (int)Type.TypeEnum.Poison || playerchecktype.PlayerType01 == (int)Type.TypeEnum.Steel || playerchecktype.PlayerType02 == (int)Type.TypeEnum.Steel || playerchecktype.PlayerTeraType == (int)Type.TypeEnum.Steel || playerchecktype.PlayerTeraTypeJOR == (int)Type.TypeEnum.Steel))
+        {
             if (!isInMistyTerrain && !isStateInvincible && !isToxicDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
             {
                 ToxicPointFloat += ToxicPoint;
@@ -1540,6 +1547,7 @@ public class Pokemon : MonoBehaviour
                     isStateInvincible = true;
                     StateInvincileTimer = TimeStateInvincible;
                 }
+            }
         }
     }
 
@@ -1595,53 +1603,57 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始中毒，开始中毒
     public void ParalysisFloatPlus(float ParalysisPoint)
     {
-        if (!isInMistyTerrain && !isStateInvincible && !isParalysisDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
+        PlayerControler playerchecktype = transform.GetComponent<PlayerControler>();
+        if (!(playerchecktype.PlayerType01 == (int)Type.TypeEnum.Electric || playerchecktype.PlayerType02 == (int)Type.TypeEnum.Electric || playerchecktype.PlayerTeraType == (int)Type.TypeEnum.Electric || playerchecktype.PlayerTeraTypeJOR == (int)Type.TypeEnum.Electric))
         {
-            ParalysisPointFloat += ParalysisPoint + ((isInSuperElectricTerrain) ? 0.3f : 0);
-            ParalysisPointFloat = (ParalysisPointFloat > 1 ? 1 : ParalysisPointFloat);
+            if (!isInMistyTerrain && !isStateInvincible && !isParalysisDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
+            {
+                ParalysisPointFloat += ParalysisPoint + ((isInSuperElectricTerrain) ? 0.3f : 0);
+                ParalysisPointFloat = (ParalysisPointFloat > 1 ? 1 : ParalysisPointFloat);
 
-            if (!isParalysisStart && ParalysisPointFloat < 1)
-            {
-                playerUIState.StatePlus(4);
-                playerUIState.StateSlowUP(4, ParalysisPointFloat);
-                isParalysisStart = true;
-            }
-            else if (isParalysisStart && ParalysisPointFloat < 1)
-            {
-                playerUIState.StateSlowUP(4, ParalysisPointFloat);
-            }
-            else if (ParalysisPointFloat >= 1 && !isParalysisDone)
-            {
-                if (!isParalysisStart)
+                if (!isParalysisStart && ParalysisPointFloat < 1)
                 {
                     playerUIState.StatePlus(4);
                     playerUIState.StateSlowUP(4, ParalysisPointFloat);
                     isParalysisStart = true;
                 }
-                isParalysisDone = true;
-                playerUIState.StateSlowUP(4, ParalysisPointFloat);
-                if (transform.GetComponent<PlayerControler>() != null)
+                else if (isParalysisStart && ParalysisPointFloat < 1)
                 {
-                    PlayerControler player = transform.GetComponent<PlayerControler>();
-                    player.playerData.SpeBounsAlways--;
-                    player.playerData.MoveSpwBounsAlways--;
-                    MoveSpeHWBeforeChange = player.speed * 0.3f;
-                    player.playerData.MoveSpeHardWorkAlways -= MoveSpeHWBeforeChange;
-                    player.ReFreshAbllityPoint();
-                    if (ParalysisDoneHappendEvent != null)
+                    playerUIState.StateSlowUP(4, ParalysisPointFloat);
+                }
+                else if (ParalysisPointFloat >= 1 && !isParalysisDone)
+                {
+                    if (!isParalysisStart)
                     {
-                        ParalysisDoneHappendEvent(player);
+                        playerUIState.StatePlus(4);
+                        playerUIState.StateSlowUP(4, ParalysisPointFloat);
+                        isParalysisStart = true;
+                    }
+                    isParalysisDone = true;
+                    playerUIState.StateSlowUP(4, ParalysisPointFloat);
+                    if (transform.GetComponent<PlayerControler>() != null)
+                    {
+                        PlayerControler player = transform.GetComponent<PlayerControler>();
+                        player.playerData.SpeBounsAlways--;
+                        player.playerData.MoveSpwBounsAlways--;
+                        MoveSpeHWBeforeChange = player.speed * 0.3f;
+                        player.playerData.MoveSpeHardWorkAlways -= MoveSpeHWBeforeChange;
                         player.ReFreshAbllityPoint();
+                        if (ParalysisDoneHappendEvent != null)
+                        {
+                            ParalysisDoneHappendEvent(player);
+                            player.ReFreshAbllityPoint();
+
+                        }
 
                     }
-
+                    MarterialChangeToParalysis();
                 }
-                MarterialChangeToParalysis();
-            }
-            if (GetComponent<PlayerControler>() != null)
-            {
-                isStateInvincible = true;
-                StateInvincileTimer = TimeStateInvincible;
+                if (GetComponent<PlayerControler>() != null)
+                {
+                    isStateInvincible = true;
+                    StateInvincileTimer = TimeStateInvincible;
+                }
             }
         }
     }
@@ -1700,48 +1712,51 @@ public class Pokemon : MonoBehaviour
     //调用此函数时，如果还未开始中毒，开始中毒
     public void BurnFloatPlus(float BurnPoint)
     {
-
-        if (!isInMistyTerrain && !isStateInvincible && !isBurnDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
+        PlayerControler playerchecktype = transform.GetComponent<PlayerControler>();
+        if (!(playerchecktype.PlayerType01 == (int)Type.TypeEnum.Fire || playerchecktype.PlayerType02 == (int)Type.TypeEnum.Fire || playerchecktype.PlayerTeraType == (int)Type.TypeEnum.Fire || playerchecktype.PlayerTeraTypeJOR == (int)Type.TypeEnum.Fire))
         {
-            BurnPointFloat += BurnPoint;
-            BurnPointFloat = (BurnPointFloat > 1 ? 1 : BurnPointFloat);
+            if (!isInMistyTerrain && !isStateInvincible && !isBurnDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
+            {
+                BurnPointFloat += BurnPoint;
+                BurnPointFloat = (BurnPointFloat > 1 ? 1 : BurnPointFloat);
 
-            if (!isBurnStart && BurnPointFloat < 1)
-            {
-                playerUIState.StatePlus(5);
-                playerUIState.StateSlowUP(5, BurnPointFloat);
-                isBurnStart = true;
-            }
-            else if (isBurnStart && BurnPointFloat < 1)
-            {
-                playerUIState.StateSlowUP(5, BurnPointFloat);
-            }
-            else if (BurnPointFloat >= 1 && !isBurnDone)
-            {
-                if (!isBurnStart)
+                if (!isBurnStart && BurnPointFloat < 1)
                 {
                     playerUIState.StatePlus(5);
                     playerUIState.StateSlowUP(5, BurnPointFloat);
                     isBurnStart = true;
                 }
-                isBurnDone = true;
-                playerUIState.StateSlowUP(5, BurnPointFloat);
-                if (transform.GetComponent<PlayerControler>() != null)
+                else if (isBurnStart && BurnPointFloat < 1)
                 {
-                    PlayerControler player = transform.GetComponent<PlayerControler>();
-                    player.KnockOutPoint = 1;
-                    player.ChangeHp((float)(-player.maxHp / 20), 0, 0);
-                    player.playerData.AtkBounsAlways--;
-                    AtkHWBeforeChange = player.AtkAbilityPoint * 0.3f;
-                    player.playerData.AtkHardWorkAlways -= AtkHWBeforeChange;
-                    player.ReFreshAbllityPoint();
+                    playerUIState.StateSlowUP(5, BurnPointFloat);
                 }
-                MarterialChangeToBurn();
-            }
-            if (GetComponent<PlayerControler>() != null)
-            {
-                isStateInvincible = true;
-                StateInvincileTimer = TimeStateInvincible;
+                else if (BurnPointFloat >= 1 && !isBurnDone)
+                {
+                    if (!isBurnStart)
+                    {
+                        playerUIState.StatePlus(5);
+                        playerUIState.StateSlowUP(5, BurnPointFloat);
+                        isBurnStart = true;
+                    }
+                    isBurnDone = true;
+                    playerUIState.StateSlowUP(5, BurnPointFloat);
+                    if (transform.GetComponent<PlayerControler>() != null)
+                    {
+                        PlayerControler player = transform.GetComponent<PlayerControler>();
+                        player.KnockOutPoint = 1;
+                        player.ChangeHp((float)(-player.maxHp / 20), 0, 0);
+                        player.playerData.AtkBounsAlways--;
+                        AtkHWBeforeChange = player.AtkAbilityPoint * 0.3f;
+                        player.playerData.AtkHardWorkAlways -= AtkHWBeforeChange;
+                        player.ReFreshAbllityPoint();
+                    }
+                    MarterialChangeToBurn();
+                }
+                if (GetComponent<PlayerControler>() != null)
+                {
+                    isStateInvincible = true;
+                    StateInvincileTimer = TimeStateInvincible;
+                }
             }
         }
     }

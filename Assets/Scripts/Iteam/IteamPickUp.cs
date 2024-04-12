@@ -60,7 +60,7 @@ public class IteamPickUp : Item
 
     public void LunchItem()
     {
-        gameObject.transform.position += new Vector3(LunchSpeed * Direction.x, LunchSpeed * Direction.y,0);
+        gameObject.transform.position = new Vector3(  Mathf.Clamp(gameObject.transform.position.x + LunchSpeed * Direction.x , ((transform.position.x+15.0f) / 30 ) - 12.0f, ((transform.position.x + 15.0f) / 30) + 12.0f), Mathf.Clamp(gameObject.transform.position.y + LunchSpeed * Direction.y, ((transform.position.y + 12.0f) / 24) - 8.5f, ((transform.position.y + 12.0f) / 24) + 8.5f) ,0);
         LunchSpeed -= 0.0012f;
         if(LunchSpeed <= 0.002f)
         {

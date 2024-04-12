@@ -9,5 +9,7 @@ public class UIPanlePokemonButton : MonoBehaviour
     void Start()
     {
         GetComponent<Image>().alphaHitTestMinimumThreshold = 0.1f;
+    
+    
     }
 }
