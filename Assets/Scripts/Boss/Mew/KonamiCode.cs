@@ -4,37 +4,77 @@ using UnityEngine;
 
 public class KonamiCode : MonoBehaviour
 {
-    private KeyCode[] konamiCode = { KeyCode.UpArrow, KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.B, KeyCode.A, KeyCode.B, KeyCode.A };
-    private int currentIndex = 0;
+    private KeyCode[] triggerKeys = { KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R };
+    private bool[] keyPressStatus = new bool[4];
+    private bool IsTrigger = false;
+    public float triggerRadius = 5f;
     public GameObject MewBossPrefab;
     public GameObject StartEffect;
     public GameObject Barrier;
 
     void Update()
     {
-        if (Input.anyKeyDown)
+        if (WithinTriggerRadius() && !AllKeysPressed())
         {
-            if (Input.GetKeyDown(konamiCode[currentIndex]))
+            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill1")))
             {
-                currentIndex++;
-                if (currentIndex >= konamiCode.Length && Mew.MewBossKilled == false)
-                {
-                    // 触发效果
-                    TriggerEffect();
-                    currentIndex = 0; // 重置索引
-                }
+                keyPressStatus[0] = true;
+                Debug.Log("技能1释放");
             }
-            else
+            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill2")))
             {
-                currentIndex = 0; // 重置索引
+                keyPressStatus[1] = true;
+                Debug.Log("技能2释放");
+            }
+            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill3")))
+            {
+                keyPressStatus[2] = true;
+                Debug.Log("技能3释放");
+            }
+            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill4")))
+            {
+                keyPressStatus[3] = true;
+                Debug.Log("技能4释放");
             }
         }
+        if (AllKeysPressed() && IsTrigger == false)
+        {
+            IsTrigger = true;
+            TriggerEffect();
+        }
+    }
+
+    bool WithinTriggerRadius()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, triggerRadius);
+        foreach (Collider2D collider in colliders)
+        {
+            PlayerControler player = collider.GetComponent<PlayerControler>();
+            if (player != null)
+            {
+                Debug.Log("存在玩家");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool AllKeysPressed()
+    {
+        foreach (bool status in keyPressStatus)
+        {
+            if (!status)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     void TriggerEffect()
     {
         // 在这里编写触发效果的代码
-        Debug.Log("Konami Code triggered!");
+        Debug.Log("触发效果");
         Instantiate(StartEffect, transform.position, Quaternion.identity);
         Timer.Start(this, 5f, () =>
         {
