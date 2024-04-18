@@ -209,7 +209,7 @@ public class Skill : MonoBehaviour
             }
         }
 
-        //声音类技能
+        //接触类技能
         if (_mTool.ContainsSkillTag(SkillTag, SkillTagEnum.接触类))
         {
             //道具138 锐利之爪
@@ -511,6 +511,12 @@ public class Skill : MonoBehaviour
 
             //接触技能触发的事件
             if (isTouch) {
+
+                //技能 电磁漂浮精通
+                if (player.isMagnetRisePlus)
+                {
+                    target.EmptyParalysisDone(1, 30, 0.4f + (float)player.LuckPoint / 10);
+                }
 
                 //道具026 毒手
                 if (player.playerData.IsPassiveGetList[26])

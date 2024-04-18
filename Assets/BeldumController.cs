@@ -61,7 +61,7 @@ public class BeldumController : PlayerControler
     {
         UpdatePlayer();
         StateMaterialChange();
-        if (!isEvolution && LevelForSkill >= 28)
+        if (!isEvolution && LevelForSkill >= 20)
         {
             EvolutionStart();
         }
