@@ -12,6 +12,7 @@ public class IteamPickUp : Item
     protected float LunchSpeed = 0.08f;
 
 
+
     //声明一个变量,代表物品移动的目标
     public GameObject targer;
 
@@ -60,7 +61,12 @@ public class IteamPickUp : Item
 
     public void LunchItem()
     {
-        gameObject.transform.position = new Vector3(  Mathf.Clamp(gameObject.transform.position.x + LunchSpeed * Direction.x , ((transform.position.x+15.0f) / 30 ) - 12.0f, ((transform.position.x + 15.0f) / 30) + 12.0f), Mathf.Clamp(gameObject.transform.position.y + LunchSpeed * Direction.y, ((transform.position.y + 12.0f) / 24) - 8.5f, ((transform.position.y + 12.0f) / 24) + 8.5f) ,0);
+        //Debug.Log((transform.position.x));
+        //Debug.Log((transform.position.x + 15.0f));
+        //Debug.Log(((transform.position.x + 15.0f) / 30));
+        //Debug.Log((((transform.position.x + 15.0f) / 30) * 30.0f));
+        //gameObject.transform.position = new Vector3(  Mathf.Clamp(gameObject.transform.position.x + LunchSpeed * Direction.x , (((StartPosition.x+15.0f) / (int)30 )*30.0f) - 12.0f, (((StartPosition.x + 15.0f) / (int)30)*30.0f) + 12.0f), Mathf.Clamp(gameObject.transform.position.y + LunchSpeed * Direction.y, (((StartPosition.y + 12.0f) / (int)24)*24.0f) - 8.5f, (((StartPosition.y + 12.0f) / (int)24)*24.0f) + 8.5f) ,0);
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x + LunchSpeed * Direction.x, gameObject.transform.position.y + LunchSpeed * Direction.y, 0);
         LunchSpeed -= 0.0012f;
         if(LunchSpeed <= 0.002f)
         {

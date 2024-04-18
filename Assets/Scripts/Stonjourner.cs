@@ -13,8 +13,8 @@ public class Stonjourner : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Normal;
-        EmptyType02 = Type.TypeEnum.Normal;
+        EmptyType01 = Type.TypeEnum.Rock;
+        EmptyType02 = Type.TypeEnum.No;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);

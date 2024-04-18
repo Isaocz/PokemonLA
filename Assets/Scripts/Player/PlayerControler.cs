@@ -343,6 +343,14 @@ public class PlayerControler : Pokemon
     }
     bool isbatonPass = false;
 
+    //处于电磁漂浮精通状态
+    public bool isMagnetRisePlus
+    {
+        get { return ismagnetRisePlus; }
+        set { ismagnetRisePlus = value; }
+    }
+    bool ismagnetRisePlus = false;
+
 
 
     //处于草丛中 当isInGress==0时代表不在草中 每和一片草碰撞+1
@@ -1873,6 +1881,35 @@ public class PlayerControler : Pokemon
         }
     }
 
+    /// <summary>
+    /// 减少CD的重载（如果存在技能s，减少s技能的冷却 ， float 减少的百分比（如果isTimeMode==true则减少固定时间） ，bool 是否为固定数量模式）
+    /// </summary>
+    /// <param name="SkillIndex"></param>
+    /// <param name="MinusCDTimerPer"></param>
+    /// <param name="isTimeMode"></param>
+    public void MinusSkillCDTime(Skill s, float MinusCDTimerPer, bool isTimeMode)
+    {
+        if (Skill01 != null && s.SkillIndex == Skill01.SkillIndex)
+        {
+            Skill01Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(1) * MinusCDTimerPer);
+            skillBar01.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(1) * MinusCDTimerPer));
+        }
+        if (Skill02 != null && s.SkillIndex == Skill02.SkillIndex)
+        {
+            Skill02Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(2) * MinusCDTimerPer);
+            skillBar02.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(2) * MinusCDTimerPer));
+        }
+        if (Skill03 != null && s.SkillIndex == Skill03.SkillIndex)
+        {
+            Skill03Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(3) * MinusCDTimerPer);
+            skillBar03.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(3) * MinusCDTimerPer));
+        }
+        if (Skill04 != null && s.SkillIndex == Skill04.SkillIndex)
+        {
+            Skill04Timer += (isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(4) * MinusCDTimerPer);
+            skillBar04.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(4) * MinusCDTimerPer));
+        }
+    }
 
     /// <summary>
     /// //声明一个函数，调用时结束表示正在使用技能，无法移动的状态
