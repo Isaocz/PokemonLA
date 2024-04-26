@@ -5,6 +5,7 @@ using UnityEngine;
 public class CryogonalIceShard : Projectile
 {
     bool isDestory;
+    public float MoveSpeed;
     private void Awake()
     {
         AwakeProjectile();
@@ -17,6 +18,7 @@ public class CryogonalIceShard : Projectile
     private void Update()
     {
         //this.transform.localScale += new Vector3(Time.deltaTime * 2, 0, 0);
+        transform.Translate(Vector3.right * MoveSpeed * Time.deltaTime);
         DestoryByRange(20);
         if (isDestory)
         {
