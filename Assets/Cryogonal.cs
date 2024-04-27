@@ -68,10 +68,10 @@ public class Cryogonal : Empty
                 StateTimer += Time.deltaTime;
                 if (isIdle && !isMove && !isAtk)
                 {   // Idle½×¶Î
-                    if(lookL && !lookR)
-                        ChangeAnimationState("CryogonalIdleL");
-                    else if(!lookL && lookR)
-                        ChangeAnimationState("CryogonalIdleR");
+                    if (lookL && !lookR)
+                    { ChangeAnimationState("CryogonalIdleL"); }
+                    else if (!lookL && lookR)
+                    { ChangeAnimationState("CryogonalIdleR");}
                 }
                 
                 if(StateTimer > idleDuration && isIdle || isMove)//ÒÆ¶¯×´Ì¬
@@ -149,6 +149,7 @@ public class Cryogonal : Empty
             if (currentState == newState)
                 return;
 
+            currentState = newState;
             animator.Play(newState);
         }
     }
