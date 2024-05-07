@@ -320,10 +320,10 @@ public class DragSkillBar : MonoBehaviour , IBeginDragHandler , IDragHandler , I
         transform.parent.GetChild(7).name = "SkillPanelBar02";
         transform.parent.GetChild(8).name = "SkillPanelBar03";
         transform.parent.GetChild(9).name = "SkillPanelBar04";
-        if (player.Skill01) { player.skillBar01.CDPlus(player.Skill01.ColdDown); }
-        if (player.Skill02) { player.skillBar02.CDPlus(player.Skill02.ColdDown); }      
-        if (player.Skill03) { player.skillBar03.CDPlus(player.Skill03.ColdDown); }
-        if (player.Skill04) { player.skillBar04.CDPlus(player.Skill04.ColdDown); }
+        if (player.Skill01 && !player.Is01imprison) { player.skillBar01.CDPlus(player.Skill01.ColdDown); }
+        if (player.Skill02 && !player.Is02imprison) { player.skillBar02.CDPlus(player.Skill02.ColdDown); }      
+        if (player.Skill03 && !player.Is03imprison) { player.skillBar03.CDPlus(player.Skill03.ColdDown); }
+        if (player.Skill04 && !player.Is04imprison) { player.skillBar04.CDPlus(player.Skill04.ColdDown); }
 
         if (player.Skill01 != null) { 
             player.skillBar01.GetSkill(player.Skill01);

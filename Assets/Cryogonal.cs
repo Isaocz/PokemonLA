@@ -62,7 +62,7 @@ public class Cryogonal : Empty
         if (!isDie && !isBorn)
         {
             EmptyBeKnock();
-            if (!isEmptyFrozenDone && !isCanNotMoveWhenParalysis && !isSleepDone && !isSilence)
+            if (!isEmptyFrozenDone && !isCanNotMoveWhenParalysis && !isSleepDone && !isSilence && !isFearDone)
             {
 
                 StateTimer += Time.deltaTime;

@@ -410,41 +410,7 @@ public class Mew : Empty
             isSkillFin = true;
             StartCoroutine(Phase3Middle());
         }
-            /*  TODO-时间太长了！！！
-            if (!isSkillFin)
-            {
-                if (skillTimer <= 0f)
-                {
-                    if (Phase3Skills.Length == 0)
-                    {
-                        isSkillFin = true;
-                        StartCoroutine(Phase3Middle());
-                    }
-                    else
-                    {
-                        int randomIndex = Random.Range(0, Phase3Skills.Length);
-                        int randomNumber = Phase3Skills[randomIndex];
-                        ChangeType(randomNumber);
-                        TeleportEnd();
-                        UseSkill(randomNumber);
-                        //使用技能后移除数组内的技能
-                        int[] LeftSkills = new int[Phase3Skills.Length - 1];
-                        for (int i = 0, j = 0; i < Phase3Skills.Length; i++)
-                        {
-                            if (i != randomIndex)
-                            {
-                                LeftSkills[j] = Phase3Skills[i];
-                                j++;
-                            }
-                        }
-                        Phase3Skills = LeftSkills;
-                        SkillTimerUpdate(randomNumber, 3);
-                    }
-                }
-                skillTimer -= Time.deltaTime;
-            }
-            */
-        }
+    }
 
     #endregion
 
@@ -476,10 +442,7 @@ public class Mew : Empty
                                 spawnPosition = transform.position;
                             }
                             GameObject magicalLeaf = ObjectPoolManager.SpawnObject(magicalLeafPrefab, spawnPosition, Quaternion.identity);
-                            magicalLeaf.GetComponent<MagicalLeafEmpty>().SetTarget(AtkTarget);
                             magicalLeaf.GetComponent<MagicalLeafEmpty>().empty = this;
-                            ObjectPoolManager.ReturnObjectToPool(magicalLeaf, 6f); // 6秒后销毁魔法叶对象
-                            yield return new WaitForSeconds(currentPhase == 3? 0f: 0.3f);//每片魔法叶之间的延迟
                         }
                         yield return new WaitForSeconds(currentPhase == 3 ? 2f : 0f);//重复释放魔法叶的延迟
                     }
