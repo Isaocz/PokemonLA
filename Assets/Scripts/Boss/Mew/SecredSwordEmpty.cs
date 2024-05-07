@@ -9,6 +9,7 @@ public class SecredSwordEmpty : Projectile
     private Vector3 position;
     private float timer;
     private float randomangle;
+    private float currentRadius;
     private GameObject target;
     private Vector3 target2;
     public void Initialize(float Angle, float Radius, GameObject Target, float randomAngle)
@@ -33,8 +34,8 @@ public class SecredSwordEmpty : Projectile
         {
             float t = (1 - Mathf.Exp(-2 * timer)) / (1 + Mathf.Exp(-2 * timer));//用双曲正切函数来表示0-1转换的过程
             float currentAngle = Mathf.Lerp(angle, angle + randomangle, t);
-
-            position = target.transform.position + Quaternion.Euler(0f, 0f, currentAngle) * Vector2.right * radius;
+            currentRadius = Mathf.Lerp(2f, radius, timer / 1.7f);
+            position = target.transform.position + Quaternion.Euler(0f, 0f, currentAngle) * Vector2.right * currentRadius;
             transform.position = position;
             transform.right = Quaternion.Euler(0f, 0f, currentAngle) * Vector2.right * -1;
         }

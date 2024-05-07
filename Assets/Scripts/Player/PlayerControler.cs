@@ -286,6 +286,15 @@ public class PlayerControler : Pokemon
     public bool IsSpaceItemButtonDown { get { return isSpaceItemButtonDown; } set { isSpaceItemButtonDown = value; } }
     bool isSpaceItemButtonDown;
 
+    //判断技能是否被封印
+    public bool Is01imprison;
+    public float imprisonTime01;
+    public bool Is02imprison;
+    public float imprisonTime02;
+    public bool Is03imprison;
+    public float imprisonTime03;
+    public bool Is04imprison;
+    public float imprisonTime04;
 
 
 
@@ -680,41 +689,85 @@ public class PlayerControler : Pokemon
                 //如果技能1在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
                 if (isSkill01CD  /* && ((Skill01.useSkillConditions(this))) */ )
                 {
-                    Skill01Timer += Time.deltaTime;
-                    if (Skill01Timer >= GetSkillIndexCD(1))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
+                    if (!Is01imprison)
                     {
-                        isSkill01CD = false;
-                        Skill01Timer = 0;
+                        Skill01Timer += Time.deltaTime;
+                        if (Skill01Timer >= GetSkillIndexCD(1))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
+                        {
+                            isSkill01CD = false;
+                            Skill01Timer = 0;
+                        }
+                    }
+                    else
+                    {
+                        imprisonTime01 -= Time.deltaTime;
+                        if(imprisonTime01 <= 0)
+                        {
+                            Is01imprison = false;
+                        }
                     }
                 }
                 //如果技能2在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
                 if (isSkill02CD  /*  && ((Skill02.useSkillConditions(this))) */  )
                 {
-                    Skill02Timer += Time.deltaTime;
-                    if (Skill02Timer >= GetSkillIndexCD(2))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
+                    if (!Is02imprison)
                     {
-                        isSkill02CD = false;
-                        Skill02Timer = 0;
+                        Skill02Timer += Time.deltaTime;
+                        if (Skill02Timer >= GetSkillIndexCD(2))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
+                        {
+                            isSkill02CD = false;
+                            Skill02Timer = 0;
+                        }
+                    }
+                    else
+                    {
+                        imprisonTime02 -= Time.deltaTime;
+                        if (imprisonTime02 <= 0)
+                        {
+                            Is02imprison = false;
+                        }
                     }
                 }
                 //如果技能3在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
                 if (isSkill03CD  /*  && ((Skill03.useSkillConditions(this)))  */  )
                 {
-                    Skill03Timer += Time.deltaTime;
-                    if (Skill03Timer >= GetSkillIndexCD(3))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
+                    if (!Is03imprison)
                     {
-                        isSkill03CD = false;
-                        Skill03Timer = 0;
+                        Skill03Timer += Time.deltaTime;
+                        if (Skill03Timer >= GetSkillIndexCD(3))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
+                        {
+                            isSkill03CD = false;
+                            Skill03Timer = 0;
+                        }
+                    }
+                    else
+                    {
+                        imprisonTime03 -= Time.deltaTime;
+                        if (imprisonTime03 <= 0)
+                        {
+                            Is03imprison = false;
+                        }
                     }
                 }
                 //如果技能1在cd期间，cd计时器时间开始增加，当计时器满变为可发射状态，计时器归零
                 if (isSkill04CD  /*  && ((Skill04.useSkillConditions(this)))  */ )
                 {
-                    Skill04Timer += Time.deltaTime;
-                    if (Skill04Timer >= GetSkillIndexCD(4))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1) )* (1 - ((float)SpeedAbilityPoint / 500)))
+                    if (!Is04imprison)
                     {
-                        isSkill04CD = false;
-                        Skill04Timer = 0;
+                        Skill04Timer += Time.deltaTime;
+                        if (Skill04Timer >= GetSkillIndexCD(4))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1) )* (1 - ((float)SpeedAbilityPoint / 500)))
+                        {
+                            isSkill04CD = false;
+                            Skill04Timer = 0;
+                        }
+                    }
+                    else
+                    {
+                        imprisonTime04 -= Time.deltaTime;
+                        if (imprisonTime04 <= 0)
+                        {
+                            Is04imprison = false;
+                        }
                     }
                 }
             }
