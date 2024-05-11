@@ -24,5 +24,7 @@ public class OnixDigAnimatorPause : MonoBehaviour
         {
             if (animator.speed != 0) { animator.speed = 0; }
         }
+
+        if (empty.isDie) { animator.SetTrigger("Over"); }
     }
 }

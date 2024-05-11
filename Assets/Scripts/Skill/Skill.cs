@@ -309,7 +309,7 @@ public class Skill : MonoBehaviour
         }
 
         //特性12:激流
-        if (player.PlayerAbility == PlayerControler.PlayerAbilityList.激流 && SkillType == (int)Type.TypeEnum.Water && player.Hp < player.maxHp / 3.0f) { 
+        if (player.PlayerAbility == PlayerControler.PlayerAbilityList.激流 && SkillType == (int)Type.TypeEnum.Water && player.Hp <( player.maxHp / 3.0f)) { 
             Damage *= 1.5f; 
             SpDamage *= 1.5f; 
         }

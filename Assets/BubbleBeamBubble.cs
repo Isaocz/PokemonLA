@@ -66,7 +66,7 @@ public class BubbleBeamBubble : MonoBehaviour
                 BubbleBreak();
                 if (target != null)
                 {
-                    if (ParentBubbleBeam.SkillFrom == 2 && target.isSpeedChange) { ParentBubbleBeam.SpDamage += 15; }
+                    if (ParentBubbleBeam.SkillFrom == 2 && target.isSpeedChange) { ParentBubbleBeam.SpDamage += 25; }
                     ParentBubbleBeam.HitAndKo(target);
                     if (Random.Range(0.0f , 1.0f) + ((float)ParentBubbleBeam.player.LuckPoint / 30.0f) > 0.9f ) { target.SpeedChange(); target.SpeedRemove01(3.0f * target.OtherStateResistance); }
                 }

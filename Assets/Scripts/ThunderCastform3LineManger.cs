@@ -28,7 +28,7 @@ public class ThunderCastform3LineManger : MonoBehaviour
         {
             SetActiveTimer += Time.deltaTime;
         }
-        if ((ParentEmpty.isSleepDone || ParentEmpty.isFearDone) && SetActiveTimer < 5.95f)
+        if ((ParentEmpty.isSleepDone || ParentEmpty.isFearDone || ParentEmpty.isDie) && SetActiveTimer < 5.95f)
         {
             SetActiveTimer = 5.95f;
         }

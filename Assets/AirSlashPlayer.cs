@@ -93,7 +93,7 @@ public class AirSlashPlayer : Skill
             if (target != null)
             {
                 HitAndKo(target);
-                if (Random.Range(0.0f , 1.0f) + ((float)player.LuckPoint / 15.0f ) > 0.3f )
+                if (Random.Range(0.0f , 1.0f) + ((float)player.LuckPoint / 15.0f ) > 0.7f )
                 {
                     target.Fear(4.0f , 1);
                 }

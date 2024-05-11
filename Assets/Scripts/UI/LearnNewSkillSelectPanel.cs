@@ -38,18 +38,27 @@ public class LearnNewSkillSelectPanel : MonoBehaviour
         Skill03 = skill03;
         PokemonChineseName = pokemonChineseName;
 
-        if (skill01 == null) { SkillBar01.gameObject.SetActive(false); Skill01ButtonText.transform.parent.gameObject.SetActive(false);  }
-        if (skill02 == null) { SkillBar02.gameObject.SetActive(false); Skill02ButtonText.transform.parent.gameObject.SetActive(false);  }
-        if (skill03 == null) { SkillBar03.gameObject.SetActive(false); Skill03ButtonText.transform.parent.gameObject.SetActive(false);  }
+        if (skill01 == null) { SkillBar01.gameObject.SetActive(false); Skill01ButtonText.transform.parent.gameObject.SetActive(false); }
+        else { SkillBar01.gameObject.SetActive(true); Skill01ButtonText.transform.parent.gameObject.SetActive(true); }
+        if (skill02 == null) { SkillBar02.gameObject.SetActive(false); Skill02ButtonText.transform.parent.gameObject.SetActive(false); }
+        else { SkillBar02.gameObject.SetActive(true); Skill02ButtonText.transform.parent.gameObject.SetActive(true); }
+        if (skill03 == null) { SkillBar03.gameObject.SetActive(false); Skill03ButtonText.transform.parent.gameObject.SetActive(false); }
+        else { SkillBar03.gameObject.SetActive(true); Skill03ButtonText.transform.parent.gameObject.SetActive(true); }
         //Debug.Log(PokemonChineseName);
         //Debug.Log(text);
         text.text = PokemonChineseName + "灵感突发，想到了新的技能！\n选择一个学习吧！";
-        SkillBar01.GetSkill_Panle(skill01 , GetNewSkillPanel.playerControler);
-        Skill01ButtonText.text = "学习技能" + Skill01.SkillChineseName;
-        SkillBar02.GetSkill_Panle(skill02, GetNewSkillPanel.playerControler);
-        Skill02ButtonText.text = "学习技能" + Skill02.SkillChineseName;
-        SkillBar03.GetSkill_Panle(skill03, GetNewSkillPanel.playerControler);
-        Skill03ButtonText.text = "学习技能" + Skill03.SkillChineseName;
+        if (skill01 != null) {
+            SkillBar01.GetSkill_Panle(skill01, GetNewSkillPanel.playerControler);
+            Skill01ButtonText.text = "学习技能" + Skill01.SkillChineseName;
+        }
+        if (skill02 != null) {
+            SkillBar02.GetSkill_Panle(skill02, GetNewSkillPanel.playerControler);
+            Skill02ButtonText.text = "学习技能" + Skill02.SkillChineseName;
+        }
+        if (skill03 != null) {
+            SkillBar03.GetSkill_Panle(skill03, GetNewSkillPanel.playerControler);
+            Skill03ButtonText.text = "学习技能" + Skill03.SkillChineseName;
+        }
     }
 
     public void LearnSkill01()

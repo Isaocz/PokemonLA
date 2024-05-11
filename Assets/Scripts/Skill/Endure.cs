@@ -15,8 +15,8 @@ public class Endure : Skill
             ParentPlayer.EndureStart();
             if (SkillFrom == 2)
             {
-                player.playerData.DefBounsAlways++;
-                player.playerData.SpDBounsAlways++;
+                player.playerData.DefBounsJustOneRoom++;
+                player.playerData.SpDBounsJustOneRoom++;
             }
         }
     }
@@ -31,8 +31,8 @@ public class Endure : Skill
         ParentPlayer.EndureOver();
         if (SkillFrom == 2)
         {
-            player.playerData.DefBounsAlways--;
-            player.playerData.SpDBounsAlways--;
+            player.playerData.DefBounsJustOneRoom--;
+            player.playerData.SpDBounsJustOneRoom--;
         }
     }
 }

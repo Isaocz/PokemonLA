@@ -157,6 +157,7 @@ public class Corbat : Empty
                             rigidbody2D.bodyType = RigidbodyType2D.Static;
                             isXcutMove = false; isXCutStart = false;
                             PosionMistObj = Instantiate(PosionMist, transform.position, Quaternion.identity);
+                            PosionMistObj.ParentEmpty = this;
                             PosionMistCenter = transform.position;
                             animator.SetBool("Charge", true);
                         }

@@ -47,8 +47,8 @@ public class WaterGun : Skill
     {
         if (!isCanNotMove)
         {
-            var e = transform.GetChild(1).GetComponent<ParticleSystem>().emission;
-            e.enabled = false;
+            var m = transform.GetChild(1).GetComponent<ParticleSystem>().main;
+            m.loop = false;
             transform.GetChild(0).gameObject.SetActive(true);
             transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
             transform.DetachChildren();

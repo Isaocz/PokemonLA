@@ -2094,6 +2094,14 @@ public class Pokemon : MonoBehaviour
                 {
                     EmptyAttacked.EmptyHpChange(AtkPower, SpAPower, 19, Critial);
                 }
+
+                //if（当前被攻击是梦妖
+                //    && 攻击者是玩家
+                //    && 检测玩家的四个技能 某个技能的（ 属性==SkillType ） && （（物攻威力 == AtkPower && 特攻威力 == SpAPower） || （技能的IsDamageChangable == true） ）
+                //    && 梦妖的生命值《= 0 ）
+                //    {
+                //      则封印该技能
+                //    }
             }
             else
             {

@@ -43,6 +43,13 @@ public class UiMiniMap : MonoBehaviour
     private void Start()
     {
         MainCamera = GameObject.FindWithTag("MainCamera");
+        Invoke("PlayerSeeMap" , 0.1f);
+    }
+
+    void PlayerSeeMap()
+    {
+        PlayerControler player = GameObject.FindWithTag("Player").transform.GetComponent<PlayerControler>();
+        if (player != null && player.playerData.IsPassiveGetList[1]) { SeeMap(); }
     }
 
 

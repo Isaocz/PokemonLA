@@ -30,10 +30,10 @@ public class BrickBreak : Skill
 
                 if (target != null)
                 {
-                    if (target.AtkUpLevel != 0) { target.AtkChange(-target.AtkUpLevel, 0); target.ResetAtk(); isR = true; }
-                    if (target.DefUpLevel != 0) { target.DefChange(-target.DefUpLevel, 0); target.ResetDef(); isR = true; }
-                    if (target.SpAUpLevel != 0) { target.SpAChange(-target.SpAUpLevel, 0); target.ResetSpA(); isR = true; }
-                    if (target.SpDUpLevel != 0) { target.SpDChange(-target.SpDUpLevel, 0); target.ResetSpD(); isR = true; }
+                    if (target.AtkUpLevel > 0) { target.AtkChange(-target.AtkUpLevel, 0); target.ResetAtk(); isR = true; }
+                    if (target.DefUpLevel > 0) { target.DefChange(-target.DefUpLevel, 0); target.ResetDef(); isR = true; }
+                    if (target.SpAUpLevel > 0) { target.SpAChange(-target.SpAUpLevel, 0); target.ResetSpA(); isR = true; }
+                    if (target.SpDUpLevel > 0) { target.SpDChange(-target.SpDUpLevel, 0); target.ResetSpD(); isR = true; }
                 }
                 if (SkillFrom == 2 && isR)
                 {

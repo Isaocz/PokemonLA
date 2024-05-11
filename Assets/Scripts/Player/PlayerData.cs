@@ -781,16 +781,16 @@ public class PlayerData : MonoBehaviour
                     switch (Random.Range(0, 2))
                     {
                         case 0:
-                            player.PlayerTeraType = player.PlayerType01;
+                            player.TeraTypeChange(player.PlayerType01);
                             break;
                         case 1:
-                            player.PlayerTeraType = player.PlayerType02;
+                            player.TeraTypeChange(player.PlayerType02);
                             break;
                     }
                 }
                 else
                 {
-                    player.PlayerTeraType = player.PlayerType01;
+                    player.TeraTypeChange(player.PlayerType01);
                 }
                 break;
 
@@ -806,22 +806,22 @@ public class PlayerData : MonoBehaviour
 
             case 108:
                 //108 碧草面具
-                player.PlayerTeraType = (int)Type.TypeEnum.Grass;
+                player.TeraTypeChange((int)Type.TypeEnum.Grass);
                 break;
 
             case 109:
                 //109 水井面具
-                player.PlayerTeraType = (int)Type.TypeEnum.Water;
+                player.TeraTypeChange((int)Type.TypeEnum.Water);
                 break;
 
             case 110:
                 //110 火灶面具
-                player.PlayerTeraType = (int)Type.TypeEnum.Fire;
+                player.TeraTypeChange((int)Type.TypeEnum.Fire);
                 break;
 
             case 111:
                 //111 础石面具
-                player.PlayerTeraType = (int)Type.TypeEnum.Rock;
+                player.TeraTypeChange((int)Type.TypeEnum.Rock);
                 break;
 
             case 112:

@@ -513,11 +513,19 @@ public class PlayerControler : Pokemon
     public void TeraTypeJORChange(int TeraType)
     {
         PlayerTeraTypeJOR = TeraType;
-
         if (Skill01 != null && Skill01.GetComponent<TeraBlast>() != null) { Skill01.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar01.GetSkill(Skill01); }
         if (Skill02 != null && Skill02.GetComponent<TeraBlast>() != null) { Skill02.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar02.GetSkill(Skill02); }
         if (Skill03 != null && Skill03.GetComponent<TeraBlast>() != null) { Skill03.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar03.GetSkill(Skill03); }
         if (Skill04 != null && Skill04.GetComponent<TeraBlast>() != null) { Skill04.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar04.GetSkill(Skill04); }
+    }
+
+    public void TeraTypeChange(int TeraType)
+    {
+        PlayerTeraType = TeraType;
+        if (Skill01 != null && Skill01.GetComponent<TeraBlast>() != null) { Skill01.SkillType = PlayerTeraType == 0 ? 1 : PlayerTeraType; skillBar01.GetSkill(Skill01); }
+        if (Skill02 != null && Skill02.GetComponent<TeraBlast>() != null) { Skill02.SkillType = PlayerTeraType == 0 ? 1 : PlayerTeraType; skillBar02.GetSkill(Skill02); }
+        if (Skill03 != null && Skill03.GetComponent<TeraBlast>() != null) { Skill03.SkillType = PlayerTeraType == 0 ? 1 : PlayerTeraType; skillBar03.GetSkill(Skill03); }
+        if (Skill04 != null && Skill04.GetComponent<TeraBlast>() != null) { Skill04.SkillType = PlayerTeraType == 0 ? 1 : PlayerTeraType; skillBar04.GetSkill(Skill04); }
     }
 
     // Update is called once per frame
@@ -1518,14 +1526,14 @@ public class PlayerControler : Pokemon
     public void ReFreshAbllityPoint()
     {
         MaxHpForLevel(Level);
-        maxHp = (int)((maxHp + playerData.HPHardWorkAlways + playerData.HPHardWorkJustOneRoom) * Mathf.Pow(1.2f, (playerData.HPBounsAlways + playerData.HPBounsJustOneRoom)));
-        AtkAbility = (int)((AbilityForLevel(Level, AtkPlayerPoint) + playerData.AtkHardWorkAlways + playerData.AtkHardWorkJustOneRoom) * Mathf.Pow(1.2f , (playerData.AtkBounsAlways + playerData.AtkBounsJustOneRoom)));
-        SpAAbility = (int)((AbilityForLevel(Level, SpAPlayerPoint) + playerData.SpAHardWorkAlways + playerData.SpAHardWorkJustOneRoom) * Mathf.Pow(1.2f , (playerData.SpABounsAlways + playerData.SpABounsJustOneRoom))); 
-        DefAbility = (int)((AbilityForLevel(Level, DefPlayerPoint) + playerData.DefHardWorkAlways + playerData.DefHardWorkJustOneRoom) * Mathf.Pow(1.2f , (playerData.DefBounsAlways + playerData.DefBounsJustOneRoom))); 
-        SpDAbility = (int)((AbilityForLevel(Level, SpdPlayerPoint) + playerData.SpDHardWorkAlways + playerData.SpDHardWorkJustOneRoom) * Mathf.Pow(1.2f , (playerData.SpDBounsAlways + playerData.SpDBounsJustOneRoom)));
-        SpeedAbility = (int)((AbilityForLevel(Level, SpeedPlayerPoint) + playerData.SpeHardWorkAlways + playerData.SpeHardWorkJustOneRoom) * Mathf.Pow(1.2f , (playerData.SpeBounsAlways + playerData.SpeBounsJustOneRoom)));
-        speed = Mathf.Clamp(!isSleepDone?((MoveSpePlayerPoint + playerData.MoveSpeHardWorkAlways + playerData.MoveSpeHardWorkJustOneRoom) * Mathf.Pow(1.2f, (playerData.MoveSpwBounsAlways + playerData.MoveSpeBounsJustOneRoom))):0.5f , 0.2f , 10);
-        LuckPoint = (int)((LuckPlayerPoint + playerData.LuckHardWorkAlways + playerData.LuckHardWorkJustOneRoom) * Mathf.Pow(1.2f, (playerData.LuckBounsAlways + playerData.LuckBounsJustOneRoom)));
+        maxHp = (int)((maxHp + playerData.HPHardWorkAlways + playerData.HPHardWorkJustOneRoom) * Mathf.Pow((((playerData.HPBounsAlways + playerData.HPBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.ºã¾»Ö®Çû  ? 1.1f : 1.2f) : 1.2f)), (playerData.HPBounsAlways + playerData.HPBounsJustOneRoom)));
+        AtkAbility = (int)((AbilityForLevel(Level, AtkPlayerPoint) + playerData.AtkHardWorkAlways + playerData.AtkHardWorkJustOneRoom) * Mathf.Pow((((playerData.AtkBounsAlways + playerData.AtkBounsJustOneRoom < 0)? (PlayerAbility == PlayerAbilityList.ºã¾»Ö®Çû ? 1.1f : 1.2f) : 1.2f )) , (playerData.AtkBounsAlways + playerData.AtkBounsJustOneRoom)));
+        SpAAbility = (int)((AbilityForLevel(Level, SpAPlayerPoint) + playerData.SpAHardWorkAlways + playerData.SpAHardWorkJustOneRoom) * Mathf.Pow((((playerData.SpABounsAlways + playerData.SpABounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.ºã¾»Ö®Çû ? 1.1f : 1.2f) : 1.2f)), (playerData.SpABounsAlways + playerData.SpABounsJustOneRoom))); 
+        DefAbility = (int)((AbilityForLevel(Level, DefPlayerPoint) + playerData.DefHardWorkAlways + playerData.DefHardWorkJustOneRoom) * Mathf.Pow((((playerData.DefBounsAlways + playerData.DefBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.ºã¾»Ö®Çû ? 1.1f : 1.2f) : 1.2f)), (playerData.DefBounsAlways + playerData.DefBounsJustOneRoom))); 
+        SpDAbility = (int)((AbilityForLevel(Level, SpdPlayerPoint) + playerData.SpDHardWorkAlways + playerData.SpDHardWorkJustOneRoom) * Mathf.Pow((((playerData.SpDBounsAlways + playerData.SpDBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.ºã¾»Ö®Çû ? 1.1f : 1.2f) : 1.2f)), (playerData.SpDBounsAlways + playerData.SpDBounsJustOneRoom)));
+        SpeedAbility = (int)((AbilityForLevel(Level, SpeedPlayerPoint) + playerData.SpeHardWorkAlways + playerData.SpeHardWorkJustOneRoom) * Mathf.Pow((((playerData.SpeBounsAlways + playerData.SpeBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.ºã¾»Ö®Çû ? 1.1f : 1.2f) : 1.2f)), (playerData.SpeBounsAlways + playerData.SpeBounsJustOneRoom)));
+        speed = Mathf.Clamp(!isSleepDone?((MoveSpePlayerPoint + playerData.MoveSpeHardWorkAlways + playerData.MoveSpeHardWorkJustOneRoom) * Mathf.Pow((((playerData.MoveSpwBounsAlways + playerData.MoveSpeBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.ºã¾»Ö®Çû ? 1.1f : 1.2f) : 1.2f)), (playerData.MoveSpwBounsAlways + playerData.MoveSpeBounsJustOneRoom))):0.5f , 0.2f , 10);
+        LuckPoint = (int)((LuckPlayerPoint + playerData.LuckHardWorkAlways + playerData.LuckHardWorkJustOneRoom) * Mathf.Pow((((playerData.LuckBounsAlways + playerData.LuckBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.ºã¾»Ö®Çû ? 1.1f : 1.2f) : 1.2f)), (playerData.LuckBounsAlways + playerData.LuckBounsJustOneRoom)));
         UIHealthBar.Instance.MaxHpText.text = maxHp.ToString();
         UIHealthBar.Instance.NowHpText.text = nowHp.ToString();
         float x = (UIHealthBar.Instance.Per - (float)nowHp / (float)maxHp);
@@ -1719,11 +1727,14 @@ public class PlayerControler : Pokemon
                 Instantiate(baby, baby.transform.position, Quaternion.identity, EBaby.transform.GetChild(2));
             }
         }
-        e.PlayerTeraType = PlayerTeraType;
+        e.TeraTypeChange(PlayerTeraType);
+        e.TeraTypeJORChange(PlayerTeraTypeJOR);
 
         e.spaceItem = spaceItem;
         e.NatureIndex = NatureIndex;
         e.Hp = (e.Level + 10 + (int)(((float)Level * e.HpPlayerPoint * 2) / 100.0f)) - (maxHp - Hp);
+
+        e.SpeedRemove01(0);
         Destroy(gameObject);
         UISkillButton.Instance.isEscEnable = true;
     }
@@ -2298,6 +2309,8 @@ public class PlayerControler : Pokemon
                     PlayerHailTimer += Time.deltaTime;
                     if (Weather.GlobalWeather.isHailPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
                     else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                    KnockOutPoint = 0;
+                    KnockOutDirection = Vector2.zero;
                     PlayerHailTimer = 0;
                 }
             }
@@ -2325,6 +2338,8 @@ public class PlayerControler : Pokemon
                     PlayerSandStormTimer += Time.deltaTime;
                     if (Weather.GlobalWeather.isSandstormPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
                     else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                    KnockOutPoint = 0;
+                    KnockOutDirection = Vector2.zero;
                     PlayerSandStormTimer = 0;
                 }
             }

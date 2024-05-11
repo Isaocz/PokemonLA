@@ -223,7 +223,7 @@ public class Room : MonoBehaviour
             Debug.Log(1);
             Instantiate( RandomDropItem , transform.position+DropItemPosion , Quaternion.identity , transform );
             if (playerControler.playerData.IsPassiveGetList[134] && transform.GetComponent<BossRoom>() == null) {
-                if (Random.Range(0.0f, 1.0f) + ((float)playerControler.LuckPoint / 30) >= 0.5f) { Instantiate(RandomDropItem, transform.position + DropItemPosion + Vector3.up * 0.2f, Quaternion.identity, transform); }
+                if (Random.Range(0.0f, 1.0f) + ((float)playerControler.LuckPoint / 30) >= 0.65f) { Instantiate(RandomDropItem, transform.position + DropItemPosion + Vector3.up * 0.2f, Quaternion.identity, transform); }
             }
             if (playerControler.ClearThisRoomEvent != null)
             {

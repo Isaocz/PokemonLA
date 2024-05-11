@@ -59,7 +59,7 @@ public class EmptyHydroPump : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((ParentEmpty.isSleepDone || ParentEmpty.isFearDone) && RayTimer < 9.95f)
+        if ((ParentEmpty.isSleepDone || ParentEmpty.isFearDone || ParentEmpty.isDie) && RayTimer < 9.95f)
         {
             RayTimer = 9.95f;
         }

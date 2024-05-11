@@ -24,7 +24,7 @@ public class FireBlastEmptyLine : MonoBehaviour
             BornTimer += Time.deltaTime;
             TurnTimer += Time.deltaTime;
         }
-        if ((ParentEmpty.isSleepDone || ParentEmpty.isFearDone) && TurnTimer < 12.95f)
+        if ((ParentEmpty.isSleepDone || ParentEmpty.isFearDone || ParentEmpty.isDie) && TurnTimer < 12.95f)
         {
             TurnTimer = 12.95f;
         }
