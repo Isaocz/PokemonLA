@@ -48,7 +48,6 @@ public class WeakTreeCut : MonoBehaviour
     {
         if(other.tag == "Player" && other.GetComponent<PlayerControler>() != null)
         {
-
             ZButtonObj.SetActive(true);
             p = other.GetComponent<PlayerControler>();
         }

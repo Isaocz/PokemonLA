@@ -218,15 +218,15 @@ public class Kricketune : Empty
 
     public void BornBaby()
     {
-        if (ChildCount < 4 && Mathf.Abs(transform.position.y) < 9.4f)
+        if (ChildCount < 4 && Mathf.Abs(transform.position.x - transform.parent.position.x) < 9.4f)
         {
-            if (isThisPointEmpty(transform.position + Vector3.right * 3) &&  isThisPointInRoom(transform.position + Vector3.right * 3)   )
+            if (isThisPointEmpty(transform.position + Vector3.right * 3) &&  isThisPointInRoom(transform.position + Vector3.right * 3 - transform.parent.position)   )
             {
                 ParentRoom.isClear++;
                 Instantiate(BabyKricketot, transform.position + Vector3.right * 3, Quaternion.identity, transform.parent).isBeCall = true;
                 ChildCount++;
             }
-            if (isThisPointEmpty(transform.position - Vector3.right * 3) && isThisPointInRoom(transform.position - Vector3.right * 3))
+            if (isThisPointEmpty(transform.position - Vector3.right * 3) && isThisPointInRoom(transform.position - Vector3.right * 3 - transform.parent.position))
             {
                 ParentRoom.isClear++;
                 Instantiate(BabyKricketot, transform.position - Vector3.right * 3, Quaternion.identity, transform.parent).isBeCall = true;

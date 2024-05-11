@@ -222,6 +222,7 @@ public class Castform : Empty
                 }
             }
         }
+        if (isDie && !Weather.GlobalWeather.isNormal) { Weather.GlobalWeather.ChangeWeatherNormal();  }
     }
 
     private void FixedUpdate()
@@ -245,6 +246,8 @@ public class Castform : Empty
 
         }
     }
+
+    
 
     void CheckWeather()
     {

@@ -257,6 +257,7 @@ public class Kirlia : Empty
     {
         Instantiate(DG, transform.position, Quaternion.identity).ParentKirlia = this;
         isTP = true;
+        TPTimer = 0;
         isDG = false;
         isJump = false;
     }

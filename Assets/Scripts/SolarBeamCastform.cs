@@ -49,7 +49,7 @@ public class SolarBeamCastform : Projectile
     // Update is called once per frame
     void Update()
     {
-        if ((empty.isSleepDone || empty.isFearDone || empty.isEmptyFrozenDone) && LeserTimer < 3.45f)
+        if ((empty.isSleepDone || empty.isFearDone || empty.isEmptyFrozenDone || empty.isDie) && LeserTimer < 3.45f)
         {
             LeserTimer = 3.45f;
         }

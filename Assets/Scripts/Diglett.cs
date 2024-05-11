@@ -174,6 +174,7 @@ public class Diglett : Empty
             {
                 transform.position = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
             }
+
         }
         else
         {
@@ -184,7 +185,7 @@ public class Diglett : Empty
             transform.position = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
             Debug.Log(transform.position);
         }
-
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, transform.parent.position.x - 12.0f, transform.parent.position.x + 12.0f), Mathf.Clamp(transform.position.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f), 0);
     }
 
 

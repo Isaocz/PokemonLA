@@ -396,7 +396,13 @@ public class Empty : Pokemon
                 }
             }
 
-            Debug.Log(Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000) + " + " + "Dmage:" + (int)(Dmage + SpDmage));
+            //Debug.Log(Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000) + " + " + "Dmage:" + (int)(Dmage + SpDmage));
+            Debug.Log(
+                "Dmage=" + Dmage + "  " 
+                + "SpDmage=" + SpDmage + "  "
+                + "typeDef=" + typeDef + "  "
+                + "Type.TYPE[SkillType][(int)EmptyType01]=" + Type.TYPE[SkillType][(int)EmptyType01] + "  "
+                + "Type.TYPE[SkillType][(int)EmptyType02]=" + Type.TYPE[SkillType][(int)EmptyType02] + "  ");
             if ((int)Dmage + (int)SpDmage > 0)
             {
                 if (!isCanHitAnimation && animator != null) { animator.SetTrigger("Hit"); }
@@ -1088,6 +1094,13 @@ public class Empty : Pokemon
                 ParentPokemonRoom.transform.GetChild(6).localPosition = Vector3.zero;
             }
         }
+        else if(ParentPokemonRoom.transform.GetChild(0).localPosition != Vector3.zero)
+        {
+            ParentPokemonRoom.transform.GetChild(0).localPosition = Vector3.zero;
+            ParentPokemonRoom.transform.GetChild(1).localPosition = Vector3.zero;
+            ParentPokemonRoom.transform.GetChild(2).localPosition = Vector3.zero;
+            ParentPokemonRoom.transform.GetChild(6).localPosition = Vector3.zero;
+        }
     }
 
     //=================¾µÍ·Ò¡»Î======================
@@ -1102,7 +1115,6 @@ public class Empty : Pokemon
     {
         if (!isShake) { isShake = true; ShakeTime = time; isHorizontalShake = isHorizontal; ShakePower = Power;  }
     }
-
 
 
 

@@ -126,6 +126,7 @@ public class CrystalOnixBodyShadow : SubEmptyBody
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+
         if (isCanInsideWall)
         {
             if (other.transform.tag == ("Room"))

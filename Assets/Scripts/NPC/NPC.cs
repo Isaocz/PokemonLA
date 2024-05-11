@@ -62,5 +62,9 @@ public class NPC : MonoBehaviour
             TalkPanel.gameObject.SetActive(true);
             playerControler.CanNotUseSpaceItem = true;
         }
+        if (!isInTrriger && TalkPanel.enabled == true)
+        {
+            TalkPanel.gameObject.SetActive(false);
+        }
     }
 }

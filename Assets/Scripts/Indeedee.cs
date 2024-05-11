@@ -60,11 +60,22 @@ public class Indeedee : Empty
 
     void RemoveProtect()
     {
-        for (int i = 0; i < ProtectList.Count; i++)
+        bool isAnotherIndedee = false;
+        for (int i = 0; i < transform.parent.childCount; i++)
         {
-            ProtectList[i].Invincible = false;
+            if (transform.parent.GetChild(i).gameObject != gameObject) {
+                isAnotherIndedee = transform.parent.GetChild(i).GetComponent<Indeedee>();
+                if (isAnotherIndedee) { break; }
+            }
         }
-        ProtectList.Clear();
+
+        if (!isAnotherIndedee) {
+            for (int i = 0; i < ProtectList.Count; i++)
+            {
+                ProtectList[i].Invincible = false;
+            }
+            ProtectList.Clear();
+        }
     }
 
     private void OnDestroy()

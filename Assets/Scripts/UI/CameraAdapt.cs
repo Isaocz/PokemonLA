@@ -18,7 +18,7 @@ public class CameraAdapt : MonoBehaviour
     public GameObject cameraMaskDown;
     public GameObject vcam;
 
-
+    public bool isCameraFollow;
 
 
     public void HideCameraMasks()
@@ -73,7 +73,7 @@ public class CameraAdapt : MonoBehaviour
         //aimRatio = (float)ConstantRoom.ROOM_WIDTH / ConstantRoom.ROOM_HIGHT;
         aimRatio = ConstantRoom.ROOM_SHOW_RATIO;
         halfWidth = aimRatio * halfHeightPre;
-        vcam.SetActive(false);
+        vcam.SetActive(isCameraFollow);
     }
 
     void adapt()

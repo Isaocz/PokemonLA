@@ -51,7 +51,7 @@ public class BlizzardCastform : Projectile
             if (!BlizzardSnow.isPaused) { BlizzardSnow.Pause(); }
             if (!BlizzardSnowBall.isPaused) { BlizzardSnowBall.Pause(); }
         }
-        if ((empty.isSleepDone || empty.isFearDone) && !isStop)
+        if ((empty.isSleepDone || empty.isFearDone || empty.isDie) && !isStop)
         {
             isStop = true;
         }
@@ -110,6 +110,7 @@ public class BlizzardCastform : Projectile
             }
         }
         if (RangeTimer > 18) { Destroy(gameObject); }
+
 
     }
 

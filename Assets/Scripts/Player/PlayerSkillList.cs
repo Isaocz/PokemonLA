@@ -78,31 +78,38 @@ public class PlayerSkillList : MonoBehaviour
         */
         
         Skill OutPut = null;
-        float RanPoint = Random.Range(0, GetTotalWeight(SkillLearnWeightD));
-        float counter = 0;
+        if (SkillLearnWeightD.Count != 0) {
+            Debug.Log((SkillLearnWeightD));
+            Debug.Log(GetTotalWeight(SkillLearnWeightD));
+            float RanPoint = Random.Range(0, GetTotalWeight(SkillLearnWeightD));
+            float counter = 0;
 
-        foreach (var temp in SkillLearnWeightD)
-        {
-            counter += temp.Value;
-            if (RanPoint <= counter)
+            foreach (var temp in SkillLearnWeightD)
             {
-                OutPut = temp.Key;
-                break;
+                counter += temp.Value;
+                if (RanPoint <= counter)
+                {
+                    OutPut = temp.Key;
+                    break;
+                }
             }
-        }
 
 
-        if (OnceTimeSkillBlackList.Contains(OutPut)) 
-        {
+            if (OnceTimeSkillBlackList.Contains(OutPut))
+            {
 
-            return RandomLearnASkill(PlayerLevel);
+                return RandomLearnASkill(PlayerLevel);
+            }
+            else
+            {
+                OnceTimeSkillBlackList.Add(OutPut);
+                return OutPut;
+            }
         }
         else
         {
-            OnceTimeSkillBlackList.Add(OutPut);
-            return OutPut;
+            return null;
         }
-
     }
 
     void AddPlusSkillInList()
@@ -129,10 +136,10 @@ public class PlayerSkillList : MonoBehaviour
     {
         for (int i = 0; i<SkillLearnList.Count;)
         {
-            if(    (player.Skill01 != null && (SkillLearnList[i].SkillIndex == player.Skill01.SkillIndex) || (player.Skill01.PlusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.PlusSkill.SkillIndex) || (player.Skill01.MinusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.MinusSkill.SkillIndex))
-                || (player.Skill02 != null && (SkillLearnList[i].SkillIndex == player.Skill02.SkillIndex) || (player.Skill01.PlusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.PlusSkill.SkillIndex) || (player.Skill01.MinusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.MinusSkill.SkillIndex))
-                || (player.Skill03 != null && (SkillLearnList[i].SkillIndex == player.Skill03.SkillIndex) || (player.Skill01.PlusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.PlusSkill.SkillIndex) || (player.Skill01.MinusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.MinusSkill.SkillIndex))
-                || (player.Skill04 != null && (SkillLearnList[i].SkillIndex == player.Skill04.SkillIndex) || (player.Skill01.PlusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.PlusSkill.SkillIndex) || (player.Skill01.MinusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.MinusSkill.SkillIndex)) ){
+            if(    (player.Skill01 != null && (SkillLearnList[i].SkillIndex == player.Skill01.SkillIndex) || (player.Skill01 != null && player.Skill01.PlusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.PlusSkill.SkillIndex) || (player.Skill01 != null && player.Skill01.MinusSkill != null && SkillLearnList[i].SkillIndex == player.Skill01.MinusSkill.SkillIndex))
+                || (player.Skill02 != null && (SkillLearnList[i].SkillIndex == player.Skill02.SkillIndex) || (player.Skill02 != null && player.Skill02.PlusSkill != null && SkillLearnList[i].SkillIndex == player.Skill02.PlusSkill.SkillIndex) || (player.Skill02 != null && player.Skill02.MinusSkill != null && SkillLearnList[i].SkillIndex == player.Skill02.MinusSkill.SkillIndex))
+                || (player.Skill03 != null && (SkillLearnList[i].SkillIndex == player.Skill03.SkillIndex) || (player.Skill03 != null && player.Skill03.PlusSkill != null && SkillLearnList[i].SkillIndex == player.Skill03.PlusSkill.SkillIndex) || (player.Skill03 != null && player.Skill03.MinusSkill != null && SkillLearnList[i].SkillIndex == player.Skill03.MinusSkill.SkillIndex))
+                || (player.Skill04 != null && (SkillLearnList[i].SkillIndex == player.Skill04.SkillIndex) || (player.Skill04 != null && player.Skill04.PlusSkill != null && SkillLearnList[i].SkillIndex == player.Skill04.PlusSkill.SkillIndex) || (player.Skill04 != null && player.Skill04.MinusSkill != null && SkillLearnList[i].SkillIndex == player.Skill04.MinusSkill.SkillIndex)) ){
                 SkillLearnList.Remove(SkillLearnList[i]);
             }
             else
@@ -239,7 +246,32 @@ public class PlayerSkillList : MonoBehaviour
         SkillMachineList.Clear();
         for (int i = 0; i < SkillMachineListBorn.Count; i++)
         {
-            if ((player.Skill01 == null || SkillMachineListBorn[i].SkillIndex != player.Skill01.SkillIndex || SkillMachineListBorn[i].SkillIndex+1 != player.Skill01.SkillIndex) && (player.Skill02 == null || SkillMachineListBorn[i].SkillIndex != player.Skill02.SkillIndex || SkillMachineListBorn[i].SkillIndex+1 != player.Skill02.SkillIndex) && (player.Skill03 == null || SkillMachineListBorn[i].SkillIndex != player.Skill03.SkillIndex || SkillMachineListBorn[i].SkillIndex+1 != player.Skill03.SkillIndex) && (player.Skill04 == null || SkillMachineListBorn[i].SkillIndex != player.Skill04.SkillIndex || SkillMachineListBorn[i].SkillIndex+1 != player.Skill04.SkillIndex))
+            //if((player.Skill01 == null || SkillMachineListBorn[i].SkillIndex != player.Skill01.SkillIndex || SkillMachineListBorn[i].SkillIndex+1 != player.Skill01.SkillIndex) && (player.Skill02 == null || SkillMachineListBorn[i].SkillIndex != player.Skill02.SkillIndex || SkillMachineListBorn[i].SkillIndex+1 != player.Skill02.SkillIndex) && (player.Skill03 == null || SkillMachineListBorn[i].SkillIndex != player.Skill03.SkillIndex || SkillMachineListBorn[i].SkillIndex+1 != player.Skill03.SkillIndex) && (player.Skill04 == null || SkillMachineListBorn[i].SkillIndex != player.Skill04.SkillIndex || SkillMachineListBorn[i].SkillIndex+1 != player.Skill04.SkillIndex))
+            if (
+                (player.Skill01 == null ||
+                    (
+                        SkillMachineListBorn[i].SkillIndex != player.Skill01.SkillIndex &&
+                        (SkillMachineListBorn[i].PlusSkill != null && SkillMachineListBorn[i].PlusSkill.SkillIndex != player.Skill01.SkillIndex) &&
+                        (SkillMachineListBorn[i].PlusSkill != null && SkillMachineListBorn[i].PlusSkill.SkillIndex != player.Skill01.SkillIndex)
+                     )) &&
+                (player.Skill02 == null ||
+                    (
+                        SkillMachineListBorn[i].SkillIndex != player.Skill02.SkillIndex &&
+                        (SkillMachineListBorn[i].PlusSkill != null && SkillMachineListBorn[i].PlusSkill.SkillIndex != player.Skill02.SkillIndex) &&
+                        (SkillMachineListBorn[i].PlusSkill != null && SkillMachineListBorn[i].PlusSkill.SkillIndex != player.Skill02.SkillIndex)
+                     )) &&
+                (player.Skill03 == null ||
+                    (
+                        SkillMachineListBorn[i].SkillIndex != player.Skill03.SkillIndex &&
+                        (SkillMachineListBorn[i].PlusSkill != null && SkillMachineListBorn[i].PlusSkill.SkillIndex != player.Skill03.SkillIndex) &&
+                        (SkillMachineListBorn[i].PlusSkill != null && SkillMachineListBorn[i].PlusSkill.SkillIndex != player.Skill03.SkillIndex)
+                     )) &&
+                (player.Skill04 == null ||
+                    (
+                        SkillMachineListBorn[i].SkillIndex != player.Skill04.SkillIndex &&
+                        (SkillMachineListBorn[i].PlusSkill != null && SkillMachineListBorn[i].PlusSkill.SkillIndex != player.Skill04.SkillIndex) &&
+                        (SkillMachineListBorn[i].PlusSkill != null && SkillMachineListBorn[i].PlusSkill.SkillIndex != player.Skill04.SkillIndex)
+                     )))
             {
                 SkillMachineList.Add(SkillMachineListBorn[i]);
             }
