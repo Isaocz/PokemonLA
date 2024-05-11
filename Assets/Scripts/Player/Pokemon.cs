@@ -2102,6 +2102,49 @@ public class Pokemon : MonoBehaviour
                 //    {
                 //      则封印该技能
                 //    }
+                if(Attacker.GetComponent<PlayerControler>()!= null && Attacked.GetComponent<Misdreavus>()!= null)
+                {
+                    if(Attacked.GetComponent<Misdreavus>().EmptyHp <= 0)
+                    {
+                        var player = Attacker.GetComponent<PlayerControler>();
+                        if(player.Skill01 != null)
+                        {
+                            var skill01 = player.Skill01.GetComponent<Skill>();
+                            if (skill01 != null && (Type.TypeEnum)skill01.SkillType == SkillType && (skill01.Damage == AtkPower || skill01.SpDamage == SpAPower))
+                            {
+                                player.Is01imprison = true;
+                                player.imprisonTime01 = 20f;
+                            }
+                        }
+                        if (player.Skill02 != null)
+                        {
+                            var skill02 = player.Skill02.GetComponent<Skill>();
+                            if (skill02 != null && (Type.TypeEnum)skill02.SkillType == SkillType && (skill02.Damage == AtkPower || skill02.SpDamage == SpAPower))
+                            {
+                                player.Is02imprison = true;
+                                player.imprisonTime02 = 20f;
+                            }
+                        }
+                        if(player.Skill03 != null)
+                        {
+                            var skill03 = player.Skill03.GetComponent<Skill>();
+                            if (skill03 != null && (Type.TypeEnum)skill03.SkillType == SkillType && (skill03.Damage == AtkPower || skill03.SpDamage == SpAPower))
+                            {
+                                player.Is03imprison = true;
+                                player.imprisonTime03 = 20f;
+                            }
+                        }
+                        if (player.Skill04 != null)
+                        {
+                            var skill04 = player.Skill04.GetComponent<Skill>();
+                            if (skill04 != null && (Type.TypeEnum)skill04.SkillType == SkillType && (skill04.Damage == AtkPower || skill04.SpDamage == SpAPower))
+                            {
+                                player.Is04imprison = true;
+                                player.imprisonTime04 = 20f;
+                            }
+                        }
+                    }
+                }
             }
             else
             {
