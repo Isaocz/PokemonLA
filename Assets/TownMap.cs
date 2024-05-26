@@ -77,8 +77,8 @@ public class TownMap : MonoBehaviour
         {
             case TownPlayerState.inTown:
                 OutPut = new Vector2[] {
-                    new Vector2(34.0f, 30.5f),
-                    new Vector2(-26.0f, 30.5f),
+                    new Vector2(34.0f, 31.6f),
+                    new Vector2(-26.0f, 31.6f),
                     new Vector2(-26.0f, -2.0f),
                     new Vector2(34.0f, -2.0f)
                 };
