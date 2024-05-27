@@ -82,6 +82,10 @@ public class BackGroundMusic : MonoBehaviour
             // 更新计时器
             transitionTimer += Time.deltaTime;
         }
+        if(BGM.clip == MewPhase2 && BGM.time > 201.1f)
+        {
+            BGM.time = 7.5f;
+        }
     }
     public void FadeIn()
     {

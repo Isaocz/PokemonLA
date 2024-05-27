@@ -49,13 +49,13 @@ public class MagicalLeafEmpty : Projectile
         Vector3 Predictdirection = (target.position - playerPosition).normalized;
         float playerSpeed = (target.position - playerPosition).magnitude;
         playerPosition = target.position;
-        targetPosition += Predictdirection * playerSpeed * 2f;
+        targetPosition += Predictdirection * playerSpeed * 0.5f;
 
         if (percent < 1 && !changeDirection)
         {
             reticle.transform.position = targetPosition;
             
-
+            //对象走贝塞尔曲线
             lastPosition = transform.position;
             percent += percentSpeed * Time.deltaTime;
             transform.position = MathUtils.Bezier(percent, startPosition, middlePosition, targetPosition);
@@ -68,6 +68,7 @@ public class MagicalLeafEmpty : Projectile
         }
         else if (changeDirection)
         {
+            //对象移动到预测点上的逻辑
             changetime -= Time.deltaTime;
             transform.Translate(moveSpeed * Vector3.right * Time.deltaTime);
             if (changetime < 0f)
@@ -84,6 +85,7 @@ public class MagicalLeafEmpty : Projectile
         }
         else if (percent > 1 && !changeDirection)
         {
+            //进行重复
             percent = 0;
             startPosition = transform.position;
             targetPosition = target.position;
