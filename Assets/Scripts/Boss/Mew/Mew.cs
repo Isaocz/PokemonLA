@@ -38,7 +38,6 @@ public class Mew : Empty
     public GameObject StickyWebPrefab;//技能17
     public GameObject CrossPoisonPrefab;//技能18
     public GameObject SecredFirePrefab;//技能19
-    public GameObject SecredFireCentrePrefab;
     public GameObject SecredFireVertexPrefab;
     public GameObject reticle2Prefab;//Reticle2预制体
     public GameObject SecredSwordPrefab;//技能20
@@ -47,7 +46,6 @@ public class Mew : Empty
     public GameObject EdgePar;//玩家越过边界的时候显示的粒子
     public GameObject Phase3OrbRotate;
     public GameObject ElectricBallPrefab;//技能21
-    public GameObject ElectricBallp2;
     public GameObject TimeStopEffect;
     public GameObject TrailEffect;
     public GameObject TrailEffect2;
@@ -101,11 +99,14 @@ public class Mew : Empty
     [Header("其他")]
     public int currentPhase = 1; // 当前阶段
     public bool LaserChange = false;
+    private List<int> skillList;
+    private int currentSkillIndex = 0;
     private float skillTimer = 0f; // 技能计时器
     private bool isReset;
     private bool isTeleport;
     public float teleportTime;
     private float teleportTimer = 0f;
+    private int playerHpinP3;
     Vector3 targetPosition;
     Vector3 currentPosition;
     private bool isPhase3 = false;
@@ -202,6 +203,7 @@ public class Mew : Empty
 
         //入场
         ClearProjectile();
+        InitializeSkillList();
         isReset = false;
 
         //将列表中的技能冷却时间设定入字典中
@@ -360,9 +362,15 @@ public class Mew : Empty
         ResetSkillTimer();
         if (skillTimer <= 0f)
         {
-            int randomSkillIndex = Random.Range(1, 19);
+            if (currentSkillIndex >= skillList.Count)
+            {
+                InitializeSkillList();
+                currentSkillIndex = 0;
+            }
+            int randomSkillIndex = skillList[currentSkillIndex];
             StartCoroutine(Phase1Skill(randomSkillIndex));
             SkillTimerUpdate(randomSkillIndex, 1);
+            currentSkillIndex++;
         }
         // 技能计时器递减
         skillTimer -= Time.deltaTime;
@@ -372,12 +380,19 @@ public class Mew : Empty
         ResetSkillTimer();
         if (skillTimer <= 0f)
         {
-            // 随机选择一个技能释放
-            int randomSkillIndex = Random.Range(1, 21);
+            if (currentSkillIndex >= skillList.Count)
+            {
+                InitializeSkillList();
+                currentSkillIndex = 0;
+            }
+
+            int randomSkillIndex = skillList[currentSkillIndex];
+
             StartCoroutine(Phase2Skill(randomSkillIndex));
             targetPosition = RamdomTeleport();
             currentPosition = transform.position;
             SkillTimerUpdate(randomSkillIndex, 2);
+            currentSkillIndex++;
         }
         if (isTeleport)
         {
@@ -402,13 +417,45 @@ public class Mew : Empty
         {
             Invincible = true;
             isPhase3 = false;
+            playerHpinP3 = player.Hp;
             StartCoroutine(Phase3Start());
+        }
+
+        //锁血禁用恢复
+        if(player.Hp > playerHpinP3)
+        {
+            player.Hp = playerHpinP3;
+        }
+        else if(player.Hp < playerHpinP3)
+        {
+            playerHpinP3 = player.Hp;
         }
 
         if (!isSkillFin)
         {
             isSkillFin = true;
             StartCoroutine(Phase3Middle());
+        }
+    }
+
+    void InitializeSkillList()
+    {
+        skillList = new List<int>();
+        for (int i = 1; i <= (currentPhase == 1 ? 18 : 20); i++)
+        {
+            skillList.Add(i);
+        }
+        ShuffleSkillList();
+    }
+
+    void ShuffleSkillList()
+    {
+        for (int i = 0; i < skillList.Count; i++)
+        {
+            int temp = skillList[i];
+            int randomIndex = Random.Range(0, skillList.Count);
+            skillList[i] = skillList[randomIndex];
+            skillList[randomIndex] = temp;
         }
     }
 
@@ -1015,7 +1062,8 @@ public class Mew : Empty
                     for (int i = 0; i < 5; i++)
                     {
                         Vector3 randomPosition = mapCenter + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
-                        Instantiate(StickyWebPrefab, randomPosition, Quaternion.identity);
+                        GameObject stickyweb = Instantiate(StickyWebPrefab, transform.position, Quaternion.identity);
+                        stickyweb.GetComponent<MewStringShot>().SetTarget(randomPosition);
                     }
                 }
                 else
@@ -1023,7 +1071,8 @@ public class Mew : Empty
                     for (int i = 0; i < (currentPhase == 3 ? 25 : 14); i++) 
                     {
                         Vector3 randomPosition = mapCenter + new Vector3(Random.Range(-24.0f, 24.0f), Random.Range(-14.0f, 14.0f), 0);
-                        Instantiate(StickyWebPrefab, randomPosition, Quaternion.identity);
+                        GameObject stickyweb = Instantiate(StickyWebPrefab, transform.position, Quaternion.identity);
+                        stickyweb.GetComponent<MewStringShot>().SetTarget(randomPosition);
                     }
                 }
                 break;
@@ -1087,17 +1136,6 @@ public class Mew : Empty
                             float y = radius * Mathf.Cos(angle) + player.transform.position.y;
                             starVertices[i] = new Vector3(x, y, player.transform.position.z);
                         }
-                        // 生成圆弧中心的SecredFire
-                        for (int i = 0; i < numPoints; i++)
-                        {
-                            Vector3 startPoint = starVertices[i];
-                            Vector3 endPoint = starVertices[(i + 1) % numPoints];
-
-                            Vector3 center = (startPoint + endPoint) / 2f;
-
-                            GameObject secredFireCenter = ObjectPoolManager.SpawnObject(SecredFireCentrePrefab, center, Quaternion.identity);
-                            secredFireCenter.GetComponent<SecredFireEmpryCentre>().empty = this;
-                        }
                         // 在每个五角星顶点生成SecredFire
                         for (int i = 0; i < numPoints; i++)
                         {
@@ -1139,17 +1177,6 @@ public class Mew : Empty
                             float x = radius * Mathf.Sin(angle) + player.transform.position.x;
                             float y = radius * Mathf.Cos(angle) + player.transform.position.y;
                             starVertices[i] = new Vector3(x, y, player.transform.position.z);
-                        }
-                        // 生成圆弧中心的SecredFire
-                        for (int i = 0; i < numPoints; i++)
-                        {
-                            Vector3 startPoint = starVertices[i];
-                            Vector3 endPoint = starVertices[(i + 1) % numPoints];
-
-                            Vector3 center = (startPoint + endPoint) / 2f;
-
-                            GameObject secredFireCenter = ObjectPoolManager.SpawnObject(SecredFireCentrePrefab, center, Quaternion.identity);
-                            secredFireCenter.GetComponent<SecredFireEmpryCentre>().empty = this;
                         }
                         // 在每个五角星顶点生成SecredFire
                         for (int i = 0; i < numPoints; i++)
@@ -1550,6 +1577,7 @@ public class Mew : Empty
         player.InANewRoom = true;
         player.NewRoomTimer = 0f;
         currentPhase++;
+        InitializeSkillList();
 
         Transform mewTransform = newRoom.transform.Find("Empty");
         if (mewTransform != null)
@@ -1586,7 +1614,7 @@ public class Mew : Empty
         Transform uitext = player.transform.GetChild(2).GetChild(3);
         if (uitext)
         {
-            uitext.GetComponent<PlayerUIText>().SetText("禁止使用道具\n禁止打开菜单", true);
+            uitext.GetComponent<PlayerUIText>().SetText("禁止使用道具\n禁用所有回复", true);
         }
         player.CanNotUseSpaceItem = true;//不允许玩家使用主动道具
         MewOrbRotate mewOrbRotate = Phase3OrbRotate.GetComponent<MewOrbRotate>();
