@@ -57,6 +57,8 @@ public class TownPlayer : MonoBehaviour
     }
     bool isinz = false;
 
+    public float Weight;
+
 
     //声明六个整形数据，表示角色的六项种族值,以及六项当前能力值
     public int HpPlayerPoint;
@@ -118,8 +120,12 @@ public class TownPlayer : MonoBehaviour
     }
     Vector3 playerLocalScal = new Vector3(1.0f, 1.0f, 1.0f);
 
-
-
+    public Vector2 MoveSpeed
+    {
+        get { return moveSpeed; }
+        set { moveSpeed = value; }
+    }
+    Vector2 moveSpeed;
 
     //=================================初始化=====================================
 
@@ -156,48 +162,48 @@ public class TownPlayer : MonoBehaviour
     {
         //每帧获取一次十字键的按键信息
         {
-            Vector2 MoveSpeed = Vector2.zero;
+            moveSpeed = Vector2.zero;
             if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.Other)
             {
                 if (MoveStick.joystick != null && MoveStick.joystick.Horizontal != 0 || MoveStick.joystick.Vertical != 0)
                 {
                     Vector2 StickVector = new Vector2(MoveStick.joystick.Horizontal, MoveStick.joystick.Vertical).normalized;
                     float a = _mTool.Angle_360Y(StickVector, Vector2.right);
-                    if (a > 22.5f && a <= 67.5f) { MoveSpeed = new Vector2(1f, 1f); }
-                    else if (a > 67.5f && a <= 112.5f) { MoveSpeed = new Vector2(0f, 1f); }
-                    else if (a > 112.5f && a <= 157.5f) { MoveSpeed = new Vector2(-1f, 1f); }
-                    else if (a > 157.5f && a <= 202.5f) { MoveSpeed = new Vector2(-1f, 0f); }
-                    else if (a > 202.5f && a <= 247.5f) { MoveSpeed = new Vector2(-1f, -1f); }
-                    else if (a > 247.5f && a <= 292.5f) { MoveSpeed = new Vector2(0f, -1f); }
-                    else if (a > 292.5f && a <= 337.5f) { MoveSpeed = new Vector2(1f, -1f); }
-                    else { MoveSpeed = new Vector2(1f, 0f); }
+                    if (a > 22.5f && a <= 67.5f) { moveSpeed = new Vector2(1f, 1f); }
+                    else if (a > 67.5f && a <= 112.5f) { moveSpeed = new Vector2(0f, 1f); }
+                    else if (a > 112.5f && a <= 157.5f) { moveSpeed = new Vector2(-1f, 1f); }
+                    else if (a > 157.5f && a <= 202.5f) { moveSpeed = new Vector2(-1f, 0f); }
+                    else if (a > 202.5f && a <= 247.5f) { moveSpeed = new Vector2(-1f, -1f); }
+                    else if (a > 247.5f && a <= 292.5f) { moveSpeed = new Vector2(0f, -1f); }
+                    else if (a > 292.5f && a <= 337.5f) { moveSpeed = new Vector2(1f, -1f); }
+                    else { moveSpeed = new Vector2(1f, 0f); }
                 }
             }
 
             if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Left")))
             {
-                MoveSpeed.x = -1f;
+                moveSpeed.x = -1f;
             }
             else if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Right")))
             {
-                MoveSpeed.x = 1f;
+                moveSpeed.x = 1f;
             }
 
             if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Up")))
             {
-                MoveSpeed.y = 1f;
+                moveSpeed.y = 1f;
             }
             else if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Down")))
             {
-                MoveSpeed.y = -1f;
+                moveSpeed.y = -1f;
             }
 
-            if (MoveSpeed != Vector2.zero)
+            if (moveSpeed != Vector2.zero)
             {
-                MoveSpeed = MoveSpeed.normalized;
+                moveSpeed = moveSpeed.normalized;
             }
-            horizontal = MoveSpeed.x;
-            vertical = MoveSpeed.y;
+            horizontal = moveSpeed.x;
+            vertical = moveSpeed.y;
 
         }
     }

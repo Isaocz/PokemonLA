@@ -304,7 +304,7 @@ public class PlayerControler : Pokemon
     int levelChecker = 0;
     public UIPanelGwtNewSkill uIPanelGwtNewSkill;
 
-
+    
     public Vector3Int NowRoom = new Vector3Int (0, 0, 0);
     public bool InANewRoom;
     public float NewRoomTimer;
@@ -449,7 +449,7 @@ public class PlayerControler : Pokemon
         FollowBaby = transform.GetChild(5).GetChild(0).gameObject;
         NotFollowBaby = transform.GetChild(5).GetChild(1).gameObject;
         ButterflyManger = transform.GetChild(5).GetChild(2).GetComponent<PlayerButterflyManger>();
-
+        
         //获得小山猪的刚体组件和动画组件
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();

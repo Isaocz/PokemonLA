@@ -77,10 +77,10 @@ public class TownMap : MonoBehaviour
         {
             case TownPlayerState.inTown:
                 OutPut = new Vector2[] {
-                    new Vector2(34.0f, 31.6f),
-                    new Vector2(-26.0f, 31.6f),
+                    new Vector2(36.0f, 32.2f),
+                    new Vector2(-26.0f, 32.2f),
                     new Vector2(-26.0f, -2.0f),
-                    new Vector2(34.0f, -2.0f)
+                    new Vector2(36.0f, -2.0f)
                 };
                 break;
             case TownPlayerState.inMilkBar:

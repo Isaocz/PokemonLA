@@ -1061,7 +1061,9 @@ public class PlayerData : MonoBehaviour
 
     void ComatosePillow(PlayerControler playerInput)
     {
-        playerInput.SleepFloatPlus(1);
+        if (Random.Range(0.0f,1.0f) > 0.5f) {
+            playerInput.SleepFloatPlus(1);
+        }
     }
     //===================================================¾ø¶ÔË¯ÃßÕíÍ·=================================================
 
