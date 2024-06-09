@@ -17,11 +17,12 @@ public class TownMap : MonoBehaviour
         inTown,    //玩家在镇上
     }
     public TownPlayerState State;
+    public TownPlayerState StartState;
 
     private void Awake()
     {
         townMap = this;
-        State = TownPlayerState.inTown;
+        State = StartState;
 
         FindObjectOfType<CameraAdapt>().HideCameraMasks();
     }
@@ -33,7 +34,7 @@ public class TownMap : MonoBehaviour
         if (FindObjectOfType<Camera>() != null) { MainCamera = FindObjectOfType<Camera>(); MainCamera.transform.position = InstanceCameraPosition() ;  }
     }
 
-    Vector3 InstancePlayerPosition()
+    public Vector3 InstancePlayerPosition()
     {
         Vector3 OutPut = Vector3.zero;
         switch (State)
@@ -41,14 +42,14 @@ public class TownMap : MonoBehaviour
             case TownPlayerState.inTown:
                 break;
             case TownPlayerState.inMilkBar:
-                OutPut = new Vector3 ( 1021.69f , 3.2f , 0);
+                OutPut = new Vector3 (1016.27f, 1.98f, 0);
                 break;
         }
         return OutPut;
     }
 
 
-    Vector3 InstanceCameraPosition()
+    public Vector3 InstanceCameraPosition()
     {
         Vector3 OutPut = new Vector3(0, 0.7f, -11);
         switch (townMap.State)
@@ -58,7 +59,7 @@ public class TownMap : MonoBehaviour
                 break;
             case TownPlayerState.inMilkBar:
                 Debug.Log(townMap.State);
-                OutPut = new Vector3(1014.43f, 0.7f, -11);
+                OutPut = new Vector3(1010.871f, 0.6414994f, -11);
                 break;
         }
 
@@ -86,10 +87,10 @@ public class TownMap : MonoBehaviour
             case TownPlayerState.inMilkBar:
                 Debug.Log(townMap.State);
                 OutPut = new Vector2[] {
-                    new Vector2(1029.2f, 11.4f),
-                    new Vector2(970.8f, 11.4f),
-                    new Vector2(970.8f, -10.1f),
-                    new Vector2(1029.2f, -10.1f)
+                    new Vector2(1021.2f + 00, 11.4f + 00),
+                    new Vector2(978.8f -00, 11.4f + 00),
+                    new Vector2(978.8f -00, -10.1f - 00),
+                    new Vector2(1021.2f + 00, -10.1f - 00)
                 };
                 break;
         }

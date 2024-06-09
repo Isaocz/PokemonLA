@@ -55,7 +55,7 @@ public class TownPlayer : MonoBehaviour
         get { return isinz; }
         set { isinz = value; }
     }
-    bool isinz = false;
+    public bool isinz = false;
 
     public float Weight;
 
@@ -92,6 +92,7 @@ public class TownPlayer : MonoBehaviour
 
 
     public bool isCanNotMove;
+    public bool isCameraStop;
     public bool isCanNotTurnDirection;
     public bool isInvincibleAlways;
 
