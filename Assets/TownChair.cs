@@ -66,6 +66,7 @@ public class TownChair : MonoBehaviour
     public void ChairsJumpUp()
     {
         if (ChairTarget != null) {
+            if (ChairTarget.gameObject.layer == LayerMask.NameToLayer("Player") ) { ChairTarget.gameObject.layer = LayerMask.NameToLayer("PlayerJump"); }
             if (State == ChairState.JumpUp)
             {
                 Timer += Time.deltaTime;
@@ -110,16 +111,19 @@ public class TownChair : MonoBehaviour
 
     public void ChairsSetDown()
     {
+
         if (ChairTarget != null)
         {
             if (State == ChairState.SetDown)
             {
+                if (!ChairTarget.isCameraStop) { ChairTarget.isCameraStop = true; }
                 if (ChairTarget.MoveSpeed.magnitude != 0)
                 {
                     State = ChairState.JumpDown;
                     JumpVector = (transform.position + JumpDownPosition) - ChairTarget.transform.position;
                     ChairTarget.GetComponent<Animator>().SetFloat("LookX", JumpDownV.x);
                     ChairTarget.GetComponent<Animator>().SetFloat("LookY", JumpDownV.y);
+                    if (ChairTarget.isCameraStop) { ChairTarget.isCameraStop = false; }
                 }
             }
         }
@@ -171,6 +175,8 @@ public class TownChair : MonoBehaviour
                     Timer = 0;
                     ChairTarget.transform.GetChild(2).localScale = ChairTarget.PlayerLocalScal;
                     ChairTarget.transform.GetChild(2).localPosition = ChairTarget.PlayerLocalPosition;
+                    ChairTarget.isInZ = false;
+                    if (ChairTarget.gameObject.layer == LayerMask.NameToLayer("PlayerJump")) { ChairTarget.gameObject.layer = LayerMask.NameToLayer("Player"); }
                     ChairTarget = null;
                 }
             }
