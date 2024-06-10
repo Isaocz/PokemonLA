@@ -15,6 +15,7 @@ public class TownMap : MonoBehaviour
     {
         inMilkBar, //玩家在酒吧中
         inTown,    //玩家在镇上
+        inWoodenHouse,    //玩家在镇上
     }
     public TownPlayerState State;
     public TownPlayerState StartState;
@@ -44,6 +45,9 @@ public class TownMap : MonoBehaviour
             case TownPlayerState.inMilkBar:
                 OutPut = new Vector3 (1016.27f, 1.98f, 0);
                 break;
+            case TownPlayerState.inWoodenHouse:
+                OutPut = new Vector3(202.45f, -1.51f, 0);
+                break;
         }
         return OutPut;
     }
@@ -58,8 +62,10 @@ public class TownMap : MonoBehaviour
                 OutPut = new Vector3(0, 0.7f, -11);
                 break;
             case TownPlayerState.inMilkBar:
-                Debug.Log(townMap.State);
                 OutPut = new Vector3(1010.871f, 0.6414994f, -11);
+                break;
+            case TownPlayerState.inWoodenHouse:
+                OutPut = new Vector3(200.0f, 0.6414994f, -11);
                 break;
         }
 
@@ -85,12 +91,20 @@ public class TownMap : MonoBehaviour
                 };
                 break;
             case TownPlayerState.inMilkBar:
-                Debug.Log(townMap.State);
                 OutPut = new Vector2[] {
                     new Vector2(1021.2f + 00, 11.4f + 00),
                     new Vector2(978.8f -00, 11.4f + 00),
                     new Vector2(978.8f -00, -10.1f - 00),
                     new Vector2(1021.2f + 00, -10.1f - 00)
+                };
+                break;
+            case TownPlayerState.inWoodenHouse:
+                Debug.Log(townMap.State);
+                OutPut = new Vector2[] {
+                    new Vector2(218.6062f, 10.74151f),
+                    new Vector2(181.3938f, 10.74151f),
+                    new Vector2(181.3938f, -10.74151f),
+                    new Vector2(218.6062f, -10.74151f)
                 };
                 break;
         }

@@ -15,62 +15,42 @@ public class TownMoveCamera : MonoBehaviour
     [SerializeField]
     public CinemachineConfiner cinemachineConfiner;
 
-    [SerializeField]
-    public PolygonCollider2D polygonCollider;
-    [SerializeField]
-    public PolygonCollider2D polygonCollider1;
 
     [SerializeField]
-    private int num = 1;
+    public PolygonCollider2D[] PolygonColliderList;
+
 
 
     /// <summary>
     /// 当地图 发生改变得时候，重新 设置 cinemachine的边界 来定位
     /// 边界。
     /// </summary>
-    public void changeBound()
+    public void changeBound( TownMap.TownPlayerState state )
     {
         if (cinemachineConfiner != null
-            && polygonCollider1 != null
-            && polygonCollider != null
             && playerTransform != null
             && virtualCamera != null)
         {
             CinemachineConfiner confiner = new CinemachineConfiner();
-            //transform.
-            Debug.Log("      changeBound()              cinemachineConfiner.m_BoundingShape2D = polygonCollider");
             cinemachineConfiner.m_Damping = 0f;//设置 碰撞阻尼系数，使其 摄像机到达 边界，不会弹开
             cinemachineConfiner.InvalidatePathCache();
-            if ((num % 2) != 0)
+            cinemachineConfiner.m_BoundingShape2D = null;
+            switch (state)
             {
-                cinemachineConfiner.m_BoundingShape2D = null;
-                //Destroy(cinemachineConfiner);
-                confiner.m_BoundingShape2D = polygonCollider1;
-                cameraBounds = polygonCollider1.gameObject;
-                //camera.AddExtension(confiner);
-                //transform.gameObject.AddComponent<CinemachineConfiner>();
-                //cinemachineConfiner = transform.GetComponent<CinemachineConfiner>();
-                //cinemachineConfiner = confiner;
-                //cinemachineConfiner.InvalidatePathCache();
-                //cinemachineConfiner.m_BoundingShape2D = polygonCollider1;
-            }//
-            else if ((num % 2) == 0)
-            {
-                cinemachineConfiner.m_BoundingShape2D = null;
-                //Destroy(cinemachineConfiner);
-                confiner.m_BoundingShape2D = polygonCollider;
-                cameraBounds = polygonCollider.gameObject;
-                //camera.AddExtension(confiner);
-                //transform.gameObject.AddComponent<CinemachineConfiner>();
-                //cinemachineConfiner = transform.GetComponent<CinemachineConfiner>();
-                //cinemachineConfiner = confiner;
-                //cinemachineConfiner.InvalidatePathCache();
-                //cinemachineConfiner.m_BoundingShape2D = polygonCollider;
-            }//
-            //confiner.m_BoundingShape2D = polygonCollider1;
-            //camera.AddExtension(confiner);
+                case TownMap.TownPlayerState.inTown:
+                    confiner.m_BoundingShape2D = PolygonColliderList[0];
+                    cameraBounds = PolygonColliderList[0].gameObject;
+                    break;
+                case TownMap.TownPlayerState.inMilkBar:
+                    confiner.m_BoundingShape2D = PolygonColliderList[1];
+                    cameraBounds = PolygonColliderList[1].gameObject;
+                    break;
+                case TownMap.TownPlayerState.inWoodenHouse:
+                    confiner.m_BoundingShape2D = PolygonColliderList[2];
+                    cameraBounds = PolygonColliderList[2].gameObject;
+                    break;
+            }
             cinemachineConfiner.m_BoundingShape2D = confiner.m_BoundingShape2D;
-            num++;
         }
     }
 
@@ -101,7 +81,7 @@ public class TownMoveCamera : MonoBehaviour
         {
             playerTransform = player.transform;
         }
-        changeBound();
+        changeBound(TownMap.townMap.StartState);
 
         MewCameraFollow();
     }
