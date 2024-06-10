@@ -51,13 +51,13 @@ public class TownDoor : MonoBehaviour
 
             Invoke("Move" , 1.1f);
             Invoke("SetCameraBoard", 1.2f);
-            Invoke("SetCameraStop", 2.7f);
+            Invoke("SetCameraStop", 3.5f);
         }
     }
 
     void Move()
     {
-        TownMoveCamera.CameraMover.changeBound();
+        TownMoveCamera.CameraMover.changeBound(TownMap.townMap.State);
         if (FindObjectOfType<TownPlayer>() != null) { 
             Player = FindObjectOfType<TownPlayer>();
             Animator animator = Player.GetComponent<Animator>();
