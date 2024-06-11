@@ -49,6 +49,10 @@ public class TownMoveCamera : MonoBehaviour
                     confiner.m_BoundingShape2D = PolygonColliderList[2];
                     cameraBounds = PolygonColliderList[2].gameObject;
                     break;
+                case TownMap.TownPlayerState.inSkillMaker:
+                    confiner.m_BoundingShape2D = PolygonColliderList[3];
+                    cameraBounds = PolygonColliderList[3].gameObject;
+                    break;
             }
             cinemachineConfiner.m_BoundingShape2D = confiner.m_BoundingShape2D;
         }
