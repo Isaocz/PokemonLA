@@ -15,7 +15,8 @@ public class TownMap : MonoBehaviour
     {
         inMilkBar, //玩家在酒吧中
         inTown,    //玩家在镇上
-        inWoodenHouse,    //玩家在镇上
+        inWoodenHouse,    //玩家在铁骨建筑公司木屋内
+        inSkillMaker,    //玩家在图图技能艺术廊内
     }
     public TownPlayerState State;
     public TownPlayerState StartState;
@@ -48,6 +49,9 @@ public class TownMap : MonoBehaviour
             case TownPlayerState.inWoodenHouse:
                 OutPut = new Vector3(202.45f, -1.51f, 0);
                 break;
+            case TownPlayerState.inSkillMaker:
+                OutPut = new Vector3(400.0f, -0.14f, 0);
+                break;
         }
         return OutPut;
     }
@@ -66,6 +70,9 @@ public class TownMap : MonoBehaviour
                 break;
             case TownPlayerState.inWoodenHouse:
                 OutPut = new Vector3(200.0f, 0.6414994f, -11);
+                break;
+            case TownPlayerState.inSkillMaker:
+                OutPut = new Vector3(400.0f, 0.6414994f, -11);
                 break;
         }
 
@@ -99,12 +106,19 @@ public class TownMap : MonoBehaviour
                 };
                 break;
             case TownPlayerState.inWoodenHouse:
-                Debug.Log(townMap.State);
                 OutPut = new Vector2[] {
                     new Vector2(218.6062f, 10.74151f),
                     new Vector2(181.3938f, 10.74151f),
                     new Vector2(181.3938f, -10.74151f),
                     new Vector2(218.6062f, -10.74151f)
+                };
+                break;
+            case TownPlayerState.inSkillMaker:
+                OutPut = new Vector2[] {
+                    new Vector2(414.323f, 10.74151f),
+                    new Vector2(385.677f, 10.74151f),
+                    new Vector2(385.677f, -10.74151f),
+                    new Vector2(414.323f, -10.74151f)
                 };
                 break;
         }
