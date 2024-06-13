@@ -121,6 +121,7 @@ public class TownChair : MonoBehaviour
                 {
                     State = ChairState.JumpDown;
                     JumpVector = (transform.position + JumpDownPosition) - ChairTarget.transform.position;
+                    ChairTarget.look = JumpDownV;
                     ChairTarget.GetComponent<Animator>().SetFloat("LookX", JumpDownV.x);
                     ChairTarget.GetComponent<Animator>().SetFloat("LookY", JumpDownV.y);
                     if (ChairTarget.isCameraStop) { ChairTarget.isCameraStop = false; }
