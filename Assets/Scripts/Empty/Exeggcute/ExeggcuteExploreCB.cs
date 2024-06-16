@@ -11,6 +11,7 @@ public class ExeggcuteExploreCB : MonoBehaviour
 
     private Empty empty;
     private string aimTag;
+    private Type.TypeEnum type;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -21,7 +22,7 @@ public class ExeggcuteExploreCB : MonoBehaviour
             if (aimTag == "Player")
             {
                 //PlayerControler playerControler = collision.gameObject.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Grass);
+                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, type);
                 if (playerControler != null) {
                     //playerControler.ChangeHp(0, -(30 * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / 250), (int)Type.TypeEnum.Grass);
                     playerControler.KnockOutPoint = 10;
@@ -45,5 +46,10 @@ public class ExeggcuteExploreCB : MonoBehaviour
     public void SetAimTag(string tag)
     {
         aimTag = tag;
+    }
+
+    public void SetType(Type.TypeEnum t)
+    {
+        type = t;
     }
 }
