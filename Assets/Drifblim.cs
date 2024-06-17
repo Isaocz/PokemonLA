@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Drifloon : Empty
+public class Drifblim : Empty
 {
     public Vector3 InitialDirection;
     public GameObject explosion;
+    public GameObject DSB;//DrifblimShadowBall
     private Vector3 direction;
     private string currentState;
 
@@ -41,9 +42,9 @@ public class Drifloon : Empty
             UpdateEmptyChangeHP();
             StateMaterialChange();
             timer += Time.deltaTime;
-            if(timer > 0.6f)
+            if (timer > 0.6f)
             {   //检测是否被卡住
-                if(!isHit && !IsReflect && (!(Mathf.Abs(currentPosition.x - transform.position.x) > 0.8f && Mathf.Abs(currentPosition.y - transform.position.y) > 0.8f)))
+                if (!isHit && !IsReflect && (!(Mathf.Abs(currentPosition.x - transform.position.x) > 0.6f && Mathf.Abs(currentPosition.y - transform.position.y) > 0.6f)))
                 {
                     RaycastHit2D raycastHit2Da = Physics2D.Raycast(transform.position, new Vector2(1, 1), 20f, LayerMask.GetMask("Room"));
                     RaycastHit2D raycastHit2Db = Physics2D.Raycast(transform.position, new Vector2(1, -1), 20f, LayerMask.GetMask("Room"));
@@ -52,18 +53,22 @@ public class Drifloon : Empty
                     float maxDistance = Mathf.Max(raycastHit2Da.distance, raycastHit2Db.distance, raycastHit2Dc.distance, raycastHit2Dd.distance);
                     if (maxDistance == raycastHit2Da.distance)
                     {
+                        DrifblimShadowBall();
                         direction = new Vector2(1, 1);
                     }
                     else if (maxDistance == raycastHit2Db.distance)
                     {
+                        DrifblimShadowBall();
                         direction = new Vector2(1, -1);
                     }
                     else if (maxDistance == raycastHit2Dc.distance)
                     {
+                        DrifblimShadowBall();
                         direction = new Vector2(-1, 1);
                     }
                     else
                     {
+                        DrifblimShadowBall();
                         direction = new Vector2(-1, -1);
                     }
                 }
@@ -86,13 +91,13 @@ public class Drifloon : Empty
                 rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)direction.x * Time.deltaTime * speed, -15f + transform.parent.position.x, 15f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)direction.y * Time.deltaTime * speed, -10f + transform.parent.position.y, 10f + transform.parent.position.y));
                 if (direction.x > 0)
                 {
-                    if (direction.y > 0) ChangeAnimationState("DrifloonMoveNE");
-                    else ChangeAnimationState("DrifloonMoveSE");
+                    if (direction.y > 0) ChangeAnimationState("DrifblimMoveNE");
+                    else ChangeAnimationState("DrifblimMoveSE");
                 }
                 else
                 {
-                    if (direction.y > 0) ChangeAnimationState("DrifloonMoveNW");
-                    else ChangeAnimationState("DrifloonMoveSW");
+                    if (direction.y > 0) ChangeAnimationState("DrifblimMoveNW");
+                    else ChangeAnimationState("DrifblimMoveSW");
                 }
             }
         }
@@ -110,7 +115,7 @@ public class Drifloon : Empty
             InfatuationEmptyTouchHit(other.gameObject);
         }
 
-        if(other.transform.tag == "Room")
+        if (other.transform.tag == "Room")
         {
             //反弹操作
             Vector2 newDirection = Vector2.Reflect(direction, other.GetContact(0).normal);
@@ -133,7 +138,7 @@ public class Drifloon : Empty
                     closestIndex = i;
                 }
             }
-
+            DrifblimShadowBall();
             direction = comparisonValues[closestIndex];
             IsReflect = true;
         }
@@ -147,6 +152,13 @@ public class Drifloon : Empty
         cb.SetAimTag(isEmptyInfatuationDone ? "Empty" : "Player");
         cb.SetType(Type.TypeEnum.Ghost);
         Destroy(boom, 5f);
+    }
+
+    void DrifblimShadowBall()
+    {
+        var shadowBall = Instantiate(DSB, transform.position, Quaternion.identity).GetComponent<DrifblimShadowBall>();
+        shadowBall.empty = this;
+        shadowBall.direction = -direction;
     }
 
     void ChangeAnimationState(string newState)
