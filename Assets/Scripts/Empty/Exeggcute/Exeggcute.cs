@@ -246,6 +246,7 @@ public class Exeggcute : Empty
             ExeggcuteExploreCB exploreCB = effect.transform.GetChild(0).GetChild(0).GetComponent<ExeggcuteExploreCB>();
             exploreCB.SetEmptyInfo(this);
             exploreCB.SetAimTag(isEmptyInfatuationDone ? "Empty" : "Player");
+            exploreCB.SetType(Type.TypeEnum.Grass);
             eggobj.SetActive(false);
             shadow.SetActive(false);
             objects.Add(effect);
