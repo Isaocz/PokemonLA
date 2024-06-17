@@ -17,6 +17,8 @@ public class TownMap : MonoBehaviour
         inTown,    //玩家在镇上
         inWoodenHouse,    //玩家在铁骨建筑公司木屋内
         inSkillMaker,    //玩家在图图技能艺术廊内
+        inDayCareF1,    //玩家在破壳宝育园一层
+        inDayCareF2,    //玩家在破壳宝育园二层
     }
     public TownPlayerState State;
     public TownPlayerState StartState;
@@ -52,6 +54,12 @@ public class TownMap : MonoBehaviour
             case TownPlayerState.inSkillMaker:
                 OutPut = new Vector3(400.0f, -0.14f, 0);
                 break;
+            case TownPlayerState.inDayCareF1:
+                OutPut = new Vector3(606.96f, -5.41f, 0);
+                break;
+            case TownPlayerState.inDayCareF2:
+                OutPut = new Vector3(794.278f, 3.53f, 0);
+                break;
         }
         return OutPut;
     }
@@ -74,8 +82,14 @@ public class TownMap : MonoBehaviour
             case TownPlayerState.inSkillMaker:
                 OutPut = new Vector3(400.0f, 0.6414994f, -11);
                 break;
+            case TownPlayerState.inDayCareF1:
+                OutPut = new Vector3(600.0f, 0.6414994f, -11);
+                break;
+            case TownPlayerState.inDayCareF2:
+                OutPut = new Vector3(800.0f, 0.6414994f, -11);
+                break;
         }
-
+        
         return OutPut;
     }
 
@@ -119,6 +133,22 @@ public class TownMap : MonoBehaviour
                     new Vector2(385.677f, 10.74151f),
                     new Vector2(385.677f, -10.74151f),
                     new Vector2(414.323f, -10.74151f)
+                };
+                break;
+            case TownPlayerState.inDayCareF1:
+                OutPut = new Vector2[] {
+                    new Vector2(618.6063f, 10.74151f),
+                    new Vector2(581.3937f, 10.74151f),
+                    new Vector2(581.3937f, -10.74151f),
+                    new Vector2(618.6063f, -10.74151f)
+                };
+                break;
+            case TownPlayerState.inDayCareF2:
+                OutPut = new Vector2[] {
+                    new Vector2(818.6063f, 10.74151f+4.598501f),
+                    new Vector2(781.3937f, 10.74151f+4.598501f),
+                    new Vector2(781.3937f, -10.74151f+4.698501f),
+                    new Vector2(818.6063f, -10.74151f+4.698501f)
                 };
                 break;
         }
