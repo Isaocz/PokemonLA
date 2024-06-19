@@ -19,6 +19,7 @@ public class TownMap : MonoBehaviour
         inSkillMaker,    //玩家在图图技能艺术廊内
         inDayCareF1,    //玩家在破壳宝育园一层
         inDayCareF2,    //玩家在破壳宝育园二层
+        inItemShop,    //玩家在道具商店
     }
     public TownPlayerState State;
     public TownPlayerState StartState;
@@ -60,6 +61,9 @@ public class TownMap : MonoBehaviour
             case TownPlayerState.inDayCareF2:
                 OutPut = new Vector3(794.278f, 3.53f, 0);
                 break;
+            case TownPlayerState.inItemShop:
+                OutPut = new Vector3(200.0f, 201.6f, 0);
+                break;
         }
         return OutPut;
     }
@@ -87,6 +91,9 @@ public class TownMap : MonoBehaviour
                 break;
             case TownPlayerState.inDayCareF2:
                 OutPut = new Vector3(800.0f, 0.6414994f, -11);
+                break;
+            case TownPlayerState.inItemShop:
+                OutPut = new Vector3(200.0f, 200.12f, -11);
                 break;
         }
         
@@ -149,6 +156,14 @@ public class TownMap : MonoBehaviour
                     new Vector2(781.3937f, 10.74151f+4.598501f),
                     new Vector2(781.3937f, -10.74151f+4.698501f),
                     new Vector2(818.6063f, -10.74151f+4.698501f)
+                };
+                break;
+            case TownPlayerState.inItemShop:
+                OutPut = new Vector2[] {
+                    new Vector2(211.6625f, 207.875f),
+                    new Vector2(188.3375f, 207.875f),
+                    new Vector2(188.3375f, 192.125f),
+                    new Vector2(211.6625f, 192.125f)
                 };
                 break;
         }
