@@ -20,6 +20,8 @@ public class TownMap : MonoBehaviour
         inDayCareF1,    //玩家在破壳宝育园一层
         inDayCareF2,    //玩家在破壳宝育园二层
         inItemShop,    //玩家在道具商店
+        inBossClub,    //玩家在头目俱乐部
+
     }
     public TownPlayerState State;
     public TownPlayerState StartState;
@@ -64,6 +66,9 @@ public class TownMap : MonoBehaviour
             case TownPlayerState.inItemShop:
                 OutPut = new Vector3(200.0f, 201.6f, 0);
                 break;
+            case TownPlayerState.inBossClub:
+                OutPut = new Vector3(387.04f, 197.85f, 0);
+                break;
         }
         return OutPut;
     }
@@ -94,6 +99,9 @@ public class TownMap : MonoBehaviour
                 break;
             case TownPlayerState.inItemShop:
                 OutPut = new Vector3(200.0f, 200.12f, -11);
+                break;
+            case TownPlayerState.inBossClub:
+                OutPut = new Vector3(396.44f, 199.98f, -11);
                 break;
         }
         
@@ -164,6 +172,14 @@ public class TownMap : MonoBehaviour
                     new Vector2(188.3375f, 207.875f),
                     new Vector2(188.3375f, 192.125f),
                     new Vector2(211.6625f, 192.125f)
+                };
+                break;
+            case TownPlayerState.inBossClub:
+                OutPut = new Vector2[] {
+                    new Vector2(417.8835f, 210.723f),
+                    new Vector2(382.1165f, 210.723f),
+                    new Vector2(382.1165f, 189.2377f),
+                    new Vector2(417.8835f, 189.2377f)
                 };
                 break;
         }
