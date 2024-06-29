@@ -9,7 +9,15 @@ public class EeveeControler : PlayerControler
     public Skill SandAttack;
     public Skill TestSkill01;
 
-    
+    /// <summary>
+    /// 伊布进化型列表
+    /// </summary>
+    public PlayerControler[] EeveeList;
+
+    /// <summary>
+    /// 伊布的进化型 0仙子伊布 1月亮伊布 2太阳伊布 3水伊布 4火伊布 5电伊布 6冰伊布 7草伊布
+    /// </summary>
+    public int EeveeEvolutionType;
 
     // Start is called before the first frame update
     void Start()
@@ -69,7 +77,23 @@ public class EeveeControler : PlayerControler
     {
         if (((Skill01 != null && Skill01.SkillType == 18) ||(Skill02 != null && Skill02.SkillType == 18) ||(Skill03 != null && Skill03.SkillType == 18 )|| (Skill04 != null && Skill04.SkillType == 18)) &&
             ((playerData.AtkHardWorkAlways + playerData.DefHardWorkAlways + playerData.HPHardWorkAlways + playerData.LuckHardWorkAlways + playerData.MoveSpeHardWorkAlways + playerData.SpAHardWorkAlways + playerData.SpDHardWorkAlways + playerData.SpeHardWorkAlways) >= 30) )
-            { return true; }
+            {
+            if (EeveeEvolutionType + 1 <= EeveeList.Length ) {
+                EvolutionPlayer = EeveeList[EeveeEvolutionType];
+                animator.SetFloat("EvolutionType" , EeveeEvolutionType);
+            }
+
+            return true;
+        }
+        else if ((((playerData.AtkHardWorkAlways + playerData.DefHardWorkAlways + playerData.HPHardWorkAlways + playerData.LuckHardWorkAlways + playerData.MoveSpeHardWorkAlways + playerData.SpAHardWorkAlways + playerData.SpDHardWorkAlways + playerData.SpeHardWorkAlways) >= 30)))
+        {
+            if (EeveeEvolutionType + 1 <= EeveeList.Length)
+            {
+                EvolutionPlayer = EeveeList[EeveeEvolutionType];
+                animator.SetFloat("EeveeType", EeveeEvolutionType);
+            }
+            return true;
+        }
         else{ return false; }
     }
 

@@ -227,6 +227,9 @@ public class PlayerControler : Pokemon
         好胜 = 13,
         恒净之躯 = 14,
         轻金属 = 15,
+        同步 = 16,
+        精神力 = 17,
+
     }
     //当前角色可以获得特性
     public PlayerAbilityList playerAbility01;
