@@ -271,6 +271,8 @@ public class PokemonDataWindowsPanel : MonoBehaviour
             case 13: AbilityText.text = "特性：好胜";  AbilityDescribe.DescribeText = "111"; break;
             case 14: AbilityText.text = "特性：恒净之躯"; AbilityDescribe.DescribeText = "能力降低时，能力的降低值大幅变少。"; break;
             case 15: AbilityText.text = "特性：轻金属"; AbilityDescribe.DescribeText = "111"; break;
+            case 16: AbilityText.text = "特性：同步"; AbilityDescribe.DescribeText = "当处于麻痹，烧伤，中毒状态时，攻击敌人有概率把异常状态传染给敌人。"; break;
+            case 17: AbilityText.text = "特性：精神力"; AbilityDescribe.DescribeText = "111"; break;
 
 
 
