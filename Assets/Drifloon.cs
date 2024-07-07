@@ -43,7 +43,7 @@ public class Drifloon : Empty
             timer += Time.deltaTime;
             if(timer > 0.6f)
             {   //¼ì²âÊÇ·ñ±»¿¨×¡
-                if(!isHit && !IsReflect && (!(Mathf.Abs(currentPosition.x - transform.position.x) > 0.8f && Mathf.Abs(currentPosition.y - transform.position.y) > 0.8f)))
+                if(!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence && !isFearDone && !isHit && !IsReflect && (!(Mathf.Abs(currentPosition.x - transform.position.x) > 0.8f && Mathf.Abs(currentPosition.y - transform.position.y) > 0.8f)))
                 {
                     RaycastHit2D raycastHit2Da = Physics2D.Raycast(transform.position, new Vector2(1, 1), 20f, LayerMask.GetMask("Room"));
                     RaycastHit2D raycastHit2Db = Physics2D.Raycast(transform.position, new Vector2(1, -1), 20f, LayerMask.GetMask("Room"));

@@ -13,6 +13,8 @@ public class Drifblim : Empty
     private Vector3 currentPosition;
     private float timer;
     private bool IsReflect;
+    private float ShadowBallCD;
+    private bool IsShadowBall;
 
     void Start()
     {
@@ -30,6 +32,8 @@ public class Drifblim : Empty
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
         direction = InitialDirection;
+        ShadowBallCD = 0f;
+        IsShadowBall = false;
         IsReflect = true;
     }
 
@@ -44,13 +48,13 @@ public class Drifblim : Empty
             timer += Time.deltaTime;
             if (timer > 0.6f)
             {   //检测是否被卡住
-                if (!isHit && !IsReflect && (!(Mathf.Abs(currentPosition.x - transform.position.x) > 0.6f && Mathf.Abs(currentPosition.y - transform.position.y) > 0.6f)))
+                if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence && !isFearDone && !isHit && !IsReflect && (!(Mathf.Abs(currentPosition.x - transform.position.x) > 0.6f && Mathf.Abs(currentPosition.y - transform.position.y) > 0.6f)))
                 {
                     RaycastHit2D raycastHit2Da = Physics2D.Raycast(transform.position, new Vector2(1, 1), 20f, LayerMask.GetMask("Room"));
                     RaycastHit2D raycastHit2Db = Physics2D.Raycast(transform.position, new Vector2(1, -1), 20f, LayerMask.GetMask("Room"));
                     RaycastHit2D raycastHit2Dc = Physics2D.Raycast(transform.position, new Vector2(-1, 1), 20f, LayerMask.GetMask("Room"));
                     RaycastHit2D raycastHit2Dd = Physics2D.Raycast(transform.position, new Vector2(-1, -1), 20f, LayerMask.GetMask("Room"));
-                    float maxDistance = Mathf.Max(raycastHit2Da.distance, raycastHit2Db.distance, raycastHit2Dc.distance, raycastHit2Dd.distance);
+                    float maxDistance = Mathf.Max(raycastHit2Da.distance, raycastHit2Db.distance, raycastHit2Dc.distance, raycastHit2Dd.distance);//检测斜向的射线距离
                     if (maxDistance == raycastHit2Da.distance)
                     {
                         DrifblimShadowBall();
@@ -101,6 +105,16 @@ public class Drifblim : Empty
                 }
             }
         }
+
+        if (IsShadowBall)
+        {
+            ShadowBallCD += Time.deltaTime;
+            if(ShadowBallCD > 1f)
+            {
+                IsShadowBall = false;
+                ShadowBallCD = 0f;
+            }
+        }//ShadowBallCD
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -152,14 +166,18 @@ public class Drifblim : Empty
         cb.SetAimTag(isEmptyInfatuationDone ? "Empty" : "Player");
         cb.SetType(Type.TypeEnum.Ghost);
         Destroy(boom, 5f);
-    }
+    }//爆炸
 
     void DrifblimShadowBall()
     {
-        var shadowBall = Instantiate(DSB, transform.position, Quaternion.identity).GetComponent<DrifblimShadowBall>();
-        shadowBall.empty = this;
-        shadowBall.direction = -direction;
-    }
+        if (!IsShadowBall && !isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence && !isFearDone)
+        {
+            IsShadowBall = true;
+            var shadowBall = Instantiate(DSB, transform.position, Quaternion.identity).GetComponent<DrifblimShadowBall>();
+            shadowBall.empty = this;
+            shadowBall.direction = -direction;
+        }
+    }//发射ShadowBall
 
     void ChangeAnimationState(string newState)
     {   //动画管理
