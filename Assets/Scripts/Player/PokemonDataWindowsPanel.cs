@@ -273,6 +273,7 @@ public class PokemonDataWindowsPanel : MonoBehaviour
             case 15: AbilityText.text = "特性：轻金属"; AbilityDescribe.DescribeText = "111"; break;
             case 16: AbilityText.text = "特性：同步"; AbilityDescribe.DescribeText = "当处于麻痹，烧伤，中毒状态时，攻击敌人有概率把异常状态传染给敌人。"; break;
             case 17: AbilityText.text = "特性：精神力"; AbilityDescribe.DescribeText = "111"; break;
+            case 18: AbilityText.text = "特性：魔法镜"; AbilityDescribe.DescribeText = "111"; break;
 
 
 
