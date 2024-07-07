@@ -229,6 +229,7 @@ public class PlayerControler : Pokemon
         轻金属 = 15,
         同步 = 16,
         精神力 = 17,
+        魔法镜 = 18,
 
     }
     //当前角色可以获得特性
