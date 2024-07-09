@@ -22,6 +22,7 @@ public class TownMap : MonoBehaviour
         inItemShop,    //玩家在道具商店
         inBossClub,    //玩家在头目俱乐部
         inPoliceStation,    //玩家在冒险家俱乐部
+        inRockClub,    //玩家在滚石俱乐部
 
     }
     public TownPlayerState State;
@@ -73,6 +74,9 @@ public class TownMap : MonoBehaviour
             case TownPlayerState.inPoliceStation:
                 OutPut = new Vector3(605.67f, 197.34f, 0);
                 break;
+            case TownPlayerState.inRockClub:
+                OutPut = new Vector3(789.88f, 200.14f, 0);
+                break;
         }
         return OutPut;
     }
@@ -109,6 +113,9 @@ public class TownMap : MonoBehaviour
                 break;
             case TownPlayerState.inPoliceStation:
                 OutPut = new Vector3(596.44f, 199.98f, -11);
+                break;
+            case TownPlayerState.inRockClub:
+                OutPut = new Vector3(789.48f, 199.98f, -11);
                 break;
         }
         
@@ -195,6 +202,14 @@ public class TownMap : MonoBehaviour
                     new Vector2(582.1165f, 210.723f),
                     new Vector2(582.1165f, 189.2377f),
                     new Vector2(617.8835f, 189.2377f)
+                };
+                break;
+            case TownPlayerState.inRockClub:
+                OutPut = new Vector2[] {
+                    new Vector2(817.8835f, 210.723f),
+                    new Vector2(782.1165f, 210.723f),
+                    new Vector2(782.1165f, 189.2377f),
+                    new Vector2(817.8835f, 189.2377f)
                 };
                 break;
         }

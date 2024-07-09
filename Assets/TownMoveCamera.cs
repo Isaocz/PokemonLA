@@ -73,6 +73,10 @@ public class TownMoveCamera : MonoBehaviour
                     confiner.m_BoundingShape2D = PolygonColliderList[8];
                     cameraBounds = PolygonColliderList[8].gameObject;
                     break;
+                case TownMap.TownPlayerState.inRockClub:
+                    confiner.m_BoundingShape2D = PolygonColliderList[9];
+                    cameraBounds = PolygonColliderList[9].gameObject;
+                    break;
             }
             cinemachineConfiner.m_BoundingShape2D = confiner.m_BoundingShape2D;
         }
