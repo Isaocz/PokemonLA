@@ -1,5 +1,282 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &122995453
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 122995454}
+  - component: {fileID: 122995455}
+  - component: {fileID: 122995456}
+  m_Layer: 0
+  m_Name: Door
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &122995454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122995453}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 21.680014, y: 5.4700003, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7993775389503898868}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &122995455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122995453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f5f68799a4ec1e42b8801d2039f23aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  town: {fileID: 0}
+  ParentHouse: 1
+  TownPosition: {x: 10, y: 21, z: -1}
+  PlayerR: {x: 0, y: -1}
+--- !u!61 &122995456
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122995453}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!1 &495541732
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 495541733}
+  - component: {fileID: 495541735}
+  - component: {fileID: 495541734}
+  m_Layer: 0
+  m_Name: Set2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &495541733
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495541732}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5765312838542164820}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &495541735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495541732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0.43, y: -0.67, z: 0}
+  ChairV: {x: 1, y: 0}
+  JumpDownPosition: {x: 2.7, y: -3, z: 0}
+  JumpDownV: {x: 1, y: 0}
+  isNotChangeSortLayer: 1
+--- !u!61 &495541734
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495541732}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.09599471, y: -2.3453894}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2.8525395, y: 4.3330307}
+  m_EdgeRadius: 0
+--- !u!1 &756607972
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 756607973}
+  - component: {fileID: 756607975}
+  - component: {fileID: 756607974}
+  m_Layer: 0
+  m_Name: Set1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &756607973
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756607972}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5765312838542164820}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &756607975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756607972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0.43, y: 0.75, z: 0}
+  ChairV: {x: 1, y: 0}
+  JumpDownPosition: {x: 0, y: 3, z: 0}
+  JumpDownV: {x: 0, y: 1}
+  isNotChangeSortLayer: 1
+--- !u!61 &756607974
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756607972}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.018710613, y: 1.6391243}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2.767497, y: 2.5481694}
+  m_EdgeRadius: 0
+--- !u!58 &1937282832
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1609169863}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.10994661, y: 0.41615018}
+  serializedVersion: 2
+  m_Radius: 0.499347
+--- !u!1 &1956913430669836043
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7615003105795955537}
+  m_Layer: 11
+  m_Name: NPC
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7615003105795955537
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956913430669836043}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 540417753}
+  m_Father: {fileID: 5765312839685360063}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5765312838291300909
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,7 +383,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312838308733036}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -120,7 +397,7 @@ Transform:
   - {fileID: 5765312839171461922}
   - {fileID: 5765312840025845655}
   - {fileID: 1609169862}
-  m_Father: {fileID: 5765312839685360063}
+  m_Father: {fileID: 7981659460338631690}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5765312838310643848
@@ -334,7 +611,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312838322057009}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.64, z: 0}
+  m_LocalPosition: {x: 0, y: -2.0829992, z: 0}
   m_LocalScale: {x: 1.0127361, y: 1.3707281, z: 0.7310516}
   m_Children: []
   m_Father: {fileID: 5765312839299712121}
@@ -501,14 +778,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312838348659410}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -21.10001, y: 6.37, z: 0}
+  m_LocalPosition: {x: -21.100018, y: 6.3700004, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5765312840090202187}
   - {fileID: 5765312838314321859}
   - {fileID: 5765312839837780281}
   - {fileID: 6057007707409090962}
-  m_Father: {fileID: 5765312839685360063}
+  m_Father: {fileID: 7981659460338631690}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5765312838348659408
@@ -690,7 +967,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312838384606027}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.64, z: 0}
+  m_LocalPosition: {x: 0, y: -2.0829992, z: 0}
   m_LocalScale: {x: 1.0127361, y: 1.3707281, z: 0.7310516}
   m_Children: []
   m_Father: {fileID: 5765312839777351703}
@@ -1020,14 +1297,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312838464472466}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.13, y: 0.15, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.1299642, y: 0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5765312839487481301}
   - {fileID: 5765312838665927520}
   - {fileID: 5765312840162075161}
-  m_Father: {fileID: 5765312839685360063}
+  m_Father: {fileID: 7981659460338631690}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5765312838468827915
@@ -1040,9 +1317,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312838468827914}
   - component: {fileID: 5765312838468827913}
-  m_Layer: 0
+  - component: {fileID: 1718480783}
+  m_Layer: 11
   m_Name: Bartable_0 (2)
-  m_TagString: Untagged
+  m_TagString: Enviroment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1116,6 +1394,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!70 &1718480783
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312838468827915}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.20150457}
+  m_Size: {x: 1.8270009, y: 1.0676534}
+  m_Direction: 1
 --- !u!1 &5765312838487893718
 GameObject:
   m_ObjectHideFlags: 0
@@ -1475,7 +1769,9 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -24.690006, y: -4.94, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 756607973}
+  - {fileID: 495541733}
   m_Father: {fileID: 5765312840170795296}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1519,7 +1815,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: ded3d9e4ff88a744daabaff6b75577ce, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1541,6 +1837,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312838565658335}
   - component: {fileID: 5765312838565658334}
+  - component: {fileID: 1638036993}
+  - component: {fileID: 1638036994}
   m_Layer: 0
   m_Name: BarChairs_2
   m_TagString: Untagged
@@ -1616,6 +1914,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &1638036993
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312838565658328}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.9112673}
+  serializedVersion: 2
+  m_Radius: 0.36
+--- !u!114 &1638036994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312838565658328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: 0.335, z: 0}
+  ChairV: {x: 0, y: 1}
+  JumpDownPosition: {x: 0, y: -2.788, z: 0}
+  JumpDownV: {x: 0, y: -1}
+  isNotChangeSortLayer: 0
 --- !u!1 &5765312838616307141
 GameObject:
   m_ObjectHideFlags: 0
@@ -2056,7 +2390,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312838676372752}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5770006, z: 0}
+  m_LocalPosition: {x: 0, y: -2.02, z: 0}
   m_LocalScale: {x: 0.91146237, y: 1.2336614, z: 0.7310516}
   m_Children: []
   m_Father: {fileID: 5765312839299712121}
@@ -2137,7 +2471,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312838676544863}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2149,7 +2483,7 @@ Transform:
   - {fileID: 5765312839475059874}
   - {fileID: 5765312839299712121}
   - {fileID: 5765312839135294729}
-  m_Father: {fileID: 5765312839685360063}
+  m_Father: {fileID: 7981659460338631690}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5765312838678165671
@@ -2162,9 +2496,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312838678165670}
   - component: {fileID: 5765312838678165669}
-  m_Layer: 0
+  - component: {fileID: 1718480784}
+  m_Layer: 11
   m_Name: Bartable_0 (1)
-  m_TagString: Untagged
+  m_TagString: Enviroment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2238,6 +2573,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!70 &1718480784
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312838678165671}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.20150457}
+  m_Size: {x: 1.8270009, y: 1.0676534}
+  m_Direction: 1
 --- !u!1 &5765312838680739833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2403,7 +2754,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!1 &5765312838755676868
 GameObject:
   m_ObjectHideFlags: 0
@@ -2580,6 +2931,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312838828724445}
   - component: {fileID: 5765312838828724444}
+  - component: {fileID: 1869599297}
+  - component: {fileID: 1869599298}
   m_Layer: 0
   m_Name: BarChairs_4
   m_TagString: Untagged
@@ -2655,6 +3008,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &1869599297
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312838828724446}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.9112673}
+  serializedVersion: 2
+  m_Radius: 0.36
+--- !u!114 &1869599298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312838828724446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: 0.335, z: 0}
+  ChairV: {x: 0, y: 1}
+  JumpDownPosition: {x: 0, y: -2.788, z: 0}
+  JumpDownV: {x: 0, y: -1}
+  isNotChangeSortLayer: 0
 --- !u!1 &5765312838846349998
 GameObject:
   m_ObjectHideFlags: 0
@@ -2665,6 +3054,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312838846349997}
   - component: {fileID: 5765312838846349996}
+  - component: {fileID: 882469771}
+  - component: {fileID: 882469770}
   m_Layer: 0
   m_Name: Bartablechair_0 (1)
   m_TagString: Untagged
@@ -2680,7 +3071,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312838846349998}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.37, y: -7.93, z: 0}
+  m_LocalPosition: {x: 9.37, y: -6.6099997, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5765312839879729795}
@@ -2740,6 +3131,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!58 &882469771
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312838846349998}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.96829605}
+  serializedVersion: 2
+  m_Radius: 0.6
+--- !u!114 &882469770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312838846349998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: -0.56, z: 0}
+  ChairV: {x: -1, y: 0}
+  JumpDownPosition: {x: 2, y: -1.603, z: 0}
+  JumpDownV: {x: 1, y: 0}
+  isNotChangeSortLayer: 1
 --- !u!1 &5765312838858820058
 GameObject:
   m_ObjectHideFlags: 0
@@ -2765,7 +3192,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312838858820058}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5770006, z: 0}
+  m_LocalPosition: {x: 0, y: -2.02, z: 0}
   m_LocalScale: {x: 0.91146237, y: 1.2336614, z: 0.7310516}
   m_Children: []
   m_Father: {fileID: 5765312839475059874}
@@ -2853,7 +3280,6 @@ Transform:
   m_Children:
   - {fileID: 5765312839472701395}
   - {fileID: 5765312838333804266}
-  - {fileID: 540417753}
   m_Father: {fileID: 5765312839250263131}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3189,6 +3615,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312838978881604}
   - component: {fileID: 5765312838978881605}
+  - component: {fileID: 1923117675}
+  - component: {fileID: 1923117674}
   m_Layer: 0
   m_Name: Sofa1
   m_TagString: Untagged
@@ -3250,7 +3678,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 352aff2dc7f7e854887a60ffc30e0c3c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -3261,7 +3689,43 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
+--- !u!58 &1923117675
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312838978881606}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.8660226}
+  serializedVersion: 2
+  m_Radius: 1.192801
+--- !u!114 &1923117674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312838978881606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: -0.624, z: 0}
+  ChairV: {x: 0, y: -1}
+  JumpDownPosition: {x: 2.5, y: -1.2, z: 0}
+  JumpDownV: {x: 1, y: 0}
+  isNotChangeSortLayer: 1
 --- !u!1 &5765312839014264477
 GameObject:
   m_ObjectHideFlags: 0
@@ -3355,6 +3819,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312839015610989}
   - component: {fileID: 5765312839015610988}
+  - component: {fileID: 1774183595}
+  - component: {fileID: 1774183596}
   m_Layer: 0
   m_Name: BarChairs_1
   m_TagString: Untagged
@@ -3430,6 +3896,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &1774183595
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839015610990}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.9112673}
+  serializedVersion: 2
+  m_Radius: 0.36
+--- !u!114 &1774183596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839015610990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: 0.335, z: 0}
+  ChairV: {x: 0, y: 1}
+  JumpDownPosition: {x: 0, y: -2.788, z: 0}
+  JumpDownV: {x: 0, y: -1}
+  isNotChangeSortLayer: 0
 --- !u!1 &5765312839025738543
 GameObject:
   m_ObjectHideFlags: 0
@@ -3608,6 +4110,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312839129377228}
   - component: {fileID: 5765312839129377267}
+  - component: {fileID: 938554196}
+  - component: {fileID: 938554197}
   m_Layer: 0
   m_Name: BarChairs_5
   m_TagString: Untagged
@@ -3623,7 +4127,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312839129377229}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13.150002, y: -2.38, z: 0}
+  m_LocalPosition: {x: 13.150002, y: -1.89, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5765312838655593178}
@@ -3683,6 +4187,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &938554196
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839129377229}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.9112673}
+  serializedVersion: 2
+  m_Radius: 0.36
+--- !u!114 &938554197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839129377229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: 0.335, z: 0}
+  ChairV: {x: 0, y: 1}
+  JumpDownPosition: {x: 3.26, y: -1.96, z: 0}
+  JumpDownV: {x: 1, y: 0}
+  isNotChangeSortLayer: 0
 --- !u!1 &5765312839129851249
 GameObject:
   m_ObjectHideFlags: 0
@@ -3776,6 +4316,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312839135294729}
   - component: {fileID: 5765312839135294728}
+  - component: {fileID: 2030672401}
+  - component: {fileID: 2030672400}
   m_Layer: 0
   m_Name: Bartablechair_0 (5)
   m_TagString: Untagged
@@ -3791,7 +4333,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312839135294730}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.17, y: -1.83, z: 0}
+  m_LocalPosition: {x: 24.17, y: -0.51, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5765312839793785485}
@@ -3851,6 +4393,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!58 &2030672401
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839135294730}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.96829605}
+  serializedVersion: 2
+  m_Radius: 0.6
+--- !u!114 &2030672400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839135294730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: -0.56, z: 0}
+  ChairV: {x: 0, y: -1}
+  JumpDownPosition: {x: -2, y: -1.603, z: 0}
+  JumpDownV: {x: -1, y: 0}
+  isNotChangeSortLayer: 1
 --- !u!1 &5765312839144028732
 GameObject:
   m_ObjectHideFlags: 0
@@ -4445,6 +5023,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312839299712121}
   - component: {fileID: 5765312839299712120}
+  - component: {fileID: 546671233}
+  - component: {fileID: 546671232}
   m_Layer: 0
   m_Name: Bartablechair_0 (3)
   m_TagString: Untagged
@@ -4460,7 +5040,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312839299712122}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14.999997, y: -7.07, z: 0}
+  m_LocalPosition: {x: 14.999997, y: -5.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5765312838322057008}
@@ -4520,6 +5100,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!58 &546671233
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839299712122}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.96829605}
+  serializedVersion: 2
+  m_Radius: 0.6
+--- !u!114 &546671232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839299712122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: -0.56, z: 0}
+  ChairV: {x: 0, y: -1}
+  JumpDownPosition: {x: -2, y: -1.603, z: 0}
+  JumpDownV: {x: -1, y: 0}
+  isNotChangeSortLayer: 1
 --- !u!1 &5765312839341636785
 GameObject:
   m_ObjectHideFlags: 0
@@ -4862,6 +5478,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312839475059874}
   - component: {fileID: 5765312839475059873}
+  - component: {fileID: 401943800}
+  - component: {fileID: 401943799}
   m_Layer: 0
   m_Name: Bartablechair_0 (2)
   m_TagString: Untagged
@@ -4877,7 +5495,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312839475059875}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18.029997, y: -7.86, z: 0}
+  m_LocalPosition: {x: 18.029997, y: -6.54, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5765312840347012242}
@@ -4937,6 +5555,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!58 &401943800
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839475059875}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.96829605}
+  serializedVersion: 2
+  m_Radius: 0.6
+--- !u!114 &401943799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839475059875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: -0.56, z: 0}
+  ChairV: {x: -1, y: 0}
+  JumpDownPosition: {x: 2, y: -1.603, z: 0}
+  JumpDownV: {x: 1, y: 0}
+  isNotChangeSortLayer: 1
 --- !u!1 &5765312839487481302
 GameObject:
   m_ObjectHideFlags: 0
@@ -5059,6 +5713,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312839488127513}
   - component: {fileID: 5765312839488127512}
+  - component: {fileID: 891326647}
+  - component: {fileID: 891326648}
   m_Layer: 0
   m_Name: BarChairs_3
   m_TagString: Untagged
@@ -5134,6 +5790,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &891326647
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839488127514}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.9112673}
+  serializedVersion: 2
+  m_Radius: 0.36
+--- !u!114 &891326648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839488127514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: 0.335, z: 0}
+  ChairV: {x: 0, y: 1}
+  JumpDownPosition: {x: 0, y: -2.788, z: 0}
+  JumpDownV: {x: 0, y: -1}
+  isNotChangeSortLayer: 0
 --- !u!1 &5765312839496748792
 GameObject:
   m_ObjectHideFlags: 0
@@ -5328,7 +6020,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312839597565298}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.880005, y: 1.3599999, z: 0}
+  m_LocalPosition: {x: 3.880005, y: -0.42, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5765312838738974677}
@@ -5386,7 +6078,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!95 &26752514
 Animator:
   serializedVersion: 3
@@ -5499,6 +6191,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312839666933052}
   - component: {fileID: 5765312839666933027}
+  - component: {fileID: 1033073309}
+  - component: {fileID: 1033073311}
   m_Layer: 0
   m_Name: BarChairs_0
   m_TagString: Untagged
@@ -5574,6 +6268,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &1033073309
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839666933053}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.9112673}
+  serializedVersion: 2
+  m_Radius: 0.36
+--- !u!114 &1033073311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839666933053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: 0.335, z: 0}
+  ChairV: {x: 0, y: 1}
+  JumpDownPosition: {x: 0, y: -2.788, z: 0}
+  JumpDownV: {x: 0, y: -1}
+  isNotChangeSortLayer: 0
 --- !u!1 &5765312839685360056
 GameObject:
   m_ObjectHideFlags: 0
@@ -5583,9 +6313,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5765312839685360063}
-  m_Layer: 0
+  - component: {fileID: 1042849017}
+  m_Layer: 11
   m_Name: MilkBarRoom
-  m_TagString: Untagged
+  m_TagString: Enviroment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5599,18 +6330,95 @@ Transform:
   m_GameObject: {fileID: 5765312839685360056}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -52.3, y: 0.67, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 1}
   m_Children:
-  - {fileID: 5765312838308732947}
-  - {fileID: 5765312840365223185}
-  - {fileID: 5765312838348659409}
-  - {fileID: 5765312840170795296}
-  - {fileID: 5765312839835817313}
-  - {fileID: 5765312838464472465}
-  - {fileID: 5765312838676544862}
+  - {fileID: 7981659460338631690}
+  - {fileID: 7615003105795955537}
+  - {fileID: 7993775389503898868}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &1042849017
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839685360056}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 23.6, y: 4.5}
+      - {x: 22.8, y: 4.5}
+      - {x: 22.8, y: 5}
+      - {x: 24.1, y: 5}
+      - {x: 26.9, y: 2.7}
+      - {x: 26.9, y: -7.5}
+      - {x: 25.1, y: -9.08}
+      - {x: -25.1, y: -9.08}
+      - {x: -26.9, y: -7.5}
+      - {x: -26.9, y: 5}
+      - {x: 20.55, y: 5}
+      - {x: 20.55, y: 4.5}
+      - {x: 18.5, y: 4.5}
+      - {x: 18.5, y: -2.05}
+      - {x: 18.3, y: -2.3}
+      - {x: -9, y: -2.3}
+      - {x: -9.25, y: -2.05}
+      - {x: -9.25, y: 0}
+      - {x: -8.85, y: 0.4}
+      - {x: 11, y: 0.4}
+      - {x: 11, y: 2.7}
+      - {x: 8.1, y: 2.7}
+      - {x: 7.8, y: 2.3}
+      - {x: 5.7, y: 2.3}
+      - {x: 5.4, y: 2.65}
+      - {x: -8.3, y: 2.65}
+      - {x: -8.5, y: 2.85}
+      - {x: -8.5, y: 3.2}
+      - {x: -9.9, y: 3.2}
+      - {x: -10.2, y: 3.4}
+      - {x: -10.2, y: 4.5}
+      - {x: -11.55, y: 4.5}
+      - {x: -11.55, y: 4.2}
+      - {x: -11.7, y: 4.05}
+      - {x: -14.25, y: 4.05}
+      - {x: -14.25, y: 3.6}
+      - {x: -19.3, y: 3.6}
+      - {x: -20.4, y: 2.5}
+      - {x: -23.4, y: 2.5}
+      - {x: -23.9, y: 3}
+      - {x: -24.7, y: 3}
+      - {x: -24.7, y: 2.6}
+      - {x: -25.7, y: 2.6}
+      - {x: -25.7, y: 3}
+      - {x: -26.2, y: 3}
+      - {x: -26.7, y: 2.5}
+      - {x: -26.7, y: -7.3}
+      - {x: -25.1, y: -8.88}
+      - {x: 25.1, y: -8.88}
+      - {x: 26.7, y: -7.3}
+      - {x: 26.7, y: 2.5}
+      - {x: 25.9, y: 3.3}
+      - {x: 25.5, y: 3.3}
+      - {x: 25.1, y: 2.9}
+      - {x: 24, y: 2.9}
+      - {x: 23.6, y: 3.3}
 --- !u!1 &5765312839773279091
 GameObject:
   m_ObjectHideFlags: 0
@@ -5719,7 +6527,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312839774418811}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5770006, z: 0}
+  m_LocalPosition: {x: 0, y: -2.02, z: 0}
   m_LocalScale: {x: 0.91146237, y: 1.2336614, z: 0.7310516}
   m_Children: []
   m_Father: {fileID: 5765312839135294729}
@@ -5787,6 +6595,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312839777351703}
   - component: {fileID: 5765312839777351696}
+  - component: {fileID: 1556223859}
+  - component: {fileID: 1556223860}
   m_Layer: 0
   m_Name: Bartablechair_0
   m_TagString: Untagged
@@ -5802,7 +6612,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312839777351697}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.41, y: -8.11, z: 0}
+  m_LocalPosition: {x: 5.41, y: -6.7899995, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5765312838384606026}
@@ -5862,6 +6672,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!58 &1556223859
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839777351697}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.96829605}
+  serializedVersion: 2
+  m_Radius: 0.6
+--- !u!114 &1556223860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312839777351697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: -0.56, z: 0}
+  ChairV: {x: 1, y: 0}
+  JumpDownPosition: {x: -2.224, y: -1.603, z: 0}
+  JumpDownV: {x: -1, y: 0}
+  isNotChangeSortLayer: 1
 --- !u!1 &5765312839783381803
 GameObject:
   m_ObjectHideFlags: 0
@@ -5970,7 +6816,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312839793785486}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.64, z: 0}
+  m_LocalPosition: {x: 0, y: -2.0829992, z: 0}
   m_LocalScale: {x: 1.0127361, y: 1.3707281, z: 0.7310516}
   m_Children: []
   m_Father: {fileID: 5765312839135294729}
@@ -6051,8 +6897,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312839835817314}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.98, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.97998047, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5765312840319559282}
@@ -6068,7 +6914,7 @@ Transform:
   - {fileID: 5765312839129377228}
   - {fileID: 5765312840039757355}
   - {fileID: 5765312840113341999}
-  m_Father: {fileID: 5765312839685360063}
+  m_Father: {fileID: 7981659460338631690}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5765312839837780282
@@ -6262,7 +7108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312839879729820}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.64, z: 0}
+  m_LocalPosition: {x: 0, y: -2.0829992, z: 0}
   m_LocalScale: {x: 1.0127361, y: 1.3707281, z: 0.7310516}
   m_Children: []
   m_Father: {fileID: 5765312838846349997}
@@ -6830,6 +7676,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312840039757355}
   - component: {fileID: 5765312840039757354}
+  - component: {fileID: 993811061}
+  - component: {fileID: 993811062}
   m_Layer: 0
   m_Name: BarChairs_6
   m_TagString: Untagged
@@ -6905,6 +7753,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &993811061
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312840039757348}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.9112673}
+  serializedVersion: 2
+  m_Radius: 0.36
+--- !u!114 &993811062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312840039757348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: 0.335, z: 0}
+  ChairV: {x: -1, y: 0}
+  JumpDownPosition: {x: 1.75, y: -1.513, z: 0}
+  JumpDownV: {x: 1, y: 0}
+  isNotChangeSortLayer: 0
 --- !u!1 &5765312840046349650
 GameObject:
   m_ObjectHideFlags: 0
@@ -7247,6 +8131,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312840113341999}
   - component: {fileID: 5765312840113341998}
+  - component: {fileID: 1909789878}
+  - component: {fileID: 1909789879}
   m_Layer: 0
   m_Name: BarChairs_7
   m_TagString: Untagged
@@ -7322,6 +8208,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &1909789878
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312840113341992}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.9112673}
+  serializedVersion: 2
+  m_Radius: 0.36
+--- !u!114 &1909789879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312840113341992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a530c925cee3a746ad0af145c636c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  State: 0
+  ChairTarget: {fileID: 0}
+  TargetPosition: {x: 0, y: 0.335, z: 0}
+  ChairV: {x: -1, y: 0}
+  JumpDownPosition: {x: 1.75, y: -1.513, z: 0}
+  JumpDownV: {x: 1, y: 0}
+  isNotChangeSortLayer: 0
 --- !u!1 &5765312840139732565
 GameObject:
   m_ObjectHideFlags: 0
@@ -7430,7 +8352,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312840142724571}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5770006, z: 0}
+  m_LocalPosition: {x: 0, y: -2.02, z: 0}
   m_LocalScale: {x: 0.91146237, y: 1.2336614, z: 0.7310516}
   m_Children: []
   m_Father: {fileID: 5765312838846349997}
@@ -7677,7 +8599,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312840170795297}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -7685,7 +8607,7 @@ Transform:
   - {fileID: 5765312838542164820}
   - {fileID: 5765312840291768047}
   - {fileID: 5765312840336950551}
-  m_Father: {fileID: 5765312839685360063}
+  m_Father: {fileID: 7981659460338631690}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5765312840226627036
@@ -7796,7 +8718,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312840228519755}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5770006, z: 0}
+  m_LocalPosition: {x: 0, y: -2.02, z: 0}
   m_LocalScale: {x: 0.91146237, y: 1.2336614, z: 0.7310516}
   m_Children: []
   m_Father: {fileID: 5765312839777351703}
@@ -7864,9 +8786,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312840291768047}
   - component: {fileID: 5765312840291768040}
-  m_Layer: 0
+  - component: {fileID: 1718480787}
+  m_Layer: 11
   m_Name: Table
-  m_TagString: Untagged
+  m_TagString: Enviroment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7925,7 +8848,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 393630feb239c13448f0836335be08ed, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -7936,7 +8859,33 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
+--- !u!61 &1718480787
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312840291768041}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.312235, y: -0.3606996}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 4.0588236, y: 4.4117646}
+    newSize: {x: 4.0588236, y: 4.4117646}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.4343536, y: 3.2022867}
+  m_EdgeRadius: 0
 --- !u!1 &5765312840311336163
 GameObject:
   m_ObjectHideFlags: 0
@@ -7947,9 +8896,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5765312840311336162}
   - component: {fileID: 5765312840311336161}
-  m_Layer: 0
+  - component: {fileID: 1718480785}
+  m_Layer: 11
   m_Name: Bartable_0
-  m_TagString: Untagged
+  m_TagString: Enviroment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8023,6 +8973,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!70 &1718480785
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765312840311336163}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.20150457}
+  m_Size: {x: 1.8270009, y: 1.0676534}
+  m_Direction: 1
 --- !u!1 &5765312840319559244
 GameObject:
   m_ObjectHideFlags: 0
@@ -8216,7 +9182,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312840347012243}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.64, z: 0}
+  m_LocalPosition: {x: 0, y: -2.0829992, z: 0}
   m_LocalScale: {x: 1.0127361, y: 1.3707281, z: 0.7310516}
   m_Children: []
   m_Father: {fileID: 5765312839475059874}
@@ -8299,10 +9265,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765312840365223187}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -19.651009, y: 2.227, z: 0}
+  m_LocalPosition: {x: -19.651043, y: 2.227, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 5765312839685360063}
+  m_Father: {fileID: 7981659460338631690}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5765312840365223186
@@ -8440,6 +9406,43 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &6209270566843677369
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7981659460338631690}
+  m_Layer: 11
+  m_Name: Enviroment
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7981659460338631690
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6209270566843677369}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5765312838308732947}
+  - {fileID: 5765312840365223185}
+  - {fileID: 5765312838348659409}
+  - {fileID: 5765312840170795296}
+  - {fileID: 5765312839835817313}
+  - {fileID: 5765312838464472465}
+  - {fileID: 5765312838676544862}
+  m_Father: {fileID: 5765312839685360063}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8537834281374906147
 GameObject:
   m_ObjectHideFlags: 0
@@ -8523,6 +9526,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &8718288806156326863
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7993775389503898868}
+  m_Layer: 11
+  m_Name: Door
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7993775389503898868
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8718288806156326863}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 122995454}
+  m_Father: {fileID: 5765312839685360063}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4669456806673188469
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8580,6 +9614,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c4b0fc35dc6cd54a8a6535580b697be, type: 3}
+--- !u!1 &1609169863 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4669456805605211570, guid: 0c4b0fc35dc6cd54a8a6535580b697be, type: 3}
+  m_PrefabInstance: {fileID: 4669456806673188469}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1609169862 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4669456805605211571, guid: 0c4b0fc35dc6cd54a8a6535580b697be, type: 3}
@@ -8926,7 +9965,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 5765312838868336427}
+    m_TransformParent: {fileID: 7615003105795955537}
     m_Modifications:
     - target: {fileID: 9156829735384121416, guid: 119243f012bdce64eb5a88330a0c3a29, type: 3}
       propertyPath: m_Name
@@ -8934,15 +9973,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9156829735384121417, guid: 119243f012bdce64eb5a88330a0c3a29, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9156829735384121417, guid: 119243f012bdce64eb5a88330a0c3a29, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.47
+      value: 14.609945
       objectReference: {fileID: 0}
     - target: {fileID: 9156829735384121417, guid: 119243f012bdce64eb5a88330a0c3a29, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: 2.5100002
       objectReference: {fileID: 0}
     - target: {fileID: 9156829735384121417, guid: 119243f012bdce64eb5a88330a0c3a29, type: 3}
       propertyPath: m_LocalPosition.z
