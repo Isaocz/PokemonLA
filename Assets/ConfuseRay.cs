@@ -14,7 +14,15 @@ public class ConfuseRay : Skill
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Empty")
+        if (SkillFrom != 2)
+        {
+            if (collision.tag == "Enviroment" || collision.tag == "Room")
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        if (collision.tag == "Empty")
         {
             Empty target = collision.GetComponent<Empty>();
             if (target != null)
@@ -26,5 +34,6 @@ public class ConfuseRay : Skill
                 Destroy(effect, 1f);
             }
         }
+
     }
 }
