@@ -1278,7 +1278,7 @@ public class PlayerControler : Pokemon
 
     private void DmgShow(int dmg, bool recover, bool crit, bool magic = false)
     {
-        if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage)
+        if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage && FloatingDamage)
         {
             GameObject fd = Instantiate(FloatingDamage, transform.position, Quaternion.identity);
             fd.transform.GetComponent<damageShow>().SetText(dmg, crit, recover, magic, true);
