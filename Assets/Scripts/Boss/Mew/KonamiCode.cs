@@ -7,14 +7,19 @@ public class KonamiCode : MonoBehaviour
     private KeyCode[] triggerKeys = { KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R };
     private bool[] keyPressStatus = new bool[4];
     private bool IsTrigger = false;
+    public bool isWillFly;
     public float triggerRadius = 5f;
     public GameObject MewBossPrefab;
     public GameObject StartEffect;
     public GameObject Barrier;
 
+    private void Start()
+    {
+        isWillFly = false;
+    }
     void Update()
     {
-        if (WithinTriggerRadius() && !AllKeysPressed())
+        if (WithinTriggerRadius() && !AllKeysPressed() && !isWillFly)
         {
             if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill1")))
             {
@@ -73,8 +78,7 @@ public class KonamiCode : MonoBehaviour
 
     void TriggerEffect()
     {
-        // 在这里编写触发效果的代码
-        Debug.Log("触发效果");
+        GetComponent<MewNPC>().isTrigger = true;
         Instantiate(StartEffect, transform.position, Quaternion.identity);
         Timer.Start(this, 5f, () =>
         {
