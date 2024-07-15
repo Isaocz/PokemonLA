@@ -11,29 +11,37 @@ public class SecredFireEmptyVertex : Projectile
     private Rigidbody2D rb;
     private Vector3 direction;
     private float speed;
+    private bool isEffect;
     public float acceleration;
+    public bool startMoving;
+    public GameObject trail;
 
     private void OnEnable()
     {
+        startMoving = false;
+        isEffect = false;
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
         direction = (player.position - transform.position).normalized;
         speed = 8f;
-        StartCoroutine(StartMovingAfterDelay(1.5f));
         ObjectPoolManager.ReturnObjectToPool(gameObject, 6.5f);
-    }
-
-    private IEnumerator StartMovingAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        GameObject ef = Instantiate(Effects, transform.position, Quaternion.identity);
-        Destroy(ef, 1.4f);
-        rb.velocity = direction * speed;
     }
 
     private void FixedUpdate()
     {
-        speed += acceleration * Time.fixedDeltaTime;
+        if (startMoving)
+        {
+            speed += acceleration * Time.fixedDeltaTime;
+            if (!isEffect)
+            {
+                GameObject ef = Instantiate(Effects, transform.position, Quaternion.identity);
+                GameObject trails = Instantiate(trail, transform.position, Quaternion.LookRotation(direction));
+                Destroy(ef, 1.4f);
+                Destroy(trails, 1f);
+                isEffect = true;
+            }
+            rb.velocity = direction * speed;
+        }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

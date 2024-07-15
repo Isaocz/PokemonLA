@@ -310,7 +310,7 @@ public class Mew : Empty
                                         turningPhase = true;
                                         ClearStatusEffects();
                                         EmptyHp = maxHP;
-                                        player.Hp = player.maxHp;
+                                        player.ChangeHp(player.maxHp - player.Hp, 0, 0);
                                         uIHealth.Per = EmptyHp / maxHP;
                                         StartCoroutine(Phase2Start());
                                     }
@@ -328,7 +328,7 @@ public class Mew : Empty
                                 isReset = false;
                                 ClearStatusEffects();
                                 StopAllCoroutines();
-                                player.Hp = (player.Hp < player.maxHp / 2) ? (player.Hp + player.maxHp / 2) : player.maxHp;
+                                player.ChangeHp((player.Hp < player.maxHp / 2) ? (player.Hp + player.maxHp / 2) : (player.maxHp - player.Hp), 0, 0);
                                 EmptyHp = maxHP;
                                 uIHealth.Per = EmptyHp / maxHP;
                                 uIHealth.ChangeHpUp();
@@ -424,7 +424,7 @@ public class Mew : Empty
         //锁血禁用恢复
         if(player.Hp > playerHpinP3)
         {
-            player.Hp = playerHpinP3;
+            player.ChangeHp(playerHpinP3 - player.Hp);
         }
         else if(player.Hp < playerHpinP3)
         {
@@ -1121,29 +1121,34 @@ public class Mew : Empty
                 StartCoroutine(ReleaseScaredFire());
                 IEnumerator ReleaseScaredFire()
                 {
+                    Vector3 PlayerPosition = player.transform.position;
                     if (currentPhase != 3)
                     {
                         int numPoints = 6; // 星上的点数
                         float radius = 15f; // 星的顶点到中心的距离
 
                         Vector3[] starVertices = new Vector3[numPoints];
+                        GameObject[] secredFireSum = new GameObject[200];
 
                         // 创建五角星的顶点坐标
                         for (int i = 0; i < numPoints; i++)
                         {
                             float angle = i * 2f * Mathf.PI / numPoints;
-                            float x = radius * Mathf.Sin(angle) + player.transform.position.x;
-                            float y = radius * Mathf.Cos(angle) + player.transform.position.y;
-                            starVertices[i] = new Vector3(x, y, player.transform.position.z);
+                            float x = radius * Mathf.Sin(angle) + PlayerPosition.x;
+                            float y = radius * Mathf.Cos(angle) + PlayerPosition.y;
+                            starVertices[i] = new Vector3(x, y, PlayerPosition.z);
                         }
                         // 在每个五角星顶点生成SecredFire
                         for (int i = 0; i < numPoints; i++)
                         {
                             GameObject secredFireVertex = ObjectPoolManager.SpawnObject(SecredFireVertexPrefab, starVertices[i], Quaternion.identity);
                             secredFireVertex.GetComponent<SecredFireEmptyVertex>().empty = this;
+                            secredFireSum[i] = secredFireVertex;
+                            yield return null;
                         }
 
                         // 在每条线上均匀分布生成SecredFire
+                        int currentSecredFireIndex = numPoints;
                         for (int i = 0; i < numPoints; i++)
                         {
                             Vector3 startPoint = starVertices[i];
@@ -1157,12 +1162,27 @@ public class Mew : Empty
                             for (int j = 0; j < 12; j++)
                             {
                                 Vector3 secredFirePosition = startPoint + direction * (j * step);
-                                SecredFireEmpty secredFire = ObjectPoolManager.SpawnObject(SecredFirePrefab, secredFirePosition, Quaternion.identity).GetComponent<SecredFireEmpty>();
-                                secredFire.empty = this;
-                                secredFire.Initialize(player.transform.position, 3f);
+                                GameObject secredFire = ObjectPoolManager.SpawnObject(SecredFirePrefab, secredFirePosition, Quaternion.identity);
+                                SecredFireEmpty secredFireEmpty = secredFire.GetComponent<SecredFireEmpty>();
+                                secredFireEmpty.empty = this;
+                                secredFireEmpty.Initialize(PlayerPosition, 2.5f);
+                                secredFireSum[currentSecredFireIndex] = secredFire;
+                                currentSecredFireIndex++;
+                                yield return null;
                             }
                         }
-                        yield return null;
+                        int k = 0;
+                        yield return new WaitForSeconds(1.5f);
+                        for(; k < numPoints; k++)
+                        {
+                            secredFireSum[k].GetComponent<SecredFireEmptyVertex>().startMoving = true;
+                        }
+                        yield return new WaitForSeconds(1.5f);
+                        for(; k < currentSecredFireIndex; k++)
+                        {
+                            secredFireSum[k].GetComponent<SecredFireEmpty>().startMoving = true;
+                        }
+
                     }
                     else
                     {
@@ -1559,6 +1579,7 @@ public class Mew : Empty
             {
                 Vector3 secredFirePosition = startPoint + direction * (j * step);
                 GameObject willowispprefab = Instantiate(WillOWispPrefab, secredFirePosition, Quaternion.identity);
+                willowispprefab.GetComponent<WillOWispEmpty>().isStage = true;
                 yield return null;
             }
         }
