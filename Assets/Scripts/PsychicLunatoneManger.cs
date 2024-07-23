@@ -58,6 +58,8 @@ public class PsychicLunatoneManger : MonoBehaviour
             Timer.Start(this, 1.92f, () => { PL07.gameObject.SetActive(true); });
         }
 
+        Timer.Start(this, 7.0f, () => { Destroy(gameObject); });
+
     }
 
 }

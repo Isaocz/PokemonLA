@@ -18,6 +18,7 @@ public class MewNPC : NPC
     // Update is called once per frame
     void Update()
     {
+        PlayerisinTrigger();
         if (!isWillFly) {
             if (TalkPanel.gameObject.activeSelf == false)
             {
@@ -50,6 +51,7 @@ public class MewNPC : NPC
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        Debug.Log("XXX");
         if (!isWillFly)
         {
             NPCOnTriggerExit2D(other);
@@ -59,5 +61,12 @@ public class MewNPC : NPC
                 SelecrSkillPanel.gameObject.SetActive(false);
             }
         }
+    }
+
+    public override void CloseButton()
+    {
+        base.CloseButton();
+        if (TalkPanel.isTalkPuse) { TalkPanel.isTalkPuse = false; }
+        SelecrSkillPanel.gameObject.SetActive(false);
     }
 }

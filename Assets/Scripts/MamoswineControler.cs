@@ -60,14 +60,14 @@ public class MamoswineControler : PlayerControler
 
         //GetSkillLevel = new int[] {  8, 20, 23, 25, 10000 };
 
-        Invoke("LearDoubleHit", 0.01f);
+        Invoke("LearnDoubleHit", 0.01f);
 
         JudgeEvolutionForEachLevel = NotJudgeEvolution;
     }
 
-    void LearDoubleHitg()
+    void LearnDoubleHit()
     {
-        if (Skill01 != DoubleHit && Skill02 != DoubleHit && Skill03 != DoubleHit && Skill04 != DoubleHit)
+        if ((Skill01 == null || Skill01.SkillIndex != 7 && Skill01.SkillIndex != 8) && (Skill02 == null || Skill02.SkillIndex != 7 && Skill02.SkillIndex != 8) && (Skill03 == null || Skill03.SkillIndex != 7 && Skill03.SkillIndex != 8) && (Skill04 == null || Skill04.SkillIndex != 7 && Skill04.SkillIndex != 8))
         {
             LearnNewSkillByOtherWay(DoubleHit);
         }

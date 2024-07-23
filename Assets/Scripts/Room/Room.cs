@@ -67,10 +67,17 @@ public class Room : MonoBehaviour
     float GraphUpdateTimer;
 
 
+    /// <summary>
+    /// 该房间某个方向是否被该房间内的环境物体遮挡，依次为上下左右，不被阻挡时为false，被阻挡时为true
+    /// 如某个房间右侧门出有湖，使该房间无法再右侧开门，则该房间的isBlockerIn == {false false false true}
+    /// </summary>
+    public bool[] isBlockerIn = new bool[] { false, false, false, false };
 
 
-
-
+    /// <summary>
+    /// 房间的尺寸，玩家仅允许在这个区域内被击退，使用位移技能，敌人的移动也被限制在这个范围，依次为上下左右
+    /// </summary>
+    public float[] RoomSize = new float[] { 7.3f, -7.3f,-12.0f,  12.0f };
 
 
 

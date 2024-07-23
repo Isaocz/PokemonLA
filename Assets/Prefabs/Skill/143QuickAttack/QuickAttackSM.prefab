@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2819523494109405550}
   - component: {fileID: 1319143655878340565}
+  - component: {fileID: 5517909071798510421}
   m_Layer: 0
   m_Name: QuickAttackSM
   m_TagString: Untagged
@@ -46,7 +47,7 @@ MonoBehaviour:
   SkillIndex: 143
   player: {fileID: 0}
   baby: {fileID: 0}
-  ExistenceTime: 1
+  ExistenceTime: 0.15
   Damage: 40
   SpDamage: 0
   IsDamageChangeable: 0
@@ -67,12 +68,27 @@ MonoBehaviour:
   SkillFrom: 1
   SkillTag: 00000000
   isNotDirection: 0
-  DirctionDistance: 0
-  isNotMoveWithPlayer: 1
+  DirctionDistance: 1
+  isNotMoveWithPlayer: 0
   isMultipleDamage: 0
   MultipleDamageCDTime: 0
-  isImmediately: 0
+  isImmediately: 1
   DrainBounsPer: 0
-  dashAmount: 2.5
-  dashSpeed: 30
   PlayerShadow: {fileID: 2029467130777894892, guid: 15782ac3d488ccf4cb5a8b7ce5945a4a, type: 3}
+  MoveSpeed: 3
+--- !u!58 &5517909071798510421
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6792649290836430307}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.47

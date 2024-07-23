@@ -5,21 +5,36 @@ using UnityEngine;
 
 public class Cryogonal : Empty
 {
+    Vector2 Director;
     Vector2 TargetPosition;
-    bool isAtk = false;
-    bool isIdle = true;
-    bool isMove = false;
-    bool Atking = false;
 
-    bool lookL = true;
-    bool lookR = false;
+    bool isInAttackState;
+
+    //bool isAtk = false;
+    //bool isIdle = true;
+    //bool isMove = false;
+    //bool Atking = false;
+
+    //bool lookL = true;
+    //bool lookR = false;
 
     float StateTimer = 0f;
-    public float idleDuration = 2f;
-    public float moveRadius = 5f;
+    //public float idleDuration = 2f;
+    //public float moveRadius = 5f;
 
     public CryogonalIceShard CIS;
     private string currentState;
+
+    Vector2 LastPosition;
+
+
+    int AtkCount = 0;
+
+    float AtkCDTime = 3.0f;
+    float MoveTime = 1.0f;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,7 +53,24 @@ public class Cryogonal : Empty
         //获取刚体目标 动画管理者目标 并让刚体的初始x坐标带入FirstX中
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
+
+        isInAttackState = false;
+        StateTimer = 0;
+        if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(7) == null)
+        {
+            TargetPosition = player.transform.position;
+            if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
+        }
+        else { TargetPosition = InfatuationForRangeRayCastEmpty(7).transform.position; }
+        Director = new Vector2(((TargetPosition - (Vector2)transform.position).normalized.x > 0) ? 1 : -1, ((TargetPosition - (Vector2)transform.position).normalized.y > 0) ? 1 : -1);
+        animator.SetFloat("LookX", Director.x);
+
+        LastPosition = transform.position;
     }
+
+
+
+
 
     // Update is called once per frame
     void Update()
@@ -50,8 +82,6 @@ public class Cryogonal : Empty
             UpdateEmptyChangeHP();
             StateMaterialChange();
         }
-
-        //Debug.Log("idle:" + isIdle + " move:" + isMove + " atk:" + isAtk + " TargetPosition:" + TargetPosition + " StateTimer:" + StateTimer);
     }
 
     private void FixedUpdate()
@@ -62,128 +92,55 @@ public class Cryogonal : Empty
         if (!isDie && !isBorn)
         {
             EmptyBeKnock();
-            if (!isEmptyFrozenDone && !isCanNotMoveWhenParalysis && !isSleepDone && !isSilence && !isFearDone)
+            if (!isEmptyFrozenDone && !isCanNotMoveWhenParalysis && !isSleepDone && !isSilence)
             {
 
                 StateTimer += Time.deltaTime;
-                if (isIdle && !isMove && !isAtk)
-                {   // Idle阶段
-                    if (lookL && !lookR)
-                    { ChangeAnimationState("CryogonalIdleL"); }
-                    else if (!lookL && lookR)
-                    { ChangeAnimationState("CryogonalIdleR");}
-                }
-                
-                if(StateTimer > idleDuration && isIdle || isMove)//移动状态
+                //进入移动模式
+                if (StateTimer >= AtkCDTime && isInAttackState)
                 {
-                    if (isIdle)
-                    {   // 设置Move状态基本参数（移动到的位置、状态布尔值）
-                        SetRandomTargetPosition();
-                        isIdle = false;
-                        isMove = true;
-                        Atking = false;
-                        StateTimer = 0f;
-                    }
-                    if (Vector2.Distance(transform.position, TargetPosition) < 0.1f || StateTimer > 3f)
-                    {   // 转移至下一阶段
-                        isMove = false;
-                        isAtk = true;
-                        StateTimer = 0f;
-                    }
-                    else
+                    isInAttackState = false;
+                    StateTimer = 0;
+                    if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForRangeRayCastEmpty(9) == null)
                     {
-                        transform.position = Vector2.MoveTowards(transform.position, TargetPosition, 0.1f);
-                        if (transform.position.x < TargetPosition.x)
-                        {
-                            // 往右移动
-                            ChangeAnimationState("CryogonalMoveR");
-                            lookR = true;
-                            lookL = false;
-                        }
-                        else if (transform.position.x > TargetPosition.x)
-                        {
-                            // 往左移动
-                            ChangeAnimationState("CryogonalMoveL");
-                            lookL = true;
-                            lookR = false;
-                        }
+                        TargetPosition = player.transform.position;
+                        if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
                     }
+                    else { TargetPosition = InfatuationForRangeRayCastEmpty(9).transform.position; }
+                    Director = (new Vector2(((TargetPosition - (Vector2)transform.position).normalized.x > 0) ? 1 : -1, ((TargetPosition - (Vector2)transform.position).normalized.y > 0) ? 1 : -1));
+                    animator.SetFloat("LookX", Director.x);
+                }
+                //进入攻击模式
+                if (StateTimer >= MoveTime && !isInAttackState)
+                {
+                    AtkCount++;
+                    if (AtkCount > 3) { AtkCount = 0; }
+                    SetAtkCDTime();
+                    StateTimer = 0; isInAttackState = true;
+                    if (!isFearDone) {
+                        animator.SetTrigger("Atk"); }
+                }
+                if (!isInAttackState)
+                {
+                    //Debug.Log(Time.deltaTime);
+                    rigidbody2D.MovePosition(new Vector2(transform.position.x + Director.x * speed * Time.deltaTime * 0.6f * (isFearDone ? -1.3f : 1), transform.position.y + Director.y * speed * Time.deltaTime * 0.6f * (isFearDone ? -1.3f : 1)));
+                    if (isFearDone)
+                    {
+                        animator.SetFloat("LookX", -Director.x);
+                    }
+                }
+                else
+                {
+
                 }
 
-                if(!isMove && isAtk)//攻击状态
-                {
-                    if (transform.position.x < TargetPosition.x)
-                    {
-                        // 往右
-                        ChangeAnimationState("CrygonalAtkR");
-                        lookR = true;
-                        lookL = false;
-                    }
-                    else if (transform.position.x > TargetPosition.x)
-                    {
-                        // 往左
-                        ChangeAnimationState("CrygonalAtkL");
-                        lookL = true;
-                        lookR = false;
-                    }
-                    if (!Atking)
-                    {   // 进行攻击
-                        LunchCIS();
-                        Atking = true;
-                    }
-                    if(StateTimer > 1f)
-                    {   // 转移至Idle阶段
-                        isAtk = false;
-                        isIdle = true;
-                        StateTimer = 0f;
-                    }
-                }
             }
+            animator.SetFloat("Speed", ((Vector2)transform.position - LastPosition).magnitude);
+            LastPosition = transform.position;
         }
     }
 
-    void ChangeAnimationState(string newState)
-    {   //动画管理
-        if (!isHit)
-        {
-            if (currentState == newState)
-                return;
-
-            currentState = newState;
-            animator.Play(newState);
-        }
-    }
-
-    void SetRandomTargetPosition()//设置随机位置
-    {
-        Vector2 newTargetPosition;
-        bool isValidPosition = false;
-
-        while (!isValidPosition)
-        {
-            newTargetPosition = (Vector2)transform.position + Random.insideUnitCircle * moveRadius;
-
-            // 检测newTargetPosition是否与Environment和Room标签的物体相撞
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(newTargetPosition, 0.5f);
-            bool isColliding = false;
-            foreach (Collider2D collider in colliders)
-            {
-                if (collider.CompareTag("Enviroment") || collider.CompareTag("Room"))
-                {
-                    isColliding = true;
-                    break;
-                }
-            }
-
-            // 如果没有相撞,则设置为有效位置
-            if (!isColliding)
-            {
-                isValidPosition = true;
-                TargetPosition = newTargetPosition;
-            }
-        }
-    }
-
+   
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (!isEmptyInfatuationDone && other.transform.tag == ("Player"))
@@ -197,15 +154,53 @@ public class Cryogonal : Empty
         }
     }
 
+    void SetAtkCDTime()
+    {
+        switch (AtkCount)
+        {
+            case 0:
+                AtkCDTime = 4.0f;
+                MoveTime = 1.0f;
+                speed = 3.8f;
+                break;
+            case 1:
+                AtkCDTime = 2.6f;
+                MoveTime = 1.0f;
+                speed = 4.6f;
+                break;
+            case 2:
+                AtkCDTime = 1.2f;
+                MoveTime = 0.7f;
+                speed = 5.4f;
+                break;
+            case 3:
+                AtkCDTime = 0.8f;
+                MoveTime = 0.0f;
+                speed = 0;
+                break;
+        }
+    }
+
     public void LunchCIS()
     {
         if (!isFearDone)
         {
-            for(int i = 0; i < 6; i++)
-            {
-                CryogonalIceShard e1 = Instantiate(CIS, transform.position, Quaternion.Euler(0, 0, i * 60));
-                e1.empty = this;
+            if (!isEmptyConfusionDone) {
+                for (int i = 0; i < 6; i++)
+                {
+                    CryogonalIceShard e1 = Instantiate(CIS, transform.position, Quaternion.Euler(0, 0, ((AtkCount % 2 == 0) ? 0 : 90) + i * 60));
+                    e1.empty = this;
+                } 
             }
+            else
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    CryogonalIceShard e1 = Instantiate(CIS, transform.position, Quaternion.Euler(0, 0, ((AtkCount % 2 == 0) ? 0 : 90) + i * 90));
+                    e1.empty = this;
+                }
+            }
+
         }
     }
 }

@@ -180,7 +180,7 @@ public class CrystalOnixBodyShadow : SubEmptyBody
                 ParentEmpty.EmptyTouchHit(other.gameObject);
             }
         }
-        if (other.transform.tag == ("Enviroment")) { Physics2D.IgnoreCollision(BodyCollider2D, other.collider, true); }
+        if (other.transform.tag == ("Enviroment") || other.gameObject.GetComponent<BossDoorBillboard>()) { Physics2D.IgnoreCollision(BodyCollider2D, other.collider, true); }
     }
 
 

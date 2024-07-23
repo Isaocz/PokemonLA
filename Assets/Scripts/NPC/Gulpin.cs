@@ -13,6 +13,8 @@ public class Gulpin : NPC
     // Update is called once per frame
     void Update()
     {
+        PlayerisinTrigger();
+
         if (TalkPanel.gameObject.activeSelf == false && TalkPanel.transform.parent.GetChild(1).gameObject.activeSelf == false && TalkPanel.transform.parent.GetChild(2).gameObject.activeSelf == false)
         {
 

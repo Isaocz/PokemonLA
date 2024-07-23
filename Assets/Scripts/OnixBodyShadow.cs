@@ -39,6 +39,16 @@ public class OnixBodyShadow : SubEmptyBody
         Shadow = transform.GetChild(0).gameObject;
         Y = Shadow.transform.localPosition.y;
         LastPosition = transform.position;
+
+
+        /*
+        if (AnchorsSubBody != null)
+        {
+            float Dis = AnchorsSubBody.GetComponent<CircleCollider2D>().radius + GetComponent<CircleCollider2D>().radius + 0.1f;
+            AnchorsDisMax = Dis + 0.1f;
+            AnchorsDisMin = Dis - 0.1f;
+        }
+        */
     }
 
     // Update is called once per frame
@@ -129,8 +139,8 @@ public class OnixBodyShadow : SubEmptyBody
     }
 
 
-    public void JumpStart() { MoveFloatTimer = 0; isPositionMove = true; BodySprite.transform.localPosition = Vector3.zero; isDSpriteChange = true; }
-    public void JumpOver() { MoveFloatTimer = 0; isPositionMove = false; BodySprite.transform.localPosition = Vector3.zero ; isDSpriteChange = false; }
+    public void JumpStart() { MoveFloatTimer = 0; isPositionMove = true; BodySprite.transform.localPosition = Vector3.zero; isDSpriteChange = true;rigidbody2D.bodyType = RigidbodyType2D.Kinematic; }
+    public void JumpOver() { MoveFloatTimer = 0; isPositionMove = false; BodySprite.transform.localPosition = Vector3.zero ; isDSpriteChange = false; rigidbody2D.bodyType = RigidbodyType2D.Dynamic; }
 
 
 
@@ -210,7 +220,7 @@ public class OnixBodyShadow : SubEmptyBody
                 ParentEmpty.EmptyTouchHit(other.gameObject);
             }
         }
-        if (other.transform.tag == ("Enviroment")) { Physics2D.IgnoreCollision(BodyCollider2D, other.collider, true); }
+        if (other.transform.tag == ("Enviroment") || other.gameObject.GetComponent<BossDoorBillboard>()) { Physics2D.IgnoreCollision(BodyCollider2D, other.collider, true); }
     }
 
 

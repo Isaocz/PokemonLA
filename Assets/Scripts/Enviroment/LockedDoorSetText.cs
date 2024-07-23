@@ -9,7 +9,7 @@ public class LockedDoorSetText : MonoBehaviour
     public void SetLockedDoorText(MapCreater map , Vector3Int RoomPosition)
     {
 
-        Debug.Log(RoomPosition);
+        //Debug.Log(RoomPosition);
         if(RoomPosition == map.SkillShopRoomPoint)
         {
             transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = "前方是技能商店！";

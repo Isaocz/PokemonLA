@@ -42,7 +42,7 @@ public class TakeDown : Skill
             Instantiate(TackleBlast, target.transform.position, Quaternion.identity );
             HitAndKo(target);
         }
-        if (other.tag == "Enviroment" || other.tag == "Room")
+        if (other.tag == "Enviroment" || other.tag == "Room" || other.gameObject.tag == "Water")
         {
             MoveStop = true;
             ExistenceTime = 0.01f;

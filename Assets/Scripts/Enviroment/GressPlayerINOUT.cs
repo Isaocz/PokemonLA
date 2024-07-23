@@ -9,6 +9,7 @@ public class GressPlayerINOUT : MonoBehaviour
     public GameObject RareCandy;
     public GameObject CCG;
     public GameObject StartDust;
+    public GameObject SharpStone;
     bool isVisit;
     PlayerControler player;
     public bool isDie;
@@ -35,9 +36,10 @@ public class GressPlayerINOUT : MonoBehaviour
             if (Random.Range(0.000f, 1.000f) < (0.1f+(((float)player.LuckPoint))/60) )
             {
                 float JudgeF = Random.Range(0.0f, 1.0f);
-                if (JudgeF <= 1.0f && JudgeF > 0.8f) { LunchNewItem(RareCandy); }
-                else if (JudgeF <= 0.8f && JudgeF > 0.6f) { LunchNewItem(StartDust); }
-                else if (JudgeF <= 0.6f && JudgeF >= 0.4f) { LunchNewItem(CCG); }
+                if (JudgeF <= 1.0f && JudgeF > 0.82f) { LunchNewItem(RareCandy); }
+                else if (JudgeF <= 0.82f && JudgeF > 0.64f) { LunchNewItem(StartDust); }
+                else if (JudgeF <= 0.64f && JudgeF >= 0.46f) { LunchNewItem(CCG); }
+                else if (JudgeF <= 0.46f && JudgeF >= 0.4f) { LunchNewItem(SharpStone); }
                 
             }
         }

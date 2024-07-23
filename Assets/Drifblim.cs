@@ -16,6 +16,7 @@ public class Drifblim : Empty
     private float ShadowBallCD;
     private bool IsShadowBall;
 
+
     void Start()
     {
         EmptyType01 = Type.TypeEnum.Ghost;
@@ -40,7 +41,7 @@ public class Drifblim : Empty
     void Update()
     {
         ResetPlayer();
-        if (!isBorn)
+        if (!isBorn && !isDie)
         {
             EmptyDie();
             UpdateEmptyChangeHP();
@@ -158,15 +159,21 @@ public class Drifblim : Empty
         }
     }
 
+
     public void Explosion()
     {
-        GameObject boom = Instantiate(explosion, transform.position, Quaternion.identity);
-        var cb = boom.transform.GetChild(0).GetComponent<ExeggcuteExploreCB>();
-        cb.SetEmptyInfo(this);
-        cb.SetAimTag(isEmptyInfatuationDone ? "Empty" : "Player");
-        cb.SetType(Type.TypeEnum.Ghost);
-        Destroy(boom, 5f);
-    }//±¨’®
+        if (IsDeadrattle)
+        {
+            GameObject boom = Instantiate(explosion, transform.position, Quaternion.identity);
+            var cb = boom.transform.GetChild(0).GetComponent<ExeggcuteExploreCB>();
+            cb.SetEmptyInfo(this);
+            cb.SetAimTag(isEmptyInfatuationDone ? "Empty" : "Player");
+            cb.SetType(Type.TypeEnum.Normal);
+            cb.Dmage = 250;
+            Destroy(boom, 5f);
+        }
+    }
+
 
     void DrifblimShadowBall()
     {
@@ -175,7 +182,7 @@ public class Drifblim : Empty
             IsShadowBall = true;
             var shadowBall = Instantiate(DSB, transform.position, Quaternion.identity).GetComponent<DrifblimShadowBall>();
             shadowBall.empty = this;
-            shadowBall.direction = -direction;
+            shadowBall.direction = -(Quaternion.AngleAxis((isEmptyConfusionDone ? (Random.Range(-45,45)) : 0) , Vector3.forward ) * direction  );
         }
     }//∑¢…‰ShadowBall
 

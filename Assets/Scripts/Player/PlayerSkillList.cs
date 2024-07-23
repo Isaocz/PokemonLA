@@ -343,7 +343,6 @@ public class PlayerSkillList : MonoBehaviour
                 break;
             }
         }
-        
         if (OnceTimeMewSkillList.Contains(OutPut))
         {
             return RandomGetAMEWSkill();

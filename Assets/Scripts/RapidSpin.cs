@@ -42,9 +42,16 @@ public class RapidSpin : Skill
             player.animator.SetFloat("LookY", d.y);
         }
 
+
+    }
+
+    private void FixedUpdate()
+    {
         if (!MoveStop)
         {
             Vector2 postion = PlayerRigibody.position;
+            //postion.x = Mathf.Clamp(postion.x + Direction.x * 2.5f * player.speed * Time.deltaTime, MapCreater.StaticMap.RRoom[player.NowRoom].transform.position.x + MapCreater.StaticMap.RRoom[player.NowRoom].RoomSize[2], MapCreater.StaticMap.RRoom[player.NowRoom].transform.position.x + MapCreater.StaticMap.RRoom[player.NowRoom].RoomSize[3]);
+            //postion.y = Mathf.Clamp(postion.y + Direction.y * 2.5f * player.speed * Time.deltaTime, MapCreater.StaticMap.RRoom[player.NowRoom].transform.position.y + MapCreater.StaticMap.RRoom[player.NowRoom].RoomSize[1], MapCreater.StaticMap.RRoom[player.NowRoom].transform.position.y + MapCreater.StaticMap.RRoom[player.NowRoom].RoomSize[0]);\
             postion.x += Direction.x * 2.5f * player.speed * Time.deltaTime;
             postion.y += Direction.y * 2.5f * player.speed * Time.deltaTime;
             PlayerRigibody.position = postion;

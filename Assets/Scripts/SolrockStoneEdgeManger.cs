@@ -61,5 +61,8 @@ public class SolrockStoneEdgeManger : MonoBehaviour
             SE08.LaunchNotForce(Quaternion.AngleAxis(315, Vector3.forward) * Vector3.right, 9);
         }
 
+
+        Timer.Start(this, 7.0f, () => { Destroy(gameObject); });
+
     }
 }

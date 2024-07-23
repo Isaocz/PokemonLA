@@ -67,4 +67,20 @@ public class NPC : MonoBehaviour
             TalkPanel.gameObject.SetActive(false);
         }
     }
+
+    protected void PlayerisinTrigger()
+    {
+        if (isInTrriger && (transform.position - playerControler.transform.position).magnitude >= 6.0f)
+        {
+            CloseButton();
+        }
+    }
+
+    public virtual void CloseButton()
+    {
+        ZBottonObj.SetActive(false);
+        isInTrriger = false;
+        TalkPanel.PlayerExit();
+        playerControler.CanNotUseSpaceItem = false;
+    }
 }

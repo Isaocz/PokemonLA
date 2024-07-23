@@ -16,6 +16,7 @@ public class OnixRockTombRock : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+
         if (!isBreak && (other.gameObject.tag == "Empty" || other.gameObject.GetComponent<OnixTailDig>() != null ))
         {
             RockBreak();
@@ -31,14 +32,14 @@ public class OnixRockTombRock : MonoBehaviour
             isBreak = true;
             GetComponent<Animator>().SetTrigger("Break");
             GetComponent<Collider2D>().enabled = false;
+            Debug.Log("XSXS");
             if (isStealthRock) { Instantiate(StealthRock , transform.position , Quaternion.identity);}
         }
     }
 
-
-
     public void DestorySelf()
     {
         Destroy(gameObject);
+        
     }
 }

@@ -26,6 +26,7 @@ public class UIHealthBar : MonoBehaviour
     bool isHpUp = false;
     bool isHpDown = false;
 
+    PlayerControler player;
 
 
     //初始化血条
@@ -45,14 +46,23 @@ public class UIHealthBar : MonoBehaviour
         {
             originalSize = Mask.rectTransform.rect.width;
         }
-        PlayerControler player = FindObjectOfType<PlayerControler>();
+        player = FindObjectOfType<PlayerControler>();
         if(player != null)
         {
-            MaxHpText.text = string.Format("{000}", player.maxHp);
-            NowHpText.text = string.Format("{000}", player.Hp);
-            Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)player.Hp/(float)player.maxHp * originalSize);
+            Timer.Start(this, 0.1f, () =>
+          {
+              MaxHpText.text = string.Format("{000}", player.maxHp);
+              NowHpText.text = string.Format("{000}", player.Hp);
+              Debug.Log("sasa");
+              per = (float)player.Hp / (float)player.maxHp;
+              timer = 1 - per;
+              Debug.Log(player.Hp + "+" + player.maxHp + "+" + per + "+" + timer);
+              Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)player.Hp / (float)player.maxHp * originalSize);
+          }
+            );
         }
     }
+
 
     public void InstanceHpBar()
     {
@@ -66,6 +76,12 @@ public class UIHealthBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isHpUp && !isHpDown )
+        {
+            if (Mask.rectTransform.rect.width/ originalSize > per ) { ChangeHpDown(); }
+            if (Mask.rectTransform.rect.width/ originalSize < per) { ChangeHpUp(); }
+        }
+
         //当调用血量上升函数时血条缓慢增加到指定值，反之缓慢减少到指定值
         if (isHpUp)
         {
@@ -100,6 +116,7 @@ public class UIHealthBar : MonoBehaviour
         if(timer <= 1 - per)
         {
             isHpUp = false;
+            timer = 1 - per;
         }
     }
     public void ChangeHpDown()
@@ -108,6 +125,7 @@ public class UIHealthBar : MonoBehaviour
         if(timer >= 1-per)
         {
             isHpDown = false;
+            timer = 1 - per;
         }
     }
 

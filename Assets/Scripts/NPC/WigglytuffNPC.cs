@@ -16,6 +16,7 @@ public class WigglytuffNPC : NPC
     // Update is called once per frame
     void Update()
     {
+        PlayerisinTrigger();
             if (TalkPanel.gameObject.activeSelf == false)
             {
                 NPCUpdate();
@@ -44,5 +45,18 @@ public class WigglytuffNPC : NPC
             animator.ResetTrigger("Sad");
             animator.ResetTrigger("Jump");
         }
+    }
+
+    public override void CloseButton()
+    {
+        base.CloseButton();
+        if (TalkPanel.isTalkPuse)
+        {
+            TalkPanel.isTalkPuse = false;
+        }
+        animator.SetTrigger("TalkOver");
+        animator.ResetTrigger("Happy");
+        animator.ResetTrigger("Sad");
+        animator.ResetTrigger("Jump");
     }
 }

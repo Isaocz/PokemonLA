@@ -18,6 +18,8 @@ public class WigglytuffTalkPanel : NPCTalkPanel
         BabyIndex = FriendsBall.passiveList.GetARandomItemIndex(0, PassiveItemPool.Baby );
         if (FriendsBall.passiveList.transform.GetChild(BabyIndex).GetComponent<BabyPassiveItem>() == null ) { BabyIndex = 34; }
 
+        Debug.Log(TalkTextList);
+
         TalkTextList = new string[] {
             "哈喽哈喽！这里是实惠培育屋咪！\n我是这里的负责人胖可丁儿老师。",
             "哦哦，原来你就是" + GetPlayerParentName() + "女士的孩子咪\n今天早上我请她来帮忙,她说你正好会路过这里\n拜托你来帮我一下咪！",

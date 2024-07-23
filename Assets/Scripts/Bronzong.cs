@@ -231,7 +231,7 @@ public class Bronzong : Empty
                                 if (GyroBallRidus >= 18.0f) { GyroBallRSpeed -= Time.deltaTime * 180; }
                                 if (GyroBallRSpeed <= 5) {
                                     NowState = State.Idle;
-                                    IdleTimer = 4.0f;
+                                    IdleTimer = 11.0f;
                                     isGyroBallInstan = false;
                                     animator.SetTrigger("GyroBallOver");
                                 }
@@ -244,8 +244,9 @@ public class Bronzong : Empty
                             }
                             break;
                         case State.Idle:
-                            if (isSleepDone) {
+                            if (!isSleepDone) {
                                 IdleTimer -= Time.deltaTime;
+                                Debug.Log(IdleTimer);
                                 if (IdleTimer <= 0 && !isSilence) {
                                     IdleTimer = 0;
                                     BlockCDTimer = BlockCDTime;

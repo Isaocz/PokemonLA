@@ -49,7 +49,8 @@ public class GateWayUP : GateWay
         {
 
             isCameraMove = true;
-            Player.transform.position += new Vector3(0, MoveDistance, 0);
+            //Player.transform.position += new Vector3(0, MoveDistance, 0);
+            Player.transform.position = new Vector3(transform.position.x , Player.transform.position.y + (MoveDistance + MoveDisByPlayerBody(Player.GetComponent<PlayerControler>())), 0);
             PlayerControler p = Player.GetComponent<PlayerControler>();
             if (p != null)
             {

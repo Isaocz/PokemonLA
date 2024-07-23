@@ -8,7 +8,7 @@ public class impoisonEffect : MonoBehaviour
     private float timer;
     private Transform impoison;
     private SpriteRenderer sp;
-    private PlayerControler player;
+    public PlayerControler player;
 
     void Start()
     {
@@ -21,16 +21,16 @@ public class impoisonEffect : MonoBehaviour
     void FixedUpdate()
     {
         timer += Time.deltaTime;
-        transform.position = player.transform.position;
+        transform.position = player.transform.position + Vector3.up * player.SkillOffsetforBodySize[0];
         if (timer > 0 && timer < 0.5f)
         {
-            sp.color = new Color(1f, 1f, 1f, 0.2f + 0.8f * timer / 0.5f);
-            impoison.localScale = new Vector3(1f - 0.75f * timer / 0.5f, 1f - 0.75f * timer / 0.5f, 1f);
+            sp.color = new Color(1f, 1f, 1f, 0.2f + 0.5f * timer / 0.5f);
+            impoison.localScale = new Vector3(1.15f - 0.75f * timer / 0.5f, 1.15f - 0.75f * timer / 0.5f, 1f);
         }
         else
         {
-            sp.color = Color.white;
-            impoison.localScale = new Vector3(0.25f, 0.25f, 1f);
+            sp.color = new Color(1f, 1f, 1f, 0.7f);
+            impoison.localScale = new Vector3(0.4f, 0.4f, 1f);
         }
     }
 }

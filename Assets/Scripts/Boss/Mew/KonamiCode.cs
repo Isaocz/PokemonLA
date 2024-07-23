@@ -52,7 +52,7 @@ public class KonamiCode : MonoBehaviour
             PlayerControler player = collider.GetComponent<PlayerControler>();
             if (player != null)
             {
-                Debug.Log("存在玩家");
+                //Debug.Log("存在玩家");
                 return true;
             }
         }

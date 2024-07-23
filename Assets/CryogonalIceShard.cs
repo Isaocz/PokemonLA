@@ -6,6 +6,10 @@ public class CryogonalIceShard : Projectile
 {
     bool isDestory;
     public float MoveSpeed;
+
+    bool isCanNotMove;
+
+
     private void Awake()
     {
         AwakeProjectile();
@@ -18,7 +22,9 @@ public class CryogonalIceShard : Projectile
     private void Update()
     {
         //this.transform.localScale += new Vector3(Time.deltaTime * 2, 0, 0);
-        transform.Translate(Vector3.right * MoveSpeed * Time.deltaTime);
+        if (!isCanNotMove) {
+            transform.Translate(Vector3.right * MoveSpeed * Time.deltaTime);
+        }
         DestoryByRange(20);
         if (isDestory)
         {
@@ -31,11 +37,33 @@ public class CryogonalIceShard : Projectile
 
     }
 
+    void IceBreak()
+    {
+        isCanNotMove = true;
+        GetComponent<Animator>().SetTrigger("Break");
+        if (transform.childCount > 0) {
+            var Emission1 = transform.GetChild(0).GetComponent<ParticleSystem>().emission;
+            var Main1 = transform.GetChild(0).GetComponent<ParticleSystem>().main;
+            Emission1.enabled = false;
+            Main1.loop = false;
+        }
+        if (transform.childCount > 1)
+        {
+            var Emission2 = transform.GetChild(1).GetComponent<ParticleSystem>().emission;
+            var Main2 = transform.GetChild(1).GetComponent<ParticleSystem>().main;
+            Emission2.enabled = false;
+            Main2.loop = false;
+        }
+
+        transform.DetachChildren();
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
 
         if (other.tag == ("Enviroment") || other.tag == ("Room") || other.tag == ("Player") || (empty.isEmptyInfatuationDone && other.gameObject != empty.gameObject && other.tag == ("Empty")))
         {
+            IceBreak();
             isDestory = true;
             Destroy(rigidbody2D);
 

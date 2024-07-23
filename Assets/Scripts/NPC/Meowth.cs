@@ -48,12 +48,29 @@ public class Meowth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isInTrriger && ZButton.Z.IsZButtonDown && !isHi)
+        if (isInTrriger && (transform.position - playerControler.transform.position).magnitude >= 6.0f)
+        {
+            ZBottonObj.SetActive(false);
+            isInTrriger = false;
+            TalkPanel.PlayerExit();
+            playerControler.CanNotUseSpaceItem = false;
+            isHi = false;
+        }
+        if (isInTrriger && ZButton.Z.IsZButtonDown && !isHi)
         {
             animator.SetTrigger("Hi"); isHi = true;
             TalkPanel.gameObject.SetActive(true);
             playerControler.CanNotUseSpaceItem = true;
         }
+    }
+
+    public void CloseButton()
+    {
+        ZBottonObj.SetActive(false);
+        isInTrriger = false;
+        TalkPanel.PlayerExit();
+        isHi = false;
+        playerControler.CanNotUseSpaceItem = false;
     }
 
     public void GoodBye()

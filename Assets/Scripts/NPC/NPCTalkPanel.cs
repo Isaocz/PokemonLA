@@ -8,7 +8,7 @@ public class NPCTalkPanel : MonoBehaviour
     protected Text TalkInformation;
     public bool isTalkPuse;
     public int TalkIndex;
-    protected string[] TalkTextList;
+    protected string[] TalkTextList = new string[] { };
     public PlayerControler player;
     protected NPC ParentNPC;
 

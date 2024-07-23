@@ -1985,6 +1985,8 @@ public class Pokemon : MonoBehaviour
 
         CopyTarget.isConfusionDef = isConfusionDef;
         CopyTarget.isConfusionDone = isConfusionDone;
+        CopyTarget.isConfusionStart = isConfusionStart;
+        CopyTarget.ConfusionPointFloat = ConfusionPointFloat;
 
         for(int i = 0; i< playerUIState.transform.childCount; i++)
         {
@@ -2102,45 +2104,51 @@ public class Pokemon : MonoBehaviour
                 //    {
                 //      则封印该技能
                 //    }
-                if(Attacker.GetComponent<PlayerControler>()!= null && Attacked.GetComponent<Misdreavus>()!= null)
+                if(Attacker!= null && Attacker.GetComponent<PlayerControler>()!= null && Attacked != null &&  Attacked.GetComponent<Misdreavus>()!= null)
                 {
                     if(Attacked.GetComponent<Misdreavus>().EmptyHp <= 0)
                     {
                         var player = Attacker.GetComponent<PlayerControler>();
-                        if(player.Skill01 != null)
+                        var MisdreavusObj = Attacked.GetComponent<Misdreavus>();
+                        MisdreavusObj.IsDeadrattle = (!MisdreavusObj.isEmptyFrozenDone) && (!MisdreavusObj.isFearDone) && (!MisdreavusObj.isBlindDone);
+                        if (player.Skill01 != null)
                         {
                             var skill01 = player.Skill01.GetComponent<Skill>();
-                            if (skill01 != null && (Type.TypeEnum)skill01.SkillType == SkillType && (skill01.Damage == AtkPower || skill01.SpDamage == SpAPower))
+                            if (skill01 != null && (Type.TypeEnum)skill01.SkillType == SkillType && (skill01.Damage == AtkPower && skill01.SpDamage == SpAPower))
                             {
-                                player.Is01imprison = true;
-                                player.imprisonTime01 = 20f;
+                                MisdreavusObj.ImpoisonSkillIndex = 1;
+                                MisdreavusObj.IsKilledBySkill = true;
+                                Debug.Log(MisdreavusObj.IsDeadrattle + "+" + MisdreavusObj.IsKilledBySkill);
                             }
                         }
                         if (player.Skill02 != null)
                         {
                             var skill02 = player.Skill02.GetComponent<Skill>();
-                            if (skill02 != null && (Type.TypeEnum)skill02.SkillType == SkillType && (skill02.Damage == AtkPower || skill02.SpDamage == SpAPower))
+                            if (skill02 != null && (Type.TypeEnum)skill02.SkillType == SkillType && (skill02.Damage == AtkPower && skill02.SpDamage == SpAPower))
                             {
-                                player.Is02imprison = true;
-                                player.imprisonTime02 = 20f;
+                                MisdreavusObj.ImpoisonSkillIndex = 2;
+                                MisdreavusObj.IsKilledBySkill = true;
+                                Debug.Log(MisdreavusObj.IsDeadrattle + "+" + MisdreavusObj.IsKilledBySkill);
                             }
                         }
                         if(player.Skill03 != null)
                         {
                             var skill03 = player.Skill03.GetComponent<Skill>();
-                            if (skill03 != null && (Type.TypeEnum)skill03.SkillType == SkillType && (skill03.Damage == AtkPower || skill03.SpDamage == SpAPower))
+                            if (skill03 != null && (Type.TypeEnum)skill03.SkillType == SkillType && (skill03.Damage == AtkPower && skill03.SpDamage == SpAPower))
                             {
-                                player.Is03imprison = true;
-                                player.imprisonTime03 = 20f;
+                                MisdreavusObj.ImpoisonSkillIndex = 3;
+                                MisdreavusObj.IsKilledBySkill = true;
+                                Debug.Log(MisdreavusObj.IsDeadrattle + "+" + MisdreavusObj.IsKilledBySkill);
                             }
                         }
                         if (player.Skill04 != null)
                         {
                             var skill04 = player.Skill04.GetComponent<Skill>();
-                            if (skill04 != null && (Type.TypeEnum)skill04.SkillType == SkillType && (skill04.Damage == AtkPower || skill04.SpDamage == SpAPower))
+                            if (skill04 != null && (Type.TypeEnum)skill04.SkillType == SkillType && (skill04.Damage == AtkPower && skill04.SpDamage == SpAPower))
                             {
-                                player.Is04imprison = true;
-                                player.imprisonTime04 = 20f;
+                                MisdreavusObj.ImpoisonSkillIndex = 4;
+                                MisdreavusObj.IsKilledBySkill = true;
+                                Debug.Log(MisdreavusObj.IsDeadrattle + "+" + MisdreavusObj.IsKilledBySkill);
                             }
                         }
                     }
@@ -2194,7 +2202,9 @@ public class Pokemon : MonoBehaviour
     /// </summary>
     public enum SpecialAttackTypes
     {
+        None,
         BodyPress,
+        Psyshock,
     }
 
 
@@ -2208,8 +2218,10 @@ public class Pokemon : MonoBehaviour
     /// <param name="HpUpValue">此次改变不是伤害</param>
     /// <param name="SkillType">此次伤害的属性</param>
     /// <param name="AttackTypes">特殊攻击的种类</param>
-    public static void PokemonHpChange(GameObject Attacker, GameObject Attacked, float AtkPower, float SpAPower, int HpUpValue, Type.TypeEnum SkillType , Pokemon.SpecialAttackTypes AttackTypes)
+    public static void PokemonHpChange(GameObject Attacker, GameObject Attacked, float AtkPower, float SpAPower, int HpUpValue, Type.TypeEnum SkillType , Pokemon.SpecialAttackTypes AttackTypes,bool Critial = false)
     {
+
+        Debug.Log("BodyPress");
         //决定攻击者
         int AttackerATK = 1;
         int AttackerSpA = 1;
@@ -2237,6 +2249,9 @@ public class Pokemon : MonoBehaviour
                     case Pokemon.SpecialAttackTypes.BodyPress:
                         AttackerATK = (int)EmptyAttacker.DefAbilityPoint; AttackerSpA = (int)EmptyAttacker.DefAbilityPoint;
                         break;
+                    default:
+                        AttackerATK = (int)EmptyAttacker.AtkAbilityPoint; AttackerSpA = (int)EmptyAttacker.SpAAbilityPoint;
+                        break;
                 }
                 AttackerLevel = EmptyAttacker.Emptylevel;
                 EmptyTypeAlpha = ((SkillType == EmptyAttacker.EmptyType01) || (SkillType == EmptyAttacker.EmptyType02)) ? 1.5f : 1;
@@ -2248,6 +2263,9 @@ public class Pokemon : MonoBehaviour
                     case Pokemon.SpecialAttackTypes.BodyPress:
                         AttackerATK = PlayerAttacker.DefAbilityPoint; AttackerSpA = PlayerAttacker.DefAbilityPoint;
                         break;
+                    default:
+                        AttackerATK = PlayerAttacker.AtkAbilityPoint; AttackerSpA = PlayerAttacker.SpAAbilityPoint;
+                        break;
                 }
                 AttackerLevel = PlayerAttacker.Level;
                 EmptyTypeAlpha = ((int)SkillType == PlayerAttacker.PlayerType01 ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) * ((int)SkillType == PlayerAttacker.PlayerType02 ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) * (PlayerAttacker.PlayerTeraTypeJOR == 0 ? ((int)SkillType == PlayerAttacker.PlayerTeraType ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) : ((int)SkillType == PlayerAttacker.PlayerTeraTypeJOR ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1));
@@ -2258,6 +2276,9 @@ public class Pokemon : MonoBehaviour
                     case Pokemon.SpecialAttackTypes.BodyPress:
                         AttackerATK = FollowBabyAttacker.BabyDef();
                         AttackerSpA = FollowBabyAttacker.BabyDef();
+                        break;
+                    default:
+                        AttackerATK = FollowBabyAttacker.BabyAtk(); AttackerSpA = FollowBabyAttacker.BabySpA();
                         break;
                 }
                 AttackerLevel = FollowBabyAttacker.BabyLevel(); }
@@ -2276,6 +2297,14 @@ public class Pokemon : MonoBehaviour
 
                 float WeatherDefAlpha = ((Weather.GlobalWeather.isSandstorm ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Rock || EmptyAttacked.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1));
                 float WeatherSpDAlpha = ((Weather.GlobalWeather.isHail ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Ice || EmptyAttacked.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1));
+
+                float AttackedDEF = EmptyAttacked.DefAbilityPoint;
+                float AttackedSPD = EmptyAttacked.SpdAbilityPoint;
+                if (AttackTypes == SpecialAttackTypes.Psyshock) 
+                {
+                    AttackedDEF = EmptyAttacked.SpdAbilityPoint;
+                    AttackedSPD = EmptyAttacked.DefAbilityPoint;
+                }
                 /*float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
                     * ((Weather.GlobalWeather.isRain && SkillType == Type.TypeEnum.Fire) ? 0.5f : 1)
                     * ((Weather.GlobalWeather.isSunny && SkillType == Type.TypeEnum.Water) ? 0.5f : 1)
@@ -2284,10 +2313,11 @@ public class Pokemon : MonoBehaviour
 
                 if (SkillType != Type.TypeEnum.IgnoreType)
                 {
+                    Debug.Log("SpAPower = " + SpAPower + " AttackerSpA = " + AttackerSpA + "EmptyTypeAlpha = " + EmptyTypeAlpha + "AttackerLevel = " + AttackerLevel + "AttackedSPD = " + AttackedSPD);
                     EmptyAttacked.EmptyHpChange(
-                    ((AtkPower == 0) ? 0 : (Mathf.Clamp((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha * TerrainAlpha * AbillityAlpha * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2), 1, 10000))),
-                    ((SpAPower == 0) ? 0 : (Mathf.Clamp((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha * TerrainAlpha * AbillityAlpha * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.SpdAbilityPoint * WeatherSpDAlpha + 2), 1, 10000))),
-                    (int)SkillType);
+                    ((AtkPower == 0) ? 0 : (Mathf.Clamp((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha * TerrainAlpha * AbillityAlpha * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * AttackedDEF * WeatherDefAlpha + 2), 1, 10000))),
+                    ((SpAPower == 0) ? 0 : (Mathf.Clamp((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha * TerrainAlpha * AbillityAlpha * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * AttackedSPD * WeatherSpDAlpha + 2), 1, 10000))),
+                    (int)SkillType, Critial);
 
                     //if (SpAPower == 0){ Debug.Log((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) + " + " + (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2)); }
                     //else if (AtkPower == 0) {  Debug.Log((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha /* WeatherAlpha */ * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) + " + " + (250 * EmptyAttacked.SpdAbilityPoint * WeatherDefAlpha + 2)); }
@@ -2295,12 +2325,69 @@ public class Pokemon : MonoBehaviour
                 }
                 else
                 {
-                    EmptyAttacked.EmptyHpChange(AtkPower, SpAPower, 19);
+                    EmptyAttacked.EmptyHpChange(AtkPower, SpAPower, 19, Critial);
                 }
+                //if（当前被攻击是梦妖
+                //    && 攻击者是玩家
+                //    && 检测玩家的四个技能 某个技能的（ 属性==SkillType ） && （（物攻威力 == AtkPower && 特攻威力 == SpAPower） || （技能的IsDamageChangable == true） ）
+                //    && 梦妖的生命值《= 0 ）
+                //    {
+                //      则封印该技能
+                //    }
+                if (Attacker != null && Attacker.GetComponent<PlayerControler>() != null && Attacked != null && Attacked.GetComponent<Misdreavus>() != null)
+                {
+                    if (Attacked.GetComponent<Misdreavus>().EmptyHp <= 0)
+                    {
+                        var player = Attacker.GetComponent<PlayerControler>();
+                        var MisdreavusObj = Attacked.GetComponent<Misdreavus>();
+                        MisdreavusObj.IsDeadrattle = (!MisdreavusObj.isEmptyFrozenDone) && (!MisdreavusObj.isFearDone) && (!MisdreavusObj.isBlindDone);
+                        if (player.Skill01 != null)
+                        {
+                            var skill01 = player.Skill01.GetComponent<Skill>();
+                            if (skill01 != null && (Type.TypeEnum)skill01.SkillType == SkillType && (skill01.Damage == AtkPower && skill01.SpDamage == SpAPower))
+                            {
+                                MisdreavusObj.ImpoisonSkillIndex = 1;
+                                MisdreavusObj.IsKilledBySkill = true;
+                                Debug.Log(MisdreavusObj.IsDeadrattle + "+" + MisdreavusObj.IsKilledBySkill);
+                            }
+                        }
+                        if (player.Skill02 != null)
+                        {
+                            var skill02 = player.Skill02.GetComponent<Skill>();
+                            if (skill02 != null && (Type.TypeEnum)skill02.SkillType == SkillType && (skill02.Damage == AtkPower && skill02.SpDamage == SpAPower))
+                            {
+                                MisdreavusObj.ImpoisonSkillIndex = 2;
+                                MisdreavusObj.IsKilledBySkill = true;
+                                Debug.Log(MisdreavusObj.IsDeadrattle + "+" + MisdreavusObj.IsKilledBySkill);
+                            }
+                        }
+                        if (player.Skill03 != null)
+                        {
+                            var skill03 = player.Skill03.GetComponent<Skill>();
+                            if (skill03 != null && (Type.TypeEnum)skill03.SkillType == SkillType && (skill03.Damage == AtkPower && skill03.SpDamage == SpAPower))
+                            {
+                                MisdreavusObj.ImpoisonSkillIndex = 3;
+                                MisdreavusObj.IsKilledBySkill = true;
+                                Debug.Log(MisdreavusObj.IsDeadrattle + "+" + MisdreavusObj.IsKilledBySkill);
+                            }
+                        }
+                        if (player.Skill04 != null)
+                        {
+                            var skill04 = player.Skill04.GetComponent<Skill>();
+                            if (skill04 != null && (Type.TypeEnum)skill04.SkillType == SkillType && (skill04.Damage == AtkPower && skill04.SpDamage == SpAPower))
+                            {
+                                MisdreavusObj.ImpoisonSkillIndex = 4;
+                                MisdreavusObj.IsKilledBySkill = true;
+                                Debug.Log(MisdreavusObj.IsDeadrattle + "+" + MisdreavusObj.IsKilledBySkill);
+                            }
+                        }
+                    }
+                }
+
             }
             else
             {
-                EmptyAttacked.EmptyHpChange(-HpUpValue, 0, 19);
+                EmptyAttacked.EmptyHpChange(-HpUpValue, 0, 19, Critial);
             }
         }
         if (Attacked.GetComponent<PlayerControler>() != null)
@@ -2311,7 +2398,7 @@ public class Pokemon : MonoBehaviour
                 PlayerAttacked.ChangeHp(
                          ((AtkPower == 0) ? 0 : (Mathf.Clamp((-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1))),
                          ((SpAPower == 0) ? 0 : (Mathf.Clamp((-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1))),
-                        (int)SkillType);
+                        (int)SkillType, Critial);
                 if (PlayerAttacked.playerData.IsPassiveGetList[120])
                 {
                     Empty EmptyAttacker = Attacker.GetComponent<Empty>();
@@ -2323,7 +2410,7 @@ public class Pokemon : MonoBehaviour
             }
             else
             {
-                PlayerAttacked.ChangeHp(HpUpValue, 0, 19);
+                PlayerAttacked.ChangeHp(HpUpValue, 0, 19, Critial);
             }
         }
         if (Attacked.GetComponent<Substitute>() != null)
