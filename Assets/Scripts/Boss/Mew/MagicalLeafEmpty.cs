@@ -19,6 +19,7 @@ public class MagicalLeafEmpty : Projectile
     private float percentSpeed;
     private bool changeDirection;
     private float setTime;
+    private SpriteRenderer sr;
 
     public float bezierRadio;
     public int changeStages;
@@ -28,6 +29,8 @@ public class MagicalLeafEmpty : Projectile
     {   //初始化
         target = FindObjectOfType<PlayerControler>().transform;
         reticle = Instantiate(Reticle);
+        sr = GetComponent<SpriteRenderer>();
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
         reticle.GetComponent<SpriteRenderer>().color = Color.green;
         reticle.GetComponent<Animator>().Play("emphasizeReticle");
         playerPosition = target.position;
@@ -71,16 +74,21 @@ public class MagicalLeafEmpty : Projectile
             //对象移动到预测点上的逻辑
             changetime -= Time.deltaTime;
             transform.Translate(moveSpeed * Vector3.right * Time.deltaTime);
-            if (changetime < 0f)
+            if (changetime < 0f && changeStages > 0)
             {
-                if(changeStages <= 0)
-                {
-                    ObjectPoolManager.ReturnObjectToPool(gameObject);
-                    Destroy(reticle);
-                }
                 changeStages--;
                 changeDirection = false;
                 changetime = setTime;
+            }
+            else if (changeStages <= 0)
+            {
+                sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, changetime / setTime);
+                if(changetime < 0f)
+                {
+                    changetime = setTime;
+                    ObjectPoolManager.ReturnObjectToPool(gameObject);
+                    Destroy(reticle);
+                }
             }
         }
         else if (percent > 1 && !changeDirection)

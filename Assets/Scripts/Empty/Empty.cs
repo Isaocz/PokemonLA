@@ -387,7 +387,7 @@ public class Empty : Pokemon
                         }
                     }
                 }
-                if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage && GetComponent<SubEmptyBody>() == null)
+                if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage && GetComponent<SubEmptyBody>() == null && FloatingDmg)
                 {
                     GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
                     if (Dmage > SpDmage)
@@ -405,7 +405,7 @@ public class Empty : Pokemon
             else
             {
                 EmptyHp = Mathf.Clamp(EmptyHp - (int)(Dmage + SpDmage), (IsBeFalseSwipe ? 1 : 0), maxHP);
-                if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage)
+                if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage && FloatingDmg)
                 {
                     int allRecover = -(int)(Dmage + SpDmage);
                     GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity);
