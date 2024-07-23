@@ -345,14 +345,15 @@ public class Onix : Empty
                                 //Debug.Log((BodyPressTargetPosition - BodyPressJumpCenter).normalized + OnixBodyTop.rigidbody2D.position + TargetPosition.ToString());
                                 animator.SetTrigger("Jump"); PauseAllPS();
                                 Timer.Start(this, 0.5f, () => { 
-                                    bp = Instantiate(BodyPressCollider, BodyPressJumpCenter, Quaternion.identity, transform);
+                                    bp = Instantiate(BodyPressCollider, SubEmptyBodyList[5].transform.position, Quaternion.identity, transform);
                                     bp.empty = this;
                                 });
                             }
-                            if (bp != null) { bp.transform.position = new Vector3(Mathf.Clamp(transform.position.x, ParentRoom.transform.position.x - 12.5f, ParentRoom.transform.position.x + 12.5f), Mathf.Clamp(transform.position.y, ParentRoom.transform.position.y - 7.2f, ParentRoom.transform.position.y + 7.2f), 0); }
+                            
                             Vector2 d = Quaternion.AngleAxis( (isEmptyConfusionDone ? Random.Range(-45,45) : 0 ) , Vector3.forward) * (BodyPressTargetPosition - BodyPressJumpCenter).normalized;
                             transform.position += new Vector3(Mathf.Clamp((isFearDone ? -1 : 1) * d.x * 20.0f * Time.deltaTime, -10.0f + ParentRoom.transform.position.x, 10.0f + ParentRoom.transform.position.x), Mathf.Clamp((isFearDone ? -1 : 1) * d.y * 20.0f * Time.deltaTime, -4.2f + ParentRoom.transform.position.y, 4.2f + ParentRoom.transform.position.y), 0);
                         }
+                        if (bp != null) {bp.transform.position = new Vector3(Mathf.Clamp(SubEmptyBodyList[5].transform.position.x, ParentRoom.transform.position.x - 12.5f, ParentRoom.transform.position.x + 12.5f), Mathf.Clamp(SubEmptyBodyList[5].transform.position.y, ParentRoom.transform.position.y - 7.2f, ParentRoom.transform.position.y + 7.2f), 0); }
 
 
                         //Debug.Log(Mathf.Cos(BodyPressD * Mathf.Deg2Rad  * (BodyPressFloatTimer * 100 + BodyPressAlphaAngel)) + "+" + BodyPressD * Mathf.Deg2Rad  * (BodyPressFloatTimer * 100 + BodyPressAlphaAngel));
@@ -492,6 +493,9 @@ public class Onix : Empty
     /// </summary>
     void MoveInWall()
     {
+        //“∆∂Ø ±÷ÿ÷√Œﬁµ–◊¥Ã¨£¨∑¿÷π¥Û—“…ﬂŒﬁµ–
+        ResetSubBodyInvincible();
+
         CalibrationPosition();
         int r = (int)Random.Range(0, 16);
         while ( (!ParentRoom.isWallAround[0] && r == 12) || (!ParentRoom.isWallAround[1] && r == 13) || (!ParentRoom.isWallAround[2] && r == 14) || (!ParentRoom.isWallAround[3] && r == 15) ){  r = (int)Random.Range(0, 16); }

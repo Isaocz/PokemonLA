@@ -18,6 +18,22 @@ public class SubEmptyBody : Empty{
     public float NowCursePoint;
     public float NowInfatuationPoint;
 
+    /// <summary>
+    /// 该体节锚定的体节，该体节距离AnchorsSubBody的距离范围在AnchorsDisMax和AnchorsDisMin之间；
+    /// </summary>
+    public SubEmptyBody AnchorsSubBody;
+
+    /// <summary>
+    /// 该体节距离锚定体节AnchorsSubBody的最远距离
+    /// </summary>
+    public float AnchorsDisMax;
+
+    /// <summary>
+    /// 该体节距离锚定体节AnchorsSubBody的最近距离
+    /// </summary>
+    public float AnchorsDisMin;
+
+
 
     // Start is called before the first frame update
     public void SubEmptyBodyStart()
@@ -49,7 +65,36 @@ public class SubEmptyBody : Empty{
         NowBlindPoint = EmptyBlindPoint;
         NowCursePoint = EmptyCursePoint;
         NowInfatuationPoint = EmptyInfatuationPoint;
+
+        if (GetComponent<HingeJoint2D>() && GetComponent<HingeJoint2D>().connectedBody)
+        {
+            AnchorsSubBody = GetComponent<HingeJoint2D>().connectedBody.gameObject.GetComponent<SubEmptyBody>();
+        }
     }
+
+
+
+
+
+    /// <summary>
+    /// 根据锚定体节修正位置
+    /// </summary>
+    public void SetAnchorsPos()
+    {
+        if (AnchorsSubBody != null && ((AnchorsSubBody.transform.position - transform.position).magnitude < AnchorsDisMin || (AnchorsSubBody.transform.position - transform.position).magnitude > AnchorsDisMax))
+        {
+            transform.position = ( new Vector3(
+                Mathf.Clamp(transform.position.x ,
+                Mathf.Min(AnchorsSubBody.transform.position.x + ((transform.position - AnchorsSubBody.transform.position).normalized * AnchorsDisMin).x , AnchorsSubBody.transform.position.x + ((transform.position - AnchorsSubBody.transform.position).normalized * AnchorsDisMax).x),
+                Mathf.Max(AnchorsSubBody.transform.position.x + ((transform.position - AnchorsSubBody.transform.position).normalized * AnchorsDisMin).x, AnchorsSubBody.transform.position.x + ((transform.position - AnchorsSubBody.transform.position).normalized * AnchorsDisMax).x)),
+
+
+                Mathf.Clamp(transform.position.y ,
+                Mathf.Min(AnchorsSubBody.transform.position.y + ((transform.position - AnchorsSubBody.transform.position).normalized * AnchorsDisMin).y , AnchorsSubBody.transform.position.y + ((transform.position - AnchorsSubBody.transform.position).normalized * AnchorsDisMax).y) ,
+                Mathf.Max(AnchorsSubBody.transform.position.y + ((transform.position - AnchorsSubBody.transform.position).normalized * AnchorsDisMin).y, AnchorsSubBody.transform.position.y + ((transform.position - AnchorsSubBody.transform.position).normalized * AnchorsDisMax).y)) ,0 ) );
+        }
+    }
+
 
     // Update is called once per frame
     public void SubEmptyBodyUpdate()
@@ -446,6 +491,7 @@ public class SubEmptyBody : Empty{
 
     public void SubEmptyBodyFixedUpdate()
     {
+        SetAnchorsPos();
         if (!ParentEmpty.isDie && !ParentEmpty.isBorn)
         {
             EmptyBeKnock();

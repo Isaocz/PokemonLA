@@ -5,19 +5,26 @@ using UnityEngine;
 public class PCMap : MonoBehaviour
 {
 
-    GameObject ZBotton;
+    GameObject ZBottonObj;
     bool isInTrriger;
     public PlayerControler player;
     public PCMapTalkPanel TalkPanel;
     // Start is called before the first frame update
     void Start()
     {
-        ZBotton = gameObject.transform.GetChild(0).gameObject;
+        ZBottonObj = gameObject.transform.GetChild(0).gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isInTrriger && player != null && (transform.position - player.transform.position).magnitude >= 6.0f)
+        {
+            ZBottonObj.SetActive(false);
+            isInTrriger = false;
+            TalkPanel.PlayerExit();
+            player.CanNotUseSpaceItem = false;
+        }
         if (isInTrriger && ZButton.Z.IsZButtonDown)
         {
             TalkPanel.gameObject.SetActive(true);
@@ -39,12 +46,19 @@ public class PCMap : MonoBehaviour
         }
     }
 
+    public void CloseButton()
+    {
+        ZBottonObj.SetActive(false);
+        isInTrriger = false;
+        player.CanNotUseSpaceItem = false;
+    }
+
     private void OnTriggerStay2D(Collider2D other)
     {
         if (other.tag == ("Player") && other.GetComponent<PlayerControler>() != null)
         {
             player = other.GetComponent<PlayerControler>();
-            ZBotton.SetActive(true);
+            ZBottonObj.SetActive(true);
             isInTrriger = true;
         }
     }
@@ -52,7 +66,7 @@ public class PCMap : MonoBehaviour
     {
         if (other.tag == ("Player") && isInTrriger && other.GetComponent<PlayerControler>() != null)
         {
-            ZBotton.SetActive(false);
+            ZBottonObj.SetActive(false);
             isInTrriger = false;
             player.CanNotUseSpaceItem = false;
         }

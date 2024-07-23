@@ -28,7 +28,7 @@ public class TPMask : MonoBehaviour
     {
         if (TPStart)
         {
-            GetComponent<Canvas>().sortingOrder = 21;
+            GetComponent<Canvas>().sortingOrder = 100;
             Mask.color += new Color(0, 0, 0, Time.deltaTime);
             Timer += Time.deltaTime;
             if(BlackTime!=0 && Timer >= BlackTime)

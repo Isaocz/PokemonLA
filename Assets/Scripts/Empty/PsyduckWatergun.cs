@@ -19,12 +19,24 @@ public class PsyduckWatergun : Projectile
         DestoryByRange(10);
         if (isDestory)
         {
+
+            if (!transform.GetChild(0).gameObject.activeInHierarchy)
+            {
+                if (transform.GetChild(0).gameObject.GetComponent<ParticleSystem>() && transform.GetChild(1).gameObject.GetComponent<ParticleSystem>())
+                {
+                    transform.GetChild(0).gameObject.SetActive(true);
+                    var e = transform.GetChild(1).GetComponent<ParticleSystem>().emission;
+                    e.enabled = false;
+                }
+            }
             spriteRenderer.material.color = spriteRenderer.material.color - new Color(0, 0, 0, 3f * Time.deltaTime);
             if (spriteRenderer.material.color.a <= 0.1f)
             {
                 Destroy(gameObject);
             }
         }
+
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -34,6 +46,9 @@ public class PsyduckWatergun : Projectile
             isDestory = true;
             Destroy(rigidbody2D);
             float WeatherAlpha = ((Weather.GlobalWeather.isRain) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1) * ((Weather.GlobalWeather.isSunny) ? 0.5f : 1);
+
+
+
 
             if (other.tag == ("Player") && !empty.isEmptyInfatuationDone)
             {

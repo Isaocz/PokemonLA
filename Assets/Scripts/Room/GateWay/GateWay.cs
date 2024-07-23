@@ -30,6 +30,28 @@ public class GateWay : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 根据玩家提醒不同，过门时产生的位移量不同
+    /// </summary>
+    /// <returns></returns>
+    public float MoveDisByPlayerBody( PlayerControler Player )
+    {
+        float OutPut = 0;
+        switch (Player.PlayerBodySize)
+        {
+            case 0: //小体型
+                OutPut = 0;
+                break;
+            case 1: //中体型
+                OutPut = 0.28f;
+                break;
+            case 2: //大体型
+                OutPut = 0.55f;
+                break;
+        }
+        return OutPut;
+    }
+
     public void DoorEnable()
     {
         animator.speed = 0;

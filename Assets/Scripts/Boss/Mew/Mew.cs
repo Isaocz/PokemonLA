@@ -1577,6 +1577,7 @@ public class Mew : Empty
         player.InANewRoom = true;
         player.NewRoomTimer = 0f;
         currentPhase++;
+        MapCreater.StaticMap.RRoom.Add(new Vector3Int(100, 100, 0), newRoom.GetComponent<Room>());
         InitializeSkillList();
 
         Transform mewTransform = newRoom.transform.Find("Empty");

@@ -51,7 +51,8 @@ public class GateWayLeft : GateWay
         if (Player.tag == ("Player") && Player.GetComponent<PlayerControler>() != null)
         {
             isCameraMove = true;
-            Player.transform.position += new Vector3(-MoveDistance, 0, 0);
+            //Player.transform.position += new Vector3(-MoveDistance, 0, 0);
+            Player.transform.position = new Vector3(Player.transform.position.x - (MoveDistance + MoveDisByPlayerBody(Player.GetComponent<PlayerControler>())), transform.position.y, 0);
             PlayerControler p = Player.GetComponent<PlayerControler>();
             if (p != null)
             {

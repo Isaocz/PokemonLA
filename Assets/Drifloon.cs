@@ -13,6 +13,7 @@ public class Drifloon : Empty
     private float timer;
     private bool IsReflect;
 
+
     void Start()
     {
         EmptyType01 = Type.TypeEnum.Ghost;
@@ -31,6 +32,8 @@ public class Drifloon : Empty
         direction = InitialDirection;
         IsReflect = true;
     }
+
+
 
     void Update()
     {
@@ -72,6 +75,7 @@ public class Drifloon : Empty
                 currentPosition = transform.position;
             }
         }
+    
     }
 
     private void FixedUpdate()
@@ -97,6 +101,7 @@ public class Drifloon : Empty
             }
         }
     }
+
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -141,12 +146,15 @@ public class Drifloon : Empty
 
     public void Explosion()
     {
-        GameObject boom = Instantiate(explosion, transform.position, Quaternion.identity);
-        var cb = boom.transform.GetChild(0).GetComponent<ExeggcuteExploreCB>();
-        cb.SetEmptyInfo(this);
-        cb.SetAimTag(isEmptyInfatuationDone ? "Empty" : "Player");
-        cb.SetType(Type.TypeEnum.Ghost);
-        Destroy(boom, 5f);
+        if (IsDeadrattle) {
+            GameObject boom = Instantiate(explosion, transform.position, Quaternion.identity);
+            var cb = boom.transform.GetChild(0).GetComponent<ExeggcuteExploreCB>();
+            cb.SetEmptyInfo(this);
+            cb.SetAimTag(isEmptyInfatuationDone ? "Empty" : "Player");
+            cb.SetType(Type.TypeEnum.Normal);
+            cb.Dmage = 200;
+            Destroy(boom, 5f);
+        }
     }
 
     void ChangeAnimationState(string newState)

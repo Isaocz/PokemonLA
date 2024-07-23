@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class BossDoorBillboard : MonoBehaviour
 {
 
-    GameObject ZBotton;
+    GameObject ZBottonObj;
     Image TalkPanel;
     PlayerControler playerControler;
     bool isInTrriger;
@@ -14,7 +14,7 @@ public class BossDoorBillboard : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ZBotton = gameObject.transform.GetChild(1).gameObject;
+        ZBottonObj = gameObject.transform.GetChild(1).gameObject;
         TalkPanel = gameObject.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Image>();
     }
 
@@ -25,7 +25,7 @@ public class BossDoorBillboard : MonoBehaviour
             if (other.GetComponent<PlayerControler>() != null)
             {
                 playerControler = other.GetComponent<PlayerControler>();
-                ZBotton.SetActive(true);
+                ZBottonObj.SetActive(true);
                 isInTrriger = true;
             }
         }
@@ -34,9 +34,10 @@ public class BossDoorBillboard : MonoBehaviour
     // Update is called once per frame
     private void OnTriggerExit2D(Collider2D other)
     {
+        Debug.Log("XXX");
         if (other.tag == ("Player") && isInTrriger && other.GetComponent<PlayerControler>() != null)
         {
-            ZBotton.SetActive(false);
+            ZBottonObj.SetActive(false);
             isInTrriger = false;
             if (TalkPanel != null)
             {
@@ -49,6 +50,13 @@ public class BossDoorBillboard : MonoBehaviour
 
     void Update()
     {
+        if ((isInTrriger || ZBottonObj.activeInHierarchy) && (transform.position - playerControler.transform.position).magnitude >= 6.0f)
+        {
+            ZBottonObj.SetActive(false);
+            isInTrriger = false;
+            playerControler.CanNotUseSpaceItem = false;
+            TalkPanel.gameObject.SetActive(false);
+        }
         if (isInTrriger && ZButton.Z.IsZButtonDown)
         {
             if (TalkPanel.IsActive())
@@ -62,5 +70,13 @@ public class BossDoorBillboard : MonoBehaviour
                 TalkPanel.gameObject.SetActive(true);
             }
         }
+    }
+
+    public void CloseButton()
+    {
+        ZBottonObj.SetActive(false);
+        isInTrriger = false;
+        playerControler.CanNotUseSpaceItem = false;
+        TalkPanel.gameObject.SetActive(false);
     }
 }

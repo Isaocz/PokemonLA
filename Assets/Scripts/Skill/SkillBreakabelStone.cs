@@ -18,7 +18,8 @@ public class SkillBreakabelStone : MonoBehaviour
         if (!isBreak && other.gameObject.tag != "Enviroment" && other.gameObject.tag != "Room" && other.gameObject.tag != "Item" && other.gameObject.tag != "Spike")
         {
             ColliderCount++;
-            if(ColliderCount >= Random.Range(1, 6))
+            if (other.gameObject.tag == "Player" && other.transform.GetComponent<PlayerControler>() && other.transform.GetComponent<PlayerControler>().PlayerBodySize == 2) { ColliderCount = 7; }
+            if(ColliderCount >= Random.Range(1, 6) || GetComponent<LittleTreeBeKickDown>().isBeKickDown)
             {
                 RockBreak();
             }

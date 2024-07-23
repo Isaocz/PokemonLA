@@ -82,6 +82,6 @@ public class FollowBaby : Baby
 
     public virtual void InANewRoomEvent()
     {
-
+        transform.localPosition = new Vector3(0, 0, 0);
     }
 }

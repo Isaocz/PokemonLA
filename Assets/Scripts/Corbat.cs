@@ -150,7 +150,7 @@ public class Corbat : Empty
                         break;
 
                     case State.PosionMistState:
-                        
+                        //Debug.Log(PosionMistTimer);
                         //³õÊ¼»¯¶¾Îí×´Ì¬
                         if (PosionMistTimer == 0)
                         {

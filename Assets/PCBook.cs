@@ -13,6 +13,7 @@ public class PCBook : NPC
     void Update()
     {
         NPCUpdate();
+        PlayerisinTrigger();
     }
 
 

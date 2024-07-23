@@ -44,7 +44,7 @@ public class DrifblimShadowBall : Projectile
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Player"||collision.tag == "Room" || collision.tag == "Enviroment"|| (empty.isEmptyInfatuationDone && collision.tag == "Empty"))
+        if(collision.tag == "Player"||collision.tag == "Room" || collision.tag == "Enviroment"|| (empty.isEmptyInfatuationDone && collision.tag == "Empty" && collision.gameObject != empty.gameObject ))
         {
             BallBreak();
             if (collision.tag == "Player")
@@ -57,7 +57,7 @@ public class DrifblimShadowBall : Projectile
                     playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                 }
             }
-            else if (empty.isEmptyInfatuationDone && collision.tag == "Empty")
+            else if (empty.isEmptyInfatuationDone && collision.tag == "Empty" && collision.gameObject != empty.gameObject)
             {
                 Empty e = collision.GetComponent<Empty>();
                 Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, 80, 0, Type.TypeEnum.Ghost);

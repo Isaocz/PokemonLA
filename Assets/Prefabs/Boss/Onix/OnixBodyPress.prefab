@@ -14749,6 +14749,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2097289123129183621}
   - component: {fileID: 486106158409354039}
+  - component: {fileID: 211996528377421352}
+  - component: {fileID: 52997088720671737}
   m_Layer: 0
   m_Name: OnixBodyPress
   m_TagString: Untagged
@@ -14791,3 +14793,36 @@ MonoBehaviour:
   BabyLevel: 0
   Dmage: 80
   SpDmage: 0
+  ProType: 0
+--- !u!58 &211996528377421352
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097289123129183618}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.2}
+  serializedVersion: 2
+  m_Radius: 3.8
+--- !u!114 &52997088720671737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097289123129183618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 889d5e064f1c7764481281d163413ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FadeInTime: 0.15
+  FadeOutTime: 0
+  StartDelay: 0.2
+  EmptySkillDuration: 0.4

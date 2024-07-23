@@ -192,6 +192,17 @@ public class Empty : Pokemon
 
 
 
+    /// <summary>
+    /// 敌人死亡时是否可以触发亡语效果，如在死亡时冰冻，畏缩则不可触发；
+    /// </summary>
+    public bool IsDeadrattle
+    {
+        get { return isDeadrattle; }
+        set { isDeadrattle = value; }
+    }
+    bool isDeadrattle;
+
+
     //=============================初始化敌人数据================================
 
     //敌人最初的未经改变的速度
@@ -324,6 +335,12 @@ public class Empty : Pokemon
             }
 
             Type.TypeEnum enumVaue = (Type.TypeEnum)SkillType;
+
+            Debug.Log(name);
+            Debug.Log(player);
+            Debug.Log(player.playerData);
+            Debug.Log(player.playerData.IsPassiveGetList[118]);
+
             Dmage = Dmage * (player.playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
                 * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
                 * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
@@ -370,7 +387,7 @@ public class Empty : Pokemon
                         }
                     }
                 }
-                if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage)
+                if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage && GetComponent<SubEmptyBody>() == null)
                 {
                     GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
                     if (Dmage > SpDmage)
@@ -553,6 +570,7 @@ public class Empty : Pokemon
         //每帧检测一次，当目标血量小于0时销毁目标
         if (EmptyHp <= 0)
         {
+            isDeadrattle = (!isEmptyFrozenDone) && (!isFearDone) && (!isBlindDone);
             FrozenRemove();
             Destroy(rigidbody2D);
             RemoveChild();
@@ -1048,6 +1066,22 @@ public class Empty : Pokemon
         if (isOnixSpeedChange) { SpeedChange(); } else { SpeedRemove01(0); }
 
 
+    }
+
+
+    /// <summary>
+    /// 重置所有体节为非无敌状态
+    /// </summary>
+    public void ResetSubBodyInvincible()
+    {
+        if (SubEmptyBodyList.Count != 0)
+        {
+            for (int i = 0; i < SubEmptyBodyList.Count; i++)
+            {
+                SubEmptyBodyList[i].isSubBodyEmptyInvincible = false;
+                this.Invincible = false;
+            }
+        }
     }
 
     //===================================多身体构造的敌人（三地鼠 ， 大岩蛇等）使用的函数===========================================

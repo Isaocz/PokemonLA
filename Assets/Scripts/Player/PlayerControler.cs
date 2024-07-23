@@ -657,6 +657,7 @@ public class PlayerControler : Pokemon
                         RaycastHit2D SearchER = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.right, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
                         RaycastHit2D SearchEL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.left, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
 
+
                         if ((SearchED.collider != null && (SearchED.transform.tag == "Enviroment" || SearchED.transform.tag == "Room" || SearchED.transform.tag == "Water"))
                             || (SearchEU.collider != null && (SearchEU.transform.tag == "Enviroment" || SearchEU.transform.tag == "Room" || SearchEU.transform.tag == "Water"))
                             || (SearchER.collider != null && (SearchER.transform.tag == "Enviroment" || SearchER.transform.tag == "Room" || SearchER.transform.tag == "Water"))
@@ -664,9 +665,12 @@ public class PlayerControler : Pokemon
                         else
                         {
                             Vector2 position = rigidbody2D.position;
+                            position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.x * 30 + MapCreater.StaticMap.RRoom[NowRoom].RoomSize[2], NowRoom.x * 30 + MapCreater.StaticMap.RRoom[NowRoom].RoomSize[3]);
+                            position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.y * 24 + MapCreater.StaticMap.RRoom[NowRoom].RoomSize[1], NowRoom.y * 24 + MapCreater.StaticMap.RRoom[NowRoom].RoomSize[0]);
+                            /*
                             if (NowRoom != new Vector3Int(100, 100, 0))
                             {
-                                position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 12);
+                                position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.x * 30 - 12 , NowRoom.x * 30 + 12);
                                 position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 7.3f);
                             }
                             else
@@ -674,6 +678,7 @@ public class PlayerControler : Pokemon
                                 position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 41.5f);
                                 position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 33.5f);
                             }
+                            */
                             rigidbody2D.position = position;
                         }
                     }
@@ -791,10 +796,11 @@ public class PlayerControler : Pokemon
                 {
                     if (isSkill01ButtonDown || isSkill02ButtonDown || isSkill03ButtonDown || isSkill04ButtonDown )
                     {
+                        Debug.Log(Is01imprison + "+" + Is02imprison + "+" + Is03imprison + "+" + Is04imprison);
                         switch (Random.Range(0, 4))
                         {
                             case 0:
-                                if (isSkill01CD == false && Skill01 != null && !isSkill && (Skill01.useSkillConditions(this)))
+                                if (isSkill01CD == false && Skill01 != null && !isSkill && (Skill01.useSkillConditions(this)) && !Is01imprison)
                                 {
                                     //当动画进行到第8帧时会发射技能1，并技能1进入CD
                                     animator.SetTrigger("Skill");
@@ -805,7 +811,7 @@ public class PlayerControler : Pokemon
                                 }
                                 break;
                             case 1:
-                                if (isSkill02CD == false && Skill02 != null && !isSkill && (Skill02.useSkillConditions(this)))
+                                if (isSkill02CD == false && Skill02 != null && !isSkill && (Skill02.useSkillConditions(this)) && !Is02imprison)
                                 {
                                     //当动画进行到第8帧时会发射技能2，并技能2进入CD
                                     animator.SetTrigger("Skill");
@@ -816,7 +822,7 @@ public class PlayerControler : Pokemon
                                 }
                                 break;
                             case 2:
-                                if (isSkill03CD == false && Skill02 != null && !isSkill && (Skill02.useSkillConditions(this)))
+                                if (isSkill03CD == false && Skill02 != null && !isSkill && (Skill02.useSkillConditions(this)) && !Is03imprison)
                                 {
                                     //当动画进行到第8帧时会发射技能3，并技能3进入CD
                                     animator.SetTrigger("Skill");
@@ -827,7 +833,7 @@ public class PlayerControler : Pokemon
                                 }
                                 break;
                             case 3:
-                                if (isSkill04CD == false && Skill01 != null && !isSkill && (Skill01.useSkillConditions(this)))
+                                if (isSkill04CD == false && Skill01 != null && !isSkill && (Skill01.useSkillConditions(this)) && !Is04imprison)
                                 {
                                     //当动画进行到第8帧时会发射技能4，并技能4进入CD
                                     animator.SetTrigger("Skill");
@@ -844,7 +850,7 @@ public class PlayerControler : Pokemon
                 {
                     //当按下q键时发射skill01
 
-                    if (isSkill01ButtonDown && isSkill01CD == false && Skill01 != null && !isSkill)
+                    if (isSkill01ButtonDown && isSkill01CD == false && Skill01 != null && !isSkill && !Is01imprison)
                     {
                         if ((Skill01.useSkillConditions(this)))
                         {
@@ -860,7 +866,7 @@ public class PlayerControler : Pokemon
 
                     //当按下w键时发射skill02
 
-                    if (isSkill02ButtonDown && isSkill02CD == false && Skill02 != null && !isSkill)
+                    if (isSkill02ButtonDown && isSkill02CD == false && Skill02 != null && !isSkill && !Is02imprison)
                     {
                         if ((Skill02.useSkillConditions(this)))
                         {
@@ -876,7 +882,7 @@ public class PlayerControler : Pokemon
 
                     //当按下e键时发射skill03
 
-                    if (isSkill03ButtonDown && isSkill03CD == false && Skill03 != null && !isSkill)
+                    if (isSkill03ButtonDown && isSkill03CD == false && Skill03 != null && !isSkill && !Is03imprison)
                     {
                         if ((Skill03.useSkillConditions(this)))
                         {
@@ -892,7 +898,7 @@ public class PlayerControler : Pokemon
 
                     //当按下r键时发射skill04
 
-                    if (isSkill04ButtonDown && isSkill04CD == false && Skill04 != null && !isSkill)
+                    if (isSkill04ButtonDown && isSkill04CD == false && Skill04 != null && !isSkill && !Is04imprison)
                     {
 
                         if ((Skill04.useSkillConditions(this)))
@@ -917,6 +923,7 @@ public class PlayerControler : Pokemon
                     RestoreStrengthAndTeraType();
                     if (ComeInANewRoomEvent != null && !isComeInANewRoomEvent)
                     {
+                        Debug.Log(ComeInANewRoomEvent);
                         ComeInANewRoomEvent(this);
                         isComeInANewRoomEvent = true;
                     }
@@ -925,6 +932,7 @@ public class PlayerControler : Pokemon
                     isSpaceItemCanBeUse = false;
                     if (NewRoomTimer >= 1.2f)
                     {
+                        //Debug.Log(MapCreater.StaticMap.RRoom[NowRoom].RoomSize[0]);
                         isToxicDoneInNewRoom = false;
                         isBornDoneInNewRoom = false;
                         InANewRoom = false;
@@ -933,6 +941,22 @@ public class PlayerControler : Pokemon
                         NewRoomTimer = 0;
                         isSpaceItemCanBeUse = true;
                         CanNotUseSpaceItem = false;
+
+                        Camera MainCamera = CameraAdapt.MainCamera.GetComponent<Camera>();
+                        if (!MapCreater.StaticMap.RRoom.ContainsKey(NowRoom) || 
+                            !(transform.position.x >= (float)NowRoom.x*30.0f-15.0f && transform.position.x <= (float)NowRoom.x * 30.0f + 15.0f && transform.position.y >= (float)NowRoom.y * 24.0f - 12.0f && transform.position.y <= (float)NowRoom.y * 24.0f + 12.0f) ||
+                            !(MainCamera.transform.position.x >= (float)NowRoom.x * 30.0f - 15.0f && MainCamera.transform.position.x <= (float)NowRoom.x * 30.0f + 15.0f && MainCamera.transform.position.y >= (float)NowRoom.y * 24.0f - 12.0f && MainCamera.transform.position.y <= (float)NowRoom.y * 24.0f + 12.0f)
+                            )
+                        {
+                            Vector3Int LastNowRoom = NowRoom;
+                            NowRoom = new Vector3Int((int)Mathf.Round(transform.position.x / 30.0f), (int)Mathf.Round(transform.position.y / 24.0f), 0);
+                            MainCamera.transform.position = new Vector3((float)NowRoom.x *30.0f , (float)NowRoom.y * 24.0f +0.7f , -11.0f);
+                            InANewRoom = true;
+                            NewRoomTimer = 0f;
+                            Debug.Log(NowRoom + "+" + LastNowRoom);
+                            UiMiniMap.Instance.SeeMapOver();
+                            UiMiniMap.Instance.MiniMapMove(LastNowRoom - NowRoom);
+                        }
                     }
                 }
             }
@@ -1742,6 +1766,10 @@ public class PlayerControler : Pokemon
         e.Skill04 = Skill04;
         e.Ex = Ex;
 
+        e.UpdataPassiveItemEvent += UpdataPassiveItemEvent;
+        e.ClearThisRoomEvent += ClearThisRoomEvent;
+        e.ComeInANewRoomEvent += ComeInANewRoomEvent;
+
         e.Money = Money;
         e.Stone = Stone;
         e.Money = Money;
@@ -1891,9 +1919,9 @@ public class PlayerControler : Pokemon
     {
         float OutPut = 0.0f;
         float Skill01CDTime = (Skill01 == null) ? 0 : ((isParalysisDone ? 1.8f : 1.0f) * (Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill01.Damage == 0) && (Skill01.SpDamage == 0)) ?  0.5f : 1.0f));
-        float Skill02CDTime = (Skill02 == null) ? 0 : ((isParalysisDone ? 1.8f : 1.0f) * (Skill02.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill02.Damage == 0) && (Skill02.SpDamage == 0)) ? 0.5f : 1.0f));
-        float Skill03CDTime = (Skill03 == null) ? 0 : ((isParalysisDone ? 1.8f : 1.0f) * (Skill03.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill03.Damage == 0) && (Skill03.SpDamage == 0)) ? 0.5f : 1.0f));
-        float Skill04CDTime = (Skill04 == null) ? 0 : ((isParalysisDone ? 1.8f : 1.0f) * (Skill04.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill04.Damage == 0) && (Skill04.SpDamage == 0)) ? 0.5f : 1.0f));
+        float Skill02CDTime = (Skill02 == null) ? 0 : ((isParalysisDone ? 1.8f : 1.0f) * (Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill02.Damage == 0) && (Skill02.SpDamage == 0)) ? 0.5f : 1.0f));
+        float Skill03CDTime = (Skill03 == null) ? 0 : ((isParalysisDone ? 1.8f : 1.0f) * (Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill03.Damage == 0) && (Skill03.SpDamage == 0)) ? 0.5f : 1.0f));
+        float Skill04CDTime = (Skill04 == null) ? 0 : ((isParalysisDone ? 1.8f : 1.0f) * (Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)) * (((playerData.IsPassiveGetList[116]) && (Skill04.Damage == 0) && (Skill04.SpDamage == 0)) ? 0.5f : 1.0f));
         if (playerData.IsPassiveGetList[62])
         {
             OutPut = (Skill01CDTime + Skill02CDTime + Skill03CDTime + Skill04CDTime) / 4.0f;
@@ -2242,7 +2270,17 @@ public class PlayerControler : Pokemon
     /// </summary>
     public void TPDoit()
     {
-        gameObject.transform.position = new Vector3(30.0f * TpVector3.x, 24.0f * TpVector3.y - 2.0f, 0);
+        Vector3 TPAlpha = new Vector3(0.0f , -2.0f , 0.0f);
+        if (TpVector3 != new Vector3Int(0, 0, 0) && TpVector3 != MapCreater.StaticMap.PCRoomPoint && TpVector3 != MapCreater.StaticMap.StoreRoomPoint && MapCreater.StaticMap.RRoom.ContainsKey(TpVector3)) 
+        {
+            Debug.Log("TP");
+            if (!MapCreater.StaticMap.RRoom[TpVector3].isBlockerIn[0] && MapCreater.StaticMap.RRoom.ContainsKey(TpVector3 + Vector3Int.up) ) {  TPAlpha = new Vector3(0.0f, 7.47f, 0.0f); }
+            else if (!MapCreater.StaticMap.RRoom[TpVector3].isBlockerIn[1] && MapCreater.StaticMap.RRoom.ContainsKey(TpVector3 + Vector3Int.down)) {  TPAlpha = new Vector3(0.0f, -7.45f, 0.0f); }
+            else if(!MapCreater.StaticMap.RRoom[TpVector3].isBlockerIn[2] && MapCreater.StaticMap.RRoom.ContainsKey(TpVector3 + Vector3Int.left)) {  TPAlpha = new Vector3(-12.74f, -0.4f, 0.0f); }
+            else if(!MapCreater.StaticMap.RRoom[TpVector3].isBlockerIn[3] && MapCreater.StaticMap.RRoom.ContainsKey(TpVector3 + Vector3Int.right)) { TPAlpha = new Vector3(12.74f, -0.4f, 0.0f); }
+        }
+
+        gameObject.transform.position = new Vector3(30.0f * TpVector3.x + TPAlpha.x, 24.0f * TpVector3.y + TPAlpha.y, 0);
         GameObject Maincamera = GameObject.FindWithTag("MainCamera");
         Maincamera.transform.position = new Vector3(30.0f * TpVector3.x, 24.0f * TpVector3.y + 0.7f, -10);
         UiMiniMap.Instance.MiniMapMove(new Vector3(NowRoom.x - TpVector3.x, NowRoom.y - TpVector3.y, 0));

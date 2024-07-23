@@ -28,15 +28,15 @@ public class RandomDropItem : MonoBehaviour
         {
             OutPut = Instantiate(MoneyRandom, transform.position, Quaternion.identity, transform);
         }
-        else if (RandomPoint >= 0.25f && RandomPoint < 0.475f)
+        else if (RandomPoint >= 0.25f && RandomPoint < 0.495f)
         {
             OutPut = Instantiate(Stone, transform.position, Quaternion.identity, transform);
         }
-        else if (RandomPoint >= 0.475f && RandomPoint < 0.65f)
+        else if (RandomPoint >= 0.495f && RandomPoint < 0.67f)
         {
             OutPut = Instantiate(PotionRandom, transform.position, Quaternion.identity, transform);
         }
-        else if (RandomPoint >= 0.65f && RandomPoint < 0.75f)
+        else if (RandomPoint >= 0.67f && RandomPoint < 0.75f)
         {
             OutPut = Instantiate(HealRandom, transform.position, Quaternion.identity, transform);
         }

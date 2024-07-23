@@ -7,6 +7,12 @@ public class LittleTreeBeKickDown : MonoBehaviour
     public GameObject PS1;
     public GameObject PS2;
 
+    public bool isBeKickDown
+    {
+        get { return IsBeKickDown; }
+        set { IsBeKickDown = value; }
+    }
+    bool IsBeKickDown;
 
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -16,6 +22,7 @@ public class LittleTreeBeKickDown : MonoBehaviour
             PlayerControler Player = other.gameObject.GetComponent<PlayerControler>();
             if (Player != null && Player.PlayerBodySize == 2)
             {
+                isBeKickDown = true;
                 BekickDown();
             }
         }
@@ -28,6 +35,7 @@ public class LittleTreeBeKickDown : MonoBehaviour
 
     public void BekickDown()
     {
+
         GetComponent<Animator>().SetTrigger("KickDown");
         Instantiate(PS1, transform.position, Quaternion.identity);
         Instantiate(PS2, transform.position, Quaternion.identity);

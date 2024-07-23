@@ -64,7 +64,8 @@ public class Skill : MonoBehaviour
     //表示技能的来源 0表示由学习获得 1表示由技能学习机获得 2表示精通技能
     public int SkillFrom;
 
-    
+
+    public Pokemon.SpecialAttackTypes AttackType;
 
 
     //技能的Tag
@@ -395,18 +396,44 @@ public class Skill : MonoBehaviour
                     int EmptyBeforeHP = target.EmptyHp;
                     if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
                     {
-                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f), 0, (Type.TypeEnum)SkillType);
+                        if (AttackType == Pokemon.SpecialAttackTypes.None)
+                        {
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f), 0, (Type.TypeEnum)SkillType);
+                        }
+                        else
+                        {
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f), 0, (Type.TypeEnum)SkillType, AttackType);
+
+                        }
                     }
                     else
                     {
-                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * 1.5f * (Mathf.Pow(1.2f, CTDamage)) * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1 * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f)), 0, (Type.TypeEnum)SkillType, true);
+                        if (AttackType == Pokemon.SpecialAttackTypes.None)
+                        {
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * 1.5f * (Mathf.Pow(1.2f, CTDamage)) * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1 * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f)), 0, (Type.TypeEnum)SkillType, true);
+                        }
+                        else
+                        {
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage * 1.5f * (Mathf.Pow(1.2f, CTDamage)) * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1 * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f)), 0, (Type.TypeEnum)SkillType, AttackType, true);
+
+                        }
                         GetCTEffect(target);
                     }
-                    if (target.Abillity == Empty.EmptyAbillity.RoughSkin && _mTool.ContainsSkillTag(SkillTag, SkillTagEnum.接触类)) { Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHP - target.EmptyHp) / 4, 1, 10000), 0, 0, Type.TypeEnum.IgnoreType); }
+                    if (target.Abillity == Empty.EmptyAbillity.RoughSkin && _mTool.ContainsSkillTag(SkillTag, SkillTagEnum.接触类)) {
+                        Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHP - target.EmptyHp) / 4, 1, 10000), 0, 0, Type.TypeEnum.IgnoreType); 
+                    }
                 }
                 else if (baby != null)
                 {
-                    Pokemon.PokemonHpChange(baby.gameObject, target.gameObject, 0, SpDamage * 1.5f, 0, (Type.TypeEnum)SkillType);
+                    if (AttackType == Pokemon.SpecialAttackTypes.None)
+                    {
+                        Pokemon.PokemonHpChange(baby.gameObject, target.gameObject, 0, SpDamage * 1.5f, 0, (Type.TypeEnum)SkillType);
+                    }
+                    else
+                    {
+                        Pokemon.PokemonHpChange(baby.gameObject, target.gameObject, 0, SpDamage * 1.5f, 0, (Type.TypeEnum)SkillType, AttackType);
+
+                    }
                     Debug.Log(baby);
                 }
 
@@ -421,23 +448,48 @@ public class Skill : MonoBehaviour
                     if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
                     {
 
-                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f), 0, 0, (Type.TypeEnum)SkillType);
+                        if (AttackType == Pokemon.SpecialAttackTypes.None)
+                        {
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f), 0, 0, (Type.TypeEnum)SkillType);
+                        }
+                        else
+                        {
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f), 0, 0, (Type.TypeEnum)SkillType, AttackType);
+
+                        }
                         //Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? ((target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1))) + 2, 0, SkillType);
 
                     }
                     else
                     {
+                        if (AttackType == Pokemon.SpecialAttackTypes.None)
+                        {
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * 1.5f * (Mathf.Pow(1.2f, CTDamage) * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f)), 0, 0, (Type.TypeEnum)SkillType, true);
+                        }
+                        else
+                        {
+                            Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * 1.5f * (Mathf.Pow(1.2f, CTDamage) * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f)), 0, 0, (Type.TypeEnum)SkillType, AttackType, true);
 
-                        Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage * 1.5f * (Mathf.Pow(1.2f, CTDamage) * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f)), 0, 0, (Type.TypeEnum)SkillType, true);
+                        }
                         GetCTEffect(target);
                         //Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? (( target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1 ) : 1)) ) + 2, 0, SkillType);
 
                     }
-                    if (target.Abillity == Empty.EmptyAbillity.RoughSkin && _mTool.ContainsSkillTag(SkillTag, SkillTagEnum.接触类)) { Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHP - target.EmptyHp) / 4 , 1 , 10000), 0, 0, Type.TypeEnum.IgnoreType); }
+                    if (target.Abillity == Empty.EmptyAbillity.RoughSkin && _mTool.ContainsSkillTag(SkillTag, SkillTagEnum.接触类)) {
+                        Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHP - target.EmptyHp) / 4 , 1 , 10000), 0, 0, Type.TypeEnum.IgnoreType); 
+                    }
                 }
                 else if (baby != null)
                 {
-                    Pokemon.PokemonHpChange(baby.gameObject, target.gameObject, Damage, 0, 0, (Type.TypeEnum)SkillType);
+                    if (AttackType == Pokemon.SpecialAttackTypes.None)
+                    {
+                        Pokemon.PokemonHpChange(baby.gameObject, target.gameObject, Damage, 0, 0, (Type.TypeEnum)SkillType);
+                    }
+                    else
+                    {
+                        Pokemon.PokemonHpChange(baby.gameObject, target.gameObject, Damage, 0, 0, (Type.TypeEnum)SkillType , AttackType);
+
+                    }
                     Debug.Log(baby);
                 }
             }

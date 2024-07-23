@@ -464,6 +464,11 @@ public class CrystalOnix : Empty
     /// </summary>
     void MoveInWall()
     {
+
+        //移动时重置无敌状态，防止大岩蛇无敌
+        ResetSubBodyInvincible();
+
+
         CalibrationPosition();
         int r = (int)Random.Range(0, 16);
         while ((!ParentRoom.isWallAround[0] && r == 12) || (!ParentRoom.isWallAround[1] && r == 13) || (!ParentRoom.isWallAround[2] && r == 14) || (!ParentRoom.isWallAround[3] && r == 15)) { r = (int)Random.Range(0, 16); }

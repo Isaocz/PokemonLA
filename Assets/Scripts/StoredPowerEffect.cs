@@ -31,7 +31,13 @@ public class StoredPowerEffect : Skill
         if (!isCanNotMove) {
             timer += 3 * Time.deltaTime;
             moveSpeed = Mathf.Exp(timer);
-            transform.position += ((te.isTEDone)?0: moveSpeed) * targetPos * Time.deltaTime;
+            if (SkillFrom == 2) {
+                transform.position += ((te.isTEDone) ? 0 : moveSpeed) * targetPos * Time.deltaTime;
+            }
+            else
+            {
+                transform.position += (moveSpeed) * targetPos * Time.deltaTime;
+            }
             if (timer >= 4f)
             {
                 isCanNotMove = true;

@@ -46,7 +46,7 @@ public class WeakTreeCut : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if(other.tag == "Player" && other.GetComponent<PlayerControler>() != null)
+        if (other.tag == "Player" && other.GetComponent<PlayerControler>() != null && this.isActiveAndEnabled)
         {
             ZButtonObj.SetActive(true);
             p = other.GetComponent<PlayerControler>();
@@ -56,7 +56,7 @@ public class WeakTreeCut : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == "Player" && other.GetComponent<PlayerControler>() != null)
+        if (other.tag == "Player" && other.GetComponent<PlayerControler>() != null && this.isActiveAndEnabled)
         {
             ZButtonObj.SetActive(false);
         }

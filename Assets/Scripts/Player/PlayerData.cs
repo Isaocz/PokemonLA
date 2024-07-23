@@ -151,7 +151,10 @@ public class PlayerData : MonoBehaviour
 
 
 
-
+    private void Update()
+    {
+        if (player == null) { player = GetComponent<PlayerControler>(); }
+    }
 
 
 
@@ -1072,15 +1075,24 @@ public class PlayerData : MonoBehaviour
     //===================================================æ—…‰∂µ√±=================================================
     void DecidueyeHood(PlayerControler playerInput)
     {
-        GameObject EmptyFile = MapCreater.StaticMap.RRoom[player.NowRoom].transform.GetChild(3).gameObject;
-        for (int i = 0; i < EmptyFile.transform.childCount; i ++)
-        {
-            Empty e = EmptyFile.transform.GetChild(i).GetComponent<Empty>();
-            if (e != null)
-            {
-                e.Blind(5.0f, 5.0f);
+
+        GameObject EmptyFile = null;
+        if (MapCreater.StaticMap.RRoom.ContainsKey(playerInput.NowRoom) && MapCreater.StaticMap.RRoom[playerInput.NowRoom].transform.childCount > 3) {
+            EmptyFile = MapCreater.StaticMap.RRoom[playerInput.NowRoom].transform.GetChild(3).gameObject;
+            //Debug.Log("decidue" + "+" + playerInput.gameObject.name  + "+" + EmptyFile.gameObject.name + "+" + EmptyFile.transform.gameObject.name + "+" + EmptyFile.transform.childCount);
+            if (EmptyFile && EmptyFile.transform.childCount > 0) {
+                
+                for (int i = 0; i < EmptyFile.transform.childCount; i++)
+                {
+                    Empty e = EmptyFile.transform.GetChild(i).GetComponent<Empty>();
+                    if (e != null)
+                    {
+                        e.Blind(5.0f, 5.0f);
+                    }
+                }
             }
         }
+
     }
     //===================================================æ—…‰∂µ√±=================================================
 
@@ -1091,7 +1103,7 @@ public class PlayerData : MonoBehaviour
     //===================================================ºƒ…˙ƒ¢πΩ=================================================
     void ParasiticSpores(PlayerControler playerInput)
     {
-        if (playerInput.Hp >= player.maxHp/2)
+        if (playerInput.Hp >= playerInput.maxHp/2)
         {
             Pokemon.PokemonHpChange(null , this.gameObject , playerInput.maxHp / 8 , 0 , 0 , Type.TypeEnum.IgnoreType);
         }
@@ -1139,9 +1151,9 @@ public class PlayerData : MonoBehaviour
         {
             case 1:
                 playerInput.playerData.HPBounsAlways += ((UpOrDown)? 1 : -1);
-                player.ReFreshAbllityPoint();
-                player.ChangeHp(player.maxHp - player.Hp, 0, 0);
-                UIHealthBar.Instance.MaxHpText.text = player.maxHp.ToString();
+                playerInput.ReFreshAbllityPoint();
+                playerInput.ChangeHp(playerInput.maxHp - playerInput.Hp, 0, 0);
+                UIHealthBar.Instance.MaxHpText.text = playerInput.maxHp.ToString();
                 break;
             case 2:
                 playerInput.playerData.AtkBounsAlways += ((UpOrDown) ? 1 : -1);

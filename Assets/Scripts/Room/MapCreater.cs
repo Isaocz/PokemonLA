@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MapCreater : MonoBehaviour
@@ -238,7 +239,8 @@ public class MapCreater : MonoBehaviour
 
                 if (item != PCRoomPoint && item != StoreRoomPoint && item != BossRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
                 {
-                    BaseRoom = SwithABaseRoom();
+                    
+                    BaseRoom = SwithABaseRoom(item);
                     Room room = Instantiate(BaseRoom, new Vector3(item.x * 30, item.y * 24, 0), Quaternion.identity);
                     room.CreatWall();
                     room.transform.name = roomname;
@@ -1241,10 +1243,43 @@ public class MapCreater : MonoBehaviour
 
 
 
-
-    Room SwithABaseRoom()
+    /// <summary>
+    /// 根据房间形状，在当前房间白名单内选择一个房间生成
+    /// </summary>
+    /// <returns></returns>
+    Room SwithABaseRoom( Vector3Int RoomVector )
     {
-        int x = RoomWhiteList[Random.Range(0, RoomWhiteList.Count - 1)];
+
+        //当前房间周围是否有房间的情况 ， 如某一个房间上下右有房间 ， 则该房间Blocked = true ，true ， false ，true
+        //对于某一房间在所有方向，如果某方向有相邻的房间，则该方向被房间内环境物体堵住的房间不可被采用
+        //既当某一方向没有相邻房间时 ， 该方向是否被环境物阻挡皆可 ， 当有相邻房间时，该房间的该方向必须不被阻挡
+        //也就是 i=0,1,2,3时，满足(!Blcoked[i] || (Blocked && !Room.isBlockerIN[i])的房间才可被采用
+        
+
+        bool[] Bolcked = new bool[] { VRoom.ContainsKey(RoomVector + Vector3Int.up)  , VRoom.ContainsKey(RoomVector + Vector3Int.down) , VRoom.ContainsKey(RoomVector + Vector3Int.left) , VRoom.ContainsKey(RoomVector + Vector3Int.right) };
+
+        int x = RoomWhiteList[Random.Range(0, RoomWhiteList.Count)];
+        int count = 0;
+        while (!JudgeRoomBlacked(Bolcked, BaseRoomList.transform.GetChild(x).GetComponent<Room>()))
+        {
+            x = RoomWhiteList[Random.Range(0, RoomWhiteList.Count)];
+            count += 1;
+            if (count == 20) {
+                
+                RoomBlackList = RoomWhiteList.Union(RoomBlackList).ToList();
+                RoomWhiteList = RoomBlackList;
+                RoomBlackList = new List<int> { };
+                string DebugString = "";
+                for (int j = 0; j < RoomWhiteList.Count; j++) { DebugString += RoomWhiteList[j].ToString() + ","; }
+                Debug.Log(DebugString + "+" + RoomWhiteList.Count + "+" + RoomBlackList.Count + "+" + RoomVector);
+            }
+            if (count >= 100)
+            {
+                return StarRoom;
+                break;
+            }
+        }
+
         RoomWhiteList.Remove(x);
         RoomBlackList.Add(x);
         if (RoomWhiteList.Count == 0)
@@ -1254,6 +1289,20 @@ public class MapCreater : MonoBehaviour
         }
         Room OutPut = BaseRoomList.transform.GetChild(x).GetComponent<Room>();
         return OutPut;
+    }
+
+    /// <summary>
+    /// 判断某一个房间的阻挡情况是否可以被采用
+    /// </summary>
+    bool JudgeRoomBlacked( bool[] Blocked , Room JudgeRoom )
+    {
+        bool Output = true;
+        for (int i = 0; i <= 3; i++)
+        {
+            if (Blocked[i] && JudgeRoom.isBlockerIn[i]) { Output = false; }
+        }
+        if (Output) { Debug.Log(JudgeRoom + "+" + Blocked[0]+"+"+ Blocked[1] + "+" + Blocked[2] + "+" + Blocked[3] + "+" + JudgeRoom.isBlockerIn[0] + "+" + JudgeRoom.isBlockerIn[1] + "+" + JudgeRoom.isBlockerIn[2] + "+" + JudgeRoom.isBlockerIn[3]); }
+        return Output;
     }
 
 

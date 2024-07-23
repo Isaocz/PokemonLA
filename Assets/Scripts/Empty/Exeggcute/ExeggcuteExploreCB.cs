@@ -15,13 +15,12 @@ public class ExeggcuteExploreCB : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.tag == aimTag && !collisionMap.ContainsKey(collision.gameObject))
+        if ( (collision.transform.tag == "Player" || collision.transform.tag == "Empty") && !collisionMap.ContainsKey(collision.gameObject))
         {
             collisionMap.Add(collision.gameObject, true);
-            PlayerControler playerControler = collision.gameObject.GetComponent<PlayerControler>();
             if (aimTag == "Player")
             {
-                //PlayerControler playerControler = collision.gameObject.GetComponent<PlayerControler>();
+                PlayerControler playerControler = collision.gameObject.GetComponent<PlayerControler>();
                 Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, type);
                 if (playerControler != null) {
                     //playerControler.ChangeHp(0, -(30 * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / 250), (int)Type.TypeEnum.Grass);
@@ -32,7 +31,10 @@ public class ExeggcuteExploreCB : MonoBehaviour
             else if(aimTag == "Empty")
             {
                 Empty e = collision.GetComponent<Empty>();
-                e.EmptyHpChange(0, (Dmage * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / (250 * e.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((e.EmptyType01 == Type.TypeEnum.Ice || e.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2), (int)Type.TypeEnum.Grass);
+                if (e != null) {
+                    Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, Dmage, 0, 0, type);
+                }
+                //e.EmptyHpChange(0, (Dmage * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / (250 * e.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((e.EmptyType01 == Type.TypeEnum.Ice || e.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2), (int)Type.TypeEnum.Grass);
             }
 
         }

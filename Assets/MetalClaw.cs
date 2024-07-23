@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class MetalClaw : Skill
 {
+
+    bool isAbllityUp;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,22 +33,26 @@ public class MetalClaw : Skill
         {
             Empty target = other.GetComponent<Empty>();
             if (target != null) {
-                if (!isHitDone)
+                if (!isHitDone && !isAbllityUp)
                 {
-                    if (Random.Range(0.0f,1.0f) + ((float)player.LuckPoint / 20.0f) >= 0.3f ) {
+                    isAbllityUp = true;
+                    if (Random.Range(0.0f,1.0f) + ((float)player.LuckPoint / 20.0f) >= 0.8f ) {
                         player.playerData.AtkBounsJustOneRoom++;
                         player.ReFreshAbllityPoint();
                     }
                     if (SkillFrom == 2) {
-                        if (Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 20.0f) >= 0.2f)
+                        if (Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 20.0f) >= 0.7f)
                         {
-                            player.playerData.DefBounsJustOneRoom++;
-                            player.ReFreshAbllityPoint();
-                        }
-                        if (Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 20.0f) >= 0.2f)
-                        {
-                            player.playerData.SpDBounsJustOneRoom++;
-                            player.ReFreshAbllityPoint();
+                            if (Random.Range(0.0f , 1.0f) >= 0.5f ) {
+                                player.playerData.DefBounsJustOneRoom = Mathf.Clamp( player.playerData.DefBounsJustOneRoom + 1 , -8 , 8);
+                                player.ReFreshAbllityPoint();
+                            }
+                            else
+                            {
+                                player.playerData.SpDBounsJustOneRoom = Mathf.Clamp(player.playerData.SpDBounsJustOneRoom + 1, -8, 8); ;
+                                player.ReFreshAbllityPoint();
+
+                            }
                         }
                     }
                 }

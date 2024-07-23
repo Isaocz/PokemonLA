@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Blissey : MonoBehaviour
 {
-    GameObject ZBotton;
+    GameObject ZBottonObj;
     BlisseyTalkUI TalkPanel;
     Text TalkInformation;
     Animator animator;
@@ -17,20 +17,21 @@ public class Blissey : MonoBehaviour
 
     private void Start()
     {
-        ZBotton = gameObject.transform.GetChild(3).gameObject;
+        ZBottonObj = gameObject.transform.GetChild(3).gameObject;
         TalkPanel = gameObject.transform.GetChild(2).GetChild(0).gameObject.GetComponent<BlisseyTalkUI>();
         animator = GetComponent<Animator>();
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
+        Debug.Log("xxxxxx");
         if (other.tag == ("Player"))
         {
             if (other.GetComponent<PlayerControler>() != null)
             {
                 playerControler = other.GetComponent<PlayerControler>();
             }
-            ZBotton.SetActive(true);
+            ZBottonObj.SetActive(true);
             isInTrriger = true;
         }
     }
@@ -38,7 +39,7 @@ public class Blissey : MonoBehaviour
     {
         if (other.tag == ("Player") && isInTrriger && other.GetComponent<PlayerControler>() != null)
         {
-            ZBotton.SetActive(false);
+            ZBottonObj.SetActive(false);
             isInTrriger = false;
             TalkPanel.PlayerExit();
             GoodBye();
@@ -48,6 +49,10 @@ public class Blissey : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if ( (isInTrriger || ZBottonObj.activeInHierarchy) && (transform.position - playerControler.transform.position).magnitude >= 6.0f)
+        {
+            CloseButton();
+        }
         if (isInTrriger && ZButton.Z.IsZButtonDown && !isHi && !isSleep)
         {
             playerControler.CanNotUseSpaceItem = true;
@@ -70,7 +75,14 @@ public class Blissey : MonoBehaviour
         }
     }
     
-
+    public void CloseButton()
+    {
+        ZBottonObj.SetActive(false);
+        isInTrriger = false;
+        TalkPanel.PlayerExit();
+        playerControler.CanNotUseSpaceItem = false;
+        GoodBye();
+    }
 
     void Sleep()
     {

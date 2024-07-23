@@ -20,6 +20,13 @@ public class CameraAdapt : MonoBehaviour
 
     public bool isCameraFollow;
 
+    //方便其他脚本获取相机
+    public static CameraAdapt MainCamera;
+
+    private void Awake()
+    {
+        MainCamera = this;
+    }
 
     public void HideCameraMasks()
     {

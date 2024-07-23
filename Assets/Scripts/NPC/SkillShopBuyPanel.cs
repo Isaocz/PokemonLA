@@ -40,12 +40,17 @@ public class SkillShopBuyPanel : MonoBehaviour
         SkillShopBuyBlock B = null;
         if (r <= 0.2f) { BlockNum = 3; }
         else if (r >= 0.8) { BlockNum = 5; }
+
+        int Count = 0;
         for(int i = 0; i < BlockNum; )
         {
             Skill s = player.playerSkillList.RandomGetASkillMachine();
             if (IsGoodAlready.Contains(s))
             {
-                continue;
+                Count++;
+                if (Count > 10) { Count=0;i++; }
+                else {
+                    continue; }
             }
             else
             {

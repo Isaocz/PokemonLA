@@ -39,9 +39,16 @@ public class MewSelectSkillPanel : MonoBehaviour
 
     public void SetLNSSPanel()
     {
-        Skill01 = player.playerSkillList.RandomGetAMEWSkill();
-        Skill02 = player.playerSkillList.RandomGetAMEWSkill();
-        Skill03 = player.playerSkillList.RandomGetAMEWSkill();
+        if (player.playerSkillList.SkillMewList.Count>0) { Skill01 = player.playerSkillList.RandomGetAMEWSkill(); }
+
+        if (player.playerSkillList.SkillMewList.Count > 1)
+        {
+            Skill02 = player.playerSkillList.RandomGetAMEWSkill();
+        }
+        if (player.playerSkillList.SkillMewList.Count > 2)
+        {
+            Skill03 = player.playerSkillList.RandomGetAMEWSkill();
+        }
 
         PokemonChineseName = player.PlayerNameChinese;
 
@@ -50,16 +57,16 @@ public class MewSelectSkillPanel : MonoBehaviour
         if (Skill03 == null) { SkillBar03.gameObject.SetActive(false); Skill03ButtonText.transform.parent.gameObject.SetActive(false); }
         //Debug.Log(PokemonChineseName);
         //Debug.Log(text);
-        if (SkillBar01.PanelSkill == null) { 
+        if (Skill01 != null && SkillBar01.PanelSkill == null) { 
             SkillBar01.GetSkill_Panle(Skill01, player);
             Skill01ButtonText.text = "学习技能" + Skill01.SkillChineseName;
         }
-        if (SkillBar02.PanelSkill == null)
+        if (Skill02 != null && SkillBar02.PanelSkill == null)
         {
             SkillBar02.GetSkill_Panle(Skill02, player);
             Skill02ButtonText.text = "学习技能" + Skill02.SkillChineseName;
         }
-        if (SkillBar03.PanelSkill == null)
+        if (Skill03 != null && SkillBar03.PanelSkill == null)
         {
             SkillBar03.GetSkill_Panle(Skill03, player);
             Skill03ButtonText.text = "学习技能" + Skill03.SkillChineseName;
