@@ -7,19 +7,20 @@ public class MewNPC : NPC
 
     MewSelectSkillPanel SelecrSkillPanel;
     bool isWillFly;
+    public bool isTrigger;
 
     // Start is called before the first frame update
     void Start()
     {
         NPCStart();
+        isTrigger = false;
         SelecrSkillPanel = gameObject.transform.GetChild(4).GetChild(1).gameObject.GetComponent<MewSelectSkillPanel>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        PlayerisinTrigger();
-        if (!isWillFly) {
+        if (!isWillFly && !isTrigger) {
             if (TalkPanel.gameObject.activeSelf == false)
             {
 
@@ -35,6 +36,7 @@ public class MewNPC : NPC
     public void Beybey()
     {
         isWillFly = true;
+        GetComponent<KonamiCode>().isWillFly = true;
         SelecrSkillPanel.gameObject.SetActive(false);
         TalkPanel.gameObject.SetActive(false);
         ZBottonObj.gameObject.SetActive(false);

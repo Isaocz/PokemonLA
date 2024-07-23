@@ -6,21 +6,34 @@ public class MakeItRainEmpty : Projectile
 {
     private Vector3 direction;
     private float movespeed;
-    // Start is called before the first frame update
+    private float timer;
+    private SpriteRenderer sr;
+
     public void MIRrotate(Vector3 Direction)
     {
         direction = Direction;
     }
     void OnEnable()
     {
+        sr = GetComponent<SpriteRenderer>();
         movespeed = 5f;
-        ObjectPoolManager.ReturnObjectToPool(gameObject, 7f);
+        timer = 0f;
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
     }
 
     // Update is called once per frame
     void Update()
     {
+        timer += Time.deltaTime;
         transform.Translate(direction * movespeed * Time.deltaTime);
+        if(timer > 6.5f && timer < 7f)
+        {
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, (7f - timer) / 0.5f);
+        }
+        else if (timer > 7f)
+        {
+            ObjectPoolManager.ReturnObjectToPool(gameObject);
+        }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

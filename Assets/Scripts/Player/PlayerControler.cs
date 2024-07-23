@@ -1299,10 +1299,33 @@ public class PlayerControler : Pokemon
             }
         }
     }
+    /// <summary>
+    /// 精准掉血，数值是多少就掉多少
+    /// </summary>
+    /// <param name="ChangePoint">改变量</param>
+    public void ChangeHp(int ChangePoint)
+    {
+        nowHp = Mathf.Clamp(nowHp + ChangePoint, 0, maxHp);
+        if (ChangePoint > 0)
+        {
+            //血量上升时对血条UI输出当前血量，并调用血条上升的函数
+            UIHealthBar.Instance.Per = (float)nowHp / (float)maxHp;
+            UIHealthBar.Instance.NowHpText.text = string.Format("{000}", nowHp);
+            UIHealthBar.Instance.ChangeHpUp();
+        }
+        else
+        {
+            UIHealthBar.Instance.Per = (float)nowHp / (float)maxHp;
+            UIHealthBar.Instance.ChangeHpDown();
+            UIHealthBar.Instance.NowHpText.text = string.Format("{000}", nowHp);
+        }
+        //掉血条用“魔法伤害，暴击”表示
+        DmgShow(ChangePoint, ChangePoint > 0 ? true : false, true, true);
+    }
 
     private void DmgShow(int dmg, bool recover, bool crit, bool magic = false)
     {
-        if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage)
+        if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage && FloatingDamage)
         {
             GameObject fd = Instantiate(FloatingDamage, transform.position, Quaternion.identity);
             fd.transform.GetComponent<damageShow>().SetText(dmg, crit, recover, magic, true);
