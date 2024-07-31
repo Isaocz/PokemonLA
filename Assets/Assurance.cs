@@ -7,7 +7,7 @@ public class Assurance : Skill
     public float dashAmount;
     public float dashSpeed;
     private float hp;
-    private bool isDashing = false;
+    //private bool isDashing;
     private bool hpdown = false;
     Rigidbody2D PlayerRigibody;
     Vector2 Direction;
@@ -79,7 +79,7 @@ public class Assurance : Skill
 
     IEnumerator DashMovement(Vector3 targetPosition)
     {
-        isDashing = true;
+        //isDashing = true;
         float startTime = Time.time;
         float distance = Vector3.Distance(transform.position, targetPosition);
         float journeyLength = distance / dashSpeed;
@@ -93,7 +93,7 @@ public class Assurance : Skill
         }
 
         // 结束高速移动
-        isDashing = false;
+        //isDashing = false;
         player.isInvincible = false;
     }
 

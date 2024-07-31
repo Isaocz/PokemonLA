@@ -22,7 +22,20 @@ public class Moonlight : Skill
             recover = player.maxHp / 2;
         }
 
-        player.ChangeHp(recover, 0, 0);
+        //player.ChangeHp(recover, 0, 0);
+        int BeforeHP = player.Hp;
+        Pokemon.PokemonHpChange(null , player.gameObject , 0 , 0, recover , Type.TypeEnum.IgnoreType);
+        int HealHP = player.Hp - BeforeHP;
+        if (SkillFrom == 2 && HealHP > 0)
+        {
+            int ButterflyCount = (HealHP / 10) + 1;
+            for (int i = 0; i < ButterflyCount;i++)
+            {
+                Debug.Log(ButterflyCount);
+                player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.Ç³·ÛÉ«ÆÕÍ¨ÐÍ);
+            }
+            
+        }
     }
 
     // Update is called once per frame

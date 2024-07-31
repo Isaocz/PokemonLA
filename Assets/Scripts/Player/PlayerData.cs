@@ -1029,7 +1029,8 @@ public class PlayerData : MonoBehaviour
     void Leftover(PlayerControler player)
     {
         if (Random.Range(0.0f , 1.0f)+((float)(player.LuckPoint)/30) >= 0.4f) {
-            player.ChangeHp((int)Mathf.Clamp(player.maxHp / 10, 1, 10), 0, 0);
+            Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, (int)Mathf.Clamp(player.maxHp / 10, 1, 10), Type.TypeEnum.IgnoreType);
+            //player.ChangeHp((int)Mathf.Clamp(player.maxHp / 10, 1, 10), 0, 0);
         }
     }
 

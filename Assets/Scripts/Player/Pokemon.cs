@@ -2202,9 +2202,10 @@ public class Pokemon : MonoBehaviour
     /// </summary>
     public enum SpecialAttackTypes
     {
-        None,
-        BodyPress,
-        Psyshock,
+        None,            //普通的攻击
+        BodyPress,       //扑击
+        Psyshock,        //精神冲击
+        FoulPlay,        //欺诈
     }
 
 
@@ -2249,12 +2250,24 @@ public class Pokemon : MonoBehaviour
                     case Pokemon.SpecialAttackTypes.BodyPress:
                         AttackerATK = (int)EmptyAttacker.DefAbilityPoint; AttackerSpA = (int)EmptyAttacker.DefAbilityPoint;
                         break;
+                    case Pokemon.SpecialAttackTypes.FoulPlay:
+                        AttackerATK = (int)Attacked.GetComponent<PlayerControler>().AtkAbilityPoint; AttackerSpA = (int)EmptyAttacker.DefAbilityPoint;
+                        break;
                     default:
                         AttackerATK = (int)EmptyAttacker.AtkAbilityPoint; AttackerSpA = (int)EmptyAttacker.SpAAbilityPoint;
                         break;
                 }
                 AttackerLevel = EmptyAttacker.Emptylevel;
-                EmptyTypeAlpha = ((SkillType == EmptyAttacker.EmptyType01) || (SkillType == EmptyAttacker.EmptyType02)) ? 1.5f : 1;
+                if (AttackTypes == SpecialAttackTypes.FoulPlay)
+                {
+                    PlayerControler p = Attacked.GetComponent<PlayerControler>();
+                    EmptyTypeAlpha = ((int)SkillType == p.PlayerType01 ? (p.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) * ((int)SkillType == p.PlayerType02 ? (p.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) * (p.PlayerTeraTypeJOR == 0 ? ((int)SkillType == p.PlayerTeraType ? (p.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) : ((int)SkillType == p.PlayerTeraTypeJOR ? (p.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1));
+                }
+                else
+                {
+                    EmptyTypeAlpha = ((SkillType == EmptyAttacker.EmptyType01) || (SkillType == EmptyAttacker.EmptyType02)) ? 1.5f : 1;
+
+                }
             }
             if (PlayerAttacker != null)
             {
@@ -2263,18 +2276,32 @@ public class Pokemon : MonoBehaviour
                     case Pokemon.SpecialAttackTypes.BodyPress:
                         AttackerATK = PlayerAttacker.DefAbilityPoint; AttackerSpA = PlayerAttacker.DefAbilityPoint;
                         break;
+                    case SpecialAttackTypes.FoulPlay:
+                        AttackerATK = (int)Attacked.GetComponent<Empty>().AtkAbilityPoint; AttackerSpA = PlayerAttacker.SpAAbilityPoint;
+                        break;
                     default:
                         AttackerATK = PlayerAttacker.AtkAbilityPoint; AttackerSpA = PlayerAttacker.SpAAbilityPoint;
                         break;
                 }
                 AttackerLevel = PlayerAttacker.Level;
-                EmptyTypeAlpha = ((int)SkillType == PlayerAttacker.PlayerType01 ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) * ((int)SkillType == PlayerAttacker.PlayerType02 ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) * (PlayerAttacker.PlayerTeraTypeJOR == 0 ? ((int)SkillType == PlayerAttacker.PlayerTeraType ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) : ((int)SkillType == PlayerAttacker.PlayerTeraTypeJOR ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1));
+                if (AttackTypes == SpecialAttackTypes.FoulPlay)
+                {
+                    EmptyTypeAlpha = (SkillType == Attacked.GetComponent<Empty>().EmptyType01 ? 1.5f : 1) * (SkillType == Attacked.GetComponent<Empty>().EmptyType02 ? 1.5f : 1);
+                }
+                else
+                {
+                    EmptyTypeAlpha = ((int)SkillType == PlayerAttacker.PlayerType01 ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) * ((int)SkillType == PlayerAttacker.PlayerType02 ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) * (PlayerAttacker.PlayerTeraTypeJOR == 0 ? ((int)SkillType == PlayerAttacker.PlayerTeraType ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1) : ((int)SkillType == PlayerAttacker.PlayerTeraTypeJOR ? (PlayerAttacker.PlayerAbility == PlayerControler.PlayerAbilityList.适应力 ? 1.8f : 1.5f) : 1));
+                }
             }
             if (FollowBabyAttacker != null) {
                 switch (AttackTypes)
                 {
                     case Pokemon.SpecialAttackTypes.BodyPress:
                         AttackerATK = FollowBabyAttacker.BabyDef();
+                        AttackerSpA = FollowBabyAttacker.BabyDef();
+                        break;
+                    case Pokemon.SpecialAttackTypes.FoulPlay:
+                        AttackerATK = (int)Attacked.GetComponent<Empty>().AtkAbilityPoint;
                         AttackerSpA = FollowBabyAttacker.BabyDef();
                         break;
                     default:
@@ -2313,7 +2340,9 @@ public class Pokemon : MonoBehaviour
 
                 if (SkillType != Type.TypeEnum.IgnoreType)
                 {
-                    Debug.Log("SpAPower = " + SpAPower + " AttackerSpA = " + AttackerSpA + "EmptyTypeAlpha = " + EmptyTypeAlpha + "AttackerLevel = " + AttackerLevel + "AttackedSPD = " + AttackedSPD);
+
+                    Debug.Log("SpAPower = " + SpAPower + " AttackerSpA = " + AttackerATK + "EmptyTypeAlpha = " + EmptyTypeAlpha + "AttackerLevel = " + AttackerLevel + "AttackedSPD = " + AttackedSPD);
+
                     EmptyAttacked.EmptyHpChange(
                     ((AtkPower == 0) ? 0 : (Mathf.Clamp((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha * TerrainAlpha * AbillityAlpha * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * AttackedDEF * WeatherDefAlpha + 2), 1, 10000))),
                     ((SpAPower == 0) ? 0 : (Mathf.Clamp((SpAPower * (Attacker == null ? 1 : AttackerSpA) * EmptyTypeAlpha * TerrainAlpha * AbillityAlpha * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * AttackedSPD * WeatherSpDAlpha + 2), 1, 10000))),

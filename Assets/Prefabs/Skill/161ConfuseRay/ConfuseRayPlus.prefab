@@ -1,5 +1,88 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &731138730486772043
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7836964267532617415}
+  - component: {fileID: 1550343908612746624}
+  m_Layer: 0
+  m_Name: BuffCircle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &7836964267532617415
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731138730486772043}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3606171182400046980}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &1550343908612746624
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731138730486772043}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: ea80ffca31a4c434a8fd01d2ed898500, type: 3}
+  m_Color: {r: 0.9016133, g: 0.990566, b: 0.21026169, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 3.9, y: 3.9}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &3615002611868317782
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,6 +178,7 @@ GameObject:
   - component: {fileID: 6092602406263690430}
   - component: {fileID: 8031253472217281829}
   - component: {fileID: 3542270909047065587}
+  - component: {fileID: 4695319181780663290}
   m_Layer: 0
   m_Name: ConfuseRayPlus
   m_TagString: Untagged
@@ -114,6 +198,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6712775659432561907}
+  - {fileID: 7836964267532617415}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -135,22 +220,23 @@ MonoBehaviour:
   ExistenceTime: 4
   Damage: 0
   SpDamage: 0
-  IsDamageChangeable: 0
+  IsDamageChangeable: 1
   animator: {fileID: 0}
   MaxRange: 10
   SkillType: 8
   SkillName: Confuse Ray
   SkillChineseName: "\u5947\u5F02\u4E4B\u5149"
-  SkillDiscribe: "\u663E\u793A\u5947\u602A\u7684\u5149\uFF0C\u6270\u4E71\u5BF9\u624B\u3002\u4F7F\u5BF9\u624B\u6DF7\u4E71"
-  PlusSkillDiscribe: "\u5947\u5F02\u4E4B\u5149\u73B0\u5728\u53EF\u4EE5\u7A7F\u8FC7\u5899\u58C1"
+  SkillDiscribe: "\u663E\u793A\u5947\u602A\u7684\u5149\uFF0C\u6270\u4E71\u5BF9\u624B\u3002\u4F7F\u5BF9\u624B\u6DF7\u4E71\u3002"
+  PlusSkillDiscribe: "\u5947\u5F02\u4E4B\u5149\u73B0\u5728\u53EF\u4EE5\u7A7F\u8FC7\u5899\u58C1\u3002\u7A7F\u8FC7\u5899\u58C1\u540E\u5947\u5F02\u4E4B\u5149\u4F1A\u79FB\u52A8\u7684\u66F4\u5FEB\uFF0C\u5E76\u4E14\u53EF\u4EE5\u964D\u4F4E\u654C\u4EBA\u7684\u79FB\u52A8\u901F\u5EA6\u3002"
   PlusSkill: {fileID: 0}
   MinusSkill: {fileID: 7110304752299143227, guid: dfca19cb6e26c60409ed7e3d469d3844, type: 3}
   KOPoint: 0
-  ColdDown: 7
+  ColdDown: 4.2
   CTLevel: 0
   CTDamage: 0
-  SkillQualityLevel: 4
+  SkillQualityLevel: 3
   SkillFrom: 2
+  AttackType: 0
   SkillTag: 
   isNotDirection: 0
   DirctionDistance: 0
@@ -196,3 +282,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!50 &4695319181780663290
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3892367602744022187}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

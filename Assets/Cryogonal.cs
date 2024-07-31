@@ -185,6 +185,7 @@ public class Cryogonal : Empty
     {
         if (!isFearDone)
         {
+            Debug.Log(isEmptyConfusionDone);
             if (!isEmptyConfusionDone) {
                 for (int i = 0; i < 6; i++)
                 {

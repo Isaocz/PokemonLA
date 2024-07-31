@@ -10,13 +10,13 @@ public class AlluringVoice : Skill
         if (!isSkillFrom02Done && SkillFrom == 2)
         {
             isSkillFrom02Done = true;
-            player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.浅粉色普通型);
+            player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.深紫色魅惑型);
             for (int i = 0; i < player.ButterflyManger.transform.childCount; i++)
             {
                 FairyButterfly bf = player.ButterflyManger.transform.GetChild(i).GetComponent<FairyButterfly>();
                 if (bf != null)
                 {
-                    bf.isInfatuation = true;
+                    bf.ResetType(FairyButterfly.ButterflyType.深紫色魅惑型);
                 }
             }
         }

@@ -28,6 +28,7 @@ public class FairyButterfly : MonoBehaviour
         红色慢速攻击型,
         蓝色增加特攻型,
         橙色增加攻击型,
+        深紫色魅惑型,
     }
 
     // Start is called before the first frame update
@@ -35,10 +36,16 @@ public class FairyButterfly : MonoBehaviour
     {
         player = transform.parent.GetComponent<PlayerButterflyManger>().player;
         BFSprite = GetComponent<SpriteRenderer>();
+        SwitchBFColor();
+    }
+
+    void SwitchBFColor()
+    {
+        
         switch (BFType)
         {
             case ButterflyType.浅粉色普通型:
-                BFSprite.color = new Color(0.9150943f , 0.6517889f , 0.7923888f , 1);
+                BFSprite.color = new Color(0.9150943f, 0.6517889f, 0.7923888f, 1);
                 break;
             case ButterflyType.浅黄色回血型:
                 BFSprite.color = new Color(0.8998755f, 0.9137255f, 0.6509804f, 1);
@@ -52,8 +59,10 @@ public class FairyButterfly : MonoBehaviour
             case ButterflyType.橙色增加攻击型:
                 BFSprite.color = new Color(0.8396226f, 0.5381053f, 0.2495105f, 1);
                 break;
+            case ButterflyType.深紫色魅惑型:
+                BFSprite.color = new Color(0.4648002f, 0.2973033f, 0.4811321f, 1);
+                break;
         }
-
     }
 
     // Update is called once per frame
@@ -83,24 +92,7 @@ public class FairyButterfly : MonoBehaviour
     public void ResetType(FairyButterfly.ButterflyType RType)
     {
         BFType = RType;
-        switch (BFType)
-        {
-            case ButterflyType.浅粉色普通型:
-                BFSprite.color = new Color(0.9150943f, 0.6517889f, 0.7923888f, 1);
-                break;
-            case ButterflyType.浅黄色回血型:
-                BFSprite.color = new Color(0.8998755f, 0.9137255f, 0.6509804f, 1);
-                break;
-            case ButterflyType.红色慢速攻击型:
-                BFSprite.color = new Color(0.745283f, 0.3848812f, 0.3128782f, 1);
-                break;
-            case ButterflyType.蓝色增加特攻型:
-                BFSprite.color = new Color(0.4316927f, 0.6190022f, 0.8396226f, 1);
-                break;
-            case ButterflyType.橙色增加攻击型:
-                BFSprite.color = new Color(0.8396226f, 0.5381053f, 0.2495105f, 1);
-                break;
-        }
+        SwitchBFColor();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -110,7 +102,6 @@ public class FairyButterfly : MonoBehaviour
             Empty e = other.GetComponent<Empty>();
             if (e != null && !e.Invincible)
             {
-                if (isinfatuation) { e.EmptyInfatuation(15,0.4f); }
                 if (player.SpAAbilityPoint >= player.AtkAbilityPoint)
                 {
                     Pokemon.PokemonHpChange(player.gameObject , e.gameObject , 0 , ((BFType == ButterflyType.红色慢速攻击型) ? 30 : 15), 0 , Type.TypeEnum.Fairy);
@@ -119,6 +110,7 @@ public class FairyButterfly : MonoBehaviour
                 {
                     Pokemon.PokemonHpChange(player.gameObject, e.gameObject, ((BFType == ButterflyType.红色慢速攻击型) ? 30 : 15), 0, 0, Type.TypeEnum.Fairy);
                 }
+
                 if (BFType == ButterflyType.浅黄色回血型)
                 {
                     Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, Mathf.Clamp(player.maxHp/16 , 1 , 20) , Type.TypeEnum.IgnoreType);
@@ -130,6 +122,10 @@ public class FairyButterfly : MonoBehaviour
                 if (BFType == ButterflyType.橙色增加攻击型)
                 {
                     player.ChangeHPW(new Vector2Int(2, 1));
+                }
+                if (BFType == ButterflyType.深紫色魅惑型)
+                {
+                    e.EmptyInfatuation(15, 0.4f);
                 }
                 Destroy(gameObject);
             }

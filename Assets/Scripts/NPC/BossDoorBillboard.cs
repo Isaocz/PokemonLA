@@ -34,7 +34,6 @@ public class BossDoorBillboard : MonoBehaviour
     // Update is called once per frame
     private void OnTriggerExit2D(Collider2D other)
     {
-        Debug.Log("XXX");
         if (other.tag == ("Player") && isInTrriger && other.GetComponent<PlayerControler>() != null)
         {
             ZBottonObj.SetActive(false);

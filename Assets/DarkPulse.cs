@@ -4,6 +4,47 @@ using UnityEngine;
 
 public class DarkPulse : Skill
 {
+
+    int BeforeHP;
+
+    private void Start()
+    {
+        BeforeHP = player.Hp;
+    }
+
+    private void OnDestroy()
+    {
+        if (SkillFrom == 2) {
+            int DmageHP = player.Hp - BeforeHP;
+            if (DmageHP < 0)
+            {
+                Pokemon.PokemonHpChange(null , player.gameObject , 0 , 0 , -DmageHP , Type.TypeEnum.IgnoreType);
+            }
+        }
+    }
+
+    private void Update()
+    {
+        StartExistenceTimer();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+
+        if (collision.tag == "Empty") {
+            Empty e = collision.GetComponent<Empty>();
+            if ( e != null)
+            {
+                HitAndKo(e);
+                if (Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 20.0f) > 0.8f)
+                {
+                    e.Fear(4.0f, 1);
+                }
+            }
+        }
+    }
+
+    /*
     public float diffuseRadius;
     public int particalNumber;
     public float duration;
@@ -35,4 +76,5 @@ public class DarkPulse : Skill
             transform.position = player.transform.position;
         }
     }
+    */
 }

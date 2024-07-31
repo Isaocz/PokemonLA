@@ -15,7 +15,7 @@ public class MeanLook : Skill
     void Update()
     {
         StartExistenceTimer();
-        if(target != null)
+        if(target != null && !target.isBoos)
         {
             float distance = Vector2.Distance(target.transform.position, transform.position);
             if (distance > radius)
@@ -23,6 +23,10 @@ public class MeanLook : Skill
                 Vector3 direction = (target.transform.position - transform.position).normalized;
                 target.transform.position = transform.position + direction * radius;
             }
+        }
+        if (target.isDie)
+        {
+            Destroy(gameObject);
         }
     }
 }

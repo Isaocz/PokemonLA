@@ -1206,18 +1206,20 @@ public class PlayerControler : Pokemon
         else
         {
             Type.TypeEnum enumVaue = (Type.TypeEnum)SkillType;
-            ChangePoint = ChangePoint * (playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
-                * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
-                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
-                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)))
-                * (playerData.IsPassiveGetList[58] ? 1.5f : 1f);
-            ChangePointSp = ChangePointSp * (playerData.IsPassiveGetList[118] ? 1 : ( ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
-                * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
-                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
-                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1) ))
-                * (playerData.IsPassiveGetList[58] ? 1.5f : 1f);
-            ChangePoint = ChangePoint * (isReflect ? 0.75f : 1);
-            ChangePointSp = ChangePointSp * (isLightScreen ? 0.75f : 1);
+            if ((int)SkillType != 19) {
+                ChangePoint = ChangePoint * (playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+                    * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
+                    * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
+                    * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)))
+                    * (playerData.IsPassiveGetList[58] ? 1.5f : 1f);
+                ChangePointSp = ChangePointSp * (playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+                    * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
+                    * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
+                    * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)))
+                    * (playerData.IsPassiveGetList[58] ? 1.5f : 1f);
+                ChangePoint = ChangePoint * (isReflect ? 0.75f : 1);
+                ChangePointSp = ChangePointSp * (isLightScreen ? 0.75f : 1);
+            }
             //如果无敌结束，不无敌的话变为不无敌状态，无敌时间计时器时间设置为无敌时间
             if (isInvincible || isInvincibleAlways)
             {
@@ -1278,27 +1280,49 @@ public class PlayerControler : Pokemon
                 if(nowHp <= 0) { PlayerDie(); }
                 //血量上升时对血条UI输出当前血量，并调用血条上升的函数
 
-                //道具096 冷静头脑
-                if (playerData.IsPassiveGetList[96] && enumVaue == Type.TypeEnum.Ice)
-                {
-                    playerData.PassiveItemClamMind();
-                }
 
-                //道具092 王者盾牌
-                if(playerData.IsPassiveGetList[92]){
-                    playerData.KingsShieldDone();
-                }
 
-                //道具133 淘金滑板
-                if(playerData.IsPassiveGetList[133]){
-                    if (Random.Range(0.0f, 1.0f) > 0.5f) { ChangeMoney(-1); }
-                }
+                HitEvent(ChangePoint , ChangePointSp , SkillType , Crit);
 
                 //输出被击打的动画管理器参数
                 animator.SetTrigger("Hit");
             }
         }
     }
+
+    /// <summary>
+    /// 受到伤害时触发的事件
+    /// </summary>
+    void HitEvent(float ChangePoint, float ChangePointSp, int SkillType, bool Crit = false)
+    {
+
+        Type.TypeEnum enumVaue = (Type.TypeEnum)SkillType;
+        //道具096 冷静头脑
+        if (playerData.IsPassiveGetList[96] && enumVaue == Type.TypeEnum.Ice)
+        {
+            playerData.PassiveItemClamMind();
+        }
+
+        //道具092 王者盾牌
+        if (playerData.IsPassiveGetList[92])
+        {
+            playerData.KingsShieldDone();
+        }
+
+        //道具133 淘金滑板
+        if (playerData.IsPassiveGetList[133])
+        {
+            if (Random.Range(0.0f, 1.0f) > 0.5f) { ChangeMoney(-1); }
+        }
+
+        //技能164 恶意追击精通
+        if (Skill01 != null && Skill01.SkillIndex == 164 ) { MinusSkillCDTime(1 , 1 , false); }
+        if (Skill02 != null && Skill02.SkillIndex == 164 ) { MinusSkillCDTime(2 , 1 , false); }
+        if (Skill03 != null && Skill03.SkillIndex == 164 ) { MinusSkillCDTime(3 , 1 , false); }
+        if (Skill04 != null && Skill04.SkillIndex == 164 ) { MinusSkillCDTime(4 , 1 , false); }
+
+    }
+
     /// <summary>
     /// 精准掉血，数值是多少就掉多少
     /// </summary>
@@ -1777,8 +1801,8 @@ public class PlayerControler : Pokemon
         UISkillButton.Instance.isEscEnable = true;
         e.isSpaceItemCanBeUse = true;
 
-        if (playerAbility == playerAbility01) { e.playerAbility = e.playerAbility01; }
-        else if (playerAbility == playerAbility02) { e.playerAbility = e.playerAbility02; }
+        if (playerAbility == playerAbility01) { e.playerAbility = (e.playerAbility01 == PlayerAbilityList.无特性)? e.playerAbility02 : e.playerAbility01; }
+        else if (playerAbility == playerAbility02) { e.playerAbility = (e.playerAbility02 == PlayerAbilityList.无特性) ? e.playerAbility01 : e.playerAbility02; }
         else if (playerAbility == playerAbilityDream) { e.playerAbility = e.playerAbilityDream; }
         else { e.playerAbility = playerAbility; }
 
