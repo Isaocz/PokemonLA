@@ -75,26 +75,46 @@ public class EeveeControler : PlayerControler
     //学会妖精系技能，努力值总和大于40，可以进化为仙子伊布
     bool JudgeSylveonEvolution()
     {
-        if (((Skill01 != null && Skill01.SkillType == 18) ||(Skill02 != null && Skill02.SkillType == 18) ||(Skill03 != null && Skill03.SkillType == 18 )|| (Skill04 != null && Skill04.SkillType == 18)) &&
-            ((playerData.AtkHardWorkAlways + playerData.DefHardWorkAlways + playerData.HPHardWorkAlways + playerData.LuckHardWorkAlways + playerData.MoveSpeHardWorkAlways + playerData.SpAHardWorkAlways + playerData.SpDHardWorkAlways + playerData.SpeHardWorkAlways) >= 30) )
-            {
-            if (EeveeEvolutionType + 1 <= EeveeList.Length ) {
-                EvolutionPlayer = EeveeList[EeveeEvolutionType];
-                animator.SetFloat("EvolutionType" , EeveeEvolutionType);
-            }
 
-            return true;
-        }
-        else if ((((playerData.AtkHardWorkAlways + playerData.DefHardWorkAlways + playerData.HPHardWorkAlways + playerData.LuckHardWorkAlways + playerData.MoveSpeHardWorkAlways + playerData.SpAHardWorkAlways + playerData.SpDHardWorkAlways + playerData.SpeHardWorkAlways) >= 30)))
+        if (((playerData.AtkHardWorkAlways + playerData.DefHardWorkAlways + playerData.HPHardWorkAlways + playerData.LuckHardWorkAlways + playerData.MoveSpeHardWorkAlways + playerData.SpAHardWorkAlways + playerData.SpDHardWorkAlways + playerData.SpeHardWorkAlways) >= 30))
         {
-            if (EeveeEvolutionType + 1 <= EeveeList.Length)
+            if (((Skill01 != null && Skill01.SkillType == 18) || (Skill02 != null && Skill02.SkillType == 18) || (Skill03 != null && Skill03.SkillType == 18) || (Skill04 != null && Skill04.SkillType == 18)))
             {
-                EvolutionPlayer = EeveeList[EeveeEvolutionType];
-                animator.SetFloat("EeveeType", EeveeEvolutionType);
+                EeveeEvolutionType = 0;
+                if (EeveeEvolutionType + 1 <= EeveeList.Length)
+                {
+                    Debug.Log(EeveeEvolutionType);
+                    EvolutionPlayer = EeveeList[EeveeEvolutionType];
+                    animator.SetFloat("EeveeType", EeveeEvolutionType);
+                }
+                return true;
             }
-            return true;
+            else if (((Skill01 != null && Skill01.SkillType == 17) || (Skill02 != null && Skill02.SkillType == 17) || (Skill03 != null && Skill03.SkillType == 17) || (Skill04 != null && Skill04.SkillType == 17)))
+            {
+                EeveeEvolutionType = 1;
+                if (EeveeEvolutionType + 1 <= EeveeList.Length)
+                {
+                    Debug.Log(EeveeEvolutionType);
+                    EvolutionPlayer = EeveeList[EeveeEvolutionType];
+                    animator.SetFloat("EeveeType", EeveeEvolutionType);
+                }
+                return true;
+            }
+            else if (((Skill01 != null && Skill01.SkillType == 14) || (Skill02 != null && Skill02.SkillType == 14) || (Skill03 != null && Skill03.SkillType == 14) || (Skill04 != null && Skill04.SkillType == 14)))
+            {
+                EeveeEvolutionType = 2;
+                if (EeveeEvolutionType + 1 <= EeveeList.Length)
+                {
+                    Debug.Log(EeveeEvolutionType);
+                    EvolutionPlayer = EeveeList[EeveeEvolutionType];
+                    animator.SetFloat("EeveeType", EeveeEvolutionType);
+                }
+                return true;
+            }
+            else { return false; }
         }
-        else{ return false; }
+        else { return false; }
+
     }
 
     private void FixedUpdate()

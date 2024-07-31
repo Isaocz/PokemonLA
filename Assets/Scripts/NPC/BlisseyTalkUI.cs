@@ -72,11 +72,13 @@ public class BlisseyTalkUI : MonoBehaviour
 
     void Heal()
     {
-        ParentBlissey.playerControler.ChangeHp(ParentBlissey.playerControler.maxHp,0,0);
+        //ParentBlissey.playerControler.ChangeHp(ParentBlissey.playerControler.maxHp,0,0);
+        Pokemon.PokemonHpChange(null, ParentBlissey.playerControler.gameObject, 0, 0, ParentBlissey.playerControler.maxHp, Type.TypeEnum.IgnoreType);
         ParentBlissey.playerControler.BurnRemove();
         ParentBlissey.playerControler.ParalysisRemove();
         ParentBlissey.playerControler.SleepRemove();
         ParentBlissey.playerControler.ToxicRemove();
+        ParentBlissey.playerControler.PlayerFrozenRemove();
     }
 
     void HealEnd()

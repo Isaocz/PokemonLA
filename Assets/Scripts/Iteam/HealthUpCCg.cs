@@ -46,7 +46,10 @@ public class HealthUpCCg : IteamPickUp
                 foreach (int i in ItemTypeTag)
                 {
                     Debug.Log(1);
-                    if (i == 1) { playerControler.ChangeHp(Mathf.Clamp(playerControler.maxHp / 16, 1, 10), 0, 19); }
+                    if (i == 1) {
+                        Pokemon.PokemonHpChange(null, playerControler.gameObject, 0, 0, Mathf.Clamp(playerControler.maxHp / 16, 1, 10), Type.TypeEnum.IgnoreType);
+                        //playerControler.ChangeHp(Mathf.Clamp(playerControler.maxHp / 16, 1, 10), 0, 19);
+                    }
                 }
             }
             //道具100 宝可方块套装

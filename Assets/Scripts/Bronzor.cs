@@ -128,13 +128,13 @@ public class Bronzor : Empty
     {
         if (!isFearDone) {
             BronzorExtrasensory e1 = Instantiate(Extrasensory, transform.position + Vector3.right * 0.5f, Quaternion.Euler(0, 0, 0));
-            e1.empty = this; e1.LaunchNotForce(Vector3.right, (isEmptyConfusionDone ? 7.5f : 13.0f) );
+            e1.empty = this; e1.LaunchNotForce(Vector3.right, (isEmptyConfusionDone ? 6.5f : 10.0f) );
             BronzorExtrasensory e2 = Instantiate(Extrasensory, transform.position + Vector3.up * 0.5f, Quaternion.Euler(0, 0, 90));
-            e2.empty = this; e2.LaunchNotForce(Vector3.up, (isEmptyConfusionDone ? 7.5f : 13.0f));
+            e2.empty = this; e2.LaunchNotForce(Vector3.up, (isEmptyConfusionDone ? 6.5f : 10.0f));
             BronzorExtrasensory e3 = Instantiate(Extrasensory, transform.position + Vector3.left * 0.5f, Quaternion.Euler(0, 0, 180));
-            e3.empty = this; e3.LaunchNotForce(Vector3.left, (isEmptyConfusionDone ? 7.5f : 13.0f));
+            e3.empty = this; e3.LaunchNotForce(Vector3.left, (isEmptyConfusionDone ? 6.5f : 10.0f));
             BronzorExtrasensory e4 = Instantiate(Extrasensory, transform.position + Vector3.down * 0.5f, Quaternion.Euler(0, 0, 270));
-            e4.empty = this; e4.LaunchNotForce(Vector3.down, (isEmptyConfusionDone ? 7.5f : 13.0f));
+            e4.empty = this; e4.LaunchNotForce(Vector3.down, (isEmptyConfusionDone ? 6.5f : 10.0f));
         }
     }
 

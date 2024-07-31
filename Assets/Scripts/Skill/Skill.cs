@@ -142,7 +142,6 @@ public class Skill : MonoBehaviour
 
     void SkillStart()
     {
-        Debug.Log(111);
         if (player.isInSuperPsychicTerrain)
         {
             bool isTraceSkill = false;
@@ -503,7 +502,7 @@ public class Skill : MonoBehaviour
 
 
             //道具136 贝壳铃
-            if (player.playerData.IsPassiveGetList[136])
+            if (player.playerData.IsPassiveGetList[136] && !target.Invincible)
             {
                 Drain(BeforeHP , target.EmptyHp , 0.1f);
             }
@@ -577,7 +576,7 @@ public class Skill : MonoBehaviour
                 }
 
                 //道具059 金假牙
-                if (player.playerData.IsPassiveGetList[59] && Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 30) > 0.8f)
+                if (player.playerData.IsPassiveGetList[59] && !target.Invincible && Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 30) > 0.8f)
                 {
                     Instantiate(PassiveItemGameObjList.ObjList.List[18] , transform.position , Quaternion.identity).GetComponent<RandomStarMoney>().isLunch = true;
                 }
@@ -623,6 +622,15 @@ public class Skill : MonoBehaviour
                 {
                     target.EmptyToxicDone(1, 30, 0.2f + (float)player.LuckPoint / 30);
                 }
+
+                //特性16 同步
+                if (player.PlayerAbility == PlayerControler.PlayerAbilityList.同步)
+                {
+                    if (player.isBurnDone) { target.EmptyBurnDone( 1 , 10.0f , 0.3f + ((float)player.LuckPoint / 20) ); }
+                    if (player.isParalysisDone) { target.EmptyParalysisDone( 1 , 10.0f , 0.3f + ((float)player.LuckPoint / 20) ); }
+                    if (player.isToxicDone) { target.EmptyToxicDone( 1 , 10.0f , 0.3f + ((float)player.LuckPoint / 20) ); }
+                }
+
 
             }
 

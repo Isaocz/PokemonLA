@@ -52,11 +52,11 @@ public class Wish : Skill
 
             if (SkillFrom != 2)
             {
-                player.ChangeHp(player.maxHp / 4, 0, 0);
+                Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp / 4, Type.TypeEnum.IgnoreType);
             }
             else
             {
-                player.ChangeHp(player.maxHp * 2 / 5, 0, 0);
+                Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp * 2 / 5, Type.TypeEnum.IgnoreType);
             }
             transform.Rotate(0, 0, 180f);
             transform.GetChild(0).gameObject.SetActive(true);

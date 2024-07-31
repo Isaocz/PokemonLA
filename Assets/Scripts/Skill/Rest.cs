@@ -18,7 +18,10 @@ public class Rest : Skill
             //player.frozenRemove();
         }
         player.SleepFloatPlus(10);
-        if (player.isSleepDone) { player.ChangeHp(player.maxHp, 0, 0); }
+        if (player.isSleepDone) {
+            Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp, Type.TypeEnum.IgnoreType);
+            //player.ChangeHp(player.maxHp, 0, 0);
+        }
     }
 
     private void Update()

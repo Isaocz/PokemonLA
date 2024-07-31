@@ -51,8 +51,8 @@ public class PlayerButterflyManger : MonoBehaviour
             
             float z = _mTool.Angle_360Y(TurnBFList[(i == (BFNum - 1) ? 0 : i + 1)].transform.localPosition, Vector3.right) - _mTool.Angle_360Y(TurnBFList[i].transform.localPosition, Vector3.right);
             float MagnitudeOffset = 1;
-            if (TurnBFList[i].transform.localPosition.magnitude > 1) { MagnitudeOffset = 0.95f; }
-            else if (TurnBFList[i].transform.localPosition.magnitude < 1) { MagnitudeOffset = 1.05f; }
+            if (TurnBFList[i].transform.localPosition.magnitude > 1) { MagnitudeOffset = 0.85f; }
+            else if (TurnBFList[i].transform.localPosition.magnitude < 1) { MagnitudeOffset = 1.15f; }
             if (TurnBFList[i].transform.localPosition.magnitude - 1 < 0.2) { MagnitudeOffset = 1; }
 
             if (MagnitudeOffset == 1)
@@ -72,7 +72,7 @@ public class PlayerButterflyManger : MonoBehaviour
 
     public void BornABF(FairyButterfly.ButterflyType t)
     {
-        Instantiate(BF , transform.position + Vector3.right * 0.3f , Quaternion.identity , transform).BFType = t;
+        Instantiate(BF , transform.position + (Quaternion.AngleAxis( (transform.childCount == 0)? 0 : ( 360/(transform.childCount+1) ) , Vector3.forward) * Vector3.right ) * 0.3f , Quaternion.identity , transform).BFType = t;
         if (player.isInSuperMistyTerrain)
         {
             Instantiate(BF, transform.position + Vector3.right * 0.3f, Quaternion.identity, transform).BFType = t;

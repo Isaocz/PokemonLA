@@ -1276,7 +1276,6 @@ public class MapCreater : MonoBehaviour
             if (count >= 100)
             {
                 return StarRoom;
-                break;
             }
         }
 

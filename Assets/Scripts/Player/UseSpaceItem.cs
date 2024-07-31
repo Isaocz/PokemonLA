@@ -389,7 +389,7 @@ public class UseSpaceItem : MonoBehaviour
             //¸´»î²Ý
             case 66:
                 if (player.Hp <= 1) {
-                    player.ChangeHp(player.maxHp, 0, 0);
+                    Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp, Type.TypeEnum.IgnoreType);
                     switch (Random.Range(0, 6))
                     {
                         case 0:
@@ -449,7 +449,9 @@ public class UseSpaceItem : MonoBehaviour
         {
             foreach (int i in spaceItem.ItemTypeTag)
             {
-                if (i == 1) { player.ChangeHp(Mathf.Clamp(player.maxHp / 16, 1, 10), 0, 19); }
+                if (i == 1) { 
+                    Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, Mathf.Clamp(player.maxHp / 16, 1, 10), Type.TypeEnum.IgnoreType);
+                }
             }
         }
         if (player.playerData.IsPassiveGetList[100] && spaceItem.ItemTypeTag != null)
@@ -488,7 +490,7 @@ public class UseSpaceItem : MonoBehaviour
 
     static void SitrusBerry(PlayerControler player)
     {
-        player.ChangeHp(player.maxHp/3,0,0);
+        Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp / 3, Type.TypeEnum.IgnoreType);
     }
 
     static void TeraShard(PlayerControler player, int TeraShardType)

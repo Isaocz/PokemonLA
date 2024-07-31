@@ -5,7 +5,7 @@ using UnityEngine;
 public class MagicalFireEmpty : Projectile
 {
     Vector3 mewposition;
-    CircleCollider2D collider2D;
+    CircleCollider2D MFCollider2D;
     float speed= 7f;
     float rotationspeed;
     float timer;
@@ -15,8 +15,8 @@ public class MagicalFireEmpty : Projectile
     void OnEnable()
     {
         timer = 0f;
-        collider2D = GetComponent<CircleCollider2D>();
-        collider2D.radius = 0.25f;
+        MFCollider2D = GetComponent<CircleCollider2D>();
+        MFCollider2D.radius = 0.25f;
         transform.GetChild(0).localScale = new Vector3(3f, 3f);
     }
 
@@ -38,7 +38,7 @@ public class MagicalFireEmpty : Projectile
         {
             float t = (timer - 6.5f) / 0.5f;
             transform.GetChild(0).localScale = Vector3.Lerp(new Vector3(3f, 3f), new Vector3(0, 0), t);
-            collider2D.radius = Mathf.Lerp(0.25f, 0, t);
+            MFCollider2D.radius = Mathf.Lerp(0.25f, 0, t);
         }
         else if (timer > 7f)
         {
