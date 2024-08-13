@@ -56,6 +56,7 @@ public class MewNPC : NPC
         Debug.Log("XXX");
         if (!isWillFly)
         {
+            Debug.Log(other.name);
             NPCOnTriggerExit2D(other);
             if (TalkPanel.isTalkPuse) { TalkPanel.isTalkPuse = false; }
             if (other.tag == ("Player") && other.GetComponent<PlayerControler>() != null)

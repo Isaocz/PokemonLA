@@ -21,7 +21,7 @@ public class StoneEdge : Skill
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Spike")
+        if (other.tag == "Spike" && SkillFrom == 2)
         {
             StealthRockPrefabs stealthRock = other.GetComponent<StealthRockPrefabs>();
             if(stealthRock != null)

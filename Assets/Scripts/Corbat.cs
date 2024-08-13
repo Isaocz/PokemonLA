@@ -117,7 +117,7 @@ public class Corbat : Empty
                             if (XCutDirectior != Vector2.zero && XCutTimer > 1) { isXCutStart = true; XCutDirectior = Quaternion.AngleAxis( (isEmptyConfusionDone ? Random.Range(-30,30) : 0) , Vector3.forward) * XCutDirectior; animator.SetTrigger("XCut"); }
                             animator.SetFloat("LookX", Director.x); animator.SetFloat("LookY", Director.y);
                             MoveDirector = Quaternion.AngleAxis((isFearDone? (TurnCount % 2 == 0 ? 1 : -1)*95   : (TurnCount % 2 == 0 ? 1 : -1) * (75 - (TurnCount * 10))       ), Vector3.forward) * MoveDirector;
-                            if (!isFearDone && TurnCount >= (isAngry ? 2 : 3))
+                            if (!isFearDone && TurnCount >= (isAngry ? 1 : 2))
                             {
                                 SupersonicOrAirSlashTimer += Time.deltaTime;
                                 if (SupersonicOrAirSlashTimer >= 0.8f)
@@ -136,9 +136,9 @@ public class Corbat : Empty
                                     }
                                 }
                             }
-                            rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)MoveDirector.x * Time.deltaTime * speed * (Mathf.Pow(1.2f, TurnCount)) * (isFearDone ? 1.4f : 1), -15f + transform.parent.position.x, 15f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)MoveDirector.y * Time.deltaTime * speed * (Mathf.Pow(1.2f, TurnCount)) * (isFearDone ? 1.4f : 1), -10f + transform.parent.position.y, 10f + transform.parent.position.y));
+                            rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)MoveDirector.x * Time.deltaTime * speed * (Mathf.Pow(1.2f, TurnCount)) * (isFearDone ? 1.4f : 1), ParentPokemonRoom.RoomSize[2] - 1.5f + transform.parent.position.x, ParentPokemonRoom.RoomSize[3] + 1.5f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)MoveDirector.y * Time.deltaTime * speed * (Mathf.Pow(1.2f, TurnCount)) * (isFearDone ? 1.4f : 1), ParentPokemonRoom.RoomSize[1] - 1.5f + transform.parent.position.y, ParentPokemonRoom.RoomSize[0] + 1.5f + transform.parent.position.y));
                         }
-                        if (!isPosionDone && EmptyHp <= maxHP * 0.45f)
+                        if (!isPosionDone && EmptyHp <= maxHP * 0.6f)
                         {
                             isAngry = true;
                             isPosionDone = true;
@@ -156,7 +156,7 @@ public class Corbat : Empty
                         {
                             rigidbody2D.bodyType = RigidbodyType2D.Static;
                             isXcutMove = false; isXCutStart = false;
-                            PosionMistObj = Instantiate(PosionMist, transform.position, Quaternion.identity);
+                            if (PosionMistObj == null) { PosionMistObj = Instantiate(PosionMist, transform.position, Quaternion.identity); }
                             PosionMistObj.ParentEmpty = this;
                             PosionMistCenter = transform.position;
                             animator.SetBool("Charge", true);
@@ -208,13 +208,21 @@ public class Corbat : Empty
                                 PosionMistXCutCount = 0;
                                 IdleTimer = 7.0f;
                             }
-                            if ((transform.position - PosionMistCenter).magnitude > 8.5f) { MoveDirector = (PosionMistCenter - transform.position).normalized; }
+                            if ((transform.position - PosionMistCenter).magnitude > 8.5f) { Debug.Log("test00"); MoveDirector = (PosionMistCenter - transform.position).normalized; }
                             else {
                                 MoveDirector = (-PosionMistCenter + transform.position).normalized;
-                                while ( Mathf.Abs(((Vector2)PosionMistCenter + (Vector2)MoveDirector*8.5f).x) > 12.5 || Mathf.Abs(((Vector2)PosionMistCenter + (Vector2)MoveDirector * 8.5f).y) > 7.0f)
+                                Debug.Log("test01");
+                                int WhileCOunt = 0;
+                                while ( ((Vector2)PosionMistCenter + (Vector2)MoveDirector * 8.5f).x > ParentPokemonRoom.transform.position.x + ParentPokemonRoom.RoomSize[3] || 
+                                        ((Vector2)PosionMistCenter + (Vector2)MoveDirector * 8.5f).y > ParentPokemonRoom.transform.position.y + ParentPokemonRoom.RoomSize[0] ||
+                                        ((Vector2)PosionMistCenter + (Vector2)MoveDirector * 8.5f).x < ParentPokemonRoom.transform.position.x + ParentPokemonRoom.RoomSize[2] ||
+                                        ((Vector2)PosionMistCenter + (Vector2)MoveDirector * 8.5f).y < ParentPokemonRoom.transform.position.y + ParentPokemonRoom.RoomSize[1])
                                 {
                                     MoveDirector = (new Vector3(Random.Range(-1.0f , 1.0f) , Random.Range(-1.0f, 1.0f)  , 0)).normalized;
+                                    WhileCOunt++;
+                                    if (WhileCOunt > 100) { break; }
                                 }
+                                Debug.Log("test02");
                             }
                             float Angle = _mTool.Angle_360Y(MoveDirector, Vector2.right);
                             if (Angle >= 0 && Angle < 90) { Director.x = 1; Director.y = 1; }

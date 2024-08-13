@@ -297,7 +297,7 @@ public class Room : MonoBehaviour
             GameObject gatewayup = Instantiate(GateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform); isWallAround[0] = false;
         }
 
-
+        
 
 
 
