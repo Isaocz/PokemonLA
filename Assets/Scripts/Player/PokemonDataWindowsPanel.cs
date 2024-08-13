@@ -256,12 +256,12 @@ public class PokemonDataWindowsPanel : MonoBehaviour
         switch ((int)playerControler.PlayerAbility)
         {
 
-            case 1: AbilityText.text = "特性：迟钝"; AbilityDescribe.TwoMode = true; AbilityDescribe.FirstText = "当异常状态的进度被连续累积时，两次累积之间的时间间隔变长。"; AbilityDescribe.DescribeText = "并且当使用了接触类招式后，一小段时间异常状态的进度不会累积。"; break;
-            case 2: AbilityText.text = "特性：雪隐";  AbilityDescribe.DescribeText = "使用了冰属性技能后，一小段时间内大幅提升移动速度。"; break;
+            case 1: AbilityText.text = "特性：迟钝"; AbilityDescribe.TwoMode = true; AbilityDescribe.FirstText = "当异常状态的进度被连续累积时，两次累积之间的时间间隔巨幅变长。"; AbilityDescribe.DescribeText = "并且当使用了接触类招式后，一段时间异常状态的进度不会累积。"; break;
+            case 2: AbilityText.text = "特性：雪隐";  AbilityDescribe.DescribeText = "使用了冰属性技能后，一段时间内大幅提升移动速度。"; break;
             case 3: AbilityText.text = "特性：厚脂肪";  AbilityDescribe.DescribeText = "111"; break;
             case 4: AbilityText.text = "特性：叶子防守";  AbilityDescribe.DescribeText = "晴天或者处于草丛中时异常状态的进度不会累积。"; break;
             case 5: AbilityText.text = "特性：甜幕";  AbilityDescribe.DescribeText = "111"; break;
-            case 6: AbilityText.text = "特性：女王的威严";  AbilityDescribe.DescribeText = "111"; break;
+            case 6: AbilityText.text = "特性：女王的威严";  AbilityDescribe.DescribeText = "向对手施加威慑力，还未受伤的敌人无法对你施加伤害！"; break;
             case 7: AbilityText.text = "特性：逃跑";  AbilityDescribe.DescribeText = "移动速度变得更快"; break;
             case 8: AbilityText.text = "特性：适应力";  AbilityDescribe.DescribeText = "与自身同属性的招式威力会变得更高。"; break;
             case 9: AbilityText.text = "特性：危险预知";  AbilityDescribe.DescribeText = "111"; break;

@@ -296,12 +296,13 @@ public class Onix : Empty
                         break;
                     case State.BodyPress:
                         BodyPressFloatTimer += Time.deltaTime;
+                        Debug.Log(BodyPressFloatTimer);
                         if (!isBodyPressIns)
                         {
 
                             isBodyPressIns = true;
-                            if (OnixBodyTop.transform.position.x < 0) { BodyPressCenter = new Vector2(-5.5f, 0.0f); }
-                            else { BodyPressCenter = new Vector2(5.5f, 0.0f); }
+                            if (OnixBodyTop.transform.position.x < 0) { BodyPressCenter = (Vector2)ParentRoom.transform.position + new Vector2(-5.5f, 0.0f); }
+                            else { BodyPressCenter = (Vector2)ParentRoom.transform.position + new Vector2(5.5f, 0.0f); }
                             SpeedAlpha = -1; RemoveIronHeadMode();
                             BodyPressR = (BodyPressCenter - (Vector2)OnixBodyTop.transform.position).magnitude;
                             BodyPressAlphaAngel = _mTool.Angle_360Y(((Vector2)OnixBodyTop.transform.position - BodyPressCenter).normalized, Vector2.right);
@@ -351,9 +352,16 @@ public class Onix : Empty
                             }
                             
                             Vector2 d = Quaternion.AngleAxis( (isEmptyConfusionDone ? Random.Range(-45,45) : 0 ) , Vector3.forward) * (BodyPressTargetPosition - BodyPressJumpCenter).normalized;
-                            transform.position += new Vector3(Mathf.Clamp((isFearDone ? -1 : 1) * d.x * 20.0f * Time.deltaTime, -10.0f + ParentRoom.transform.position.x, 10.0f + ParentRoom.transform.position.x), Mathf.Clamp((isFearDone ? -1 : 1) * d.y * 20.0f * Time.deltaTime, -4.2f + ParentRoom.transform.position.y, 4.2f + ParentRoom.transform.position.y), 0);
+                            Debug.Log(transform.position);
+                            transform.position = new Vector3(
+                                Mathf.Clamp((isFearDone ? -1 : 1) * d.x * 20.0f * Time.deltaTime + transform.position.x, ParentRoom.RoomSize[2] + 2.0f + ParentRoom.transform.position.x, ParentRoom.RoomSize[3] - 2.0f + ParentRoom.transform.position.x),
+                                Mathf.Clamp((isFearDone ? -1 : 1) * d.y * 20.0f * Time.deltaTime + transform.position.y, ParentRoom.RoomSize[1] + 3.1f + ParentRoom.transform.position.y, ParentRoom.RoomSize[0] - 3.1f + ParentRoom.transform.position.y),
+                                0);
+                            Debug.Log(transform.position);
                         }
-                        if (bp != null) {bp.transform.position = new Vector3(Mathf.Clamp(SubEmptyBodyList[5].transform.position.x, ParentRoom.transform.position.x - 12.5f, ParentRoom.transform.position.x + 12.5f), Mathf.Clamp(SubEmptyBodyList[5].transform.position.y, ParentRoom.transform.position.y - 7.2f, ParentRoom.transform.position.y + 7.2f), 0); }
+                        if (bp != null) {bp.transform.position = new Vector3(
+                            Mathf.Clamp(SubEmptyBodyList[5].transform.position.x, ParentRoom.transform.position.x + ParentRoom.RoomSize[2], ParentRoom.transform.position.x + ParentRoom.RoomSize[3]), 
+                            Mathf.Clamp(SubEmptyBodyList[5].transform.position.y, ParentRoom.transform.position.y + ParentRoom.RoomSize[1], ParentRoom.transform.position.y + ParentRoom.RoomSize[0]), 0); }
 
 
                         //Debug.Log(Mathf.Cos(BodyPressD * Mathf.Deg2Rad  * (BodyPressFloatTimer * 100 + BodyPressAlphaAngel)) + "+" + BodyPressD * Mathf.Deg2Rad  * (BodyPressFloatTimer * 100 + BodyPressAlphaAngel));

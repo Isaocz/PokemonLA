@@ -17,7 +17,7 @@ public class SwordBaby : Baby
         Vector3 TargetPosition = player.transform.position + player.SkillOffsetforBodySize[0] * Vector3.up + (Vector3)player.look* (Mathf.Max(player.SkillOffsetforBodySize[1], player.SkillOffsetforBodySize[2]) + 0.4f);
         float TargetRotation = _mTool.Angle_360(player.look , Vector3.up);
 
-        if (transform.position != TargetPosition)
+        if (Mathf.Approximately(transform.position.x, TargetPosition.x) && Mathf.Approximately(transform.position.y, TargetPosition.y) )
         {
             transform.position += new Vector3( (TargetPosition-transform.position).normalized.x * Time.deltaTime * 7.0f  , (TargetPosition - transform.position).normalized.y * Time.deltaTime * 7.0f, 0);
             if ((transform.position-TargetPosition).magnitude <= 0.05)

@@ -63,7 +63,7 @@ public class Confusion : Skill
                     HitAndKo(target);
                     if (Random.Range(0f, 1f) + (float)player.LuckPoint / 30 > 0.9f)
                     {
-                        target.EmptyConfusion(5.0f, 1.0f);
+                        target.EmptyConfusion(10.0f, 1.0f);
                     }
                 }
                 BallBreak();

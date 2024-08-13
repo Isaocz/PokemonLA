@@ -33,9 +33,10 @@ public class WigglytuffNPC : NPC
     private void OnTriggerExit2D(Collider2D other)
     {
             
-        NPCOnTriggerExit2D(other);
+
         if (other.tag == ("Player") && other.GetComponent<PlayerControler>() != null)
         {
+            NPCOnTriggerExit2D(other);
             if (TalkPanel.isTalkPuse)
             {
                 TalkPanel.isTalkPuse = false;

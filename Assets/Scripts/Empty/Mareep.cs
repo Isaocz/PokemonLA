@@ -15,6 +15,7 @@ public class Mareep : Empty
     float isDropTimer;
     public float isEscapeTimer;
 
+    int EscapeOverCount = 0;
 
 
     // Start is called before the first frame update
@@ -46,6 +47,7 @@ public class Mareep : Empty
 
     public void EscapOver()
     {
+        EscapeOverCount = 0;
         animator.SetTrigger("EscapeOver");
         isEscape = false;
     }
@@ -63,6 +65,7 @@ public class Mareep : Empty
         {
             if(isDropTimer%20 == 0)
             {
+                if (EscapeOverCount >= 8) { EscapOver(); }
                 if ((Random.Range(0.0f, 1.0f) <= 0.2f || isDropTimer == 0) && !isFearDone)
                 {
                     DropWool();
@@ -120,25 +123,34 @@ public class Mareep : Empty
         animator.ResetTrigger("EscapeOver");
         animator.SetTrigger("Escape");
         if (!isEmptyConfusionDone) {
+            Vector3 t = Vector3.zero;
             switch (Random.Range(1, 5))
             {
                 case 1:
                     //AStarAIEscap.Escape(transform.parent.position + new Vector3(12.0f, 8.0f, 0));
-                    AStarAIEscap.Escape(transform.parent.position + new Vector3(Random.Range(7.0f, 10.0f), Random.Range(4.0f, 6.0f), 0));
+                    //ParentPokemonRoom.RoomSize[3] - 2.0f;
+                    //ParentPokemonRoom.RoomSize[2] + 2.0f;
+                    //ParentPokemonRoom.RoomSize[1] + 1.3f;
+                    //ParentPokemonRoom.RoomSize[0] - 1.3f;
+                    t = new Vector3(Random.Range(ParentPokemonRoom.RoomSize[3] - 5.0f, ParentPokemonRoom.RoomSize[3] - 2.0f), Random.Range(ParentPokemonRoom.RoomSize[0] - 3.3f, ParentPokemonRoom.RoomSize[0] - 1.3f), 0);
+
                     break;
                 case 2:
                     //AStarAIEscap.Escape(transform.parent.position + new Vector3(12.0f, 8.0f, 0));
-                    AStarAIEscap.Escape(transform.parent.position + new Vector3(Random.Range(7.0f, 10.0f), -Random.Range(4.0f, 6.0f), 0));
+                    t = new Vector3(Random.Range(ParentPokemonRoom.RoomSize[3] - 5.0f, ParentPokemonRoom.RoomSize[3] - 2.0f), Random.Range(ParentPokemonRoom.RoomSize[1] + 3.3f, ParentPokemonRoom.RoomSize[1] + 1.3f), 0);
                     break;
                 case 3:
                     //AStarAIEscap.Escape(transform.parent.position + new Vector3(12.0f, 8.0f, 0));
-                    AStarAIEscap.Escape(transform.parent.position + new Vector3(-Random.Range(7.0f, 10.0f), Random.Range(4.0f, 6.0f), 0));
+                    t = new Vector3(Random.Range(ParentPokemonRoom.RoomSize[2] + 5.0f, ParentPokemonRoom.RoomSize[2] + 2.0f), Random.Range(ParentPokemonRoom.RoomSize[0] - 3.3f, ParentPokemonRoom.RoomSize[0] - 1.3f), 0);
                     break;
                 case 4:
                     //AStarAIEscap.Escape(transform.parent.position + new Vector3(12.0f, 8.0f, 0));
-                    AStarAIEscap.Escape(transform.parent.position + new Vector3(-Random.Range(7.0f, 10.0f), -Random.Range(4.0f, 6.0f), 0));
+                    t = new Vector3(Random.Range(ParentPokemonRoom.RoomSize[2] + 5.0f, ParentPokemonRoom.RoomSize[2] + 2.0f), Random.Range(ParentPokemonRoom.RoomSize[1] + 3.3f, ParentPokemonRoom.RoomSize[1] + 1.3f), 0);
                     break;
             }
+            Debug.Log(t);
+            AStarAIEscap.Escape(transform.parent.position + t);
+             
         }
         else
         {
@@ -153,6 +165,8 @@ public class Mareep : Empty
         Projectile ProjectileObj = Instantiate(Wool, transform.position,  Quaternion.Euler(0, 0, Random.Range(0, 360)) , transform.parent);
         ProjectileObj.Launch(Quaternion.AngleAxis( Random.Range(-90,90) , Vector3.forward )*(LastPostion - transform.position), Random.Range(20,60));
         ProjectileObj.empty = transform.GetComponent<Empty>();
+        EscapeOverCount++;
+
     }
 
     Vector2 RandomDirection()

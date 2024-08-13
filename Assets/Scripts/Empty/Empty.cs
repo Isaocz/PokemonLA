@@ -7,7 +7,6 @@ public class EnumMultiAttribute : PropertyAttribute { }
 public class Empty : Pokemon
 {
 
-    Room ParentPokemonRoom;
 
     //攻击到玩家时造成的击退值声明4个变量，一个代表对玩家造成的伤害，一个代表击退值，一个表示移动的距离,一个表示移动速度，一个表示初始血量
     public float Knock = 5f;
@@ -157,6 +156,14 @@ public class Empty : Pokemon
 
 
     public bool isShadow;
+
+
+    public Room ParentPokemonRoom
+    {
+        get { return parentRoom; }
+        set { parentRoom = value; }
+    }
+    Room parentRoom;
 
 
     //当敌人身体有多个部分时（如三地鼠的多个地鼠 ， 大岩蛇的多个体节） ， 把每一个身体部分放入该List；
@@ -389,7 +396,7 @@ public class Empty : Pokemon
                 }
                 if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage && GetComponent<SubEmptyBody>() == null && FloatingDmg)
                 {
-                    GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity) as GameObject;
+                    GameObject fd = Instantiate(FloatingDmg, transform.position + Vector3.right * Random.Range(-0.8f, 0.8f), Quaternion.identity) as GameObject;
                     if (Dmage > SpDmage)
                     {
                         fd.transform.GetComponent<damageShow>().SetText(allDmg, Crit, false, false);
@@ -408,7 +415,7 @@ public class Empty : Pokemon
                 if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage && FloatingDmg)
                 {
                     int allRecover = -(int)(Dmage + SpDmage);
-                    GameObject fd = Instantiate(FloatingDmg, transform.position, Quaternion.identity);
+                    GameObject fd = Instantiate(FloatingDmg, transform.position + Vector3.right * Random.Range(-0.8f, 0.8f), Quaternion.identity);
                     fd.transform.GetComponent<damageShow>().SetText(allRecover, Crit, true, false);
                 }
             }
@@ -728,7 +735,7 @@ public class Empty : Pokemon
     public void UpdateEmptyChangeHP()
     {
         if (rigidbody2D != null) {
-            rigidbody2D.velocity = Vector2.zero;
+            if (rigidbody2D.bodyType != RigidbodyType2D.Static) { rigidbody2D.velocity = Vector2.zero; }
         }
         if (isShake) { ShakeUpdate(); }
         if (isToxicDone) { EmptyToxic(); }

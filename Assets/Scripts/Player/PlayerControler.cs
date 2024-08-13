@@ -486,7 +486,7 @@ public class PlayerControler : Pokemon
         ComeInANewRoomEvent += ChangeRoomBgm;
         isCanNotUseSpaceItem = false;
 
-        if (PlayerAbility == PlayerAbilityList.≥Ÿ∂€) { TimeStateInvincible *= 1.6f; }
+        if (PlayerAbility == PlayerAbilityList.≥Ÿ∂€) { TimeStateInvincible *= 2.5f; }
         if (PlayerAbility == PlayerAbilityList.Ã”≈‹) { playerData.MoveSpwBounsAlways += 1; ReFreshAbllityPoint(); }
         if (playerData.ResurrectionFossilDone) { PlayerType01 = (int)Type.TypeEnum.Rock; }
         playerData.Type01Always = (Type.TypeEnum)PlayerType01;
@@ -1351,7 +1351,7 @@ public class PlayerControler : Pokemon
     {
         if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage && FloatingDamage)
         {
-            GameObject fd = Instantiate(FloatingDamage, transform.position, Quaternion.identity);
+            GameObject fd = Instantiate(FloatingDamage, transform.position +  Vector3.right * Random.Range(-0.8f,0.8f), Quaternion.identity);
             fd.transform.GetComponent<damageShow>().SetText(dmg, crit, recover, magic, true);
         }
     }
@@ -2515,7 +2515,7 @@ public class PlayerControler : Pokemon
             isSnowCloakTrigger = true;
             playerData.MoveSpeBounsJustOneRoom += 2;
             ReFreshAbllityPoint();
-            Invoke("RemoveSnowCloak" , 2.0f);
+            Invoke("RemoveSnowCloak" , 3.0f);
         }
     }
 
@@ -2537,7 +2537,7 @@ public class PlayerControler : Pokemon
         if (!isObliviousTrigger)
         {
             isObliviousTrigger = true;
-            Invoke("RemoveOblivious", 1.0f);
+            Invoke("RemoveOblivious", 2.5f);
         }
     }
 

@@ -20,6 +20,7 @@ public class InitializePlayerSetting : MonoBehaviour
     public float SkillButtonYOffset;
     public float SkillButtonScale;
     public int SkillButtonLayout;
+    public bool isJoystickFixed;
 
 
     public Dictionary<string, KeyCode> keybinds = new Dictionary<string, KeyCode>() {
@@ -104,6 +105,9 @@ public class InitializePlayerSetting : MonoBehaviour
 
             if (!PlayerPrefs.HasKey("ShowDamage")) { PlayerPrefs.SetInt("ShowDamage", 1); }
             isShowDamage = intToBool(PlayerPrefs.GetInt("ShowDamage"));
+
+            if (!PlayerPrefs.HasKey("JoystickFixed")) { PlayerPrefs.SetInt("JoystickFixed", 0); }
+            isJoystickFixed = intToBool(PlayerPrefs.GetInt("JoystickFixed"));
 
             if (!PlayerPrefs.HasKey("BackGroundIndex")) { PlayerPrefs.SetInt("BackGroundIndex", 0); }
             BGIndex = PlayerPrefs.GetInt("BackGroundIndex");
