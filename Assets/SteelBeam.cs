@@ -26,28 +26,32 @@ public class SteelBeam : Skill
     // Start is called before the first frame update
     void Start()
     {
+        if (SkillFrom == 2) {
+            int DCount = Mathf.Clamp(player.playerData.DefBounsAlways + player.playerData.DefBounsJustOneRoom + player.playerData.SpDBounsAlways + player.playerData.SpDBounsJustOneRoom, 0, 4);
+            if (DCount < 4 && DCount > 0)
+            {
+                player.playerData.DefBounsJustOneRoom -= player.playerData.DefBounsAlways + player.playerData.DefBounsJustOneRoom;
+                player.playerData.SpDBounsJustOneRoom -= player.playerData.SpDBounsAlways + player.playerData.SpDBounsJustOneRoom;
+            }
+            else if (DCount == 4)
+            {
+                if (player.playerData.DefBounsAlways + player.playerData.DefBounsJustOneRoom == 1) { player.playerData.DefBounsJustOneRoom -= 1; player.playerData.SpDBounsJustOneRoom -= 3; }
+                else if (player.playerData.SpDBounsAlways + player.playerData.SpDBounsJustOneRoom == 1) { player.playerData.DefBounsJustOneRoom -= 3; player.playerData.SpDBounsJustOneRoom -= 1; }
+                else { player.playerData.DefBounsJustOneRoom -= 2; player.playerData.SpDBounsJustOneRoom -= 2; }
+            }
 
-        int DCount = Mathf.Clamp( player.playerData.DefBounsAlways + player.playerData.DefBounsJustOneRoom + player.playerData.SpDBounsAlways + player.playerData.SpDBounsJustOneRoom , 0 , 4);
-        if (DCount < 4 && DCount > 0)
-        {
-            player.playerData.DefBounsJustOneRoom -= player.playerData.DefBounsAlways + player.playerData.DefBounsJustOneRoom;
-            player.playerData.SpDBounsJustOneRoom -= player.playerData.SpDBounsAlways + player.playerData.SpDBounsJustOneRoom;
+            player.ReFreshAbllityPoint();
+
+            if (DCount < 4) {
+                Pokemon.PokemonHpChange(null, player.gameObject, (player.Hp * (4 - DCount)) / 12.0f, 0, 0, Type.TypeEnum.IgnoreType);
+            }
         }
-        else if (DCount == 4)
+        else
         {
-            if      (player.playerData.DefBounsAlways + player.playerData.DefBounsJustOneRoom == 1) { player.playerData.DefBounsJustOneRoom -= 1; player.playerData.SpDBounsJustOneRoom -= 3; }
-            else if (player.playerData.SpDBounsAlways + player.playerData.SpDBounsJustOneRoom == 1) { player.playerData.DefBounsJustOneRoom -= 3; player.playerData.SpDBounsJustOneRoom -= 1; }
-            else                                                                                    { player.playerData.DefBounsJustOneRoom -= 2; player.playerData.SpDBounsJustOneRoom -= 2; }
-        }
-
-        player.ReFreshAbllityPoint();
-
-        if (DCount < 4) {
-            Pokemon.PokemonHpChange(null, player.gameObject, (player.Hp * (4 - DCount)) / 12.0f, 0, 0, Type.TypeEnum.IgnoreType);
+            Pokemon.PokemonHpChange(null, player.gameObject, (player.Hp * (4)) / 12.0f, 0, 0, Type.TypeEnum.IgnoreType);
         }
         player.KnockOutPoint = 0;
         player.KnockOutDirection = Vector2.zero;
-
 
 
         if (transform.rotation.eulerAngles == new Vector3(0, 0, 0) || transform.rotation.eulerAngles == new Vector3(0, 0, 180)) { DirectionRight = true; }

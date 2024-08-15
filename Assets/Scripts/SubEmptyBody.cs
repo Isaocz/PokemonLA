@@ -491,9 +491,9 @@ public class SubEmptyBody : Empty{
 
     public void SubEmptyBodyFixedUpdate()
     {
-        SetAnchorsPos();
         if (!ParentEmpty.isDie && !ParentEmpty.isBorn)
         {
+            SetAnchorsPos();
             EmptyBeKnock();
         }
     }
