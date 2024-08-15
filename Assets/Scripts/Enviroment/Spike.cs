@@ -24,14 +24,13 @@ public class Spike : MonoBehaviour
     protected List<EmptyList> TargetList = new List<EmptyList> { };
 
 
-    // Start is called before the first frame update
-    private void OnTriggerStay2D(Collider2D other)
+    public virtual void SpikeOnTriggerStay2D(Collider2D other)
     {
-        if(other.tag == ("Player"))
+        if (other.tag == ("Player"))
         {
             PlayerControler playerControler = other.GetComponent<PlayerControler>();
             //playerControler.ChangeHp(-Damage, 0, 19);
-            
+
             if (playerControler != null && !playerControler.playerData.IsPassiveGetList[13] && !playerControler.isRapidSpin)
             {
                 Pokemon.PokemonHpChange(null, other.gameObject, Damage, 0, 0, Type.TypeEnum.IgnoreType);
@@ -42,16 +41,14 @@ public class Spike : MonoBehaviour
         else if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            if (target != null) {
+            if (target != null)
+            {
                 SpikeHIt(target);
             }
         }
     }
 
-
-
-
-    private void Update()
+    public virtual void SpikesUpdate()
     {
         for (int i = 0; i < TargetList.Count; i++)
         {
@@ -64,6 +61,7 @@ public class Spike : MonoBehaviour
             TargetList[i] = CDCell;
         }
     }
+
 
     public void SpikeHIt(Empty target)
     {

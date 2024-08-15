@@ -520,6 +520,21 @@ public class Skill : MonoBehaviour
     }
 
 
+    protected bool isContainsaEmptyinTargetList( Empty target )
+    {
+
+        bool isContains = false;
+        if (TargetList.Count > 0) {
+            for (int i = 0; i < TargetList.Count; i++ )
+            {
+                if (TargetList[i].Target == target && TargetList[i].isMultipleDamageColdDown && TargetList[i].MultipleDamageColdDownTimer != 0) { isContains = true; }
+            }
+        }
+        return isContains;
+    }
+    
+
+
     /// <summary>
     /// 造成伤害时发生的事件
     /// </summary>

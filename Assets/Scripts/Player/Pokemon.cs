@@ -2164,17 +2164,33 @@ public class Pokemon : MonoBehaviour
             PlayerControler PlayerAttacked = Attacked.GetComponent<PlayerControler>();
             if (HpUpValue == 0)
             {
-                PlayerAttacked.ChangeHp(
-                         ((AtkPower == 0) ? 0 : ( Mathf.Clamp((-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),
-                         ((SpAPower == 0) ? 0 : ( Mathf.Clamp((-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1) )),
-                        (int)SkillType, Critial);
+                Empty AttackerEmpty = null; SubEmptyBody AttackerSubEmpty = null;
+                if (Attacker != null && Attacker.GetComponent<Empty>()) {  AttackerEmpty = Attacker.GetComponent<Empty>(); }
+                if (Attacker != null && Attacker.GetComponent<SubEmptyBody>()) { AttackerSubEmpty = Attacker.GetComponent<SubEmptyBody>(); }
 
-                if (PlayerAttacked.playerData.IsPassiveGetList[120] && Attacker != null)
+                //触发特性女王的威严
+                if ((PlayerAttacked != null && PlayerAttacked.PlayerAbility == PlayerControler.PlayerAbilityList.女王的威严) && 
+                    (Attacker != null && AttackerEmpty != null &&  ((AttackerSubEmpty != null && AttackerSubEmpty.ParentEmpty.EmptyHp == AttackerSubEmpty.ParentEmpty.maxHP ) || (AttackerSubEmpty == null && AttackerEmpty.EmptyHp == AttackerEmpty.maxHP))  )
+                    )
                 {
-                    Empty EmptyAttacker = Attacker.GetComponent<Empty>();
-                    if (EmptyAttacker != null)
+
+                }
+                else
+                {
+
+
+                    PlayerAttacked.ChangeHp(
+                             ((AtkPower == 0) ? 0 : (Mathf.Clamp((-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1))),
+                             ((SpAPower == 0) ? 0 : (Mathf.Clamp((-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1))),
+                            (int)SkillType, Critial);
+
+                    if (PlayerAttacked.playerData.IsPassiveGetList[120] && Attacker != null)
                     {
-                        EmptyAttacker.Blind(3,5);
+                        Empty EmptyAttacker = Attacker.GetComponent<Empty>();
+                        if (EmptyAttacker != null)
+                        {
+                            EmptyAttacker.Blind(3, 5);
+                        }
                     }
                 }
             }
@@ -2424,16 +2440,30 @@ public class Pokemon : MonoBehaviour
             PlayerControler PlayerAttacked = Attacked.GetComponent<PlayerControler>();
             if (HpUpValue == 0)
             {
-                PlayerAttacked.ChangeHp(
-                         ((AtkPower == 0) ? 0 : (Mathf.Clamp((-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1))),
-                         ((SpAPower == 0) ? 0 : (Mathf.Clamp((-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1))),
-                        (int)SkillType, Critial);
-                if (PlayerAttacked.playerData.IsPassiveGetList[120])
+                Empty AttackerEmpty = null; SubEmptyBody AttackerSubEmpty = null;
+                if (Attacker != null && Attacker.GetComponent<Empty>()) { AttackerEmpty = Attacker.GetComponent<Empty>(); }
+                if (Attacker != null && Attacker.GetComponent<SubEmptyBody>()) { AttackerSubEmpty = Attacker.GetComponent<SubEmptyBody>(); }
+
+                //触发特性女王的威严
+                if ((PlayerAttacked != null && PlayerAttacked.PlayerAbility == PlayerControler.PlayerAbilityList.女王的威严) &&
+                    (Attacker != null && AttackerEmpty != null && ((AttackerSubEmpty != null && AttackerSubEmpty.ParentEmpty.EmptyHp == AttackerSubEmpty.ParentEmpty.maxHP) || (AttackerSubEmpty == null && AttackerEmpty.EmptyHp == AttackerEmpty.maxHP)))
+                    )
                 {
-                    Empty EmptyAttacker = Attacker.GetComponent<Empty>();
-                    if (EmptyAttacker != null)
+
+                }
+                else
+                {
+                    PlayerAttacked.ChangeHp(
+                             ((AtkPower == 0) ? 0 : (Mathf.Clamp((-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1))),
+                             ((SpAPower == 0) ? 0 : (Mathf.Clamp((-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1))),
+                            (int)SkillType, Critial);
+                    if (PlayerAttacked.playerData.IsPassiveGetList[120])
                     {
-                        EmptyAttacker.Blind(3, 5);
+                        Empty EmptyAttacker = Attacker.GetComponent<Empty>();
+                        if (EmptyAttacker != null)
+                        {
+                            EmptyAttacker.Blind(3, 5);
+                        }
                     }
                 }
             }
