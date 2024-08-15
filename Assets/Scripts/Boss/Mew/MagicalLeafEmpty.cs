@@ -49,10 +49,14 @@ public class MagicalLeafEmpty : Projectile
 
     private void FixedUpdate()
     {
-        Vector3 Predictdirection = (target.position - playerPosition).normalized;
-        float playerSpeed = (target.position - playerPosition).magnitude;
-        playerPosition = target.position;
-        targetPosition += Predictdirection * playerSpeed * 0.5f;
+        if (percent < 0.85f)
+        {
+            Vector3 Predictdirection = (target.position - playerPosition).normalized;
+            float playerSpeed = (target.position - playerPosition).magnitude;
+            playerPosition = target.position;
+            targetPosition += Predictdirection * playerSpeed * 0.5f;
+        }
+
 
         if (percent < 1 && !changeDirection)
         {
