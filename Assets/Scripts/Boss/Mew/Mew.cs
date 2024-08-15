@@ -16,7 +16,7 @@ public class Mew : Empty
     public float laserLength = 10f; // 激光的长度
     public float laserOffset = 1f; // 激光的偏移量
     public LayerMask obstacleLayer;
-    public GameObject CursePrefab;//技能6
+    public GameObject dashReticle;//技能6
     public GameObject MagicalFirePrefab;//技能7
     public GameObject IcicleSpearPrefab;//技能8
     public float summonRadius = 5f;
@@ -96,6 +96,9 @@ public class Mew : Empty
     //Audio
     public BackGroundMusic bgmScript;
 
+    [Header("掉落")]
+    public PokemonBall[] pbList;
+
     [Header("其他")]
     public int currentPhase = 1; // 当前阶段
     public bool LaserChange = false;
@@ -128,6 +131,7 @@ public class Mew : Empty
     private bool roomCreated = false;
     private Vector3Int GetnowRoom;
     private Vector3 GetPlayerPosition;
+    private Vector3 GetMewPosition;
     private Vector3 GetCameraPostion;
 
     //摄像跟随
@@ -197,6 +201,7 @@ public class Mew : Empty
         Camera = GameObject.FindGameObjectWithTag("MainCamera");
         mapCenter = transform.parent.position;
         GetnowRoom = player.NowRoom;
+        GetMewPosition = transform.position;
         GetPlayerPosition = player.transform.position;
         GetCameraPostion = Camera.transform.position;
         transform.parent.parent.GetComponent<Room>().isClear += 1;
@@ -240,16 +245,20 @@ public class Mew : Empty
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         ResetPlayer();
         if (!isBorn && !isDying)
         {
+            if(Vector3.Distance(player.transform.position, transform.position) > 200f)
+            {
+                Destroy(this);
+            }
             if (currentPhase == 3)//三阶段判定
             {
                 Phase3();
                 HpTiming -= Time.deltaTime;
+                EmptyHp = (int)(HpTiming / HpTimer * maxHP);
                 uIHealth.Per = HpTiming / HpTimer;
                 uIHealth.ChangeHpDown();
                 UISkillButton.Instance.isEscEnable = false;
@@ -316,10 +325,13 @@ public class Mew : Empty
                                     }
                                 }
                             }
-                            else if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
+                            else
                             {
-                                //其实就是如果不需要转阶段或者没有异常状态，进行技能计时器，技能一旦开始便无法停止。异常状态只是停止技能计时器
-                                Phase1();
+                                if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
+                                {
+                                    //其实就是如果不需要转阶段或者没有异常状态，进行技能计时器，技能一旦开始便无法停止。异常状态只是停止技能计时器
+                                    Phase1();
+                                }
                             }
                             break;
                         case 2:
@@ -439,7 +451,7 @@ public class Mew : Empty
     }
 
     void InitializeSkillList()
-    {
+    { // 初始化技能表：将某阶段会触发的技能放进去
         skillList = new List<int>();
         for (int i = 1; i <= (currentPhase == 1 ? 18 : 20); i++)
         {
@@ -449,7 +461,7 @@ public class Mew : Empty
     }
 
     void ShuffleSkillList()
-    {
+    { // 打乱技能表
         for (int i = 0; i < skillList.Count; i++)
         {
             int temp = skillList[i];
@@ -597,43 +609,11 @@ public class Mew : Empty
                     yield return null;
                 }
                 break;
-            case 6://技能6：咒术
-                if(currentPhase == 2)
-                {
-                    return;
-                }
-                StartCoroutine(ReleaseCurse());
-                IEnumerator ReleaseCurse()
-                {
-                    if (currentPhase == 1)
-                    {
-                        for (int i = 0; i < 4; i++)
-                        {
-                            GameObject Curse = ObjectPoolManager.SpawnObject(CursePrefab, AtkTarget.transform.position, Quaternion.identity);
-                            Curse.GetComponent<Curse>().empty = this;
-                            ObjectPoolManager.ReturnObjectToPool(Curse, 4f);
-                            yield return new WaitForSeconds(0.6f);
-                        }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < 4; i++)
-                        {
-                            GameObject playercurse = ObjectPoolManager.SpawnObject(CursePrefab, player.transform.position, Quaternion.identity);
-                            playercurse.GetComponent<Curse>().empty = this;
-                            Destroy(playercurse, 4f);
-                            for (int j = 0; j < 12; j++)
-                            {
-                                Vector2 position = UnityEngine.Random.insideUnitCircle * 20f;
-                                Vector3 spawnPosition = transform.position + new Vector3(position.x, position.y + 0.5f, 0f);
-                                GameObject Curse = ObjectPoolManager.SpawnObject(CursePrefab, spawnPosition, Quaternion.identity);
-                                Curse.GetComponent<Curse>().empty = this;
-                                ObjectPoolManager.ReturnObjectToPool(Curse, 4f);
-                            }
-                            yield return new WaitForSeconds(0.6f);
-                        }
-                    }
-                }
+            case 6://技能6：流星光束
+                    GameObject DashReticle = Instantiate(dashReticle, transform.position, Quaternion.identity);
+                    var dr = DashReticle.GetComponent<MewDashReticle>();
+                    dr.skillTimes = 2;
+                
                 break;
             case 7://技能7：魔法火焰
                 StartCoroutine(ReleaseMagicalFire());
@@ -1828,6 +1808,10 @@ public class Mew : Empty
 
         //清除对象池内所有对象
         ObjectPoolManager.DestoryObjectInPool(true);
+
+        //获得道具
+        int pbIndex = Random.Range(0, pbList.Length);
+        PokemonBall pb = Instantiate(pbList[pbIndex],GetMewPosition, Quaternion.identity);
 
         //梦幻嘎掉
         player.CanNotUseSpaceItem = false;
