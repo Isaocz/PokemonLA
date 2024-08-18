@@ -29,7 +29,7 @@ public class Whirlpool : Skill
             if (target != null)
             {
                 HitAndKo(target);
-                if (!target.isSpeedChange) {
+                if (!target.isSpeedChange && SkillFrom == 2) {
                     target.SpeedChange();
                 }
             }
@@ -42,7 +42,7 @@ public class Whirlpool : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            if (target != null && target.isSpeedChange)
+            if (target != null && target.isSpeedChange && SkillFrom == 2)
             {
                 target.SpeedRemove01(0.2f);
             }

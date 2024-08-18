@@ -78,6 +78,9 @@ public class MyAstarAI : MonoBehaviour
                     {
                         RunTargetPosition = targetPosition.position;
                         //if (ParentEmpty.isEmptyConfusionDone) { RunTargetPosition = (RunTargetPosition + new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3), 0)).normalized; }
+                        Debug.Log(seeker);
+                        Debug.Log(transform.position);
+                        Debug.Log(RunTargetPosition);
                         seeker.StartPath(transform.position, RunTargetPosition, OnPathComplete);
                         RePathFind = 0;
                     }

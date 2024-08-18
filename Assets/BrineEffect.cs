@@ -27,7 +27,7 @@ public class BrineEffect : MonoBehaviour
             if (ParentBrine != null && target != null) {
                 if (target.EmptyHp <= target.maxHP / 2) { 
                     ParentBrine.SpDmageDouble();
-                    if (!Empties.Contains(target))
+                    if (ParentBrine.SkillFrom == 2 && !Empties.Contains(target))
                     {
                         Empties.Add(target);
                         target.SpeedChange();

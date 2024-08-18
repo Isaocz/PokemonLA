@@ -22,6 +22,8 @@ public class InitializePlayerSetting : MonoBehaviour
     public int SkillButtonLayout;
     public bool isJoystickFixed;
 
+    public static ulong RoundSeed;
+
 
     public Dictionary<string, KeyCode> keybinds = new Dictionary<string, KeyCode>() {
             
@@ -43,6 +45,7 @@ public class InitializePlayerSetting : MonoBehaviour
     private void Awake()
     {
         GlobalPlayerSetting = this;
+        RoundSeed = (ulong)Random.Range(0, 2821109907456);
     }
 
     public void ChangeKey(string KeyName , KeyCode k )

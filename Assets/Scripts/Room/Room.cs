@@ -66,6 +66,8 @@ public class Room : MonoBehaviour
     GridGraph RoomGraph;
     float GraphUpdateTimer;
 
+    public float RoomWeight = 1.0f;
+
 
     /// <summary>
     /// 该房间某个方向是否被该房间内的环境物体遮挡，依次为上下左右，不被阻挡时为false，被阻挡时为true
@@ -504,7 +506,7 @@ public class Room : MonoBehaviour
     {
         for(;;) 
         {
-            if (playerControler.playerData.IsPassiveGetList[57])
+            if (playerControler!= null && playerControler.playerData.IsPassiveGetList[57])
             {
                 DeleteGrass(transform);
             }
