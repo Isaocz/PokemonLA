@@ -141,15 +141,15 @@ public class Ralts : Empty
         Vector3 TPPosition;
         if (!isFearDone)
         {
-            TPPosition = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
+            TPPosition = transform.parent.position + new Vector3(Random.Range(ParentPokemonRoom.RoomSize[2], ParentPokemonRoom.RoomSize[3]), Random.Range(ParentPokemonRoom.RoomSize[1], ParentPokemonRoom.RoomSize[0]), 0);
         }
         else
         {
-            TPPosition = transform.parent.position + new Vector3((Random.Range(0.0f, 1.0f) > 0.5 ? (Random.Range(-12.0f, -10.0f)) : (Random.Range(10.0f, 12.0f))), (Random.Range(0.0f, 1.0f) > 0.5 ? (Random.Range(-7.0f, -5.50f)) : (Random.Range(5.5f, 7f))), 0);
+            TPPosition = transform.parent.position + new Vector3((Random.Range(0.0f, 1.0f) > 0.5 ? (Random.Range(ParentPokemonRoom.RoomSize[2], ParentPokemonRoom.RoomSize[2] + 2.0f)) : (Random.Range(ParentPokemonRoom.RoomSize[3]-2.0f, ParentPokemonRoom.RoomSize[3]))), (Random.Range(0.0f, 1.0f) > 0.5 ? (Random.Range(ParentPokemonRoom.RoomSize[1], ParentPokemonRoom.RoomSize[1]+1.5f)) : (Random.Range(ParentPokemonRoom.RoomSize[0]-1.5f, ParentPokemonRoom.RoomSize[0]))), 0);
         }
         while (!isThisPointEmpty(TPPosition))
         {
-            TPPosition = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
+            TPPosition = transform.parent.position + new Vector3(Random.Range(ParentPokemonRoom.RoomSize[2], ParentPokemonRoom.RoomSize[3]), Random.Range(ParentPokemonRoom.RoomSize[1], ParentPokemonRoom.RoomSize[0]), 0);
         }
 
         transform.position = TPPosition;

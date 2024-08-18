@@ -18,7 +18,7 @@ public class MapCreater : MonoBehaviour
     //声明一个房间变量，表示基础的房间
     public Room StarRoom;
     Room BaseRoom;
-    public GameObject BaseRoomList;
+    public RoomFile BaseRoomList;
     //声明一个房间变量，表示宝可梦中心房间,一个坐标变量，用来存储PC房间的虚拟坐标，一个布尔型变量，表示是否生成过PC房间。
     //声明一个房间变量，表示商店房间,一个坐标变量，用来存储商店房间的虚拟坐标，一个布尔型变量，表示是否生成过商店房间。
     //声明一个房间变量，表示boss房间,一个坐标变量，用来存储boss房间的虚拟坐标，一个布尔型变量，表示是否生成过boss房间。
@@ -77,11 +77,12 @@ public class MapCreater : MonoBehaviour
 
     bool isReset;
 
-    //声明一个整形变量，表示生成的最小房间。
+    //声明一个整形变量，表示每次探索时生成的最小房间。超过这个范围后生成的概率会下降
+    public int StepMin;
+    //超过每次探索时生成的最小房间,生成房间概率的衰减速度
+    public float DecaySpeed = 0.2f;
     //一个浮点型变量，表示生成概率。
     //一个浮点型变量，表示特殊房间的生成半径。
-    public int StepMin;
-    float SpawnChance = 1.0f;
     float SpawnR = 1.0f;
 
 
@@ -89,7 +90,6 @@ public class MapCreater : MonoBehaviour
     //一个向量表示虚拟房间布局的目前房间点
     public Dictionary<Vector3Int, int> VRoom = new Dictionary<Vector3Int, int>();
     public Dictionary<Vector3Int, Room> RRoom = new Dictionary<Vector3Int, Room>();
-    Vector3Int NowPoint = new Vector3Int(0,0,0);
 
 
     List<int> RoomBlackList = new List<int> { };
@@ -168,7 +168,7 @@ public class MapCreater : MonoBehaviour
             isBornBabyCenterRoom = Random.Range(0.0f, 1.0f) <= 0.3f;
             isBornMintRoom = Random.Range(0.0f, 1.0f) <= 0.3f;
             isBornBerryTreeRoom = Random.Range(0.0f, 1.0f) <= 0.08f;
-            StepMin = 8;
+            //StepMin = 8;
             BossRoom = BossRoomList[Random.Range(0,BossRoomList.Count)];
         }
         Debug.Log(isBornMewRoom);
@@ -176,7 +176,7 @@ public class MapCreater : MonoBehaviour
         Debug.Log(isBornMintRoom);
 
 
-        for (int i = 0; i < BaseRoomList.transform.childCount; i++)
+        for (int i = 0; i < BaseRoomList.RoomList.Count; i++)
         {
             RoomWhiteList.Add(i);
         }
@@ -209,7 +209,7 @@ public class MapCreater : MonoBehaviour
     //声明一个生成真实房间的函数
     void CreateRoom()
     {
-        if (!isReset) { BuildVRoom(); }
+        if (!isReset) { BuildVRoom(1.0f , Vector3Int.zero , 0); }
         if (!isReset) { BuiledStoreRoom(); }
         if (!isReset) { BuiledBossRoom(); }
         if (!isReset) { BuiledBossRoom(); }
@@ -277,8 +277,8 @@ public class MapCreater : MonoBehaviour
         {
             isPCRoomSpawn = false; isStoreRoomSpawn = false; isBossRoomSpawn = false;
             PCCreatCount = 0; StoreCreatCount = 0; BossRoomCreatCount = 0;
-            PCRoomPoint = Vector3Int.zero; StoreRoomPoint = Vector3Int.zero; BossRoomPoint = Vector3Int.zero; NowPoint = Vector3Int.zero;
-            SpawnR = 1.0f; SpawnChance = 1.0f;
+            PCRoomPoint = Vector3Int.zero; StoreRoomPoint = Vector3Int.zero; BossRoomPoint = Vector3Int.zero; 
+            SpawnR = 1.0f; 
 
             BabyCenterRoomPoint = new Vector3Int(10000, 10000, 0);
             isBabyCenterRoomSpawn = false;
@@ -304,7 +304,7 @@ public class MapCreater : MonoBehaviour
 
         VRoom.Clear(); RRoom.Clear();
         RRoom = new Dictionary<Vector3Int, Room> { };
-        BuildVRoom();
+        BuildVRoom(1.0f , Vector3Int.zero , 0);
         BuiledPCroom();
         BuiledStoreRoom();
         BuiledBossRoom();
@@ -332,21 +332,87 @@ public class MapCreater : MonoBehaviour
     //==============================================生成特殊房间的部分========================================================
 
     //生成一个计算虚拟普通房间的函数
-    void BuildVRoom()
+    void BuildVRoom( float per , Vector3Int NowChechPoint , int RoomCount)
     {
+        //Debug.Log("per" + per + "NowChechPoint" + NowChechPoint + "RoomCount" + RoomCount);
 
         //如果当前虚拟房间点不是一个虚拟房间，使该房间变为虚拟房间
-        if(!VRoom.ContainsKey(NowPoint)) { VRoom.Add(NowPoint, 0); }
+        if (!VRoom.ContainsKey(NowChechPoint)) { VRoom.Add(NowChechPoint, 0); }
 
         //当当前虚拟房间数大于需要生成的最小房间数时，房间生成概率降低10%
-        if(VRoom.Count > StepMin) { SpawnChance -= 0.12f; }
+        if(RoomCount > StepMin) { per -= DecaySpeed; }
 
+        float s1 = Random.Range(0.0f, 0.8f) - (NowChechPoint == Vector3Int.zero ? 0.6f : 0);
         //进行一次随机如果小于生成概率就随机向某个方向生成一个虚拟房间
-        if (Random.Range(0.0f,1.0f) <= SpawnChance)
+        if (s1 <= per)
         {
-            NowPoint += RandomRoomDirection();
-            BuildVRoom();
+            Vector3Int r = RandomRoomDirection();
+            int Count = 0;
+            bool isOver = false;
+            while (VRoom.ContainsKey(NowChechPoint + r) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(r.y,r.x,0)) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(-r.y, r.x, 0)) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(-r.y, -r.x, 0)) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(r.y, -r.x, 0)))
+            {
+                r = RandomRoomDirection(); 
+                Count++;
+                if (Count > 100) { isOver = true; break; }
+            }
+            if (!isOver)
+            {
+                BuildVRoom(per, NowChechPoint + r, RoomCount + 1);
+            }
+
         }
+        float s2 = Random.Range(0.0f, 1.0f) - (NowChechPoint == Vector3Int.zero ? 0.6f : 0);
+        if (s2 <= per)
+        {
+            Vector3Int r = RandomRoomDirection();
+            int Count = 0;
+            bool isOver = false;
+            while (VRoom.ContainsKey(NowChechPoint + r) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(r.y, r.x, 0)) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(-r.y, r.x, 0)) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(-r.y, -r.x, 0)) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(r.y, -r.x, 0)))
+            {
+                r = RandomRoomDirection();
+                Count++;
+                if (Count > 100) { isOver = true; break; }
+            }
+            if (!isOver) {
+                BuildVRoom(per, NowChechPoint + r, RoomCount + 1);
+            }
+        }
+        float s3 = Random.Range(0.0f, 1.2f) - (NowChechPoint == Vector3Int.zero ? 0.6f : 0);
+        if (s3 <= per)
+        {
+            Vector3Int r = RandomRoomDirection();
+            int Count = 0;
+            bool isOver = false;
+            while (VRoom.ContainsKey(NowChechPoint + r) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(r.y, r.x, 0)) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(-r.y, r.x, 0)) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(-r.y, -r.x, 0)) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(r.y, -r.x, 0)))
+            {
+                r = RandomRoomDirection();
+                Count++;
+                if (Count > 100) { isOver = true; break; }
+            }
+            if (!isOver)
+            {
+                BuildVRoom(per, NowChechPoint + r, RoomCount + 1);
+            }
+        }
+        float s4 = Random.Range(0.0f, 1.6f) - (NowChechPoint == Vector3Int.zero ? 0.6f : 0);
+        if (s4 <= per)
+        {
+            Vector3Int r = RandomRoomDirection();
+            int Count = 0;
+            bool isOver = false;
+            while (VRoom.ContainsKey(NowChechPoint + r) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(r.y, r.x, 0)) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(-r.y, r.x, 0)) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(-r.y, -r.x, 0)) || VRoom.ContainsKey(NowChechPoint + r + new Vector3Int(r.y, -r.x, 0)))
+            {
+                r = RandomRoomDirection();
+                Count++;
+                if (Count > 100) { isOver = true; break; }
+            }
+            if (!isOver)
+            {
+                BuildVRoom(per, NowChechPoint + r, RoomCount + 1);
+            }
+        }
+
+       
 
     }
 
@@ -1258,11 +1324,11 @@ public class MapCreater : MonoBehaviour
 
         bool[] Bolcked = new bool[] { VRoom.ContainsKey(RoomVector + Vector3Int.up)  , VRoom.ContainsKey(RoomVector + Vector3Int.down) , VRoom.ContainsKey(RoomVector + Vector3Int.left) , VRoom.ContainsKey(RoomVector + Vector3Int.right) };
 
-        int x = RoomWhiteList[Random.Range(0, RoomWhiteList.Count)];
+        int x = SwitchRoomByWeight(RoomWhiteList);
         int count = 0;
-        while (!JudgeRoomBlacked(Bolcked, BaseRoomList.transform.GetChild(x).GetComponent<Room>()))
+        while (!JudgeRoomBlacked(Bolcked, BaseRoomList.RoomList[x].GetComponent<Room>()))
         {
-            x = RoomWhiteList[Random.Range(0, RoomWhiteList.Count)];
+            x = SwitchRoomByWeight(RoomWhiteList);
             count += 1;
             if (count == 20) {
                 
@@ -1286,9 +1352,31 @@ public class MapCreater : MonoBehaviour
             RoomWhiteList = RoomBlackList;
             RoomBlackList = new List<int> { };
         }
-        Room OutPut = BaseRoomList.transform.GetChild(x).GetComponent<Room>();
+        Room OutPut = BaseRoomList.RoomList[x].GetComponent<Room>();
         return OutPut;
     }
+
+
+    int SwitchRoomByWeight( List<int> WhiteList )
+    {
+        int Output = Random.Range(0, WhiteList.Count);
+        float TotalWeight = 0;
+
+        for (int i = 0; i < WhiteList.Count; i++) 
+        {
+            TotalWeight += BaseRoomList.RoomList[WhiteList[i]].RoomWeight;
+        }
+        float W = Random.Range(0.0f , TotalWeight);
+        float test = 0;
+        for (int i = 0; i < WhiteList.Count; i++)
+        {
+            if (W >= test && W < test + BaseRoomList.RoomList[WhiteList[i]].RoomWeight ) { Output = WhiteList[i]; break; }
+            test += BaseRoomList.RoomList[WhiteList[i]].RoomWeight;
+        }
+        //Debug.Log("TotalWeight:" + TotalWeight + " Switch:" + W + " WhiteList:" + WhiteList.Count + "Room:" + Output);
+        return Output;
+    }
+
 
     /// <summary>
     /// 判断某一个房间的阻挡情况是否可以被采用
@@ -1300,7 +1388,7 @@ public class MapCreater : MonoBehaviour
         {
             if (Blocked[i] && JudgeRoom.isBlockerIn[i]) { Output = false; }
         }
-        if (Output) { Debug.Log(JudgeRoom + "+" + Blocked[0]+"+"+ Blocked[1] + "+" + Blocked[2] + "+" + Blocked[3] + "+" + JudgeRoom.isBlockerIn[0] + "+" + JudgeRoom.isBlockerIn[1] + "+" + JudgeRoom.isBlockerIn[2] + "+" + JudgeRoom.isBlockerIn[3]); }
+        //if (Output) { Debug.Log(JudgeRoom + "+" + Blocked[0]+"+"+ Blocked[1] + "+" + Blocked[2] + "+" + Blocked[3] + "+" + JudgeRoom.isBlockerIn[0] + "+" + JudgeRoom.isBlockerIn[1] + "+" + JudgeRoom.isBlockerIn[2] + "+" + JudgeRoom.isBlockerIn[3]); }
         return Output;
     }
 

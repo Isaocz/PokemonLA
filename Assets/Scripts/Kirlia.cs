@@ -109,7 +109,7 @@ public class Kirlia : Empty
                         }
                         else
                         {
-                            rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)JumpDirector.x * Time.deltaTime * speed * (Mathf.Pow(1.2f, Mathf.Clamp(JumpCount, 0, 2))), -12f + transform.parent.position.x, 12f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)JumpDirector.y * Time.deltaTime * speed * (Mathf.Pow(1.2f, Mathf.Clamp(JumpCount, 0, 2))), -7.5f + transform.parent.position.y, 7.5f + transform.parent.position.y));
+                            rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)JumpDirector.x * Time.deltaTime * speed * (Mathf.Pow(1.2f, Mathf.Clamp(JumpCount, 0, 2))), ParentPokemonRoom.RoomSize[2] + transform.parent.position.x, ParentPokemonRoom.RoomSize[3] + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)JumpDirector.y * Time.deltaTime * speed * (Mathf.Pow(1.2f, Mathf.Clamp(JumpCount, 0, 2))), ParentPokemonRoom.RoomSize[1] + transform.parent.position.y, ParentPokemonRoom.RoomSize[0] + transform.parent.position.y));
                             animator.SetFloat("LookX", ((JumpCount == 2 ? Director.x : JumpDirector.x) >= 0 ? 1 : -1));
                             animator.SetFloat("LookY", ((JumpCount == 2 ? Director.y : JumpDirector.y) >= 0 ? 1 : -1));
                         }
@@ -163,7 +163,7 @@ public class Kirlia : Empty
                         }
                         else
                         {
-                            rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)JumpDirector.x * Time.deltaTime * speed * (Mathf.Pow(1.2f, Mathf.Clamp(JumpCount, 0, 2))), -12f + transform.parent.position.x, 12f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)JumpDirector.y * Time.deltaTime * speed * (Mathf.Pow(1.2f, Mathf.Clamp(JumpCount, 0, 2))), -7.5f + transform.parent.position.y, 7.5f + transform.parent.position.y));
+                            rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)JumpDirector.x * Time.deltaTime * speed * (Mathf.Pow(1.2f, Mathf.Clamp(JumpCount, 0, 2))), ParentPokemonRoom.RoomSize[2] + transform.parent.position.x, ParentPokemonRoom.RoomSize[3] + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)JumpDirector.y * Time.deltaTime * speed * (Mathf.Pow(1.2f, Mathf.Clamp(JumpCount, 0, 2))), ParentPokemonRoom.RoomSize[1] + transform.parent.position.y, ParentPokemonRoom.RoomSize[0] + transform.parent.position.y));
                             animator.SetFloat("LookX", ((JumpDirector.x) >= 0 ? 1 : -1));
                             animator.SetFloat("LookY", ((JumpDirector.y) >= 0 ? 1 : -1));
                         }
@@ -219,14 +219,14 @@ public class Kirlia : Empty
     {
         Vector3 TPPosition;
         TPPosition = (Vector3)TargetPosition + (new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), 0).normalized) * Random.Range(4.5f, 9f);
-        TPPosition = new Vector3( Mathf.Clamp(TPPosition.x , transform.parent.position.x-12.0f , transform.parent.position.x+12.0f), Mathf.Clamp(TPPosition.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f));
+        TPPosition = new Vector3( Mathf.Clamp(TPPosition.x , transform.parent.position.x+ ParentPokemonRoom.RoomSize[2], transform.parent.position.x+ ParentPokemonRoom.RoomSize[3]), Mathf.Clamp(TPPosition.y, transform.parent.position.y + ParentPokemonRoom.RoomSize[1], transform.parent.position.y + ParentPokemonRoom.RoomSize[0]));
         int TPCount = 0;
-        while (!isThisPointEmpty(TPPosition) || Mathf.Abs(TPPosition.x - transform.parent.position.x) > 12 || Mathf.Abs(TPPosition.y - transform.parent.position.y) > 7)
+        while (!isThisPointEmpty(TPPosition) || (TPPosition.x - transform.parent.position.x > ParentPokemonRoom.RoomSize[3]) || (TPPosition.x - transform.parent.position.x < ParentPokemonRoom.RoomSize[2]) ||( TPPosition.y - transform.parent.position.y > ParentPokemonRoom.RoomSize[0]) || (TPPosition.y - transform.parent.position.y < ParentPokemonRoom.RoomSize[1]))
         {
             TPPosition = (Vector3)TargetPosition + (new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), 0).normalized) * Random.Range(4.5f, 7.5f);
-            TPPosition = new Vector3(Mathf.Clamp(TPPosition.x, transform.parent.position.x - 12.0f, transform.parent.position.x + 12.0f), Mathf.Clamp(TPPosition.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f));
+            TPPosition = new Vector3(Mathf.Clamp(TPPosition.x, transform.parent.position.x + ParentPokemonRoom.RoomSize[2], transform.parent.position.x + ParentPokemonRoom.RoomSize[3]), Mathf.Clamp(TPPosition.y, transform.parent.position.y + ParentPokemonRoom.RoomSize[1], transform.parent.position.y + ParentPokemonRoom.RoomSize[0]));
             Debug.Log(TPPosition);
-            Debug.Log(!isThisPointEmpty(TPPosition) || Mathf.Abs(TPPosition.x) >= 12 || Mathf.Abs(TPPosition.y) >= 7);
+            Debug.Log(!isThisPointEmpty(TPPosition) || TPPosition.x >= ParentPokemonRoom.RoomSize[3] || TPPosition.x <= ParentPokemonRoom.RoomSize[2] || TPPosition.y >= ParentPokemonRoom.RoomSize[0] || TPPosition.y <= ParentPokemonRoom.RoomSize[1]);
             TPCount++;
             if(TPCount > 100)
             {

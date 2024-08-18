@@ -135,7 +135,7 @@ public class Gastly : Empty
             case 1:
                 if (!isFearDone)
                 {
-                    if (TargetPosition.x + 3 <= transform.parent.position.x + 12)
+                    if (TargetPosition.x + 3 <= transform.parent.position.x + ParentPokemonRoom.RoomSize[3])
                     {
                         transform.position = new Vector3(TargetPosition.x + 3 + Random.Range(-0.5f, 0.0f), TargetPosition.y + Random.Range(-1.5f, 1.5f), 0);
                         if (!isEmptyConfusionDone)
@@ -155,7 +155,7 @@ public class Gastly : Empty
                 }
                 else
                 {
-                    if (TargetPosition.x + 5 <= transform.parent.position.x + 12)
+                    if (TargetPosition.x + 5 <= transform.parent.position.x +ParentPokemonRoom.RoomSize[3])
                     {
                         transform.position = new Vector3(TargetPosition.x + 5 + Random.Range(-0.5f, 0.0f), TargetPosition.y + Random.Range(-1.5f, 1.5f), 0);
                         if (!isEmptyConfusionDone)
@@ -177,7 +177,7 @@ public class Gastly : Empty
             case 2:
                 if (!isFearDone)
                 {
-                    if (TargetPosition.x - 3 >= transform.parent.position.x - 12)
+                    if (TargetPosition.x - 3 >= transform.parent.position.x + ParentPokemonRoom.RoomSize[2])
                     {
                         transform.position = new Vector3(TargetPosition.x - 3 - Random.Range(-0.5f, 0.0f), TargetPosition.y + Random.Range(-1.5f, 1.5f), 0);
                         if (!isEmptyConfusionDone)
@@ -197,7 +197,7 @@ public class Gastly : Empty
                 }
                 else
                 {
-                    if (TargetPosition.x - 5 >= transform.parent.position.x - 12)
+                    if (TargetPosition.x - 5 >= transform.parent.position.x + ParentPokemonRoom.RoomSize[2])
                     {
                         transform.position = new Vector3(TargetPosition.x - 5 - Random.Range(-0.5f, 0.0f), TargetPosition.y + Random.Range(-1.5f, 1.5f), 0);
                         if (!isEmptyConfusionDone)
@@ -219,7 +219,7 @@ public class Gastly : Empty
             case 3:
                 if (!isFearDone)
                 {
-                    if (TargetPosition.y + 3 <= transform.parent.position.y + 7)
+                    if (TargetPosition.y + 3 <= transform.parent.position.y + ParentPokemonRoom.RoomSize[0])
                     {
                         transform.position = new Vector3(TargetPosition.x + Random.Range(-1.5f, 1.5f), TargetPosition.y + 3 + Random.Range(-0.5f, 0.0f), 0);
                         if (!isEmptyConfusionDone)
@@ -239,7 +239,7 @@ public class Gastly : Empty
                 }
                 else
                 {
-                    if (TargetPosition.y + 5 <= transform.parent.position.y + 7)
+                    if (TargetPosition.y + 5 <= transform.parent.position.y + ParentPokemonRoom.RoomSize[0])
                     {
                         transform.position = new Vector3(TargetPosition.x + Random.Range(-1.5f, 1.5f), TargetPosition.y + 5 + Random.Range(-0.5f, 0.0f), 0);
                         if (!isEmptyConfusionDone)
@@ -261,7 +261,7 @@ public class Gastly : Empty
             case 4:
                 if (!isFearDone)
                 {
-                    if (TargetPosition.y - 3 >= transform.parent.position.x - 7)
+                    if (TargetPosition.y - 3 >= transform.parent.position.x + ParentPokemonRoom.RoomSize[1])
                     {
                         transform.position = new Vector3(TargetPosition.x + Random.Range(-1.5f, 1.5f), TargetPosition.y - 3 - Random.Range(-0.5f, 0.0f), 0);
                         if (!isEmptyConfusionDone)
@@ -281,7 +281,7 @@ public class Gastly : Empty
                 }
                 else
                 {
-                    if (TargetPosition.y - 5 >= transform.parent.position.x - 7)
+                    if (TargetPosition.y - 5 >= transform.parent.position.x + ParentPokemonRoom.RoomSize[1])
                     {
                         transform.position = new Vector3(TargetPosition.x + Random.Range(-1.5f, 1.5f), TargetPosition.y - 5 - Random.Range(-0.5f, 0.0f), 0);
                         if (!isEmptyConfusionDone)

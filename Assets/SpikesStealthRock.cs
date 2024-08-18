@@ -58,7 +58,7 @@ public class SpikesStealthRock : Spike
                 float f = ((SpikeTimer - ((CycleTimer / 2.0f) - ToTimer)) / ToTimer) * 0.8f;
                 SpikeList[i].color = new Color(1, 1, 1, Mathf.Clamp(1.0f - f, 0.2f, 1.0f));
                 ShadowList[i].color = new Color(1, 1, 1, Mathf.Clamp(1.0f - f, 0.2f, 1.0f));
-                Debug.Log(SpikeList[i].gameObject.name);
+                //Debug.Log(SpikeList[i].gameObject.name);
             }
         }
         if (SpikeState == State.I2N) 
@@ -69,7 +69,7 @@ public class SpikesStealthRock : Spike
                 if (SpikeTimer >= CycleTimer || SpikeTimer < CycleTimer - ToTimer) { f = 0.8f; }
                 SpikeList[i].color = new Color(1, 1, 1, Mathf.Clamp( 0.2f + f , 0.2f ,1.0f ));
                 ShadowList[i].color = new Color(1, 1, 1, Mathf.Clamp(0.2f + f, 0.2f, 1.0f));
-                Debug.Log(SpikeList[i].gameObject.name);
+                //Debug.Log(SpikeList[i].gameObject.name);
             }
         }
 
@@ -114,7 +114,7 @@ public class SpikesStealthRock : Spike
                 SpikeList[i].color = new Color(1 , 1 , 1 , 0.2f);
                 ShadowList[i].color = new Color(1 , 1 , 1 , 0.2f);
             }
-            Debug.Log(SpikeList.Count);
+            //Debug.Log(SpikeList.Count);
         }
         else if (SpikeTimer > CycleTimer-ToTimer && SpikeTimer <= CycleTimer && SpikeState != State.I2N)
         {
