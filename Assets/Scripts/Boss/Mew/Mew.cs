@@ -17,6 +17,7 @@ public class Mew : Empty
     public float laserOffset = 1f; // 激光的偏移量
     public LayerMask obstacleLayer;
     public GameObject dashReticle;//技能6
+    public GameObject PouncePrefab;
     public GameObject MagicalFirePrefab;//技能7
     public GameObject IcicleSpearPrefab;//技能8
     public float summonRadius = 5f;
@@ -149,24 +150,24 @@ public class Mew : Empty
     //颜色
     private Color[] colors = new Color[]
 {
-        new Color(0.7176471f, 0.6901961f, 0.6666667f, 0.5882353f), // Normal
-        new Color(1, 0.75f, 0.175f, 0.7803922f), // Fighting
-        new Color(0.678f,0.643f,0.91f,0.5882353f), // Flying
-        new Color(0.875f,0.385f,0.733f,0.5882353f), // Poison
-        new Color(0.81f,0.702f,0.51f,0.7058824f), // Ground
-        new Color(0.68f, 0.54f,0.2636614f,0.702f), // Rock
-        new Color(0.9f,0.945f,0.506f,0.5882353f), // Bug
-        new Color(0.92f,0.31f,0.43f,0.627451f), // Ghost
-        new Color(0.765f,0.64f,0.5f,0.53f), // Steel
-        new Color(1,0.95f,0,0.6862745f), // Fire
-        new Color(0.54f,0.75f,0.8903922f,0.5882353f), // Water
-        new Color(0.69f,0.87f,0.54f,0.5882353f), // Grass
-        new Color(0.96f,0.93f,0.63f,0.5882353f), // Electric
-        new Color(0.86f,0.50f,0.655f,0.5882353f), // Psychic
-        new Color(0.495f,0.765f,0.895f,0.5882353f), // Ice
-        new Color(0.845f,0.553f,0.5137255f,0.682353f), // Dragon
-        new Color(1,0.498f,0.53104f,0.8313726f), // Dark
-        new Color(0.823f,0.87f,0.95f,0.5882353f), // Fairy
+        new Color(0.7294118f, 0.7333333f, 0.6627451f, 1f), // Normal
+        new Color(0.7333333f, 0.3372549f, 0.2666667f, 1f), // Fighting
+        new Color(0.6588235f, 0.5647059f, 0.9333334f, 1f), // Flying
+        new Color(0.6666667f, 0.3333333f, 0.6f, 1f), // Poison
+        new Color(0.8588236f, 0.7568628f, 0.3921569f, 1f), // Ground
+        new Color(0.7098039f, 0.6313726f, 0.227451f, 1f), // Rock
+        new Color(0.6666667f, 0.7333333f, 0.1215686f, 1f), // Bug
+        new Color(0.4431373f, 0.345098f, 0.6f, 1f), // Ghost
+        new Color(0.6705883f, 0.6666667f, 0.7294118f, 1f), // Steel
+        new Color(1, 0.2666667f, 0.1294118f, 1f), // Fire
+        new Color(0.2f, 0.6f, 0.9960785f, 1f), // Water
+        new Color(0.4666667f, 0.8f, 0.3333333f, 1f), // Grass
+        new Color(0.9725491f, 0.8156863f, 0.1882353f, 1f), // Electric
+        new Color(0.9764706f, 0.3490196f, 0.5372549f, 1f), // Psychic
+        new Color(0.5921569f, 0.8431373f, 0.8431373f, 1f), // Ice
+        new Color(0.4470589f, 0.2313726f, 0.9764706f, 1f), // Dragon
+        new Color(0.4470589f, 0.345098f, 0.2862745f, 1f), // Dark
+        new Color(0.9333334f, 0.6078432f, 0.6784314f, 1f), // Fairy
 };
     public Type.TypeEnum SkillType;
     public Material src1;
@@ -250,10 +251,6 @@ public class Mew : Empty
         ResetPlayer();
         if (!isBorn && !isDying)
         {
-            if(Vector3.Distance(player.transform.position, transform.position) > 200f)
-            {
-                Destroy(this);
-            }
             if (currentPhase == 3)//三阶段判定
             {
                 Phase3();
@@ -295,6 +292,10 @@ public class Mew : Empty
                         StartCoroutine(Phase3End());
                     }
                 }
+                if (Vector3.Distance(player.transform.position, transform.position) > 200f)
+                {
+                    Destroy(this);
+                }
             }
             else
             {
@@ -310,6 +311,7 @@ public class Mew : Empty
                             if (EmptyHp < maxHP / 2)
                             {
                                 Invincible = true;
+                                player.isInvincible = true;
                                 StopAllCoroutines();
                                 if (!UsedMeanLook)
                                 {
@@ -340,7 +342,7 @@ public class Mew : Empty
                                 isReset = false;
                                 ClearStatusEffects();
                                 StopAllCoroutines();
-                                player.ChangeHp((player.Hp < player.maxHp / 2) ? (player.Hp + player.maxHp / 2) : (player.maxHp - player.Hp), 0, 0);
+                                player.ChangeHp((player.Hp < (player.maxHp * 3 / 4)) ? player.maxHp / 4 : (player.maxHp - player.Hp), 0, 0);
                                 EmptyHp = maxHP;
                                 uIHealth.Per = EmptyHp / maxHP;
                                 uIHealth.ChangeHpUp();
@@ -609,10 +611,14 @@ public class Mew : Empty
                     yield return null;
                 }
                 break;
-            case 6://技能6：流星光束
-                    GameObject DashReticle = Instantiate(dashReticle, transform.position, Quaternion.identity);
-                    var dr = DashReticle.GetComponent<MewDashReticle>();
-                    dr.skillTimes = 2;
+            case 6://技能6：虫扑
+                GameObject pounce = Instantiate(PouncePrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+                var poc = pounce.GetComponent<PounceMew>();
+                poc.empty = this;
+
+                GameObject DashReticle = Instantiate(dashReticle, transform.position, Quaternion.identity);
+                var dr = DashReticle.GetComponent<MewDashReticle>();
+                dr.skillTimes = 2;
                 
                 break;
             case 7://技能7：魔法火焰
@@ -1002,7 +1008,7 @@ public class Mew : Empty
                 IEnumerator ReleaseMakeItRain()
                 {
                     float angle = 0f;
-                    float angleIncrement = currentPhase == 3 ? 10f : 8f;
+                    float angleIncrement = currentPhase != 2 ? 11f : 8f;//数值越小，弹幕越密集
                     int Degree = 50;
                     int Times = 2;
                     if (currentPhase == 2)
@@ -1241,7 +1247,7 @@ public class Mew : Empty
                 }
                 break;
         }
-        //二阶段总共移除的技能：暴风雪（2）、咒术（6）和尖石攻击（14）
+        //二阶段总共移除的技能：暴风雪（2）、和尖石攻击（14）
     }
     void SkillTimerUpdate(int skillindex, int stage)//技能重置时间调整
     {
@@ -1511,7 +1517,7 @@ public class Mew : Empty
     #region 第二阶段
     private IEnumerator Phase2Skill(int randomSkillIndex)
     {
-        if (randomSkillIndex == 2 || randomSkillIndex == 6 || randomSkillIndex == 14)
+        if (randomSkillIndex == 2 || randomSkillIndex == 14)
         {
             yield break;
         }
@@ -1577,6 +1583,7 @@ public class Mew : Empty
         player.NowRoom = new Vector3Int(100, 100, 0);
         player.InANewRoom = true;
         player.NewRoomTimer = 0f;
+        player.isInvincible = false;
         currentPhase++;
         MapCreater.StaticMap.RRoom.Add(new Vector3Int(100, 100, 0), newRoom.GetComponent<Room>());
         InitializeSkillList();
@@ -1703,7 +1710,7 @@ public class Mew : Empty
         yield return new WaitForSeconds(1f);
         isFinal = true;
         GameObject meanlookfinal = Instantiate(Meanlookfinal, transform.position, Quaternion.identity);
-        StartCoroutine(ShootSwords(200, 3, 0.1f, false));
+        StartCoroutine(ShootSwords(230, 3, 0.1f, false));
         yield return new WaitForSeconds(10f);
         StartCoroutine(ShootSwords(4, 6, 3f, true));
         yield return new WaitForSeconds(19f);
@@ -1787,7 +1794,6 @@ public class Mew : Empty
     private IEnumerator Phase3End()
     {
         animator.SetTrigger("Die");
-        CameraShake(1.5f, 1f, true);
         yield return new WaitForSeconds(0.4f);
         isFinal = false;
         MewBossKilled = true;
@@ -1831,7 +1837,7 @@ public class Mew : Empty
             case 3: SkillType = Type.TypeEnum.Fire; break;
             case 4: SkillType = Type.TypeEnum.Normal; break;
             case 5: SkillType = Type.TypeEnum.Normal; break;
-            case 6: SkillType = Type.TypeEnum.Ghost; break;
+            case 6: SkillType = Type.TypeEnum.Bug; break;
             case 7: SkillType = Type.TypeEnum.Fire; break;
             case 8: SkillType = Type.TypeEnum.Ice; break;
             case 9: SkillType = Type.TypeEnum.Fairy; break;
@@ -1873,7 +1879,6 @@ public class Mew : Empty
             case Type.TypeEnum.Dragon: useskillmask.startColor = colors[15]; break;
             case Type.TypeEnum.Dark: useskillmask.startColor = colors[16]; break;
             case Type.TypeEnum.Fairy: useskillmask.startColor = colors[17]; break;
-            default: useskillmask.startColor = Color.white; break;
         }
     }
     void ClearStatusEffects()

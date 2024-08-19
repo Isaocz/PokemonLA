@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class IcicleSpearEmpty : Projectile
 {
+    public GameObject IcicleSpearBreak;
     private Vector3 PlayerPosition;
+    private SpriteRenderer sr;
     private float initialMoveSpeed = 1.0f;
     private float finalMoveSpeed = 4f;
     private bool isMoving = false;
+    private bool isFin;
 
     private void Start()
     {
+        sr = GetComponent<SpriteRenderer>();
+        isFin = false;
         isMoving = false;
         StartCoroutine(MoveToCenter());
     }
@@ -37,12 +42,21 @@ public class IcicleSpearEmpty : Projectile
             yield return null;
         }
         // 冰锥到达圆心后执行其他逻辑
-        Destroy(gameObject);
+        sr.enabled = false;
+        isFin = true;
+
+        if(IcicleSpearBreak!= null)
+        {
+            GameObject isb = Instantiate(IcicleSpearBreak, transform.position, Quaternion.identity);
+            Destroy(isb, 0.5f);
+        }
+        
+        Destroy(gameObject, 1f);
         // 例如销毁冰锥或者改变冰锥的状态等
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && isFin == false)
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
             Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage,0 , 0, Type.TypeEnum.Ice);
