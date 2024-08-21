@@ -43,7 +43,7 @@ public class Synthesis : Skill
                 if (Weather.GlobalWeather.isSunny || Weather.GlobalWeather.isSunnyPlus) { }
                 else if (Weather.GlobalWeather.isSandstorm || Weather.GlobalWeather.isSandstormPlus || Weather.GlobalWeather.isRain || Weather.GlobalWeather.isRainPlus || Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus)
                 {
-                    if (NowFrozenPoint > 0.2f) { player.PlayerFrozenFloatPlus(NowFrozenPoint - 0.2f); }
+                    if (NowFrozenPoint > 0.2f) { player.PlayerFrozenFloatPlus(NowFrozenPoint - 0.2f , 0); }
                     if (NowToxicPoint > 0.2f) { player.ToxicFloatPlus(NowToxicPoint - 0.2f); }
                     if (NowParalysisPoint > 0.2f) { player.ParalysisFloatPlus(NowParalysisPoint - 0.2f); }
                     if (NowSleepPoint > 0.2f) { player.SleepFloatPlus(NowSleepPoint - 0.2f); }
@@ -51,7 +51,7 @@ public class Synthesis : Skill
                 }
                 else
                 {
-                    if (NowFrozenPoint > 0.5f) { player.PlayerFrozenFloatPlus(NowFrozenPoint - 0.5f); }
+                    if (NowFrozenPoint > 0.5f) { player.PlayerFrozenFloatPlus(NowFrozenPoint - 0.5f , 0); }
                     if (NowToxicPoint > 0.5f) { player.ToxicFloatPlus(NowToxicPoint - 0.5f); }
                     if (NowParalysisPoint > 0.5f) { player.ParalysisFloatPlus(NowParalysisPoint - 0.5f); }
                     if (NowSleepPoint > 0.5f) { player.SleepFloatPlus(NowSleepPoint - 0.5f); }
@@ -60,7 +60,7 @@ public class Synthesis : Skill
             }
             else
             {
-                if (NowFrozenPoint > 0.5f) { player.PlayerFrozenFloatPlus(NowFrozenPoint - 0.5f); }
+                if (NowFrozenPoint > 0.5f) { player.PlayerFrozenFloatPlus(NowFrozenPoint - 0.5f , 0); }
                 if (NowToxicPoint > 0.5f) { player.ToxicFloatPlus(NowToxicPoint - 0.5f); }
                 if (NowParalysisPoint > 0.5f) { player.ParalysisFloatPlus(NowParalysisPoint - 0.5f); }
                 if (NowSleepPoint > 0.5f) { player.SleepFloatPlus(NowSleepPoint - 0.5f); }

@@ -14,6 +14,7 @@ public class Pokemon : MonoBehaviour
     public Material SleepMaterial;
     public Material FearMaterial;
     public Material InfatuationMaterial;
+    public Material TeraMaterial;
 
 
     public float FrozenResistance = 1f;
@@ -107,9 +108,17 @@ public class Pokemon : MonoBehaviour
 
     public void MarterialChangeToNurmal()
     {
+        SetSkinRenderersMaterial(NormalMaterial);
+        PlayerControler player = GetComponent<PlayerControler>();
+
         if (isEmptyFrozenDone)
         {
             MarterialChangeToFrozen();
+        }
+        else if (player != null &&( player.PlayerTeraTypeJOR != 0 || player.PlayerTeraType != 0))
+        {
+            if (player.PlayerTeraType != 0) { MarterialChangeToTera(player.PlayerTeraType); }
+            else if (player.PlayerTeraTypeJOR != 0) { MarterialChangeToTera(player.PlayerTeraTypeJOR); }
         }
         else if (isToxicDone)
         {
@@ -139,51 +148,80 @@ public class Pokemon : MonoBehaviour
         {
             MarterialChangeToInfatuation();
         }
-        else
-        {
-            SetSkinRenderersMaterial(NormalMaterial);
-        }
+
     }
 
 
     public void MarterialChangeToFrozen()
     {
-        SetSkinRenderersMaterial(FrozenMaterial);
+        if (!GetSkinRenderersMaterial().HasFloat("_MaterialPriority") || FrozenMaterial.GetFloat("_MaterialPriority") >= GetSkinRenderersMaterial().GetFloat("_MaterialPriority"))
+        {
+            SetSkinRenderersMaterial(FrozenMaterial);
+        }
         animator.speed = 0;
     }
     public void MarterialChangeToSpeedDown()
     {
-        SetSkinRenderersMaterial(SpeedDownMaterial);
+        if (!GetSkinRenderersMaterial().HasFloat("_MaterialPriority") || SpeedDownMaterial.GetFloat("_MaterialPriority") >= GetSkinRenderersMaterial().GetFloat("_MaterialPriority"))
+        {
+            SetSkinRenderersMaterial(SpeedDownMaterial);
+        }
     }
     public void MarterialChangeToToxic()
     {
-        SetSkinRenderersMaterial(ToxicMaterial);
+        if (!GetSkinRenderersMaterial().HasFloat("_MaterialPriority") || ToxicMaterial.GetFloat("_MaterialPriority") >= GetSkinRenderersMaterial().GetFloat("_MaterialPriority"))
+        {
+            SetSkinRenderersMaterial(ToxicMaterial);
+        }
     }
 
     public void MarterialChangeToParalysis()
     {
-        SetSkinRenderersMaterial(ParalysisMaterial);
+        if (!GetSkinRenderersMaterial().HasFloat("_MaterialPriority") || ParalysisMaterial.GetFloat("_MaterialPriority") >= GetSkinRenderersMaterial().GetFloat("_MaterialPriority"))
+        {
+            SetSkinRenderersMaterial(ParalysisMaterial);
+        }
     }
 
     public void MarterialChangeToBurn()
     {
-        SetSkinRenderersMaterial(BurnMaterial);
+        if (!GetSkinRenderersMaterial().HasFloat("_MaterialPriority") || BurnMaterial.GetFloat("_MaterialPriority") >= GetSkinRenderersMaterial().GetFloat("_MaterialPriority"))
+        {
+            SetSkinRenderersMaterial(BurnMaterial);
+        }
     }
 
     public void MarterialChangeToSleep()
     {
-        SetSkinRenderersMaterial(SleepMaterial);
-        //animator.speed = 0.55f;
+        if (!GetSkinRenderersMaterial().HasFloat("_MaterialPriority") || SleepMaterial.GetFloat("_MaterialPriority") >= GetSkinRenderersMaterial().GetFloat("_MaterialPriority"))
+        {
+            SetSkinRenderersMaterial(SleepMaterial);
+            //animator.speed = 0.55f;
+        }
     }
 
     public void MarterialChangeToFear()
     {
-        SetSkinRenderersMaterial(FearMaterial);
+        if (!GetSkinRenderersMaterial().HasFloat("_MaterialPriority") || FearMaterial.GetFloat("_MaterialPriority") >= GetSkinRenderersMaterial().GetFloat("_MaterialPriority"))
+        {
+            SetSkinRenderersMaterial(FearMaterial);
+        }
     }
 
     public void MarterialChangeToInfatuation()
     {
-        SetSkinRenderersMaterial(InfatuationMaterial);
+        if (!GetSkinRenderersMaterial().HasFloat("_MaterialPriority") || InfatuationMaterial.GetFloat("_MaterialPriority") >= GetSkinRenderersMaterial().GetFloat("_MaterialPriority"))
+        {
+            SetSkinRenderersMaterial(InfatuationMaterial);
+        }
+    }
+
+    public void MarterialChangeToTera(int TeraType)
+    {
+        if (!GetSkinRenderersMaterial().HasFloat("_MaterialPriority") || TeraMaterial.GetFloat("_MaterialPriority") >= GetSkinRenderersMaterial().GetFloat("_MaterialPriority") ) {
+            TeraMaterial.SetColor("_Color", Type.TeraTypeColor[TeraType]);
+            SetSkinRenderersMaterial(TeraMaterial);
+        }
     }
 
     //获取 pokemon 主体的渲染组件
@@ -221,6 +259,12 @@ public class Pokemon : MonoBehaviour
         {
             skinRenderer.material = material;
         }
+    }
+
+    Material GetSkinRenderersMaterial()
+    {
+        List<SpriteRenderer> skinRendererList = GetSkinRenderers();
+        return skinRendererList[0].material;
     }
 
     /// <summary>
@@ -1418,13 +1462,15 @@ public class Pokemon : MonoBehaviour
     //===========================================================================冰冻的函数=====================================================================================
 
 
+
     //一个变量代表是否冰冻，一个代表冰冻的程度
     public bool isPlayerFrozenDone;
     public bool isPlayerFrozenStart;
     public float PlayerFrozenPointFloat;
 
+
     //调用此函数时，如果还未开始冰冻，开始冰冻
-    public void PlayerFrozenFloatPlus(float FrozenPoint)
+    public void PlayerFrozenFloatPlus(float FrozenPoint , float FrozenTime)
     {
         PlayerControler playerchecktype = transform.GetComponent<PlayerControler>();
         if (!(playerchecktype.PlayerType01 == (int)Type.TypeEnum.Ice || playerchecktype.PlayerType02 == (int)Type.TypeEnum.Ice || playerchecktype.PlayerTeraType == (int)Type.TypeEnum.Ice || playerchecktype.PlayerTeraTypeJOR == (int)Type.TypeEnum.Ice))
@@ -1441,7 +1487,7 @@ public class Pokemon : MonoBehaviour
                 }
                 else if (isPlayerFrozenStart && PlayerFrozenPointFloat < 1)
                 {
-                    playerUIState.StateSlowUP(3, PlayerFrozenPointFloat);
+                    playerUIState.StateSlowUP(2, PlayerFrozenPointFloat);
                 }
                 else if (PlayerFrozenPointFloat >= 1 && !isPlayerFrozenDone)
                 {
@@ -1453,6 +1499,21 @@ public class Pokemon : MonoBehaviour
                     }
                     isPlayerFrozenDone = true;
                     playerUIState.StateSlowUP(2, PlayerFrozenPointFloat);
+                    if (transform.GetComponent<PlayerControler>() != null)
+                    {
+                        /*
+                        
+                        player.KnockOutPoint = 1;
+                        player.playerData.SpABounsAlways--;
+                        SpAHWBeforeChange = player.SpAAbilityPoint * 0.3f;
+                        player.playerData.SpAHardWorkAlways -= SpAHWBeforeChange;
+                        
+                        */
+                        //冰冻的效果
+                        PlayerControler player = transform.GetComponent<PlayerControler>();
+                        Timer.Start(this , FrozenTime , ()=> { PlayerFrozenRemove(); });
+                        player.ReFreshAbllityPoint();
+                    }
                     MarterialChangeToFrozen();
                 }
                 if (GetComponent<PlayerControler>() != null)
@@ -1477,12 +1538,27 @@ public class Pokemon : MonoBehaviour
             PlayerFrozenPointFloat = 0;
             playerUIState.StateSlowUP(2, 0);
             playerUIState.StateDestory(2);
+            if (transform.GetComponent<PlayerControler>() != null && isPlayerFrozenDone)
+            {
+                /*
+                
+                player.playerData.SpABounsAlways++;
+                player.playerData.SpAHardWorkAlways += SpAHWBeforeChange;
+                
+                */
+                //冰冻解除的效果
+                PlayerControler player = transform.GetComponent<PlayerControler>();
+                animator.speed = 1;
+                player.ReFreshAbllityPoint();
+            }
             isPlayerFrozenStart = false;
             isPlayerFrozenDone = false;
             MarterialChangeToNurmal();
 
         }
     }
+
+
 
     //===========================================================================中毒的函数=====================================================================================
 

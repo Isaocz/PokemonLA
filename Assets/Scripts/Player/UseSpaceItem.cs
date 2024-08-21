@@ -236,9 +236,10 @@ public class UseSpaceItem : MonoBehaviour
                 player.SleepRemove();
                 break;
             case 49:
-                
+                player.PlayerFrozenRemove();
                 break;
             case 50:
+                player.PlayerFrozenRemove();
                 player.ToxicRemove();
                 player.ParalysisRemove();
                 player.BurnRemove();

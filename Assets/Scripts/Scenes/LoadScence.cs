@@ -22,11 +22,13 @@ public class LoadScence : MonoBehaviour
 
     public void LoadGame()
     {
+        if (FloorNum.GlobalFloorNum.FloorNumber == 0) { InitializePlayerSetting.GlobalPlayerSetting.ResetSeed(); }
         StartCoroutine(StartLoadGame(FloorNum.GlobalFloorNum.FloorNumber + 3));
     }
 
     public IEnumerator StartLoadGame(int Sence)
     {
+        Random.InitState(InitializePlayerSetting.GlobalPlayerSetting.RoundSeed);
         int DisplayProgress = 0;
         int ToProgress = 0;
         AsyncOperation op = SceneManager.LoadSceneAsync(Sence);

@@ -14,7 +14,7 @@ Shader "TextMeshPro/Sprite"
 		_CullMode ("Cull Mode", Float) = 0
 		_ColorMask ("Color Mask", Float) = 15
 		_ClipRect ("Clip Rect", vector) = (-32767, -32767, 32767, 32767)
-
+		_MaterialPriority ("Material Priority", Float) = 0
 		[Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
 	}
 

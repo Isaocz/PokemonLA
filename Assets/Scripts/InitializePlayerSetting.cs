@@ -22,7 +22,21 @@ public class InitializePlayerSetting : MonoBehaviour
     public int SkillButtonLayout;
     public bool isJoystickFixed;
 
-    public static ulong RoundSeed;
+    public int RoundSeed;
+    public string SeedString;
+
+    string[][] SeedStringWord = new string[][] { 
+        new string[] { "怕寂寞", "固执", "顽皮", "大胆", "淘气", "乐天", "内敛", "慢吞吞", "马虎", "冷静", "温和", "慎重", "胆小", "爽朗", "认真", "浮躁" },
+        new string[] { "伊布" ,"小火龙" ,"杰尼龟","妙蛙种子" ,"皮卡丘","小山猪","利欧路", "圆陆鲨", "呆呆兽", "巨钳螳螂", "岩狗狗", "烛光灵", "索罗亚", "迷你龙", "帝王拿波", "胖可丁" },
+        new string[] { "呼呼森林" ,"隆隆山洞" ,"萧萧雪山", "森之洋馆", "废弃发电厂", "大鍋湖", "玉虹遊戲城", "沙漠遗迹", "送神山", "密阿雷美术馆", "冠軍之路", "神闔寺院遺址", "铃铛塔", "呆呆兽之井", "烘烘沙漠", "迷光森林" },
+        new string[] { "连环巴掌", "十万伏特", "大字爆炎", "冲浪", "飞叶快刀", "嬉闹", "铁尾", "祸不单行", "虫咬", "恶意追击", "绝对零度", "污泥炸弹", "地震", "岩石封", "逆鳞", "扑击" },
+        new string[] { "击败", "魅惑", "逗笑", "威慑", "说服", "欺骗", "恐吓", "激怒", "吓唬", "挑衅", "哄骗", "感动", "鼓励", "感化", "启迪", "打伤" },
+        new string[] { "耿鬼", "卡比兽", "烈箭鹰", "超坏星", "电飞鼠", "坚果哑铃", "雪妖女", "艾路雷朵", "焰后蜥", "暴飞龙", "波克基斯", "天蝎王", "坚盾剑怪", "玛力露丽", "大岩蛇", "红莲铠骑" },
+        new string[] { "朽木妖", "土王", "列阵兵", "锹农炮虫", "花疗环环", "姆克鹰", "铳嘴大鸟", "乌鸦头头", "奇麒麟", "黏美龙", "三首恶龙", "布拨", "浩大鲸", "海豚侠", "超甲狂犀", "电肚蛙" },
+        new string[] { "学习装置", "晶晶蜜", "月亮球", "凰梨果", "紫之书", "肌力之羽", "觉醒之石", "泥炭块", "特性膏药", "心之鳞片", "精通种子", "护符金币", "吃剩的东西", "安抚之铃", "达人带", "凸凸头盔" }
+    };
+
+
 
 
     public Dictionary<string, KeyCode> keybinds = new Dictionary<string, KeyCode>() {
@@ -45,7 +59,16 @@ public class InitializePlayerSetting : MonoBehaviour
     private void Awake()
     {
         GlobalPlayerSetting = this;
-        RoundSeed = (ulong)Random.Range(0, 2821109907456);
+        ResetSeed();
+    }
+
+    //每次开局时重新放置种子
+    public void ResetSeed()
+    {
+        Random.InitState((int)System.DateTime.Now.Ticks);
+        RoundSeed = Random.Range(int.MinValue, int.MaxValue);
+        Random.InitState(RoundSeed);
+        SetStringBySeedint();
     }
 
     public void ChangeKey(string KeyName , KeyCode k )
@@ -185,4 +208,39 @@ public class InitializePlayerSetting : MonoBehaviour
     {
         return val != 0;
     }
+
+
+    void SetStringBySeedint()
+    {
+        SeedString = System.String.Format("{0:X}", RoundSeed);
+        Debug.Log(SeedString);
+        char[] Xw = SeedString.ToCharArray();
+        string[] Words = new string[8] { "", "", "", "", "", "", "", ""};
+        int[] IntSting = new int[8] { 0,0,0,0,0,0,0,0 };
+        for (int i = Xw.Length - 1; i >= 0; i--)
+        {
+            IntSting[i] = int.Parse(Xw[i].ToString(), System.Globalization.NumberStyles.HexNumber);
+        }
+        for (int i = 7; i >= 0; i--)
+        {
+            Words[i] = SeedStringWord[i][IntSting[i]];
+        }
+
+
+
+
+        long longValue = System.Convert.ToInt32(SeedString, 16);
+
+        // 检查并处理补码表示
+        if (longValue > 0x7FFFFFFF)
+        {
+            longValue -= 0x100000000;
+        }
+        int intValue = (int)longValue;
+        Debug.Log(intValue);
+
+        SeedString = "性格" + Words[0] + "的" + Words[1] + "在" + Words[2] + "使用" + Words[3] + ",\n" + Words[4] + "了" + Words[5] + "和" + Words[6] + ",\n" + "获得了它们的" + Words[7];
+    }
+
+
 }

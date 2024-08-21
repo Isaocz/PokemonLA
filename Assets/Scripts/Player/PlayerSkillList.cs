@@ -56,12 +56,15 @@ public class PlayerSkillList : MonoBehaviour
             SkillMewListBorn.Add(SkillMewList[i]);
         }
         AddPlusSkillInList();
+
     }
 
 
     //=================================================通过等级提升学习技能===============================================================
     public Skill RandomLearnASkill(int PlayerLevel)
     {
+        Random.InitState(InitializePlayerSetting.GlobalPlayerSetting.RoundSeed);
+
         RemoveNowSkillInList();
         AddPlusSkillInList();
 
@@ -220,6 +223,7 @@ public class PlayerSkillList : MonoBehaviour
 
     public Skill RandomGetASkillMachine()
     {
+        Random.InitState(InitializePlayerSetting.GlobalPlayerSetting.RoundSeed);
         SetSkillMachineList();
         SetMachineDictionary();
 
@@ -322,6 +326,7 @@ public class PlayerSkillList : MonoBehaviour
 
     public Skill RandomGetAMEWSkill()
     {
+        Random.InitState(InitializePlayerSetting.GlobalPlayerSetting.RoundSeed);
         SetSkillMewList();
         SetMewDictionary();
         

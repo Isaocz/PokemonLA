@@ -789,7 +789,7 @@ public class Skill : MonoBehaviour
 
     protected static bool NormalSkill(PlayerControler player)
     {
-        if (player.isSleepDone) { return false; }
+        if (player.isSleepDone || player.isPlayerFrozenDone) { return false; }
         else { return true; }
     }
 
