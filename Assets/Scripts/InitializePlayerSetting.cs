@@ -25,6 +25,7 @@ public class InitializePlayerSetting : MonoBehaviour
     public int RoundSeed;
     public string SeedString;
 
+
     string[][] SeedStringWord = new string[][] { 
         new string[] { "ÅÂ¼ÅÄ¯", "¹ÌÖ´", "ÍçÆ¤", "´óµ¨", "ÌÔÆø", "ÀÖÌì", "ÄÚÁ²", "ÂıÍÌÍÌ", "Âí»¢", "Àä¾²", "ÎÂºÍ", "É÷ÖØ", "µ¨Ğ¡", "Ë¬ÀÊ", "ÈÏÕæ", "¸¡Ôê" },
         new string[] { "ÒÁ²¼" ,"Ğ¡»ğÁú" ,"½ÜÄá¹ê","ÃîÍÜÖÖ×Ó" ,"Æ¤¿¨Çğ","Ğ¡É½Öí","ÀûÅ·Â·", "Ô²Â½öè", "´ô´ôÊŞ", "¾ŞÇ¯ó«òë", "ÑÒ¹·¹·", "Öò¹âÁé", "Ë÷ÂŞÑÇ", "ÃÔÄãÁú", "µÛÍõÄÃ²¨", "ÅÖ¿É¶¡" },
@@ -66,9 +67,11 @@ public class InitializePlayerSetting : MonoBehaviour
     public void ResetSeed()
     {
         Random.InitState((int)System.DateTime.Now.Ticks);
-        RoundSeed = Random.Range(int.MinValue, int.MaxValue);
+        //RoundSeed = Random.Range(int.MinValue, int.MaxValue);
+        RoundSeed = 42;
         Random.InitState(RoundSeed);
         SetStringBySeedint();
+
     }
 
     public void ChangeKey(string KeyName , KeyCode k )

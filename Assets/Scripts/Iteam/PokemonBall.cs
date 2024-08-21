@@ -29,6 +29,7 @@ public class PokemonBall : IteamPickUp
 
     public PassiveItemPool.PoolType ItemPoolType;
 
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -99,7 +100,7 @@ public class PokemonBall : IteamPickUp
 
     void PokemonNormalOpen()
     {
-        Random.InitState(InitializePlayerSetting.GlobalPlayerSetting.RoundSeed);
+        //Random.InitState(InitializePlayerSetting.GlobalPlayerSetting.RoundSeed);
 
         Instantiate(RandomMoney, transform.position, Quaternion.identity, transform);
         Instantiate(RandomMoney, transform.position, Quaternion.identity, transform);
