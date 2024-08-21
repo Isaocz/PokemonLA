@@ -99,6 +99,8 @@ public class PokemonBall : IteamPickUp
 
     void PokemonNormalOpen()
     {
+        Random.InitState(InitializePlayerSetting.GlobalPlayerSetting.RoundSeed);
+
         Instantiate(RandomMoney, transform.position, Quaternion.identity, transform);
         Instantiate(RandomMoney, transform.position, Quaternion.identity, transform);
         Instantiate(RandomDropItem, transform.position, Quaternion.identity, transform);

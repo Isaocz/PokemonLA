@@ -97,6 +97,11 @@ public class _mTool : MonoBehaviour
     };
 
 
+    public static void SetSeed()
+    {
+        if (InitializePlayerSetting.GlobalPlayerSetting != null) { Random.InitState(InitializePlayerSetting.GlobalPlayerSetting.RoundSeed); }
+    }
+
     [DllImport("user32.dll", EntryPoint = "keybd_event")]
 
     public static extern void Keybd_event(

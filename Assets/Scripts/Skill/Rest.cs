@@ -15,7 +15,7 @@ public class Rest : Skill
             player.ParalysisRemove();
             player.SleepRemove();
             player.ToxicRemove();
-            //player.frozenRemove();
+            player.FrozenRemove();
         }
         player.SleepFloatPlus(10);
         if (player.isSleepDone) {

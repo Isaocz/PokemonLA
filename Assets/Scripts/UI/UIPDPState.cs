@@ -23,7 +23,21 @@ public class UIPDPState : MonoBehaviour
             GetComponent<Image>().color = new Color(0.74f, 1, 0.88f, 0.5f);
         }
 
-        if(player.isToxicStart )
+        if (player.isPlayerFrozenStart)
+        {
+            float OrangeSize = Frozen.rectTransform.rect.height; ;
+            Frozen.transform.GetChild(0).GetComponent<Image>().rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - player.PlayerFrozenPointFloat) * OrangeSize);
+            Frozen.gameObject.SetActive(true);
+            Frozen.GetComponent<UICallDescribe>().FirstText = "冰冻：" + (player.PlayerFrozenPointFloat * 100).ToString() + "%";
+            Frozen.GetComponent<UICallDescribe>().DescribeText = "当到达100%时进入冰冻状态，会在一段时间内无法移动，无法使用招式，一段时间过后会自动解除。";
+            Frozen.GetComponent<UICallDescribe>().TwoMode = true;
+        }
+        else
+        {
+            Frozen.gameObject.SetActive(false);
+        }
+
+        if (player.isToxicStart )
         {
             float OrangeSize = Toxic.rectTransform.rect.height;;
             Toxic.transform.GetChild(0).GetComponent<Image>().rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1 - player.ToxicPointFloat) * OrangeSize);

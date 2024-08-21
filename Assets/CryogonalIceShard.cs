@@ -75,8 +75,9 @@ public class CryogonalIceShard : Projectile
                 Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, Dmage, 0, 0, Type.TypeEnum.Ice);
                 if (playerControler != null)
                 {
-                    playerControler.KnockOutPoint = 5;
+                    playerControler.KnockOutPoint = 1;
                     playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+                    playerControler.PlayerFrozenFloatPlus(0.3f , 1.2f);
                 }
             }
             if (other.tag == ("Empty") && empty.isEmptyInfatuationDone)

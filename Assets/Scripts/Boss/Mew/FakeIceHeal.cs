@@ -14,7 +14,7 @@ public class FakeIceHeal : MonoBehaviour
         PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
         if (playerControler != null)
         {
-            playerControler.Frozen(2f, 1f, 1f);
+            playerControler.PlayerFrozenFloatPlus(1.0f , 2.0f);
             Destroy(gameObject);
         }
     }

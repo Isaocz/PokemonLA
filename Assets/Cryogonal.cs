@@ -159,19 +159,19 @@ public class Cryogonal : Empty
         switch (AtkCount)
         {
             case 0:
-                AtkCDTime = 4.0f;
+                AtkCDTime = 6.0f;
                 MoveTime = 1.0f;
                 speed = 3.8f;
                 break;
             case 1:
                 AtkCDTime = 2.6f;
                 MoveTime = 1.0f;
-                speed = 4.6f;
+                speed = 4.9f;
                 break;
             case 2:
                 AtkCDTime = 1.2f;
                 MoveTime = 0.7f;
-                speed = 5.4f;
+                speed = 6.0f;
                 break;
             case 3:
                 AtkCDTime = 0.8f;

@@ -112,13 +112,14 @@ public class MapCreater : MonoBehaviour
     private void Awake()
     {
         StaticMap = this;
+        _mTool.SetSeed();
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
-
+        _mTool.SetSeed();
         //========================一些控制根据道具特性等生成地图的变量==============================
 
         PlayerControler p = GameObject.FindObjectOfType<PlayerControler>();

@@ -526,6 +526,15 @@ public class PlayerControler : Pokemon
     public void TeraTypeJORChange(int TeraType)
     {
         PlayerTeraTypeJOR = TeraType;
+        if (PlayerTeraTypeJOR != 0 || PlayerTeraType != 0) {
+            if (PlayerTeraType != 0) { MarterialChangeToTera(PlayerTeraType); } 
+            else if (PlayerTeraTypeJOR != 0) { MarterialChangeToTera(PlayerTeraTypeJOR); } 
+        }
+        else
+        {
+            MarterialChangeToNurmal();
+        }
+
         if (Skill01 != null && Skill01.GetComponent<TeraBlast>() != null) { Skill01.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar01.GetSkill(Skill01); }
         if (Skill02 != null && Skill02.GetComponent<TeraBlast>() != null) { Skill02.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar02.GetSkill(Skill02); }
         if (Skill03 != null && Skill03.GetComponent<TeraBlast>() != null) { Skill03.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar03.GetSkill(Skill03); }
@@ -535,6 +544,15 @@ public class PlayerControler : Pokemon
     public void TeraTypeChange(int TeraType)
     {
         PlayerTeraType = TeraType;
+        if (PlayerTeraTypeJOR != 0 || PlayerTeraType != 0)
+        {
+            if (PlayerTeraType != 0) { MarterialChangeToTera(PlayerTeraType); }
+            else if (PlayerTeraTypeJOR != 0) { MarterialChangeToTera(PlayerTeraTypeJOR); }
+        }
+        else
+        {
+            MarterialChangeToNurmal();
+        }
         if (Skill01 != null && Skill01.GetComponent<TeraBlast>() != null) { Skill01.SkillType = PlayerTeraType == 0 ? 1 : PlayerTeraType; skillBar01.GetSkill(Skill01); }
         if (Skill02 != null && Skill02.GetComponent<TeraBlast>() != null) { Skill02.SkillType = PlayerTeraType == 0 ? 1 : PlayerTeraType; skillBar02.GetSkill(Skill02); }
         if (Skill03 != null && Skill03.GetComponent<TeraBlast>() != null) { Skill03.SkillType = PlayerTeraType == 0 ? 1 : PlayerTeraType; skillBar03.GetSkill(Skill03); }
@@ -1090,7 +1108,7 @@ public class PlayerControler : Pokemon
     protected void FixedUpdatePlayer()
     {
         //2D向量position等于刚体组件的坐标,之后让position的xy坐标加上十字键x速度x单位时间，最后让刚体的位置等于position
-        if (!isDie && !isSkill && !isTP && !isCanNotMove)
+        if (!isDie && !isSkill && !isTP && !isCanNotMove && !isPlayerFrozenDone)
         {
             position = rigidbody2D.position;
             position.x = position.x + horizontal * speed * Time.deltaTime;

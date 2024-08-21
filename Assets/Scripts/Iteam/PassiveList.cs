@@ -12,6 +12,8 @@ public class PassiveList : MonoBehaviour
 
     public int GetARandomItemIndex(int CallCount , PassiveItemPool.ItemPool Pool)
     {
+        Random.InitState(InitializePlayerSetting.GlobalPlayerSetting.RoundSeed);
+
         int RandomItemIndex = Random.Range(0, SpritesList.Length);
         if (!(Pool.BlackList.Count == 0 && Pool.WriteList.Count == 0))
         {

@@ -998,9 +998,12 @@ public class PlayerData : MonoBehaviour
                 case 4:
                     playerInput.SleepRemove();
                     break;
+                case 5:
+                    playerInput.PlayerFrozenRemove();
+                    break;
             }
         }
-        ViciousEventIndex = Random.Range(1,5);
+        ViciousEventIndex = Random.Range(1,6);
         switch (ViciousEventIndex)
         {
             case 1:
@@ -1014,6 +1017,9 @@ public class PlayerData : MonoBehaviour
                 break;
             case 4:
                 playerInput.SleepFloatPlus(1);
+                break;
+            case 5:
+                playerInput.PlayerFrozenFloatPlus(1.0f , 1.5f);
                 break;
         }
     }

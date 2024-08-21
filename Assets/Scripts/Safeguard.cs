@@ -19,7 +19,7 @@ public class Safeguard : Skill
                         
             if (NowFrozenPoint < 1.0f) {
                 player.PlayerFrozenRemove();
-                if (NowFrozenPoint > 0.2f) { player.PlayerFrozenFloatPlus(NowFrozenPoint - 0.2f); }
+                if (NowFrozenPoint > 0.2f) { player.PlayerFrozenFloatPlus(NowFrozenPoint - 0.2f , 0); }
             }
             if (NowToxicPoint < 1.0f) {
                 player.ToxicRemove();
