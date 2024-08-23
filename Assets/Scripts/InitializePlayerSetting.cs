@@ -20,7 +20,41 @@ public class InitializePlayerSetting : MonoBehaviour
     public float SkillButtonYOffset;
     public float SkillButtonScale;
     public int SkillButtonLayout;
+
     public bool isJoystickFixed;
+
+    /// <summary>
+    /// 手机玩家的操作方式 0：十字键 1：自由摇杆 2：固定摇杆3：结合模式
+    /// </summary>
+    public int ControlTypr;
+    /// <summary>
+    /// 摇杆的大小
+    /// </summary>
+    public float JoystickScale;
+    /// <summary>
+    /// 固定摇杆的X轴偏移量
+    /// </summary>
+    public float JoystickXOffset;
+    /// <summary>
+    /// 固定摇杆的Y轴偏移量
+    /// </summary>
+    public float JoystickYOffset;
+    /// <summary>
+    /// 十字键的大小
+    /// </summary>
+    public float ArrowScale;
+    /// <summary>
+    /// 十字键的X轴偏移量
+    /// </summary>
+    public float ArrowXOffset;
+    /// <summary>
+    /// 十字键的Y轴偏移量
+    /// </summary>
+    public float ArrowYOffset;
+    /// <summary>
+    /// 十字键的间距
+    /// </summary>
+    public float ArrowSpacing;
 
     public int RoundSeed;
     public string SeedString;
@@ -67,8 +101,8 @@ public class InitializePlayerSetting : MonoBehaviour
     public void ResetSeed()
     {
         Random.InitState((int)System.DateTime.Now.Ticks);
-        //RoundSeed = Random.Range(int.MinValue, int.MaxValue);
-        RoundSeed = 42;
+        RoundSeed = Random.Range(int.MinValue, int.MaxValue);
+        //RoundSeed = 42;
         Random.InitState(RoundSeed);
         SetStringBySeedint();
 
@@ -137,6 +171,35 @@ public class InitializePlayerSetting : MonoBehaviour
 
             if (!PlayerPrefs.HasKey("JoystickFixed")) { PlayerPrefs.SetInt("JoystickFixed", 0); }
             isJoystickFixed = intToBool(PlayerPrefs.GetInt("JoystickFixed"));
+
+
+            //摇杆与十字键
+            {
+                if (!PlayerPrefs.HasKey("ControlTypr")) { PlayerPrefs.SetInt("ControlTypr", 0); }
+                ControlTypr = PlayerPrefs.GetInt("ControlTypr");
+
+                if (!PlayerPrefs.HasKey("JoystickXOffset")) { PlayerPrefs.SetFloat("JoystickXOffset", 0.7f); }
+                JoystickXOffset = PlayerPrefs.GetFloat("JoystickXOffset");
+
+                if (!PlayerPrefs.HasKey("JoystickYOffset")) { PlayerPrefs.SetFloat("JoystickYOffset", 0.0f); }
+                JoystickYOffset = PlayerPrefs.GetFloat("JoystickYOffset");
+
+                if (!PlayerPrefs.HasKey("JoystickScale")) { PlayerPrefs.SetFloat("JoystickScale", 0.5f); }
+                JoystickScale = PlayerPrefs.GetFloat("JoystickScale");
+
+                if (!PlayerPrefs.HasKey("ArrowXOffset")) { PlayerPrefs.SetFloat("ArrowXOffset", 0.6f); }
+                ArrowXOffset = PlayerPrefs.GetFloat("ArrowXOffset");
+
+                if (!PlayerPrefs.HasKey("ArrowYOffset")) { PlayerPrefs.SetFloat("ArrowYOffset", 0.5f); }
+                ArrowYOffset = PlayerPrefs.GetFloat("ArrowYOffset");
+
+                if (!PlayerPrefs.HasKey("ArrowScale")) { PlayerPrefs.SetFloat("ArrowScale", 0.0f); }
+                ArrowScale = PlayerPrefs.GetFloat("ArrowScale");
+
+                if (!PlayerPrefs.HasKey("ArrowSpacing")) { PlayerPrefs.SetFloat("ArrowSpacing", 0.0f); }
+                ArrowSpacing = PlayerPrefs.GetFloat("ArrowSpacing");
+            }
+
 
             if (!PlayerPrefs.HasKey("BackGroundIndex")) { PlayerPrefs.SetInt("BackGroundIndex", 0); }
             BGIndex = PlayerPrefs.GetInt("BackGroundIndex");

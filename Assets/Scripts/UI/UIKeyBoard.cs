@@ -47,18 +47,7 @@ public class UIKeyBoard : MonoBehaviour
 
     private void Start()
     {
-        if (SystemInfo.operatingSystemFamily != OperatingSystemFamily.Other)
-        {
-            gameObject.SetActive(true);
-            transform.parent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 2553.556f);
-        }
-        else
-        {
-            gameObject.SetActive(false);
-            transform.parent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1510.359f);
 
-        }
-        //SettingPanel.SetActive(false);
     }
 
     private void Update()

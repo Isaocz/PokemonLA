@@ -13,6 +13,8 @@ public class KonamiCode : MonoBehaviour
     public GameObject StartEffect;
     public GameObject Barrier;
 
+    PlayerControler player;
+
     private void Start()
     {
         isWillFly = false;
@@ -21,22 +23,22 @@ public class KonamiCode : MonoBehaviour
     {
         if (WithinTriggerRadius() && !AllKeysPressed() && !isWillFly)
         {
-            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill1")))
+            if (!keyPressStatus[0] && player.IsSkill01ButtonDown)
             {
                 keyPressStatus[0] = true;
                 Debug.Log("技能1释放");
             }
-            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill2")))
+            if (!keyPressStatus[1] && player.IsSkill02ButtonDown)
             {
                 keyPressStatus[1] = true;
                 Debug.Log("技能2释放");
             }
-            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill3")))
+            if (!keyPressStatus[2] && player.IsSkill03ButtonDown)
             {
                 keyPressStatus[2] = true;
                 Debug.Log("技能3释放");
             }
-            if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill4")))
+            if (!keyPressStatus[3] && player.IsSkill04ButtonDown)
             {
                 keyPressStatus[3] = true;
                 Debug.Log("技能4释放");
@@ -54,7 +56,7 @@ public class KonamiCode : MonoBehaviour
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, triggerRadius);
         foreach (Collider2D collider in colliders)
         {
-            PlayerControler player = collider.GetComponent<PlayerControler>();
+            player = collider.GetComponent<PlayerControler>();
             if (player != null)
             {
                 //Debug.Log("存在玩家");
