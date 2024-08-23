@@ -571,44 +571,46 @@ public class Mew : Empty
                 StartCoroutine(ReleaseTeraBlast());
                 IEnumerator ReleaseTeraBlast()
                 {
-                    if (currentPhase != 3)
+                    if (currentPhase == 1)
                     {
-                        float[] angles = { 90f, 210f, 330f };
-                        for (int i = 0; i < angles.Length; i++)
+                        float[] angles = { 0f, 120f, 240f };
+                        for (int i = 0; i < 3; i++)
                         {
-                            //计算激光的起始点和终点
-                            float angle = angles[i];
-                            Vector3 startPoint = transform.position;
-                            Vector3 endPoint = transform.position + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
-                            TeraBlastEmpty Terablast = Instantiate(TeraBlastPrefab, startPoint, Quaternion.identity).GetComponent<TeraBlastEmpty>();
-                            Terablast.SetEndpoints(startPoint, endPoint, angle);
-                            Terablast.SetColors(Color.yellow, Color.red);
-                            Terablast.empty = this;
+                            float angleoffset = Random.Range(0f, 120f);
+                            for (int j = 0; j < angles.Length; j++)
+                            {
+                                //计算激光的起始点和终点
+                                float angle = angles[j] + angleoffset;
+                                Vector3 startPoint = transform.position + new Vector3(1.5f * Mathf.Cos(Mathf.Deg2Rad * angle), 1.5f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
+                                Vector3 endPoint = transform.position + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
+                                TeraBlastEmpty Terablast = Instantiate(TeraBlastPrefab, startPoint, Quaternion.identity).GetComponent<TeraBlastEmpty>();
+                                Terablast.SetEndpoints(startPoint, endPoint, angle);
+                                Terablast.empty = this;
+
+                            }
+                            yield return new WaitForSeconds(1.5f);
                         }
+                    
                     }
                     else
                     {
-                        for (int j = 0; j < 3; j++)
+                        float[] angles = { 0f, 60f, 120f, 180f, 240f, 300f };
+                        for (int i = 0; i < 6; i++)
                         {
-                            float[] angles = new float[6];
-                            LaserChange = j == 1 ? true : false;
-                            float randomAngle = Random.Range(0f, 30f);
-                            for (int i = 0; i < angles.Length; i++)
+                            float angleoffset = Random.Range(0f, 60f);
+                            for (int j = 0; j < angles.Length; j++)
                             {
-                                angles[i] = randomAngle + 60f * i;
                                 //计算激光的起始点和终点
-                                float angle = angles[i];
-                                Vector3 startPoint = mapCenter;
-                                Vector3 endPoint = mapCenter + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
+                                float angle = angles[j] + angleoffset;
+                                Vector3 startPoint = transform.position + new Vector3(1.5f * Mathf.Cos(Mathf.Deg2Rad * angle), 1.5f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
+                                Vector3 endPoint = transform.position + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
                                 TeraBlastEmpty Terablast = Instantiate(TeraBlastPrefab, startPoint, Quaternion.identity).GetComponent<TeraBlastEmpty>();
                                 Terablast.SetEndpoints(startPoint, endPoint, angle);
-                                Terablast.SetColors(Color.yellow, Color.red);
                                 Terablast.empty = this;
                             }
-                            yield return new WaitForSeconds(2.5f);
+                            yield return new WaitForSeconds(1.5f);
                         }
                     }
-                    yield return null;
                 }
                 break;
             case 6://技能6：虫扑
