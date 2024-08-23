@@ -609,6 +609,17 @@ public class PlayerControler : Pokemon
                         MoveSpeed = Quaternion.AngleAxis(a, Vector3.forward) * Vector2.right;
                         */
                     }
+                    
+                    if (MoveArrow.arrow != null && ( MoveArrow.arrow.isUpArrowPressDown || MoveArrow.arrow.isDownArrowPressDown || MoveArrow.arrow.isLeftArrowPressDown || MoveArrow.arrow.isRightArrowPressDown))
+                    {
+                        if (MoveArrow.arrow.isUpArrowPressDown) { MoveSpeed = new Vector2(MoveSpeed.x, 1);  }
+                        if (MoveArrow.arrow.isDownArrowPressDown) { MoveSpeed = new Vector2(MoveSpeed.x, -1);  }
+                        if (MoveArrow.arrow.isLeftArrowPressDown) { MoveSpeed = new Vector2(-1, MoveSpeed.x);  }
+                        if (MoveArrow.arrow.isRightArrowPressDown) { MoveSpeed = new Vector2(1, MoveSpeed.x);  }
+                    }
+                    else if(!(MoveStick.joystick != null && MoveStick.joystick.Horizontal != 0 || MoveStick.joystick.Vertical != 0)) {
+                        MoveSpeed = Vector2.zero;
+                    }
                 }
 
                 if (Input.GetKey(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Left")))

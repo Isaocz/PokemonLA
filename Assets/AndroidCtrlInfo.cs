@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class AndroidCtrlInfo : MonoBehaviour
 {
+    public static AndroidCtrlInfo info;
+
+    private void Awake()
+    {
+        info = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,5 +22,11 @@ public class AndroidCtrlInfo : MonoBehaviour
     public void CloseInfo()
     {
         PlayerPrefs.SetInt("ShowAndroidCtrInfo", 1);
+        gameObject.SetActive(false);
+    }
+
+    public void Open()
+    {
+        gameObject.SetActive(true);
     }
 }

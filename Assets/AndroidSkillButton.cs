@@ -31,6 +31,10 @@ public class AndroidSkillButton : MonoBehaviour
         {
             ParentCanvas.gameObject.SetActive(false);
         }
+        else
+        {
+            ParentCanvas.gameObject.SetActive(true);
+        }
 
         Player = GameObject.FindObjectOfType<PlayerControler>();
         SkillButtonTransform = transform.GetChild(0).GetChild(1).GetComponent<RectTransform>();

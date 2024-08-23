@@ -111,4 +111,48 @@ public class _mTool : MonoBehaviour
         int dwExtraInfo//
     );
 
+
+    /// <summary>
+    /// 获得某一Transform的最后一个未被禁用的孙对象
+    /// </summary>
+    /// <param name="Parent"></param>
+    /// <returns></returns>
+    public static Transform GetLastGrandChild(Transform Parent)
+    {
+        Transform Output = GetLastChild(Parent);
+        int Count = 0;
+        while (Output.childCount != 0)
+        {
+            Output = GetLastChild(Output);
+            Count++;
+            if (Count >= 100) { break; }
+        }
+        return Output;
+    }
+
+    /// <summary>
+    /// 获得某一Transform的最后一个未被禁用的子对象
+    /// </summary>
+    /// <param name="Parent"></param>
+    /// <returns></returns>
+    public static Transform GetLastChild(Transform Parent)
+    {
+        if (Parent.childCount != 0)
+        {
+            Transform Output = Parent.GetChild(Parent.childCount - 1);
+            int Count = 1;
+            while (!Output.gameObject.activeInHierarchy)
+            {
+                Count++;
+                Output = Parent.GetChild(Parent.childCount - Count);
+                if (Count >= 100) { break; }
+            }
+            return Output;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
 }
