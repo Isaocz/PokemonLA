@@ -13,7 +13,7 @@ public class PCBoorAnimation : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D other)
     {
-        if (other.gameObject.tag == ("Player") && other.gameObject.GetComponent<PlayerControler>() != null && transform.parent.parent.GetComponent<Room>().isClear == 0)
+        if (other.gameObject.tag == ("Player") && other.gameObject.GetComponent<PlayerControler>() != null && transform.parent.parent.GetComponent<Room>().isClear <= 0)
         {
             animator.SetTrigger("Door");
         }

@@ -53,10 +53,10 @@ public class UIHealthBar : MonoBehaviour
           {
               MaxHpText.text = string.Format("{000}", player.maxHp);
               NowHpText.text = string.Format("{000}", player.Hp);
-              Debug.Log("sasa");
+              //Debug.Log("sasa");
               per = (float)player.Hp / (float)player.maxHp;
               timer = 1 - per;
-              Debug.Log(player.Hp + "+" + player.maxHp + "+" + per + "+" + timer);
+              //SDebug.Log(player.Hp + "+" + player.maxHp + "+" + per + "+" + timer);
               Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)player.Hp / (float)player.maxHp * originalSize);
           }
             );

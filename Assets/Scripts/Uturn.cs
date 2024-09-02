@@ -28,23 +28,17 @@ public class Uturn : Skill
             float CollidorOffset = 0;
             float CollidorRadiusH = 0;
             float CollidorRadiusV = 0;
-            switch (player.PlayerBodySize)
-            {
-                case 0:
-                    CollidorOffset = 0.4023046f; CollidorRadiusH = 0.6039822f; CollidorRadiusV = 0.2549849f;
-                    break;
-                case 1:
-                    CollidorOffset = 0.5f; CollidorRadiusH = 0.7f; CollidorRadiusV = 0.7f;
-                    break;
-                case 2:
-                    CollidorOffset = 0.7f; CollidorRadiusH = 1.3f; CollidorRadiusV = 1.1f;
-                    break;
-            }
-            RaycastHit2D SearchED = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.down, CollidorRadiusH + TurnD.x * 3f * player.speed * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
-            RaycastHit2D SearchEU = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.up, CollidorRadiusH + TurnD.x * 3f * player.speed * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
-            RaycastHit2D SearchER = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.right, CollidorRadiusV + TurnD.x * 3f * player.speed * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
-            RaycastHit2D SearchEL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.left, CollidorRadiusV + TurnD.x * 3f * player.speed * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room"));
+            BoxCollider2D boxc = player.GetComponent<BoxCollider2D>();
+            CollidorOffset = boxc.offset.y; CollidorRadiusH = (boxc.size.x / 2) + boxc.edgeRadius; CollidorRadiusV = (boxc.size.y / 2) + boxc.edgeRadius;
 
+            RaycastHit2D SearchED = new RaycastHit2D();
+            RaycastHit2D SearchEU = new RaycastHit2D();
+            RaycastHit2D SearchER = new RaycastHit2D();
+            RaycastHit2D SearchEL = new RaycastHit2D();
+            if (TurnD == Vector2.down) { SearchED = Physics2D.Raycast(new Vector2(player.transform.position.x, player.transform.position.y + CollidorOffset), Vector2.down, (CollidorRadiusV + 3f * player.speed * Time.deltaTime), LayerMask.GetMask("Enviroment", "Room")); }
+            if (TurnD == Vector2.up) { SearchEU = Physics2D.Raycast(new Vector2(player.transform.position.x, player.transform.position.y + CollidorOffset), Vector2.up, (CollidorRadiusV + 3f * player.speed * Time.deltaTime), LayerMask.GetMask("Enviroment", "Room")); }
+            if (TurnD == Vector2.right) { SearchER = Physics2D.Raycast(new Vector2(player.transform.position.x, player.transform.position.y + CollidorOffset), Vector2.right, (CollidorRadiusH + 3f * player.speed * Time.deltaTime), LayerMask.GetMask("Enviroment", "Room")); }
+            if (TurnD == Vector2.left) { SearchEL = Physics2D.Raycast(new Vector2(player.transform.position.x, player.transform.position.y + CollidorOffset), Vector2.left, (CollidorRadiusH + 3f * player.speed * Time.deltaTime), LayerMask.GetMask("Enviroment", "Room")); }
             if ((SearchED.collider != null && (SearchED.transform.tag == "Enviroment" || SearchED.transform.tag == "Room"))
                 || (SearchEU.collider != null && (SearchEU.transform.tag == "Enviroment" || SearchEU.transform.tag == "Room"))
                 || (SearchER.collider != null && (SearchER.transform.tag == "Enviroment" || SearchER.transform.tag == "Room"))
@@ -52,16 +46,8 @@ public class Uturn : Skill
             else
             {
                 Vector2 position = PlayerRigidbody2D.position;
-                if (player.NowRoom != new Vector3Int(100, 100, 0))
-                {
-                    position.x = Mathf.Clamp(position.x + TurnD.x * 2.5f * player.speed * Time.deltaTime, player.NowRoom.x * 30 - 12, player.NowRoom.x * 30 + 12);
-                    position.y = Mathf.Clamp(position.y + TurnD.y * 2.5f * player.speed * Time.deltaTime, player.NowRoom.y * 24 - 7.3f, player.NowRoom.y * 24 + 7.3f);
-                }
-                else
-                {
-                    position.x = Mathf.Clamp(position.x + TurnD.x * 2.5f * player.speed * Time.deltaTime, player.NowRoom.x * 30 - 12, player.NowRoom.x * 30 + 41.5f);
-                    position.y = Mathf.Clamp(position.y + TurnD.y * 2.5f * player.speed * Time.deltaTime, player.NowRoom.y * 24 - 7.3f, player.NowRoom.y * 24 + 33.5f);
-                }
+                position.x = Mathf.Clamp(position.x + TurnD.x * 2.5f * player.speed * Time.deltaTime, player.NowRoom.x * 30 + MapCreater.StaticMap.RRoom[player.NowRoom].RoomSize[2], player.NowRoom.x * 30 + MapCreater.StaticMap.RRoom[player.NowRoom].RoomSize[3]);
+                position.y = Mathf.Clamp(position.y + TurnD.y * 2.5f * player.speed * Time.deltaTime, player.NowRoom.y * 24 + MapCreater.StaticMap.RRoom[player.NowRoom].RoomSize[1], player.NowRoom.y * 24 + MapCreater.StaticMap.RRoom[player.NowRoom].RoomSize[0]);
                 PlayerRigidbody2D.position = position;
             }
         }

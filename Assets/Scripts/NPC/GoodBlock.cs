@@ -39,7 +39,9 @@ public class GoodBlock : MonoBehaviour
 
     public void BuyGoods()
     {
-        if(Good.Price <= playerControler.Money)
+        if (ParentMeowth == null) { ParentMeowth = transform.parent.parent.parent.parent.parent.parent.parent.GetComponent<Meowth>(); }
+        if (playerControler == null) { playerControler = ParentMeowth.playerControler;  }
+        if (Good.Price <= playerControler.Money)
         {
             playerControler.ChangeMoney(-Good.Price);
             if (Good.ItemTag != 2 && Good.ItemTag != 4)

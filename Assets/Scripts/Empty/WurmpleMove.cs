@@ -7,6 +7,7 @@ public class WurmpleMove : Empty
     bool run = false;
     bool launch = false;
     float runCDTimer = 0;
+    float runTimer = 0;
     float launchTimer = 0;
     Vector2 move;
     Vector2 look;
@@ -123,7 +124,7 @@ public class WurmpleMove : Empty
                     Vector2 NowPosition = position;
                     if (run && runCDTimer == 0)
                     {
-
+                        runTimer += Time.deltaTime;
 
                         animator.SetFloat("LookDirectionX", look.x);
                         animator.SetFloat("LookDirectionY", look.y);
@@ -131,7 +132,7 @@ public class WurmpleMove : Empty
                         position.y += (position.y - PlayerPosition.y) * speed * Time.deltaTime;
 
                         rigidbody2D.position = position;
-                        if (Vector2.Distance(position, PlayerPosition) >= Random.Range(7, 13)) { run = false; runCDTimer = 1; }
+                        if (Vector2.Distance(position, PlayerPosition) >= Random.Range(7, 13) || runTimer >= 5.0f) { run = false; runCDTimer = 1; runTimer = 0.0f; }
                     }
                     if (runCDTimer != 0)
                     {
@@ -161,7 +162,7 @@ public class WurmpleMove : Empty
             EmptyTouchHit(other.gameObject);
 
         }
-        if(other.transform.tag == ("Enviroment"))
+        if(other.transform.tag == ("Enviroment") || other.transform.tag == ("Room"))
         {
             run = false;
             runCDTimer = 1;

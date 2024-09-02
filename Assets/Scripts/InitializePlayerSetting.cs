@@ -15,6 +15,14 @@ public class InitializePlayerSetting : MonoBehaviour
 
     public bool isShowAndroidCtrInfo;
 
+    /// <summary>
+    /// 获得奋斗力时是否显示
+    /// </summary>
+    public bool isShowHardworking;
+    /// <summary>
+    /// 是否显示能力加成 0不显示 1显示于角色上方 2显示于状态栏下方
+    /// </summary>
+    public int isShowBouns;
 
     public float SkillButtonXOffset;
     public float SkillButtonYOffset;
@@ -59,6 +67,8 @@ public class InitializePlayerSetting : MonoBehaviour
     public int RoundSeed;
     public string SeedString;
 
+    //测试模式，开启后种子固定为42
+    public bool TestMode;
 
     string[][] SeedStringWord = new string[][] { 
         new string[] { "怕寂寞", "固执", "顽皮", "大胆", "淘气", "乐天", "内敛", "慢吞吞", "马虎", "冷静", "温和", "慎重", "胆小", "爽朗", "认真", "浮躁" },
@@ -101,8 +111,14 @@ public class InitializePlayerSetting : MonoBehaviour
     public void ResetSeed()
     {
         Random.InitState((int)System.DateTime.Now.Ticks);
-        RoundSeed = Random.Range(int.MinValue, int.MaxValue);
-        //RoundSeed = 42;
+        if (TestMode) {
+            RoundSeed = 42;
+        }
+        else
+        {
+            RoundSeed = Random.Range(int.MinValue, int.MaxValue);
+        }
+
         Random.InitState(RoundSeed);
         SetStringBySeedint();
 
@@ -165,12 +181,21 @@ public class InitializePlayerSetting : MonoBehaviour
             SEVolumeValue = PlayerPrefs.GetFloat("SEVolume");
 
 
-
+            //显示伤害
             if (!PlayerPrefs.HasKey("ShowDamage")) { PlayerPrefs.SetInt("ShowDamage", 1); }
             isShowDamage = intToBool(PlayerPrefs.GetInt("ShowDamage"));
 
             if (!PlayerPrefs.HasKey("JoystickFixed")) { PlayerPrefs.SetInt("JoystickFixed", 0); }
             isJoystickFixed = intToBool(PlayerPrefs.GetInt("JoystickFixed"));
+
+
+            //显示努力值
+            if (!PlayerPrefs.HasKey("ShowHardworking")) { PlayerPrefs.SetInt("ShowHardworking", 1); }
+            isShowHardworking = intToBool(PlayerPrefs.GetInt("ShowHardworking"));
+
+            //显示能力加成
+            if (!PlayerPrefs.HasKey("ShowBouns")) { PlayerPrefs.SetInt("ShowBouns", 2); }
+            isShowBouns = PlayerPrefs.GetInt("ShowBouns");
 
 
             //摇杆与十字键

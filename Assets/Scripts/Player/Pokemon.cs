@@ -290,8 +290,10 @@ public class Pokemon : MonoBehaviour
 
 
 
-    //获得玩家的UI状态栏
+    //获得玩家的UI状态栏(角色上方)
     public PlayerUIState playerUIState;
+
+
 
     //声明变量速度
     public float speed;
@@ -2245,7 +2247,7 @@ public class Pokemon : MonoBehaviour
                 if (Attacker != null && Attacker.GetComponent<SubEmptyBody>()) { AttackerSubEmpty = Attacker.GetComponent<SubEmptyBody>(); }
 
                 //触发特性女王的威严
-                if ((PlayerAttacked != null && PlayerAttacked.PlayerAbility == PlayerControler.PlayerAbilityList.女王的威严) && 
+                if ((PlayerAttacked != null && PlayerAttacked.PlayerAbility == PlayerControler.PlayerAbilityList.女王的威严) && !PlayerAttacked.isSleepDone &&
                     (Attacker != null && AttackerEmpty != null &&  ((AttackerSubEmpty != null && AttackerSubEmpty.ParentEmpty.EmptyHp == AttackerSubEmpty.ParentEmpty.maxHP ) || (AttackerSubEmpty == null && AttackerEmpty.EmptyHp == AttackerEmpty.maxHP))  )
                     )
                 {

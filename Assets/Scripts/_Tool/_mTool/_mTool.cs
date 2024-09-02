@@ -155,4 +155,20 @@ public class _mTool : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// 能力随提升段衰减的函数，可用于其他衰减 , isClearBody为是否有特性恒净之躯，有的话减算幅度降低
+    /// </summary>
+    /// <param name="Level"></param>
+    /// <returns></returns>
+    public static float AbllityChangeFunction(int Level , bool isClearBody = false )
+    {
+        float Output = 1.0f;
+        int AbllityLevel = Mathf.Clamp(Level , -30 , 30);
+        if (AbllityLevel >= 0) { Output = Mathf.Pow(Mathf.Log10(4.0f * (float)AbllityLevel + 1.0f), 2.85f) + 1.0f; }
+        else            { Output = Mathf.Pow((isClearBody?1.1f: 1.3f) , AbllityLevel); }
+
+        return Output;
+    }
+
 }

@@ -33,6 +33,11 @@ public class BlisseyTalkUI : MonoBehaviour
         
     }
 
+    public void ZButtonDown()
+    {
+        ZButton.Z.IsZButtonDown = true;
+    }
+
 
     void TalkContinue()
     {

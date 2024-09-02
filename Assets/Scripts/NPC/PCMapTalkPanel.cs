@@ -16,12 +16,18 @@ public class PCMapTalkPanel : MonoBehaviour
 
     public Sprite YesHL;
     public Sprite NoHL;
-    
+
+    public int Price;
+
+    public void ZButtonDown()
+    {
+        ZButton.Z.IsZButtonDown = true;
+    }
 
     private void Awake()
     {
         TalkInformation = transform.GetChild(0).GetComponent<Text>();
-        TalkTextList = new string[] { "周边地区的地图，需要付费观看，\n一共七块钱，要看吗？", "节省一点吧。。。", "付钱了！\n好好记住吧，离开这里就看不到了", "记不清了，\n再看一次吧","零花钱不够了！" };
+        TalkTextList = new string[] { "周边地区的地图，需要付费观看，\n一共"+ Price+"块钱，要看吗？", "节省一点吧。。。", "付钱了！\n好好记住吧，离开这里就看不到了", "记不清了，\n再看一次吧","零花钱不够了！" };
         TalkIndex = 0;
         TalkInformation.text = TalkTextList[TalkIndex];
         ParentPcMap = transform.parent.parent.GetComponent<PCMap>();
@@ -57,13 +63,13 @@ public class PCMapTalkPanel : MonoBehaviour
 
     public void BuyMap()
     {
-        if (ParentPcMap.player.Money >= 7)
+        if (ParentPcMap.player.Money >= Price)
         {
             TalkIndex = 2;
             TalkInformation.text = TalkTextList[2];
             isSeeMap = true;
             UiMiniMap.Instance.SeeMapJustOneRoom();
-            ParentPcMap.player.ChangeMoney(-7);
+            ParentPcMap.player.ChangeMoney(-Price);
             Buy.gameObject.SetActive(false);
             DontBuy.gameObject.SetActive(false);
         }

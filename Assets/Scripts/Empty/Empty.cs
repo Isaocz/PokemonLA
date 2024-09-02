@@ -227,6 +227,7 @@ public class Empty : Pokemon
     /// <returns></returns>
     protected int SetLevel(int PlayerLevel,int MaxLevel)
     {
+        StartCoroutine(SetInvincible(1.0f));
         if (transform.parent.parent.GetComponent<Room>() != null) { ParentPokemonRoom = transform.parent.parent.GetComponent<Room>(); }
         FirstSpeed = speed;
         int OutPut;
@@ -365,7 +366,6 @@ public class Empty : Pokemon
                 {
                     if (!isInPsychicTerrain) 
                     { 
-                        Debug.Log(IsBeFalseSwipe);
                         allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000);
                         EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000), (IsBeFalseSwipe ? 1 : 0), maxHP); 
                     }
@@ -507,7 +507,6 @@ public class Empty : Pokemon
     /// <param name="player"></param>
     public void EmptyTouchHit(GameObject playerObj)
     {
-        Debug.Log(playerObj.layer);
         if (playerObj.layer != 23) {
             //如果触碰到的是玩家，使玩家扣除一点血量
             PlayerControler playerControler = playerObj.gameObject.GetComponent<PlayerControler>();
@@ -523,7 +522,11 @@ public class Empty : Pokemon
                 }
             }
         }
+        
     }
+
+
+
 
     protected bool isInfatuationDmageDone;
     float InfatuationDmageCDTimer;
@@ -601,8 +604,9 @@ public class Empty : Pokemon
                     player.playerData.SpABounsJustOneRoom++;
                     player.ReFreshAbllityPoint();
                 }
+                isDie = true;
             }
-            isDie = true;
+            
             animator.SetTrigger("Die");
         }
     }
@@ -621,21 +625,22 @@ public class Empty : Pokemon
     public void EmptyDrop()
     {
         if (IsHaveDropItem) {
+            
             if (isBoos)
             {
-                Vector2 DropPosition = new Vector2(Mathf.Clamp(transform.position.x, transform.parent.position.x - 12.0f, transform.parent.position.x + 12.0f), Mathf.Clamp(transform.position.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f));
+                Vector2 DropPosition = new Vector2(Mathf.Clamp(transform.position.x, parentRoom.transform.position.x - 12.0f, parentRoom.transform.position.x + 12.0f), Mathf.Clamp(transform.position.y, parentRoom.transform.position.y - 7.0f, parentRoom.transform.position.y + 7.0f));
                 if (!player.playerData.IsPassiveGetList[134]) {
-                    Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-                    Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-                    Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+                    Instantiate(DropItem, DropPosition, Quaternion.identity, parentRoom.transform).GetComponent<RandomSkillItem>().isLunch = true;
+                    Instantiate(DropItem, DropPosition, Quaternion.identity, parentRoom.transform).GetComponent<RandomSkillItem>().isLunch = true;
+                    Instantiate(DropItem, DropPosition, Quaternion.identity, parentRoom.transform).GetComponent<RandomSkillItem>().isLunch = true;
                 }
             }
             else
             {
 
-                Vector2 DropPosition = new Vector2(Mathf.Clamp(transform.position.x, transform.parent.position.x - 12.0f, transform.parent.position.x + 12.0f), Mathf.Clamp(transform.position.y, transform.parent.position.y - 7.0f, transform.parent.position.y + 7.0f));
+                Vector2 DropPosition = new Vector2(Mathf.Clamp(transform.position.x, parentRoom.transform.position.x - 12.0f, parentRoom.transform.position.x + 12.0f), Mathf.Clamp(transform.position.y, parentRoom.transform.position.y - 7.0f, parentRoom.transform.position.y + 7.0f));
                 if (!player.playerData.IsPassiveGetList[134]) {
-                    Instantiate(DropItem, DropPosition, Quaternion.identity, transform.parent);
+                    Instantiate(DropItem, DropPosition, Quaternion.identity, parentRoom.transform);
                 }
 
             }
@@ -1072,8 +1077,9 @@ public class Empty : Pokemon
         if (isOnixSuperInMistyTerrain) { isInSuperMistyTerrain = true; } else { isInSuperMistyTerrain = false; }
         if (isOnixSpeedChange) { SpeedChange(); } else { SpeedRemove01(0); }
 
-
     }
+
+
 
 
     /// <summary>
@@ -1088,6 +1094,17 @@ public class Empty : Pokemon
                 SubEmptyBodyList[i].isSubBodyEmptyInvincible = false;
                 this.Invincible = false;
             }
+        }
+    }
+
+    IEnumerator SetInvincible(float interval)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(interval);
+            // 处理事件
+            isSubBodyEmptyInvincible = false;
+            ResetSubBodyInvincible();
         }
     }
 

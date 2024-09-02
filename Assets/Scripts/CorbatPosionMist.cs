@@ -35,4 +35,8 @@ public class CorbatPosionMist : MonoBehaviour
             }
         }
     }
+    private void OnDestroy()
+    {
+        ParentEmpty.GetComponent<Corbat>().IsPosionMistExit = false;
+    }
 }

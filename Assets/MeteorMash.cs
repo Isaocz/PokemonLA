@@ -25,7 +25,10 @@ public class MeteorMash : Skill
                 HitAndKo(e);
                 if (SkillFrom == 2)
                 {
-                    if ((float)(Type.TYPE[9][(int)e.EmptyType01]) * (float)(Type.TYPE[9][(int)e.EmptyType02] * e.TypeDef[9]) > 1.0f)
+                    Debug.Log((float)(Type.TYPE[9][(int)e.EmptyType01]));
+                    Debug.Log((float)(Type.TYPE[9][(int)e.EmptyType02]));
+                    Debug.Log(Mathf.Pow(1.2f, -e.TypeDef[9]));
+                    if ((float)(Type.TYPE[9][(int)e.EmptyType01]) * (float)(Type.TYPE[9][(int)e.EmptyType02] * Mathf.Pow(1.2f , -e.TypeDef[9])) > 1.0f)
                     {
                         if (player.playerData.DefBounsJustOneRoom <= 8) {
                             player.playerData.DefBounsJustOneRoom++;
