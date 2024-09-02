@@ -14,12 +14,14 @@ public class SelectRoleToggle : MonoBehaviour
 
     public void ChangeSprite()
     {
+        Debug.Log("XXX");
         if (isOn) { isOn = false; image.sprite = SpriteNormal; }
         else { isOn = true; image.sprite = SpriteHL; }
     }
 
     public void _OnMouseEnter()
     {
+        Debug.Log("XXX");
         image.sprite = SpriteHL;
     }
 

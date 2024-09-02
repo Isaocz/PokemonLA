@@ -45,7 +45,7 @@ public class MewNPC : NPC
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (!isWillFly)
+        if (!isWillFly && other.tag == ("Player"))
         {
             NPCOnTriggerStay2D(other);
         }
@@ -53,8 +53,7 @@ public class MewNPC : NPC
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        Debug.Log("XXX");
-        if (!isWillFly)
+        if (!isWillFly && other.tag == ("Player"))
         {
             Debug.Log(other.name);
             NPCOnTriggerExit2D(other);

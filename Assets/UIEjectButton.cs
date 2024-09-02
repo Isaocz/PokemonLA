@@ -43,7 +43,7 @@ public class UIEjectButton : MonoBehaviour
             }
         }
 
-        if (Timer >= 8.0f && MapCreater.StaticMap.RRoom[Player.NowRoom].isClear == 0)
+        if (Timer >= 8.0f && MapCreater.StaticMap.RRoom[Player.NowRoom].isClear <= 0)
         {
             isPanelActive = true;
             EBPanel.gameObject.SetActive(true);

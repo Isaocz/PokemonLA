@@ -43,6 +43,12 @@ public class Corbat : Empty
 
     float IdleTimer;
 
+    public bool IsPosionMistExit
+    {
+        get { return isPosionMistExit; }
+        set { isPosionMistExit = value; }
+    }
+    bool isPosionMistExit = false;
 
     public enum State
     {
@@ -156,7 +162,7 @@ public class Corbat : Empty
                         {
                             rigidbody2D.bodyType = RigidbodyType2D.Static;
                             isXcutMove = false; isXCutStart = false;
-                            if (PosionMistObj == null) { PosionMistObj = Instantiate(PosionMist, transform.position, Quaternion.identity); }
+                            if (PosionMistObj == null && !IsPosionMistExit) { PosionMistObj = Instantiate(PosionMist, transform.position, Quaternion.identity); IsPosionMistExit = true; }
                             PosionMistObj.ParentEmpty = this;
                             PosionMistCenter = transform.position;
                             animator.SetBool("Charge", true);
@@ -259,7 +265,7 @@ public class Corbat : Empty
                         isAirSlashBouns = true;
                         SupersonicOrAirSlashTimer += Time.deltaTime;
                         //发射空气斩
-                        if (!isSupersonicBorn && SupersonicOrAirSlashTimer >= 0.3f)
+                        if (!isSupersonicBorn && SupersonicOrAirSlashTimer >= 0.3f && SupersonicOrAirSlashTimer < 0.7f)
                         {
                             isSupersonicBorn = true;
                             animator.SetBool("Charge", false);
@@ -278,7 +284,7 @@ public class Corbat : Empty
                             });
                         }
                         //被击退后开始曲线运动
-                        if (SupersonicOrAirSlashTimer >= 0.7f)
+                        if (SupersonicOrAirSlashTimer >= 0.7f && SupersonicOrAirSlashTimer < 1.2f)
                         {
                             MoveDirector = ((Vector2)TargetPosition - (Vector2)transform.position).normalized;
                             float Angle = _mTool.Angle_360Y(MoveDirector, Vector2.right);
@@ -288,9 +294,15 @@ public class Corbat : Empty
                             else { Director.x = 1; Director.y = -1; }
                             animator.SetFloat("LookX", Director.x); animator.SetFloat("LookY", Director.y);
                             MoveDirector = Quaternion.AngleAxis(-70, Vector3.forward) * MoveDirector;
-                            rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)MoveDirector.x * Time.deltaTime * speed * (isAirSlashBouns ? 1.85f : 1) * (Mathf.Pow(1.2f, TurnCount)) * (isFearDone ? 1.4f : 1), -15f + transform.parent.position.x, 15f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)MoveDirector.y * Time.deltaTime * speed * (isAirSlashBouns ? 1.85f : 1) * (Mathf.Pow(1.2f, TurnCount)) * (isFearDone ? 1.4f : 1), -10f + transform.parent.position.y, 10f + transform.parent.position.y));
+                            rigidbody2D.position = new Vector2(
+                                Mathf.Clamp(rigidbody2D.position.x + (float)MoveDirector.x * Time.deltaTime * speed * (isAirSlashBouns ? 1.85f : 1) * (Mathf.Pow(1.2f, TurnCount)) * (isFearDone ? 1.4f : 1),
+                                -15f + transform.parent.position.x, 
+                                15f + transform.parent.position.x), 
+                                Mathf.Clamp(rigidbody2D.position.y + (float)MoveDirector.y * Time.deltaTime * speed * (isAirSlashBouns ? 1.85f : 1) * (Mathf.Pow(1.2f, TurnCount)) * (isFearDone ? 1.4f : 1), 
+                                -10f + transform.parent.position.y,
+                                10f + transform.parent.position.y));
                         }
-                        if (SupersonicOrAirSlashTimer >= 1.2f)
+                        if (SupersonicOrAirSlashTimer >= 1.2f && SupersonicOrAirSlashTimer < 2.5f)
                         {
                             if (!isAirSlashXCutDone) {
                                 isAirSlashXCutDone = true;
@@ -301,6 +313,7 @@ public class Corbat : Empty
                         }
                         if (SupersonicOrAirSlashTimer >= 2.5f)
                         {
+                            speed = 6;
                             isAirSlashXCutDone = false; isAirSlashBouns = false;
                              SupersonicOrAirSlashTimer = 0; NowState = State.Idle; TurnCount = 0; isSupersonicBorn = false; XCutTimer = 0; IdleTimer = 7.0f;
                         }

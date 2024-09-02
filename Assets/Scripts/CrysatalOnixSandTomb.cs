@@ -30,7 +30,7 @@ public class CrysatalOnixSandTomb : MonoBehaviour
             Vector3 direction = Vector3.Normalize(transform.position - other.transform.position);
             if (other.transform.tag == "Player")
             {
-                if (Vector3.Distance(transform.position, other.transform.position) > addForceDis)
+                if ((other.gameObject.layer != LayerMask.NameToLayer("PlayerFly") && other.gameObject.layer != LayerMask.NameToLayer("PlayerJump")) && Vector3.Distance(transform.position, other.transform.position) > addForceDis)
                 {
 
                     PlayerControler playerControler = other.GetComponent<PlayerControler>();

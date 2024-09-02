@@ -14,7 +14,7 @@ public class Blissey : MonoBehaviour
     bool isHi;
     bool isTalked;
     public bool isSleep;
-
+    
     private void Start()
     {
         ZBottonObj = gameObject.transform.GetChild(3).gameObject;

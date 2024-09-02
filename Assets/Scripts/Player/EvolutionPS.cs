@@ -40,6 +40,8 @@ public class EvolutionPS : MonoBehaviour
 
     private void OnDestroy()
     {
-        BackGroundMusic.StaticBGM.BGM.volume = 1f;
+        if (BackGroundMusic.StaticBGM != null) {
+            BackGroundMusic.StaticBGM.BGM.volume = 1f;
+        }
     }
 }

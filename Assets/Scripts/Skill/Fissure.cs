@@ -28,7 +28,10 @@ public class Fissure : Skill
     {
         if (ExistenceTime > 1) {
             TrailMoveTimer += 1;
-            Trail.transform.position += Direction * Time.deltaTime * 5;
+            Room NowPlayerRoom = MapCreater.StaticMap.RRoom[player.NowRoom];
+            Vector3 NowPlayerRoomPosition = NowPlayerRoom.transform.position;
+            Trail.transform.position = new Vector3(Mathf.Clamp((Trail.transform.position + Direction * Time.deltaTime * 5).x , NowPlayerRoomPosition.x + NowPlayerRoom.RoomSize[2] , NowPlayerRoomPosition.x + NowPlayerRoom.RoomSize[3]) ,
+                                                   Mathf.Clamp((Trail.transform.position + Direction * Time.deltaTime * 5).y , NowPlayerRoomPosition.y + NowPlayerRoom.RoomSize[1] , NowPlayerRoomPosition.y + NowPlayerRoom.RoomSize[0]), 0); 
             if ((TrailMoveTimer % 10) == 0)
             {
                 if (Up)

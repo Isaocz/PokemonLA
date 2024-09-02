@@ -76,6 +76,7 @@ public class SkillBall : IteamPickUp
                 UIGetANewItem.UI.GetANewItem(3, SkillMachineName);
                 isThereAreSkillMechine = false;
                 playerControler.animator.SetTrigger("Happy");
+                playerControler.SetTerablast(GetSkill);
                 playerControler.LearnNewSkillByOtherWay(GetSkill);
                 playerControler.PassiveItemGetUI.GetComponent<Image>().sprite = SkillMachineItemObj.GetComponent<SpriteRenderer>().sprite;
                 Destroy(SkillMachineItemObj);

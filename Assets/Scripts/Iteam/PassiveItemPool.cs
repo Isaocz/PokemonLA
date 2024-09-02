@@ -72,7 +72,7 @@ public class PassiveItemPool : MonoBehaviour
     public static ItemPool Baby
     = new ItemPool
     {
-        WriteList = new List<int> { 30,31,32,34,69,70,71,124,125,126,127,128,129,130,131,132, },
+        WriteList = new List<int> { 30,31,32,33,69,70,71,124,125,126,127,128,129,130,131,132, },
         BlackList = new List<int> { }
     };
 

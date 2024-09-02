@@ -92,7 +92,9 @@ public class Solrock : Empty
                         }
                         if (MoveTurnTimer <= 1.2f)
                         {
-                            rigidbody2D.MovePosition(new Vector2(rigidbody2D.position.x + Time.deltaTime * speed * Director.x * (isFearDone ? 2 : 1), rigidbody2D.position.y + Time.deltaTime * speed * Director.y * (isFearDone ? 2 : 1)));
+                            if (rigidbody2D != null) {
+                                rigidbody2D.MovePosition(new Vector2(rigidbody2D.position.x + Time.deltaTime * speed * Director.x * (isFearDone ? 2 : 1), rigidbody2D.position.y + Time.deltaTime * speed * Director.y * (isFearDone ? 2 : 1)));
+                            }
                         }
                         break;
                     case State.Attack:

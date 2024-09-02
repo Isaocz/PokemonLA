@@ -15,24 +15,47 @@ public class Covet : Skill
         if (collision.CompareTag("Empty"))
         {
             Empty target = collision.GetComponent<Empty>();
+            SubEmptyBody Subtarget = collision.GetComponent<SubEmptyBody>();
             if (target != null)
             {
                 if (target.DropItem != null)
                 {
-                    if (target.isBoos)
+                    if (Subtarget == null) {
+                        if (target.isBoos)
+                        {
+                            Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+                            Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+                            Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+                        }
+                        else
+                        {
+                            if (target.IsHaveDropItem)
+                            {
+                                target.EmptyDrop();
+                            }
+                        }
+                    }
+                    
+                    target.DropItem = null;
+                }
+                if (Subtarget != null && Subtarget.ParentEmpty.DropItem != null)
+                {
+                    if (Subtarget.ParentEmpty.isBoos)
                     {
-                        Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-                        Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
-                        Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+                        Instantiate(Subtarget.ParentEmpty.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+                        Instantiate(Subtarget.ParentEmpty.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+                        Instantiate(Subtarget.ParentEmpty.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
+                        Subtarget.ParentEmpty.DropItem = null;
                     }
                     else
                     {
-                        if (target.IsHaveDropItem)
+                        if (Subtarget.ParentEmpty.IsHaveDropItem)
                         {
-                            target.EmptyDrop();
+                            Subtarget.ParentEmpty.EmptyDrop();
+                            Subtarget.ParentEmpty.DropItem = null;
                         }
                     }
-                    target.DropItem = null;
+                    Subtarget.ParentEmpty.DropItem = null;
                 }
                 HitAndKo(target);
             }

@@ -134,6 +134,11 @@ public class PlayerControler : Pokemon
 
     public GameObject FloatingDamage;//造成伤害显示
 
+    public HardworkShow HardworkFloatingShow;
+
+    List<HardworkShow> LastHardworkShow = new List<HardworkShow> { };
+
+
     //声明一个整形表示当前等级最大经验值，一个整形变量表示等级，以及一个经验值表，一个整形变量现在经验值,以及一个整型变量代表现在经验值以用于其他函数
     protected int[] Exp;
     public int maxEx;
@@ -301,6 +306,10 @@ public class PlayerControler : Pokemon
     public float imprisonTime04;
 
 
+    /// <summary>
+    /// 获得玩家的UI状态栏(状态栏下方)
+    /// </summary>
+    public PlayerUIState playerUIStateOther;
 
     //声明一个数组型变量，用来储存角色学习新招式的等级,以及一个整形变量检测当前等级是否习得技能
     public int GetSkillLevel;
@@ -442,6 +451,11 @@ public class PlayerControler : Pokemon
     /// </summary>
     protected void Instance()
     {
+
+        for (int i = -10; i < 10;i++)
+        {
+            Debug.Log(_mTool.AbllityChangeFunction(i,PlayerAbility == PlayerAbilityList.恒净之躯));
+        }
         
         DontDestroyOnLoad(this);
         //当前最大生命值等于一级时的最大生命值
@@ -534,11 +548,15 @@ public class PlayerControler : Pokemon
         {
             MarterialChangeToNurmal();
         }
+        SetTerablast(Skill01);
+        skillBar01.GetSkill(Skill01);
+        SetTerablast(Skill02);
+        skillBar02.GetSkill(Skill02);
+        SetTerablast(Skill03);
+        skillBar03.GetSkill(Skill03);
+        SetTerablast(Skill04);
+        skillBar04.GetSkill(Skill04);
 
-        if (Skill01 != null && Skill01.GetComponent<TeraBlast>() != null) { Skill01.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar01.GetSkill(Skill01); }
-        if (Skill02 != null && Skill02.GetComponent<TeraBlast>() != null) { Skill02.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar02.GetSkill(Skill02); }
-        if (Skill03 != null && Skill03.GetComponent<TeraBlast>() != null) { Skill03.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar03.GetSkill(Skill03); }
-        if (Skill04 != null && Skill04.GetComponent<TeraBlast>() != null) { Skill04.SkillType = PlayerTeraTypeJOR == 0 ? 1 : PlayerTeraTypeJOR; skillBar04.GetSkill(Skill04); }
     }
 
     public void TeraTypeChange(int TeraType)
@@ -553,10 +571,24 @@ public class PlayerControler : Pokemon
         {
             MarterialChangeToNurmal();
         }
-        if (Skill01 != null && Skill01.GetComponent<TeraBlast>() != null) { Skill01.SkillType = PlayerTeraType == 0 ? 1 : PlayerTeraType; skillBar01.GetSkill(Skill01); }
-        if (Skill02 != null && Skill02.GetComponent<TeraBlast>() != null) { Skill02.SkillType = PlayerTeraType == 0 ? 1 : PlayerTeraType; skillBar02.GetSkill(Skill02); }
-        if (Skill03 != null && Skill03.GetComponent<TeraBlast>() != null) { Skill03.SkillType = PlayerTeraType == 0 ? 1 : PlayerTeraType; skillBar03.GetSkill(Skill03); }
-        if (Skill04 != null && Skill04.GetComponent<TeraBlast>() != null) { Skill04.SkillType = PlayerTeraType == 0 ? 1 : PlayerTeraType; skillBar04.GetSkill(Skill04); }
+
+        SetTerablast(Skill01);
+        skillBar01.GetSkill(Skill01);
+        SetTerablast(Skill02);
+        skillBar02.GetSkill(Skill02);
+        SetTerablast(Skill03);
+        skillBar03.GetSkill(Skill03);
+        SetTerablast(Skill04);
+        skillBar04.GetSkill(Skill04);
+    }
+
+    public void SetTerablast(Skill s )
+    {
+        int NowTeraTypr = (PlayerTeraTypeJOR == 0) ? PlayerTeraType : PlayerTeraTypeJOR;
+        if (NowTeraTypr != 0)
+        {
+            if (s != null && s.GetComponent<TeraBlast>() != null) { s.SkillType = NowTeraTypr == 0 ? 1 : NowTeraTypr;  }
+        }
     }
 
     // Update is called once per frame
@@ -566,11 +598,14 @@ public class PlayerControler : Pokemon
         {
             //技能虚拟按钮
             {
-                if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill1"))) { isSkill01ButtonDown = true; }
-                if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill2"))) { isSkill02ButtonDown = true; }
-                if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill3"))) { isSkill03ButtonDown = true; }
-                if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill4"))) { isSkill04ButtonDown = true; }
-                if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("UseItem"))) { isSpaceItemButtonDown = true; }
+                if (SystemInfo.operatingSystemFamily != OperatingSystemFamily.Other) {
+                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill1"))) { isSkill01ButtonDown = true; }
+                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill2"))) { isSkill02ButtonDown = true; }
+                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill3"))) { isSkill03ButtonDown = true; }
+                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("Skill4"))) { isSkill04ButtonDown = true; }
+                    if (Input.GetKeyDown(InitializePlayerSetting.GlobalPlayerSetting.GetKeybind("UseItem"))) { isSpaceItemButtonDown = true; }
+                }
+
             }
 
             //检验时间是否停止，停止不进化
@@ -590,7 +625,7 @@ public class PlayerControler : Pokemon
             {
                 Vector2 MoveSpeed = Vector2.zero;
                 if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.Other) {
-                    if (MoveStick.joystick != null && MoveStick.joystick.Horizontal != 0 || MoveStick.joystick.Vertical != 0)
+                    if (MoveStick.joystick != null &&(!Mathf.Approximately(MoveStick.joystick.Horizontal, 0) || !Mathf.Approximately(MoveStick.joystick.Horizontal, 0)) && new Vector2(MoveStick.joystick.Horizontal, MoveStick.joystick.Vertical).magnitude > 0.0001)
                     {
                         Vector2 StickVector = new Vector2(MoveStick.joystick.Horizontal, MoveStick.joystick.Vertical).normalized;
                         float a = _mTool.Angle_360Y(StickVector, Vector2.right);
@@ -669,22 +704,14 @@ public class PlayerControler : Pokemon
                         float CollidorOffset = 0;
                         float CollidorRadiusH = 0;
                         float CollidorRadiusV = 0;
-                        switch (PlayerBodySize)
-                        {
-                            case 0:
-                                CollidorOffset = 0.4023046f; CollidorRadiusH = 0.6039822f; CollidorRadiusV = 0.2549849f;
-                                break;
-                            case 1:
-                                CollidorOffset = 0.5f; CollidorRadiusH = 0.7f; CollidorRadiusV = 0.7f;
-                                break;
-                            case 2:
-                                CollidorOffset = 0.7f; CollidorRadiusH = 1.3f; CollidorRadiusV = 1.1f;
-                                break;
-                        }
-                        RaycastHit2D SearchED = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.down, CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
-                        RaycastHit2D SearchEU = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.up, CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
-                        RaycastHit2D SearchER = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.right, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
-                        RaycastHit2D SearchEL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.left, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
+                        BoxCollider2D boxc = GetComponent<BoxCollider2D>();
+                        CollidorOffset = boxc.offset.y; CollidorRadiusH = (boxc.size.x / 2) + boxc.edgeRadius; CollidorRadiusV = (boxc.size.y / 2) + boxc.edgeRadius;
+
+
+                        RaycastHit2D SearchED = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.down, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
+                        RaycastHit2D SearchEU = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.up, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
+                        RaycastHit2D SearchER = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.right, CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
+                        RaycastHit2D SearchEL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.left, CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
 
 
                         if ((SearchED.collider != null && (SearchED.transform.tag == "Enviroment" || SearchED.transform.tag == "Room" || SearchED.transform.tag == "Water"))
@@ -952,6 +979,7 @@ public class PlayerControler : Pokemon
                     RestoreStrengthAndTeraType();
                     if (ComeInANewRoomEvent != null && !isComeInANewRoomEvent)
                     {
+                        if (playerAbility == PlayerAbilityList.雪隐) { isSnowCloakTrigger = false; }
                         Debug.Log(ComeInANewRoomEvent);
                         ComeInANewRoomEvent(this);
                         isComeInANewRoomEvent = true;
@@ -1011,14 +1039,18 @@ public class PlayerControler : Pokemon
                 }
             }
 
-            //重置虚拟按键按下状态
-            {
-                isSkill01ButtonDown = false;
-                isSkill02ButtonDown = false;
-                isSkill03ButtonDown = false;
-                isSkill04ButtonDown = false;
-                isSpaceItemButtonDown = false;
-            }
+        }
+    }
+
+    private void LateUpdate()
+    {
+        //重置虚拟按键按下状态
+        {
+            isSkill01ButtonDown = false;
+            isSkill02ButtonDown = false;
+            isSkill03ButtonDown = false;
+            isSkill04ButtonDown = false;
+            isSpaceItemButtonDown = false;
         }
     }
 
@@ -1106,7 +1138,7 @@ public class PlayerControler : Pokemon
         }
         else if (NowRoom == MapCreater.StaticMap.BossRoomPoint)
         {
-            if (MapCreater.StaticMap.RRoom[NowRoom].isClear == 0) { BackGroundMusic.StaticBGM.ChangeBGMToBossWin(); }
+            if (MapCreater.StaticMap.RRoom[NowRoom].isClear <= 0) { BackGroundMusic.StaticBGM.ChangeBGMToBossWin(); }
             else { BackGroundMusic.StaticBGM.ChangeBGMToBoss(); }
         }
         else
@@ -1454,11 +1486,11 @@ public class PlayerControler : Pokemon
     public void ChangeMoney(int ChangePoint)
     {
 
+        int BrforeMoney = nowMoney;
         //改变金钱数，上限为99，下限为0，之后向UI对象输出金钱的改变值，并调用UI改变金钱数的函数
         nowMoney = Mathf.Clamp(nowMoney + ChangePoint + (playerData.IsPassiveGetList[10]?1:0), 0, 99);
-        UIMoneyBar.Instance._Money += ChangePoint + (playerData.IsPassiveGetList[10] ? 1 : 0);
+        UIMoneyBar.Instance._Money += nowMoney - BrforeMoney;
         UIMoneyBar.Instance.MoneyChange();
-        
     }
 
 
@@ -1468,13 +1500,15 @@ public class PlayerControler : Pokemon
     /// <param name="ChangePoint"></param>
     public void ChangeStone(int ChangePoint)
     {
+        int BrforeStone = nowStone;
 
         //改变石头数，上限为99，下限为0，之后向UI对象输出金钱的改变值，并调用UI改变金钱数的函数
         nowStone = Mathf.Clamp(nowStone + ChangePoint, 0, 99);
-        UIMoneyBar.Instance._Stone += ChangePoint;
+        UIMoneyBar.Instance._Stone += nowStone - BrforeStone;
         UIMoneyBar.Instance.StoneChange();
-
     }
+
+
 
 
     /// <summary>
@@ -1537,24 +1571,42 @@ public class PlayerControler : Pokemon
     public void ChangeHPW(Vector2Int HWP)
     {
         if (HWP.y > 0) {
+            float f = 0;
+
+            //性格加成
+            if   (GetNatureUpAbllity(NatureIndex) != 0 && HWP.x == GetNatureUpAbllity(NatureIndex) + 1) { f += 0.15f; }
+            else if (GetNatureDownAbllity(NatureIndex) != 0 && HWP.x == GetNatureDownAbllity(NatureIndex) + 1){ f -= 0.15f; }
             switch (HWP.x) {
                 case 1:
-                    playerData.HPHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[18] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    f += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[18] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+
+                    playerData.HPHardWorkAlways += f;
+                    HWPShow(f, 0);
                     break;
                 case 2:
-                    playerData.AtkHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[19] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    f += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[19] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    playerData.AtkHardWorkAlways += f;
+                    HWPShow(f, 1);
                     break;
                 case 3:
-                    playerData.DefHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[20] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    f += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[20] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    playerData.DefHardWorkAlways += f;
+                    HWPShow(f, 2);
                     break;
                 case 4:
-                    playerData.SpAHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[21] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    f += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[21] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    playerData.SpAHardWorkAlways += f;
+                    HWPShow(f, 3);
                     break;
                 case 5:
-                    playerData.SpDHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[22] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    f += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[22] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    playerData.SpDHardWorkAlways += f;
+                    HWPShow(f, 4);
                     break;
                 case 6:
-                    playerData.SpeHardWorkAlways += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[23] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    f += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[23] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    playerData.SpeHardWorkAlways += f;
+                    HWPShow(f, 5);
                     break;
             }
         }
@@ -1581,22 +1633,25 @@ public class PlayerControler : Pokemon
                     playerData.SpeHardWorkAlways += (HWP.y) * 0.25f;
                     break;
             }
+            HWPShow((HWP.y) * 0.25f , HWP.x - 1);
         }
-
         float LuckHPDPlusPer = Random.Range(0.0f, 1.0f);
         if (!playerData.IsPassiveGetList[17])
         {
             if (LuckHPDPlusPer >= 0.85f && LuckHPDPlusPer <= 0.95f)
             {
                 playerData.LuckHardWorkAlways += 0.5f;
+                HWPShow(0.5f, 7);
             }
             else if (LuckHPDPlusPer > 0.95f && LuckHPDPlusPer <= 0.985f)
             {
                 playerData.LuckHardWorkAlways += 0.75f;
+                HWPShow(0.75f, 7);
             }
             else if (LuckHPDPlusPer > 0.985f && LuckHPDPlusPer <= 1.0f)
             {
                 playerData.LuckHardWorkAlways += 1.25f;
+                HWPShow(1.25f, 7);
             }
         }
         else
@@ -1604,18 +1659,43 @@ public class PlayerControler : Pokemon
             if (LuckHPDPlusPer >= 0.6f && LuckHPDPlusPer <= 0.86f)
             {
                 playerData.LuckHardWorkAlways += 0.5f;
+                HWPShow(0.5f, 7);
             }
             else if (LuckHPDPlusPer > 0.86f && LuckHPDPlusPer <= 0.96f)
             {
                 playerData.LuckHardWorkAlways += 0.75f;
+                HWPShow(0.75f, 7);
             }
             else if (LuckHPDPlusPer > 0.96f && LuckHPDPlusPer <= 1.0f)
             {
                 playerData.LuckHardWorkAlways += 1.25f;
+                HWPShow(1.25f, 7);
             }
         }
 
         ReFreshAbllityPoint();
+    }
+
+
+    public void HWPShow(float Value , int Type)
+    {
+        if (InitializePlayerSetting.GlobalPlayerSetting.isShowHardworking && HardworkFloatingShow)
+        {
+            Vector3 Offset = Vector3.zero;
+            if (LastHardworkShow.Count != 0)
+            {
+                LastHardworkShow.RemoveAll(item => item == null);
+                if (LastHardworkShow.Count != 0 && (LastHardworkShow[0].transform.position - transform.position).y < 0.6f) { 
+                    Offset = Vector3.up * (0.6f + (LastHardworkShow[LastHardworkShow.Count - 1].transform.position - transform.position).y); 
+                }
+            }
+            
+            
+            HardworkShow h = Instantiate(HardworkFloatingShow, transform.position + Offset + Vector3.right * Random.Range(-0.5f, 0.5f), Quaternion.identity);
+            if (LastHardworkShow.Count != 0 && (LastHardworkShow[0].transform.position - transform.position).y < 0.6f) {  LastHardworkShow.Add(h); }
+            else { LastHardworkShow.Insert(0, h); }
+            h.SetText(Value,Type);
+        }
     }
 
 
@@ -1683,14 +1763,28 @@ public class PlayerControler : Pokemon
     public void ReFreshAbllityPoint()
     {
         MaxHpForLevel(Level);
-        maxHp = (int)((maxHp + playerData.HPHardWorkAlways + playerData.HPHardWorkJustOneRoom) * Mathf.Pow((((playerData.HPBounsAlways + playerData.HPBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯  ? 1.1f : 1.2f) : 1.2f)), (playerData.HPBounsAlways + playerData.HPBounsJustOneRoom)));
-        AtkAbility = (int)((AbilityForLevel(Level, AtkPlayerPoint) + playerData.AtkHardWorkAlways + playerData.AtkHardWorkJustOneRoom) * Mathf.Pow((((playerData.AtkBounsAlways + playerData.AtkBounsJustOneRoom < 0)? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f )) , (playerData.AtkBounsAlways + playerData.AtkBounsJustOneRoom)));
-        SpAAbility = (int)((AbilityForLevel(Level, SpAPlayerPoint) + playerData.SpAHardWorkAlways + playerData.SpAHardWorkJustOneRoom) * Mathf.Pow((((playerData.SpABounsAlways + playerData.SpABounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f)), (playerData.SpABounsAlways + playerData.SpABounsJustOneRoom))); 
-        DefAbility = (int)((AbilityForLevel(Level, DefPlayerPoint) + playerData.DefHardWorkAlways + playerData.DefHardWorkJustOneRoom) * Mathf.Pow((((playerData.DefBounsAlways + playerData.DefBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f)), (playerData.DefBounsAlways + playerData.DefBounsJustOneRoom))); 
-        SpDAbility = (int)((AbilityForLevel(Level, SpdPlayerPoint) + playerData.SpDHardWorkAlways + playerData.SpDHardWorkJustOneRoom) * Mathf.Pow((((playerData.SpDBounsAlways + playerData.SpDBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f)), (playerData.SpDBounsAlways + playerData.SpDBounsJustOneRoom)));
-        SpeedAbility = (int)((AbilityForLevel(Level, SpeedPlayerPoint) + playerData.SpeHardWorkAlways + playerData.SpeHardWorkJustOneRoom) * Mathf.Pow((((playerData.SpeBounsAlways + playerData.SpeBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f)), (playerData.SpeBounsAlways + playerData.SpeBounsJustOneRoom)));
-        speed = Mathf.Clamp(!isSleepDone?((MoveSpePlayerPoint + playerData.MoveSpeHardWorkAlways + playerData.MoveSpeHardWorkJustOneRoom) * Mathf.Pow((((playerData.MoveSpwBounsAlways + playerData.MoveSpeBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f)), (playerData.MoveSpwBounsAlways + playerData.MoveSpeBounsJustOneRoom))):0.5f , 0.2f , 10);
-        LuckPoint = (int)((LuckPlayerPoint + playerData.LuckHardWorkAlways + playerData.LuckHardWorkJustOneRoom) * Mathf.Pow((((playerData.LuckBounsAlways + playerData.LuckBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f)), (playerData.LuckBounsAlways + playerData.LuckBounsJustOneRoom)));
+
+
+        //新方法在前7级增长比老方法大，第8级增长和老方法一样，之后开始衰减
+        maxHp = (int)((maxHp + playerData.HPHardWorkAlways + playerData.HPHardWorkJustOneRoom) * _mTool.AbllityChangeFunction(playerData.HPBounsAlways + playerData.HPBounsJustOneRoom, PlayerAbility == PlayerAbilityList.恒净之躯));
+        AtkAbility = (int)((AbilityForLevel(Level, AtkPlayerPoint) + playerData.AtkHardWorkAlways + playerData.AtkHardWorkJustOneRoom) * _mTool.AbllityChangeFunction(playerData.AtkBounsAlways + playerData.AtkBounsJustOneRoom, PlayerAbility == PlayerAbilityList.恒净之躯));
+        SpAAbility = (int)((AbilityForLevel(Level, SpAPlayerPoint) + playerData.SpAHardWorkAlways + playerData.SpAHardWorkJustOneRoom) * _mTool.AbllityChangeFunction(playerData.SpABounsAlways + playerData.SpABounsJustOneRoom, PlayerAbility == PlayerAbilityList.恒净之躯));
+        DefAbility = (int)((AbilityForLevel(Level, DefPlayerPoint) + playerData.DefHardWorkAlways + playerData.DefHardWorkJustOneRoom) * _mTool.AbllityChangeFunction(playerData.DefBounsAlways + playerData.DefBounsJustOneRoom, PlayerAbility == PlayerAbilityList.恒净之躯));
+        SpDAbility = (int)((AbilityForLevel(Level, SpdPlayerPoint) + playerData.SpDHardWorkAlways + playerData.SpDHardWorkJustOneRoom) * _mTool.AbllityChangeFunction(playerData.SpDBounsAlways + playerData.SpDBounsJustOneRoom, PlayerAbility == PlayerAbilityList.恒净之躯));
+        SpeedAbility = (int)((AbilityForLevel(Level, SpeedPlayerPoint) + playerData.SpeHardWorkAlways + playerData.SpeHardWorkJustOneRoom) * _mTool.AbllityChangeFunction(playerData.SpeBounsAlways + playerData.SpeBounsJustOneRoom, PlayerAbility == PlayerAbilityList.恒净之躯));
+        speed = Mathf.Clamp(!isSleepDone ? ((MoveSpePlayerPoint + playerData.MoveSpeHardWorkAlways + playerData.MoveSpeHardWorkJustOneRoom) * _mTool.AbllityChangeFunction(playerData.MoveSpwBounsAlways + playerData.MoveSpeBounsJustOneRoom, PlayerAbility == PlayerAbilityList.恒净之躯)) : 1.0f, 1.0f, 10);
+        LuckPoint = (int)((LuckPlayerPoint + playerData.LuckHardWorkAlways + playerData.LuckHardWorkJustOneRoom) * _mTool.AbllityChangeFunction(playerData.LuckBounsAlways + playerData.LuckBounsJustOneRoom, PlayerAbility == PlayerAbilityList.恒净之躯));
+
+        //老方法无衰减，指数增长
+        //maxHp = (int)((maxHp + playerData.HPHardWorkAlways + playerData.HPHardWorkJustOneRoom) * Mathf.Pow((((playerData.HPBounsAlways + playerData.HPBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯  ? 1.1f : 1.2f) : 1.2f)), (playerData.HPBounsAlways + playerData.HPBounsJustOneRoom)));
+        //AtkAbility = (int)((AbilityForLevel(Level, AtkPlayerPoint) + playerData.AtkHardWorkAlways + playerData.AtkHardWorkJustOneRoom) * Mathf.Pow((((playerData.AtkBounsAlways + playerData.AtkBounsJustOneRoom < 0)? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f )) , (playerData.AtkBounsAlways + playerData.AtkBounsJustOneRoom)));
+        //SpAAbility = (int)((AbilityForLevel(Level, SpAPlayerPoint) + playerData.SpAHardWorkAlways + playerData.SpAHardWorkJustOneRoom) * Mathf.Pow((((playerData.SpABounsAlways + playerData.SpABounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f)), (playerData.SpABounsAlways + playerData.SpABounsJustOneRoom))); 
+        //DefAbility = (int)((AbilityForLevel(Level, DefPlayerPoint) + playerData.DefHardWorkAlways + playerData.DefHardWorkJustOneRoom) * Mathf.Pow((((playerData.DefBounsAlways + playerData.DefBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f)), (playerData.DefBounsAlways + playerData.DefBounsJustOneRoom))); 
+        //SpDAbility = (int)((AbilityForLevel(Level, SpdPlayerPoint) + playerData.SpDHardWorkAlways + playerData.SpDHardWorkJustOneRoom) * Mathf.Pow((((playerData.SpDBounsAlways + playerData.SpDBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f)), (playerData.SpDBounsAlways + playerData.SpDBounsJustOneRoom)));
+        //SpeedAbility = (int)((AbilityForLevel(Level, SpeedPlayerPoint) + playerData.SpeHardWorkAlways + playerData.SpeHardWorkJustOneRoom) * Mathf.Pow((((playerData.SpeBounsAlways + playerData.SpeBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f)), (playerData.SpeBounsAlways + playerData.SpeBounsJustOneRoom)));
+        //speed = Mathf.Clamp(!isSleepDone?((MoveSpePlayerPoint + playerData.MoveSpeHardWorkAlways + playerData.MoveSpeHardWorkJustOneRoom) * Mathf.Pow((((playerData.MoveSpwBounsAlways + playerData.MoveSpeBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f)), (playerData.MoveSpwBounsAlways + playerData.MoveSpeBounsJustOneRoom))):1.0f , 1.0f , 10);
+        //LuckPoint = (int)((LuckPlayerPoint + playerData.LuckHardWorkAlways + playerData.LuckHardWorkJustOneRoom) * Mathf.Pow((((playerData.LuckBounsAlways + playerData.LuckBounsJustOneRoom < 0) ? (PlayerAbility == PlayerAbilityList.恒净之躯 ? 1.1f : 1.2f) : 1.2f)), (playerData.LuckBounsAlways + playerData.LuckBounsJustOneRoom)));
+        
         UIHealthBar.Instance.MaxHpText.text = maxHp.ToString();
         UIHealthBar.Instance.NowHpText.text = nowHp.ToString();
         float x = (UIHealthBar.Instance.Per - (float)nowHp / (float)maxHp);
@@ -1702,7 +1796,49 @@ public class PlayerControler : Pokemon
             UIHealthBar.Instance.Per = (float)nowHp / (float)maxHp;
             UIHealthBar.Instance.ChangeHpUp();
         }
+        RefreshAbllityUI();
     }
+
+    /// <summary>
+    /// 更新玩家的状态提升值UI
+    /// </summary>
+    public void RefreshAbllityUI()
+    {
+
+        switch (InitializePlayerSetting.GlobalPlayerSetting.isShowBouns)
+        {
+            case 0:
+                playerUIState.RemoveAllAbllityChangeMark();
+                playerUIStateOther.RemoveAllAbllityChangeMark();
+                break;
+            case 1:
+                playerUIStateOther.RemoveAllAbllityChangeMark();
+                playerUIState.AbllityChange(0, playerData.AtkBounsAlways + playerData.AtkBounsJustOneRoom);
+                playerUIState.AbllityChange(1, playerData.DefBounsAlways + playerData.DefBounsJustOneRoom);
+                playerUIState.AbllityChange(2, playerData.SpABounsAlways + playerData.SpABounsJustOneRoom);
+                playerUIState.AbllityChange(3, playerData.SpDBounsAlways + playerData.SpDBounsJustOneRoom);
+                playerUIState.AbllityChange(4, playerData.HPBounsAlways + playerData.HPBounsJustOneRoom);
+                playerUIState.AbllityChange(5, playerData.SpeBounsAlways + playerData.SpeBounsJustOneRoom);
+                playerUIState.AbllityChange(6, playerData.MoveSpwBounsAlways + playerData.MoveSpeBounsJustOneRoom);
+                playerUIState.AbllityChange(7, playerData.LuckBounsAlways + playerData.LuckBounsJustOneRoom);
+                break;
+            case 2:
+                playerUIState.RemoveAllAbllityChangeMark();
+                playerUIStateOther.AbllityChange(0, playerData.AtkBounsAlways + playerData.AtkBounsJustOneRoom);
+                playerUIStateOther.AbllityChange(1, playerData.DefBounsAlways + playerData.DefBounsJustOneRoom);
+                playerUIStateOther.AbllityChange(2, playerData.SpABounsAlways + playerData.SpABounsJustOneRoom);
+                playerUIStateOther.AbllityChange(3, playerData.SpDBounsAlways + playerData.SpDBounsJustOneRoom);
+                playerUIStateOther.AbllityChange(4, playerData.HPBounsAlways + playerData.HPBounsJustOneRoom);
+                playerUIStateOther.AbllityChange(5, playerData.SpeBounsAlways + playerData.SpeBounsJustOneRoom);
+                playerUIStateOther.AbllityChange(6, playerData.MoveSpwBounsAlways + playerData.MoveSpeBounsJustOneRoom);
+                playerUIStateOther.AbllityChange(7, playerData.LuckBounsAlways + playerData.LuckBounsJustOneRoom);
+                break;
+        }
+
+
+
+    }
+
 
 
     /// <summary>
@@ -1789,6 +1925,25 @@ public class PlayerControler : Pokemon
         {
             isCanEvolution = true;
         }
+        if (!isEvolution && EvolutionSkill != null)
+        {
+            if ((Skill01 != null && (Skill01.SkillIndex == EvolutionSkill.SkillIndex || Skill01.SkillIndex == EvolutionSkill.SkillIndex + 1)) ||
+            (Skill02 != null && (Skill02.SkillIndex == EvolutionSkill.SkillIndex || Skill02.SkillIndex == EvolutionSkill.SkillIndex + 1)) ||
+            (Skill03 != null && (Skill03.SkillIndex == EvolutionSkill.SkillIndex || Skill03.SkillIndex == EvolutionSkill.SkillIndex + 1)) ||
+            (Skill04 != null && (Skill04.SkillIndex == EvolutionSkill.SkillIndex || Skill04.SkillIndex == EvolutionSkill.SkillIndex + 1)))
+            {
+                isCanEvolution = true;
+
+            }
+            else if ((Skill01 != null && (Skill01.SkillIndex != EvolutionSkill.SkillIndex && Skill01.SkillIndex != EvolutionSkill.SkillIndex + 1)) &&
+            (Skill02 != null && (Skill02.SkillIndex != EvolutionSkill.SkillIndex && Skill02.SkillIndex != EvolutionSkill.SkillIndex + 1)) &&
+            (Skill03 != null && (Skill03.SkillIndex != EvolutionSkill.SkillIndex && Skill03.SkillIndex != EvolutionSkill.SkillIndex + 1)) &&
+            (Skill04 != null && (Skill04.SkillIndex != EvolutionSkill.SkillIndex && Skill04.SkillIndex != EvolutionSkill.SkillIndex + 1)))
+            {
+                isCanEvolution = false;
+            }
+        }
+        Debug.Log("isCanEvolution" + isCanEvolution);
     }
 
 
@@ -1814,6 +1969,8 @@ public class PlayerControler : Pokemon
         UISkillButton.Instance.isEscEnable = false;
         animator.SetTrigger("Evolution");
         isEvolution = true;
+        SpeedRemove01(0);
+        PlayerFrozenRemove();
     }
 
 
@@ -1840,6 +1997,10 @@ public class PlayerControler : Pokemon
         e.Skill02 = Skill02;
         e.Skill03 = Skill03;
         e.Skill04 = Skill04;
+        e.isSkill01ButtonDown = false;
+        e.isSkill02ButtonDown = false;
+        e.isSkill03ButtonDown = false;
+        e.isSkill04ButtonDown = false;
         e.Ex = Ex;
 
         e.UpdataPassiveItemEvent += UpdataPassiveItemEvent;
@@ -1890,8 +2051,21 @@ public class PlayerControler : Pokemon
         }
         e.TeraTypeChange(PlayerTeraType);
         e.TeraTypeJORChange(PlayerTeraTypeJOR);
+        
+
 
         e.spaceItem = spaceItem;
+        if (e.spaceItem != null)
+        {
+            e.SpaceItemImage.color = new Color(1, 1, 1, 1);
+            e.SpaceItemImage.sprite = spaceItem.GetComponent<SpaceItem>().UIImage;
+        }
+        else
+        {
+            e.SpaceItemImage.color = new Color(0, 0, 0, 0);
+            e.SpaceItemImage.sprite = null;
+        }
+
         e.NatureIndex = NatureIndex;
         e.Hp = (e.Level + 10 + (int)(((float)Level * e.HpPlayerPoint * 2) / 100.0f)) - (maxHp - Hp);
 
@@ -2415,6 +2589,91 @@ public class PlayerControler : Pokemon
             case 24:   break;
         }
     }
+
+    /// <summary>
+    /// 获得根据性格的能力增加项 0无增加项 1攻击 2防御 3特攻 4特防 5攻速
+    /// </summary>
+    /// <param name="NatureIndex"></param>
+    /// <returns></returns>
+    public int GetNatureUpAbllity(int NatureIndex)
+    {
+        switch (NatureIndex)
+        {
+            case 0: return 0;
+            case 1: return 1;
+            case 2: return 1;
+            case 3: return 1;
+            case 4: return 1;
+
+            case 5: return 2;
+            case 6: return 0;
+            case 7: return 2;
+            case 8: return 2;
+            case 9: return 2;
+
+            case 10: return 3;
+            case 11: return 3;
+            case 12: return 0;
+            case 13: return 3;
+            case 14: return 3;
+
+            case 15: return 4;
+            case 16: return 4;
+            case 17: return 4;
+            case 18: return 0;
+            case 19: return 4;
+
+            case 20: return 5;
+            case 21: return 5;
+            case 22: return 5;
+            case 23: return 5;
+            case 24: return 0;
+            default: return 0;
+        }
+    }
+
+    /// <summary>
+    /// 获得根据性格的能力减少项 0无增加项 1攻击 2防御 3特攻 4特防 5攻速
+    /// </summary>
+    /// <param name="NatureIndex"></param>
+    /// <returns></returns>
+    public int GetNatureDownAbllity(int NatureIndex)
+    {
+        switch (NatureIndex)
+        {
+            case 0: return 0;
+            case 1: return 2;
+            case 2: return 3;
+            case 3: return 4;
+            case 4: return 5;
+
+            case 5: return 1;
+            case 6: return 0;
+            case 7: return 3;
+            case 8: return 4;
+            case 9: return 5;
+
+            case 10: return 1;
+            case 11: return 2;
+            case 12: return 0;
+            case 13: return 4;
+            case 14: return 5;
+
+            case 15: return 1;
+            case 16: return 2;
+            case 17: return 3;
+            case 18: return 0;
+            case 19: return 5;
+
+            case 20: return 1;
+            case 21: return 2;
+            case 22: return 3;
+            case 23: return 4;
+            case 24: return 0;
+            default: return 0;
+        }
+    }
+
     public void RemoveNature(int NatureIndex)
     {
         switch (NatureIndex)
@@ -2474,15 +2733,18 @@ public class PlayerControler : Pokemon
         {
             if (!playerData.IsPassiveGetList[122])
             {
-                PlayerHailTimer += Time.deltaTime;
-                if (PlayerHailTimer >= 2.4f)
+                if (NowRoom != MapCreater.StaticMap.PCRoomPoint && NowRoom != MapCreater.StaticMap.StoreRoomPoint)
                 {
                     PlayerHailTimer += Time.deltaTime;
-                    if (Weather.GlobalWeather.isHailPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
-                    else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
-                    KnockOutPoint = 0;
-                    KnockOutDirection = Vector2.zero;
-                    PlayerHailTimer = 0;
+                    if (PlayerHailTimer >= 2.4f)
+                    {
+                        PlayerHailTimer += Time.deltaTime;
+                        if (Weather.GlobalWeather.isHailPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                        else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                        KnockOutPoint = 0;
+                        KnockOutDirection = Vector2.zero;
+                        PlayerHailTimer = 0;
+                    }
                 }
             }
         }
@@ -2503,15 +2765,17 @@ public class PlayerControler : Pokemon
         if (PlayerType01 != 5 && PlayerType01 != 6 && PlayerType01 != 9 && PlayerType02 != 5 && PlayerType02 != 6 && PlayerType02 != 9 && PlayerTeraType != 5 && PlayerTeraType != 6 && PlayerTeraType != 9 && PlayerTeraTypeJOR != 5 && PlayerTeraTypeJOR != 6 && PlayerTeraTypeJOR != 9)
         {
             if (!playerData.IsPassiveGetList[122]) {
-                PlayerSandStormTimer += Time.deltaTime;
-                if (PlayerSandStormTimer >= 2.4f)
-                {
+                if (NowRoom != MapCreater.StaticMap.PCRoomPoint && NowRoom != MapCreater.StaticMap.StoreRoomPoint) {
                     PlayerSandStormTimer += Time.deltaTime;
-                    if (Weather.GlobalWeather.isSandstormPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
-                    else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
-                    KnockOutPoint = 0;
-                    KnockOutDirection = Vector2.zero;
-                    PlayerSandStormTimer = 0;
+                    if (PlayerSandStormTimer >= 2.4f)
+                    {
+                        PlayerSandStormTimer += Time.deltaTime;
+                        if (Weather.GlobalWeather.isSandstormPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                        else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                        KnockOutPoint = 0;
+                        KnockOutDirection = Vector2.zero;
+                        PlayerSandStormTimer = 0;
+                    }
                 }
             }
         }

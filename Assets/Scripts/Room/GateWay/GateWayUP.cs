@@ -30,12 +30,12 @@ public class GateWayUP : GateWay
         }
         if (transform.parent.GetComponent<Room>() == null)
         {
-            if (transform.parent.parent.GetComponent<Room>().isClear == 0)
+            if (transform.parent.parent.GetComponent<Room>().isClear <= 0)
             {
                 GetComponent<BoxCollider2D>().isTrigger = true;
             }
         }
-        else if (transform.parent.GetComponent<Room>().isClear == 0 && GetComponent<BoxCollider2D>().isTrigger == false)
+        else if (transform.parent.GetComponent<Room>().isClear <= 0 && GetComponent<BoxCollider2D>().isTrigger == false)
         {
             GetComponent<BoxCollider2D>().isTrigger = true;
             animator.SetTrigger("Enable");

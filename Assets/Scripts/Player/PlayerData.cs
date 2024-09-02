@@ -196,14 +196,14 @@ public class PlayerData : MonoBehaviour
                 break;
 
             case 3:
-                if (HPHardWorkAlways >= 0) { HPHardWorkAlways = 0; }
-                if (AtkHardWorkAlways >= 0) { AtkHardWorkAlways = 0; }
-                if (DefHardWorkAlways >= 0) { DefHardWorkAlways = 0; }
-                if (SpAHardWorkAlways >= 0) { SpAHardWorkAlways = 0; }
-                if (SpDHardWorkAlways >= 0) { SpDHardWorkAlways = 0; }
-                if (SpeHardWorkAlways >= 0) { SpeHardWorkAlways = 0; }
-                if (LuckHardWorkAlways >= 0) { LuckHardWorkAlways = 0; }
-                if (MoveSpeHardWorkAlways >= 0) { MoveSpeHardWorkAlways = 0; }
+                if (HPHardWorkAlways >= 0) { HPHardWorkAlways = 0; player.HWPShow(-HPHardWorkAlways, 0); }
+                if (AtkHardWorkAlways >= 0) { AtkHardWorkAlways = 0; player.HWPShow(-AtkHardWorkAlways, 1); }
+                if (DefHardWorkAlways >= 0) { DefHardWorkAlways = 0; player.HWPShow(-DefHardWorkAlways, 2); }
+                if (SpAHardWorkAlways >= 0) { SpAHardWorkAlways = 0; player.HWPShow(-SpAHardWorkAlways, 3); }
+                if (SpDHardWorkAlways >= 0) { SpDHardWorkAlways = 0; player.HWPShow(-SpDHardWorkAlways, 4); }
+                if (SpeHardWorkAlways >= 0) { SpeHardWorkAlways = 0; player.HWPShow(-SpeHardWorkAlways, 5); }
+                if (LuckHardWorkAlways >= 0) { LuckHardWorkAlways = 0; player.HWPShow(-LuckHardWorkAlways, 7); }
+                if (MoveSpeHardWorkAlways >= 0) { MoveSpeHardWorkAlways = 0; player.HWPShow(-MoveSpeHardWorkAlways, 6); }
                 HPBounsAlways += 1;
                 AtkBounsAlways += 1;
                 DefBounsAlways += 1;
@@ -226,6 +226,7 @@ public class PlayerData : MonoBehaviour
             case 6:
                 LuckBounsAlways += 1;
                 LuckHardWorkAlways += 2;
+                player.HWPShow(2.0f, 7);
                 break;
 
             case 7:
@@ -589,6 +590,10 @@ public class PlayerData : MonoBehaviour
 
             case 68:
                 //绝对睡眠枕头
+                player.isToxicDef = true;
+                player.isParalysisDef = true;
+                player.isBurnDef = true;
+                player.isFrozenDef = true;
                 player.ComeInANewRoomEvent += ComatosePillow;
                 ComatosePillow(player);
                 break;
@@ -671,6 +676,7 @@ public class PlayerData : MonoBehaviour
                 //难吃宝芬
                 LuckBounsAlways -= 1;
                 LuckHardWorkAlways -= 5.0f;
+                player.HWPShow(-5.0f, 7);
                 break;
 
             case 85:
@@ -766,6 +772,7 @@ public class PlayerData : MonoBehaviour
                 //102马志士的签名
                 LuckBounsAlways += 1;
                 LuckHardWorkAlways += 2;
+                player.HWPShow(2.0f, 7);
                 break;
 
             case 103:
@@ -1071,7 +1078,9 @@ public class PlayerData : MonoBehaviour
 
     void ComatosePillow(PlayerControler playerInput)
     {
-        if (Random.Range(0.0f,1.0f) > 0.5f) {
+        float x = Random.Range(0.0f, 1.0f);
+        Debug.Log(x);
+        if (x > 0.5f) {
             playerInput.SleepFloatPlus(1);
         }
     }
@@ -1112,11 +1121,11 @@ public class PlayerData : MonoBehaviour
     {
         if (playerInput.Hp >= playerInput.maxHp/2)
         {
-            Pokemon.PokemonHpChange(null , this.gameObject , playerInput.maxHp / 8 , 0 , 0 , Type.TypeEnum.IgnoreType);
+            Pokemon.PokemonHpChange(null , playerInput.gameObject , playerInput.maxHp / 8 , 0 , 0 , Type.TypeEnum.IgnoreType);
         }
         else
         {
-            Pokemon.PokemonHpChange(null, this.gameObject, 0, 0, playerInput.maxHp / 8, Type.TypeEnum.IgnoreType);
+            Pokemon.PokemonHpChange(null, playerInput.gameObject, 0, 0, playerInput.maxHp / 8, Type.TypeEnum.IgnoreType);
         }
     }
     //===================================================寄生蘑菇=================================================

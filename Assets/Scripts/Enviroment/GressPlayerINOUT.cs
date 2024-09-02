@@ -14,17 +14,30 @@ public class GressPlayerINOUT : MonoBehaviour
     PlayerControler player;
     public bool isDie;
 
+    bool BanUp;
+    bool BanDown;
+    bool BanRight;
+    bool BanLeft;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
         animator = gameObject.GetComponent<Animator>();
-        
+
     }
 
     void LunchNewItem(GameObject LunchGameObject)
     {
-        GameObject NewItem = Instantiate(LunchGameObject, gameObject.transform.position+Vector3.down*0.4f, Quaternion.identity,transform);
-        NewItem.GetComponent<IteamPickUp>().isLunch = true;
+        CheckBan();
+        IteamPickUp NewItem = Instantiate(LunchGameObject, gameObject.transform.position+Vector3.down* 0.4f, Quaternion.identity,transform).GetComponent<IteamPickUp>();
+        NewItem.isLunch = true;
+        NewItem.BanLunchUp = BanUp;
+        NewItem.BanLunchDown = BanDown;
+        NewItem.BanLunchRight = BanRight;
+        NewItem.BanLunchLeft = BanLeft;
+        Debug.Log(BanUp + "+" + BanDown + "+" + BanRight + "+" + BanLeft);
 
     }
 
@@ -36,10 +49,14 @@ public class GressPlayerINOUT : MonoBehaviour
             if (Random.Range(0.000f, 1.000f) < (0.1f+(((float)player.LuckPoint))/60) )
             {
                 float JudgeF = Random.Range(0.0f, 1.0f);
-                if (JudgeF <= 1.0f && JudgeF > 0.82f) { LunchNewItem(RareCandy); }
-                else if (JudgeF <= 0.82f && JudgeF > 0.64f) { LunchNewItem(StartDust); }
-                else if (JudgeF <= 0.64f && JudgeF >= 0.46f) { LunchNewItem(CCG); }
-                else if (JudgeF <= 0.46f && JudgeF >= 0.4f) { LunchNewItem(SharpStone); }
+                if (JudgeF <= 1.0f && JudgeF > 0.82f) {
+                    LunchNewItem(RareCandy); }
+                else if (JudgeF <= 0.82f && JudgeF > 0.64f) {
+                    LunchNewItem(StartDust); }
+                else if (JudgeF <= 0.64f && JudgeF >= 0.46f) { 
+                    LunchNewItem(CCG); }
+                else if (JudgeF <= 0.46f && JudgeF >= 0.4f) {
+                    LunchNewItem(SharpStone); }
                 
             }
         }
@@ -48,7 +65,7 @@ public class GressPlayerINOUT : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.transform.tag == "Player") {
-            if (other.GetComponent<PlayerControler>() != null) {
+            if (other.GetComponent<PlayerControler>() != null && other.gameObject.layer != LayerMask.NameToLayer("PlayerFly") && other.gameObject.layer != LayerMask.NameToLayer("PlayerJump") ) {
                 animator.SetTrigger("PlayerIn");
                 player = other.GetComponent<PlayerControler>();
                 CreatNewItem();
@@ -77,5 +94,19 @@ public class GressPlayerINOUT : MonoBehaviour
     public void DestroySelf()
     {
         Destroy(gameObject);
+    }
+
+
+    void CheckBan()
+    {
+        RaycastHit2D CheckRight = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 0.1f), Vector2.right, 0.7f, LayerMask.GetMask("Enviroment", "Room", "Water"));
+        RaycastHit2D CheckLeft = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 0.1f), Vector2.left, 0.7f, LayerMask.GetMask("Enviroment", "Room", "Water"));
+        RaycastHit2D CheckUp = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 0.1f), Vector2.up, 0.7f, LayerMask.GetMask("Enviroment", "Room", "Water"));
+        RaycastHit2D CheckDown = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 0.1f), Vector2.down, 0.7f, LayerMask.GetMask("Enviroment", "Room", "Water"));
+        if (CheckRight.collider != null && CheckRight.collider.transform != transform.parent) { BanRight = true; }
+        if (CheckLeft.collider != null && CheckLeft.collider.transform != transform.parent) { BanLeft = true;  }
+        if (CheckUp.collider != null && CheckUp.collider.transform != transform.parent) { BanUp = true; }
+        if (CheckDown.collider != null && CheckDown.collider.transform != transform.parent) { BanDown = true; }
+        
     }
 }
