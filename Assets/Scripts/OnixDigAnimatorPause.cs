@@ -7,6 +7,7 @@ public class OnixDigAnimatorPause : MonoBehaviour
 
     public Empty empty;
     Animator animator;
+    bool isOver;
 
     // Start is called before the first frame update
     void Start()
@@ -16,15 +17,23 @@ public class OnixDigAnimatorPause : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!empty.isEmptyFrozenDone && !empty.isSleepDone && !empty.isCanNotMoveWhenParalysis && !empty.isSilence)
-        {
-            if (animator.speed == 0) { animator.speed = 1; }
+
+
+        if ((empty.isDie || empty == null) ) {
+            if (!isOver) {
+                Debug.Log("onixdig"); animator.speed = 1; animator.SetTrigger("Over"); isOver = true;
+            }
         }
         else
         {
-            if (animator.speed != 0) { animator.speed = 0; }
+            if (!empty.isEmptyFrozenDone && !empty.isSleepDone && !empty.isCanNotMoveWhenParalysis && !empty.isSilence)
+            {
+                if (animator.speed == 0) { animator.speed = 1; }
+            }
+            else
+            {
+                if (animator.speed != 0) { animator.speed = 0; }
+            }
         }
-
-        if (empty.isDie) { animator.SetTrigger("Over"); }
     }
 }

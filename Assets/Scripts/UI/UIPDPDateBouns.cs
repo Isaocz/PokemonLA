@@ -7,7 +7,11 @@ public class UIPDPDateBouns : MonoBehaviour
 {
     public Image PlusBouns;
     public Image MinusBouns;
+    public Image MegaPlusBouns;
+    public Image MegaMinusBouns;
 
+    public Transform BigStartGroup;
+    public Transform SmallStartGroup;
 
     // Start is called before the first frame update
     void Start()
@@ -17,23 +21,30 @@ public class UIPDPDateBouns : MonoBehaviour
 
     public void GetBounsMark( int Bouns )
     {
-        int i;
-        for (i = 0; i < transform.childCount; i++)
+        int AbilityBouns = Mathf.Clamp(Bouns , -30 , 30);
+        bool isPlus = (AbilityBouns > 0);
+        for (int i = 0; i < BigStartGroup.transform.childCount; i++)
         {
-            GameObject child = transform.GetChild(i).gameObject;
+            GameObject child = BigStartGroup.transform.GetChild(i).gameObject;
             Destroy(child);
         }
-        if (Bouns > 0) {
-            for (i=0;i<Bouns;i++)
-            {
-                Instantiate(PlusBouns , Vector3.zero , Quaternion.identity , gameObject.transform);
-            }
-        }else if ( Bouns < 0)
+        for (int i = 0; i < SmallStartGroup.transform.childCount; i++)
         {
-            for (i = 0; i > Bouns; i--)
-            {
-                Instantiate(MinusBouns, Vector3.zero, Quaternion.identity, gameObject.transform);
-            }
+            GameObject child = SmallStartGroup.transform.GetChild(i).gameObject;
+            Destroy(child);
+        }
+
+        Image smallstart = isPlus ? PlusBouns : MinusBouns;
+        Image bigstart = isPlus ? MegaPlusBouns : MegaMinusBouns;
+
+        int BounsCount = Mathf.Abs(AbilityBouns);
+        for (; BounsCount >= 10; BounsCount -= 10)
+        {
+            Instantiate(bigstart, Vector3.zero, Quaternion.identity, BigStartGroup.transform);
+        }
+        for (; BounsCount > 0; BounsCount --)
+        {
+            Instantiate(smallstart, Vector3.zero, Quaternion.identity, SmallStartGroup.transform);
         }
     }
 

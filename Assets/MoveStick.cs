@@ -66,7 +66,7 @@ public class MoveStick : MonoBehaviour
         MoveStick.joystick.transform.GetChild(0).GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 128 * (1 + scale));
         if (InitializePlayerSetting.GlobalPlayerSetting.ControlTypr == 2 || InitializePlayerSetting.GlobalPlayerSetting.ControlTypr == 3)
         {
-            MoveStick.joystick.transform.GetChild(0).localPosition = new Vector3(800.0f + (1000.0f * xoffset), 256.0f + (200.0f * yoffset), 0);
+            MoveStick.joystick.transform.GetChild(0).localPosition = new Vector3(800.0f + (1000.0f * xoffset), 200.0f + (256.0f * yoffset), 0);
         }
 
     }

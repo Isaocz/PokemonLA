@@ -8,28 +8,33 @@ public class AbllityChangeUI : MonoBehaviour
     public Image AbllityChangeImage;
     public Image AbllityChangeLevelImage;
     public int AbllityLevel;
-    public Sprite Up01;
-    public Sprite Up02;
-    public Sprite Up03;
-    public Sprite Up04;
-    public Sprite Up05;
-    public Sprite Up06;
-    public Sprite Up07;
-    public Sprite Up08;
-    public Sprite Down01;
-    public Sprite Down02;
-    public Sprite Down03;
-    public Sprite Down04;
-    public Sprite Down05;
-    public Sprite Down06;
-    public Sprite Down07;
-    public Sprite Down08;
+
+
+
+    public Sprite[] UpChangeLevelMark;
+    public Sprite[] DownChangeLevelMark;
 
 
     public void ChangeAblityLevel()
     {
+        AbllityLevel = Mathf.Clamp(AbllityLevel, -30, 30);
+
         AbllityChangeImage = transform.GetComponent<Image>();
         AbllityChangeLevelImage = transform.GetChild(0).GetComponent<Image>();
+        if (AbllityLevel > 0) 
+        {
+            AbllityChangeLevelImage.sprite = UpChangeLevelMark[Mathf.Abs(AbllityLevel) - 1];
+        }
+        else if(AbllityLevel < 0)
+        {
+            AbllityChangeLevelImage.sprite = DownChangeLevelMark[Mathf.Abs(AbllityLevel) - 1];
+        }
+        else
+        {
+            AbllityChangeLevelImage.sprite = null;
+        }
+
+        /*
         switch (AbllityLevel)
         {
             case -1:
@@ -81,5 +86,8 @@ public class AbllityChangeUI : MonoBehaviour
                 AbllityChangeLevelImage.sprite = Up08;
                 break;
         }
+    
+         */
+    
     }
 }

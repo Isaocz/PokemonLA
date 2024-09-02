@@ -47,6 +47,11 @@ public class BossDoorBillboard : MonoBehaviour
     }
 
 
+    public void ZButtonDown()
+    {
+        ZButton.Z.IsZButtonDown = true;
+    }
+
     void Update()
     {
         if ((isInTrriger || ZBottonObj.activeInHierarchy) && (transform.position - playerControler.transform.position).magnitude >= 6.0f)

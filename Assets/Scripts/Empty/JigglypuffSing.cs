@@ -48,9 +48,9 @@ public class JigglypuffSing : MonoBehaviour
         {
             SingRange.radius += Time.deltaTime;
         }
-        if (SingTimer >= 5.6f)
+        if (SingTimer >= 5.4f)
         {
-            SingRange.radius -= Time.deltaTime * 1.2f;
+            SingRange.radius -= Time.deltaTime * 1.8f;
         }
     }
 

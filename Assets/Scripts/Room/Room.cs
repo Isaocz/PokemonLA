@@ -149,7 +149,7 @@ public class Room : MonoBehaviour
         {
             isInThisRoom = false;
         }
-        if (isVisit && isClear != 0 && new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f), 0) != playerControler.NowRoom)
+        if (isVisit && isClear > 0 && new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f), 0) != playerControler.NowRoom)
         {
             isVisit = false;
             if (RoomTag == 0 || RoomTag == 3)
@@ -226,7 +226,7 @@ public class Room : MonoBehaviour
                 isMapCreated = true;
         }
 
-        if ( isVisit && (RoomTag == 0 || RoomTag == 3) && !isItemDrop && isClear == 0 && RandomDropItem != null)
+        if ( isVisit && (RoomTag == 0 || RoomTag == 3) && !isItemDrop && isClear <= 0 && RandomDropItem != null)
         {
             isItemDrop = true;
             Debug.Log(1);

@@ -9,7 +9,7 @@ public class BerryTree : MonoBehaviour
     public HealthUpCCg CCG;
     public SpaceItem WY;
     public PokemonBall PB;
-    PlayerControler player;
+    public PlayerControler player;
 
 
     bool BanUp;
@@ -43,7 +43,8 @@ public class BerryTree : MonoBehaviour
 
     public void DropABerry()
     {
-        float PandomPoint = (player.playerData.IsPassiveGetList[0] ? (Random.Range(0.0f, 1.0f)) : (Random.Range(0.0f, 1.04f)));
+        Debug.Log(BanUp + "+" + BanDown + "+" + BanRight + "+" + BanLeft);
+        float PandomPoint = (player.playerData.IsPassiveGetList[0] ? (Random.Range(0.0f, 1.0f)) : (Random.Range(0.0f, 1.025f)));
         if (PandomPoint <= 0.35f)
         {
             RandomBerryTypeDef b = Instantiate(Berry, transform.position + ((Quaternion.AngleAxis(r, Vector3.forward) * Vector3.right).normalized), Quaternion.identity, transform.parent.parent);
@@ -89,14 +90,14 @@ public class BerryTree : MonoBehaviour
 
     void CheckBan()
     {
-        RaycastHit2D CheckRight = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.right , 0.7f, LayerMask.GetMask("Enviroment", "Room"));
-        RaycastHit2D CheckLeft = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.left , 0.7f, LayerMask.GetMask("Enviroment", "Room"));
-        RaycastHit2D CheckUp = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.up , 0.7f, LayerMask.GetMask("Enviroment", "Room"));
-        RaycastHit2D CheckDown = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.down , 0.7f, LayerMask.GetMask("Enviroment", "Room"));
-        if (CheckRight.collider != null) { BanRight = true; }
-        if (CheckLeft.collider != null)    { BanLeft = true; }
-        if (CheckUp.collider != null)          { BanUp = true; }
-        if (CheckDown.collider != null)    { BanDown = true; }
+        RaycastHit2D CheckRight = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.right , 0.7f, LayerMask.GetMask("Enviroment", "Room" , "Water"));
+        RaycastHit2D CheckLeft = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.left , 0.7f, LayerMask.GetMask("Enviroment", "Room", "Water"));
+        RaycastHit2D CheckUp = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.up , 0.7f, LayerMask.GetMask("Enviroment", "Room", "Water"));
+        RaycastHit2D CheckDown = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), Vector2.down , 0.7f, LayerMask.GetMask("Enviroment", "Room", "Water"));
+        if (CheckRight.collider != null && CheckRight.collider.transform != transform.parent) { BanRight = true; }
+        if (CheckLeft.collider != null && CheckLeft.collider.transform != transform.parent)    { BanLeft = true; }
+        if (CheckUp.collider != null && CheckUp.collider.transform != transform.parent)          { BanUp = true;  }
+        if (CheckDown.collider != null && CheckDown.collider.transform != transform.parent)    { BanDown = true;  }
         r = Random.Range(0, 360);
         while ((BanUp && r > 45 && r <= 135) || (BanLeft && r > 135 && r <= 225) || (BanDown && r > 225 && r <= 315) || (BanRight && (r > 315 || r <= 45)))
         {

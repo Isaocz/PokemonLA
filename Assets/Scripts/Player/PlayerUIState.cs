@@ -66,6 +66,22 @@ public class PlayerUIState : MonoBehaviour
     AbllityChangeUI SpDChangeObj;
     int SpDChangeLevel;
 
+    public AbllityChangeUI HpChangeImage;
+    AbllityChangeUI HpChangeObj;
+    int HpChangeLevel;
+
+    public AbllityChangeUI SpeChangeImage;
+    AbllityChangeUI SpeChangeObj;
+    int SpeChangeLevel;
+
+    public AbllityChangeUI MoveSpeChangeImage;
+    AbllityChangeUI MoveSpeChangeObj;
+    int MoveSpeChangeLevel;
+
+    public AbllityChangeUI LuckChangeImage;
+    AbllityChangeUI LuckChangeObj;
+    int LuckChangeLevel;
+
 
     public Image ColdImage;
     Image ColdObj;
@@ -98,6 +114,12 @@ public class PlayerUIState : MonoBehaviour
         DefChangeLevel = OtherState.DefChangeLevel;
         SpAChangeLevel = OtherState.SpAChangeLevel;
         SpDChangeLevel = OtherState.SpDChangeLevel;
+
+        HpChangeLevel = OtherState.HpChangeLevel;
+        SpeChangeLevel = OtherState.SpeChangeLevel;
+        MoveSpeChangeLevel = OtherState.MoveSpeChangeLevel;
+        LuckChangeLevel = OtherState.LuckChangeLevel;
+
         IsCold = OtherState.IsCold;
         IsCurse = OtherState.IsCurse;
         for (int i = 0; i < transform.childCount; i++) {
@@ -126,10 +148,18 @@ public class PlayerUIState : MonoBehaviour
             if (DefChangeLevel != 0 && s == DefChangeImage.AbllityChangeImage.sprite) { DefChangeObj = transform.GetChild(i).GetComponent<AbllityChangeUI>(); }
             if (SpAChangeLevel != 0 && s == SpAChangeImage.AbllityChangeImage.sprite) { SpAChangeObj = transform.GetChild(i).GetComponent<AbllityChangeUI>(); }
             if (SpDChangeLevel != 0 && s == SpDChangeImage.AbllityChangeImage.sprite) { SpDChangeObj = transform.GetChild(i).GetComponent<AbllityChangeUI>(); }
+            if (HpChangeLevel != 0 && s == HpChangeImage.AbllityChangeImage.sprite) { HpChangeObj = transform.GetChild(i).GetComponent<AbllityChangeUI>(); }
+            if (SpeChangeLevel != 0 && s == SpeChangeImage.AbllityChangeImage.sprite) { SpeChangeObj = transform.GetChild(i).GetComponent<AbllityChangeUI>(); }
+            if (MoveSpeChangeLevel != 0 && s == MoveSpeChangeImage.AbllityChangeImage.sprite) { MoveSpeChangeObj = transform.GetChild(i).GetComponent<AbllityChangeUI>(); }
+            if (LuckChangeLevel != 0 && s == LuckChangeImage.AbllityChangeImage.sprite) { LuckChangeObj = transform.GetChild(i).GetComponent<AbllityChangeUI>(); }
+
+
+
             if (IsCold && s == ColdImage.sprite) { ColdObj = transform.GetChild(i).GetComponent<Image>(); }
             if (IsCurse && s == CurseImage.sprite) { CurseObj = transform.GetChild(i).GetComponent<Image>(); }
 
         }
+        SortAbllityChangeMark();
     }
 
     /// <summary>
@@ -240,10 +270,11 @@ public class PlayerUIState : MonoBehaviour
                 }
                 break;
         }
+        SortAbllityChangeMark();
     }
 
     /// <summary>
-    /// 0攻击改变 1防御改变 2特攻改变 3特防改变
+    /// 0攻击改变 1防御改变 2特攻改变 3特防改变 4HP改变 5攻速改变 6移速改变 7幸运改变
     /// </summary>
     /// <param name="AbllityIndex"></param>
     /// <param name="ChangeLevel"></param>
@@ -253,7 +284,7 @@ public class PlayerUIState : MonoBehaviour
             case 0:
                 if (ChangeLevel == 0) 
                 {
-                    if (AtkChangeObj.gameObject != null) {
+                    if (AtkChangeObj != null) {
                         Destroy(AtkChangeObj.gameObject);
                     }
                     AtkChangeLevel = 0;
@@ -269,7 +300,7 @@ public class PlayerUIState : MonoBehaviour
             case 1:
                 if (ChangeLevel == 0)
                 {
-                    if (DefChangeObj.gameObject != null)
+                    if (DefChangeObj != null)
                     {
                         Destroy(DefChangeObj.gameObject);
                     }
@@ -278,7 +309,6 @@ public class PlayerUIState : MonoBehaviour
                 else
                 {
                     if (/*DefChangeLevel == 0 && */ DefChangeObj == null) {  DefChangeObj = Instantiate(DefChangeImage, transform.position, Quaternion.identity, transform); }
-                    Debug.Log(DefChangeLevel);
                     DefChangeLevel = ChangeLevel;
                     DefChangeObj.AbllityLevel = DefChangeLevel;
                     DefChangeObj.ChangeAblityLevel();
@@ -287,7 +317,7 @@ public class PlayerUIState : MonoBehaviour
             case 2:
                 if (ChangeLevel == 0)
                 {
-                    if (SpAChangeObj.gameObject != null)
+                    if (SpAChangeObj != null)
                     {
                         Destroy(SpAChangeObj.gameObject);
                     }
@@ -296,7 +326,6 @@ public class PlayerUIState : MonoBehaviour
                 else
                 {
                     if (/* SpAChangeLevel == 0 && */ SpAChangeObj == null) { SpAChangeObj = Instantiate(SpAChangeImage, transform.position, Quaternion.identity, transform); }
-                    Debug.Log(SpAChangeLevel);
                     SpAChangeLevel = ChangeLevel;
                     SpAChangeObj.AbllityLevel = SpAChangeLevel;
                     SpAChangeObj.ChangeAblityLevel();
@@ -305,7 +334,7 @@ public class PlayerUIState : MonoBehaviour
             case 3:
                 if (ChangeLevel == 0)
                 {
-                    if (SpDChangeObj.gameObject != null)
+                    if (SpDChangeObj != null)
                     {
                         Destroy(SpDChangeObj.gameObject);
                     }
@@ -319,7 +348,107 @@ public class PlayerUIState : MonoBehaviour
                     SpDChangeObj.ChangeAblityLevel();
                 }
                 break;
+            case 4:
+                if (ChangeLevel == 0)
+                {
+                    if (HpChangeObj != null)
+                    {
+                        Destroy(HpChangeObj.gameObject);
+                    }
+                    HpChangeLevel = 0;
+                }
+                else
+                {
+                    if (/*SpDChangeLevel == 0 &&  */HpChangeObj == null) { HpChangeObj = Instantiate(HpChangeImage, transform.position, Quaternion.identity, transform); }
+                    HpChangeLevel = ChangeLevel;
+                    HpChangeObj.AbllityLevel = HpChangeLevel;
+                    HpChangeObj.ChangeAblityLevel();
+                }
+                break;
+            case 5:
+                if (ChangeLevel == 0)
+                {
+                    if (SpeChangeObj != null)
+                    {
+                        Destroy(SpeChangeObj.gameObject);
+                    }
+                    SpeChangeLevel = 0;
+                }
+                else
+                {
+                    if (/*SpDChangeLevel == 0 &&  */SpeChangeObj == null) { SpeChangeObj = Instantiate(SpeChangeImage, transform.position, Quaternion.identity, transform); }
+                    SpeChangeLevel = ChangeLevel;
+                    SpeChangeObj.AbllityLevel = SpeChangeLevel;
+                    SpeChangeObj.ChangeAblityLevel();
+                }
+                break;
+            case 6:
+                if (ChangeLevel == 0)
+                {
+                    if (MoveSpeChangeObj != null)
+                    {
+                        Destroy(MoveSpeChangeObj.gameObject);
+                    }
+                    MoveSpeChangeLevel = 0;
+                }
+                else
+                {
+                    if (/*SpDChangeLevel == 0 &&  */MoveSpeChangeObj == null) { MoveSpeChangeObj = Instantiate(MoveSpeChangeImage, transform.position, Quaternion.identity, transform); }
+                    MoveSpeChangeLevel = ChangeLevel;
+                    MoveSpeChangeObj.AbllityLevel = MoveSpeChangeLevel;
+                    MoveSpeChangeObj.ChangeAblityLevel();
+                }
+                break;
+            case 7:
+                if (ChangeLevel == 0)
+                {
+                    if (LuckChangeObj != null)
+                    {
+                        Destroy(LuckChangeObj.gameObject);
+                    }
+                    LuckChangeLevel = 0;
+                }
+                else
+                {
+                    if (/*SpDChangeLevel == 0 &&  */LuckChangeObj == null) { LuckChangeObj = Instantiate(LuckChangeImage, transform.position, Quaternion.identity, transform); }
+                    LuckChangeLevel = ChangeLevel;
+                    LuckChangeObj.AbllityLevel = LuckChangeLevel;
+                    LuckChangeObj.ChangeAblityLevel();
+                }
+                break;
         }
+        SortAbllityChangeMark();
+    }
+
+    /// <summary>
+    /// 移除所有能力变化
+    /// </summary>
+    public void RemoveAllAbllityChangeMark()
+    {
+        Debug.Log("Xxx");
+        if (AtkChangeObj != null) { Destroy(AtkChangeObj.gameObject); AtkChangeLevel = 0; }
+        if (DefChangeObj != null) { Destroy(DefChangeObj.gameObject); DefChangeLevel = 0; }
+        if (SpAChangeObj != null) { Destroy(SpAChangeObj.gameObject); SpAChangeLevel = 0; Debug.Log("Xxx"); }
+        if (SpDChangeObj != null) { Destroy(SpDChangeObj.gameObject); SpDChangeLevel = 0; }
+        if (SpeChangeObj != null) { Destroy(SpeChangeObj.gameObject); SpeChangeLevel = 0; }
+        if (MoveSpeChangeObj != null) { Destroy(MoveSpeChangeObj.gameObject); MoveSpeChangeLevel = 0; }
+        if (HpChangeObj != null) { Destroy(HpChangeObj.gameObject); HpChangeLevel = 0; }
+        if (LuckChangeObj != null) { Destroy(LuckChangeObj.gameObject); LuckChangeLevel = 0; }
+    }
+
+    /// <summary>
+    /// 排序能力变化标签
+    /// </summary>
+    public void SortAbllityChangeMark()
+    {
+        if (LuckChangeObj != null) { LuckChangeObj.transform.SetAsFirstSibling(); }
+        if (MoveSpeChangeObj != null) { MoveSpeChangeObj.transform.SetAsFirstSibling(); }
+        if (SpeChangeObj != null) { SpeChangeObj.transform.SetAsFirstSibling(); }
+        if (SpDChangeObj != null) { SpDChangeObj.transform.SetAsFirstSibling(); }
+        if (SpAChangeObj != null) { SpAChangeObj.transform.SetAsFirstSibling(); }
+        if (DefChangeObj != null) { DefChangeObj.transform.SetAsFirstSibling(); }
+        if (AtkChangeObj != null) { AtkChangeObj.transform.SetAsFirstSibling(); }
+        if (HpChangeObj != null) { HpChangeObj.transform.SetAsFirstSibling(); }
     }
 
 
@@ -431,6 +560,7 @@ public class PlayerUIState : MonoBehaviour
                 break;
 
         }
+        SortAbllityChangeMark();
     }
 
     public void StateSlowUP(int StateNum, float Per)
@@ -510,6 +640,7 @@ public class PlayerUIState : MonoBehaviour
                 }
                 break;
         }
+        SortAbllityChangeMark();
     }
 
 }

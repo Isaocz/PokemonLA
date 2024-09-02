@@ -71,8 +71,55 @@ public class Weather : MonoBehaviour
         player = FindObjectOfType<PlayerControler>();
     }
 
+    bool[] WeatherBool = new bool[4] { false, false, false, false};
+
+    void InPC()
+    {
+        if (player.NowRoom == MapCreater.StaticMap.PCRoomPoint || player.NowRoom == MapCreater.StaticMap.StoreRoomPoint) {
+            transform.GetChild(0).gameObject.SetActive(false);
+            for (int i = 1; i < 5; i++)
+            {
+                WeatherBool[i - 1] = transform.GetChild(i).gameObject.activeInHierarchy;
+                if (i == 3) { transform.GetChild(i).GetChild(0).gameObject.SetActive(false); transform.GetChild(i).GetChild(1).gameObject.SetActive(false); }
+                else { transform.GetChild(i).gameObject.SetActive(false); }
+
+            }
+        }
+    }
+
     private void Update()
     {
+        CheckPlayer();
+
+        //进入商店PC隐藏天气效果；
+        if (player.NowRoom == MapCreater.StaticMap.PCRoomPoint || player.NowRoom == MapCreater.StaticMap.StoreRoomPoint) 
+        {
+            if (transform.GetChild(0).gameObject.activeInHierarchy) 
+            {
+                InPC();
+            }
+        }
+        else {
+            if (!transform.GetChild(0).gameObject.activeInHierarchy) 
+            {
+                transform.GetChild(0).gameObject.SetActive(true);
+                for (int i = 1; i < 5; i++)
+                {
+                    if (WeatherBool[i - 1])
+                    {
+                        if (i == 3) { transform.GetChild(i).GetChild(0).gameObject.SetActive(true); transform.GetChild(i).GetChild(1).gameObject.SetActive(true); }
+                        else { transform.GetChild(i).gameObject.SetActive(true); }
+                    }
+                }
+
+                if (!isSunny && !isSunnyPlus) { SunShinePS.gameObject.SetActive(false); }
+                if (!isRain && !isRainPlus) { RainPS.Stop(); }
+                if (!isHail && !isHailPlus) { HailPS1.Stop(); HailPS2.Stop(); }
+                if (!isSandstorm && !isSandstormPlus) { SandstormPS.Stop(); }
+                if (isNormal) { RemoveAllWeather(); }
+            }
+        }
+
         if (!isNormal && WeatherTimer > 0)
         {
             WeatherTimer -= Time.deltaTime;
@@ -151,11 +198,11 @@ public class Weather : MonoBehaviour
 
         //=================================================改变天气时的粒子变化===============================================
 
-        if (!RainPS.IsAlive()) { RainPS.gameObject.SetActive(false); }
-        if (!SunShinePS.IsAlive()) { SunShinePS.gameObject.SetActive(false); }
-        if (!HailPS1.IsAlive()) { HailPS1.gameObject.SetActive(false); }
-        if (!HailPS2.IsAlive()) { HailPS2.gameObject.SetActive(false); }
-        if (!SandstormPS.IsAlive()) { SandstormPS.gameObject.SetActive(false); }
+        if (RainPS.gameObject.activeInHierarchy && !RainPS.IsAlive()) { RainPS.gameObject.SetActive(false); }
+        if (SunShinePS.gameObject.activeInHierarchy && !SunShinePS.IsAlive()) { SunShinePS.gameObject.SetActive(false); }
+        if (HailPS1.gameObject.activeInHierarchy && !HailPS1.IsAlive()) { HailPS1.gameObject.SetActive(false); }
+        if (HailPS2.gameObject.activeInHierarchy && !HailPS2.IsAlive()) { HailPS2.gameObject.SetActive(false); }
+        if (SandstormPS.gameObject.activeInHierarchy && !SandstormPS.IsAlive()) { SandstormPS.gameObject.SetActive(false); }
 
         //=================================================改变天气时的粒子变化===============================================
     }
@@ -172,6 +219,7 @@ public class Weather : MonoBehaviour
             WeatherTimer = Time;
             ChangeWeatherSkillType();
         }
+        InPC();
     }
 
     public void ChangeWeatherSunshine(float Time, bool isPlus)
@@ -187,6 +235,7 @@ public class Weather : MonoBehaviour
             WeatherTimer = Time;
             ChangeWeatherSkillType();
         }
+        InPC();
     }
 
 
@@ -212,6 +261,7 @@ public class Weather : MonoBehaviour
             WeatherTimer = Time;
             ChangeWeatherSkillType();
         }
+        InPC();
     }
 
     public void ChangeWeatherSandStorm(float Time, bool isPlus)
@@ -233,6 +283,7 @@ public class Weather : MonoBehaviour
             }
             ChangeWeatherSkillType();
         }
+        InPC();
     }
 
     void CheckPlayer()
@@ -249,6 +300,7 @@ public class Weather : MonoBehaviour
         isNormalColorStartChange = true;
         isNormal = true;
         ChangeWeatherSkillType();
+        InPC();
     }
 
     void RemoveAllWeather()

@@ -59,7 +59,7 @@ public class MoveArrow : MonoBehaviour
         float yoffset = InitializePlayerSetting.GlobalPlayerSetting.ArrowYOffset;
         float scale = InitializePlayerSetting.GlobalPlayerSetting.ArrowScale;
         float spacing = InitializePlayerSetting.GlobalPlayerSetting.ArrowSpacing;
-        arrow.transform.localPosition = new Vector3(-900.0f + (700.0f * xoffset), -50 + (150.0f * yoffset), 0);
+        arrow.transform.localPosition = new Vector3(-900.0f + (700.0f * xoffset), -75 + (200.0f * yoffset), 0);
         arrow.transform.localScale = new Vector3(1 + scale, 1 + scale, 1 + scale);
         arrow.UpArrow.transform.localPosition = new Vector3(0, 60.0f + 40.0f * spacing, 0);
         arrow.DownArrow.transform.localPosition = new Vector3(0, -(60.0f + 40.0f * spacing), 0);

@@ -21,9 +21,19 @@ public class AudioM : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
+    private void Start()
+    {
+        float BgmVolume = PlayerPrefs.GetFloat("BGMVolume");
+        float SEVolume = PlayerPrefs.GetFloat("SEVolume");
+        AudioM.GlobalAudioM.SetBgmVolume(BgmVolume);
+        AudioM.GlobalAudioM.SetSEVolume(SEVolume);
+    }
+
     float Float2dB(float Float0to1)
     {
-        return Mathf.Clamp(Mathf.Clamp(Float0to1, 0.0f, 1.0f) * 80.0f - 80.0f, -80f, 0.0f);
+        float OutPut = Mathf.Clamp(Mathf.Clamp(Float0to1, 0.0f, 1.0f) * 30f - 30f, -30f, 0.0f);
+        if (Float0to1 == 0.0f) { OutPut = -80.0f; }
+        return OutPut;
     }
 
 

@@ -23,7 +23,7 @@ public class NextFloorGateWay : GateWay
     {
         if (transform.parent.GetComponent<Room>() == null)
         {
-            if (transform.parent.parent.GetComponent<Room>().isClear == 0)
+            if (transform.parent.parent.GetComponent<Room>().isClear <= 0)
             {
                 if (FloorNum.GlobalFloorNum.MaxFloor > FloorNum.GlobalFloorNum.FloorNumber)
                 {
@@ -33,7 +33,7 @@ public class NextFloorGateWay : GateWay
 
             }
         }
-        else if (transform.parent.GetComponent<Room>().isClear == 0 && GetComponent<BoxCollider2D>().isTrigger == false)
+        else if (transform.parent.GetComponent<Room>().isClear <= 0 && GetComponent<BoxCollider2D>().isTrigger == false)
         {
             if (FloorNum.GlobalFloorNum.MaxFloor > FloorNum.GlobalFloorNum.FloorNumber+1)
             {

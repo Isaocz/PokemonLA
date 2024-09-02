@@ -33,6 +33,10 @@ public class PinecoBaby : FollowBaby
         Shadow01 = transform.GetChild(1).gameObject;
         Shadow02 = transform.GetChild(2).gameObject;
         animator = GetComponent<Animator>();
+        Colision.transform.localPosition = Vector3.zero;
+        Shadow01.transform.localPosition = new Vector3(0, -0.5867003f, 0);
+        Shadow02.transform.localPosition = new Vector3(0, -0.54f, 0);
+        NowState = State.idle;
     }
 
     // Update is called once per frame

@@ -178,6 +178,7 @@ public class Masquerain : Empty
     
     void OnAniBornFinsih()
     {
+        ResetPlayer();
         StartAiTimer();
     }
     

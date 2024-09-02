@@ -102,7 +102,7 @@ public class TrapinchSandTomb : MonoBehaviour
                 // 魅惑时不对player产生作用
                 return;
             }
-            if(Vector3.Distance(transform.position, other.transform.position) > addForceDis)
+            if((other.gameObject.layer != LayerMask.NameToLayer("PlayerFly") && other.gameObject.layer != LayerMask.NameToLayer("PlayerJump")) && Vector3.Distance(transform.position, other.transform.position) > addForceDis)
             {
 
                 PlayerControler playerControler = other.GetComponent<PlayerControler>();

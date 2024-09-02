@@ -133,7 +133,7 @@ public class Kricketune : Empty
                             S.sprite02.sprite = skinRenderers[1].sprite;
                         }
                         Debug.Log(MoveDirector);
-                        rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)MoveDirector.x * Time.deltaTime * 7.25f * speed, -15f + transform.parent.position.x, 15f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)MoveDirector.y * Time.deltaTime * 7.25f * speed, -10f + transform.parent.position.y, 10f + transform.parent.position.y));
+                        rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)MoveDirector.x * Time.deltaTime * 7.15f * speed, ParentPokemonRoom.RoomSize[2] - 1.0f + transform.parent.position.x, ParentPokemonRoom.RoomSize[3] + 1.0f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)MoveDirector.y * Time.deltaTime * 7.25f * speed, ParentPokemonRoom.RoomSize[1] - 1.0f + transform.parent.position.y, ParentPokemonRoom.RoomSize[0] + 1.0f + transform.parent.position.y));
                     }
                     WingAnimator.SetFloat("LookX", animator.GetFloat("LookX"));
                     WingAnimator.SetFloat("LookY", animator.GetFloat("LookY"));

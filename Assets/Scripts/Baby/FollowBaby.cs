@@ -29,6 +29,7 @@ public class FollowBaby : Baby
         }
     }
 
+
     int GetChildNum()
     {
         int i = 0;
@@ -56,10 +57,9 @@ public class FollowBaby : Baby
         {
             Speed = 4;
         }
-
         if ((Target.transform.position - transform.position).magnitude > 1.7f) {
             
-            //Debug.Log((Target.transform.position - transform.position).magnitude);
+
             Vector3 position = transform.position;
             position.x += Time.deltaTime * direction.x * Speed;
             position.y += Time.deltaTime * direction.y * Speed;
@@ -73,6 +73,8 @@ public class FollowBaby : Baby
         LastPosition = transform.position;
 
     }
+
+
     
     public virtual void FollowBabyShot( Vector2Int Dir)
     {

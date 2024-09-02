@@ -12,15 +12,15 @@ public class Acupressure : Skill
     void Start()
     {
 
-        PlusIndex1 = Random.Range(0, 6);
+        PlusIndex1 = Random.Range(0, 5);
         ImproveAb(PlusIndex1);
 
         if (SkillFrom == 2)
         {
-            PlusIndex2 = Random.Range(0, 6);
+            PlusIndex2 = Random.Range(0, 5);
             while (PlusIndex2 == PlusIndex1)
             {
-                PlusIndex2 = Random.Range(0, 6);
+                PlusIndex2 = Random.Range(0, 5);
             }
             ImproveAb(PlusIndex2);
         }
@@ -48,9 +48,6 @@ public class Acupressure : Skill
                 player.playerData.SpDBounsJustOneRoom += 2;
                 break;
             case 4:
-                player.playerData.SpeBounsJustOneRoom += 2;
-                break;
-            case 5:
                 player.playerData.MoveSpeBounsJustOneRoom += 2;
                 break;
         }

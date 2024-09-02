@@ -23,6 +23,11 @@ public class MeowthTalkUI : MonoBehaviour
         TalkIndex = 0;
         TalkInformation.text = TalkTextList[TalkIndex];
     }
+
+    public void ZButtonDown()
+    {
+        ZButton.Z.IsZButtonDown = true;
+    }
     public void PlayerExit()
     {
         if (TalkInformation != null)
