@@ -12,6 +12,11 @@ public class PCcomputerTalkPanle : MonoBehaviour
     bool isGetGift;
     public PokemonBall pokemonBall;
 
+    public void ZButtonDown()
+    {
+        ZButton.Z.IsZButtonDown = true;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

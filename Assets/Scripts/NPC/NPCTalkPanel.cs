@@ -24,6 +24,11 @@ public class NPCTalkPanel : MonoBehaviour
 
     }
 
+    public void ZButtonDown()
+    {
+        ZButton.Z.IsZButtonDown = true;
+    }
+
     protected void NPCTPContinue()
     {
         if (!isTalkPuse) {

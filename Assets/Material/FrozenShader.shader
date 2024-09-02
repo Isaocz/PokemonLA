@@ -3,11 +3,12 @@ Shader "FrozenCustom/MyShader"
     Properties
     {
         _Color ("Color", Color) = (1,1,1,1)
-        _MainTex ("Albedo (RGB)", 2D) = "white" {}
+        _MainTex (        "Main Texture", 2D) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
                 
         _MaterialPriority ("Material Priority", Float) = 0
+
     }
     SubShader
     {
@@ -49,13 +50,13 @@ Shader "FrozenCustom/MyShader"
             }
 
             //通过c#获取到人物纹理传递过来
-            sampler2D _PlayerTex;
+            sampler2D _MainTex;
 
             // 片元着色获取
             fixed4 frag (v2f i) : SV_Target
             {
                 // 采样传过来的纹理
-                fixed4 col = tex2D(_PlayerTex, i.uv);
+                fixed4 col = tex2D(_MainTex, i.uv);
                 // 这里用step代替if
                 // 当 透明度值大于1时, 就呈现黑色(即影子)
                 col.r += 0.1;

@@ -543,6 +543,8 @@ public class Skill : MonoBehaviour
     {
         if (player != null)
         {
+            SubEmptyBody subEmpty = target.GetComponent<SubEmptyBody>();
+
             //是否是接触类技能
             bool isTouch = false;
             if (SkillTag != null)
@@ -573,8 +575,6 @@ public class Skill : MonoBehaviour
                 }
             }
 
-
-
             //接触技能触发的事件
             if (isTouch) {
 
@@ -591,7 +591,7 @@ public class Skill : MonoBehaviour
                 }
 
                 //道具059 金假牙
-                if (player.playerData.IsPassiveGetList[59] && !target.Invincible && Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 30) > 0.8f)
+                if (player.playerData.IsPassiveGetList[59] && !target.Invincible && (subEmpty == null? true : !subEmpty.ParentEmpty.isSubBodyEmptyInvincible) && Random.Range(0.0f, 1.0f) + Mathf.Clamp(((float)player.LuckPoint / 30) , -1.0f , 0.5f ) > 0.8f)
                 {
                     Instantiate(PassiveItemGameObjList.ObjList.List[18] , transform.position , Quaternion.identity).GetComponent<RandomStarMoney>().isLunch = true;
                 }

@@ -52,7 +52,6 @@ public class AerialAce : Skill
                 {
                     isNeedReturn = false;
                     ExistenceTime = 0.05f;
-                    player.playerData.MoveSpwBounsAlways -= 2;
                     player.ReFreshAbllityPoint();
                 }
                 else { isNeedReturn = true; }
@@ -68,12 +67,13 @@ public class AerialAce : Skill
                         player.transform.position += new Vector3(0, 0.5f, 0);
                         player.transform.GetChild(3).position = player.transform.GetChild(3).position + Vector3.up * 0.5f;
                         player.PlayerLocalPosition = player.transform.GetChild(3).localPosition;
-                        transform.GetChild(0).gameObject.SetActive(true);
-                        transform.GetChild(1).gameObject.SetActive(true);
-                        transform.rotation = Quaternion.Euler(0, 0, _mTool.Angle_360Y(dir, Vector2.right));
-                        transform.GetChild(1).transform.localRotation = Quaternion.Euler(0, 0, -transform.rotation.eulerAngles.z);
-                        transform.GetComponent<Collider2D>().enabled = true;
+
                     }
+                    transform.GetChild(0).gameObject.SetActive(true);
+                    transform.GetChild(1).gameObject.SetActive(true);
+                    transform.rotation = Quaternion.Euler(0, 0, _mTool.Angle_360Y(dir, Vector2.right));
+                    transform.GetChild(1).transform.localRotation = Quaternion.Euler(0, 0, -transform.rotation.eulerAngles.z);
+                    transform.GetComponent<Collider2D>().enabled = true;
                 }
             }
             if (isNeedReturn)

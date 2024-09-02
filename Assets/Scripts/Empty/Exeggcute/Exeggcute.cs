@@ -92,7 +92,7 @@ public class Exeggcute : Empty
         }
         if(aIState == AI_STATE.IDLE)
         {
-            if (Time.time - lastUseBomb < cdBomb)
+            if (Time.time - lastUseBomb < cdBomb || isBlindDone)
             {
                 return;
             }

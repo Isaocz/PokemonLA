@@ -106,6 +106,7 @@ public class PlayerSkillList : MonoBehaviour
             else
             {
                 OnceTimeSkillBlackList.Add(OutPut);
+                player.SetTerablast(OutPut);
                 return OutPut;
             }
         }
@@ -240,7 +241,7 @@ public class PlayerSkillList : MonoBehaviour
                 break;
             }
         }
-
+        player.SetTerablast(OutPut);
         return OutPut;
     }
 
@@ -355,6 +356,7 @@ public class PlayerSkillList : MonoBehaviour
         else
         {
             OnceTimeMewSkillList.Add(OutPut);
+            player.SetTerablast(OutPut);
             return OutPut;
         }
         

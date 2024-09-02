@@ -28,7 +28,8 @@ public class SceneLoadManger : MonoBehaviour
             }
             Debug.Log(p);
         }
-        if (FindObjectOfType<PlayerControler>() != null) { PlayerControler player = FindObjectOfType<PlayerControler>(); player.transform.position = Vector3.zero; player.NowRoom = Vector3Int.zero; }
+        if (FindObjectOfType<PlayerControler>() != null) { PlayerControler player = FindObjectOfType<PlayerControler>(); player.transform.position = Vector3.zero; player.NowRoom = Vector3Int.zero; player.InANewRoom = true; player.NewRoomTimer = 0f;
+        }
     }
 
     private void Start()

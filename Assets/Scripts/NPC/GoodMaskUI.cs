@@ -102,6 +102,8 @@ public class GoodMaskUI : MonoBehaviour
 
     public void ResetPanel()
     {
+        if (ParentMeowth == null) { ParentMeowth = transform.parent.parent.parent.parent.parent.parent.GetComponent<Meowth>(); }
+        if (playerControler == null) { playerControler = ParentMeowth.playerControler; }
 
 
         if (playerControler.Money >= RefreshMoney) {
