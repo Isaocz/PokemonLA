@@ -16,7 +16,7 @@ public class TownBillboard : MonoBehaviour
     public void BillboardStart()
     {
         ZBottonOBJ = gameObject.transform.GetChild(1).gameObject;
-        Debug.Log(gameObject.transform.GetChild(1).gameObject);
+        //Debug.Log(gameObject.transform.GetChild(1).gameObject);
         TalkPanel = gameObject.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Image>();
     }
 

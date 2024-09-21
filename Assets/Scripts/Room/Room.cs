@@ -70,6 +70,12 @@ public class Room : MonoBehaviour
 
 
     /// <summary>
+    /// 是否第一次进入房间
+    /// </summary>
+    bool isFirstTimeEntry;
+
+
+    /// <summary>
     /// 该房间某个方向是否被该房间内的环境物体遮挡，依次为上下左右，不被阻挡时为false，被阻挡时为true
     /// 如某个房间右侧门出有湖，使该房间无法再右侧开门，则该房间的isBlockerIn == {false false false true}
     /// </summary>
@@ -132,6 +138,17 @@ public class Room : MonoBehaviour
         {
             isVisit = true;
             isInThisRoom = true;
+
+            //初次进入房间给与AP
+            if(!isFirstTimeEntry) {
+                isFirstTimeEntry = true;
+                //给AP
+                if (FloorNum.GlobalFloorNum != null && ScoreCounter.Instance != null)
+                {
+                    ScoreCounter.Instance.RoomBounsAP += APBounsPoint.RoomBouns( FloorNum.GlobalFloorNum.FloorNumber);
+                }
+            }
+
             if(RoomTag == 0 || RoomTag == 3)
             {
                 transform.GetChild(3).gameObject.SetActive(true);

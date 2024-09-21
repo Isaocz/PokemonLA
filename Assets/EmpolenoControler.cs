@@ -39,14 +39,6 @@ public class EmpolenoControler : PlayerControler
         InstanceNewSkillPanel();
 
 
-        if (!isNeedInherit)
-        {
-            Skill01 = Pound;
-            Skill02 = Growl;
-            Skill03 = WaterGun;
-            Skill04 = AquaJet;
-        }
-
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);
         skillBar03.GetSkill(Skill03);

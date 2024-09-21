@@ -91,120 +91,122 @@ public class Weather : MonoBehaviour
     {
         CheckPlayer();
 
-        //进入商店PC隐藏天气效果；
-        if (player.NowRoom == MapCreater.StaticMap.PCRoomPoint || player.NowRoom == MapCreater.StaticMap.StoreRoomPoint) 
-        {
-            if (transform.GetChild(0).gameObject.activeInHierarchy) 
+        if (player != null) {
+            //进入商店PC隐藏天气效果；
+            if (player.NowRoom == MapCreater.StaticMap.PCRoomPoint || player.NowRoom == MapCreater.StaticMap.StoreRoomPoint)
             {
-                InPC();
-            }
-        }
-        else {
-            if (!transform.GetChild(0).gameObject.activeInHierarchy) 
-            {
-                transform.GetChild(0).gameObject.SetActive(true);
-                for (int i = 1; i < 5; i++)
+                if (transform.GetChild(0).gameObject.activeInHierarchy)
                 {
-                    if (WeatherBool[i - 1])
-                    {
-                        if (i == 3) { transform.GetChild(i).GetChild(0).gameObject.SetActive(true); transform.GetChild(i).GetChild(1).gameObject.SetActive(true); }
-                        else { transform.GetChild(i).gameObject.SetActive(true); }
-                    }
+                    InPC();
                 }
-
-                if (!isSunny && !isSunnyPlus) { SunShinePS.gameObject.SetActive(false); }
-                if (!isRain && !isRainPlus) { RainPS.Stop(); }
-                if (!isHail && !isHailPlus) { HailPS1.Stop(); HailPS2.Stop(); }
-                if (!isSandstorm && !isSandstormPlus) { SandstormPS.Stop(); }
-                if (isNormal) { RemoveAllWeather(); }
             }
-        }
+            else {
+                if (!transform.GetChild(0).gameObject.activeInHierarchy)
+                {
+                    transform.GetChild(0).gameObject.SetActive(true);
+                    for (int i = 1; i < 5; i++)
+                    {
+                        if (WeatherBool[i - 1])
+                        {
+                            if (i == 3) { transform.GetChild(i).GetChild(0).gameObject.SetActive(true); transform.GetChild(i).GetChild(1).gameObject.SetActive(true); }
+                            else { transform.GetChild(i).gameObject.SetActive(true); }
+                        }
+                    }
 
-        if (!isNormal && WeatherTimer > 0)
-        {
-            WeatherTimer -= Time.deltaTime;
-            if (WeatherTimer <= 0) { WeatherTimer = 0;ChangeWeatherNormal(); }
-        }
+                    if (!isSunny && !isSunnyPlus) { SunShinePS.gameObject.SetActive(false); }
+                    if (!isRain && !isRainPlus) { RainPS.Stop(); }
+                    if (!isHail && !isHailPlus) { HailPS1.Stop(); HailPS2.Stop(); }
+                    if (!isSandstorm && !isSandstormPlus) { SandstormPS.Stop(); }
+                    if (isNormal) { RemoveAllWeather(); }
+                }
+            }
 
-        //=================================================改变天气时的滤镜颜色变化===============================================
-
-        if (isRainColorStartChange)
-        {
-            WeatherMaskColor.color = new Color(
-                Mathf.Clamp(WeatherMaskColor.color.r + ((WeatherMaskColor.color.r > RainColor.r) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.r > RainColor.r) ? RainColor.r : WeatherMaskColor.color.r), ((WeatherMaskColor.color.r > RainColor.r) ? WeatherMaskColor.color.r : RainColor.r)),
-                Mathf.Clamp(WeatherMaskColor.color.g + ((WeatherMaskColor.color.g > RainColor.g) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.g > RainColor.g) ? RainColor.g : WeatherMaskColor.color.g), ((WeatherMaskColor.color.g > RainColor.g) ? WeatherMaskColor.color.g : RainColor.g)),
-                Mathf.Clamp(WeatherMaskColor.color.b + ((WeatherMaskColor.color.b > RainColor.b) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.b > RainColor.b) ? RainColor.b : WeatherMaskColor.color.b), ((WeatherMaskColor.color.b > RainColor.b) ? WeatherMaskColor.color.b : RainColor.b)),
-                Mathf.Clamp(WeatherMaskColor.color.a + ((WeatherMaskColor.color.a > RainColor.a) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.a > RainColor.a) ? RainColor.a : WeatherMaskColor.color.a), ((WeatherMaskColor.color.a > RainColor.a) ? WeatherMaskColor.color.a : RainColor.a)));
-            if (Mathf.Abs(WeatherMaskColor.color.r - RainColor.r) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.g - RainColor.g) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.b - RainColor.b) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.a - RainColor.a) <= 0.01f)
+            if (!isNormal && WeatherTimer > 0)
             {
-                isRainColorStartChange = false;
+                WeatherTimer -= Time.deltaTime;
+                if (WeatherTimer <= 0) { WeatherTimer = 0; ChangeWeatherNormal(); }
             }
-        }
 
-        if (isSunColorStartChange)
-        {
-            WeatherMaskColor.color = new Color(
-                Mathf.Clamp(WeatherMaskColor.color.r + ((WeatherMaskColor.color.r > SunColor.r) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.r > SunColor.r) ? SunColor.r : WeatherMaskColor.color.r), ((WeatherMaskColor.color.r > SunColor.r) ? WeatherMaskColor.color.r : SunColor.r)),
-                Mathf.Clamp(WeatherMaskColor.color.g + ((WeatherMaskColor.color.g > SunColor.g) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.g > SunColor.g) ? SunColor.g : WeatherMaskColor.color.g), ((WeatherMaskColor.color.g > SunColor.g) ? WeatherMaskColor.color.g : SunColor.g)),
-                Mathf.Clamp(WeatherMaskColor.color.b + ((WeatherMaskColor.color.b > SunColor.b) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.b > SunColor.b) ? SunColor.b : WeatherMaskColor.color.b), ((WeatherMaskColor.color.b > SunColor.b) ? WeatherMaskColor.color.b : SunColor.b)),
-                Mathf.Clamp(WeatherMaskColor.color.a + ((WeatherMaskColor.color.a > SunColor.a) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.a > SunColor.a) ? SunColor.a : WeatherMaskColor.color.a), ((WeatherMaskColor.color.a > SunColor.a) ? WeatherMaskColor.color.a : SunColor.a)));
-            if (Mathf.Abs(WeatherMaskColor.color.r - SunColor.r) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.g - SunColor.g) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.b - SunColor.b) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.a - SunColor.a) <= 0.01f)
+            //=================================================改变天气时的滤镜颜色变化===============================================
+
+            if (isRainColorStartChange)
             {
-                isSunColorStartChange = false;
+                WeatherMaskColor.color = new Color(
+                    Mathf.Clamp(WeatherMaskColor.color.r + ((WeatherMaskColor.color.r > RainColor.r) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.r > RainColor.r) ? RainColor.r : WeatherMaskColor.color.r), ((WeatherMaskColor.color.r > RainColor.r) ? WeatherMaskColor.color.r : RainColor.r)),
+                    Mathf.Clamp(WeatherMaskColor.color.g + ((WeatherMaskColor.color.g > RainColor.g) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.g > RainColor.g) ? RainColor.g : WeatherMaskColor.color.g), ((WeatherMaskColor.color.g > RainColor.g) ? WeatherMaskColor.color.g : RainColor.g)),
+                    Mathf.Clamp(WeatherMaskColor.color.b + ((WeatherMaskColor.color.b > RainColor.b) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.b > RainColor.b) ? RainColor.b : WeatherMaskColor.color.b), ((WeatherMaskColor.color.b > RainColor.b) ? WeatherMaskColor.color.b : RainColor.b)),
+                    Mathf.Clamp(WeatherMaskColor.color.a + ((WeatherMaskColor.color.a > RainColor.a) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.a > RainColor.a) ? RainColor.a : WeatherMaskColor.color.a), ((WeatherMaskColor.color.a > RainColor.a) ? WeatherMaskColor.color.a : RainColor.a)));
+                if (Mathf.Abs(WeatherMaskColor.color.r - RainColor.r) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.g - RainColor.g) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.b - RainColor.b) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.a - RainColor.a) <= 0.01f)
+                {
+                    isRainColorStartChange = false;
+                }
             }
-        }
 
-        if (isHailColorStartChange)
-        {
-            WeatherMaskColor.color = new Color(
-                Mathf.Clamp(WeatherMaskColor.color.r + ((WeatherMaskColor.color.r > HailColor.r) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.r > HailColor.r) ? HailColor.r : WeatherMaskColor.color.r), ((WeatherMaskColor.color.r > HailColor.r) ? WeatherMaskColor.color.r : HailColor.r)),
-                Mathf.Clamp(WeatherMaskColor.color.g + ((WeatherMaskColor.color.g > HailColor.g) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.g > HailColor.g) ? HailColor.g : WeatherMaskColor.color.g), ((WeatherMaskColor.color.g > HailColor.g) ? WeatherMaskColor.color.g : HailColor.g)),
-                Mathf.Clamp(WeatherMaskColor.color.b + ((WeatherMaskColor.color.b > HailColor.b) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.b > HailColor.b) ? HailColor.b : WeatherMaskColor.color.b), ((WeatherMaskColor.color.b > HailColor.b) ? WeatherMaskColor.color.b : HailColor.b)),
-                Mathf.Clamp(WeatherMaskColor.color.a + ((WeatherMaskColor.color.a > HailColor.a) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.a > HailColor.a) ? HailColor.a : WeatherMaskColor.color.a), ((WeatherMaskColor.color.a > HailColor.a) ? WeatherMaskColor.color.a : HailColor.a)));
-            if (Mathf.Abs(WeatherMaskColor.color.r - HailColor.r) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.g - HailColor.g) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.b - HailColor.b) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.a - HailColor.a) <= 0.01f)
+            if (isSunColorStartChange)
             {
-                isHailColorStartChange = false;
+                WeatherMaskColor.color = new Color(
+                    Mathf.Clamp(WeatherMaskColor.color.r + ((WeatherMaskColor.color.r > SunColor.r) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.r > SunColor.r) ? SunColor.r : WeatherMaskColor.color.r), ((WeatherMaskColor.color.r > SunColor.r) ? WeatherMaskColor.color.r : SunColor.r)),
+                    Mathf.Clamp(WeatherMaskColor.color.g + ((WeatherMaskColor.color.g > SunColor.g) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.g > SunColor.g) ? SunColor.g : WeatherMaskColor.color.g), ((WeatherMaskColor.color.g > SunColor.g) ? WeatherMaskColor.color.g : SunColor.g)),
+                    Mathf.Clamp(WeatherMaskColor.color.b + ((WeatherMaskColor.color.b > SunColor.b) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.b > SunColor.b) ? SunColor.b : WeatherMaskColor.color.b), ((WeatherMaskColor.color.b > SunColor.b) ? WeatherMaskColor.color.b : SunColor.b)),
+                    Mathf.Clamp(WeatherMaskColor.color.a + ((WeatherMaskColor.color.a > SunColor.a) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.a > SunColor.a) ? SunColor.a : WeatherMaskColor.color.a), ((WeatherMaskColor.color.a > SunColor.a) ? WeatherMaskColor.color.a : SunColor.a)));
+                if (Mathf.Abs(WeatherMaskColor.color.r - SunColor.r) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.g - SunColor.g) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.b - SunColor.b) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.a - SunColor.a) <= 0.01f)
+                {
+                    isSunColorStartChange = false;
+                }
             }
-        }
 
-        if (isSandstormColorStartChange)
-        {
-            WeatherMaskColor.color = new Color(
-                Mathf.Clamp(WeatherMaskColor.color.r + ((WeatherMaskColor.color.r > SandStormColor.r) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.r > SandStormColor.r) ? SandStormColor.r : WeatherMaskColor.color.r), ((WeatherMaskColor.color.r > SandStormColor.r) ? WeatherMaskColor.color.r : SandStormColor.r)),
-                Mathf.Clamp(WeatherMaskColor.color.g + ((WeatherMaskColor.color.g > SandStormColor.g) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.g > SandStormColor.g) ? SandStormColor.g : WeatherMaskColor.color.g), ((WeatherMaskColor.color.g > SandStormColor.g) ? WeatherMaskColor.color.g : SandStormColor.g)),
-                Mathf.Clamp(WeatherMaskColor.color.b + ((WeatherMaskColor.color.b > SandStormColor.b) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.b > SandStormColor.b) ? SandStormColor.b : WeatherMaskColor.color.b), ((WeatherMaskColor.color.b > SandStormColor.b) ? WeatherMaskColor.color.b : SandStormColor.b)),
-                Mathf.Clamp(WeatherMaskColor.color.a + ((WeatherMaskColor.color.a > SandStormColor.a) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.a > SandStormColor.a) ? SandStormColor.a : WeatherMaskColor.color.a), ((WeatherMaskColor.color.a > SandStormColor.a) ? WeatherMaskColor.color.a : SandStormColor.a)));
-            if (Mathf.Abs(WeatherMaskColor.color.r - SandStormColor.r) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.g - SandStormColor.g) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.b - SandStormColor.b) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.a - SandStormColor.a) <= 0.01f)
+            if (isHailColorStartChange)
             {
-                isSandstormColorStartChange = false;
+                WeatherMaskColor.color = new Color(
+                    Mathf.Clamp(WeatherMaskColor.color.r + ((WeatherMaskColor.color.r > HailColor.r) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.r > HailColor.r) ? HailColor.r : WeatherMaskColor.color.r), ((WeatherMaskColor.color.r > HailColor.r) ? WeatherMaskColor.color.r : HailColor.r)),
+                    Mathf.Clamp(WeatherMaskColor.color.g + ((WeatherMaskColor.color.g > HailColor.g) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.g > HailColor.g) ? HailColor.g : WeatherMaskColor.color.g), ((WeatherMaskColor.color.g > HailColor.g) ? WeatherMaskColor.color.g : HailColor.g)),
+                    Mathf.Clamp(WeatherMaskColor.color.b + ((WeatherMaskColor.color.b > HailColor.b) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.b > HailColor.b) ? HailColor.b : WeatherMaskColor.color.b), ((WeatherMaskColor.color.b > HailColor.b) ? WeatherMaskColor.color.b : HailColor.b)),
+                    Mathf.Clamp(WeatherMaskColor.color.a + ((WeatherMaskColor.color.a > HailColor.a) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.a > HailColor.a) ? HailColor.a : WeatherMaskColor.color.a), ((WeatherMaskColor.color.a > HailColor.a) ? WeatherMaskColor.color.a : HailColor.a)));
+                if (Mathf.Abs(WeatherMaskColor.color.r - HailColor.r) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.g - HailColor.g) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.b - HailColor.b) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.a - HailColor.a) <= 0.01f)
+                {
+                    isHailColorStartChange = false;
+                }
             }
-        }
 
-        if (isNormalColorStartChange)
-        {
-            WeatherMaskColor.color = new Color(
-                Mathf.Clamp(WeatherMaskColor.color.r + ((WeatherMaskColor.color.r > NormalColor.r) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.r > NormalColor.r) ? NormalColor.r : WeatherMaskColor.color.r), ((WeatherMaskColor.color.r > NormalColor.r) ? WeatherMaskColor.color.r : NormalColor.r)),
-                Mathf.Clamp(WeatherMaskColor.color.g + ((WeatherMaskColor.color.g > NormalColor.g) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.g > NormalColor.g) ? NormalColor.g : WeatherMaskColor.color.g), ((WeatherMaskColor.color.g > NormalColor.g) ? WeatherMaskColor.color.g : NormalColor.g)),
-                Mathf.Clamp(WeatherMaskColor.color.b + ((WeatherMaskColor.color.b > NormalColor.b) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.b > NormalColor.b) ? NormalColor.b : WeatherMaskColor.color.b), ((WeatherMaskColor.color.b > NormalColor.b) ? WeatherMaskColor.color.b : NormalColor.b)),
-                Mathf.Clamp(WeatherMaskColor.color.a + ((WeatherMaskColor.color.a > NormalColor.a) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.a > NormalColor.a) ? NormalColor.a : WeatherMaskColor.color.a), ((WeatherMaskColor.color.a > NormalColor.a) ? WeatherMaskColor.color.a : NormalColor.a)));
-            if (Mathf.Abs(WeatherMaskColor.color.r - NormalColor.r) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.g - NormalColor.g) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.b - NormalColor.b) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.a - NormalColor.a) <= 0.01f)
+            if (isSandstormColorStartChange)
             {
-                isNormalColorStartChange = false;
+                WeatherMaskColor.color = new Color(
+                    Mathf.Clamp(WeatherMaskColor.color.r + ((WeatherMaskColor.color.r > SandStormColor.r) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.r > SandStormColor.r) ? SandStormColor.r : WeatherMaskColor.color.r), ((WeatherMaskColor.color.r > SandStormColor.r) ? WeatherMaskColor.color.r : SandStormColor.r)),
+                    Mathf.Clamp(WeatherMaskColor.color.g + ((WeatherMaskColor.color.g > SandStormColor.g) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.g > SandStormColor.g) ? SandStormColor.g : WeatherMaskColor.color.g), ((WeatherMaskColor.color.g > SandStormColor.g) ? WeatherMaskColor.color.g : SandStormColor.g)),
+                    Mathf.Clamp(WeatherMaskColor.color.b + ((WeatherMaskColor.color.b > SandStormColor.b) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.b > SandStormColor.b) ? SandStormColor.b : WeatherMaskColor.color.b), ((WeatherMaskColor.color.b > SandStormColor.b) ? WeatherMaskColor.color.b : SandStormColor.b)),
+                    Mathf.Clamp(WeatherMaskColor.color.a + ((WeatherMaskColor.color.a > SandStormColor.a) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.a > SandStormColor.a) ? SandStormColor.a : WeatherMaskColor.color.a), ((WeatherMaskColor.color.a > SandStormColor.a) ? WeatherMaskColor.color.a : SandStormColor.a)));
+                if (Mathf.Abs(WeatherMaskColor.color.r - SandStormColor.r) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.g - SandStormColor.g) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.b - SandStormColor.b) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.a - SandStormColor.a) <= 0.01f)
+                {
+                    isSandstormColorStartChange = false;
+                }
             }
+
+            if (isNormalColorStartChange)
+            {
+                WeatherMaskColor.color = new Color(
+                    Mathf.Clamp(WeatherMaskColor.color.r + ((WeatherMaskColor.color.r > NormalColor.r) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.r > NormalColor.r) ? NormalColor.r : WeatherMaskColor.color.r), ((WeatherMaskColor.color.r > NormalColor.r) ? WeatherMaskColor.color.r : NormalColor.r)),
+                    Mathf.Clamp(WeatherMaskColor.color.g + ((WeatherMaskColor.color.g > NormalColor.g) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.g > NormalColor.g) ? NormalColor.g : WeatherMaskColor.color.g), ((WeatherMaskColor.color.g > NormalColor.g) ? WeatherMaskColor.color.g : NormalColor.g)),
+                    Mathf.Clamp(WeatherMaskColor.color.b + ((WeatherMaskColor.color.b > NormalColor.b) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.b > NormalColor.b) ? NormalColor.b : WeatherMaskColor.color.b), ((WeatherMaskColor.color.b > NormalColor.b) ? WeatherMaskColor.color.b : NormalColor.b)),
+                    Mathf.Clamp(WeatherMaskColor.color.a + ((WeatherMaskColor.color.a > NormalColor.a) ? -1 : 1) * 0.5f * Time.deltaTime, ((WeatherMaskColor.color.a > NormalColor.a) ? NormalColor.a : WeatherMaskColor.color.a), ((WeatherMaskColor.color.a > NormalColor.a) ? WeatherMaskColor.color.a : NormalColor.a)));
+                if (Mathf.Abs(WeatherMaskColor.color.r - NormalColor.r) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.g - NormalColor.g) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.b - NormalColor.b) <= 0.01f && Mathf.Abs(WeatherMaskColor.color.a - NormalColor.a) <= 0.01f)
+                {
+                    isNormalColorStartChange = false;
+                }
+            }
+
+            //=================================================改变天气时的滤镜颜色变化===============================================
+
+
+            //=================================================改变天气时的粒子变化===============================================
+
+            if (RainPS.gameObject.activeInHierarchy && !RainPS.IsAlive()) { RainPS.gameObject.SetActive(false); }
+            if (SunShinePS.gameObject.activeInHierarchy && !SunShinePS.IsAlive()) { SunShinePS.gameObject.SetActive(false); }
+            if (HailPS1.gameObject.activeInHierarchy && !HailPS1.IsAlive()) { HailPS1.gameObject.SetActive(false); }
+            if (HailPS2.gameObject.activeInHierarchy && !HailPS2.IsAlive()) { HailPS2.gameObject.SetActive(false); }
+            if (SandstormPS.gameObject.activeInHierarchy && !SandstormPS.IsAlive()) { SandstormPS.gameObject.SetActive(false); }
+
+            //=================================================改变天气时的粒子变化===============================================
         }
-
-        //=================================================改变天气时的滤镜颜色变化===============================================
-
-
-        //=================================================改变天气时的粒子变化===============================================
-
-        if (RainPS.gameObject.activeInHierarchy && !RainPS.IsAlive()) { RainPS.gameObject.SetActive(false); }
-        if (SunShinePS.gameObject.activeInHierarchy && !SunShinePS.IsAlive()) { SunShinePS.gameObject.SetActive(false); }
-        if (HailPS1.gameObject.activeInHierarchy && !HailPS1.IsAlive()) { HailPS1.gameObject.SetActive(false); }
-        if (HailPS2.gameObject.activeInHierarchy && !HailPS2.IsAlive()) { HailPS2.gameObject.SetActive(false); }
-        if (SandstormPS.gameObject.activeInHierarchy && !SandstormPS.IsAlive()) { SandstormPS.gameObject.SetActive(false); }
-
-        //=================================================改变天气时的粒子变化===============================================
     }
 
     public void ChangeWeatherRain(float Time , bool isPlus)
@@ -288,7 +290,7 @@ public class Weather : MonoBehaviour
 
     void CheckPlayer()
     {
-        if(player == null)
+        if(player == null && FloorNum.GlobalFloorNum != null && FloorNum.GlobalFloorNum.FloorNumber >= 0)
         {
             player = FindObjectOfType<PlayerControler>();
         }

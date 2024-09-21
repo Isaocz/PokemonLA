@@ -33,7 +33,7 @@ public class FloorNum : MonoBehaviour
 
     public void InstanceFloorNum()
     {
-        FloorNumber = 0;
+        FloorNumber = -2;
         isBabyCenterBeCreated = false;
         isMewRoomBeCreated = false;
         isMewBeTalk = false;
@@ -48,6 +48,6 @@ public class FloorNum : MonoBehaviour
     {
         GlobalFloorNum = this;
         DontDestroyOnLoad(this);
-        FloorNumber = 0;
+        FloorNumber = -2;
     }
 }

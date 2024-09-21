@@ -14,6 +14,7 @@ public class UISkillPanel : MonoBehaviour
 
     public void SetPanelActiv1eFalse()
     {
+        Debug.Log("xxx");
         Time.timeScale = 1;
         gameObject.SetActive(false);
     }

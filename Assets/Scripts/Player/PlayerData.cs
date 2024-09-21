@@ -161,6 +161,12 @@ public class PlayerData : MonoBehaviour
 
     public void GetPassiveItem(PassiveItem GetPassiveItem)
     {
+        //¸øAP
+        if (FloorNum.GlobalFloorNum != null && ScoreCounter.Instance != null)
+        {
+            ScoreCounter.Instance.itemBounsAP += APBounsPoint.ItemBouns;
+        }
+
         int ItemIndex = GetPassiveItem.PassiveItemIndex;
         switch (ItemIndex)
         {

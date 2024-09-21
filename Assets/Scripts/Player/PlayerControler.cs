@@ -9,9 +9,12 @@ public class PlayerControler : Pokemon
 {
     // Start is called before the first frame update
 
-
-
-
+    
+    /// <summary>
+    /// 角色的序列号
+    /// </summary>
+    public int PlayerIndex;
+    
 
 
     //=======================================角色的数据===================================
@@ -23,6 +26,14 @@ public class PlayerControler : Pokemon
     /// 角色头像图标
     /// </summary>
     public Sprite PlayerHead;
+    /// <summary>
+    /// 角色的糖果
+    /// </summary>
+    public Sprite PlayerCandy;
+    /// <summary>
+    /// 角色的糖果高清
+    /// </summary>
+    public Sprite PlayerCandyHD;
     /// <summary>
     /// 角色体型 0小体型 1中体型 2大体形
     /// </summary>
@@ -212,6 +223,14 @@ public class PlayerControler : Pokemon
     public int PlayerTeraType;
     public int PlayerTeraTypeJOR;
 
+    //玩家的四个天赋技能
+    public Skill InitialSkill01;
+    public Skill InitialSkill02;
+    public Skill InitialSkill03;
+    public Skill InitialSkill04;
+
+
+    public Skill[] InitialSkillCandidateList;
 
     //角色的特性列表
     public enum PlayerAbilityList
@@ -520,6 +539,14 @@ public class PlayerControler : Pokemon
 
         playerLocalPosition = transform.GetChild(3).localPosition;
         playerLocalScal = transform.GetChild(3).localScale;
+
+        if (!isNeedInherit)
+        {
+            if (InitialSkill01 != null) { Skill01 = InitialSkill01; }
+            if (InitialSkill02 != null) { Skill02 = InitialSkill02; }
+            if (InitialSkill03 != null) { Skill03 = InitialSkill03; }
+            if (InitialSkill04 != null) { Skill04 = InitialSkill04; }
+        }
     }
 
 
@@ -979,7 +1006,7 @@ public class PlayerControler : Pokemon
                     RestoreStrengthAndTeraType();
                     if (ComeInANewRoomEvent != null && !isComeInANewRoomEvent)
                     {
-                        if (playerAbility == PlayerAbilityList.雪隐) { isSnowCloakTrigger = false; }
+                        if (playerAbility == PlayerAbilityList.雪隐) { isSnowCloakTrigger = false; CancelInvoke("RemoveSnowCloak"); }
                         Debug.Log(ComeInANewRoomEvent);
                         ComeInANewRoomEvent(this);
                         isComeInANewRoomEvent = true;
@@ -999,11 +1026,13 @@ public class PlayerControler : Pokemon
                         isSpaceItemCanBeUse = true;
                         CanNotUseSpaceItem = false;
 
-                        Camera MainCamera = CameraAdapt.MainCamera.GetComponent<Camera>();
-                        if (!MapCreater.StaticMap.RRoom.ContainsKey(NowRoom) || 
+                        Camera MainCamera = null;
+                        if (CameraAdapt.MainCamera != null) { MainCamera = CameraAdapt.MainCamera.GetComponent<Camera>(); }
+                        if  (MainCamera != null &&
+                            (!MapCreater.StaticMap.RRoom.ContainsKey(NowRoom) || 
                             !(transform.position.x >= (float)NowRoom.x*30.0f-15.0f && transform.position.x <= (float)NowRoom.x * 30.0f + 15.0f && transform.position.y >= (float)NowRoom.y * 24.0f - 12.0f && transform.position.y <= (float)NowRoom.y * 24.0f + 12.0f) ||
                             !(MainCamera.transform.position.x >= (float)NowRoom.x * 30.0f - 15.0f && MainCamera.transform.position.x <= (float)NowRoom.x * 30.0f + 15.0f && MainCamera.transform.position.y >= (float)NowRoom.y * 24.0f - 12.0f && MainCamera.transform.position.y <= (float)NowRoom.y * 24.0f + 12.0f)
-                            )
+                            ))
                         {
                             Vector3Int LastNowRoom = NowRoom;
                             NowRoom = new Vector3Int((int)Mathf.Round(transform.position.x / 30.0f), (int)Mathf.Round(transform.position.y / 24.0f), 0);
@@ -1125,7 +1154,7 @@ public class PlayerControler : Pokemon
         if (!MapCreater.StaticMap)
         {
             // 兼容测试 case
-            BackGroundMusic.StaticBGM.ChangeBGMToTown();
+            // BackGroundMusic.StaticBGM.ChangeBGMToTown();
             return;
         }
         if (NowRoom == MapCreater.StaticMap.PCRoomPoint)
@@ -1288,6 +1317,8 @@ public class PlayerControler : Pokemon
             }
             else
             {
+                int ChangeHP = Hp;
+
                 if((int)SkillType != 19)
                 {
                     if (!isInPsychicTerrain)
@@ -1330,6 +1361,17 @@ public class PlayerControler : Pokemon
                 }
                 isInvincible = true;
                 InvincileTimer = TimeInvincible;
+
+                ChangeHP = ChangeHP - Hp;
+                if (ChangeHP > 0)
+                {                
+                    //给AP
+                    if (FloorNum.GlobalFloorNum != null && ScoreCounter.Instance != null)
+                    {
+                        ScoreCounter.Instance.DmagePunishAP += APBounsPoint.DmagePunish(ChangeHP);
+                    }
+                }
+
 
                 if (isSleepDone) { SleepRemove(); }
                 if (UIHealthBar.Instance != null) {
@@ -1428,6 +1470,8 @@ public class PlayerControler : Pokemon
     }
 
 
+    bool isTimePunishDone;
+
     /// <summary>
     /// 角色复活或者呼出死亡UI
     /// </summary>
@@ -1451,6 +1495,17 @@ public class PlayerControler : Pokemon
             else {
                 if (TPMask.In != null)
                 {
+                    if (!isTimePunishDone) {
+                        isTimePunishDone = true;
+                        MapCreater m = FindObjectOfType<MapCreater>();
+                        if (FloorNum.GlobalFloorNum != null && m != null && ScoreCounter.Instance != null)
+                        {
+                            ScoreCounter.Instance.TimePunishAP += APBounsPoint.TimePunish(m.MapTime, FloorNum.GlobalFloorNum.FloorNumber);
+                            ScoreCounter.Instance.ClearGameBouns = false;
+                        }
+                    }
+
+
                     TPMask.In.BlackTime = 0;
                     TPMask.In.TPStart = true;
                     TPMask.In.transform.GetChild(0).gameObject.SetActive(true);
@@ -1579,32 +1634,37 @@ public class PlayerControler : Pokemon
             switch (HWP.x) {
                 case 1:
                     f += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[18] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
-
+                    f = Mathf.Round(f * 100) / 100;
                     playerData.HPHardWorkAlways += f;
                     HWPShow(f, 0);
                     break;
                 case 2:
                     f += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[19] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    f = Mathf.Round(f * 100) / 100;
                     playerData.AtkHardWorkAlways += f;
                     HWPShow(f, 1);
                     break;
                 case 3:
                     f += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[20] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    f = Mathf.Round(f * 100) / 100;
                     playerData.DefHardWorkAlways += f;
                     HWPShow(f, 2);
                     break;
                 case 4:
                     f += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[21] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    f = Mathf.Round(f * 100) / 100;
                     playerData.SpAHardWorkAlways += f;
                     HWPShow(f, 3);
                     break;
                 case 5:
                     f += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[22] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    f = Mathf.Round(f * 100) / 100;
                     playerData.SpDHardWorkAlways += f;
                     HWPShow(f, 4);
                     break;
                 case 6:
                     f += (HWP.y) * 0.25f + (playerData.IsPassiveGetList[24] ? 0.15f : 0) + (playerData.IsPassiveGetList[89] ? 0.25f : 0) + (playerData.IsPassiveGetList[23] ? 0.4f : 0) + (playerData.IsPassiveGetList[29] ? 0.4f : 0);
+                    f = Mathf.Round(f * 100) / 100;
                     playerData.SpeHardWorkAlways += f;
                     HWPShow(f, 5);
                     break;
@@ -1877,6 +1937,12 @@ public class PlayerControler : Pokemon
     /// <param name="isLearnSkill"></param>
     public void GetNewSkill(Skill NewSkill ,Skill OldSkill , int SkillNumber , bool isLearnSkill)
     {
+        //给AP
+        if (FloorNum.GlobalFloorNum != null && ScoreCounter.Instance != null)
+        {
+            ScoreCounter.Instance.SkillBounsAP += APBounsPoint.SkillBouns;
+        }
+
         switch (SkillNumber)
         {
             case 1:
@@ -2804,12 +2870,15 @@ public class PlayerControler : Pokemon
     //--雪隐
     public void TriggerSnowCloak()
     {
+        CancelInvoke("RemoveSnowCloak");
         if (!isSnowCloakTrigger) {
+
             isSnowCloakTrigger = true;
             playerData.MoveSpeBounsJustOneRoom += 2;
             ReFreshAbllityPoint();
-            Invoke("RemoveSnowCloak" , 3.0f);
+
         }
+        Invoke("RemoveSnowCloak", 3.0f);
     }
 
     void RemoveSnowCloak()

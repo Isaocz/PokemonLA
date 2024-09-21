@@ -39,13 +39,6 @@ public class PrinplupControler : PlayerControler
         InstanceNewSkillPanel();
 
 
-        if (!isNeedInherit)
-        {
-            Skill01 = Pound;
-            Skill02 = Growl;
-            Skill03 = WaterGun;
-            Skill04 = MetalClaw;
-        }
 
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);

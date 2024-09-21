@@ -24,10 +24,6 @@ public class XszControler : PlayerControler
         Instance();
         InstanceNewSkillPanel();
 
-        Skill01 = Tackle;
-        Skill02 = MudSlup;
-        Skill03 = TestSkill01;
-        Skill04 = TestSkill02;
 
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);

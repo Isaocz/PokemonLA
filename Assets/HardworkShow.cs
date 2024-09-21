@@ -23,7 +23,7 @@ public class HardworkShow : MonoBehaviour
         else { isPlus = false; }
 
         float HardworkValue = Mathf.Abs(Value);
-        string floatString = HardworkValue.ToString();
+        string floatString = HardworkValue.ToString("F2");
         char[] charArray = floatString.ToCharArray();
         int[] intArray = System.Array.ConvertAll(charArray, c => (int)char.GetNumericValue(c));
 

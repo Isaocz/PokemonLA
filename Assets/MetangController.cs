@@ -41,14 +41,6 @@ public class MetangController : PlayerControler
         Instance();
         InstanceNewSkillPanel();
 
-        if (!isNeedInherit)
-        {
-            Skill01 = Tackle;
-            Skill02 = BulletPunch;
-            Skill03 = HoneClaws;
-            //Skill04 = TestSkill03;
-        }
-
 
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);

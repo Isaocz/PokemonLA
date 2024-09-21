@@ -43,10 +43,6 @@ public class EeveeControler : PlayerControler
         Instance();
         InstanceNewSkillPanel();
 
-        Skill01 = Tackle;
-        Skill02 = Growl;
-        Skill03 = SandAttack;
-        Skill04 = TestSkill01;
 
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);

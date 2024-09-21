@@ -6,22 +6,25 @@ using UnityEngine.UI;
 public class SelectRoleToggle : MonoBehaviour
 {
     public Image image;
-    bool isOn;
+    public bool isOn;
     public Sprite SpriteNormal;
     public Sprite SpriteHL;
+
+    private void Start()
+    {
+        isOn = false; image.sprite = SpriteNormal;
+    }
 
 
 
     public void ChangeSprite()
     {
-        Debug.Log("XXX");
         if (isOn) { isOn = false; image.sprite = SpriteNormal; }
         else { isOn = true; image.sprite = SpriteHL; }
     }
 
     public void _OnMouseEnter()
     {
-        Debug.Log("XXX");
         image.sprite = SpriteHL;
     }
 

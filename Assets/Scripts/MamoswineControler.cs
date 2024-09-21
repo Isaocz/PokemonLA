@@ -38,14 +38,6 @@ public class MamoswineControler : PlayerControler
         InstanceNewSkillPanel();
 
 
-        if (!isNeedInherit)
-        {
-            Skill01 = Tackle;
-            Skill02 = MudSlup;
-            //Skill03 = Growl;
-            //Skill04 = SandAttack;
-        }
-
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);
         skillBar03.GetSkill(Skill03);

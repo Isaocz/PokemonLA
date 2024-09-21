@@ -33,13 +33,6 @@ public class EspeonControler : PlayerControler
         InstanceNewSkillPanel();
 
 
-        if (!isNeedInherit)
-        {
-            Skill01 = Tackle;
-            Skill02 = Growl;
-            Skill03 = SandAttack;
-        }
-
 
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);
