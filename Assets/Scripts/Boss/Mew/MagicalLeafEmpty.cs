@@ -10,7 +10,6 @@ public class MagicalLeafEmpty : Projectile
     private Vector3 targetPosition;
     private Vector3 startPosition;
     private Vector3 middlePosition;
-    private Vector3 playerPosition;
     private Vector3 direction;
     private Vector3 lastPosition;
     private Vector3 currentPosition;
@@ -28,12 +27,12 @@ public class MagicalLeafEmpty : Projectile
     private void OnEnable()
     {   //≥ı ºªØ
         target = FindObjectOfType<PlayerControler>().transform;
+        targetPosition = target.position;
         reticle = Instantiate(Reticle);
         sr = GetComponent<SpriteRenderer>();
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
         reticle.GetComponent<SpriteRenderer>().color = Color.green;
         reticle.GetComponent<Animator>().Play("emphasizeReticle");
-        playerPosition = target.position;
         changeStages = 2;
         changeDirection = false;
         setTime = changetime;
@@ -49,14 +48,6 @@ public class MagicalLeafEmpty : Projectile
 
     private void FixedUpdate()
     {
-        if (percent < 0.85f)
-        {
-            Vector3 Predictdirection = (target.position - playerPosition).normalized;
-            float playerSpeed = (target.position - playerPosition).magnitude;
-            playerPosition = target.position;
-            targetPosition += Predictdirection * playerSpeed * 0.5f;
-        }
-
 
         if (percent < 1 && !changeDirection)
         {

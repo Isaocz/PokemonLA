@@ -528,6 +528,7 @@ public class Room : MonoBehaviour
                 DeleteGrass(transform);
             }
             yield return new WaitForSeconds(4f);
+            Debug.Log("clear the grass complete");
         }
     }
 
