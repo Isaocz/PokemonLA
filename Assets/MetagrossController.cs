@@ -41,13 +41,6 @@ public class MetagrossController : PlayerControler
         Instance();
         InstanceNewSkillPanel();
 
-        if (!isNeedInherit)
-        {
-            Skill01 = Tackle;
-            Skill02 = Confusion;
-            Skill03 = MetalClaw;
-            Skill04 = BulletPunch;
-        }
 
 
         skillBar01.GetSkill(Skill01);

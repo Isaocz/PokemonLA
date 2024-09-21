@@ -27,7 +27,7 @@ public class StartPanelBackGround : MonoBehaviour
                 if (Splist[i].gameObject != this.gameObject) { Destroy(Splist[i].gameObject); }
             }
         }
-        if (SceneManager.GetActiveScene().buildIndex != 0 && SceneManager.GetActiveScene().buildIndex != 1 && SceneManager.GetActiveScene().buildIndex != 2)
+        if (SceneManager.GetActiveScene().buildIndex != 0 && SceneManager.GetActiveScene().buildIndex != 1 && SceneManager.GetActiveScene().buildIndex != 2 && SceneManager.GetActiveScene().buildIndex != 3)
         {
             Destroy(gameObject);
         }

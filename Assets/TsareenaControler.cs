@@ -32,14 +32,6 @@ public class TsareenaControler : PlayerControler
         Instance();
         InstanceNewSkillPanel();
 
-        if (!isNeedInherit)
-        {
-            Skill01 = Splash;
-            Skill02 = Playnice;
-            Skill03 = RapidSpin;
-            Skill04 = TropKick;
-
-        }
 
 
         skillBar01.GetSkill(Skill01);

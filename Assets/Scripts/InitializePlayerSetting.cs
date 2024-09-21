@@ -119,10 +119,16 @@ public class InitializePlayerSetting : MonoBehaviour
             RoundSeed = Random.Range(int.MinValue, int.MaxValue);
         }
 
+
+        DoSeed();
+    }
+
+    public void DoSeed()
+    {
         Random.InitState(RoundSeed);
         SetStringBySeedint();
-
     }
+
 
     public void ChangeKey(string KeyName , KeyCode k )
     {
@@ -331,6 +337,7 @@ public class InitializePlayerSetting : MonoBehaviour
         Debug.Log(intValue);
 
         SeedString = "性格" + Words[0] + "的" + Words[1] + "在" + Words[2] + "使用" + Words[3] + ",\n" + Words[4] + "了" + Words[5] + "和" + Words[6] + ",\n" + "获得了它们的" + Words[7];
+        Debug.Log(SeedString);
     }
 
 

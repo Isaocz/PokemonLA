@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
+using System.Text;
 
 public class _mTool : MonoBehaviour
 {
@@ -144,8 +145,8 @@ public class _mTool : MonoBehaviour
             while (!Output.gameObject.activeInHierarchy)
             {
                 Count++;
+                if (Count >= 100 || Parent.childCount - Count < 0) { break; }
                 Output = Parent.GetChild(Parent.childCount - Count);
-                if (Count >= 100) { break; }
             }
             return Output;
         }
@@ -167,8 +168,46 @@ public class _mTool : MonoBehaviour
         int AbllityLevel = Mathf.Clamp(Level , -30 , 30);
         if (AbllityLevel >= 0) { Output = Mathf.Pow(Mathf.Log10(4.0f * (float)AbllityLevel + 1.0f), 2.85f) + 1.0f; }
         else            { Output = Mathf.Pow((isClearBody?1.1f: 1.3f) , AbllityLevel); }
-
+        
         return Output;
+    }
+
+    /// <summary>
+    /// 删除某一对象所有的子对象
+    /// </summary>
+    public static void RemoveAllChild(GameObject Parent)
+    {
+        if (Parent.transform.childCount != 0) {
+            for (int i = 0; i < Parent.transform.childCount; i++)
+            {
+                Destroy(Parent.transform.GetChild(i).gameObject);
+            }
+        }
+    }
+
+
+
+
+    /// <summary>
+    /// 给字符串的每个字符间插入一个空格
+    /// </summary>
+    public static string AddSpaceInString( string s )
+    {
+        StringBuilder spacedString = new StringBuilder();
+
+        foreach (char c in s)
+        {
+            spacedString.Append(c).Append(' ');
+        }
+
+        // 移除最后一个多余的空格
+        if (spacedString.Length > 0)
+        {
+            spacedString.Length--;
+        }
+
+        string result = spacedString.ToString();
+        return result;
     }
 
 }

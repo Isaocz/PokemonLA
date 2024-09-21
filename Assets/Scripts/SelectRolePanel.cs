@@ -13,7 +13,6 @@ public class SelectRolePanel : MonoBehaviour
     List<Toggle> TogglesList = new List<Toggle> { };
 
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +32,8 @@ public class SelectRolePanel : MonoBehaviour
         pData.Player = null;
         pData.PlayerAbilityIndex = -1;
         GameStartButton.interactable = false;
+
+
         TogglesList[Index].transform.GetChild(13).GetComponent<Toggle>().interactable = false;
         TogglesList[Index].transform.GetChild(13).GetComponent<Toggle>().isOn = false;
         TogglesList[Index].transform.GetChild(14).GetComponent<Toggle>().interactable = false;

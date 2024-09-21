@@ -5,45 +5,80 @@ using UnityEngine.UI;
 
 public class SelectRolePanelAbilityButton : MonoBehaviour
 {
-    public Image image;
+    public Image ToggleImage;
     public Text text;
+    public Image ToggleMask;
     bool isOn;
-
     public Sprite SpriteNormal;
     public Sprite SpriteHL;
-    public Color TextColorNormal;
-    public Color TextColorHL;
-    Toggle PanertToogle;
+
     StartPanelPlayerData pData;
-    public Button GamestartButton;
-    public List<Toggle> TogglesList = new List<Toggle> { };
     UICallDescribe CallUI;
 
-    private void Start()
+    public Color TextColorNormal;
+    public Color TextColorHL;
+
+    public int AbilityIndex;
+    public Button GamestartButton;
+    public List<Toggle> TogglesList = new List<Toggle> { };
+    
+
+
+    /// <summary>
+    /// …Ë÷√∞¥≈•
+    /// </summary>
+    /// <param name="ability"></param>
+    public void SetAbilityToggle( Type.Ability ability , int Index , UIDescribe uIDescribe , Button GameStart)
     {
-        PanertToogle = transform.parent.GetComponent<Toggle>();
+
+
         pData = StartPanelPlayerData.PlayerData;
-        TogglesList.Add(PanertToogle.transform.GetChild(13).GetComponent<Toggle>()) ;
-        TogglesList.Add(PanertToogle.transform.GetChild(14).GetComponent<Toggle>()) ;
-        TogglesList.Add(PanertToogle.transform.GetChild(15).GetComponent<Toggle>()) ;
+        ToggleImage.sprite = SpriteNormal;
+
+        ToggleMask.color = ability.AbilityToggleColor;
+        text.color = ability.AbilityToggleTextColor;
+        text.text = ability.AbilityChineseName;
+        if (text.text.Length <= 4)
+        {
+            text.text = _mTool.AddSpaceInString(text.text);
+        }
+
+        TextColorHL = ability.AbilityToggleTextColorHL;
+        TextColorNormal = ability.AbilityToggleTextColor;
+        AbilityIndex = Index;
+        GamestartButton = GameStart;
+
         CallUI = GetComponent<UICallDescribe>();
+        CallUI.DescribeUI = uIDescribe;
+        if (ability.AbilityDescribe02 == "")
+        {
+            CallUI.TwoMode = false;
+            CallUI.DescribeText = ability.AbilityDescribe01;
+            CallUI.FirstText = ability.AbilityDescribe02;
+        }
+        else
+        {
+            CallUI.TwoMode = true;
+            CallUI.DescribeText = ability.AbilityDescribe02;
+            CallUI.FirstText = ability.AbilityDescribe01;
+        }
     }
 
     public void ChangeSprite()
     {
         if (isOn) { 
             isOn = false; 
-            image.sprite = SpriteNormal;
+            ToggleImage.sprite = SpriteNormal;
             text.color = TextColorNormal;
         }
         else {
             isOn = true;
-            image.sprite = SpriteHL;
+            ToggleImage.sprite = SpriteHL;
             text.color = TextColorHL;
         }
     }
 
-    public void SelectAbility( int Index )
+    public void SelectAbility()
     {
         if (!GetComponent<Toggle>().isOn)
         {
@@ -53,10 +88,10 @@ public class SelectRolePanelAbilityButton : MonoBehaviour
         {
             for (int i = 0; i < TogglesList.Count; i++)
             {
-                if (i != Index) { TogglesList[i].isOn = false; }
+                if (i != AbilityIndex) { TogglesList[i].isOn = false; }
             }
 
-            pData.PlayerAbilityIndex = Index;
+            pData.PlayerAbilityIndex = AbilityIndex;
             GamestartButton.interactable = true;
         }
     }
@@ -69,19 +104,18 @@ public class SelectRolePanelAbilityButton : MonoBehaviour
 
     public void _OnMouseEnter()
     {
-        if (PanertToogle.isOn) {
-            image.sprite = SpriteHL;
-            text.color = TextColorHL;
-            CallUI.MouseEnter();
-        }
+        ToggleImage.sprite = SpriteHL;
+        text.color = TextColorHL;
+        CallUI.MouseEnter();
     }
 
     public void _OnMouseExit()
     {
+        CallUI.MouseExit();
         if (!isOn) {
-            image.sprite = SpriteNormal;
+            ToggleImage.sprite = SpriteNormal;
             text.color = TextColorNormal;
-            CallUI.MouseExit();
+            
         }
     }
 }

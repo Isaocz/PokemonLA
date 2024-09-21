@@ -8,16 +8,18 @@ public class ScrollChild : MonoBehaviour, IDragHandler , IBeginDragHandler , IEn
 {
     private ScrollRect upperscroll;
 
+    public bool isIngore;
+
     private void Awake()
     {
         Transform parent = transform.parent;
         
         if (parent)
         {
-            upperscroll = parent.GetComponentInParent<ScrollRect>();
+            upperscroll = (parent.GetComponentInParent<ScrollChild>() && parent.GetComponentInParent<ScrollChild>().isIngore) ? null : parent.GetComponentInParent<ScrollRect>();
             while (upperscroll == null && parent.parent != null) {
                 parent = parent.parent;
-                upperscroll = parent.GetComponentInParent<ScrollRect>();
+                upperscroll = (parent.GetComponentInParent<ScrollChild>() && parent.GetComponentInParent<ScrollChild>().isIngore) ? null : parent.GetComponentInParent<ScrollRect>();
             }
             
         }

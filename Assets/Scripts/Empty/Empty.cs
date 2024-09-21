@@ -366,8 +366,8 @@ public class Empty : Pokemon
                 {
                     if (!isInPsychicTerrain) 
                     { 
-                        allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000);
-                        EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000), (IsBeFalseSwipe ? 1 : 0), maxHP); 
+                        allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000));
+                        EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP); 
                     }
                     else
                     {
@@ -589,6 +589,13 @@ public class Empty : Pokemon
                 if (GetComponent<Collider2D>()) { GetComponent<Collider2D>().enabled = false; }
                 player.ChangeEx((int)(Exp * (isBoos ? 1.8f : 1.3f)));
                 player.ChangeHPW(HWP);
+
+                //¸øAP
+                if (FloorNum.GlobalFloorNum != null && ScoreCounter.Instance != null)
+                {
+                    ScoreCounter.Instance.EmptyBounsAP += APBounsPoint.EmptyBouns(this , FloorNum.GlobalFloorNum.FloorNumber);
+                }
+
                 if (player.playerData.IsPassiveGetList[134] && (EmptyType01 == Type.TypeEnum.Dark || EmptyType02 == Type.TypeEnum.Dark) ) { player.ChangeHPW(HWP); }
                 transform.parent.parent.GetComponent<Room>().isClear -= 1;
                 if (DestoryEvent != null) { DestoryEvent(); }

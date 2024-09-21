@@ -34,10 +34,6 @@ public class BounsweetControler : PlayerControler
         Instance();
         InstanceNewSkillPanel();
 
-        Skill01 = Splash;
-        Skill02 = Playnice;
-        Skill03 = RapidSpin;
-        Skill04 = TestSkill01;
 
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);

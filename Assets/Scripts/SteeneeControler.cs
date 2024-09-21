@@ -34,13 +34,6 @@ public class SteeneeControler : PlayerControler
         Instance();
         InstanceNewSkillPanel();
 
-        if (!isNeedInherit) {
-            Skill01 = Splash;
-            Skill02 = Playnice;
-            Skill03 = RapidSpin;
-            Skill04 = TestSkill01;
-
-        }
 
 
         skillBar01.GetSkill(Skill01);

@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class UIPokemonDataPanelTypemark : MonoBehaviour
 {
-    Image TypeColorBar;
-    Image TypeMark;
-    Image TeraMask;
-    Text TypeName;
+    public Image TypeColorBar;
+    public Image TypeMark;
+    public Image TeraMask;
+    public Text TypeName;
 
 
 

@@ -22,8 +22,8 @@ public class LoadScence : MonoBehaviour
 
     public void LoadGame()
     {
-        if (FloorNum.GlobalFloorNum.FloorNumber == 0) { InitializePlayerSetting.GlobalPlayerSetting.ResetSeed(); }
-        StartCoroutine(StartLoadGame(FloorNum.GlobalFloorNum.FloorNumber + 3));
+        if (FloorNum.GlobalFloorNum != null && FloorNum.GlobalFloorNum.FloorNumber == 0 && StartPanelPlayerData.PlayerData != null && !StartPanelPlayerData.PlayerData.isSeedGame ) { InitializePlayerSetting.GlobalPlayerSetting.ResetSeed(); }
+        StartCoroutine(StartLoadGame(FloorNum.GlobalFloorNum.FloorNumber + 5));
     }
 
     public IEnumerator StartLoadGame(int Sence)

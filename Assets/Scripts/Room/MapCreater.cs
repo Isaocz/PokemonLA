@@ -188,7 +188,7 @@ public class MapCreater : MonoBehaviour
         CreateRoom();
         UiMiniMap.Instance.CreatMiniMap();
 
-
+        StartCoroutine(APTimer());
 
 
 
@@ -1393,6 +1393,27 @@ public class MapCreater : MonoBehaviour
         return Output;
     }
 
+
+
+    float PlayTime = 0.0f;
+    /// <summary>
+    /// 在该地图呆的时间
+    /// </summary>
+    public float MapTime
+    {
+        get { return PlayTime; }
+        set { PlayTime = value; }
+    }
+
+
+    IEnumerator APTimer()
+    {
+        while (gameObject != null)
+        {
+            PlayTime += 1.0f;
+            yield return new WaitForSeconds(1.0f);
+        }
+    }
 
 
 

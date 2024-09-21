@@ -41,11 +41,6 @@ public class BeldumController : PlayerControler
         Instance();
         InstanceNewSkillPanel();
 
-        Skill01 = Tackle;
-        Skill02 = TestSkill01;
-        Skill03 = TestSkill02;
-        Skill04 = TestSkill03;
-
         skillBar01.GetSkill(Skill01);
         skillBar02.GetSkill(Skill02);
         skillBar03.GetSkill(Skill03);
