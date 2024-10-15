@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public class PlayerPokemon : Pokemon
+{
+
+}
+
 public class Pokemon : MonoBehaviour
 {
     public Material NormalMaterial;
@@ -219,7 +225,7 @@ public class Pokemon : MonoBehaviour
     public void MarterialChangeToTera(int TeraType)
     {
         if (!GetSkinRenderersMaterial().HasFloat("_MaterialPriority") || TeraMaterial.GetFloat("_MaterialPriority") >= GetSkinRenderersMaterial().GetFloat("_MaterialPriority") ) {
-            TeraMaterial.SetColor("_Color", Type.TeraTypeColor[TeraType]);
+            TeraMaterial.SetColor("_Color", PokemonType.TeraTypeColor[TeraType]);
             SetSkinRenderersMaterial(TeraMaterial);
         }
     }
@@ -558,7 +564,7 @@ public class Pokemon : MonoBehaviour
         if (!isToxicDef && Random.Range(0.0f, 1.0f) <= ToxicPer)
         {
             Empty EmptyObj = GetComponent<Empty>();
-            if (!isInMistyTerrain && !isToxicDef && EmptyObj.EmptyType01 != Type.TypeEnum.Poison && EmptyObj.EmptyType01 != Type.TypeEnum.Steel && EmptyObj.EmptyType02 != Type.TypeEnum.Poison && EmptyObj.EmptyType02 != Type.TypeEnum.Steel && !isToxicDone)
+            if (!isInMistyTerrain && !isToxicDef && EmptyObj.EmptyType01 != PokemonType.TypeEnum.Poison && EmptyObj.EmptyType01 != PokemonType.TypeEnum.Steel && EmptyObj.EmptyType02 != PokemonType.TypeEnum.Poison && EmptyObj.EmptyType02 != PokemonType.TypeEnum.Steel && !isToxicDone)
             {
                 ToxicPointFloat += ToxicPoint * ToxicResistance;
                 if (!isToxicStart && ToxicPointFloat < 1)
@@ -624,7 +630,7 @@ public class Pokemon : MonoBehaviour
         if (!isBurnDef && Random.Range(0.0f, 1.0f) <= BurnPer)
         {
             Empty EmptyObj = GetComponent<Empty>();
-            if (!isInMistyTerrain && !isBurnDef && EmptyObj.EmptyType01 != Type.TypeEnum.Fire && EmptyObj.EmptyType02 != Type.TypeEnum.Fire && !isBurnDone)
+            if (!isInMistyTerrain && !isBurnDef && EmptyObj.EmptyType01 != PokemonType.TypeEnum.Fire && EmptyObj.EmptyType02 != PokemonType.TypeEnum.Fire && !isBurnDone)
             {
                 BurnPointFloat += BurnPoint * BurnResistance;
                 if (!isBurnStart && BurnPointFloat < 1)
@@ -754,7 +760,7 @@ public class Pokemon : MonoBehaviour
         if (!isParalysisDef && Random.Range(0.0f, 1.0f) <= ParalysisPer + ((isInSuperElectricTerrain) ? 0.2f : 0))
         {
             Empty EmptyObj = GetComponent<Empty>();
-            if (!isInMistyTerrain && !isParalysisDef && EmptyObj.EmptyType01 != Type.TypeEnum.Electric && EmptyObj.EmptyType02 != Type.TypeEnum.Electric)
+            if (!isInMistyTerrain && !isParalysisDef && EmptyObj.EmptyType01 != PokemonType.TypeEnum.Electric && EmptyObj.EmptyType02 != PokemonType.TypeEnum.Electric)
             {
                 if (!isParalysisDone)
                 {
@@ -1475,7 +1481,7 @@ public class Pokemon : MonoBehaviour
     public void PlayerFrozenFloatPlus(float FrozenPoint , float FrozenTime)
     {
         PlayerControler playerchecktype = transform.GetComponent<PlayerControler>();
-        if (!(playerchecktype.PlayerType01 == (int)Type.TypeEnum.Ice || playerchecktype.PlayerType02 == (int)Type.TypeEnum.Ice || playerchecktype.PlayerTeraType == (int)Type.TypeEnum.Ice || playerchecktype.PlayerTeraTypeJOR == (int)Type.TypeEnum.Ice))
+        if (!(playerchecktype.PlayerType01 == (int)PokemonType.TypeEnum.Ice || playerchecktype.PlayerType02 == (int)PokemonType.TypeEnum.Ice || playerchecktype.PlayerTeraType == (int)PokemonType.TypeEnum.Ice || playerchecktype.PlayerTeraTypeJOR == (int)PokemonType.TypeEnum.Ice))
         {
             if (!isInMistyTerrain && !isStateInvincible && !isFrozenDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
             {
@@ -1582,7 +1588,7 @@ public class Pokemon : MonoBehaviour
     public void ToxicFloatPlus(float ToxicPoint)
     {
         PlayerControler playerchecktype = transform.GetComponent<PlayerControler>();
-        if (!(playerchecktype.PlayerType01 == (int)Type.TypeEnum.Poison || playerchecktype.PlayerType02 == (int)Type.TypeEnum.Poison || playerchecktype.PlayerTeraType == (int)Type.TypeEnum.Poison || playerchecktype.PlayerTeraTypeJOR == (int)Type.TypeEnum.Poison || playerchecktype.PlayerType01 == (int)Type.TypeEnum.Steel || playerchecktype.PlayerType02 == (int)Type.TypeEnum.Steel || playerchecktype.PlayerTeraType == (int)Type.TypeEnum.Steel || playerchecktype.PlayerTeraTypeJOR == (int)Type.TypeEnum.Steel))
+        if (!(playerchecktype.PlayerType01 == (int)PokemonType.TypeEnum.Poison || playerchecktype.PlayerType02 == (int)PokemonType.TypeEnum.Poison || playerchecktype.PlayerTeraType == (int)PokemonType.TypeEnum.Poison || playerchecktype.PlayerTeraTypeJOR == (int)PokemonType.TypeEnum.Poison || playerchecktype.PlayerType01 == (int)PokemonType.TypeEnum.Steel || playerchecktype.PlayerType02 == (int)PokemonType.TypeEnum.Steel || playerchecktype.PlayerTeraType == (int)PokemonType.TypeEnum.Steel || playerchecktype.PlayerTeraTypeJOR == (int)PokemonType.TypeEnum.Steel))
         {
             if (!isInMistyTerrain && !isStateInvincible && !isToxicDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
             {
@@ -1682,7 +1688,7 @@ public class Pokemon : MonoBehaviour
     public void ParalysisFloatPlus(float ParalysisPoint)
     {
         PlayerControler playerchecktype = transform.GetComponent<PlayerControler>();
-        if (!(playerchecktype.PlayerType01 == (int)Type.TypeEnum.Electric || playerchecktype.PlayerType02 == (int)Type.TypeEnum.Electric || playerchecktype.PlayerTeraType == (int)Type.TypeEnum.Electric || playerchecktype.PlayerTeraTypeJOR == (int)Type.TypeEnum.Electric))
+        if (!(playerchecktype.PlayerType01 == (int)PokemonType.TypeEnum.Electric || playerchecktype.PlayerType02 == (int)PokemonType.TypeEnum.Electric || playerchecktype.PlayerTeraType == (int)PokemonType.TypeEnum.Electric || playerchecktype.PlayerTeraTypeJOR == (int)PokemonType.TypeEnum.Electric))
         {
             if (!isInMistyTerrain && !isStateInvincible && !isParalysisDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
             {
@@ -1791,7 +1797,7 @@ public class Pokemon : MonoBehaviour
     public void BurnFloatPlus(float BurnPoint)
     {
         PlayerControler playerchecktype = transform.GetComponent<PlayerControler>();
-        if (!(playerchecktype.PlayerType01 == (int)Type.TypeEnum.Fire || playerchecktype.PlayerType02 == (int)Type.TypeEnum.Fire || playerchecktype.PlayerTeraType == (int)Type.TypeEnum.Fire || playerchecktype.PlayerTeraTypeJOR == (int)Type.TypeEnum.Fire))
+        if (!(playerchecktype.PlayerType01 == (int)PokemonType.TypeEnum.Fire || playerchecktype.PlayerType02 == (int)PokemonType.TypeEnum.Fire || playerchecktype.PlayerTeraType == (int)PokemonType.TypeEnum.Fire || playerchecktype.PlayerTeraTypeJOR == (int)PokemonType.TypeEnum.Fire))
         {
             if (!isInMistyTerrain && !isStateInvincible && !isBurnDef && !isSafeguard && !isObliviousTrigger && !isLeafGuardTrigger)
             {
@@ -2111,7 +2117,7 @@ public class Pokemon : MonoBehaviour
     /// <param name="HpUpValue">此次改变不是伤害，而是回复</param>
     /// <param name="SkillType">此次伤害的属性</param>
 
-    public static void PokemonHpChange(GameObject Attacker , GameObject Attacked , float AtkPower , float SpAPower ,int HpUpValue , Type.TypeEnum SkillType, bool Critial = false)
+    public static void PokemonHpChange(GameObject Attacker , GameObject Attacked , float AtkPower , float SpAPower ,int HpUpValue , PokemonType.TypeEnum SkillType, bool Critial = false)
     {
         //决定攻击者
         int AttackerATK = 1;
@@ -2121,11 +2127,11 @@ public class Pokemon : MonoBehaviour
 
         //和场地有关的伤害加成
         float TerrainAlpha = 1;
-        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInGrassyTerrain && SkillType == Type.TypeEnum.Grass) { TerrainAlpha *= 1.3f; }
-        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInElectricTerrain && SkillType == Type.TypeEnum.Electric) { TerrainAlpha *= 1.3f; }
-        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInPsychicTerrain && SkillType == Type.TypeEnum.Psychic) { TerrainAlpha *= 1.3f; }
-        if (Attacked != null && Attacked.GetComponent<Pokemon>() != null && Attacked.GetComponent<Pokemon>().isInMistyTerrain && SkillType == Type.TypeEnum.Dragon) { TerrainAlpha *= 0.5f; }
-        if (Attacked != null && Attacked.GetComponent<Substitute>() != null && Attacked.GetComponent<Substitute>().isInMistyTerrain && SkillType == Type.TypeEnum.Dragon) { TerrainAlpha *= 0.5f; }
+        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInGrassyTerrain && SkillType == PokemonType.TypeEnum.Grass) { TerrainAlpha *= 1.3f; }
+        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInElectricTerrain && SkillType == PokemonType.TypeEnum.Electric) { TerrainAlpha *= 1.3f; }
+        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInPsychicTerrain && SkillType == PokemonType.TypeEnum.Psychic) { TerrainAlpha *= 1.3f; }
+        if (Attacked != null && Attacked.GetComponent<Pokemon>() != null && Attacked.GetComponent<Pokemon>().isInMistyTerrain && SkillType == PokemonType.TypeEnum.Dragon) { TerrainAlpha *= 0.5f; }
+        if (Attacked != null && Attacked.GetComponent<Substitute>() != null && Attacked.GetComponent<Substitute>().isInMistyTerrain && SkillType == PokemonType.TypeEnum.Dragon) { TerrainAlpha *= 0.5f; }
 
 
         if (Attacker != null)
@@ -2151,15 +2157,15 @@ public class Pokemon : MonoBehaviour
         {
             Empty EmptyAttacked = Attacked.GetComponent<Empty>();
             if (HpUpValue == 0) {
-                float WeatherDefAlpha = ((Weather.GlobalWeather.isSandstorm ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Rock || EmptyAttacked.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1));
-                float WeatherSpDAlpha = ((Weather.GlobalWeather.isHail ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Ice || EmptyAttacked.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1));
+                float WeatherDefAlpha = ((Weather.GlobalWeather.isSandstorm ? ((EmptyAttacked.EmptyType01 == PokemonType.TypeEnum.Rock || EmptyAttacked.EmptyType02 == PokemonType.TypeEnum.Rock) ? 1.5f : 1) : 1));
+                float WeatherSpDAlpha = ((Weather.GlobalWeather.isHail ? ((EmptyAttacked.EmptyType01 == PokemonType.TypeEnum.Ice || EmptyAttacked.EmptyType02 == PokemonType.TypeEnum.Ice) ? 1.5f : 1) : 1));
                 /*float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
                     * ((Weather.GlobalWeather.isRain && SkillType == Type.TypeEnum.Fire) ? 0.5f : 1)
                     * ((Weather.GlobalWeather.isSunny && SkillType == Type.TypeEnum.Water) ? 0.5f : 1)
                     * ((Weather.GlobalWeather.isSunny && SkillType == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
                 */
 
-                if (SkillType != Type.TypeEnum.IgnoreType)
+                if (SkillType != PokemonType.TypeEnum.IgnoreType)
                 {
                     EmptyAttacked.EmptyHpChange(
                     ((AtkPower == 0) ? 0 : (Mathf.Clamp((AtkPower * (Attacker == null ? 1 : AttackerATK) * EmptyTypeAlpha * TerrainAlpha  * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250 * EmptyAttacked.DefAbilityPoint * WeatherDefAlpha + 2) , 1 , 10000))),
@@ -2192,7 +2198,7 @@ public class Pokemon : MonoBehaviour
                         if (player.Skill01 != null)
                         {
                             var skill01 = player.Skill01.GetComponent<Skill>();
-                            if (skill01 != null && (Type.TypeEnum)skill01.SkillType == SkillType && (skill01.Damage == AtkPower && skill01.SpDamage == SpAPower))
+                            if (skill01 != null && (PokemonType.TypeEnum)skill01.SkillType == SkillType && (skill01.Damage == AtkPower && skill01.SpDamage == SpAPower))
                             {
                                 MisdreavusObj.ImpoisonSkillIndex = 1;
                                 MisdreavusObj.IsKilledBySkill = true;
@@ -2202,7 +2208,7 @@ public class Pokemon : MonoBehaviour
                         if (player.Skill02 != null)
                         {
                             var skill02 = player.Skill02.GetComponent<Skill>();
-                            if (skill02 != null && (Type.TypeEnum)skill02.SkillType == SkillType && (skill02.Damage == AtkPower && skill02.SpDamage == SpAPower))
+                            if (skill02 != null && (PokemonType.TypeEnum)skill02.SkillType == SkillType && (skill02.Damage == AtkPower && skill02.SpDamage == SpAPower))
                             {
                                 MisdreavusObj.ImpoisonSkillIndex = 2;
                                 MisdreavusObj.IsKilledBySkill = true;
@@ -2212,7 +2218,7 @@ public class Pokemon : MonoBehaviour
                         if(player.Skill03 != null)
                         {
                             var skill03 = player.Skill03.GetComponent<Skill>();
-                            if (skill03 != null && (Type.TypeEnum)skill03.SkillType == SkillType && (skill03.Damage == AtkPower && skill03.SpDamage == SpAPower))
+                            if (skill03 != null && (PokemonType.TypeEnum)skill03.SkillType == SkillType && (skill03.Damage == AtkPower && skill03.SpDamage == SpAPower))
                             {
                                 MisdreavusObj.ImpoisonSkillIndex = 3;
                                 MisdreavusObj.IsKilledBySkill = true;
@@ -2222,7 +2228,7 @@ public class Pokemon : MonoBehaviour
                         if (player.Skill04 != null)
                         {
                             var skill04 = player.Skill04.GetComponent<Skill>();
-                            if (skill04 != null && (Type.TypeEnum)skill04.SkillType == SkillType && (skill04.Damage == AtkPower && skill04.SpDamage == SpAPower))
+                            if (skill04 != null && (PokemonType.TypeEnum)skill04.SkillType == SkillType && (skill04.Damage == AtkPower && skill04.SpDamage == SpAPower))
                             {
                                 MisdreavusObj.ImpoisonSkillIndex = 4;
                                 MisdreavusObj.IsKilledBySkill = true;
@@ -2313,7 +2319,7 @@ public class Pokemon : MonoBehaviour
     /// <param name="HpUpValue">此次改变不是伤害</param>
     /// <param name="SkillType">此次伤害的属性</param>
     /// <param name="AttackTypes">特殊攻击的种类</param>
-    public static void PokemonHpChange(GameObject Attacker, GameObject Attacked, float AtkPower, float SpAPower, int HpUpValue, Type.TypeEnum SkillType , Pokemon.SpecialAttackTypes AttackTypes,bool Critial = false)
+    public static void PokemonHpChange(GameObject Attacker, GameObject Attacked, float AtkPower, float SpAPower, int HpUpValue, PokemonType.TypeEnum SkillType , Pokemon.SpecialAttackTypes AttackTypes,bool Critial = false)
     {
 
         Debug.Log("BodyPress");
@@ -2325,11 +2331,11 @@ public class Pokemon : MonoBehaviour
 
         //和场地有关的伤害加成
         float TerrainAlpha = 1;
-        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInGrassyTerrain && SkillType == Type.TypeEnum.Grass) { TerrainAlpha *= 1.3f; }
-        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInElectricTerrain && SkillType == Type.TypeEnum.Electric) { TerrainAlpha *= 1.3f; }
-        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInPsychicTerrain && SkillType == Type.TypeEnum.Psychic) { TerrainAlpha *= 1.3f; }
-        if (Attacked != null && Attacked.GetComponent<Pokemon>() != null && Attacked.GetComponent<Pokemon>().isInMistyTerrain && SkillType == Type.TypeEnum.Dragon) { TerrainAlpha *= 0.5f; }
-        if (Attacked != null && Attacked.GetComponent<Substitute>() != null && Attacked.GetComponent<Substitute>().isInMistyTerrain && SkillType == Type.TypeEnum.Dragon) { TerrainAlpha *= 0.5f; }
+        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInGrassyTerrain && SkillType == PokemonType.TypeEnum.Grass) { TerrainAlpha *= 1.3f; }
+        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInElectricTerrain && SkillType == PokemonType.TypeEnum.Electric) { TerrainAlpha *= 1.3f; }
+        if (Attacker != null && Attacker.GetComponent<Pokemon>() != null && Attacker.GetComponent<Pokemon>().isInPsychicTerrain && SkillType == PokemonType.TypeEnum.Psychic) { TerrainAlpha *= 1.3f; }
+        if (Attacked != null && Attacked.GetComponent<Pokemon>() != null && Attacked.GetComponent<Pokemon>().isInMistyTerrain && SkillType == PokemonType.TypeEnum.Dragon) { TerrainAlpha *= 0.5f; }
+        if (Attacked != null && Attacked.GetComponent<Substitute>() != null && Attacked.GetComponent<Substitute>().isInMistyTerrain && SkillType == PokemonType.TypeEnum.Dragon) { TerrainAlpha *= 0.5f; }
 
 
         if (Attacker.gameObject != null || Attacker != null)
@@ -2413,11 +2419,11 @@ public class Pokemon : MonoBehaviour
             if (HpUpValue == 0)
             {
                 float AbillityAlpha = 1;
-                if (Attacked.GetComponent<Empty>().Abillity == Empty.EmptyAbillity.Levitate && SkillType == Type.TypeEnum.Ground) { AbillityAlpha *= 0.64f; }
+                if (Attacked.GetComponent<Empty>().Abillity == Empty.EmptyAbillity.Levitate && SkillType == PokemonType.TypeEnum.Ground) { AbillityAlpha *= 0.64f; }
 
 
-                float WeatherDefAlpha = ((Weather.GlobalWeather.isSandstorm ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Rock || EmptyAttacked.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1));
-                float WeatherSpDAlpha = ((Weather.GlobalWeather.isHail ? ((EmptyAttacked.EmptyType01 == Type.TypeEnum.Ice || EmptyAttacked.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1));
+                float WeatherDefAlpha = ((Weather.GlobalWeather.isSandstorm ? ((EmptyAttacked.EmptyType01 == PokemonType.TypeEnum.Rock || EmptyAttacked.EmptyType02 == PokemonType.TypeEnum.Rock) ? 1.5f : 1) : 1));
+                float WeatherSpDAlpha = ((Weather.GlobalWeather.isHail ? ((EmptyAttacked.EmptyType01 == PokemonType.TypeEnum.Ice || EmptyAttacked.EmptyType02 == PokemonType.TypeEnum.Ice) ? 1.5f : 1) : 1));
 
                 float AttackedDEF = EmptyAttacked.DefAbilityPoint;
                 float AttackedSPD = EmptyAttacked.SpdAbilityPoint;
@@ -2432,7 +2438,7 @@ public class Pokemon : MonoBehaviour
                     * ((Weather.GlobalWeather.isSunny && SkillType == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
                 */
 
-                if (SkillType != Type.TypeEnum.IgnoreType)
+                if (SkillType != PokemonType.TypeEnum.IgnoreType)
                 {
 
                     Debug.Log("SpAPower = " + SpAPower + " AttackerSpA = " + AttackerATK + "EmptyTypeAlpha = " + EmptyTypeAlpha + "AttackerLevel = " + AttackerLevel + "AttackedSPD = " + AttackedSPD);
@@ -2467,7 +2473,7 @@ public class Pokemon : MonoBehaviour
                         if (player.Skill01 != null)
                         {
                             var skill01 = player.Skill01.GetComponent<Skill>();
-                            if (skill01 != null && (Type.TypeEnum)skill01.SkillType == SkillType && (skill01.Damage == AtkPower && skill01.SpDamage == SpAPower))
+                            if (skill01 != null && (PokemonType.TypeEnum)skill01.SkillType == SkillType && (skill01.Damage == AtkPower && skill01.SpDamage == SpAPower))
                             {
                                 MisdreavusObj.ImpoisonSkillIndex = 1;
                                 MisdreavusObj.IsKilledBySkill = true;
@@ -2477,7 +2483,7 @@ public class Pokemon : MonoBehaviour
                         if (player.Skill02 != null)
                         {
                             var skill02 = player.Skill02.GetComponent<Skill>();
-                            if (skill02 != null && (Type.TypeEnum)skill02.SkillType == SkillType && (skill02.Damage == AtkPower && skill02.SpDamage == SpAPower))
+                            if (skill02 != null && (PokemonType.TypeEnum)skill02.SkillType == SkillType && (skill02.Damage == AtkPower && skill02.SpDamage == SpAPower))
                             {
                                 MisdreavusObj.ImpoisonSkillIndex = 2;
                                 MisdreavusObj.IsKilledBySkill = true;
@@ -2487,7 +2493,7 @@ public class Pokemon : MonoBehaviour
                         if (player.Skill03 != null)
                         {
                             var skill03 = player.Skill03.GetComponent<Skill>();
-                            if (skill03 != null && (Type.TypeEnum)skill03.SkillType == SkillType && (skill03.Damage == AtkPower && skill03.SpDamage == SpAPower))
+                            if (skill03 != null && (PokemonType.TypeEnum)skill03.SkillType == SkillType && (skill03.Damage == AtkPower && skill03.SpDamage == SpAPower))
                             {
                                 MisdreavusObj.ImpoisonSkillIndex = 3;
                                 MisdreavusObj.IsKilledBySkill = true;
@@ -2497,7 +2503,7 @@ public class Pokemon : MonoBehaviour
                         if (player.Skill04 != null)
                         {
                             var skill04 = player.Skill04.GetComponent<Skill>();
-                            if (skill04 != null && (Type.TypeEnum)skill04.SkillType == SkillType && (skill04.Damage == AtkPower && skill04.SpDamage == SpAPower))
+                            if (skill04 != null && (PokemonType.TypeEnum)skill04.SkillType == SkillType && (skill04.Damage == AtkPower && skill04.SpDamage == SpAPower))
                             {
                                 MisdreavusObj.ImpoisonSkillIndex = 4;
                                 MisdreavusObj.IsKilledBySkill = true;

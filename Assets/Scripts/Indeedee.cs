@@ -15,8 +15,8 @@ public class Indeedee : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Fairy;
-        EmptyType02 = Type.TypeEnum.Normal;
+        EmptyType01 = PokemonType.TypeEnum.Fairy;
+        EmptyType02 = PokemonType.TypeEnum.Normal;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);

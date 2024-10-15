@@ -121,9 +121,9 @@ public class SolarBeamCastform : Projectile
             if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Player")
             {
                 PlayerControler p = EndRay.collider.GetComponent<PlayerControler>();
-                if (empty != null) { Pokemon.PokemonHpChange(empty.gameObject, EndRay.collider.gameObject, 0, SpDmage, 0, Type.TypeEnum.Grass); }
+                if (empty != null) { Pokemon.PokemonHpChange(empty.gameObject, EndRay.collider.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Grass); }
                 else {
-                    Pokemon.PokemonHpChange(null, EndRay.collider.gameObject, 0, SpDmage, 0, Type.TypeEnum.Grass); 
+                    Pokemon.PokemonHpChange(null, EndRay.collider.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Grass); 
                 }
                 if (p != null)
                 {

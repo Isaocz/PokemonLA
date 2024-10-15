@@ -127,8 +127,8 @@ public class EmptyHydroPump : MonoBehaviour
             if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Player")
             {
                 PlayerControler p = EndRay.collider.GetComponent<PlayerControler>();
-                if (ParentEmpty != null) { Pokemon.PokemonHpChange(ParentEmpty.gameObject, EndRay.collider.gameObject, 0, 100, 0, Type.TypeEnum.Water); }
-                else { Pokemon.PokemonHpChange(null, EndRay.collider.gameObject, 0, 80, 0, Type.TypeEnum.Water); }
+                if (ParentEmpty != null) { Pokemon.PokemonHpChange(ParentEmpty.gameObject, EndRay.collider.gameObject, 0, 100, 0, PokemonType.TypeEnum.Water); }
+                else { Pokemon.PokemonHpChange(null, EndRay.collider.gameObject, 0, 80, 0, PokemonType.TypeEnum.Water); }
                 if (p != null)
                 {
                     p.KnockOutPoint = 10f;

@@ -23,24 +23,24 @@ public class MewHpLeftUI : MonoBehaviour
         {
             switch (mew.SkillType)
             {
-                case Type.TypeEnum.Normal: outline.effectColor = Type.TypeColor[0]; break;
-                case Type.TypeEnum.Fighting: outline.effectColor = Type.TypeColor[1]; break;
-                case Type.TypeEnum.Flying: outline.effectColor = Type.TypeColor[2]; break;
-                case Type.TypeEnum.Poison: outline.effectColor = Type.TypeColor[3]; break;
-                case Type.TypeEnum.Ground: outline.effectColor = Type.TypeColor[4]; break;
-                case Type.TypeEnum.Rock: outline.effectColor = Type.TypeColor[5]; break;
-                case Type.TypeEnum.Bug: outline.effectColor = Type.TypeColor[6]; break;
-                case Type.TypeEnum.Ghost: outline.effectColor = Type.TypeColor[7]; break;
-                case Type.TypeEnum.Steel: outline.effectColor = Type.TypeColor[8]; break;
-                case Type.TypeEnum.Fire: outline.effectColor = Type.TypeColor[9]; break;
-                case Type.TypeEnum.Water: outline.effectColor = Type.TypeColor[10]; break;
-                case Type.TypeEnum.Grass: outline.effectColor = Type.TypeColor[11]; break;
-                case Type.TypeEnum.Electric: outline.effectColor = Type.TypeColor[12]; break;
-                case Type.TypeEnum.Psychic: outline.effectColor = Type.TypeColor[13]; break;
-                case Type.TypeEnum.Ice: outline.effectColor = Type.TypeColor[14]; break;
-                case Type.TypeEnum.Dragon: outline.effectColor = Type.TypeColor[15]; break;
-                case Type.TypeEnum.Dark: outline.effectColor = Type.TypeColor[16]; break;
-                case Type.TypeEnum.Fairy: outline.effectColor = Type.TypeColor[17]; break;
+                case PokemonType.TypeEnum.Normal: outline.effectColor = PokemonType.TypeColor[0]; break;
+                case PokemonType.TypeEnum.Fighting: outline.effectColor = PokemonType.TypeColor[1]; break;
+                case PokemonType.TypeEnum.Flying: outline.effectColor = PokemonType.TypeColor[2]; break;
+                case PokemonType.TypeEnum.Poison: outline.effectColor = PokemonType.TypeColor[3]; break;
+                case PokemonType.TypeEnum.Ground: outline.effectColor = PokemonType.TypeColor[4]; break;
+                case PokemonType.TypeEnum.Rock: outline.effectColor = PokemonType.TypeColor[5]; break;
+                case PokemonType.TypeEnum.Bug: outline.effectColor = PokemonType.TypeColor[6]; break;
+                case PokemonType.TypeEnum.Ghost: outline.effectColor = PokemonType.TypeColor[7]; break;
+                case PokemonType.TypeEnum.Steel: outline.effectColor = PokemonType.TypeColor[8]; break;
+                case PokemonType.TypeEnum.Fire: outline.effectColor = PokemonType.TypeColor[9]; break;
+                case PokemonType.TypeEnum.Water: outline.effectColor = PokemonType.TypeColor[10]; break;
+                case PokemonType.TypeEnum.Grass: outline.effectColor = PokemonType.TypeColor[11]; break;
+                case PokemonType.TypeEnum.Electric: outline.effectColor = PokemonType.TypeColor[12]; break;
+                case PokemonType.TypeEnum.Psychic: outline.effectColor = PokemonType.TypeColor[13]; break;
+                case PokemonType.TypeEnum.Ice: outline.effectColor = PokemonType.TypeColor[14]; break;
+                case PokemonType.TypeEnum.Dragon: outline.effectColor = PokemonType.TypeColor[15]; break;
+                case PokemonType.TypeEnum.Dark: outline.effectColor = PokemonType.TypeColor[16]; break;
+                case PokemonType.TypeEnum.Fairy: outline.effectColor = PokemonType.TypeColor[17]; break;
                 default: outline.effectColor = Color.white; break;
             }
 

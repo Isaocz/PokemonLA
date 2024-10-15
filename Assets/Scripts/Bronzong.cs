@@ -78,8 +78,8 @@ public class Bronzong : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Steel;
-        EmptyType02 = Type.TypeEnum.Psychic;
+        EmptyType01 = PokemonType.TypeEnum.Steel;
+        EmptyType02 = PokemonType.TypeEnum.Psychic;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);
@@ -301,13 +301,13 @@ public class Bronzong : Empty
                 PlayerControler p = other.gameObject.GetComponent<PlayerControler>();
                 if ( p != null) {
                     Debug.Log(SpeedAbilityPoint.ToString() + "+" + p.SpeedAbilityPoint.ToString());
-                    Pokemon.PokemonHpChange( this.gameObject , p.gameObject , Mathf.Clamp(((25 * p.SpeedAbilityPoint) / SpeedAbilityPoint) , 1 , 150) , 0 , 0 , Type.TypeEnum.Steel );
+                    Pokemon.PokemonHpChange( this.gameObject , p.gameObject , Mathf.Clamp(((25 * p.SpeedAbilityPoint) / SpeedAbilityPoint) , 1 , 150) , 0 , 0 , PokemonType.TypeEnum.Steel );
                     p.KnockOutPoint = Knock;
                     p.KnockOutDirection = (p.transform.position - transform.position).normalized;
                 }
                 else 
                 {
-                    if (other.gameObject.GetComponent<Substitute>() != null) Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 120 , 0, 0, Type.TypeEnum.Steel);
+                    if (other.gameObject.GetComponent<Substitute>() != null) Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 120 , 0, 0, PokemonType.TypeEnum.Steel);
                 }
 
             }

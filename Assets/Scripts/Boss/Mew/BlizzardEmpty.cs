@@ -29,7 +29,7 @@ public class BlizzardEmpty : Projectile
         {
             // 对玩家造成伤害
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Ice);
+            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Ice);
             if (playerControler != null)
             {
                 playerControler.KnockOutPoint = 2.5f;

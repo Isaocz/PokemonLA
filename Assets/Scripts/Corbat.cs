@@ -63,8 +63,8 @@ public class Corbat : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Poison;
-        EmptyType02 = Type.TypeEnum.Flying;
+        EmptyType01 = PokemonType.TypeEnum.Poison;
+        EmptyType02 = PokemonType.TypeEnum.Flying;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);
@@ -432,7 +432,7 @@ public class Corbat : Empty
                     playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                 }
                 if (Random.Range(0.0f , 1.0f) > 0.8f) { playerControler.ToxicFloatPlus(0.5f); }
-                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 70, 0, 0, Type.TypeEnum.Poison);
+                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 70, 0, 0, PokemonType.TypeEnum.Poison);
             }
             else
             {

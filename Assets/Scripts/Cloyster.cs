@@ -20,8 +20,8 @@ public class Cloyster : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Water;
-        EmptyType02 = Type.TypeEnum.Ice;
+        EmptyType01 = PokemonType.TypeEnum.Water;
+        EmptyType02 = PokemonType.TypeEnum.Ice;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);

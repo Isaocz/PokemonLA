@@ -41,7 +41,7 @@ public class KnockOff : Skill
     {
         if (SkillFrom == 2 && isKnockOffHitDone && PlayerHP > player.Hp)
         {
-            Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, (PlayerHP - player.Hp) / 2, Type.TypeEnum.No);
+            Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, (PlayerHP - player.Hp) / 2, PokemonType.TypeEnum.No);
         }
     }
 }

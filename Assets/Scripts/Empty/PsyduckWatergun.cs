@@ -53,7 +53,7 @@ public class PsyduckWatergun : Projectile
             if (other.tag == ("Player") && !empty.isEmptyInfatuationDone)
             {
                 PlayerControler playerControler = other.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, 0, SpDmage, 0, Type.TypeEnum.Water);
+                Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Water);
                 if (playerControler != null) {
                     //playerControler.ChangeHp(0, -(SpDmage * empty.SpAAbilityPoint * WeatherAlpha * (2 * empty.Emptylevel + 10) / 250), 11);
                     playerControler.KnockOutPoint = 5;
@@ -63,7 +63,7 @@ public class PsyduckWatergun : Projectile
             if (other.tag == ("Empty") && empty.isEmptyInfatuationDone)
             {
                 Empty e = other.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, SpDmage, 0, Type.TypeEnum.Water);
+                Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Water);
                 //e.EmptyHpChange( 0 , (SpDmage * empty.SpAAbilityPoint * WeatherAlpha * (2 * empty.Emptylevel + 10) / (250 * e.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((e.EmptyType01 == Type.TypeEnum.Ice || e.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2), 11 );
 
             }

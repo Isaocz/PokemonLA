@@ -38,7 +38,7 @@ public class Cryogonal : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Ice;
+        EmptyType01 = PokemonType.TypeEnum.Ice;
         EmptyType02 = 0;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);

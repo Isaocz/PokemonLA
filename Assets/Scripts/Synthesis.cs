@@ -69,7 +69,7 @@ public class Synthesis : Skill
         }
 
 
-        Pokemon.PokemonHpChange( null , player.gameObject , 0 , 0 , (int)RecoveryAmount , Type.TypeEnum.IgnoreType );
+        Pokemon.PokemonHpChange( null , player.gameObject , 0 , 0 , (int)RecoveryAmount , PokemonType.TypeEnum.IgnoreType );
         player.isCanNotMove = true;
     }
 

@@ -72,7 +72,7 @@ public class CrossPoisonEmpty : Projectile
         if (canHurt == true && collision.CompareTag("Player"))
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Poison);
+            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Poison);
             if (playerControler != null)
             {
                 playerControler.KnockOutPoint = 2.5f;

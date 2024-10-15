@@ -16,9 +16,12 @@ public class ScorePanelOrder : MonoBehaviour
         {
             SaveData save = SaveLoader.saveLoader.saveData;
             int TotalAP = save.APTotal + ScoreCounter.Instance.TotalAP();
-            if (TotalAP >= SaveData.ExpRequired[save.GroupLevel])
+            while (TotalAP >= SaveData.ExpRequired[save.GroupLevel + ScoreCounter.Instance.isGroupLevelUp])
             {
-                ScoreCounter.Instance.isGroupLevelUp = true;
+                ScoreCounter.Instance.isGroupLevelUp += 1;
+                
+                //TotalAP -= SaveData.ExpRequired[save.GroupLevel + ScoreCounter.Instance.isGroupLevelUp];
+                Debug.Log(ScoreCounter.Instance.isGroupLevelUp + "+" + SaveData.ExpRequired[save.GroupLevel + ScoreCounter.Instance.isGroupLevelUp] + "+" + TotalAP);
             }
         }
         else
@@ -26,7 +29,7 @@ public class ScorePanelOrder : MonoBehaviour
             int TotalAP = 120 + ScoreCounter.Instance.TotalAP();
             if (TotalAP >= SaveData.ExpRequired[1])
             {
-                ScoreCounter.Instance.isGroupLevelUp = true;
+                ScoreCounter.Instance.isGroupLevelUp += 1;
             }
         }
     }

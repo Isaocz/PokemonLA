@@ -18,8 +18,8 @@ public class Oddish : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Poison;
-        EmptyType02 = Type.TypeEnum.Grass;
+        EmptyType01 = PokemonType.TypeEnum.Poison;
+        EmptyType02 = PokemonType.TypeEnum.Grass;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);

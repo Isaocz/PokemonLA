@@ -42,7 +42,7 @@ public class MakeItRainEmpty : Projectile
             
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
             int MoneyIncreseddamage = playerControler.Money/2 + 50;
-            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, 0, MoneyIncreseddamage < 100 ? MoneyIncreseddamage : 100, 0, Type.TypeEnum.Steel);
+            Pokemon.PokemonHpChange(empty.gameObject, playerControler.gameObject, 0, MoneyIncreseddamage < 100 ? MoneyIncreseddamage : 100, 0, PokemonType.TypeEnum.Steel);
             if (playerControler != null)
             {
                 playerControler.KnockOutPoint = 1f;

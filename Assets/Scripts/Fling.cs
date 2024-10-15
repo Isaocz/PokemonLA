@@ -35,7 +35,7 @@ public class Fling : Skill
         if (SkillFrom == 2 && FlingItem == null)
         {
             Damage = 40;
-            Pokemon.PokemonHpChange(null,player.gameObject, Mathf.Clamp( Mathf.Ceil(12 +  player.maxHp * 0.06f) , 1 , player.Hp - 1  ), 0 , 0 , Type.TypeEnum.IgnoreType);
+            Pokemon.PokemonHpChange(null,player.gameObject, Mathf.Clamp( Mathf.Ceil(12 +  player.maxHp * 0.06f) , 1 , player.Hp - 1  ), 0 , 0 , PokemonType.TypeEnum.IgnoreType);
             player.KnockOutDirection = Vector2.right; player.KnockOutPoint = 0;
         }
     }

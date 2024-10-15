@@ -19,7 +19,7 @@ public class SubsitituteDieBoom : Skill
             Empty e = other.GetComponent<Empty>();
             if (e != null)
             {
-                Pokemon.PokemonHpChange(player.gameObject, e.gameObject, Damage, 0, 0, Type.TypeEnum.Normal);
+                Pokemon.PokemonHpChange(player.gameObject, e.gameObject, Damage, 0, 0, PokemonType.TypeEnum.Normal);
             }
         }
     }

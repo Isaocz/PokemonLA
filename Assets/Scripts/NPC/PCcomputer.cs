@@ -31,7 +31,7 @@ public class PCcomputer : MonoBehaviour
             TalkPanel.gameObject.SetActive(true);
             player.CanNotUseSpaceItem = true;
         }
-        if (!isInTrriger)
+        if (!isInTrriger && player != null)
         {
             TalkPanel.PlayerExit();
         }

@@ -38,7 +38,7 @@ public class ConfusionBronzong : Projectile
             transform.GetComponent<EmptyTrace>().isCanNotMove = true;
             Destroy(rigidbody2D);
             PlayerControler playerControler = other.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, 0, SpDmage, 0, Type.TypeEnum.Psychic);
+            Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Psychic);
             if (playerControler != null)
             {
                 //playerControler.ChangeHp(0, -(SpDmage * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / 250), 14);

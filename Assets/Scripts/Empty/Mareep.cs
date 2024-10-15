@@ -22,7 +22,7 @@ public class Mareep : Empty
     void Start()
     {
 
-        EmptyType01 = Type.TypeEnum.Electric;
+        EmptyType01 = PokemonType.TypeEnum.Electric;
         EmptyType02 = 0;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);

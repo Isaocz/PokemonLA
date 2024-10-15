@@ -34,7 +34,7 @@ public class Thief : Skill
                     
                     if (target.isBoos)
                     {
-                        if (SkillFrom == 2) { Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp / 4, Type.TypeEnum.IgnoreType); }
+                        if (SkillFrom == 2) { Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp / 4, PokemonType.TypeEnum.IgnoreType); }
                         Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
                         Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
                         Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
@@ -43,19 +43,19 @@ public class Thief : Skill
                     {
                         if (target.IsHaveDropItem)
                         {
-                            if (SkillFrom == 2) { Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp / 4, Type.TypeEnum.IgnoreType); }
+                            if (SkillFrom == 2) { Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp / 4, PokemonType.TypeEnum.IgnoreType); }
                             target.EmptyDrop();
                         }
                         else
                         {
-                            if (SkillFrom == 2) { Pokemon.PokemonHpChange(null, player.gameObject, player.maxHp / 8, 0, 0, Type.TypeEnum.IgnoreType); player.KnockOutDirection = Vector2.zero; player.KnockOutPoint = 0; }
+                            if (SkillFrom == 2) { Pokemon.PokemonHpChange(null, player.gameObject, player.maxHp / 8, 0, 0, PokemonType.TypeEnum.IgnoreType); player.KnockOutDirection = Vector2.zero; player.KnockOutPoint = 0; }
                         }
                     }
                     target.DropItem = null;
                 }
                 else
                 {
-                    if (SkillFrom == 2) { Pokemon.PokemonHpChange(null, player.gameObject, player.maxHp / 8, 0, 0, Type.TypeEnum.IgnoreType); player.KnockOutDirection = Vector2.zero;player.KnockOutPoint = 0; }
+                    if (SkillFrom == 2) { Pokemon.PokemonHpChange(null, player.gameObject, player.maxHp / 8, 0, 0, PokemonType.TypeEnum.IgnoreType); player.KnockOutDirection = Vector2.zero;player.KnockOutPoint = 0; }
                 }
                 HitAndKo(target);
             }

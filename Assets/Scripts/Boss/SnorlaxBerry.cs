@@ -93,7 +93,7 @@ public class SnorlaxBerry : MonoBehaviour
         if (other.transform.tag == ("Player"))
         {
             PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(null, other.gameObject, 2, 0, 0, Type.TypeEnum.IgnoreType);
+            Pokemon.PokemonHpChange(null, other.gameObject, 2, 0, 0, PokemonType.TypeEnum.IgnoreType);
             if (playerControler != null) {
                 //playerControler.ChangeHp(-2, 0, 19);
                 playerControler.KnockOutPoint = 3;

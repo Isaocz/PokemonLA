@@ -20,7 +20,7 @@ public class AquaRing : Skill
         {
             if (Timer >= 1.6f)
             {
-                Pokemon.PokemonHpChange( null , other.gameObject , 0 , 0 , (int)(other.gameObject.GetComponent<PlayerControler>().maxHp / 16) , Type.TypeEnum.IgnoreType );
+                Pokemon.PokemonHpChange( null , other.gameObject , 0 , 0 , (int)(other.gameObject.GetComponent<PlayerControler>().maxHp / 16) , PokemonType.TypeEnum.IgnoreType );
                 Timer = 0;
             }
         }

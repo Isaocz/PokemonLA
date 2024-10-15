@@ -13,8 +13,8 @@ public class Pincurchin : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Electric;
-        EmptyType02 = Type.TypeEnum.No;
+        EmptyType01 = PokemonType.TypeEnum.Electric;
+        EmptyType02 = PokemonType.TypeEnum.No;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);

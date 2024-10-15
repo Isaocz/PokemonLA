@@ -28,7 +28,7 @@ public class PounceMew : Projectile
             if(Hittimer > 0.5f && collision.CompareTag("Player"))
             {
                 PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Bug);
+                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Bug);
                 if (playerControler != null)
                 {
                     playerControler.KnockOutPoint = 2.5f;

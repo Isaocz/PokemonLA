@@ -21,7 +21,7 @@ public class PsychicLunatone : Projectile
             {
                 // 对玩家造成伤害
                 PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Psychic);
+                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Psychic);
                 if (playerControler != null)
                 {
                     playerControler.KnockOutPoint = 5f;
@@ -32,12 +32,12 @@ public class PsychicLunatone : Projectile
             else if (empty != null && empty.isEmptyInfatuationDone && collision.tag == "Empty" && collision.gameObject != empty.gameObject)
             {
                 Empty e = collision.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Psychic);
+                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Psychic);
 
             }
             if (empty.isEmptyConfusionDone && collision.gameObject == empty.gameObject)
             {
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Psychic);
+                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Psychic);
             }
         }
     }

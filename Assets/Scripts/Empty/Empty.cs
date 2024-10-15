@@ -25,9 +25,9 @@ public class Empty : Pokemon
     //声明两个整形变量，表示敌人的两个属性
     [Header("属性")]
     [EnumMultiAttribute]
-    public Type.TypeEnum EmptyType01;
+    public PokemonType.TypeEnum EmptyType01;
     //public int EmptyType01;
-    public Type.TypeEnum EmptyType02;
+    public PokemonType.TypeEnum EmptyType02;
 
     [Header("种族值")]
     //声明六个整形数据，表示角色的六项种族值,以及六项当前能力值,MaxLevel表示该敌人可以到达的最高等级
@@ -342,21 +342,21 @@ public class Empty : Pokemon
                 return;
             }
 
-            Type.TypeEnum enumVaue = (Type.TypeEnum)SkillType;
+            PokemonType.TypeEnum enumVaue = (PokemonType.TypeEnum)SkillType;
 
             Debug.Log(name);
             Debug.Log(player);
             Debug.Log(player.playerData);
             Debug.Log(player.playerData.IsPassiveGetList[118]);
 
-            Dmage = Dmage * (player.playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
-                * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
-                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
-                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)));
-            SpDmage = SpDmage * (player.playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
-                * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
-                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
-                * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)));
+            Dmage = Dmage * (player.playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == PokemonType.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+                * ((Weather.GlobalWeather.isRain && enumVaue == PokemonType.TypeEnum.Fire) ? 0.5f : 1)
+                * ((Weather.GlobalWeather.isSunny && enumVaue == PokemonType.TypeEnum.Water) ? 0.5f : 1)
+                * ((Weather.GlobalWeather.isSunny && enumVaue == PokemonType.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)));
+            SpDmage = SpDmage * (player.playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == PokemonType.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+                * ((Weather.GlobalWeather.isRain && enumVaue == PokemonType.TypeEnum.Fire) ? 0.5f : 1)
+                * ((Weather.GlobalWeather.isSunny && enumVaue == PokemonType.TypeEnum.Water) ? 0.5f : 1)
+                * ((Weather.GlobalWeather.isSunny && enumVaue == PokemonType.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)));
 
             float typeDef = (TypeDef[SkillType] < 0 ? (Mathf.Pow(1.2f, -TypeDef[SkillType])) : 1) * (TypeDef[SkillType] > 0 ? (Mathf.Pow(0.8f, TypeDef[SkillType])) : 1);
             if (Dmage + SpDmage >= 0)
@@ -366,15 +366,15 @@ public class Empty : Pokemon
                 {
                     if (!isInPsychicTerrain) 
                     { 
-                        allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000));
-                        EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP); 
+                        allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (PokemonType.TYPE[SkillType][(int)EmptyType01]) * PokemonType.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000));
+                        EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (PokemonType.TYPE[SkillType][(int)EmptyType01]) * PokemonType.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP); 
                     }
                     else
                     {
-                        if(Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000))) > (int)(maxHP / 16))
+                        if(Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (PokemonType.TYPE[SkillType][(int)EmptyType01]) * PokemonType.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000))) > (int)(maxHP / 16))
                         {
-                            allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000));
-                            EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP);
+                            allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (PokemonType.TYPE[SkillType][(int)EmptyType01]) * PokemonType.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000));
+                            EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (PokemonType.TYPE[SkillType][(int)EmptyType01]) * PokemonType.TYPE[SkillType][(int)EmptyType02]), 1, (isBoos ? (maxHP / 6) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP);
                         }
                     }
                 }
@@ -425,8 +425,8 @@ public class Empty : Pokemon
                 "Dmage=" + Dmage + "  " 
                 + "SpDmage=" + SpDmage + "  "
                 + "typeDef=" + typeDef + "  "
-                + "Type.TYPE[SkillType][(int)EmptyType01]=" + Type.TYPE[SkillType][(int)EmptyType01] + "  "
-                + "Type.TYPE[SkillType][(int)EmptyType02]=" + Type.TYPE[SkillType][(int)EmptyType02] + "  ");
+                + "Type.TYPE[SkillType][(int)EmptyType01]=" + PokemonType.TYPE[SkillType][(int)EmptyType01] + "  "
+                + "Type.TYPE[SkillType][(int)EmptyType02]=" + PokemonType.TYPE[SkillType][(int)EmptyType02] + "  ");
             if ((int)Dmage + (int)SpDmage > 0)
             {
                 if (!isCanHitAnimation && animator != null) { animator.SetTrigger("Hit"); }
@@ -510,7 +510,7 @@ public class Empty : Pokemon
         if (playerObj.layer != 23) {
             //如果触碰到的是玩家，使玩家扣除一点血量
             PlayerControler playerControler = playerObj.gameObject.GetComponent<PlayerControler>();
-            PokemonHpChange(this.gameObject, playerObj.gameObject, 10, 0, 0, Type.TypeEnum.No);
+            PokemonHpChange(this.gameObject, playerObj.gameObject, 10, 0, 0, PokemonType.TypeEnum.No);
             if (playerControler != null)
             {
                 //playerControler.ChangeHp(-(10 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250 ) ,0, 0);
@@ -518,7 +518,7 @@ public class Empty : Pokemon
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                 if (playerControler.playerData.IsPassiveGetList[115])
                 {
-                    PokemonHpChange(playerControler.gameObject, this.gameObject, 10, 0, 0, Type.TypeEnum.No);
+                    PokemonHpChange(playerControler.gameObject, this.gameObject, 10, 0, 0, PokemonType.TypeEnum.No);
                 }
             }
         }
@@ -552,7 +552,7 @@ public class Empty : Pokemon
             Empty e = TargetEmpty.gameObject.GetComponent<Empty>();
             if (e != null)
             {
-                PokemonHpChange(this.gameObject, e.gameObject, 10, 0, 0, Type.TypeEnum.No);
+                PokemonHpChange(this.gameObject, e.gameObject, 10, 0, 0, PokemonType.TypeEnum.No);
                 e.EmptyKnockOut(Knock);
                 isInfatuationDmageDone = true;
             }
@@ -596,7 +596,7 @@ public class Empty : Pokemon
                     ScoreCounter.Instance.EmptyBounsAP += APBounsPoint.EmptyBouns(this , FloorNum.GlobalFloorNum.FloorNumber);
                 }
 
-                if (player.playerData.IsPassiveGetList[134] && (EmptyType01 == Type.TypeEnum.Dark || EmptyType02 == Type.TypeEnum.Dark) ) { player.ChangeHPW(HWP); }
+                if (player.playerData.IsPassiveGetList[134] && (EmptyType01 == PokemonType.TypeEnum.Dark || EmptyType02 == PokemonType.TypeEnum.Dark) ) { player.ChangeHPW(HWP); }
                 transform.parent.parent.GetComponent<Room>().isClear -= 1;
                 if (DestoryEvent != null) { DestoryEvent(); }
                 if (player.playerData.IsPassiveGetList[89] && player.playerData.AttackWeightCount < 6)
@@ -799,7 +799,7 @@ public class Empty : Pokemon
         if(EmptyToxicTimer >= 2)
         {
             EmptyToxicTimer += Time.deltaTime;
-            PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 16) * ToxicResistance, 1, isBoos ? 8 : 10), 0, 0, Type.TypeEnum.IgnoreType);
+            PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 16) * ToxicResistance, 1, isBoos ? 8 : 10), 0, 0, PokemonType.TypeEnum.IgnoreType);
             EmptyToxicTimer = 0;
         }
 
@@ -821,7 +821,7 @@ public class Empty : Pokemon
         if (EmptyBurnTimer >= 2)
         {
             EmptyBurnTimer += Time.deltaTime;
-            PokemonHpChange(null , this.gameObject , Mathf.Clamp((((float)maxHP) / 16) * BurnResistance, 1, isBoos ? 8 : 10), 0 , 0 , Type.TypeEnum.IgnoreType);
+            PokemonHpChange(null , this.gameObject , Mathf.Clamp((((float)maxHP) / 16) * BurnResistance, 1, isBoos ? 8 : 10), 0 , 0 , PokemonType.TypeEnum.IgnoreType);
             //EmptyHpChange(Mathf.Clamp((((float)maxHP) / 16) * BurnResistance, 1, isBoos ? 8 : 10), 0, 19);
             EmptyBurnTimer = 0;
         }
@@ -840,7 +840,7 @@ public class Empty : Pokemon
     /// </summary>
     void EmptyHail()
     {
-        if (EmptyType01 != Type.TypeEnum.Ice && EmptyType02 != Type.TypeEnum.Ice && !isHailDef)
+        if (EmptyType01 != PokemonType.TypeEnum.Ice && EmptyType02 != PokemonType.TypeEnum.Ice && !isHailDef)
         {
             EmptyHailTimer += Time.deltaTime;
             if (EmptyHailTimer >= 2)
@@ -848,12 +848,12 @@ public class Empty : Pokemon
                 EmptyHailTimer += Time.deltaTime;
                 if (Weather.GlobalWeather.isHailPlus)
                 {
-                    PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 16) * OtherStateResistance, 1, isBoos ? 8 : 10), 0, 0, Type.TypeEnum.IgnoreType);
+                    PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 16) * OtherStateResistance, 1, isBoos ? 8 : 10), 0, 0, PokemonType.TypeEnum.IgnoreType);
                     EmptyHailTimer = 0;
                 }
                 else
                 {
-                    PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 16) * OtherStateResistance, 1, isBoos ? 8 : 10), 0, 0, Type.TypeEnum.IgnoreType);
+                    PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 16) * OtherStateResistance, 1, isBoos ? 8 : 10), 0, 0, PokemonType.TypeEnum.IgnoreType);
                     EmptyHailTimer = 0;
                 }
             }
@@ -872,7 +872,7 @@ public class Empty : Pokemon
     /// </summary>
     void EmptySandStorm()
     {
-        if (EmptyType01 != Type.TypeEnum.Ground && EmptyType01 != Type.TypeEnum.Rock && EmptyType01 != Type.TypeEnum.Steel && EmptyType02 != Type.TypeEnum.Ground && EmptyType02 != Type.TypeEnum.Rock && EmptyType02 != Type.TypeEnum.Steel && !isSandStormDef)
+        if (EmptyType01 != PokemonType.TypeEnum.Ground && EmptyType01 != PokemonType.TypeEnum.Rock && EmptyType01 != PokemonType.TypeEnum.Steel && EmptyType02 != PokemonType.TypeEnum.Ground && EmptyType02 != PokemonType.TypeEnum.Rock && EmptyType02 != PokemonType.TypeEnum.Steel && !isSandStormDef)
         {
             EmptySandStormTimer += Time.deltaTime;
             if (EmptySandStormTimer >= 2)
@@ -880,12 +880,12 @@ public class Empty : Pokemon
                 EmptySandStormTimer += Time.deltaTime;
                 if (Weather.GlobalWeather.isSandstormPlus)
                 {
-                    PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 8) * OtherStateResistance, 1, isBoos ? 16 : 20), 0, 0, Type.TypeEnum.IgnoreType);
+                    PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 8) * OtherStateResistance, 1, isBoos ? 16 : 20), 0, 0, PokemonType.TypeEnum.IgnoreType);
                     EmptySandStormTimer = 0;
                 }
                 else
                 {
-                    PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 16) * OtherStateResistance, 1, isBoos ? 8 : 10), 0, 0, Type.TypeEnum.IgnoreType);
+                    PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 16) * OtherStateResistance, 1, isBoos ? 8 : 10), 0, 0, PokemonType.TypeEnum.IgnoreType);
                     EmptySandStormTimer = 0;
                 }
             }
@@ -906,7 +906,7 @@ public class Empty : Pokemon
     {
         if (EmptyCurseTimer == 0)
         {
-            PokemonHpChange(null, this.gameObject, Mathf.Clamp(( (isBoos? ((float)EmptyHp) : ((float)maxHP)) / 4), 1, 10000), 0, 0, Type.TypeEnum.IgnoreType);
+            PokemonHpChange(null, this.gameObject, Mathf.Clamp(( (isBoos? ((float)EmptyHp) : ((float)maxHP)) / 4), 1, 10000), 0, 0, PokemonType.TypeEnum.IgnoreType);
         }
         EmptyCurseTimer += Time.deltaTime;
         if (EmptyCurseTimer >= 5)
@@ -930,7 +930,7 @@ public class Empty : Pokemon
     {
         if (EmptyGrassyTerrainTimer == 0)
         {
-            PokemonHpChange(null, this.gameObject, 0, 0, (int)Mathf.Clamp(( (float)maxHP / 16), 1, 10), Type.TypeEnum.IgnoreType);
+            PokemonHpChange(null, this.gameObject, 0, 0, (int)Mathf.Clamp(( (float)maxHP / 16), 1, 10), PokemonType.TypeEnum.IgnoreType);
         }
         EmptyGrassyTerrainTimer += Time.deltaTime;
         if (EmptyGrassyTerrainTimer >= 5)

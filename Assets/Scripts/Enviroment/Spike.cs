@@ -33,7 +33,7 @@ public class Spike : MonoBehaviour
 
             if (playerControler != null && !playerControler.playerData.IsPassiveGetList[13] && !playerControler.isRapidSpin)
             {
-                Pokemon.PokemonHpChange(null, other.gameObject, Damage, 0, 0, Type.TypeEnum.IgnoreType);
+                Pokemon.PokemonHpChange(null, other.gameObject, Damage, 0, 0, PokemonType.TypeEnum.IgnoreType);
                 playerControler.KnockOutPoint = 1f;
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
             }
@@ -82,7 +82,7 @@ public class Spike : MonoBehaviour
 
         if (!TCEell.isMultipleDamageColdDown)
         {
-            Pokemon.PokemonHpChange(null, target.gameObject, 10, 0, 0, Type.TypeEnum.IgnoreType);
+            Pokemon.PokemonHpChange(null, target.gameObject, 10, 0, 0, PokemonType.TypeEnum.IgnoreType);
             TCEell.isMultipleDamageColdDown = true;
             TargetList[ListIndex] = TCEell;
         }

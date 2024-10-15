@@ -12,6 +12,11 @@ public class UISwitch : MonoBehaviour
     public int SwitchIndex { get { return switchIndex; } set { switchIndex = value; } }
     int switchIndex;
 
+    private void Awake()
+    {
+        SetSwitch(SwitchIndex);
+    }
+
     public virtual void RightSwitch()
     {
         switchIndex++;
@@ -31,4 +36,20 @@ public class UISwitch : MonoBehaviour
         switchIndex = Index % SwitchCount.Length;
         text.text = SwitchCount[switchIndex];
     }
+
+    public void RemoveAllSwitch()
+    {
+        switchIndex = 0;
+        SwitchCount = new string[] { };
+    }
+
+    public void AddSwitch(string s)
+    {
+        List<string> _list = new List<string>(SwitchCount);
+        _list.Add(s);
+        SwitchCount = _list.ToArray();
+        switchIndex = 0;
+        SetSwitch(switchIndex);
+    }
+
 }

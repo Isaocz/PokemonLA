@@ -65,11 +65,11 @@ public class DoubleEdge : Skill
         if (DoneDmage > 0) {
             if(DoneDmage / 3 >= player.Hp)
             {
-                Pokemon.PokemonHpChange(null, player.gameObject, (player.Hp-1), 0, 0, Type.TypeEnum.IgnoreType);
+                Pokemon.PokemonHpChange(null, player.gameObject, (player.Hp-1), 0, 0, PokemonType.TypeEnum.IgnoreType);
             }
             else
             {
-                Pokemon.PokemonHpChange(null, player.gameObject, DoneDmage / 3, 0, 0, Type.TypeEnum.IgnoreType);
+                Pokemon.PokemonHpChange(null, player.gameObject, DoneDmage / 3, 0, 0, PokemonType.TypeEnum.IgnoreType);
             }
             player.KnockOutPoint = 0;
         }

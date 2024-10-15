@@ -10,7 +10,7 @@ public class SwordsMew : Projectile
     private Vector3 center;
     private Color spriteColor;
     private int typeindex;
-    private Type.TypeEnum type;
+    private PokemonType.TypeEnum type;
 
     private Color[] colors = new Color[]
     {
@@ -104,24 +104,24 @@ public class SwordsMew : Projectile
     {
         switch (typeindex)
         {
-            case 0: type = Type.TypeEnum.Normal; break;
-            case 1: type = Type.TypeEnum.Fighting; break;
-            case 2: type = Type.TypeEnum.Flying; break;
-            case 3: type = Type.TypeEnum.Poison; break;
-            case 4: type = Type.TypeEnum.Ground; break;
-            case 5: type = Type.TypeEnum.Rock; break;
-            case 6: type = Type.TypeEnum.Bug; break;
-            case 7: type = Type.TypeEnum.Ghost; break;
-            case 8: type = Type.TypeEnum.Steel; break;
-            case 9: type = Type.TypeEnum.Fire; break;
-            case 10: type = Type.TypeEnum.Water; break;
-            case 11: type = Type.TypeEnum.Grass; break;
-            case 12: type = Type.TypeEnum.Electric; break;
-            case 13: type = Type.TypeEnum.Psychic; break;
-            case 14: type = Type.TypeEnum.Ice; break;
-            case 15: type = Type.TypeEnum.Dragon; break;
-            case 16: type = Type.TypeEnum.Dark; break;
-            case 17: type = Type.TypeEnum.Fairy; break;
+            case 0: type = PokemonType.TypeEnum.Normal; break;
+            case 1: type = PokemonType.TypeEnum.Fighting; break;
+            case 2: type = PokemonType.TypeEnum.Flying; break;
+            case 3: type = PokemonType.TypeEnum.Poison; break;
+            case 4: type = PokemonType.TypeEnum.Ground; break;
+            case 5: type = PokemonType.TypeEnum.Rock; break;
+            case 6: type = PokemonType.TypeEnum.Bug; break;
+            case 7: type = PokemonType.TypeEnum.Ghost; break;
+            case 8: type = PokemonType.TypeEnum.Steel; break;
+            case 9: type = PokemonType.TypeEnum.Fire; break;
+            case 10: type = PokemonType.TypeEnum.Water; break;
+            case 11: type = PokemonType.TypeEnum.Grass; break;
+            case 12: type = PokemonType.TypeEnum.Electric; break;
+            case 13: type = PokemonType.TypeEnum.Psychic; break;
+            case 14: type = PokemonType.TypeEnum.Ice; break;
+            case 15: type = PokemonType.TypeEnum.Dragon; break;
+            case 16: type = PokemonType.TypeEnum.Dark; break;
+            case 17: type = PokemonType.TypeEnum.Fairy; break;
         }
     }
 }

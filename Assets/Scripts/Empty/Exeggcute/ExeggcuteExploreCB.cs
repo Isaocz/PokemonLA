@@ -11,7 +11,7 @@ public class ExeggcuteExploreCB : MonoBehaviour
 
     private Empty empty;
     private string aimTag;
-    private Type.TypeEnum type;
+    private PokemonType.TypeEnum type;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -50,7 +50,7 @@ public class ExeggcuteExploreCB : MonoBehaviour
         aimTag = tag;
     }
 
-    public void SetType(Type.TypeEnum t)
+    public void SetType(PokemonType.TypeEnum t)
     {
         type = t;
     }

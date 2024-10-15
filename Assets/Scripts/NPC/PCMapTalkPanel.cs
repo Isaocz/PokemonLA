@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,7 @@ public class PCMapTalkPanel : MonoBehaviour
 {
     Button Buy;
     Button DontBuy;
-    Text TalkInformation;
+    TextMeshProUGUI TalkInformation;
     public int TalkIndex;
     string[] TalkTextList;
     bool isSeeMap;
@@ -26,7 +27,7 @@ public class PCMapTalkPanel : MonoBehaviour
 
     private void Awake()
     {
-        TalkInformation = transform.GetChild(0).GetComponent<Text>();
+        TalkInformation = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         TalkTextList = new string[] { "周边地区的地图，需要付费观看，\n一共"+ Price+"块钱，要看吗？", "节省一点吧。。。", "付钱了！\n好好记住吧，离开这里就看不到了", "记不清了，\n再看一次吧","零花钱不够了！" };
         TalkIndex = 0;
         TalkInformation.text = TalkTextList[TalkIndex];

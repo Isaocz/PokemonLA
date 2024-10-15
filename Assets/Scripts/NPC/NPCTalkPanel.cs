@@ -1,61 +1,66 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+
+
+
+
+
+/// <summary>
+/// 对话框的父类
+/// </summary>
+
 public class NPCTalkPanel : MonoBehaviour
 {
-    protected Text TalkInformation;
+    /// <summary>
+    /// 对话框的Text组件
+    /// </summary>
+    protected TextMeshProUGUI TalkInformation;
+
+    /// <summary>
+    /// 角色头像
+    /// </summary>
+    public Image HeadIconImage;
+
+    /// <summary>
+    /// 对话是否暂停
+    /// </summary>
     public bool isTalkPuse;
-    public int TalkIndex;
-    protected string[] TalkTextList = new string[] { };
-    public PlayerControler player;
-    protected NPC ParentNPC;
+    /// <summary>
+    /// 对话框的母NPC
+    /// </summary>
+    protected GameNPC ParentNPC;
+    protected TownNPC ParentTownNPC;
 
-    // Start is called before the first frame update
-    protected void NPCTPAwake()
-    {
-        TalkInformation = transform.GetChild(0).GetComponent<Text>();
-        TalkIndex = 0;
-        TalkInformation.text = TalkTextList[TalkIndex];
-        ParentNPC = transform.parent.parent.GetComponent<NPC>();
-        ParentNPC.playerControler.CanNotUseSpaceItem = true;
-        
 
-    }
+
+
+
 
     public void ZButtonDown()
     {
         ZButton.Z.IsZButtonDown = true;
     }
 
-    protected void NPCTPContinue()
-    {
-        if (!isTalkPuse) {
-            TalkIndex++;
-            if (TalkIndex < TalkTextList.Length)
-            {
-                TalkInformation.text = TalkTextList[TalkIndex];
-            }
-            else
-            {
-                TalkIndex = 0;
-                TalkInformation.text = TalkTextList[0];
-                gameObject.SetActive(false);
-                ParentNPC.playerControler.CanNotUseSpaceItem = false;
-            }
-        }
-    }
 
-    public void PlayerExit()
+    public virtual void PlayerExit()
     {
         if (TalkInformation != null)
         {
-            TalkIndex = 0;
-            TalkInformation.text = TalkTextList[0];
             gameObject.SetActive(false);
-            ParentNPC.playerControler.CanNotUseSpaceItem = false;
+            if (ParentNPC != null)
+            {
+                ParentNPC.PlayerSpaceItem(false);
+            }
+            
         }
 
     }
+
+
+
 }

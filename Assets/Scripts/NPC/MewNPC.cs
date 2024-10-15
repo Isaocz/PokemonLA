@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MewNPC : NPC
+public class MewNPC : GameNPC
 {
 
     MewSelectSkillPanel SelecrSkillPanel;
@@ -28,7 +28,7 @@ public class MewNPC : NPC
             }
             if (isInTrriger && ZButton.Z.IsZButtonDown)
             {
-                SelecrSkillPanel.player = playerControler;
+                SelecrSkillPanel.player = playerControler.GetComponent<PlayerControler>();
             }
         }
     }

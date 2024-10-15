@@ -46,7 +46,7 @@ public class Snorlax : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Normal;
+        EmptyType01 = PokemonType.TypeEnum.Normal;
         EmptyType02 = 0;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
@@ -268,7 +268,7 @@ public class Snorlax : Empty
             case 1:
                 Debug.Log(EmptyHp);
                 Debug.Log(-maxHP / 8);
-                PokemonHpChange(null , this.gameObject , 0 ,0 , maxHP / 8,Type.TypeEnum.IgnoreType);
+                PokemonHpChange(null , this.gameObject , 0 ,0 , maxHP / 8,PokemonType.TypeEnum.IgnoreType);
                 Debug.Log(EmptyHp);
                 break;
             case 2:
@@ -288,7 +288,7 @@ public class Snorlax : Empty
             }else if (isSlam)
             {
                 PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 80, 0, 0, Type.TypeEnum.Normal);
+                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 80, 0, 0, PokemonType.TypeEnum.Normal);
                 if (playerControler != null)
                 {
                     //playerControler.ChangeHp(-(80 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250), 0, 1);
@@ -300,7 +300,7 @@ public class Snorlax : Empty
             else if (isImpact)
             {
                 PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 50, 0, 0, Type.TypeEnum.Normal);
+                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 50, 0, 0, PokemonType.TypeEnum.Normal);
                 if (playerControler != null)
                 {
                     //playerControler.ChangeHp(-(50 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250), 0, 1);
@@ -311,7 +311,7 @@ public class Snorlax : Empty
             else if (isGigaImpact)
             {
                 PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 120, 0, 0, Type.TypeEnum.Normal);
+                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 120, 0, 0, PokemonType.TypeEnum.Normal);
                 if (playerControler != null)
                 {
                     //playerControler.ChangeHp(-(120 * AtkAbilityPoint * (2 * Emptylevel + 10) / 250), 0, 1);

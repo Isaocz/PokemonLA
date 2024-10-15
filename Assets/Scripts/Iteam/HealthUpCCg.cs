@@ -47,7 +47,7 @@ public class HealthUpCCg : IteamPickUp
                 {
                     Debug.Log(1);
                     if (i == 1) {
-                        Pokemon.PokemonHpChange(null, playerControler.gameObject, 0, 0, Mathf.Clamp(playerControler.maxHp / 16, 1, 10), Type.TypeEnum.IgnoreType);
+                        Pokemon.PokemonHpChange(null, playerControler.gameObject, 0, 0, Mathf.Clamp(playerControler.maxHp / 16, 1, 10), PokemonType.TypeEnum.IgnoreType);
                         //playerControler.ChangeHp(Mathf.Clamp(playerControler.maxHp / 16, 1, 10), 0, 19);
                     }
                 }

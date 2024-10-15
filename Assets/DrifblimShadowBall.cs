@@ -50,7 +50,7 @@ public class DrifblimShadowBall : Projectile
             if (collision.tag == "Player")
             {
                 PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, 80, 0, Type.TypeEnum.Ghost);
+                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, 80, 0, PokemonType.TypeEnum.Ghost);
                 if(playerControler != null)
                 {
                     playerControler.KnockOutPoint = 5;
@@ -60,7 +60,7 @@ public class DrifblimShadowBall : Projectile
             else if (empty.isEmptyInfatuationDone && collision.tag == "Empty" && collision.gameObject != empty.gameObject)
             {
                 Empty e = collision.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, 80, 0, Type.TypeEnum.Ghost);
+                Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, 80, 0, PokemonType.TypeEnum.Ghost);
             }
         }
     }

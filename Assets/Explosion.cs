@@ -37,7 +37,7 @@ public class Explosion : Skill
             }
             else if (other.tag == "Player")
             {
-                Pokemon.PokemonHpChange(p, other.gameObject, Damage, 0, 0, Type.TypeEnum.Normal);
+                Pokemon.PokemonHpChange(p, other.gameObject, Damage, 0, 0, PokemonType.TypeEnum.Normal);
                 other.GetComponent<PlayerControler>().KnockOutPoint = KOPoint/2.0f;
                 other.GetComponent<PlayerControler>().KnockOutDirection = (Quaternion.AngleAxis(Random.Range(0,360) , Vector3.forward) * Vector2.right).normalized;
 

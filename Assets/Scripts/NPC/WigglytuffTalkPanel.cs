@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WigglytuffTalkPanel : NPCTalkPanel
+public class WigglytuffTalkPanel : GameNPCTalkPanel
 {
     bool isTalked;
     public PokemonBall FriendsBall;
@@ -17,20 +17,16 @@ public class WigglytuffTalkPanel : NPCTalkPanel
     {
         BabyIndex = FriendsBall.passiveList.GetARandomItemIndex(0, PassiveItemPool.Baby );
         if (FriendsBall.passiveList.transform.GetChild(BabyIndex).GetComponent<BabyPassiveItem>() == null ) { BabyIndex = 33; }
-
-        Debug.Log(TalkTextList);
-
+        TalkTextList = new DialogString[] { 
+            new DialogString("哈喽哈喽！这里是实惠培育屋咪！\n我是这里的负责人胖可丁儿老师。" , DialogString.Face.Happy),
+            new DialogString("哦哦，原来你就是" + GetPlayerParentName() + "女士的孩子咪\n今天早上我请她来帮忙,她说你正好会路过这里\n拜托你来帮我一下咪！" , DialogString.Face.Inspired),
+            new DialogString("其实呢。。。\n最近培育屋里有个小朋友很不听话咪。。。" , DialogString.Face.Sigh),
+            new DialogString(FriendsBall.passiveList.transform.GetChild(BabyIndex).GetComponent<BabyPassiveItem>().BabyDescribe, DialogString.Face.Sigh),
+            new DialogString("所以呢，想请你带那孩子一起去冒险，\n帮助那孩子成长的同时那孩子也会帮助你哦！" , DialogString.Face.TearyEyed),
+            new DialogString("要决定带那孩子一起走吗，\n一起的话为了安全起见你需要先给我五块钱的押金咪。。。" , DialogString.Face.Sad),
         
-        TalkTextList = new string[] {
-            "哈喽哈喽！这里是实惠培育屋咪！\n我是这里的负责人胖可丁儿老师。",
-            "哦哦，原来你就是" + GetPlayerParentName() + "女士的孩子咪\n今天早上我请她来帮忙,她说你正好会路过这里\n拜托你来帮我一下咪！",
-            "其实呢。。。\n最近培育屋里有个小朋友很不听话咪。。。",
-            FriendsBall.passiveList.transform.GetChild(BabyIndex).GetComponent<BabyPassiveItem>().BabyDescribe,
-            "所以呢，想请你带那孩子一起去冒险，\n帮助那孩子成长的同时那孩子也会帮助你哦！",
-            "要决定带那孩子一起走吗，\n一起的话为了安全起见你需要先给我五块钱的押金咪。。。"
-
         };
-        
+
         NPCTPAwake();
     }
 
@@ -105,9 +101,9 @@ public class WigglytuffTalkPanel : NPCTalkPanel
                     isTalked = true;
                     transform.GetChild(2).gameObject.SetActive(true);
                     transform.GetChild(3).gameObject.SetActive(true);
-                    TalkTextList = new string[]{
-                        "你回来了咪，\n能请你带上那孩子吗。。。",
-                        "这样啊，如果改变主意的话随时回来找我咪。。。"
+                    TalkTextList = new DialogString[] {
+                        new DialogString("你回来了咪，\n能请你带上那孩子吗。。。" , DialogString.Face.Sad),
+                        new DialogString("这样啊，如果改变主意的话随时回来找我咪。。。" , DialogString.Face.Sad),
                     };
                 }
             }
@@ -130,11 +126,12 @@ public class WigglytuffTalkPanel : NPCTalkPanel
             player.ChangeMoney(-5);
             isTalkPuse = false;
             isTakeBaby = true;
-            TalkTextList = new string[]{
-                        "好耶！\n那么一路顺风咪！"
+            TalkTextList = new DialogString[] {
+                        new DialogString("好耶！\n那么一路顺风咪！", DialogString.Face.Joyous),
                     };
             TalkIndex = 0;
-            TalkInformation.text = TalkTextList[0];
+            TalkInformation.text = TalkTextList[0].DialogueString;
+            HeadIconImage.sprite = ParentNPC.NPCFace(TalkTextList[0].DialogueFace);
             transform.GetChild(2).gameObject.SetActive(false);
             transform.GetChild(3).gameObject.SetActive(false);
             Instantiate(FriendsBall, ParentNPC.transform.position + Vector3.down + Vector3.right * 3, Quaternion.identity).PassiveDropIndex = BabyIndex;
@@ -151,7 +148,9 @@ public class WigglytuffTalkPanel : NPCTalkPanel
     {
         isTalkPuse = false;
         TalkIndex = 1;
-        TalkInformation.text = TalkTextList[1];
+        TalkInformation.text = TalkTextList[1].DialogueString;
+        HeadIconImage.sprite = ParentNPC.NPCFace(TalkTextList[1].DialogueFace);
+
         transform.GetChild(2).gameObject.SetActive(false);
         transform.GetChild(3).gameObject.SetActive(false);
     }

@@ -64,8 +64,8 @@ public class FireBlastEmptyFire : Projectile
             if (other.tag == "Player")
             {
                 PlayerControler playerControler = other.GetComponent<PlayerControler>();
-                if (empty != null) { Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, 0, SpDmage , 0, Type.TypeEnum.Fire); }
-                else { Pokemon.PokemonHpChange(null, other.gameObject, 0, SpDmage, 0, Type.TypeEnum.Fire); }
+                if (empty != null) { Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, 0, SpDmage , 0, PokemonType.TypeEnum.Fire); }
+                else { Pokemon.PokemonHpChange(null, other.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Fire); }
                 if (playerControler != null)
                 {
                     playerControler.KnockOutPoint = 5;

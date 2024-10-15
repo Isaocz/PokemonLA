@@ -95,7 +95,7 @@ public class TeraBlastEmpty : Projectile
             if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Player")
             {
                 PlayerControler playerControler = EndRay.collider.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, EndRay.collider.gameObject, 0, SpDmage, 0, Type.TypeEnum.Normal);
+                Pokemon.PokemonHpChange(empty.gameObject, EndRay.collider.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Normal);
                 if (playerControler != null)
                 {
                     playerControler.KnockOutPoint = 2.5f;

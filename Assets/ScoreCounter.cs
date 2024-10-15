@@ -149,12 +149,12 @@ public class ScoreCounter : MonoBehaviour
 
 
     //√∞œ’Õ≈ «∑Ò…˝º∂
-    public bool IsGroupLevelUp
+    public int IsGroupLevelUp
     {
         get { return isGroupLevelUp; }
         set { isGroupLevelUp = value; }
     }
-    public bool isGroupLevelUp;
+    public int isGroupLevelUp;
 
 
     private void Awake()

@@ -19,11 +19,11 @@ public class Cruse : Skill
         {
             if(player.Hp > player.maxHp / 2)
             {
-                Pokemon.PokemonHpChange(null , player.gameObject, player.maxHp/2 , 0 , 0 , Type.TypeEnum.IgnoreType);
+                Pokemon.PokemonHpChange(null , player.gameObject, player.maxHp/2 , 0 , 0 , PokemonType.TypeEnum.IgnoreType);
             }
             else
             {
-                if (player.Hp > 1) { Pokemon.PokemonHpChange(null, player.gameObject, player.Hp-1, 0, 0, Type.TypeEnum.IgnoreType); }
+                if (player.Hp > 1) { Pokemon.PokemonHpChange(null, player.gameObject, player.Hp-1, 0, 0, PokemonType.TypeEnum.IgnoreType); }
             }
             Instantiate(CurseAnimation, player.transform.position + Vector3.right * 0.2f + Vector3.up * 0.6f, Quaternion.identity, player.transform);
             if (SkillFrom != 2) { player.isCanNotMove = true; }

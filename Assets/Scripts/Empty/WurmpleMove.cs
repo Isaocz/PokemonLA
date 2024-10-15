@@ -19,7 +19,7 @@ public class WurmpleMove : Empty
     void Start()
     {
         speed = 2.4f;
-        EmptyType01 = Type.TypeEnum.Bug;
+        EmptyType01 = PokemonType.TypeEnum.Bug;
         EmptyType02 = 0;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);

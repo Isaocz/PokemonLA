@@ -25,12 +25,12 @@ public class SkillBar01 : MonoBehaviour
     {
         originalsize = Mask.rectTransform.rect.width;
         Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
-        Mask.transform.parent.GetComponent<Image>().color = Type.TypeColor[SkillBarColor];
+        Mask.transform.parent.GetComponent<Image>().color = PokemonType.TypeColor[SkillBarColor];
     }
 
     public void GetSkill(Skill targetskill )
     {
-        if (targetskill == null) { Mask.transform.parent.GetComponent<Image>().color = Type.TypeColor[0]; }
+        if (targetskill == null) { Mask.transform.parent.GetComponent<Image>().color = PokemonType.TypeColor[0]; }
         else
         {
             skill = targetskill;
@@ -42,9 +42,9 @@ public class SkillBar01 : MonoBehaviour
             SkillCdTime = skill.ColdDown;
             SkillBarColor = skill.SkillType;
             if (Mask != null) {
-                Mask.transform.parent.GetComponent<Image>().color = Type.TypeColor[SkillBarColor];
+                Mask.transform.parent.GetComponent<Image>().color = PokemonType.TypeColor[SkillBarColor];
                 Mask.transform.parent.Find("Text").GetComponent<Text>().text = skill.SkillName;
-                Mask.transform.parent.Find("Text").GetComponent<Text>().color = Type.TypeColor[SkillBarColor] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                Mask.transform.parent.Find("Text").GetComponent<Text>().color = PokemonType.TypeColor[SkillBarColor] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                 Mask.transform.parent.Find("TypeMark").GetComponent<UiSkillBarTypeMark>().ChangeTypeMark(SkillBarColor);
             }
         }

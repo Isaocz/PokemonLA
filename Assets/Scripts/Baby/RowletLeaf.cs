@@ -44,7 +44,7 @@ public class RowletLeaf : Projectile
                     isDmageDonw = true;
                     //Debug.Log(transform.gameObject);\
                     Empty target = other.GetComponent<Empty>();
-                    Pokemon.PokemonHpChange(Baby.gameObject, target.gameObject, Dmage, 0, 0, Type.TypeEnum.Grass);
+                    Pokemon.PokemonHpChange(Baby.gameObject, target.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Grass);
                     //target.EmptyHpChange(Mathf.Clamp( (int)((float)(10 * (2 * BabyLevel + 10) *30) / (float)(250 * target.DefAbilityPoint  + 2)), 1 , 100000), 0, 12);
                 
             }

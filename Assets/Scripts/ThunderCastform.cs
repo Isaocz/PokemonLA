@@ -22,8 +22,8 @@ public class ThunderCastform : Projectile
         {
             // 对玩家造成伤害
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            if (empty != null) { Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Electric); }
-            else { Pokemon.PokemonHpChange(null, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Electric); }
+            if (empty != null) { Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Electric); }
+            else { Pokemon.PokemonHpChange(null, collision.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Electric); }
             if (playerControler != null)
             {
                 playerControler.KnockOutPoint = 2.5f;

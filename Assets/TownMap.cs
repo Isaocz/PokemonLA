@@ -4,6 +4,85 @@ using UnityEngine;
 
 public class TownMap : MonoBehaviour
 {
+    /// <summary>
+    /// 东北树林
+    /// </summary>
+    public GameObject TreeRU;
+    /// <summary>
+    /// 西北树林
+    /// </summary>
+    public GameObject TreeLU;
+    /// <summary>
+    /// 东南树林
+    /// </summary>
+    public GameObject TreeRD;
+    /// <summary>
+    /// 西南树林
+    /// </summary>
+    public GameObject TreeLD;
+    /// <summary>
+    /// 东北栅栏
+    /// </summary>
+    public GameObject FenceRU;
+    /// <summary>
+    /// 西北栅栏
+    /// </summary>
+    public GameObject FenceLU;
+    /// <summary>
+    /// 东南栅栏
+    /// </summary>
+    public GameObject FenceRD;
+    /// <summary>
+    /// 西南栅栏
+    /// </summary>
+    public GameObject FenceLD;
+
+
+
+    /// <summary>
+    /// 冒险者工会
+    /// </summary>
+    public TownPoliceStation PoliceStation;
+    /// <summary>
+    /// 冒险者奶馆
+    /// </summary>
+    public TownMilkBar MilkBar;
+    /// <summary>
+    /// 建筑木屋
+    /// </summary>
+    public TownWoodenHouse WoodenHouse;
+    /// <summary>
+    /// 技能商店
+    /// </summary>
+    public TownSkillMaker SkillMaker;
+    /// <summary>
+    /// 保育圆
+    /// </summary>
+    public TownDayCare DayCare;
+    /// <summary>
+    /// 保育圆二楼
+    /// </summary>
+    public TownDayCareF2 DayCareF2;
+    /// <summary>
+    /// 道具商店
+    /// </summary>
+    public TownItemShop ItemShop;
+    /// <summary>
+    /// 头目俱乐部
+    /// </summary>
+    public TownBossClub BossClub;
+    /// <summary>
+    /// 推石俱乐部
+    /// </summary>
+    public TownRockClub RockClub;
+
+
+    /// <summary>
+    /// 小镇中NPC的父对象
+    /// </summary>
+    public Transform TownNPCParent;
+
+
 
     public static TownMap townMap;
 

@@ -48,7 +48,7 @@ public class SolrockStoneEdge : Projectile
             if (other.tag == ("Player"))
             {
                 PlayerControler playerControler = other.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange((empty == null ? null : empty.gameObject), other.gameObject, Dmage, 0, 0, Type.TypeEnum.Rock);
+                Pokemon.PokemonHpChange((empty == null ? null : empty.gameObject), other.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Rock);
                 if (playerControler != null)
                 {
                     playerControler.KnockOutPoint = 5;
@@ -59,7 +59,7 @@ public class SolrockStoneEdge : Projectile
         else if (empty != null && empty.isEmptyInfatuationDone && other.tag == "Empty" && other.gameObject != empty.gameObject)
         {
             Empty e = other.GetComponent<Empty>();
-            Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, Dmage, 0, 0, Type.TypeEnum.Rock);
+            Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Rock);
 
         }
     }

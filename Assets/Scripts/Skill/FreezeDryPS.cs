@@ -23,7 +23,7 @@ public class FreezeDryPS : MonoBehaviour
             Empty target = other.GetComponent<Empty>();
             if(target != null)
             {
-                if (target.EmptyType01 == Type.TypeEnum.Water || target.EmptyType01 == Type.TypeEnum.Water)
+                if (target.EmptyType01 == PokemonType.TypeEnum.Water || target.EmptyType01 == PokemonType.TypeEnum.Water)
                 {
                     ParentFreezeDry.SpDamage *= 4;
                 }

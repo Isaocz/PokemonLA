@@ -19,7 +19,7 @@ public class OnixTailDig : MonoBehaviour
         if (other.tag == ("Player"))
         {
             PlayerControler playerControler = other.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange((ParentOnix == null ? null : ParentOnix.gameObject), other.gameObject, 80, 0, 0, Type.TypeEnum.Ground);
+            Pokemon.PokemonHpChange((ParentOnix == null ? null : ParentOnix.gameObject), other.gameObject, 80, 0, 0, PokemonType.TypeEnum.Ground);
             if (playerControler != null)
             {
                 

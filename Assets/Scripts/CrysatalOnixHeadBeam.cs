@@ -88,7 +88,7 @@ public class CrysatalOnixHeadBeam : MonoBehaviour
     {
         //如果触碰到的是玩家，使玩家扣除一点血量
         PlayerControler playerControler = player.gameObject.GetComponent<PlayerControler>();
-        Pokemon.PokemonHpChange(ParentCrystalOnix.gameObject, player, 10, 0, 0, Type.TypeEnum.No);
+        Pokemon.PokemonHpChange(ParentCrystalOnix.gameObject, player, 10, 0, 0, PokemonType.TypeEnum.No);
         if (playerControler != null)
         {
             playerControler.KnockOutPoint = 5;

@@ -16,8 +16,8 @@ public class Gastly : Empty
     void Start()
     {
         speed = 0f;
-        EmptyType01 = Type.TypeEnum.Ghost;
-        EmptyType02 = Type.TypeEnum.Poison;
+        EmptyType01 = PokemonType.TypeEnum.Ghost;
+        EmptyType02 = PokemonType.TypeEnum.Poison;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);

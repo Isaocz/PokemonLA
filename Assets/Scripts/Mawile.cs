@@ -18,8 +18,8 @@ public class Mawile : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Steel;
-        EmptyType02 = Type.TypeEnum.Fairy;
+        EmptyType01 = PokemonType.TypeEnum.Steel;
+        EmptyType02 = PokemonType.TypeEnum.Fairy;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);

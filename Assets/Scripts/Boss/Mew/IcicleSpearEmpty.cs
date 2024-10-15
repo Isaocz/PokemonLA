@@ -59,7 +59,7 @@ public class IcicleSpearEmpty : Projectile
         if (collision.CompareTag("Player") && isFin == false)
         {
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage,0 , 0, Type.TypeEnum.Ice);
+            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage,0 , 0, PokemonType.TypeEnum.Ice);
             if (playerControler != null)
             {
                 playerControler.KnockOutPoint = 2.5f;

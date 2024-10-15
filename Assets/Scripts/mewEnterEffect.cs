@@ -9,7 +9,7 @@ public class mewEnterEffect : MonoBehaviour
     public float DeleteTime;
 
     private GameObject Star;
-    private GameObject[] Stars = new GameObject[Type.TypeColor.Length];
+    private GameObject[] Stars = new GameObject[PokemonType.TypeColor.Length];
     private float timer;
     // Start is called before the first frame update
     void Start()
@@ -27,9 +27,9 @@ public class mewEnterEffect : MonoBehaviour
             float radians = (i * 360f / Stars.Length) / 180f * Mathf.PI;
             Stars[i].transform.position = transform.position + new Vector3(3 * Mathf.Cos(radians), 3 * Mathf.Sin(radians));//初始半径和均分
             Stars[i].transform.rotation = Quaternion.Euler(0f, 0f, radians * 180f / Mathf.PI);
-            Stars[i].GetComponent<SpriteRenderer>().color = Type.TypeColor[i];
-            Stars[i].GetComponent<TrailRenderer>().startColor = Type.TypeColor[i];
-            Stars[i].GetComponent<TrailRenderer>().endColor = Type.TypeColor[(i + 1) > (Type.TypeColor.Length - 1) ? 0 : i + 1];//如果大于阈值则把meta设为0
+            Stars[i].GetComponent<SpriteRenderer>().color = PokemonType.TypeColor[i];
+            Stars[i].GetComponent<TrailRenderer>().startColor = PokemonType.TypeColor[i];
+            Stars[i].GetComponent<TrailRenderer>().endColor = PokemonType.TypeColor[(i + 1) > (PokemonType.TypeColor.Length - 1) ? 0 : i + 1];//如果大于阈值则把meta设为0
         }
         Destroy(this.gameObject, DeleteTime);
     }
@@ -56,8 +56,8 @@ public class mewEnterEffect : MonoBehaviour
             if (timer < 0.5f) //渐入
             {
                 float t = timer / 0.5f;
-                float colorLerp = Mathf.Lerp(0f, Type.TypeColor[i].z, t);
-                Stars[i].GetComponent<SpriteRenderer>().color = new Color(Type.TypeColor[i].w, Type.TypeColor[i].x, Type.TypeColor[i].y, colorLerp);
+                float colorLerp = Mathf.Lerp(0f, PokemonType.TypeColor[i].z, t);
+                Stars[i].GetComponent<SpriteRenderer>().color = new Color(PokemonType.TypeColor[i].w, PokemonType.TypeColor[i].x, PokemonType.TypeColor[i].y, colorLerp);
             }
         }
     }

@@ -31,7 +31,7 @@ public class OnixBodyPressCollider : Projectile
             {
                 // 对玩家造成伤害
                 PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Electric,Pokemon.SpecialAttackTypes.BodyPress);
+                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Electric,Pokemon.SpecialAttackTypes.BodyPress);
                 if (playerControler != null)
                 {
                     playerControler.KnockOutPoint = 9f;

@@ -86,10 +86,10 @@ public class SelectRoleSkillBar : MonoBehaviour
         transform.GetComponent<UICallDescribe>().DescribeUI = DescribeL;
         SkillQuillity.transform.GetComponent<UICallDescribe>().DescribeUI = DescribeR;
 
-        BarMask.color = Type.TypeColor[skill.SkillType];
+        BarMask.color = PokemonType.TypeColor[skill.SkillType];
         SkillCnName.text = skill.SkillChineseName;
         SkillEnName.text = skill.SkillName;
-        SkillType.text = Type.TypeChineseName[skill.SkillType];
+        SkillType.text = PokemonType.TypeChineseName[skill.SkillType];
         SkillTypeMark.sprite = TypeMarkList[skill.SkillType];
         SkillTypeMarkHD.sprite = TypeMarkListHD[skill.SkillType];
 

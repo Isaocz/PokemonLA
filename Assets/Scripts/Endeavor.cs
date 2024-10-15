@@ -33,7 +33,7 @@ public class Endeavor : Skill
                 if (animator != null) { animator.SetTrigger("Hit"); }
                 if (!target.isBoos && target.EmptyHp > player.Hp)
                 {
-                    Pokemon.PokemonHpChange(null, target.gameObject, target.EmptyHp - player.Hp, 0, 0, Type.TypeEnum.IgnoreType);
+                    Pokemon.PokemonHpChange(null, target.gameObject, target.EmptyHp - player.Hp, 0, 0, PokemonType.TypeEnum.IgnoreType);
                 }
             }
         }

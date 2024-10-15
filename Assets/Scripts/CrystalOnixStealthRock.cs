@@ -28,7 +28,7 @@ public class CrystalOnixStealthRock : MonoBehaviour
         if (other.tag == "Player")
         {
             PlayerControler p = other.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(null, other.gameObject, 2, 0, 0, Type.TypeEnum.IgnoreType);
+            Pokemon.PokemonHpChange(null, other.gameObject, 2, 0, 0, PokemonType.TypeEnum.IgnoreType);
             if (p != null)
             {
                 p.KnockOutPoint = 5;

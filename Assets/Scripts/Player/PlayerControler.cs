@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
 
-public class PlayerControler : Pokemon
+public class PlayerControler : PlayerPokemon
 {
     // Start is called before the first frame update
 
@@ -15,7 +15,7 @@ public class PlayerControler : Pokemon
     /// </summary>
     public int PlayerIndex;
     
-
+    
 
     //=======================================角色的数据===================================
     /// <summary>
@@ -521,9 +521,9 @@ public class PlayerControler : Pokemon
 
         if (PlayerAbility == PlayerAbilityList.迟钝) { TimeStateInvincible *= 2.5f; }
         if (PlayerAbility == PlayerAbilityList.逃跑) { playerData.MoveSpwBounsAlways += 1; ReFreshAbllityPoint(); }
-        if (playerData.ResurrectionFossilDone) { PlayerType01 = (int)Type.TypeEnum.Rock; }
-        playerData.Type01Always = (Type.TypeEnum)PlayerType01;
-        playerData.Type02Always = (Type.TypeEnum)PlayerType02;
+        if (playerData.ResurrectionFossilDone) { PlayerType01 = (int)PokemonType.TypeEnum.Rock; }
+        playerData.Type01Always = (PokemonType.TypeEnum)PlayerType01;
+        playerData.Type02Always = (PokemonType.TypeEnum)PlayerType02;
 
 
         if (!isEvolution && EvolutionSkill != null && (
@@ -1097,7 +1097,7 @@ public class PlayerControler : Pokemon
     {
         if (PlayerGrassyTerrainTimer == 0)
         {
-            PokemonHpChange(null, this.gameObject, 0, 0, (int)Mathf.Clamp(((float)maxHp / 16), 1, 10), Type.TypeEnum.IgnoreType);
+            PokemonHpChange(null, this.gameObject, 0, 0, (int)Mathf.Clamp(((float)maxHp / 16), 1, 10), PokemonType.TypeEnum.IgnoreType);
         }
         PlayerGrassyTerrainTimer += Time.deltaTime;
         if (PlayerGrassyTerrainTimer >= 5)
@@ -1295,17 +1295,17 @@ public class PlayerControler : Pokemon
         }
         else
         {
-            Type.TypeEnum enumVaue = (Type.TypeEnum)SkillType;
+            PokemonType.TypeEnum enumVaue = (PokemonType.TypeEnum)SkillType;
             if ((int)SkillType != 19) {
-                ChangePoint = ChangePoint * (playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
-                    * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
-                    * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
-                    * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)))
+                ChangePoint = ChangePoint * (playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == PokemonType.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+                    * ((Weather.GlobalWeather.isRain && enumVaue == PokemonType.TypeEnum.Fire) ? 0.5f : 1)
+                    * ((Weather.GlobalWeather.isSunny && enumVaue == PokemonType.TypeEnum.Water) ? 0.5f : 1)
+                    * ((Weather.GlobalWeather.isSunny && enumVaue == PokemonType.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)))
                     * (playerData.IsPassiveGetList[58] ? 1.5f : 1f);
-                ChangePointSp = ChangePointSp * (playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
-                    * ((Weather.GlobalWeather.isRain && enumVaue == Type.TypeEnum.Fire) ? 0.5f : 1)
-                    * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Water) ? 0.5f : 1)
-                    * ((Weather.GlobalWeather.isSunny && enumVaue == Type.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)))
+                ChangePointSp = ChangePointSp * (playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == PokemonType.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
+                    * ((Weather.GlobalWeather.isRain && enumVaue == PokemonType.TypeEnum.Fire) ? 0.5f : 1)
+                    * ((Weather.GlobalWeather.isSunny && enumVaue == PokemonType.TypeEnum.Water) ? 0.5f : 1)
+                    * ((Weather.GlobalWeather.isSunny && enumVaue == PokemonType.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)))
                     * (playerData.IsPassiveGetList[58] ? 1.5f : 1f);
                 ChangePoint = ChangePoint * (isReflect ? 0.75f : 1);
                 ChangePointSp = ChangePointSp * (isLightScreen ? 0.75f : 1);
@@ -1324,16 +1324,16 @@ public class PlayerControler : Pokemon
                     if (!isInPsychicTerrain)
                     {
                         int startHp = nowHp;
-                        nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                        nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (PokemonType.TYPE[(int)SkillType][PlayerType01] * PokemonType.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? PokemonType.TYPE[(int)SkillType][PlayerTeraType] : PokemonType.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                         int allDmg = startHp - nowHp;
                         DmgShow(allDmg, false, Crit);
                     }
                     else
                     {
-                        if (Mathf.Abs((int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]))))) > (int)(maxHp / 16))
+                        if (Mathf.Abs((int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (PokemonType.TYPE[(int)SkillType][PlayerType01] * PokemonType.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? PokemonType.TYPE[(int)SkillType][PlayerTeraType] : PokemonType.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]))))) > (int)(maxHp / 16))
                         {
                             int startHp = nowHp;
-                            nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (Type.TYPE[(int)SkillType][PlayerType01] * Type.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? Type.TYPE[(int)SkillType][PlayerTeraType] : Type.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                            nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (PokemonType.TYPE[(int)SkillType][PlayerType01] * PokemonType.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? PokemonType.TYPE[(int)SkillType][PlayerTeraType] : PokemonType.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                             int allDmg = startHp - nowHp;
                             DmgShow(allDmg, false, Crit);
                         }
@@ -1399,9 +1399,9 @@ public class PlayerControler : Pokemon
     void HitEvent(float ChangePoint, float ChangePointSp, int SkillType, bool Crit = false)
     {
 
-        Type.TypeEnum enumVaue = (Type.TypeEnum)SkillType;
+        PokemonType.TypeEnum enumVaue = (PokemonType.TypeEnum)SkillType;
         //道具096 冷静头脑
-        if (playerData.IsPassiveGetList[96] && enumVaue == Type.TypeEnum.Ice)
+        if (playerData.IsPassiveGetList[96] && enumVaue == PokemonType.TypeEnum.Ice)
         {
             playerData.PassiveItemClamMind();
         }
@@ -1484,12 +1484,12 @@ public class PlayerControler : Pokemon
                 animator.Play("Idle" , 0);
                 animator.ResetTrigger("Die");
                 isDie = false;
-                PokemonHpChange(null, this.gameObject, 0, 0, (int)(maxHp / 2.0f), Type.TypeEnum.IgnoreType);
+                PokemonHpChange(null, this.gameObject, 0, 0, (int)(maxHp / 2.0f), PokemonType.TypeEnum.IgnoreType);
                 rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
                 playerData.IsPassiveGetList[72] = false;
                 spaceitemUseUI.UIAnimationStart(PassiveItemGameObjList.ObjList.List[20].GetComponent<SpriteRenderer>().sprite);
-                PlayerType01 = (int)Type.TypeEnum.Rock;
-                playerData.Type01Always = Type.TypeEnum.Rock;
+                PlayerType01 = (int)PokemonType.TypeEnum.Rock;
+                playerData.Type01Always = PokemonType.TypeEnum.Rock;
                 playerData.ResurrectionFossilDone = true;
             }
             else {
@@ -1543,7 +1543,7 @@ public class PlayerControler : Pokemon
 
         int BrforeMoney = nowMoney;
         //改变金钱数，上限为99，下限为0，之后向UI对象输出金钱的改变值，并调用UI改变金钱数的函数
-        nowMoney = Mathf.Clamp(nowMoney + ChangePoint + (playerData.IsPassiveGetList[10]?1:0), 0, 99);
+        nowMoney = Mathf.Clamp(nowMoney + ChangePoint + ((ChangePoint > 0) ? (playerData.IsPassiveGetList[10]?1:0) : 0), 0, 99);
         UIMoneyBar.Instance._Money += nowMoney - BrforeMoney;
         UIMoneyBar.Instance.MoneyChange();
     }
@@ -2805,8 +2805,8 @@ public class PlayerControler : Pokemon
                     if (PlayerHailTimer >= 2.4f)
                     {
                         PlayerHailTimer += Time.deltaTime;
-                        if (Weather.GlobalWeather.isHailPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
-                        else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                        if (Weather.GlobalWeather.isHailPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, PokemonType.TypeEnum.IgnoreType); }
+                        else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, PokemonType.TypeEnum.IgnoreType); }
                         KnockOutPoint = 0;
                         KnockOutDirection = Vector2.zero;
                         PlayerHailTimer = 0;
@@ -2836,8 +2836,8 @@ public class PlayerControler : Pokemon
                     if (PlayerSandStormTimer >= 2.4f)
                     {
                         PlayerSandStormTimer += Time.deltaTime;
-                        if (Weather.GlobalWeather.isSandstormPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
-                        else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, Type.TypeEnum.IgnoreType); }
+                        if (Weather.GlobalWeather.isSandstormPlus) { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, PokemonType.TypeEnum.IgnoreType); }
+                        else { Pokemon.PokemonHpChange(null, gameObject, Mathf.Clamp((((float)maxHp) / 20), 1, 16), 0, 0, PokemonType.TypeEnum.IgnoreType); }
                         KnockOutPoint = 0;
                         KnockOutDirection = Vector2.zero;
                         PlayerSandStormTimer = 0;

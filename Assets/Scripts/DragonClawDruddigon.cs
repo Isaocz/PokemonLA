@@ -20,7 +20,7 @@ public class DragonClawDruddigon : Projectile
             {
                 // 对玩家造成伤害
                 PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Dragon);
+                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Dragon);
                 if (playerControler != null)
                 {
                     playerControler.KnockOutPoint = 5f;
@@ -31,12 +31,12 @@ public class DragonClawDruddigon : Projectile
             else if (empty != null && empty.isEmptyInfatuationDone && collision.tag == "Empty" && collision.gameObject != empty.gameObject)
             {
                 Empty e = collision.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Dragon);
+                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Dragon);
 
             }
             if (empty.isEmptyConfusionDone && collision.gameObject == empty.gameObject)
             {
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Dragon);
+                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Dragon);
             }
         }
     }

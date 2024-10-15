@@ -66,8 +66,8 @@ public class RaltsConfusion : Projectile
             if (other.tag == ("Player") && !empty.isEmptyInfatuationDone)
             {
                 PlayerControler playerControler = other.GetComponent<PlayerControler>();
-                if (empty != null) { Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, 0, SpDmage, 0, Type.TypeEnum.Psychic); }
-                else { Pokemon.PokemonHpChange(null, other.gameObject, 0, SpDmage, 0, Type.TypeEnum.Psychic); }
+                if (empty != null) { Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Psychic); }
+                else { Pokemon.PokemonHpChange(null, other.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Psychic); }
                 if (playerControler != null)
                 {
                     //playerControler.ChangeHp(0, -(SpDmage * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / 250), 14);
@@ -78,8 +78,8 @@ public class RaltsConfusion : Projectile
             if (other.tag == ("Empty") && empty.isEmptyInfatuationDone)
             {
                 Empty e = other.GetComponent<Empty>();
-                if (empty != null) { Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, SpDmage, 0, Type.TypeEnum.Psychic); }
-                else { Pokemon.PokemonHpChange(null, e.gameObject, 0, SpDmage, 0, Type.TypeEnum.Psychic); }
+                if (empty != null) { Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Psychic); }
+                else { Pokemon.PokemonHpChange(null, e.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Psychic); }
                 //e.EmptyHpChange(0, (SpDmage * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / (250 * e.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((e.EmptyType01 == Type.TypeEnum.Ice || e.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2), 14);
             }
         }

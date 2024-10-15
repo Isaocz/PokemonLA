@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PCcomputerTalkPanle : MonoBehaviour
 {
-    Text TalkInformation;
+    TextMeshProUGUI TalkInformation;
     PCcomputer ParentPCComputer;
     public int TalkIndex;
     string[] TalkTextList;
@@ -21,7 +22,7 @@ public class PCcomputerTalkPanle : MonoBehaviour
     void Start()
     {
         ParentPCComputer = transform.parent.parent.GetComponent<PCcomputer>();
-        TalkInformation = transform.GetChild(0).GetComponent<Text>();
+        TalkInformation = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         TalkTextList = new string[] { "检查一下信息吧。。。", "受到了妈妈寄来的礼物！", "谢谢妈妈！希望她身体健康！", "没有什么邮件。。。" };
         if (!ParentPCComputer.player.playerData.IsPassiveGetList[29]) {  TalkIndex = 0;  }
         else {     TalkIndex = 3;   }

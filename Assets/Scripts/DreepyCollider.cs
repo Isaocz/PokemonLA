@@ -21,7 +21,7 @@ public class DreepyCollider : MonoBehaviour
                 if (target != null)
                 {
                     target.EmptyKnockOut(5);
-                    Pokemon.PokemonHpChange(ParentDreepy.gameObject, target.gameObject, 50, 0, 0, Type.TypeEnum.Dragon);
+                    Pokemon.PokemonHpChange(ParentDreepy.gameObject, target.gameObject, 50, 0, 0, PokemonType.TypeEnum.Dragon);
                 }
             }
             if (ParentDreepy.NowState == Dreepy.State.Move)

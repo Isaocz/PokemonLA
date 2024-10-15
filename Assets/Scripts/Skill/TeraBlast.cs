@@ -109,12 +109,12 @@ public class TeraBlast : Skill
     {
         if (SkillType != 1)
         {
-            Color LaserColor = Type.TypeColor[SkillType];
+            Color LaserColor = PokemonType.TypeColor[SkillType];
             LaserColor.a = 1;
-            Color LaserColor2 = Type.TypeColor2[SkillType];
+            Color LaserColor2 = PokemonType.TypeColor2[SkillType];
             LaserColor2.a = 1;
             //Color LaserColor3 = new Color(Type.TypeColor[SkillType].x - 0.1f, 2 * Type.TypeColor[SkillType].x - 0.1f, 2 * Type.TypeColor[SkillType].z - 0.1f, 1);
-            lineRenderer.startColor = Type.TypeColor[SkillType];
+            lineRenderer.startColor = PokemonType.TypeColor[SkillType];
             lineRenderer.endColor = LaserColor2;
 
             var mainS0 = StartVFX.transform.GetChild(0).GetComponent<ParticleSystem>().main;

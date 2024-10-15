@@ -42,8 +42,8 @@ public class Kricketune : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Bug;
-        EmptyType02 = Type.TypeEnum.No;
+        EmptyType01 = PokemonType.TypeEnum.Bug;
+        EmptyType02 = PokemonType.TypeEnum.No;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);
@@ -196,7 +196,7 @@ public class Kricketune : Empty
                     playerControler.KnockOutPoint = Knock;
                     playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                 }
-                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 75, 0, 0, Type.TypeEnum.Bug);
+                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 75, 0, 0, PokemonType.TypeEnum.Bug);
             }
             else
             {

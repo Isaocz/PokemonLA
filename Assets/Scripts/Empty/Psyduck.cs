@@ -16,7 +16,7 @@ public class Psyduck : Empty
     void Start()
     {
         speed = 0f;
-        EmptyType01 = Type.TypeEnum.Water;
+        EmptyType01 = PokemonType.TypeEnum.Water;
         EmptyType02 = 0;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);

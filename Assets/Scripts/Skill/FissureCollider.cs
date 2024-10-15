@@ -25,7 +25,7 @@ public class FissureCollider : MonoBehaviour
                     EMaxHp = e.EmptyHp;
                 }
                 
-                Pokemon.PokemonHpChange(null ,e.gameObject , EMaxHp, 0 , 0 , Type.TypeEnum.IgnoreType );
+                Pokemon.PokemonHpChange(null ,e.gameObject , EMaxHp, 0 , 0 , PokemonType.TypeEnum.IgnoreType );
             }
         }
         if (fissure.SkillFrom == 2 && other.tag == "Enviroment")

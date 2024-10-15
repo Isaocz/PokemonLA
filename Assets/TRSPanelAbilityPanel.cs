@@ -42,20 +42,20 @@ public class TRSPanelAbilityPanel : MonoBehaviour
 
         if (role.Role.playerAbility01 != PlayerControler.PlayerAbilityList.无特性) {
             Toggle t = Instantiate(AbilityToogle, AbilityTooglrParent).GetComponent<Toggle>();
-            t.GetComponent<SelectRolePanelAbilityButton>().SetAbilityToggle(Type.AbilityList[(int)role.Role.playerAbility01], count, uIDescribeR, GamestartButton);
+            t.GetComponent<SelectRolePanelAbilityButton>().SetAbilityToggle(PokemonType.AbilityList[(int)role.Role.playerAbility01], count, uIDescribeR, GamestartButton);
             ToggleList.Add(t);
             count++;
             t.isOn = true;
         }
         if (role.Role.playerAbility02 != PlayerControler.PlayerAbilityList.无特性) {
             Toggle t = Instantiate(AbilityToogle, AbilityTooglrParent).GetComponent<Toggle>();
-            t.GetComponent<SelectRolePanelAbilityButton>().SetAbilityToggle(Type.AbilityList[(int)role.Role.playerAbility02], count, uIDescribeR, GamestartButton);
+            t.GetComponent<SelectRolePanelAbilityButton>().SetAbilityToggle(PokemonType.AbilityList[(int)role.Role.playerAbility02], count, uIDescribeR, GamestartButton);
             ToggleList.Add(t);
             count++;
         }
         if (role.isDreamAbilityUnlock && role.Role.playerAbilityDream != PlayerControler.PlayerAbilityList.无特性) {
             Toggle t = Instantiate(AbilityToogle, AbilityTooglrParent).GetComponent<Toggle>();
-            t.GetComponent<SelectRolePanelAbilityButton>().SetAbilityToggle(Type.AbilityList[(int)role.Role.playerAbilityDream], count, uIDescribeR, GamestartButton);
+            t.GetComponent<SelectRolePanelAbilityButton>().SetAbilityToggle(PokemonType.AbilityList[(int)role.Role.playerAbilityDream], count, uIDescribeR, GamestartButton);
             ToggleList.Add(t);
             count++; 
         }

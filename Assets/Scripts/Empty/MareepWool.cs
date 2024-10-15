@@ -58,7 +58,7 @@ public class MareepWool : Projectile
             if (other.transform.tag == "Player" && !empty.isEmptyInfatuationDone) {
                 isDestory = true;
                 PlayerControler playerControler = other.transform.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(null, other.gameObject , 0 , SpDmage , 0 , Type.TypeEnum.Electric);
+                Pokemon.PokemonHpChange(null, other.gameObject , 0 , SpDmage , 0 , PokemonType.TypeEnum.Electric);
                 //playerControler.ChangeHp(0, -(SpDmage * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / 250), 13);
                 if (playerControler != null)
                 {
@@ -72,7 +72,7 @@ public class MareepWool : Projectile
                 Empty e = other.transform.GetComponent<Empty>();
                 if (e != null)
                 {
-                    Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, SpDmage, 0, Type.TypeEnum.Electric);
+                    Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Electric);
                     //e.EmptyHpChange(0, -(SpDmage * empty.SpAAbilityPoint * (2 * empty.Emptylevel + 10) / (250 * e.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((e.EmptyType01 == Type.TypeEnum.Ice || e.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2), 13);
                     e.EmptyParalysisDone(1, 5, 1);
                 }

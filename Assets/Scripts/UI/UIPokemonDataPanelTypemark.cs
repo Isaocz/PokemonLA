@@ -61,148 +61,148 @@ public class UIPokemonDataPanelTypemark : MonoBehaviour
 
                     break;
                 case 1:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Nurmal;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "Ò»°ã";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
 
                     break;
                 case 2:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Fight;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "¸ñ¶·";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 3:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Fly;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "·ÉÐÐ";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 4:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Poison;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "¶¾";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 5:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Ground;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "µØÃæ";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 6:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Rock;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "ÑÒÊ¯";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 7:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Bug;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "³æ";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 8:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Ghost;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "ÓÄÁé";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 9:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Steel;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "¸Ö";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 10:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Fire;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "»ð";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 11:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Water;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "Ë®";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 12:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Grass;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "²Ý";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 13:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Electric;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "µç";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 14:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Psychic;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "³¬ÄÜ";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 15:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Ice;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "±ù";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 16:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Dragon;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "Áú";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 17:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Dark;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "¶ñ";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
                 case 18:
-                    TypeColorBar.color = Type.TypeColor[type];
+                    TypeColorBar.color = PokemonType.TypeColor[type];
                     TypeMark.sprite = Fairy;
-                    TypeMark.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeMark.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     TypeName.text = "Ñý¾«";
-                    TypeName.color = Type.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    TypeName.color = PokemonType.TypeColor[type] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                     if (TeraMask != null) { TeraMask.color = new Color(1, 1, 1, 1); }
                     break;
             }

@@ -18,7 +18,7 @@ public class DarkPulse : Skill
             int DmageHP = player.Hp - BeforeHP;
             if (DmageHP < 0)
             {
-                Pokemon.PokemonHpChange(null , player.gameObject , 0 , 0 , -DmageHP , Type.TypeEnum.IgnoreType);
+                Pokemon.PokemonHpChange(null , player.gameObject , 0 , 0 , -DmageHP , PokemonType.TypeEnum.IgnoreType);
             }
         }
     }

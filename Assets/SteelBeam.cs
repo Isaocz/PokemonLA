@@ -43,12 +43,12 @@ public class SteelBeam : Skill
             player.ReFreshAbllityPoint();
 
             if (DCount < 4) {
-                Pokemon.PokemonHpChange(null, player.gameObject, (player.Hp * (4 - DCount)) / 12.0f, 0, 0, Type.TypeEnum.IgnoreType);
+                Pokemon.PokemonHpChange(null, player.gameObject, (player.Hp * (4 - DCount)) / 12.0f, 0, 0, PokemonType.TypeEnum.IgnoreType);
             }
         }
         else
         {
-            Pokemon.PokemonHpChange(null, player.gameObject, (player.Hp * (4)) / 12.0f, 0, 0, Type.TypeEnum.IgnoreType);
+            Pokemon.PokemonHpChange(null, player.gameObject, (player.Hp * (4)) / 12.0f, 0, 0, PokemonType.TypeEnum.IgnoreType);
         }
         player.KnockOutPoint = 0;
         player.KnockOutDirection = Vector2.zero;

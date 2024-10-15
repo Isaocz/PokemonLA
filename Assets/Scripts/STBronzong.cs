@@ -19,7 +19,7 @@ public class STBronzong : Projectile
             isHitDone = true;
             // 对玩家造成伤害
             PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Ground);
+            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Ground);
             if (playerControler != null)
             {
                 playerControler.KnockOutPoint = 9f;

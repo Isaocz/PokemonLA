@@ -28,7 +28,7 @@ public class SelectRolePanelAbilityButton : MonoBehaviour
     /// …Ë÷√∞¥≈•
     /// </summary>
     /// <param name="ability"></param>
-    public void SetAbilityToggle( Type.Ability ability , int Index , UIDescribe uIDescribe , Button GameStart)
+    public void SetAbilityToggle( PokemonType.Ability ability , int Index , UIDescribe uIDescribe , Button GameStart)
     {
 
 

@@ -35,7 +35,7 @@ public class SirfetchdSword : SwordBaby
                 if (e != null)
                 {
                     CDTimer = CD;
-                    Pokemon.PokemonHpChange( player.gameObject , e.gameObject , 15 , 0 , 0 , Type.TypeEnum.Grass );
+                    Pokemon.PokemonHpChange( player.gameObject , e.gameObject , 15 , 0 , 0 , PokemonType.TypeEnum.Grass );
                 }
             }
         }

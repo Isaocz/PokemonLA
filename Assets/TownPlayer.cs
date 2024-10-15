@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
 
-public class TownPlayer : MonoBehaviour
+public class TownPlayer : PlayerPokemon
 {
 
 
@@ -30,7 +30,6 @@ public class TownPlayer : MonoBehaviour
     /// 声明一个2D刚体组件，以获得角色的刚体组件
     /// </summary>
     new Rigidbody2D rigidbody2D;
-    Animator animator;
     /// <summary>
     /// 声明两个变量，获取方向键按键信息
     /// </summary>
@@ -77,7 +76,7 @@ public class TownPlayer : MonoBehaviour
     public int PlayerTeraType;
     public int PlayerTeraTypeJOR;
 
-    public float speed = 6.0f;
+    
 
 
 
@@ -137,8 +136,8 @@ public class TownPlayer : MonoBehaviour
     /// </summary>
     protected void Instance()
     {
-
-
+        speed = 6.0f;
+        
         //获得小山猪的刚体组件和动画组件
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();

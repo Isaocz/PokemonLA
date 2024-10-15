@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PCBook : NPC
+public class PCBook : GameNPC
 {
     void Start()
     {

@@ -77,6 +77,14 @@ public class DisplayTextInSequence : MonoBehaviour
     }
     public ScoreType scoreType;
 
+    private void Start()
+    {
+        if (StartPanelPlayerData.PlayerData != null && StartPanelPlayerData.PlayerData.Player != null && scoreType == ScoreType.лг╧Ш)
+        {
+            transform.GetChild(0).GetComponent<Image>().sprite = StartPanelPlayerData.PlayerData.Player.PlayerCandyHD;
+        }
+    }
+
     public bool isThisTextIngore()
     {
         bool Output = false;

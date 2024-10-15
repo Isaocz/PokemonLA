@@ -37,7 +37,7 @@ public class ElectroBallp2 : Projectile
                     default:SpDmage = 40;break;
                 }
                 
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Electric);
+                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Electric);
                 player.KnockOutPoint = 1.5f;
                 player.KnockOutDirection = (player.transform.position - transform.position).normalized;
             }

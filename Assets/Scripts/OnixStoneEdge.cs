@@ -48,7 +48,7 @@ public class OnixStoneEdge : Projectile
             if (other.tag == ("Player"))
             {
                 PlayerControler playerControler = other.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange((empty == null ? null : empty.gameObject), other.gameObject, Dmage, 0, 0, Type.TypeEnum.Rock);
+                Pokemon.PokemonHpChange((empty == null ? null : empty.gameObject), other.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Rock);
                 if (playerControler != null)
                 {
                     Debug.Log(empty);

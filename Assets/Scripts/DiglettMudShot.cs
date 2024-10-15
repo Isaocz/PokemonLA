@@ -17,14 +17,14 @@ public class DiglettMudShot : MonoBehaviour
                 isDmageDone = true;
                 if(null != EmptyDiglett)
                 {
-                    Pokemon.PokemonHpChange(null, other, 0, 55,0, Type.TypeEnum.Ground);
+                    Pokemon.PokemonHpChange(null, other, 0, 55,0, PokemonType.TypeEnum.Ground);
                 }
                 else
                 {
                     if (other.tag == ("Player") && !EmptyDiglett.isEmptyInfatuationDone)
                     {
                         PlayerControler p = other.GetComponent<PlayerControler>();
-                        Pokemon.PokemonHpChange(EmptyDiglett.gameObject, other.gameObject, 0, 55, 0, Type.TypeEnum.Ground);
+                        Pokemon.PokemonHpChange(EmptyDiglett.gameObject, other.gameObject, 0, 55, 0, PokemonType.TypeEnum.Ground);
                         if (p != null)
                         {
                             p.KnockOutPoint = 5;
@@ -34,7 +34,7 @@ public class DiglettMudShot : MonoBehaviour
                     if (other.tag == ("Empty") && EmptyDiglett.isEmptyInfatuationDone)
                     {
                         Empty e = other.GetComponent<Empty>();
-                        Pokemon.PokemonHpChange(EmptyDiglett.gameObject, e.gameObject, 0, 55, 0, Type.TypeEnum.Ground);
+                        Pokemon.PokemonHpChange(EmptyDiglett.gameObject, e.gameObject, 0, 55, 0, PokemonType.TypeEnum.Ground);
                     }
                 }
             }

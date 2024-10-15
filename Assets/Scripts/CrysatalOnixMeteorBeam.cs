@@ -123,10 +123,10 @@ public class CrysatalOnixMeteorBeam : Projectile
             if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Player")
             {
                 PlayerControler p = EndRay.collider.GetComponent<PlayerControler>();
-                if (empty != null) { Pokemon.PokemonHpChange(empty.gameObject, EndRay.collider.gameObject, 0, SpDmage, 0, Type.TypeEnum.Rock);Debug.Log("Rock"); }
+                if (empty != null) { Pokemon.PokemonHpChange(empty.gameObject, EndRay.collider.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Rock);Debug.Log("Rock"); }
                 else
                 {
-                    Pokemon.PokemonHpChange(null, EndRay.collider.gameObject, 0, SpDmage, 0, Type.TypeEnum.Rock);
+                    Pokemon.PokemonHpChange(null, EndRay.collider.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Rock);
                 }
                 if (p != null)
                 {

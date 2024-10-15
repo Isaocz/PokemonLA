@@ -20,7 +20,7 @@ public class SwabluCollider : MonoBehaviour
                 Empty target = other.GetComponent<Empty>();
                 if (target != null) {
                     target.EmptyKnockOut(5);
-                    Pokemon.PokemonHpChange(ParentSwablu.gameObject, target.gameObject, 40, 0, 0, Type.TypeEnum.Flying);
+                    Pokemon.PokemonHpChange(ParentSwablu.gameObject, target.gameObject, 40, 0, 0, PokemonType.TypeEnum.Flying);
                 }
             }
             if (ParentSwablu.NowState == SwabluBaby.State.Move)

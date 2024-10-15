@@ -12,7 +12,7 @@ public class Snarl : Skill
     {
         if (SkillFrom == 2)
         {
-            Pokemon.PokemonHpChange(null, player.gameObject, player.maxHp / 16.0f, 0.0f, 0, Type.TypeEnum.IgnoreType);
+            Pokemon.PokemonHpChange(null, player.gameObject, player.maxHp / 16.0f, 0.0f, 0, PokemonType.TypeEnum.IgnoreType);
             player.KnockOutDirection = Vector2.zero;
             player.KnockOutPoint = 0;
 

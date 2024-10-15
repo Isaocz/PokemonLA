@@ -17,8 +17,8 @@ public class Druddigon : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Dragon;
-        EmptyType02 = Type.TypeEnum.No;
+        EmptyType01 = PokemonType.TypeEnum.Dragon;
+        EmptyType02 = PokemonType.TypeEnum.No;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);

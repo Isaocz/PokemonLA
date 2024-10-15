@@ -166,7 +166,7 @@ public class CrystalOnixBodyShadow : SubEmptyBody
             if (isTopHead && ParentOnix.isIronHead)
             {
                 PlayerControler p = other.gameObject.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(ParentOnix.gameObject, other.gameObject, 80, 0, 0, Type.TypeEnum.Steel);
+                Pokemon.PokemonHpChange(ParentOnix.gameObject, other.gameObject, 80, 0, 0, PokemonType.TypeEnum.Steel);
                 if (p != null)
                 {
                     Debug.Log(p);

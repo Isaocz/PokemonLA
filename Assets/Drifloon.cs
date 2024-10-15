@@ -16,8 +16,8 @@ public class Drifloon : Empty
 
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Ghost;
-        EmptyType02 = Type.TypeEnum.Flying;
+        EmptyType01 = PokemonType.TypeEnum.Ghost;
+        EmptyType02 = PokemonType.TypeEnum.Flying;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);
@@ -151,7 +151,7 @@ public class Drifloon : Empty
             var cb = boom.transform.GetChild(0).GetComponent<ExeggcuteExploreCB>();
             cb.SetEmptyInfo(this);
             cb.SetAimTag(isEmptyInfatuationDone ? "Empty" : "Player");
-            cb.SetType(Type.TypeEnum.Normal);
+            cb.SetType(PokemonType.TypeEnum.Normal);
             cb.Dmage = 200;
             Destroy(boom, 5f);
         }

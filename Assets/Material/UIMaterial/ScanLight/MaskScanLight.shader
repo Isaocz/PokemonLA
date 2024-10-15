@@ -19,6 +19,8 @@ Shader "Custom/MaskScanLight"
         _StencilReadMask ("Stencil Read Mask", Float) = 255
         _ColorMask ("Color Mask", Float) = 15
         //MASK SUPPORT END
+
+       
     }
     SubShader
     {
@@ -29,7 +31,7 @@ Shader "Custom/MaskScanLight"
             "UniversalMaterialType" = "Unlit"
             "Queue"="Transparent"
         }
-
+        
         //MASK SUPPORT ADD
         Stencil
         {

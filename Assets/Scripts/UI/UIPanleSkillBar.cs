@@ -70,15 +70,15 @@ public class UIPanleSkillBar : MonoBehaviour
                 if (player == null) { player = FindObjectOfType<PlayerControler>(); }
                 if (i == 6) { NowObject.GetComponent<Text>().text = TargetSkill.SkillName; }
                 else if (i == 7) { NowObject.GetComponent<Text>().text = TargetSkill.SkillChineseName; }
-                else if (i == 8) { NowObject.GetComponent<Text>().text = Type.TypeChineseName[PanleSkillBarColor]; }
+                else if (i == 8) { NowObject.GetComponent<Text>().text = PokemonType.TypeChineseName[PanleSkillBarColor]; }
                 else if (i == 9) { NowObject.GetComponent<Text>().text = (TargetSkill.Damage + TargetSkill.SpDamage).ToString(); }
                 else if (i == 10) { NowObject.GetComponent<Text>().text = TargetSkill.KOPoint.ToString(); }
                 else if (i == 11) { NowObject.GetComponent<Text>().text = player.GetSkillCD(TargetSkill).ToString("#0.00"); }
 
-                if (i == 0) { NowObject.GetComponent<Image>().color = Type.TypeColor[PanleSkillBarColor]; }
+                if (i == 0) { NowObject.GetComponent<Image>().color = PokemonType.TypeColor[PanleSkillBarColor]; }
                 else
                 {
-                    NowObject.GetComponent<Text>().color = Type.TypeColor[PanleSkillBarColor] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    NowObject.GetComponent<Text>().color = PokemonType.TypeColor[PanleSkillBarColor] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                 }
             }
 
@@ -88,7 +88,7 @@ public class UIPanleSkillBar : MonoBehaviour
                 transform.GetChild(17).gameObject.SetActive(true);
                 if (transform.GetChild(17).GetComponent<Text>() != null)
                 {
-                    transform.GetChild(17).GetComponent<Text>().color = Type.TypeColor[PanleSkillBarColor] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+                    transform.GetChild(17).GetComponent<Text>().color = PokemonType.TypeColor[PanleSkillBarColor] - new Vector4(0.3f, 0.3f, 0.3f, -1);
                 }
 
             }
@@ -115,7 +115,7 @@ public class UIPanleSkillBar : MonoBehaviour
                     FromTextDiscrebe.TwoMode = true; FromTextDiscrebe.FirstText = "此技能已经精通！"; FromTextDiscrebe.DescribeText = "精通效果:" + PanelSkill.PlusSkillDiscribe;
                     break;
             }
-            FromText.color = Type.TypeColor[PanleSkillBarColor] - new Vector4(0.3f, 0.3f, 0.3f, -1);
+            FromText.color = PokemonType.TypeColor[PanleSkillBarColor] - new Vector4(0.3f, 0.3f, 0.3f, -1);
         }
     }
 }

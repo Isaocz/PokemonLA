@@ -154,12 +154,12 @@ public class SubSkill : MonoBehaviour
             {
                 if (Random.Range(0.0f, 1.0f) >= 0.04f + 0.01f * player.LuckPoint)
                 {
-                    Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage, 0, (Type.TypeEnum)SkillType);
+                    Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage, 0, (PokemonType.TypeEnum)SkillType);
                     //target.EmptyHpChange(0, (SpDamage * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.SpAAbilityPoint) / (250 * target.SpdAbilityPoint) + 2, SkillType);
                 }
                 else
                 {
-                    Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage*1.5f, 0, (Type.TypeEnum)SkillType);
+                    Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage*1.5f, 0, (PokemonType.TypeEnum)SkillType);
                     //target.EmptyHpChange(0, (SpDamage * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.SpAAbilityPoint) / (250 * target.SpdAbilityPoint) + 2, SkillType);
                 }
 
@@ -169,12 +169,12 @@ public class SubSkill : MonoBehaviour
             {
                 if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
                 {
-                    Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage, 0, 0, (Type.TypeEnum)SkillType);
+                    Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage, 0, 0, (PokemonType.TypeEnum)SkillType);
                     //target.EmptyHpChange((Damage * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint) + 2, 0, SkillType);
                 }
                 else
                 {
-                    Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage*1.5f, 0, 0, (Type.TypeEnum)SkillType);
+                    Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage*1.5f, 0, 0, (PokemonType.TypeEnum)SkillType);
                     //target.EmptyHpChange((Damage * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint) + 2, 0, SkillType);
                 }
 

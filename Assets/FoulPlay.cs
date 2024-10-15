@@ -33,13 +33,13 @@ public class FoulPlay : Skill
                     if(target.AtkAbilityPoint >= player.AtkAbilityPoint)
                     {
                         Damage += 25;
-                        Pokemon.PokemonHpChange(null , player.gameObject ,player.maxHp/16 , 0,0,Type.TypeEnum.IgnoreType );
+                        Pokemon.PokemonHpChange(null , player.gameObject ,player.maxHp/16 , 0,0,PokemonType.TypeEnum.IgnoreType );
                         player.KnockOutDirection = Vector2.zero;
                         player.KnockOutPoint = 0;
                     }
                     else
                     {
-                        Pokemon.PokemonHpChange(null, player.gameObject,0 , 0, player.maxHp / 16, Type.TypeEnum.IgnoreType);
+                        Pokemon.PokemonHpChange(null, player.gameObject,0 , 0, player.maxHp / 16, PokemonType.TypeEnum.IgnoreType);
                     }
                 }
                 HitAndKo(target);

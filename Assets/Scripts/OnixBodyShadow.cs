@@ -197,7 +197,7 @@ public class OnixBodyShadow : SubEmptyBody
             if (isTopHead && ParentOnix.isIronHead) 
             {
                 PlayerControler p = other.gameObject.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(ParentOnix.gameObject, other.gameObject, 80, 0, 0, Type.TypeEnum.Steel);
+                Pokemon.PokemonHpChange(ParentOnix.gameObject, other.gameObject, 80, 0, 0, PokemonType.TypeEnum.Steel);
                 if (p != null)
                 {
                     Debug.Log(p);
@@ -208,7 +208,7 @@ public class OnixBodyShadow : SubEmptyBody
             else if ( ParentOnix.isBodyPressDamage)
             {
                 PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(ParentOnix.gameObject, other.gameObject, 80, 0, 0, Type.TypeEnum.Fighting, Pokemon.SpecialAttackTypes.BodyPress);
+                Pokemon.PokemonHpChange(ParentOnix.gameObject, other.gameObject, 80, 0, 0, PokemonType.TypeEnum.Fighting, Pokemon.SpecialAttackTypes.BodyPress);
                 if (playerControler != null)
                 {
                     playerControler.KnockOutPoint = 9f;

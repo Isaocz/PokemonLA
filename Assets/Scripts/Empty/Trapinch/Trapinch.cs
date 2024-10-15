@@ -244,7 +244,7 @@ public class Trapinch : Empty
             }
             Timer.Start(this, 0.1f, () =>
             {
-                Pokemon.PokemonHpChange(gameObject, target, 60, 0, 0, Type.TypeEnum.Dark);
+                Pokemon.PokemonHpChange(gameObject, target, 60, 0, 0, PokemonType.TypeEnum.Dark);
 
                 PlayerControler playerControler = target.GetComponent<PlayerControler>();
                 if (playerControler != null && target.tag == "Player")

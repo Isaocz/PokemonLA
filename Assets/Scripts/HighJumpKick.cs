@@ -138,12 +138,12 @@ public class HighJumpKick : Skill
 
         if (SkillFrom == 2)
         {
-            if (!isHJKHitDone) { Pokemon.PokemonHpChange(null, player.gameObject, player.maxHp / 3, 0, 0, Type.TypeEnum.IgnoreType); }
+            if (!isHJKHitDone) { Pokemon.PokemonHpChange(null, player.gameObject, player.maxHp / 3, 0, 0, PokemonType.TypeEnum.IgnoreType); }
             else { player.AddASubSkill(sub); }
         }
         else
         {
-            if (!isHJKHitDone) { Pokemon.PokemonHpChange(null, player.gameObject, player.maxHp / 6, 0, 0, Type.TypeEnum.IgnoreType); }
+            if (!isHJKHitDone) { Pokemon.PokemonHpChange(null, player.gameObject, player.maxHp / 6, 0, 0, PokemonType.TypeEnum.IgnoreType); }
         }
     }
 }

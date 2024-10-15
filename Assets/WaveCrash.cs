@@ -103,7 +103,7 @@ public class WaveCrash : Skill
                     {
                         Alpha = 10.0f;
                     }
-                    Pokemon.PokemonHpChange(null , player.gameObject , Damage / Alpha, 0 , 0 , Type.TypeEnum.IgnoreType);
+                    Pokemon.PokemonHpChange(null , player.gameObject , Damage / Alpha, 0 , 0 , PokemonType.TypeEnum.IgnoreType);
 
                 }
             }

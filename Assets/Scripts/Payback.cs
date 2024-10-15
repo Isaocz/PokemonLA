@@ -76,7 +76,7 @@ public class Payback : Skill
                 if (HPAfter < HPBefore) { Damage *= 2; }
                 HitAndKo(target);
                 if (animator != null) { animator.SetTrigger("Hit"); }
-                if (SkillFrom == 2) { Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, HPBefore - HPAfter, Type.TypeEnum.IgnoreType); }
+                if (SkillFrom == 2) { Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, HPBefore - HPAfter, PokemonType.TypeEnum.IgnoreType); }
             }
         }
 

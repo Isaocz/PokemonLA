@@ -18,7 +18,7 @@ public class LoudredHyperVoicePSCollider : MonoBehaviour
         if (!ParentHV.empty.isEmptyInfatuationDone && other.tag == "Player")
         {
             PlayerControler p = other.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(ParentHV.empty.gameObject, other.gameObject, 0, ParentHV.SpDmage, 0, Type.TypeEnum.Normal);
+            Pokemon.PokemonHpChange(ParentHV.empty.gameObject, other.gameObject, 0, ParentHV.SpDmage, 0, PokemonType.TypeEnum.Normal);
             if (p != null)
             {
                 p.KnockOutPoint = 5f;
@@ -28,7 +28,7 @@ public class LoudredHyperVoicePSCollider : MonoBehaviour
         else if(ParentHV.empty.isEmptyInfatuationDone && other.tag == "Empty" && other.gameObject != ParentHV.empty.gameObject)
         {
             Empty e = other.GetComponent<Empty>();
-            Pokemon.PokemonHpChange(ParentHV.empty.gameObject, other.gameObject, 0, ParentHV.SpDmage, 0, Type.TypeEnum.Normal);
+            Pokemon.PokemonHpChange(ParentHV.empty.gameObject, other.gameObject, 0, ParentHV.SpDmage, 0, PokemonType.TypeEnum.Normal);
         }
     }
 }

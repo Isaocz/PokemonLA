@@ -72,7 +72,7 @@ public class CryogonalIceShard : Projectile
             if (other.tag == ("Player") && !empty.isEmptyInfatuationDone)
             {
                 PlayerControler playerControler = other.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, Dmage, 0, 0, Type.TypeEnum.Ice);
+                Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Ice);
                 if (playerControler != null)
                 {
                     playerControler.KnockOutPoint = 1;
@@ -83,7 +83,7 @@ public class CryogonalIceShard : Projectile
             if (other.tag == ("Empty") && empty.isEmptyInfatuationDone)
             {
                 Empty e = other.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, Dmage, 0, 0, Type.TypeEnum.Ice);
+                Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Ice);
             }
         }
     }

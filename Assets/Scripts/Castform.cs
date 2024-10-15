@@ -55,8 +55,8 @@ public class Castform : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Normal;
-        EmptyType02 = Type.TypeEnum.No;
+        EmptyType01 = PokemonType.TypeEnum.Normal;
+        EmptyType02 = PokemonType.TypeEnum.No;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);
@@ -379,8 +379,8 @@ public class Castform : Empty
         isRainState = false;
         isHailState = false;
 
-        EmptyType01 = Type.TypeEnum.Normal;
-        EmptyType02 = Type.TypeEnum.No;
+        EmptyType01 = PokemonType.TypeEnum.Normal;
+        EmptyType02 = PokemonType.TypeEnum.No;
 
         isBurnDef = false;
         isFrozenDef = false;
@@ -396,8 +396,8 @@ public class Castform : Empty
         isRainState = false;
         isHailState = false;
 
-        EmptyType01 = Type.TypeEnum.Fire;
-        EmptyType02 = Type.TypeEnum.No;
+        EmptyType01 = PokemonType.TypeEnum.Fire;
+        EmptyType02 = PokemonType.TypeEnum.No;
         isBurnDef = true;
         isFrozenDef = false;
 
@@ -414,8 +414,8 @@ public class Castform : Empty
         isRainState = true;
         isHailState = false;
 
-        EmptyType01 = Type.TypeEnum.Water;
-        EmptyType02 = Type.TypeEnum.No;
+        EmptyType01 = PokemonType.TypeEnum.Water;
+        EmptyType02 = PokemonType.TypeEnum.No;
 
         isBurnDef = false;
         isFrozenDef = false;
@@ -431,8 +431,8 @@ public class Castform : Empty
         isRainState = false;
         isHailState = true;
 
-        EmptyType01 = Type.TypeEnum.Ice;
-        EmptyType02 = Type.TypeEnum.No;
+        EmptyType01 = PokemonType.TypeEnum.Ice;
+        EmptyType02 = PokemonType.TypeEnum.No;
         isBurnDef = false;
         isFrozenDef = true;
 

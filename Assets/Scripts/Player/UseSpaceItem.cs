@@ -390,7 +390,7 @@ public class UseSpaceItem : MonoBehaviour
             //¸´»î²Ý
             case 66:
                 if (player.Hp <= 1) {
-                    Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp, Type.TypeEnum.IgnoreType);
+                    Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp, PokemonType.TypeEnum.IgnoreType);
                     switch (Random.Range(0, 6))
                     {
                         case 0:
@@ -451,7 +451,7 @@ public class UseSpaceItem : MonoBehaviour
             foreach (int i in spaceItem.ItemTypeTag)
             {
                 if (i == 1) { 
-                    Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, Mathf.Clamp(player.maxHp / 16, 1, 10), Type.TypeEnum.IgnoreType);
+                    Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, Mathf.Clamp(player.maxHp / 16, 1, 10), PokemonType.TypeEnum.IgnoreType);
                 }
             }
         }
@@ -483,7 +483,7 @@ public class UseSpaceItem : MonoBehaviour
             {
                 if (empty.GetComponent<Empty>() != null)
                 {
-                    Pokemon.PokemonHpChange(null , empty.GetComponent<Empty>().gameObject , 100 , 0 , 0 , Type.TypeEnum.IgnoreType);
+                    Pokemon.PokemonHpChange(null , empty.GetComponent<Empty>().gameObject , 100 , 0 , 0 , PokemonType.TypeEnum.IgnoreType);
                 }
             }
         }
@@ -491,7 +491,7 @@ public class UseSpaceItem : MonoBehaviour
 
     static void SitrusBerry(PlayerControler player)
     {
-        Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp / 3, Type.TypeEnum.IgnoreType);
+        Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp / 3, PokemonType.TypeEnum.IgnoreType);
     }
 
     static void TeraShard(PlayerControler player, int TeraShardType)
@@ -503,27 +503,27 @@ public class UseSpaceItem : MonoBehaviour
     {
         int BerryType = BerryNum - 26;
         int TypeDefPoint = player.playerData.TypeDefJustOneRoom[BerryType] + player.playerData.TypeDefAlways[BerryType];
-        if (Type.TYPE[BerryType][player.PlayerType01] == 1.2f)
+        if (PokemonType.TYPE[BerryType][player.PlayerType01] == 1.2f)
         {
             TypeDefPoint--;
         }
-        else if (Type.TYPE[BerryType][player.PlayerType01] == 0.8f)
+        else if (PokemonType.TYPE[BerryType][player.PlayerType01] == 0.8f)
         {
             TypeDefPoint++;
         }
-        else if (Type.TYPE[BerryType][player.PlayerType01] == 0.64f)
+        else if (PokemonType.TYPE[BerryType][player.PlayerType01] == 0.64f)
         {
             TypeDefPoint++; TypeDefPoint++;
         }
-        if (Type.TYPE[BerryType][player.PlayerType02] == 1.2f)
+        if (PokemonType.TYPE[BerryType][player.PlayerType02] == 1.2f)
         {
             TypeDefPoint--;
         }
-        else if (Type.TYPE[BerryType][player.PlayerType02] == 0.8f)
+        else if (PokemonType.TYPE[BerryType][player.PlayerType02] == 0.8f)
         {
             TypeDefPoint++;
         }
-        else if (Type.TYPE[BerryType][player.PlayerType02] == 0.64f)
+        else if (PokemonType.TYPE[BerryType][player.PlayerType02] == 0.64f)
         {
             TypeDefPoint++; TypeDefPoint++;
         }
@@ -531,30 +531,30 @@ public class UseSpaceItem : MonoBehaviour
 
         if (player.PlayerTeraTypeJOR == 0)
         {
-            if (Type.TYPE[BerryType][player.PlayerTeraType] == 1.2f)
+            if (PokemonType.TYPE[BerryType][player.PlayerTeraType] == 1.2f)
             {
                 TypeDefPoint--;
             }
-            else if (Type.TYPE[BerryType][player.PlayerTeraType] == 0.8f)
+            else if (PokemonType.TYPE[BerryType][player.PlayerTeraType] == 0.8f)
             {
                 TypeDefPoint++;
             }
-            else if (Type.TYPE[BerryType][player.PlayerTeraType] == 0.64f)
+            else if (PokemonType.TYPE[BerryType][player.PlayerTeraType] == 0.64f)
             {
                 TypeDefPoint++; TypeDefPoint++;
             }
         }
         else
         {
-            if (Type.TYPE[BerryType][player.PlayerTeraTypeJOR] == 1.2f)
+            if (PokemonType.TYPE[BerryType][player.PlayerTeraTypeJOR] == 1.2f)
             {
                 TypeDefPoint--;
             }
-            else if (Type.TYPE[BerryType][player.PlayerTeraTypeJOR] == 0.8f)
+            else if (PokemonType.TYPE[BerryType][player.PlayerTeraTypeJOR] == 0.8f)
             {
                 TypeDefPoint++;
             }
-            else if (Type.TYPE[BerryType][player.PlayerTeraTypeJOR] == 0.64f)
+            else if (PokemonType.TYPE[BerryType][player.PlayerTeraTypeJOR] == 0.64f)
             {
                 TypeDefPoint++; TypeDefPoint++;
             }

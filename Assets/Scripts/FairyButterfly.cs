@@ -104,16 +104,16 @@ public class FairyButterfly : MonoBehaviour
             {
                 if (player.SpAAbilityPoint >= player.AtkAbilityPoint)
                 {
-                    Pokemon.PokemonHpChange(player.gameObject , e.gameObject , 0 , ((BFType == ButterflyType.红色慢速攻击型) ? 30 : 15), 0 , Type.TypeEnum.Fairy);
+                    Pokemon.PokemonHpChange(player.gameObject , e.gameObject , 0 , ((BFType == ButterflyType.红色慢速攻击型) ? 30 : 15), 0 , PokemonType.TypeEnum.Fairy);
                 }
                 else
                 {
-                    Pokemon.PokemonHpChange(player.gameObject, e.gameObject, ((BFType == ButterflyType.红色慢速攻击型) ? 30 : 15), 0, 0, Type.TypeEnum.Fairy);
+                    Pokemon.PokemonHpChange(player.gameObject, e.gameObject, ((BFType == ButterflyType.红色慢速攻击型) ? 30 : 15), 0, 0, PokemonType.TypeEnum.Fairy);
                 }
 
                 if (BFType == ButterflyType.浅黄色回血型)
                 {
-                    Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, Mathf.Clamp(player.maxHp/16 , 1 , 20) , Type.TypeEnum.IgnoreType);
+                    Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, Mathf.Clamp(player.maxHp/16 , 1 , 20) , PokemonType.TypeEnum.IgnoreType);
                 }
                 if (BFType == ButterflyType.蓝色增加特攻型)
                 {

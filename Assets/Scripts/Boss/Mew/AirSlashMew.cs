@@ -36,7 +36,7 @@ public class AirSlashMew : Projectile
             if (collision.CompareTag("Player"))
             {
                 PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, Type.TypeEnum.Flying);
+                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Flying);
                 if (playerControler != null)
                 {
                     playerControler.KnockOutPoint = 5f;

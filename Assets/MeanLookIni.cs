@@ -37,7 +37,7 @@ public class MeanLookIni : Skill
             {
                 for (int i = 0; i < enemies.Count; i++)
                 {
-                    Pokemon.PokemonHpChange(null , enemies[i].gameObject , -PlayerDmage , 0 , 0 , Type.TypeEnum.IgnoreType);
+                    Pokemon.PokemonHpChange(null , enemies[i].gameObject , -PlayerDmage , 0 , 0 , PokemonType.TypeEnum.IgnoreType);
                 }
             }
             PlayerLastHP = player.Hp;

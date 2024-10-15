@@ -180,6 +180,7 @@ public class _mTool : MonoBehaviour
         if (Parent.transform.childCount != 0) {
             for (int i = 0; i < Parent.transform.childCount; i++)
             {
+                Debug.Log("Destroy");
                 Destroy(Parent.transform.GetChild(i).gameObject);
             }
         }

@@ -24,7 +24,7 @@ public class Moonlight : Skill
 
         //player.ChangeHp(recover, 0, 0);
         int BeforeHP = player.Hp;
-        Pokemon.PokemonHpChange(null , player.gameObject , 0 , 0, recover , Type.TypeEnum.IgnoreType);
+        Pokemon.PokemonHpChange(null , player.gameObject , 0 , 0, recover , PokemonType.TypeEnum.IgnoreType);
         int HealHP = player.Hp - BeforeHP;
         if (SkillFrom == 2 && HealHP > 0)
         {

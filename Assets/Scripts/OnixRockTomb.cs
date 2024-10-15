@@ -26,7 +26,7 @@ public class OnixRockTomb : MonoBehaviour
         if (other.tag == "Player")
         {
             PlayerControler p = other.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(ParentOnix.gameObject, other.gameObject, 60, 0, 0, Type.TypeEnum.Rock);
+            Pokemon.PokemonHpChange(ParentOnix.gameObject, other.gameObject, 60, 0, 0, PokemonType.TypeEnum.Rock);
             if (p != null)
             {
                 p.KnockOutPoint = ParentOnix.Knock;

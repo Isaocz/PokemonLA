@@ -6,7 +6,7 @@ public class WeatherBall : Projectile
 {
     // Start is called before the first frame update
     bool isDestory;
-    public Type.TypeEnum WeatherBallType;
+    public PokemonType.TypeEnum WeatherBallType;
     bool isPSDie;
 
     SpriteRenderer s1;

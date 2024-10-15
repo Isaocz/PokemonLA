@@ -54,7 +54,7 @@ public class KricketunrBufBuzzChild : Projectile
             if (other.tag == ("Player"))
             {
                 PlayerControler playerControler = other.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, 0, SpDmage, 0, Type.TypeEnum.Bug);
+                Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Bug);
                 if (playerControler != null)
                 {
                     playerControler.KnockOutPoint = 5;

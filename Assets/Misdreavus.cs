@@ -34,7 +34,7 @@ public class Misdreavus : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Ghost;
+        EmptyType01 = PokemonType.TypeEnum.Ghost;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);

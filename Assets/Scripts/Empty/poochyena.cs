@@ -43,7 +43,7 @@ public class poochyena : Empty
 
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
-        EmptyType01 = Type.TypeEnum.Dark;
+        EmptyType01 = PokemonType.TypeEnum.Dark;
         EmptyType02 = 0;
         
         EmptyHpForLevel(Emptylevel);
@@ -432,7 +432,7 @@ public class poochyena : Empty
                         {
                             Instantiate(BiteAnimation, new Vector3(other.contacts[0].point.x, other.contacts[0].point.y, 0), Quaternion.identity, other.transform);
 
-                            Pokemon.PokemonHpChange(this.gameObject , e.gameObject , 60 , 0 , 0 , Type.TypeEnum.Dark );
+                            Pokemon.PokemonHpChange(this.gameObject , e.gameObject , 60 , 0 , 0 , PokemonType.TypeEnum.Dark );
                             //e.EmptyHpChange((60 * AtkAbilityPoint * (2 * Emptylevel + 10) / (250 * e.SpdAbilityPoint * ((Weather.GlobalWeather.isHail ? ((e.EmptyType01 == Type.TypeEnum.Ice || e.EmptyType02 == Type.TypeEnum.Ice) ? 1.5f : 1) : 1))) + 2), 0, 17);
                             isInfatuationDmageDone = true;
                         }
@@ -448,7 +448,7 @@ public class poochyena : Empty
                         playerControler.KnockOutPoint = Knock;
                         playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                     }
-                    Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 75, 0, 0, Type.TypeEnum.Dark);
+                    Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 75, 0, 0, PokemonType.TypeEnum.Dark);
                 }
             }
             

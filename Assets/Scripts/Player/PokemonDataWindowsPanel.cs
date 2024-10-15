@@ -146,26 +146,26 @@ public class PokemonDataWindowsPanel : MonoBehaviour
                                   playerControler.playerData.TypeDefAlways[18] + playerControler.playerData.TypeDefJustOneRoom[18] };
         for (int i = 1; i<19; i++)
         {
-            if(Type.TYPE[i][playerControler.PlayerType01] == 1.2f)
+            if(PokemonType.TYPE[i][playerControler.PlayerType01] == 1.2f)
             {
                 Input[i - 1]--;
-            }else if (Type.TYPE[i][playerControler.PlayerType01] == 0.8f)
+            }else if (PokemonType.TYPE[i][playerControler.PlayerType01] == 0.8f)
             {
                 Input[i - 1]++;
             }
-            else if (Type.TYPE[i][playerControler.PlayerType01] == 0.64f)
+            else if (PokemonType.TYPE[i][playerControler.PlayerType01] == 0.64f)
             {
                 Input[i - 1]++; Input[i - 1]++;
             }
-            if (Type.TYPE[i][playerControler.PlayerType02] == 1.2f)
+            if (PokemonType.TYPE[i][playerControler.PlayerType02] == 1.2f)
             {
                 Input[i - 1]--;
             }
-            else if (Type.TYPE[i][playerControler.PlayerType02] == 0.8f)
+            else if (PokemonType.TYPE[i][playerControler.PlayerType02] == 0.8f)
             {
                 Input[i - 1]++;
             }
-            else if (Type.TYPE[i][playerControler.PlayerType02] == 0.64f)
+            else if (PokemonType.TYPE[i][playerControler.PlayerType02] == 0.64f)
             {
                 Input[i - 1]++; Input[i - 1]++;
             }
@@ -173,30 +173,30 @@ public class PokemonDataWindowsPanel : MonoBehaviour
 
             if (playerControler.PlayerTeraTypeJOR == 0)
             {
-                if (Type.TYPE[i][playerControler.PlayerTeraType] == 1.2f)
+                if (PokemonType.TYPE[i][playerControler.PlayerTeraType] == 1.2f)
                 {
                     Input[i - 1]--;
                 }
-                else if (Type.TYPE[i][playerControler.PlayerTeraType] == 0.8f)
+                else if (PokemonType.TYPE[i][playerControler.PlayerTeraType] == 0.8f)
                 {
                     Input[i - 1]++;
                 }
-                else if (Type.TYPE[i][playerControler.PlayerTeraType] == 0.64f)
+                else if (PokemonType.TYPE[i][playerControler.PlayerTeraType] == 0.64f)
                 {
                     Input[i - 1]++; Input[i - 1]++;
                 }
             }
             else
             {
-                if (Type.TYPE[i][playerControler.PlayerTeraTypeJOR] == 1.2f)
+                if (PokemonType.TYPE[i][playerControler.PlayerTeraTypeJOR] == 1.2f)
                 {
                     Input[i - 1]--;
                 }
-                else if (Type.TYPE[i][playerControler.PlayerTeraTypeJOR] == 0.8f)
+                else if (PokemonType.TYPE[i][playerControler.PlayerTeraTypeJOR] == 0.8f)
                 {
                     Input[i - 1]++;
                 }
-                else if (Type.TYPE[i][playerControler.PlayerTeraTypeJOR] == 0.64f)
+                else if (PokemonType.TYPE[i][playerControler.PlayerTeraTypeJOR] == 0.64f)
                 {
                     Input[i - 1]++; Input[i - 1]++;
                 }

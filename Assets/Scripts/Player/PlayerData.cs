@@ -6,8 +6,8 @@ public class PlayerData : MonoBehaviour
 {
     public PassiveList passiveList;
 
-    public Type.TypeEnum Type01Always;
-    public Type.TypeEnum Type02Always;
+    public PokemonType.TypeEnum Type01Always;
+    public PokemonType.TypeEnum Type02Always;
 
     public float HPHardWorkAlways;
     public float AtkHardWorkAlways;
@@ -793,7 +793,7 @@ public class PlayerData : MonoBehaviour
 
             case 105:
                 //105 太晶珠
-                if (player.PlayerType02 != (int)Type.TypeEnum.No) {
+                if (player.PlayerType02 != (int)PokemonType.TypeEnum.No) {
                     switch (Random.Range(0, 2))
                     {
                         case 0:
@@ -822,22 +822,22 @@ public class PlayerData : MonoBehaviour
 
             case 108:
                 //108 碧草面具
-                player.TeraTypeChange((int)Type.TypeEnum.Grass);
+                player.TeraTypeChange((int)PokemonType.TypeEnum.Grass);
                 break;
 
             case 109:
                 //109 水井面具
-                player.TeraTypeChange((int)Type.TypeEnum.Water);
+                player.TeraTypeChange((int)PokemonType.TypeEnum.Water);
                 break;
 
             case 110:
                 //110 火灶面具
-                player.TeraTypeChange((int)Type.TypeEnum.Fire);
+                player.TeraTypeChange((int)PokemonType.TypeEnum.Fire);
                 break;
 
             case 111:
                 //111 础石面具
-                player.TeraTypeChange((int)Type.TypeEnum.Rock);
+                player.TeraTypeChange((int)PokemonType.TypeEnum.Rock);
                 break;
 
             case 112:
@@ -1048,7 +1048,7 @@ public class PlayerData : MonoBehaviour
     void Leftover(PlayerControler player)
     {
         if (Random.Range(0.0f , 1.0f)+((float)(player.LuckPoint)/30) >= 0.4f) {
-            Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, (int)Mathf.Clamp(player.maxHp / 10, 1, 10), Type.TypeEnum.IgnoreType);
+            Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, (int)Mathf.Clamp(player.maxHp / 10, 1, 10), PokemonType.TypeEnum.IgnoreType);
             //player.ChangeHp((int)Mathf.Clamp(player.maxHp / 10, 1, 10), 0, 0);
         }
     }
@@ -1127,11 +1127,11 @@ public class PlayerData : MonoBehaviour
     {
         if (playerInput.Hp >= playerInput.maxHp/2)
         {
-            Pokemon.PokemonHpChange(null , playerInput.gameObject , playerInput.maxHp / 8 , 0 , 0 , Type.TypeEnum.IgnoreType);
+            Pokemon.PokemonHpChange(null , playerInput.gameObject , playerInput.maxHp / 8 , 0 , 0 , PokemonType.TypeEnum.IgnoreType);
         }
         else
         {
-            Pokemon.PokemonHpChange(null, playerInput.gameObject, 0, 0, playerInput.maxHp / 8, Type.TypeEnum.IgnoreType);
+            Pokemon.PokemonHpChange(null, playerInput.gameObject, 0, 0, playerInput.maxHp / 8, PokemonType.TypeEnum.IgnoreType);
         }
     }
     //===================================================寄生蘑菇=================================================
@@ -1332,7 +1332,7 @@ public class PlayerData : MonoBehaviour
         }
     }
 
-    public void MasqueradeChangeType(Type.TypeEnum t)
+    public void MasqueradeChangeType(PokemonType.TypeEnum t)
     {
         if (!isMasqueradeChangeTypeDone)
         {

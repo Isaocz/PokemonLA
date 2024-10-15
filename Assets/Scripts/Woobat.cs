@@ -15,8 +15,8 @@ public class Woobat : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Psychic;
-        EmptyType02 = Type.TypeEnum.Flying;
+        EmptyType01 = PokemonType.TypeEnum.Psychic;
+        EmptyType02 = PokemonType.TypeEnum.Flying;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);

@@ -29,8 +29,8 @@ public class Kirlia : Empty
     void Start()
     {
         
-        EmptyType01 = Type.TypeEnum.Psychic;
-        EmptyType02 = Type.TypeEnum.Fairy;
+        EmptyType01 = PokemonType.TypeEnum.Psychic;
+        EmptyType02 = PokemonType.TypeEnum.Fairy;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);

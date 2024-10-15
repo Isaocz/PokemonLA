@@ -83,7 +83,7 @@ public class MistyExplosionMist : Skill
                     } 
                 }
                 else if (other.tag == "Player") {
-                    Pokemon.PokemonHpChange(p, other.gameObject, 0, SpDamage, 0, Type.TypeEnum.Fairy);
+                    Pokemon.PokemonHpChange(p, other.gameObject, 0, SpDamage, 0, PokemonType.TypeEnum.Fairy);
                     other.GetComponent<PlayerControler>().KnockOutPoint = KOPoint;
                     other.GetComponent<PlayerControler>().KnockOutDirection = (other.GetComponent<PlayerControler>().transform.position - transform.position).normalized;
                     if (SkillFrom == 2 && player != null)

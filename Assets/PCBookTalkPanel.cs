@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PCBookTalkPanel : NPCTalkPanel
+public class PCBookTalkPanel : GameNPCTalkPanel
 {
     SkillShopBuyPanel BuyPanel;
     SkillShopStrengthenPanel StrengthenPanel;
 
     private void Awake()
     {
-        TalkTextList = new string[] { Book() + _mTool.Tips[Random.Range(0, _mTool.Tips.Length)] + "。" };
+        TalkTextList = new DialogString[] { new DialogString(Book() + _mTool.Tips[Random.Range(0, _mTool.Tips.Length)] + "。", DialogString.Face.Normal) };
         NPCTPAwake();
     }
     void Update()
     {
         if (ZButton.Z.IsZButtonDown)
         {
-            TalkTextList = new string[] { Book() + _mTool.Tips[Random.Range(0, _mTool.Tips.Length)] + "。" };
-            TalkInformation.text = TalkTextList[0];
+            TalkTextList = new DialogString[] { new DialogString(Book() + _mTool.Tips[Random.Range(0, _mTool.Tips.Length)] + "。" , DialogString.Face.Normal) };
+            TalkInformation.text = TalkTextList[0].DialogueString;
             TalkIndex = 0;
             gameObject.SetActive(false);
             

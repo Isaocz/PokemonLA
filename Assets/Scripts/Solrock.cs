@@ -26,8 +26,8 @@ public class Solrock : Empty
     // Start is called before the first frame update
     void Start()
     {
-        EmptyType01 = Type.TypeEnum.Rock;
-        EmptyType02 = Type.TypeEnum.Psychic;
+        EmptyType01 = PokemonType.TypeEnum.Rock;
+        EmptyType02 = PokemonType.TypeEnum.Psychic;
         player = GameObject.FindObjectOfType<PlayerControler>();
         Emptylevel = SetLevel(player.Level, MaxLevel);
         EmptyHpForLevel(Emptylevel);

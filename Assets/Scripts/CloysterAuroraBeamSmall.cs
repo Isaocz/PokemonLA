@@ -106,7 +106,7 @@ public class CloysterAuroraBeamSmall : MonoBehaviour
                 if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Player")
                 {
                     PlayerControler p = EndRay.collider.GetComponent<PlayerControler>();
-                    Pokemon.PokemonHpChange(ParentCloyster.gameObject, EndRay.collider.gameObject, 0, 1, 0, Type.TypeEnum.IgnoreType);
+                    Pokemon.PokemonHpChange(ParentCloyster.gameObject, EndRay.collider.gameObject, 0, 1, 0, PokemonType.TypeEnum.IgnoreType);
                 }
             }
             else
@@ -116,7 +116,7 @@ public class CloysterAuroraBeamSmall : MonoBehaviour
                     if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Empty")
                     {
                         Empty e = EndRay.collider.GetComponent<Empty>();
-                        Pokemon.PokemonHpChange(ParentCloyster.gameObject, EndRay.collider.gameObject, 0, 1, 0, Type.TypeEnum.IgnoreType);
+                        Pokemon.PokemonHpChange(ParentCloyster.gameObject, EndRay.collider.gameObject, 0, 1, 0, PokemonType.TypeEnum.IgnoreType);
                         InfatuationDmageCDTimer = 1.2f;
                     }
                 }

@@ -26,10 +26,10 @@ public class DrainPunchMakuhita : Projectile
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
             }
             
-            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Fighting);
+            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Fighting);
             if (BeforeHP != -1)
             {
-                Pokemon.PokemonHpChange(null, empty.gameObject, 0, 0, Mathf.Clamp((BeforeHP - playerControler.Hp) / 2, 1, 10000), Type.TypeEnum.IgnoreType);
+                Pokemon.PokemonHpChange(null, empty.gameObject, 0, 0, Mathf.Clamp((BeforeHP - playerControler.Hp) / 2, 1, 10000), PokemonType.TypeEnum.IgnoreType);
             }
 
         }
@@ -38,8 +38,8 @@ public class DrainPunchMakuhita : Projectile
             
             Empty e = collision.GetComponent<Empty>();
             int BeforeHP = e.EmptyHp;
-            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, Type.TypeEnum.Fighting);
-            Pokemon.PokemonHpChange(null, empty.gameObject, 0, 0, Mathf.Clamp((BeforeHP - e.EmptyHp) / 2 , 1 , 10000), Type.TypeEnum.IgnoreType);
+            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Fighting);
+            Pokemon.PokemonHpChange(null, empty.gameObject, 0, 0, Mathf.Clamp((BeforeHP - e.EmptyHp) / 2 , 1 , 10000), PokemonType.TypeEnum.IgnoreType);
         }
     }
 

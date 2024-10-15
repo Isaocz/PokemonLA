@@ -18,6 +18,8 @@ public class GroupLevelBar : MonoBehaviour
     public Sprite BlueBar;
     public Sprite GreenBar;
 
+    public int GroupLevelUpCount;
+
     public bool isGroupLevelUp;
 
     //»ÕÕÂ
@@ -71,7 +73,8 @@ public class GroupLevelBar : MonoBehaviour
     {
 
         SetLevel();
-        isGroupLevelUp = ScoreCounter.Instance.IsGroupLevelUp;
+        GroupLevelUpCount = ScoreCounter.Instance.IsGroupLevelUp;
+        if (GroupLevelUpCount > 0 ) { isGroupLevelUp = true; }
     }
 
 
@@ -160,7 +163,7 @@ public class GroupLevelBar : MonoBehaviour
             timer = 1 - per;
             if ( per >= 1.0f)
             {
-                if (isGroupLevelUp) {
+                if (GroupLevelUpCount > 0) {
                     isGroupLevelUp = false;
                     GetComponent<Animator>().SetTrigger("Shine");
                     for (int i = 0; i < BadgeParentTransform.transform.childCount; i++)
@@ -189,7 +192,7 @@ public class GroupLevelBar : MonoBehaviour
             timer = 1 - per;
             if ( per >= 1.0f)
             {
-                if (isGroupLevelUp) {
+                if (GroupLevelUpCount > 0 && isGroupLevelUp) {
                     isGroupLevelUp = false;
                     GetComponent<Animator>().SetTrigger("Shine");
                     for (int i = 0; i < BadgeParentTransform.transform.childCount; i++)
@@ -214,10 +217,8 @@ public class GroupLevelBar : MonoBehaviour
 
     public void LevelUp()
     {
-
-        Instantiate(Badgelist[1], BadgeParentTransform.transform.position, Quaternion.identity, BadgeParentTransform.transform).transform.SetAsFirstSibling();
-        LevelBarImage.sprite = LevelBar[1 / 3];
-
+        Instantiate(Badgelist[save.GroupLevel + 1], BadgeParentTransform.transform.position, Quaternion.identity, BadgeParentTransform.transform).transform.SetAsFirstSibling() ;
+        LevelBarImage.sprite = LevelBar[(save.GroupLevel+1) / 3];
     }
 
     public void LevelUpOver()
@@ -225,19 +226,19 @@ public class GroupLevelBar : MonoBehaviour
 
         if (SaveLoader.saveLoader != null)
         {
+            GroupLevelUpCount -= 1;
+            if (GroupLevelUpCount > 0) { isGroupLevelUp = false; }
             save.GroupLevel += 1;
             save = SaveLoader.saveLoader.saveData;
-            SetLevelBar(save.GroupLevel);
             if (save != null)
             {
-                per = Mathf.Clamp((float)(save.APTotal - ExpRequired[save.GroupLevel]) / (float)(ExpRequired[save.GroupLevel + 1] - ExpRequired[save.GroupLevel]), 0.0f, 1.0f);
+                per = Mathf.Clamp((float)(ScoreCounter.Instance.TotalAP() - ExpRequired[save.GroupLevel]) / (float)(ExpRequired[save.GroupLevel + 1] - ExpRequired[save.GroupLevel]), 0.0f, 1.0f);
                 timer = 1.0f;
                 Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
             }
         }
         else
         {
-            SetLevelBar(1);
             Per = Mathf.Clamp((float)(8120.0f - GroupLevelBar.ExpRequired[1]) / (float)(GroupLevelBar.ExpRequired[1 + 1] - GroupLevelBar.ExpRequired[1]), 0.0f, 1.0f);
             timer = 1.0f;
             Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
