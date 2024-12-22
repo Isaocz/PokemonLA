@@ -8,6 +8,7 @@ using UnityEngine;
 public class IndeedeeDizzyNPC : TownNPC
 {
 
+    bool isDizzy = true;
 
     void Start()
     {
@@ -38,6 +39,16 @@ public class IndeedeeDizzyNPC : TownNPC
         {
 
             NPCUpdate();
+        }
+
+        if (SaveLoader.saveLoader != null)
+        {
+            if (isDizzy && SaveLoader.saveLoader.saveData.TownNPCDialogState.isStateWithIndeedee03)
+            {
+                isDizzy = false;
+                animator.SetBool("Dizzy", false);
+            }
+
         }
     }
 

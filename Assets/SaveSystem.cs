@@ -113,7 +113,7 @@ public class SaveData
         for (int i = 0;i < AchievementList.AllAchievementList.Count; i++)
         {
             Debug.Log(AchievementList.AllAchievementList[i].AchiCountTarget);
-            PlayerAchievementList.Add(new PlayerAchievement(AchievementList.AllAchievementList[i].AchiCountTarget));
+            PlayerAchievementList.Add(new PlayerAchievement(AchievementList.AllAchievementList[i]));
         }
         RoleList = new List<RoleInfo> { };
         UnlockInitalItem = new List<int> { };
@@ -121,6 +121,66 @@ public class SaveData
 
         TownNPCDialogState = new NPCDialogState();
     }
+
+    /// <summary>
+    /// 检查成就的解锁情况
+    /// </summary>
+    public static void CheckforAchUnlock()
+    {
+        if (SaveLoader.saveLoader != null)
+        {
+            foreach (PlayerAchievement ach in SaveLoader.saveLoader.saveData.PlayerAchievementList)
+            {
+                //检查所有已解锁的项目 
+                if (ach.State == AchievementList.AchStatus.Locked)
+                {
+                    bool canUnlockAchi = true;
+                    bool canUnlockTDP = true;
+                    if (ach.achievement.LockedList.Count != 0)
+                    {
+                        //检查这些任务的前置任务是否已经处于完成状态。
+                        foreach (int i in ach.achievement.LockedList)
+                        {
+                            if (SaveLoader.saveLoader.saveData.PlayerAchievementList[i].State != AchievementList.AchStatus.Completed)
+                            {
+                                canUnlockAchi = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (ach.achievement.LockedTDPList.Count != 0)
+                    {
+                        //检查这些任务的前置任务是否已经处于完成状态。
+                        foreach (int i in ach.achievement.LockedTDPList)
+                        {
+                            if (SaveLoader.saveLoader.saveData.TownDevelopmentProjectsList[i].ProjectProgress != TownDevelopmentProject.ProjectStatus.Completed)
+                            {
+                                canUnlockTDP = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (canUnlockAchi && canUnlockTDP)
+                    {
+                        ach.State = AchievementList.AchStatus.InProgress;
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    /// <summary>
+    /// 某项成就的进度增加
+    /// </summary>
+    public static void AchProgressPlus(int AchIndex , int value)
+    {
+        PlayerAchievement a = SaveLoader.saveLoader.saveData.PlayerAchievementList[AchIndex];
+        a.Progress = Mathf.Clamp(a.Progress+value, 0 , a.Target);
+        a.isAchievementUnlock();
+    }
+
 }
 
 [System.Serializable]
@@ -221,9 +281,27 @@ public class PlayerAchievement
     /// </summary>
     public bool isAchievementUnlock()
     {
-        if (Progress >= Target) { return true; }
+        SaveData.CheckforAchUnlock();
+        if (State == AchievementList.AchStatus.InProgress)
+        {
+            if (Progress >= Target) { 
+                State = AchievementList.AchStatus.Completed;
+                return true;  }
+            else { return false; }
+        }
         else { return false; }
     }
+
+
+
+    /// <summary>
+    /// 成就的状态
+    /// </summary>
+    public AchievementList.AchStatus State = AchievementList.AchStatus.Locked;
+    /// <summary>
+    /// 成就的内容
+    /// </summary>
+    public AchievementList.Achievement achievement;
     /// <summary>
     /// 成就的当前进度
     /// </summary>
@@ -232,12 +310,33 @@ public class PlayerAchievement
     /// 进度到达的目标，到达时解锁成就
     /// </summary>
     public int Target;
+    /// <summary>
+    /// 记录成就的某个部分已经被完成了，如成就4大胃王，当吃过蓝菊果后，向CompletePartList种记录0 ， 下次使用蓝菊果时，如果CompletePartList中有0，则不在增加
+    /// </summary>
+    public List<string> CompletePartList = new List<string> { };
 
-    public PlayerAchievement( int target)
+
+    public PlayerAchievement(AchievementList.Achievement a )
     {
+        achievement = a;
         Progress = 0;
-        Target = target;
+        Target = a.AchiCountTarget;
+        State = a.StartState;
     }
+
+    /// <summary>
+    /// 增加成就的进度;
+    /// </summary>
+    public void AchievementProgressPlus(int Value , string Part)
+    {
+        if (Part == null || !(CompletePartList.Contains(Part)) )
+        {
+            if (Part != null) { CompletePartList.Add(Part); }
+            Progress += Mathf.Clamp(Progress + Value, 0 , Target);
+            isAchievementUnlock();
+        }
+    }
+
 }
 
 
@@ -460,6 +559,9 @@ public class SaveSystem : MonoBehaviour
         string path = Application.persistentDataPath + "/Save" + data.SaveIndex + ".json";
         SaveDataWrapper DataWrapper = new SaveDataWrapper(data);
         string json = JsonUtility.ToJson(DataWrapper);
+
+        if (DataWrapper.save.RoleList.Count > 0 && DataWrapper.save.RoleList[0].InitialSkills.Count > 0 && DataWrapper.save.RoleList[0].InitialSkills[0] == null) { Debug.LogError("InitialSkills Null!"); }
+
         using (Aes aes = Aes.Create())
         {
             currentKey = aes.Key;
@@ -488,6 +590,8 @@ public class SaveSystem : MonoBehaviour
         if (File.Exists(path))
         {
             byte[] readDataBt = File.ReadAllBytes(path);
+
+
             //文件数据是否为空
             if (readDataBt.Length <= 0)
             {
@@ -504,12 +608,23 @@ public class SaveSystem : MonoBehaviour
             if (s.RoleList.Count > 0 && s.RoleList[0].InitialSkills.Count> 0 && s.RoleList[0].InitialSkills[0] == null) { Debug.LogError("InitialSkills Null!");  }
 
 
+ 
+
+
             //如果更新了新成就，加入到存档中
             if (s.PlayerAchievementList.Count < AchievementList.AllAchievementList.Count)
             {
                 for (int i = s.PlayerAchievementList.Count; i < AchievementList.AllAchievementList.Count; i++)
                 {
-                    s.PlayerAchievementList.Add(new PlayerAchievement(AchievementList.AllAchievementList[i].AchiCountTarget));
+                    s.PlayerAchievementList.Add(new PlayerAchievement(AchievementList.AllAchievementList[i]));
+                }
+            }
+            else //成就结构改变时，刷新
+            {
+                for (int i = 0; i < AchievementList.AllAchievementList.Count; i++)
+                {
+                    s.PlayerAchievementList[i].achievement = AchievementList.AllAchievementList[i];
+                    Debug.Log(s.PlayerAchievementList[i].achievement.AchiName);
                 }
             }
             //如果更新了新角色，加入到存档中

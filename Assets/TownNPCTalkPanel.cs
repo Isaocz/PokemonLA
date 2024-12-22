@@ -216,6 +216,18 @@ public class TownNPCTalkPanel : NPCTalkPanel
                                 JudgeNodeNext();
                             }
                             return;
+                        case NodeType.AchievementJudgeNode:
+                            if (CurrentDialogNode.ChildNode != null && CurrentDialogNode.ChildNode[0].OutputItems != null && CurrentDialogNode.ChildNode[0].OutputItems.Count != 0)
+                            {
+                                AchievementJudgeNodeNext();
+                            }
+                            return;
+                        case NodeType.TDPJudgeNode:
+                            if (CurrentDialogNode.ChildNode != null && CurrentDialogNode.ChildNode[0].OutputItems != null && CurrentDialogNode.ChildNode[0].OutputItems.Count != 0)
+                            {
+                                TDPJudgeNodeNext();
+                            }
+                            return;
                         case NodeType.End:
                             PlayerExit();
                             return;
@@ -256,6 +268,18 @@ public class TownNPCTalkPanel : NPCTalkPanel
                             if (CurrentDialogNode.ChildNode != null && CurrentDialogNode.ChildNode[0].OutputItems != null && CurrentDialogNode.ChildNode[0].OutputItems.Count != 0)
                             {
                                 JudgeNodeNext();
+                            }
+                            return;
+                        case NodeType.AchievementJudgeNode:
+                            if (CurrentDialogNode.ChildNode != null && CurrentDialogNode.ChildNode[0].OutputItems != null && CurrentDialogNode.ChildNode[0].OutputItems.Count != 0)
+                            {
+                                AchievementJudgeNodeNext();
+                            }
+                            return;
+                        case NodeType.TDPJudgeNode:
+                            if (CurrentDialogNode.ChildNode != null && CurrentDialogNode.ChildNode[0].OutputItems != null && CurrentDialogNode.ChildNode[0].OutputItems.Count != 0)
+                            {
+                                TDPJudgeNodeNext();
                             }
                             return;
                         case NodeType.EventNode:
@@ -361,6 +385,7 @@ public class TownNPCTalkPanel : NPCTalkPanel
                             if (Boolean.TryParse((string)Value, out resultb)) {
                                 instanceField.SetValue(DialogState, resultb);
                             }
+                            NodeEvent(CurrentDialogNode.OutputItems[i].DialogueString, (string)Value);
                             break;
                         case Type t when t == typeof(int):
                             int resultint;
@@ -377,8 +402,10 @@ public class TownNPCTalkPanel : NPCTalkPanel
                             Debug.Log("ErrorType");
                             break;
                     }
+                    
 
                 }
+
             }
 
             CurrentDialogNode = CurrentDialogNode.ChildNode[0];
@@ -388,6 +415,139 @@ public class TownNPCTalkPanel : NPCTalkPanel
 
         SetText();
     }
+
+
+
+    /// <summary>
+    /// 事件节点的附加效果
+    /// </summary>
+    /// <param name="Condition"></param>
+    void NodeEvent( string Condition , string value)
+    {
+        switch (Condition)
+        {
+            case "isStateWithIndeedee06":  //解锁奶馆建设项目
+                if (value == "True")
+                {
+                    SaveLoader.saveLoader.saveData.TownDevelopmentProjectsList[6].ProjectProgress = TownDevelopmentProject.ProjectStatus.Locked;
+                    TownLoader.CheckforUnlock();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+
+
+
+
+    /// <summary>
+    /// 成就判断节点
+    /// </summary>
+    public void AchievementJudgeNodeNext()
+    {
+        //判断节点正确连接，有2个选项
+        if (CurrentDialogNode.NodeType == NodeType.AchievementJudgeNode && CurrentDialogNode.ChildNode.Count == 2 && SaveLoader.saveLoader != null)
+        {
+            int num;
+            bool result = int.TryParse(CurrentDialogNode.OutputItems[0].DialogueString, out num);
+            if (result)
+            {
+                // 获取该节点指向的成就
+                PlayerAchievement Ach = SaveLoader.saveLoader.saveData.PlayerAchievementList[num];
+                if (Ach != null)
+                {
+                    if (Ach.isAchievementUnlock())
+                    {
+                        CurrentDialogNode = CurrentDialogNode.ChildNode[0];
+                        Debug.Log(Ach.achievement.AchiName + Ach.isAchievementUnlock() + CurrentDialogNode.name);
+                    }
+                    else
+                    {
+                        CurrentDialogNode = CurrentDialogNode.ChildNode[1];
+                        Debug.Log(Ach.achievement.AchiName + Ach.isAchievementUnlock() + CurrentDialogNode.name);
+                    }
+                }
+            }
+            else
+            {
+                CurrentDialogNode = CurrentDialogNode.ChildNode[0];
+                Debug.Log("instanceFieldNull");
+            }
+        }
+        //判断节点错误链接,仅有一个选项
+        else
+        {
+            CurrentDialogNode = CurrentDialogNode.ChildNode[0];
+            Debug.Log("FailNodeContect");
+        }
+        Debug.Log("SetText");
+        SetText();
+    }
+
+
+    /// <summary>
+    /// 建筑计划判断节点
+    /// </summary>
+    public void TDPJudgeNodeNext()
+    {
+        
+        //判断节点正确连接，有五个选项
+        if (CurrentDialogNode.NodeType == NodeType.TDPJudgeNode && CurrentDialogNode.ChildNode.Count == 5 && SaveLoader.saveLoader != null)
+        {
+            int num;
+            bool result = int.TryParse(CurrentDialogNode.OutputItems[0].DialogueString, out num);
+            if (result)
+            {
+                // 获取该节点指向的开发计划
+                TownDevelopmentProject TDP = SaveLoader.saveLoader.saveData.TownDevelopmentProjectsList[num];
+                if (TDP != null)
+                {
+                    if (TDP.ProjectProgress == TownDevelopmentProject.ProjectStatus.Locked)
+                    {
+                        CurrentDialogNode = CurrentDialogNode.ChildNode[0];
+                        Debug.Log(TDP.ProjectName + TDP.ProjectProgress + CurrentDialogNode.name);
+                    }
+                    else if (TDP.ProjectProgress == TownDevelopmentProject.ProjectStatus.NotStarted)
+                    {
+                        CurrentDialogNode = CurrentDialogNode.ChildNode[1];
+                        Debug.Log(TDP.ProjectName + TDP.ProjectProgress + CurrentDialogNode.name);
+                    }
+                    else if (TDP.ProjectProgress == TownDevelopmentProject.ProjectStatus.InProgress)
+                    {
+                        CurrentDialogNode = CurrentDialogNode.ChildNode[2];
+                        Debug.Log(TDP.ProjectName + TDP.ProjectProgress + CurrentDialogNode.name);
+                    }
+                    else if (TDP.ProjectProgress == TownDevelopmentProject.ProjectStatus.Completed)
+                    {
+                        CurrentDialogNode = CurrentDialogNode.ChildNode[3];
+                        Debug.Log(TDP.ProjectName + TDP.ProjectProgress + CurrentDialogNode.name);
+                    }
+                    else if (TDP.ProjectProgress == TownDevelopmentProject.ProjectStatus.NotSelected)
+                    {
+                        CurrentDialogNode = CurrentDialogNode.ChildNode[4];
+                        Debug.Log(TDP.ProjectName + TDP.ProjectProgress + CurrentDialogNode.name);
+                    }
+                }
+            }
+            else
+            {
+                CurrentDialogNode = CurrentDialogNode.ChildNode[0];
+                Debug.Log("instanceFieldNull");
+            }
+        }
+        //判断节点错误链接,仅有一个选项
+        else
+        {
+            CurrentDialogNode = CurrentDialogNode.ChildNode[0];
+            Debug.Log("FailNodeContect");
+        }
+        Debug.Log("SetText");
+        SetText();
+    }
+
+
 
 
     /// <summary>
@@ -436,12 +596,12 @@ public class TownNPCTalkPanel : NPCTalkPanel
         SetText();
     }
 
-
     /// <summary>
     /// 关闭玩家互动界面
     /// </summary>
     public void ClosePlayerInterfacePanel()
     {
+        Debug.Log(CurrentDialogNode.name);
         CurrentDialogNode = CurrentDialogNode.ChildNode[0];
         PlayerInterfacePanel.SetActive(false);
         isTalkPuse = false;

@@ -89,11 +89,15 @@ public class TDPPanel : MonoBehaviour
     {
         if (SaveLoader.saveLoader != null)
         {
+            TownLoader.CheckforUnlock();
+
             _mTool.RemoveAllChild(ButtonParent);
 
             NowAP.text = SaveLoader.saveLoader.saveData.AP.ToString();
             List <TownDevelopmentProject> l = SaveLoader.saveLoader.saveData.TownDevelopmentProjectsList;
             ResetList();
+
+
             for (int i = 0; i < l.Count; i++)
             {
                 if (l[i].ProjectProgress == TownDevelopmentProject.ProjectStatus.NotStarted || l[i].ProjectProgress == TownDevelopmentProject.ProjectStatus.NotSelected)

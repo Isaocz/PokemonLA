@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerPokemon : Pokemon
 {
 
+
 }
 
 public class Pokemon : MonoBehaviour

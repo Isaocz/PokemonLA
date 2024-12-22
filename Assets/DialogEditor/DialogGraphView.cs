@@ -101,7 +101,11 @@ namespace DialogueSystem
             evt.menu.AppendAction("Create JudgeDialogNode",
                 x => CreateNode(NodeType.JudgeNode, clickPosition));
             evt.menu.AppendAction("Create EventDialogNode",
-                 x => CreateNode(NodeType.EventNode, clickPosition));
+                x => CreateNode(NodeType.EventNode, clickPosition));
+            evt.menu.AppendAction("Create AchievementJudgeNode",
+                x => CreateNode(NodeType.AchievementJudgeNode, clickPosition));
+            evt.menu.AppendAction("Create TDPJudgeNode",
+                x => CreateNode(NodeType.TDPJudgeNode, clickPosition));
             evt.menu.AppendAction("Create EndNode", x => { CreateNode(NodeType.End, clickPosition); });
 
         }
@@ -312,6 +316,32 @@ namespace DialogueSystem
                         nodeView = new EventNodeView(dialogNodeData);
                         break;
                     }
+                case NodeType.AchievementJudgeNode:
+                    {
+                        var dialogNodeData = ScriptableObject.CreateInstance<AchievementJudgeNodeData>();
+                        dialogNodeData.Path =
+                            $"Assets/DialogueData/NodeData/" + treeData.name + $"/AchievementJudgeNodeData[{dialogNodeData.GetInstanceID()}].asset";
+                        EditorUtility.SetDirty(dialogNodeData);
+
+                        AssetDatabase.CreateAsset(dialogNodeData,
+                            $"Assets/DialogueData/NodeData/" + treeData.name + $"/AchievementJudgeNodeData[{dialogNodeData.GetInstanceID()}].asset");
+
+                        nodeView = new AchievementJudgeNodeDialogView(dialogNodeData);
+                        break;
+                    }
+                case NodeType.TDPJudgeNode:
+                    {
+                        var dialogNodeData = ScriptableObject.CreateInstance<TDPJudgeNodeData>();
+                        dialogNodeData.Path =
+                            $"Assets/DialogueData/NodeData/" + treeData.name + $"/TDPJudgeNode[{dialogNodeData.GetInstanceID()}].asset";
+                        EditorUtility.SetDirty(dialogNodeData);
+
+                        AssetDatabase.CreateAsset(dialogNodeData,
+                            $"Assets/DialogueData/NodeData/" + treeData.name + $"/TDPJudgeNode[{dialogNodeData.GetInstanceID()}].asset");
+
+                        nodeView = new TDPJudgeNodeView(dialogNodeData);
+                        break;
+                    }
                 case NodeType.End:
                     {
                         var dialogNodeData = ScriptableObject.CreateInstance<EndNodeData>();
@@ -442,6 +472,16 @@ namespace DialogueSystem
                 case NodeType.JudgeNode:
                     {
                         nodeView = new JudgeNodeView(DialogNodeData);
+                        break;
+                    }
+                case NodeType.AchievementJudgeNode:
+                    {
+                        nodeView = new AchievementJudgeNodeDialogView(DialogNodeData);
+                        break;
+                    }
+                case NodeType.TDPJudgeNode:
+                    {
+                        nodeView = new TDPJudgeNodeView(DialogNodeData);
                         break;
                     }
                 case NodeType.EventNode:

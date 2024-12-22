@@ -40,11 +40,18 @@ public class NPCDialogState
     /// 是否和路卡利欧表明身份
     /// </summary>
     public bool isStateWithLucario01 = false;
-
     /// <summary>
     /// 是否和路卡利欧谈起爱管侍
     /// </summary>
     public bool isStateWithLucario02 = false;
+    /// <summary>
+    /// 是否告诉路卡利欧找到了爱管侍
+    /// </summary>
+    public bool isStateWithLucario03 = false;
+    /// <summary>
+    /// 是否告知路卡利欧完成了初次冒险
+    /// </summary>
+    public bool isStateWithLucario04 = false;
 
 
 
@@ -70,9 +77,13 @@ public class NPCDialogState
     /// </summary>
     public bool isStateWithIndeedee05 = false;
     /// <summary>
-    /// 
+    /// 是否答应爱管侍帮忙建造奶馆
     /// </summary>
     public bool isStateWithIndeedee06 = false;
+    /// <summary>
+    /// 是否开始奶馆建设
+    /// </summary>
+    public bool isStateWithIndeedee07 = false;
 
 
 
@@ -88,6 +99,8 @@ public class NPCDialogState
         isProjectFinshThisRound = false;
         isStateWithLucario01 = false;
         isStateWithLucario02 = false;
+        isStateWithLucario03 = false;
+        isStateWithLucario04 = false;
 
         isStateWithIndeedee01 = false;
         isStateWithIndeedee02 = false;
@@ -95,6 +108,7 @@ public class NPCDialogState
         isStateWithIndeedee04 = false;
         isStateWithIndeedee05 = false;
         isStateWithIndeedee06 = false;
+        isStateWithIndeedee07 = false;
 
     }
 

@@ -10,7 +10,8 @@ public class IndeedeeNPC : TownNPC
     public enum IndeedeeState
     {
         Dizzy,          //迷路
-        InTown,         //奶馆尚未建立 在小镇上
+        InTownCenter,   //奶馆尚未建立 在树林中心 树林尚未清理
+        InTownUR,         //奶馆尚未建立 树林已清理
         InMilkBar,      //奶馆建立 在吧台里
     }
     public IndeedeeState State;
@@ -20,7 +21,7 @@ public class IndeedeeNPC : TownNPC
     void Start()
     {
         NPCStart();
-        JudgeStartState();
+        Invoke("JudgeStartState" , 0.03f);
     }
 
     /// <summary>
@@ -43,7 +44,14 @@ public class IndeedeeNPC : TownNPC
                 }
                 else
                 {
-                    State = IndeedeeState.InTown; //奶馆尚未建立
+                    Debug.Log(SaveLoader.saveLoader.saveData.TownNPCDialogState.isStateWithIndeedee05);
+                    if (!SaveLoader.saveLoader.saveData.TownNPCDialogState.isStateWithIndeedee05) {
+                        State = IndeedeeState.InTownCenter; //奶馆尚未建立 树林未开拓
+                    }
+                    else {
+                        State = IndeedeeState.InTownUR; //奶馆尚未建立 树林完成开拓
+                    }
+                    
                 }
             }
         }
@@ -60,14 +68,19 @@ public class IndeedeeNPC : TownNPC
             case IndeedeeState.Dizzy:
                 gameObject.SetActive(false);
                 break;
-            case IndeedeeState.InTown:
+            case IndeedeeState.InTownCenter:
                 gameObject.SetActive(true);
                 transform.parent = TownMap.townMap.TownNPCParent;
                 transform.localPosition = new Vector3(3.33f , 19.47f , 0);
                 break;
-            case IndeedeeState.InMilkBar:
+            case IndeedeeState.InTownUR:
                 gameObject.SetActive(true);
                 transform.parent = TownMap.townMap.TownNPCParent;
+                transform.localPosition = new Vector3(9.05f, 21.9f, 0);
+                break;
+            case IndeedeeState.InMilkBar:
+                gameObject.SetActive(true);
+                transform.parent = TownMap.townMap.buildhouse.MilkBar.NPCParent.transform;
                 transform.localPosition = new Vector3(2.1f, 1.3f, 0);
                 break;
             default:

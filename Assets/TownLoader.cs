@@ -175,7 +175,8 @@ public class TownDevelopmentProject
     {
         switch (ProjectIndex)
         {
-
+            case 6:
+                return SaveLoader.saveLoader.saveData.TownNPCDialogState.isStateWithIndeedee06;
             default: return true;//绝大多数项目没有
                 
         }
@@ -188,12 +189,21 @@ public class TownDevelopmentProject
 public class TownLoader : MonoBehaviour
 {
 
+    /// <summary>
+    /// 小镇的npc 0路卡利欧 1修建老将 2爱管侍
+    /// </summary>
+    public TownNPC[] TownNPCList;
+    /// <summary>
+    /// 游戏中的npc 0溶蚀兽 1梦幻 2胖可丁
+    /// </summary>
+    public GameNPC[] GameNPCList;
+
+
     public static TownLoader townLoader;
 
     private void Awake()
     {
         townLoader = this;
-        
     }
 
     private void Start()
@@ -208,12 +218,19 @@ public class TownLoader : MonoBehaviour
     /// </summary>
     public static List<TownDevelopmentProject> TDPList = new List<TownDevelopmentProject>    
     {
-                new TownDevelopmentProject(0 ,TownDevelopmentProject.ProjectTypeEnum.DevelopmentProjects , "小镇扩张（东北方）" ,TownDevelopmentProject.ProjectLocation.Town ,  "清理掉小镇东北方向的杂草和树林，小镇会向东北方向扩张。" ,          1500, TownDevelopmentProject.ProjectStatus.NotStarted,  new List<int>{ } , new List<int>{ },0),
-                new TownDevelopmentProject(1 ,TownDevelopmentProject.ProjectTypeEnum.DevelopmentProjects , "小镇扩张（西北方）"  ,TownDevelopmentProject.ProjectLocation.Town , "清理掉小镇西北方向的杂草和树林，小镇会向西北方向扩张。"  ,         2500, TownDevelopmentProject.ProjectStatus.NotStarted,  new List<int> { }, new List<int>{ }, 0),
-                new TownDevelopmentProject(2 ,TownDevelopmentProject.ProjectTypeEnum.DevelopmentProjects , "小镇扩张（西南方）"  ,TownDevelopmentProject.ProjectLocation.Town , "清理掉小镇东北方向的杂草和树林，小镇会向西南方向扩张。"  ,         2500, TownDevelopmentProject.ProjectStatus.Locked,  new List<int> { 0, 1 }, new List<int>{ }, 0),
-                new TownDevelopmentProject(3 ,TownDevelopmentProject.ProjectTypeEnum.DevelopmentProjects , "小镇扩张（东南方）"  ,TownDevelopmentProject.ProjectLocation.Town , "清理掉小镇东北方向的杂草和树林，小镇会向东南方向扩张。"  ,         4000, TownDevelopmentProject.ProjectStatus.Locked,  new List<int> { 0, 1 }, new List<int>{ }, 0),
-                new TownDevelopmentProject(4 ,TownDevelopmentProject.ProjectTypeEnum.DecorationProjects  , "沙发（皮卡丘风格）"  ,TownDevelopmentProject.ProjectLocation.PoliceStation , "为冒险公会的老大换个新沙发吧"  ,   0, TownDevelopmentProject.ProjectStatus.Completed,  new List<int> { }, new List<int>{ 4, 5 }, -1),
-                new TownDevelopmentProject(5 ,TownDevelopmentProject.ProjectTypeEnum.DecorationProjects  , "沙发（百变怪风格）"  ,TownDevelopmentProject.ProjectLocation.PoliceStation , "为冒险公会的老大换个新沙发吧"  , 500, TownDevelopmentProject.ProjectStatus.NotStarted,  new List<int> { }, new List<int>{ 4 , 5 }, -1),
+                                                                                                                                                                                                                                                                                                                       //价格 初始状态                                               前置项目                       互斥项目
+        new TownDevelopmentProject(0  ,TownDevelopmentProject.ProjectTypeEnum.DevelopmentProjects , "小镇扩张（东北方）"  ,TownDevelopmentProject.ProjectLocation.Town  ,              "清理掉小镇东北方向的杂草和树林，小镇会向东北方向扩张。" ,                                                                        1500, TownDevelopmentProject.ProjectStatus.NotStarted,       new List<int> { } ,            new List<int>{ },           0  ), //0
+        new TownDevelopmentProject(1  ,TownDevelopmentProject.ProjectTypeEnum.DevelopmentProjects , "小镇扩张（西北方）"  ,TownDevelopmentProject.ProjectLocation.Town ,               "清理掉小镇西北方向的杂草和树林，小镇会向西北方向扩张。"  ,                                                                       2500, TownDevelopmentProject.ProjectStatus.NotStarted,       new List<int> { },             new List<int>{ },           0  ), //1
+        new TownDevelopmentProject(2  ,TownDevelopmentProject.ProjectTypeEnum.DevelopmentProjects , "小镇扩张（西南方）"  ,TownDevelopmentProject.ProjectLocation.Town ,               "清理掉小镇东北方向的杂草和树林，小镇会向西南方向扩张。"  ,                                                                       2500, TownDevelopmentProject.ProjectStatus.Locked,           new List<int> { 0, 1 },        new List<int>{ },           0  ), //2
+        new TownDevelopmentProject(3  ,TownDevelopmentProject.ProjectTypeEnum.DevelopmentProjects , "小镇扩张（东南方）"  ,TownDevelopmentProject.ProjectLocation.Town ,               "清理掉小镇东北方向的杂草和树林，小镇会向东南方向扩张。"  ,                                                                       4000, TownDevelopmentProject.ProjectStatus.Locked,           new List<int> { 0, 1 },        new List<int>{ },           0  ), //3
+        new TownDevelopmentProject(4  ,TownDevelopmentProject.ProjectTypeEnum.DecorationProjects  , "沙发（皮卡丘风格）"  ,TownDevelopmentProject.ProjectLocation.PoliceStation ,      "为冒险公会的老大换个新沙发吧"  ,                                                                                                    0, TownDevelopmentProject.ProjectStatus.Completed,        new List<int> { },             new List<int>{ 4, 5 },      -1 ), //4
+        new TownDevelopmentProject(5  ,TownDevelopmentProject.ProjectTypeEnum.DecorationProjects  , "沙发（百变怪风格）"  ,TownDevelopmentProject.ProjectLocation.PoliceStation ,      "为冒险公会的老大换个新沙发吧"  ,                                                                                                  500, TownDevelopmentProject.ProjectStatus.NotStarted,       new List<int> { },             new List<int>{ 4 , 5 },     -1 ), //5
+        new TownDevelopmentProject(6  ,TownDevelopmentProject.ProjectTypeEnum.BuildProjects       , "建造哞哞奶吧"        ,TownDevelopmentProject.ProjectLocation.Town ,               "为众多冒险家建立一个休息和交流的场所，美味的哞哞牛奶在等着你！（爱管侍小姐已经支付了一部分费用）"  ,                             2500, TownDevelopmentProject.ProjectStatus.Locked,           new List<int> { 0 },           new List<int>{  },          1  ), //6
+        new TownDevelopmentProject(7  ,TownDevelopmentProject.ProjectTypeEnum.BuildProjects       , "建造古德道具店"      ,TownDevelopmentProject.ProjectLocation.Town ,               "一个冒险家云集的小镇需要一个道具商店，冒险家们可以购买初始道具，获得更多的道具补给。"  ,                                        12500, TownDevelopmentProject.ProjectStatus.Locked,           new List<int> { 0 },           new List<int>{  },          2  ), //7
+        new TownDevelopmentProject(8  ,TownDevelopmentProject.ProjectTypeEnum.BuildProjects       , "建造破壳宝育园"      ,TownDevelopmentProject.ProjectLocation.Town ,               "破壳教育计划在冒险镇开设一所宝育园，帮助繁忙的冒险家照顾宝宝，培育出更强大的冒险家！"  ,                                        25000, TownDevelopmentProject.ProjectStatus.Locked,           new List<int> { 1 },           new List<int>{  },          3  ), //8
+        new TownDevelopmentProject(9  ,TownDevelopmentProject.ProjectTypeEnum.BuildProjects       , "建造图图技能艺术廊"  ,TownDevelopmentProject.ProjectLocation.Town ,               "伟大的技能艺术家图图似乎对冒险镇很感兴趣，希望在此举办画展并且参观冒险者冒险的英姿获得灵感。也许可以拜托他绘制技能学习机！"  ,  25000, TownDevelopmentProject.ProjectStatus.Locked,           new List<int> { 1 },           new List<int>{  },          4  ), //9
+        new TownDevelopmentProject(10 ,TownDevelopmentProject.ProjectTypeEnum.BuildProjects       , "建造头目宝可梦俱乐部",TownDevelopmentProject.ProjectLocation.Town ,               "<来自头目兄弟会密令：新崛起的冒险镇似乎很有趣，再次建立一个新俱乐部吧！>"       ,                                               50000, TownDevelopmentProject.ProjectStatus.Locked,           new List<int> { 3 },           new List<int>{  },          5  ), //10
+        new TownDevelopmentProject(11 ,TownDevelopmentProject.ProjectTypeEnum.BuildProjects       , "建造滚石俱乐部"      ,TownDevelopmentProject.ProjectLocation.Town ,               "是不是被野生宝可梦设下的推石谜题难住了？建立一个推石俱乐部，可以在此反复推敲这些谜题哦"     ,                                   50000, TownDevelopmentProject.ProjectStatus.Locked,           new List<int> { 3 },           new List<int>{  },          6  ), //11
             
     };
 
@@ -288,27 +305,74 @@ public class TownLoader : MonoBehaviour
         switch (Index)
         {
             case 0:// 移除小镇东北方的树林
-                TownMap.townMap.TreeRU.SetActive(false);
-                TownMap.townMap.FenceRU.SetActive(true);
+                TownMap.townMap.tree.TreeRU.SetActive(false);
+                TownMap.townMap.fence.FenceRU.SetActive(true);
+                SaveLoader.saveLoader.saveData.TownNPCDialogState.isStateWithIndeedee05 = true;
+
                 break;
             case 1:// 移除小镇西北方的树林
-                TownMap.townMap.TreeLU.SetActive(false);
-                TownMap.townMap.FenceLU.SetActive(true);
+                TownMap.townMap.tree.TreeLU.SetActive(false);
+                TownMap.townMap.fence.FenceLU.SetActive(true);
                 break;
             case 2:// 移除小镇西南方的树林
-                TownMap.townMap.TreeLD.SetActive(false);
-                TownMap.townMap.FenceLD.SetActive(true);
+                TownMap.townMap.tree.TreeLD.SetActive(false);
+                TownMap.townMap.fence.FenceLD.SetActive(true);
                 break;
             case 3:// 移除小镇东南方的树林
-                TownMap.townMap.TreeRD.SetActive(false);
-                TownMap.townMap.FenceRD.SetActive(true);
+                TownMap.townMap.tree.TreeRD.SetActive(false);
+                TownMap.townMap.fence.FenceRD.SetActive(true);
                 break;
 
             case 4:// 公会沙发（皮卡丘风格）
-                TownMap.townMap.PoliceStation.SwitchSofaSprite(0);
+                TownMap.townMap.buildhouse.PoliceStation.SwitchSofaSprite(0);
                 break;
             case 5:// 公会沙发（百变怪风格）
-                TownMap.townMap.PoliceStation.SwitchSofaSprite(1);
+                TownMap.townMap.buildhouse.PoliceStation.SwitchSofaSprite(1);
+                break;
+            case 6://完成奶馆建设
+                TownMap.townMap.build.MilkBar.SetActive(true);
+                TownMap.townMap.buildnow.MilkBarBuildNow.SetActive(false);
+                if (!TownMap.townMap.fence.FenceBetwwen02.gameObject.activeInHierarchy)
+                {
+                    TownMap.townMap.fence.FenceBetwwen02.SetActive(true);
+                }
+                SaveLoader.saveLoader.saveData.TownNPCDialogState.isStateWithIndeedee02 = true;
+                break;
+            case 7://完成道具店建设
+                TownMap.townMap.build.ItemShop.SetActive(true);
+                TownMap.townMap.buildnow.ItemShopBuildNow.SetActive(false);
+                if (!TownMap.townMap.fence.FenceBetwwen02.gameObject.activeInHierarchy)
+                {
+                    TownMap.townMap.fence.FenceBetwwen02.SetActive(true);
+                }
+                if (!TownMap.townMap.fence.FenceBetwwen03.gameObject.activeInHierarchy)
+                {
+                    TownMap.townMap.fence.FenceBetwwen03.SetActive(true);
+                }
+                break;
+            case 8://完成宝育园建设
+                TownMap.townMap.build.DayCare.SetActive(true);
+                TownMap.townMap.buildnow.DayCareBuildNow.SetActive(false);
+                if (!TownMap.townMap.fence.FenceBetwwen01.gameObject.activeInHierarchy)
+                {
+                    TownMap.townMap.fence.FenceBetwwen01.SetActive(true);
+                }
+                break;
+            case 9://完成技能画廊建设
+                TownMap.townMap.build.SkillMaker.SetActive(true);
+                TownMap.townMap.buildnow.SkillMakerBuildNow.SetActive(false);
+                if (!TownMap.townMap.fence.FenceBetwwen01.gameObject.activeInHierarchy)
+                {
+                    TownMap.townMap.fence.FenceBetwwen01.SetActive(true);
+                }
+                break;
+            case 10://完成头目俱乐部建设
+                TownMap.townMap.build.BossClub.SetActive(true);
+                TownMap.townMap.buildnow.BossClubBuildNow.SetActive(false);
+                break;
+            case 11://完成推石俱乐部建设
+                TownMap.townMap.build.RockClub.SetActive(true);
+                TownMap.townMap.buildnow.RockClubBuildNow.SetActive(false);
                 break;
         }
     }
@@ -324,8 +388,30 @@ public class TownLoader : MonoBehaviour
         {
             case 0:// 进行状态无任何变化，仅等待一次冒险
                 break;
+
+            case 1:// 奶馆建设时出现工地
+                TownMap.townMap.buildnow.MilkBarBuildNow.SetActive(true);
+                SaveLoader.saveLoader.saveData.TownNPCDialogState.isStateWithIndeedee07 = true;
+                break;
+            case 2:// 道具店建设时出现工地（未完成）
+                TownMap.townMap.buildnow.ItemShopBuildNow.SetActive(true);
+                break;
+            case 3:// 宝育园建设时出现工地（未完成）
+                TownMap.townMap.buildnow.DayCareBuildNow.SetActive(true);
+                break;
+            case 4:// 技能画廊建设时出现工地（未完成）
+                TownMap.townMap.buildnow.SkillMakerBuildNow.SetActive(true);
+                break;
+            case 5:// 头目俱乐部建设时出现工地（未完成）
+                TownMap.townMap.buildnow.BossClubBuildNow.SetActive(true);
+                break;
+            case 6:// 推石俱乐部建设时出现工地（未完成）
+                TownMap.townMap.buildnow.RockClubBuildNow.SetActive(true);
+                break;
         }
     }
+
+
 
 
     /// <summary>
@@ -419,10 +505,15 @@ public class TownLoader : MonoBehaviour
             List<TownDevelopmentProject> List = SaveLoader.saveLoader.saveData.TownDevelopmentProjectsList;
             foreach (TownDevelopmentProject project in List)
             {
-                //检查所有正在进行的项目 
+                //检查所有已完成的项目
                 if (project.ProjectProgress == TownDevelopmentProject.ProjectStatus.Completed)
                 {
                     CompleteProjectEvent(project.ProjectIndex);
+                }
+                //检查所有正在进行的项目 
+                if (project.ProjectProgress == TownDevelopmentProject.ProjectStatus.InProgress)
+                {
+                    InprogressProjectEvent(project.ProjectIndex);
                 }
             }
         }
