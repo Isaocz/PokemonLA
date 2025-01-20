@@ -731,35 +731,39 @@ public class Mew : Empty
                 IEnumerator ReleaseHeartStamp()
                 {
                     float intervalTime = 1.5f;
-                    int Times = 4;
+                    int Times = 2;
                     if (currentPhase == 2)
                     {
                         intervalTime = 1.2f;
-                        Times = 5;
+                        Times = 2;
                     }
 
                     for (int i = 0; i < Times; i++) {
                         float angleIncrement = 360f / heartStampCount;
                         for (int j = 0; j < heartStampCount; j++)
                         {
+                            float radius = 2f;
                             float angle = j * angleIncrement;
-                            Vector3 heartStampPosition = transform.position;
-                            Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
-                            HeartStampEmpty heartStamp = ObjectPoolManager.SpawnObject(HeartStampPrefab, heartStampPosition, rotation).GetComponent<HeartStampEmpty>();
+                            Vector3 heartStampPosition = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
+                            //Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+                            HeartStampEmpty heartStamp = ObjectPoolManager.SpawnObject(HeartStampPrefab, heartStampPosition, Quaternion.identity).GetComponent<HeartStampEmpty>();
                             heartStamp.phrase = 2;
                             heartStamp.empty = this;
+                            yield return new WaitForSeconds(0.05f);
                         }
 
                         if(currentPhase == 3)
                         {
                             for (int j = 0; j < 16; j++)
                             {
+                                float radius = 2.5f;
                                 float angle = j * 360f / 16;
-                                Vector3 heartStampPosition = transform.position;
-                                Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
-                                HeartStampEmpty heartStamp = ObjectPoolManager.SpawnObject(HeartStampPrefab, heartStampPosition, rotation).GetComponent<HeartStampEmpty>();
+                                Vector3 heartStampPosition = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
+                                //Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+                                HeartStampEmpty heartStamp = ObjectPoolManager.SpawnObject(HeartStampPrefab, heartStampPosition, Quaternion.identity).GetComponent<HeartStampEmpty>();
                                 heartStamp.phrase = 3;
                                 heartStamp.empty = this;
+                                yield return new WaitForSeconds(0.03f);
                             }
                         }
 
@@ -1807,6 +1811,7 @@ public class Mew : Empty
         player.transform.position = GetPlayerPosition;
         player.InANewRoom = true;
         player.NewRoomTimer = 0f;
+        Debug.Log("已传送");
 
         //色相头，关闭！
         cameraAdapt.DeactivateVcam();

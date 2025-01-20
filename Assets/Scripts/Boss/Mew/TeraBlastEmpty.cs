@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 public class TeraBlastEmpty : Projectile
 {
     public float laserDuration = 0.5f;
@@ -17,10 +16,15 @@ public class TeraBlastEmpty : Projectile
     GameObject StartVFX;
     GameObject EndVFX;
 
+    [Header("“Ù–ß")]
+    public AudioClip rayShoot;
+    private AudioSource audioSource;
+
     private void Awake()
     {
         mew = FindObjectOfType<Mew>();
         lineRenderer = GetComponent<LineRenderer>();
+        audioSource = GetComponent<AudioSource>();
     }
     private void Start()
     {
@@ -35,6 +39,15 @@ public class TeraBlastEmpty : Projectile
         lineRenderer.enabled = false;
         EndVFX.SetActive(false);
         StartVFX.SetActive(true);
+
+        if (rayShoot)
+        {
+            Timer.Start(this, 1f, () =>
+            {
+                audioSource.clip = rayShoot;
+                audioSource.Play();
+            });
+        }
     }
     void Update()
     {
@@ -46,7 +59,7 @@ public class TeraBlastEmpty : Projectile
             EndVFX.SetActive(false);
             StartVFX.SetActive(true);
         }
-        else if(timer >= 1f && timer < 1.4f)
+        else if(timer >= 1f && timer < 1.8f)
         {
             lineRenderer.enabled = true;
             EndVFX.SetActive(true);
@@ -58,7 +71,7 @@ public class TeraBlastEmpty : Projectile
             lineRenderer.SetPosition(1, endpoint);
             rayPosition();
         }
-        else if(timer >= 1.4f)
+        else if(timer >= 1.8f)
         {
             Destroy(gameObject);
         }
