@@ -70,7 +70,7 @@ public class CameraAdapt : MonoBehaviour
             lastwidth = Screen.width;
             lastheight = Screen.height;
             adapt();
-            print("Resolution :" + Screen.width + " X " + Screen.height);
+            //print("Resolution :" + Screen.width + " X " + Screen.height);
         }
     }
 

@@ -207,4 +207,26 @@ public class UiMiniMap : MonoBehaviour
             b.ChangeImageMark(ItemList[i].MiniMapBlockMark);
         }
     }
+
+    public void LightUpAllRooms()
+    {
+        foreach (Transform mapCell in transform)
+        {
+            Image roomImage = mapCell.GetComponent<Image>();
+            if (roomImage != null)
+            {
+                roomImage.color = new Color(0.7f, 0.7f, 0.7f, 1);
+
+                if (!VisitedRoomList.Contains(roomImage))
+                {
+                    VisitedRoomList.Add(roomImage);
+                }
+            }
+        }
+
+        if (NowMark != null)
+        {
+            NowMark.color = new Color(1, 1, 1, 1);
+        }
+    }
 }

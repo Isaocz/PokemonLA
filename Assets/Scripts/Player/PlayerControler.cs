@@ -149,7 +149,6 @@ public class PlayerControler : PlayerPokemon
 
     List<HardworkShow> LastHardworkShow = new List<HardworkShow> { };
 
-
     //声明一个整形表示当前等级最大经验值，一个整形变量表示等级，以及一个经验值表，一个整形变量现在经验值,以及一个整型变量代表现在经验值以用于其他函数
     protected int[] Exp;
     public int maxEx;
@@ -769,6 +768,15 @@ public class PlayerControler : PlayerPokemon
                     {
                         isInvincible = false;
                     }
+                }
+
+                if (InitializePlayerSetting.GlobalPlayerSetting.isHighlight)
+                {
+                    this.transform.GetChild(6).gameObject.SetActive(true);
+                }
+                else
+                {
+                    this.transform.GetChild(6).gameObject.SetActive(false);
                 }
             }
 

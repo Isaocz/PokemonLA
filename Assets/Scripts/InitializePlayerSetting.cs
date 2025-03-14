@@ -11,6 +11,7 @@ public class InitializePlayerSetting : MonoBehaviour
     public float BGMVolumeValue;
     public float SEVolumeValue;
     public bool isShowDamage;
+    public bool isHighlight;
     public int BGIndex;
 
     public bool isShowAndroidCtrInfo;
@@ -203,6 +204,9 @@ public class InitializePlayerSetting : MonoBehaviour
             if (!PlayerPrefs.HasKey("ShowBouns")) { PlayerPrefs.SetInt("ShowBouns", 2); }
             isShowBouns = PlayerPrefs.GetInt("ShowBouns");
 
+            //高亮显示
+            if (!PlayerPrefs.HasKey("Highlight")) { PlayerPrefs.SetInt("Highlight", 0); }
+            isHighlight = intToBool(PlayerPrefs.GetInt("Highlight"));
 
             //摇杆与十字键
             {
