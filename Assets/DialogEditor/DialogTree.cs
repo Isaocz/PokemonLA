@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using LFramework.AI.Kit.DialogueSystem;
+//using LFramework.AI.Kit.DialogueSystem;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -29,3 +29,4 @@ namespace DialogueSystem
         public ViewData GraphViewData = new ViewData();
     }
 }
+

@@ -21,7 +21,7 @@ public class MissionScrollBar : MonoBehaviour
     float per;
 
 
-    float timer = 0;
+    //float timer = 0;
 
     PlayerAchievement achievement;
 

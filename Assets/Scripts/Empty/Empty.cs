@@ -598,6 +598,7 @@ public class Empty : Pokemon
 
                 if (player.playerData.IsPassiveGetList[134] && (EmptyType01 == PokemonType.TypeEnum.Dark || EmptyType02 == PokemonType.TypeEnum.Dark) ) { player.ChangeHPW(HWP); }
                 transform.parent.parent.GetComponent<Room>().isClear -= 1;
+
                 if (DestoryEvent != null) { DestoryEvent(); }
                 if (player.playerData.IsPassiveGetList[89] && player.playerData.AttackWeightCount < 6)
                 {
