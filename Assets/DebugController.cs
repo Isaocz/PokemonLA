@@ -171,6 +171,37 @@ public class DebugController : MonoBehaviour
         {
             OnReturn();
         }
+
+        //É±Â¾¹â»·
+        if (Input.GetKey(KeyCode.F2))
+        {
+            PlayerControler player = FindObjectOfType<PlayerControler>();
+            GameObject EmptyParent = MapCreater.StaticMap.RRoom[player.NowRoom].transform.GetChild(3).gameObject;
+            for (int i = 0; i < EmptyParent.transform.childCount; i++)
+            {
+                Empty e = EmptyParent.transform.GetChild(i).GetComponent<Empty>();
+                if (e != null) { Pokemon.PokemonHpChange(null, e.gameObject, e.maxHP, 0, 0, PokemonType.TypeEnum.IgnoreType); }
+            }
+        }
+
+        //ÎÞµÐ
+        bool invincible = false;
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            if (!invincible)
+            {
+                invincible = true;
+                PlayerControler player = FindObjectOfType<PlayerControler>();
+                player.isInvincibleAlways = true;
+            }
+            else
+            {
+                invincible = false;
+                PlayerControler player = FindObjectOfType<PlayerControler>();
+                player.isInvincibleAlways = false;
+            }
+
+        }
     }
 
     Vector2 scroll;
