@@ -51,7 +51,7 @@ public class MyAstarAI : MonoBehaviour
                 }
                 else
                 {
-                    if (targetPosition == null)
+                    if (targetPosition != ParentEmpty.player.transform)
                     {
                         targetPosition = ParentEmpty.player.transform;
                         RunTargetPosition = targetPosition.position;
@@ -60,8 +60,9 @@ public class MyAstarAI : MonoBehaviour
             }
             else
             {
-                    targetPosition = ParentEmpty.InfatuationForRangeRayCastEmpty(3).transform;
-                    RunTargetPosition = targetPosition.position;
+                //Debug.Log(ParentEmpty.isEmptyInfatuationDone);
+                targetPosition = ParentEmpty.InfatuationForRangeRayCastEmpty(3).transform;
+                RunTargetPosition = targetPosition.position;
                 
             }
 
@@ -78,9 +79,9 @@ public class MyAstarAI : MonoBehaviour
                     {
                         RunTargetPosition = targetPosition.position;
                         //if (ParentEmpty.isEmptyConfusionDone) { RunTargetPosition = (RunTargetPosition + new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3), 0)).normalized; }
-                        Debug.Log(seeker);
-                        Debug.Log(transform.position);
-                        Debug.Log(RunTargetPosition);
+                        //Debug.Log(seeker);
+                        //Debug.Log(transform.position);
+                        //Debug.Log(RunTargetPosition);
                         seeker.StartPath(transform.position, RunTargetPosition, OnPathComplete);
                         RePathFind = 0;
                     }

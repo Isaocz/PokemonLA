@@ -67,6 +67,11 @@ public class _mTool : MonoBehaviour
         
     }
 
+    public static Vector2 TiltMainVector2(Vector2 Input)
+    {
+        return new Vector2(((Input.x < 0) ? -1 : 1), ((Input.y < 0) ? -1 : 1));
+    }
+
     public static string[] Tips = new string[]
     {
         "某一属性的抵抗力每提升一级，受到该属性的伤害就会减少为原本的80%",

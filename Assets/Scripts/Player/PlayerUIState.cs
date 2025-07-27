@@ -280,6 +280,7 @@ public class PlayerUIState : MonoBehaviour
     /// <param name="ChangeLevel"></param>
     public void AbllityChange(int AbllityIndex , int ChangeLevel)
     {
+        //Debug.Log("AbllityIndex " + AbllityIndex + "ChangeLevel" + ChangeLevel);
         switch (AbllityIndex){
             case 0:
                 if (ChangeLevel == 0) 
@@ -425,7 +426,7 @@ public class PlayerUIState : MonoBehaviour
     /// </summary>
     public void RemoveAllAbllityChangeMark()
     {
-        Debug.Log("Xxx");
+        //Debug.Log("Xxx");
         if (AtkChangeObj != null) { Destroy(AtkChangeObj.gameObject); AtkChangeLevel = 0; }
         if (DefChangeObj != null) { Destroy(DefChangeObj.gameObject); DefChangeLevel = 0; }
         if (SpAChangeObj != null) { Destroy(SpAChangeObj.gameObject); SpAChangeLevel = 0; Debug.Log("Xxx"); }
