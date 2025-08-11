@@ -135,10 +135,10 @@ public class TestSkill : Skill
 
     void StateDone( Empty target )
     {
-        if (isFroze) { target.Frozen(FrozeTime, 50f, 1); }
-        if (isBurn) { target.EmptyBurnDone(0.5f, BurnTime, 1); }
-        if (isParalysis) { target.EmptyParalysisDone(0.5f, ParalysisTime, 1); }
-        if (isToxic) { target.EmptyToxicDone(0.5f, ToxicTime, 1); }
+        if (isFroze) { target.Frozen(FrozeTime, 1.5f, 1); }
+        if (isBurn) { target.EmptyBurnDone(1.5f, BurnTime, 1); }
+        if (isParalysis) { target.EmptyParalysisDone(1.5f, ParalysisTime, 1); }
+        if (isToxic) { target.EmptyToxicDone(1.5f, ToxicTime, 1); }
         if (isSleep) { target.EmptySleepDone(50f, SleepTime, 1); }
         if (isFear) { target.Fear(FearTime, 50f); }
         if (isBlind) { target.Blind(BlindTime, 50f); }

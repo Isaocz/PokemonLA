@@ -13,4 +13,17 @@ public class DestoryState : MonoBehaviour
     {
         transform.DetachChildren();
     }
+
+
+    public void RemovePSChild()
+    {
+        foreach (Transform t in transform)
+        {
+            if (t.GetComponent<ParticleSystem>())
+            {
+                t.transform.parent = null;
+            }
+        }
+        //transform.DetachChildren();
+    }
 }

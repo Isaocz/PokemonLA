@@ -472,7 +472,7 @@ public class PlayerControler : PlayerPokemon
 
         for (int i = -10; i < 10;i++)
         {
-            Debug.Log(_mTool.AbllityChangeFunction(i,PlayerAbility == PlayerAbilityList.ºã¾»Ö®Çû));
+            //Debug.Log(_mTool.AbllityChangeFunction(i,PlayerAbility == PlayerAbilityList.ºã¾»Ö®Çû));
         }
         
         DontDestroyOnLoad(this);
@@ -1872,7 +1872,6 @@ public class PlayerControler : PlayerPokemon
     /// </summary>
     public void RefreshAbllityUI()
     {
-
         switch (InitializePlayerSetting.GlobalPlayerSetting.isShowBouns)
         {
             case 0:
