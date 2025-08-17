@@ -2276,7 +2276,7 @@ public class Pokemon : MonoBehaviour
                              ((SpAPower == 0) ? 0 : (Mathf.Clamp((-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / ((int)SkillType != 19 ? 250 : 1), -10000, -1))),
                             (int)SkillType, Critial);
 
-                    FlashScreen.instance.flashScreen();
+                    //FlashScreen.instance.flashScreen();
 
                     if (PlayerAttacked.playerData.IsPassiveGetList[120] && Attacker != null)
                     {
@@ -2561,6 +2561,7 @@ public class Pokemon : MonoBehaviour
                     }
                 }
             }
+
             else
             {
                 PlayerAttacked.ChangeHp(HpUpValue, 0, 19, Critial);
