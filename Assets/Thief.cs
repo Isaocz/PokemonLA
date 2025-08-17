@@ -32,7 +32,7 @@ public class Thief : Skill
                 if (target.DropItem != null)
                 {
                     
-                    if (target.isBoos)
+                    if ((target.EmptyBossLevel == Empty.emptyBossLevel.Boss || target.EmptyBossLevel == Empty.emptyBossLevel.EndBoss))
                     {
                         if (SkillFrom == 2) { Pokemon.PokemonHpChange(null, player.gameObject, 0, 0, player.maxHp / 4, PokemonType.TypeEnum.IgnoreType); }
                         Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;

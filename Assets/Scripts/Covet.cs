@@ -21,7 +21,7 @@ public class Covet : Skill
                 if (target.DropItem != null)
                 {
                     if (Subtarget == null) {
-                        if (target.isBoos)
+                        if ((target.EmptyBossLevel == Empty.emptyBossLevel.Boss || target.EmptyBossLevel == Empty.emptyBossLevel.EndBoss))
                         {
                             Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
                             Instantiate(target.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
@@ -40,7 +40,7 @@ public class Covet : Skill
                 }
                 if (Subtarget != null && Subtarget.ParentEmpty.DropItem != null)
                 {
-                    if (Subtarget.ParentEmpty.isBoos)
+                    if ((Subtarget.ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.Boss || Subtarget.ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.EndBoss))
                     {
                         Instantiate(Subtarget.ParentEmpty.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;
                         Instantiate(Subtarget.ParentEmpty.DropItem, transform.position, Quaternion.identity, transform.parent).GetComponent<RandomSkillItem>().isLunch = true;

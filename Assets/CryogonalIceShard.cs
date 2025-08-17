@@ -66,7 +66,7 @@ public class CryogonalIceShard : Projectile
             IceBreak();
             isDestory = true;
             Destroy(rigidbody2D);
-
+            
             float WeatherAlpha = ((Weather.GlobalWeather.isRain) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1) * ((Weather.GlobalWeather.isSunny) ? 0.5f : 1);
 
             if (other.tag == ("Player") && !empty.isEmptyInfatuationDone)

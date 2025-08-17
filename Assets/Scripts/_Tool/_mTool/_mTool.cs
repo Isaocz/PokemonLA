@@ -161,6 +161,35 @@ public class _mTool : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 获取某一个Transform在其夫Transform中的序列号（不包含被禁用对象） 无父对象时返回-1
+    /// </summary>
+    /// <param name="Child"></param>
+    /// <returns></returns>
+    public static int GetChildIndex(Transform Child)
+    {
+        int output = -1;
+        //无父对象时
+        if (Child.transform.parent == null || !Child.gameObject.activeInHierarchy) { return output; }
+        //有父对象时
+        else
+        {
+            //获取父对象
+            Transform Parent = Child.transform.parent;
+            //检查所有非禁用子对象
+            for (int i = 0; i < Parent.childCount; i++)
+            {
+                if (Parent.GetChild(i).gameObject.activeInHierarchy)
+                {
+                    output++;
+                    if (Parent.GetChild(i) == Child) { break; }
+                }
+            }
+            return output;
+        }
+    }
+
+
 
     /// <summary>
     /// 能力随提升段衰减的函数，可用于其他衰减 , isClearBody为是否有特性恒净之躯，有的话减算幅度降低
@@ -185,8 +214,30 @@ public class _mTool : MonoBehaviour
         if (Parent.transform.childCount != 0) {
             for (int i = 0; i < Parent.transform.childCount; i++)
             {
-                Debug.Log("Destroy");
+                //Debug.Log("Destroy");
                 Destroy(Parent.transform.GetChild(i).gameObject);
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 解除某一对象旗下所有的粒子特效，将这些粒子特效放置于最外场景，并且使他们不再循环并播放完毕后删除
+    /// </summary>
+    public static void RemoveAllPSChild(GameObject Parent)
+    {
+        if (Parent.transform.childCount != 0)
+        {
+            for (int i = 0; i < Parent.transform.childCount; i++)
+            {
+                ParticleSystem ps = Parent.transform.GetChild(i).GetComponent<ParticleSystem>();
+                if (ps != null)
+                {
+                    var psmain = ps.main;
+                    psmain.loop = false;
+                    psmain.stopAction = ParticleSystemStopAction.Destroy;
+                    ps.transform.parent = null;
+                }
             }
         }
     }

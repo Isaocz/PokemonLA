@@ -164,6 +164,7 @@ public class Drifblim : Empty
     {
         if (IsDeadrattle)
         {
+            Debug.Log("Boom");
             GameObject boom = Instantiate(explosion, transform.position, Quaternion.identity);
             var cb = boom.transform.GetChild(0).GetComponent<ExeggcuteExploreCB>();
             cb.SetEmptyInfo(this);

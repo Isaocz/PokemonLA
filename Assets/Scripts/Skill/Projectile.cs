@@ -29,7 +29,7 @@ public class Projectile : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void DestoryByRange(float ProjectileRange)
+    public virtual void DestoryByRange(float ProjectileRange)
     {
         if ((transform.position - BornPosition).magnitude >= ProjectileRange)
         {

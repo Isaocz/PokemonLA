@@ -14,38 +14,47 @@ public class TestSkill : Skill
     [Header(" «∑Ò±˘∂≥")]
     public bool isFroze;
     public float FrozeTime;
+    public float FrozePoint;
 
     [Header(" «∑Ò…’…À")]
     public bool isBurn;
     public float BurnTime;
+    public float BurnPoint;
 
     [Header(" «∑Ò¬È±‘")]
     public bool isParalysis;
     public float ParalysisTime;
+    public float ParalysisPoint;
 
     [Header(" «∑Ò÷–∂æ")]
     public bool isToxic;
     public float ToxicTime;
+    public float ToxicPoint;
 
     [Header(" «∑ÒÀØ√ﬂ")]
     public bool isSleep;
     public float SleepTime;
+    public float SleepPoint;
 
     [Header(" «∑ÒŒ∑Àı")]
     public bool isFear;
     public float FearTime;
+    public float FearPoint;
 
     [Header(" «∑Ò÷¬√§")]
     public bool isBlind;
     public float BlindTime;
+    public float BlindPoint;
 
     [Header(" «∑ÒªÏ¬“")]
     public bool isConfusion;
     public float ConfusionTime;
+    public float ConfusionPoint;
 
     [Header(" «∑Ò◊≈√‘")]
     public bool isInfatuation;
     public float InfatuationTime;
+    public float InfatuationPoint;
 
     [Header(" «∑Ò∫Æ¿‰")]
     public bool isCold;
@@ -135,15 +144,15 @@ public class TestSkill : Skill
 
     void StateDone( Empty target )
     {
-        if (isFroze) { target.Frozen(FrozeTime, 1.5f, 1); }
-        if (isBurn) { target.EmptyBurnDone(1.5f, BurnTime, 1); }
-        if (isParalysis) { target.EmptyParalysisDone(1.5f, ParalysisTime, 1); }
-        if (isToxic) { target.EmptyToxicDone(1.5f, ToxicTime, 1); }
-        if (isSleep) { target.EmptySleepDone(50f, SleepTime, 1); }
-        if (isFear) { target.Fear(FearTime, 50f); }
-        if (isBlind) { target.Blind(BlindTime, 50f); }
-        if (isConfusion) {  target.EmptyConfusion(ConfusionTime, 50f);}
-        if (isInfatuation) { target.EmptyInfatuation(InfatuationTime, 0.5f ); }
+        if (isFroze) { target.Frozen(FrozeTime, FrozePoint, 1); }
+        if (isBurn) { target.EmptyBurnDone(BurnPoint, BurnTime, 1); }
+        if (isParalysis) { target.EmptyParalysisDone(ParalysisPoint, ParalysisTime, 1); }
+        if (isToxic) { target.EmptyToxicDone(ToxicPoint, ToxicTime, 1); }
+        if (isSleep) { target.EmptySleepDone(SleepPoint, SleepTime, 1); }
+        if (isFear) { target.Fear(FearTime, FearPoint); }
+        if (isBlind) { target.Blind(BlindTime, BlindPoint); }
+        if (isConfusion) {  target.EmptyConfusion(ConfusionTime, ConfusionPoint);}
+        if (isInfatuation) { target.EmptyInfatuation(InfatuationTime, InfatuationPoint ); }
         if (isCold) { target.Cold(ColdTime); }
         if (isCurse) { target.EmptyCurse(CurseTime, 0.5f); }
         if (isAtkDown) { target.AtkChange(-1, AtkDownTime); }

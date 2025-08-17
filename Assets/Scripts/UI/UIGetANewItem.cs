@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIGetANewItem : MonoBehaviour
 {
@@ -21,8 +22,8 @@ public class UIGetANewItem : MonoBehaviour
         UIImage.color = new Color (1, 1, 1, 1);
         isActive = true;
         Timer = 0;
-        UIImage.transform.GetChild(0).GetComponent<Text>().color = new Color(0.196f, 0.196f, 0.196f, 1);
-        UIImage.transform.GetChild(1).GetComponent<Text>().color = new Color(0.196f, 0.196f, 0.196f, 1);
+        UIImage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(0.196f, 0.196f, 0.196f, 1);
+        UIImage.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = new Color(0.196f, 0.196f, 0.196f, 1);
         string ItemClass = "道具";
         switch (ItemTag)
         {
@@ -42,8 +43,8 @@ public class UIGetANewItem : MonoBehaviour
                 ItemClass = "冒险伙伴:";
                 break;
         }
-        UIImage.transform.GetChild(0).GetComponent<Text>().text = "获得了" + ItemClass; 
-        UIImage.transform.GetChild(1).GetComponent<Text>().text = "「" + ItemName　+ "」";
+        UIImage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "获得了" + ItemClass; 
+        UIImage.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "「" + ItemName　+ "」";
         LayoutRebuilder.ForceRebuildLayoutImmediate(UIImage.rectTransform);
     }
 
@@ -53,10 +54,10 @@ public class UIGetANewItem : MonoBehaviour
         UIImage.color = new Color(1, 1, 1, 1);
         isActive = true;
         Timer = 0;
-        UIImage.transform.GetChild(0).GetComponent<Text>().color = new Color(0.196f, 0.196f, 0.196f, 1);
-        UIImage.transform.GetChild(1).GetComponent<Text>().color = new Color(0.196f, 0.196f, 0.196f, 1);
-        UIImage.transform.GetChild(0).GetComponent<Text>().text = FirstText;
-        UIImage.transform.GetChild(1).GetComponent<Text>().text = SecondText;
+        UIImage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(0.196f, 0.196f, 0.196f, 1);
+        UIImage.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = new Color(0.196f, 0.196f, 0.196f, 1);
+        UIImage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = FirstText;
+        UIImage.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = SecondText;
         LayoutRebuilder.ForceRebuildLayoutImmediate(UIImage.rectTransform);
     }
 
@@ -69,8 +70,8 @@ public class UIGetANewItem : MonoBehaviour
             if (Timer >= 0.9f)
             {
                 UIImage.color -= new Color(0, 0, 0, 0.5f * Time.deltaTime);
-                UIImage.transform.GetChild(0).GetComponent<Text>().color -= new Color(0, 0, 0, 0.5f * Time.deltaTime);
-                UIImage.transform.GetChild(1).GetComponent<Text>().color -= new Color(0, 0, 0, 0.5f * Time.deltaTime);
+                UIImage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color -= new Color(0, 0, 0, 0.5f * Time.deltaTime);
+                UIImage.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color -= new Color(0, 0, 0, 0.5f * Time.deltaTime);
                 if (UIImage.color.a <= 0)
                 {
                     Timer = 0;

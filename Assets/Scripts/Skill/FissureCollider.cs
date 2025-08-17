@@ -15,7 +15,7 @@ public class FissureCollider : MonoBehaviour
             if(e != null)
             {
                 int EMaxHp = 0;
-                if (e.isBoos)
+                if ((e.EmptyBossLevel == Empty.emptyBossLevel.Boss || e.EmptyBossLevel == Empty.emptyBossLevel.EndBoss))
                 {
                     
                     EMaxHp = (int)((e.Emptylevel + 10 + (int)(((float)e.Emptylevel * e.HpEmptyPoint * 2) / 100.0f)));

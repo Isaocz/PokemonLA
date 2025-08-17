@@ -567,6 +567,31 @@ public class Room : MonoBehaviour
 
 
 
+    public bool isPointInRoon(Vector2 point , float WallWeight)
+    {
+        //Debug.Log("Point"+"+"+point + "+"+ (point.x < transform.position.x + RoomSize[3] - WallWeight) + "+"+ (point.x > transform.position.x + RoomSize[2] + WallWeight) + "+" + (point.y < transform.position.y + RoomSize[0] - WallWeight) + "+"+ (point.y > transform.position.y + RoomSize[1] + WallWeight));
+        if (
+            (point.x < transform.position.x + RoomSize[3] - WallWeight) &&
+            (point.x > transform.position.x + RoomSize[2] + WallWeight) &&
+            (point.y < transform.position.y + RoomSize[0] - WallWeight) &&
+            (point.y > transform.position.y + RoomSize[1] + WallWeight)
+            )
+        {
+            //Debug.Log("T");
+            return true;
+        }
+        //Debug.Log("F");
+        return false;
+    }
+
+
+
+
+
+
+
+
+
     //========================================获得房屋内所有道具===========================================
 
     public List<IteamPickUp> ItemList = new List<IteamPickUp> { };

@@ -46,13 +46,13 @@ public class EmptyHpBar : MonoBehaviour
         //当调用血量上升函数时血条缓慢增加到指定值，反之缓慢减少到指定值
         if (isHpUp)
         {
-            timer -= (ParentEmpty.isBoos? 0.18f : 2.3f)*Time.deltaTime;
+            timer -= ((ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.Boss || ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.EndBoss) ? 0.18f : 2.3f)*Time.deltaTime;
             Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalSize * (1.0f - timer));
             ChangeHpUp();
         }
         if (isHpDown)
         {
-            timer += (ParentEmpty.isBoos ? 0.18f : 2.3f) * Time.deltaTime;
+            timer += ((ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.Boss || ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.EndBoss) ? 0.18f : 2.3f) * Time.deltaTime;
             Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalSize * (1.0f - timer));
             ChangeHpDown();
         }

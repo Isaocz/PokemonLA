@@ -17,10 +17,11 @@ public class BackGroundMusic : MonoBehaviour
     public AudioClip MewPhase1;
     public AudioClip MewPhase2;
 
-    public float transitionDuration = 1.0f; // 持续时间
+    public float transitionSpeed = 1.0f; // 淡入淡出的速度
     private float currentVolume = 0.0f; // 当前音量
     private float targetVolume = 0.0f; // 目标音量
     private float transitionTimer = 0.0f; // 转换计时器
+    private bool isFadeInorOut = false; // 是否正在淡入淡出 此时不能再调用
 
 
     private void Awake()
@@ -31,6 +32,16 @@ public class BackGroundMusic : MonoBehaviour
     void Start()
     {
         BGM.Play();
+    }
+
+    public void UnPause()
+    {
+        BGM.UnPause();
+    }
+
+    public void Pause()
+    {
+        BGM.Pause();
     }
 
     public void ChangeBGMToTown()
@@ -70,11 +81,19 @@ public class BackGroundMusic : MonoBehaviour
     void Update()
     {
         // 如果目标音量与当前音量不同，则进行渐变
-        if (currentVolume != targetVolume)
+        if (isFadeInorOut)
         {
             // 计算渐变过程中的音量值
-            float transitionProgress = Mathf.Clamp01(transitionTimer / transitionDuration);
+            float transitionProgress = Mathf.Clamp01(transitionTimer * transitionSpeed);
             float volume = Mathf.Lerp(currentVolume, targetVolume, transitionProgress);
+
+            //Debug.Log(currentVolume + "+" + targetVolume);
+            if (Mathf.Abs(volume - targetVolume) <= 0.01)
+            {
+                volume = targetVolume;
+                isFadeInorOut = false;
+            }
+
 
             // 更新音频源的音量
             BGM.volume = volume;
@@ -87,21 +106,41 @@ public class BackGroundMusic : MonoBehaviour
             BGM.time = 7.5f;
         }
     }
-    public void FadeIn()
-    {
-        // 设置目标音量为最大音量
-        targetVolume = 1.0f;
 
-        transitionTimer = 0.0f;
+
+    /// <summary>
+    /// BGM缓入效果
+    /// </summary>
+    /// <param name="Target">缓入至Target音量</param>
+    /// <param name="Speed">缓入的速度</param>
+    public void FadeIn(float Target , float Speed)
+    {
+        if(!isFadeInorOut)
+        {
+            isFadeInorOut = true;
+            // 设置目标音量为最大音量
+            targetVolume = Target;
+            currentVolume = BGM.volume;
+            transitionTimer = 0.0f;
+            transitionSpeed = Speed;
+        }
     }
 
-    // 启动缓出效果
-    public void FadeOut()
+    /// <summary>
+    /// BGM缓出效果
+    /// </summary>
+    /// <param name="Target">缓出至Target音量</param>
+    /// <param name="Speed">缓出的速度</param>
+    public void FadeOut(float Target, float Speed)
     {
-        // 设置目标音量为静音
-        targetVolume = 0.0f;
-
-        transitionTimer = 0.0f;
+        if (!isFadeInorOut) {
+            isFadeInorOut = true;
+            // 设置目标音量为静音
+            targetVolume = Target;
+            currentVolume = BGM.volume;
+            transitionTimer = 0.0f;
+            transitionSpeed = Speed;
+        }
     }
 
 

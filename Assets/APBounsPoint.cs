@@ -30,7 +30,7 @@ public static class APBounsPoint
     public static int EmptyBouns(Empty e , int FloorNum)
     {
         int OutPut = 0;
-        if (e.isBoos) 
+        if ((e.EmptyBossLevel == Empty.emptyBossLevel.Boss || e.EmptyBossLevel == Empty.emptyBossLevel.EndBoss)) 
         {
             OutPut = (int)(250 * (Mathf.Pow(1.2f, FloorNum)));
         }

@@ -964,7 +964,7 @@ public class Pokemon : MonoBehaviour
                 playerUIState.StateSlowUP(10, EmptyInfatuationPoint);
                 MarterialChangeToInfatuation();
                 Empty Boss = GetComponent<Empty>();
-                if (Boss != null && Boss.isBoos)
+                if (Boss != null && (Boss.EmptyBossLevel == Empty.emptyBossLevel.Boss || Boss.EmptyBossLevel == Empty.emptyBossLevel.EndBoss))
                 {
                     Boss.speed *= 0.5f;
                 }
@@ -985,7 +985,7 @@ public class Pokemon : MonoBehaviour
             isEmptyInfatuationDone = false;
             MarterialChangeToNurmal();
             Empty Boss = GetComponent<Empty>();
-            if (Boss != null && Boss.isBoos)
+            if (Boss != null && (Boss.EmptyBossLevel == Empty.emptyBossLevel.Boss || Boss.EmptyBossLevel == Empty.emptyBossLevel.EndBoss))
             {
                 Boss.speed *= 2f;
             }
@@ -2202,7 +2202,7 @@ public class Pokemon : MonoBehaviour
                     {
                         var player = Attacker.GetComponent<PlayerControler>();
                         var MisdreavusObj = Attacked.GetComponent<Misdreavus>();
-                        MisdreavusObj.IsDeadrattle = (!MisdreavusObj.isEmptyFrozenDone) && (!MisdreavusObj.isFearDone) && (!MisdreavusObj.isBlindDone);
+                        //MisdreavusObj.IsDeadrattle = (!MisdreavusObj.isEmptyFrozenDone) && (!MisdreavusObj.isFearDone) && (!MisdreavusObj.isBlindDone);
                         if (player.Skill01 != null)
                         {
                             var skill01 = player.Skill01.GetComponent<Skill>();
@@ -2477,7 +2477,7 @@ public class Pokemon : MonoBehaviour
                     {
                         var player = Attacker.GetComponent<PlayerControler>();
                         var MisdreavusObj = Attacked.GetComponent<Misdreavus>();
-                        MisdreavusObj.IsDeadrattle = (!MisdreavusObj.isEmptyFrozenDone) && (!MisdreavusObj.isFearDone) && (!MisdreavusObj.isBlindDone);
+                        //MisdreavusObj.IsDeadrattle = (!MisdreavusObj.isEmptyFrozenDone) && (!MisdreavusObj.isFearDone) && (!MisdreavusObj.isBlindDone);
                         if (player.Skill01 != null)
                         {
                             var skill01 = player.Skill01.GetComponent<Skill>();

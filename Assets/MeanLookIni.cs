@@ -50,7 +50,7 @@ public class MeanLookIni : Skill
         if (collision.CompareTag("Empty"))
         {
             Empty enemy = collision.GetComponent<Empty>();
-            if (enemy && !enemy.isBoos && !enemies.Contains(enemy))
+            if (enemy && !(enemy.EmptyBossLevel == Empty.emptyBossLevel.Boss || enemy.EmptyBossLevel == Empty.emptyBossLevel.EndBoss) && !enemies.Contains(enemy))
             {
                 if (!collision.GetComponent<SubEmptyBody>())
                 {

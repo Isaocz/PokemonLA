@@ -418,8 +418,13 @@ public class Skill : MonoBehaviour
                         }
                         GetCTEffect(target);
                     }
+                    //´Ö²ÚÆ¤·ô
                     if (target.Abillity == Empty.EmptyAbillity.RoughSkin && _mTool.ContainsSkillTag(SkillTag, SkillTagEnum.½Ó´¥Àà)) {
                         Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHP - target.EmptyHp) / 4, 1, 10000), 0, 0, PokemonType.TypeEnum.IgnoreType); 
+                    }
+                    //±ù¶³Ö®Çû
+                    if (target.Abillity == Empty.EmptyAbillity.IceBody && _mTool.ContainsSkillTag(SkillTag, SkillTagEnum.½Ó´¥Àà)){
+                        player.PlayerFrozenFloatPlus(0.25f,2.0f);
                     }
                 }
                 else if (baby != null)
@@ -474,8 +479,14 @@ public class Skill : MonoBehaviour
                         //Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? (( target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1 ) : 1)) ) + 2, 0, SkillType);
 
                     }
+                    //´Ö²ÚÆ¤·ô
                     if (target.Abillity == Empty.EmptyAbillity.RoughSkin && _mTool.ContainsSkillTag(SkillTag, SkillTagEnum.½Ó´¥Àà)) {
                         Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHP - target.EmptyHp) / 4 , 1 , 10000), 0, 0, PokemonType.TypeEnum.IgnoreType); 
+                    }
+                    //±ù¶³Ö®Çû
+                    if (target.Abillity == Empty.EmptyAbillity.IceBody && _mTool.ContainsSkillTag(SkillTag, SkillTagEnum.½Ó´¥Àà))
+                    {
+                        player.PlayerFrozenFloatPlus(0.25f, 2.0f);
                     }
                 }
                 else if (baby != null)

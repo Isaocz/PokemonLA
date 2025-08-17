@@ -15,7 +15,7 @@ public class MeanLook : Skill
     void Update()
     {
         StartExistenceTimer();
-        if(target != null && !target.isBoos)
+        if(target != null && !(target.EmptyBossLevel == Empty.emptyBossLevel.Boss || target.EmptyBossLevel == Empty.emptyBossLevel.EndBoss))
         {
             float distance = Vector2.Distance(target.transform.position, transform.position);
             if (distance > radius)

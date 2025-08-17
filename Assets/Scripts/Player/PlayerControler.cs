@@ -770,13 +770,17 @@ public class PlayerControler : PlayerPokemon
                     }
                 }
 
-                if (InitializePlayerSetting.GlobalPlayerSetting.isHighlight)
+                //是否开启玩家高光
+                if ( this.transform.childCount >= 7 && this.transform.GetChild(6).GetComponent<PlayerHighLight>())
                 {
-                    this.transform.GetChild(6).gameObject.SetActive(true);
-                }
-                else
-                {
-                    this.transform.GetChild(6).gameObject.SetActive(false);
+                    if (InitializePlayerSetting.GlobalPlayerSetting.isHighlight)
+                    {
+                        this.transform.GetChild(6).gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        this.transform.GetChild(6).gameObject.SetActive(false);
+                    }
                 }
             }
 

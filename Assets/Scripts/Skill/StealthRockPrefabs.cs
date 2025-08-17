@@ -72,7 +72,7 @@ public class StealthRockPrefabs : MonoBehaviour
 
                 if (!TCEell.isMultipleDamageColdDown)
                 {
-                    Pokemon.PokemonHpChange(null, TCEell.Target.gameObject, Mathf.Clamp((((float)TCEell.Target.maxHP) / 20) , 1, TCEell.Target.isBoos ? 2 : 3), 0 , 0 , PokemonType.TypeEnum.IgnoreType ) ;
+                    Pokemon.PokemonHpChange(null, TCEell.Target.gameObject, Mathf.Clamp((((float)TCEell.Target.maxHP) / 20) , 1, (TCEell.Target.EmptyBossLevel == Empty.emptyBossLevel.Boss || TCEell.Target.EmptyBossLevel == Empty.emptyBossLevel.EndBoss) ? 2 : 3), 0 , 0 , PokemonType.TypeEnum.IgnoreType ) ;
                     
                     TCEell.isMultipleDamageColdDown = true;
                     TargetList[ListIndex] = TCEell;

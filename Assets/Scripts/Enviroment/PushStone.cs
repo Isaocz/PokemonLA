@@ -19,7 +19,7 @@ public class PushStone : MonoBehaviour
     {
         if (other.gameObject.tag == "Player" && other.gameObject.GetComponent<PlayerControler>() != null)
         {
-            GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+            GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         }
     }
 }

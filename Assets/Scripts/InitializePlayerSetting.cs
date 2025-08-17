@@ -113,7 +113,7 @@ public class InitializePlayerSetting : MonoBehaviour
     {
         Random.InitState((int)System.DateTime.Now.Ticks);
         if (TestMode) {
-            RoundSeed = 42;
+            RoundSeed = 1386702653;
         }
         else
         {
