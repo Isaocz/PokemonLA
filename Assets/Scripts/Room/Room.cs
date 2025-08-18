@@ -154,11 +154,12 @@ public class Room : MonoBehaviour
                 transform.GetChild(3).gameObject.SetActive(true);
                 transform.GetChild(4).gameObject.SetActive(true);
             }
+
             GraphUpdateTimer += Time.deltaTime;
-            if (GraphUpdateTimer >= 1)
+            if (GraphUpdateTimer >= 2 && isInThisRoom)
             {
                 GraphUpdateTimer = 0;
-                _PathFinder.StaticPathFinder.UpdateGraph(RoomGraph);
+                _PathFinder.StaticPathFinder.UpdateGraph(RoomGraph, new Vector3Int((int)(transform.position.x), (int)(transform.position.y), 0));
             }
 
         }
@@ -583,6 +584,7 @@ public class Room : MonoBehaviour
         //Debug.Log("F");
         return false;
     }
+
 
 
 

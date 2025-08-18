@@ -221,13 +221,13 @@ namespace Pathfinding {
 
 #if UNITY_2018_1_OR_NEWER
 			updateCheckDownload = UnityWebRequest.Get(query);
-			updateCheckDownload.SendWebRequest();
+			//updateCheckDownload.SendWebRequest();
 #else
 			updateCheckDownload = new WWW(query);
 #endif
 			lastUpdateCheck = System.DateTime.UtcNow;
 		}
-
+		
 		/// <summary>Handles the data from the update page</summary>
 		static void UpdateCheckCompleted (string result) {
 			EditorPrefs.SetString("AstarServerMessage", result);
