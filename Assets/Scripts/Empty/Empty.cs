@@ -577,6 +577,28 @@ public class Empty : Pokemon
             KOTimer = 0;
         }
     }
+
+    /// <summary>
+    /// ---Update中调用---，当敌人被击退时移动敌人
+    /// </summary>
+    protected void EmptyBeKnockByTransform()
+    {
+        if (!isDie && isHit)
+        {
+            KOTimer += Time.deltaTime;
+            Vector2 position = transform.position;
+            Vector2 KODirection = new Vector2(player.transform.position.x - transform.position.x, player.transform.position.y - transform.position.y);
+            KODirection.Normalize();
+            position.x = position.x - KOPoint * KODirection.x * Time.deltaTime / (Mathf.Pow(rigidbody2D.mass, 0.5f));
+            position.y = position.y - KOPoint * KODirection.y * Time.deltaTime / (Mathf.Pow(rigidbody2D.mass, 0.5f));
+            transform.position = position;
+        }
+        if (KOTimer >= 0.15f)
+        {
+            isHit = false;
+            KOTimer = 0;
+        }
+    }
     //========================敌人被击退相关=========================
 
 
@@ -686,7 +708,9 @@ public class Empty : Pokemon
                 }
 
                 if (player.playerData.IsPassiveGetList[134] && (EmptyType01 == PokemonType.TypeEnum.Dark || EmptyType02 == PokemonType.TypeEnum.Dark) ) { player.ChangeHPW(HWP); }
-                transform.parent.parent.GetComponent<Room>().isClear -= 1;
+                Room r = transform.parent.parent.GetComponent<Room>();
+                if (r == null) { r = ParentPokemonRoom; }
+                r.isClear -= 1;
 
                 if (DestoryEvent != null) { DestoryEvent(); }
                 if (player.playerData.IsPassiveGetList[89] && player.playerData.AttackWeightCount < 6)
@@ -772,6 +796,18 @@ public class Empty : Pokemon
 
 
     //=============================死亡事件===========================
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
