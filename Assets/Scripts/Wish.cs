@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class Wish : Skill
 {
+    [SerializeField]
     private float rotationSpeed;
     private float timer;
+    float movetime = 0; //Ã· æ∆Ì‘∏ ß∞‹ ±º‰
     bool isMove;
     Vector3 StartPosition;
+
+    public GameObject starX;
 
     void Start()
     {
@@ -27,6 +31,28 @@ public class Wish : Skill
             rotationSpeed = 80f + Mathf.Pow(Mathf.Exp(1.5f) * timer, 2);
             transform.RotateAround(transform.position, Vector3.forward, rotationSpeed * Time.deltaTime);
             JudgeisMove();
+        }
+
+        //∆Ì‘∏ ß∞‹
+        if (isMove && movetime < 1f && starX)
+        {
+            movetime += Time.deltaTime;
+            starX.SetActive(true);
+            SpriteRenderer sr = starX.GetComponent<SpriteRenderer>();
+            if(movetime < 0.2f)
+            {
+                float t = movetime / 0.2f;
+                sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, t);
+            }
+            else if (movetime > 0.8f)
+            {
+                float t = (1 - movetime) / 0.2f;
+                sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, t);
+            }
+            else if(movetime > 1f)
+            {
+                 starX.SetActive(false);
+            }
         }
     }
 

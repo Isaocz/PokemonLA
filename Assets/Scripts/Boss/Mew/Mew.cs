@@ -170,9 +170,6 @@ public class Mew : Empty
         new Color(0.9333334f, 0.6078432f, 0.6784314f, 1f), // Fairy
 };
     public PokemonType.TypeEnum SkillType;
-    public Material src1;
-    public Material src2;
-    public Material src3;
     public float intensity = 1f;
     void Start()
     {
@@ -357,7 +354,6 @@ public class Mew : Empty
                     }
                 }
             }
-            ChangeColor();
             if (UsedMeanLook)
             {
                 MeanLookTimer += Time.deltaTime;
@@ -1270,147 +1266,6 @@ public class Mew : Empty
 
     #endregion
 
-    #region 更改颜色
-    void ChangeColor()
-    {
-        float factor = Mathf.Pow(2, intensity);
-        if (!isFinal)
-        {
-            Material[] srcs = new Material[]
-            {
-                src1,
-                src2,
-                src3
-            };
-            switch (SkillType)
-            {
-                case PokemonType.TypeEnum.Normal:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[0].r * factor, colors[0].g * factor, colors[0].b * factor, 0));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Fighting:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[1].r * factor, colors[1].g * factor, colors[1].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Flying:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[2].r * factor, colors[2].g * factor, colors[2].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Poison:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[3].r * factor, colors[3].g * factor, colors[3].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Ground:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[4].r * factor, colors[4].g * factor, colors[4].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Rock:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[5].r * factor, colors[5].g * factor, colors[5].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Bug:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[6].r * factor, colors[6].g * factor, colors[6].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Ghost:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[7].r * factor, colors[7].g * factor, colors[7].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Steel:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[8].r * factor, colors[8].g * factor, colors[8].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Fire:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[9].r * factor, colors[9].g * factor, colors[9].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Water:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[10].r * factor, colors[10].g * factor, colors[10].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Grass:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[11].r * factor, colors[11].g * factor, colors[11].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Electric:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[12].r * factor, colors[12].g * factor, colors[12].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Psychic:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[13].r * factor, colors[13].g * factor, colors[13].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Ice:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[14].r * factor, colors[14].g * factor, colors[14].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Dragon:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[15].r * factor, colors[15].g * factor, colors[15].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Dark:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[16].r * factor, colors[16].g * factor, colors[16].b * factor, 1));
-                    }
-                    break;
-                case PokemonType.TypeEnum.Fairy:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", new Color(colors[17].r * factor, colors[17].g * factor, colors[17].b * factor, 1));
-                    }
-                    break;
-                default:
-                    for (int i = 0; i < srcs.Length; i++)
-                    {
-                        srcs[i].SetColor("_Color", Color.white);
-                    }
-                    break;
-            }
-        }
-        else
-        {
-            src1.SetColor("_Color", new Color(Mathf.PingPong(Time.time, 1), Mathf.PingPong(Time.time + 0.5f, 1), Mathf.PingPong(Time.time + 1f, 1)));
-            src2.SetColor("_Color", src1.color);
-            src3.SetColor("_Color", src1.color);
-        }
-        
-    }
-
-    #endregion
-
     Vector3 RamdomTeleport()
     {
         bool collided = false;
@@ -1629,7 +1484,7 @@ public class Mew : Empty
         Transform uitext = player.transform.GetChild(2).GetChild(3);
         if (uitext)
         {
-            uitext.GetComponent<PlayerUIText>().SetText("禁止使用道具\n禁用所有回复", true);
+            uitext.GetComponent<PlayerUIText>().SetText("禁止使用道具\n禁用所有回复");
         }
         player.CanNotUseSpaceItem = true;//不允许玩家使用主动道具
         MewOrbRotate mewOrbRotate = Phase3OrbRotate.GetComponent<MewOrbRotate>();

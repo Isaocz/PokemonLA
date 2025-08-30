@@ -66,8 +66,12 @@ public class PlayerUIText : MonoBehaviour
             }
         }
     }
-
-    public void SetText(string newText, bool shake)
+    /// <summary>
+    /// 设置文本
+    /// </summary>
+    /// <param name="newText">文本</param>
+    /// <param name="shake">是否摆动</param>
+    public void SetText(string newText, bool shake = false)
     {
         // 设置文本
         uitext.text = newText;
@@ -77,13 +81,5 @@ public class PlayerUIText : MonoBehaviour
         {
             Shaking = shake;
         }
-    }
-
-    public void SetText(string newText)
-    {
-        uitext.text = newText;
-        timer = 0f;
-        Timing = false;
-        Shaking = false;
     }
 }
