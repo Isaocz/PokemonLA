@@ -7,9 +7,9 @@ using Cinemachine;
 public class Mew : Empty
 {
     [Header("技能")]
-    public GameObject magicalLeafPrefab;//技能1
-    public GameObject blizzardPrefab;//技能2
-    public GameObject WillOWispPrefab;//技能3
+    public GameObject StarScatterPref;//技能1
+    public GameObject StarShootPref;//技能2
+    public GameObject StampStarPref;//技能3
     public float WillOWispRadius = 2f; // WillOWisp的生成半径
     public GameObject PlayNicePrefab;//技能4
     public GameObject TeraBlastPrefab;//技能5
@@ -59,7 +59,6 @@ public class Mew : Empty
     public GameObject FakeAwakening;//假解眠药
     public GameObject FakeIceHeal;//假解冻药
     public GameObject FakeParalyzeHeal;//假解麻药
-    public GameObject Stellarize;
     public GameObject FakeLovePrefab;//假心
 
     //各个技能的冷却时间
@@ -109,6 +108,8 @@ public class Mew : Empty
     private bool isReset;
     private bool isTeleport;
     public float teleportTime;
+    public bool testing;
+
     private float teleportTimer = 0f;
     private int playerHpinP3;
     Vector3 targetPosition;
@@ -479,83 +480,90 @@ public class Mew : Empty
         switch (skillIndex)
         {
             case 1:
-                //技能1：魔法叶
-                StartCoroutine(ReleaseLeaves());
-                IEnumerator ReleaseLeaves()
-                {
-                    for (int i = 0; i < (currentPhase == 3 ? 2 : 1); i++) 
-                    {//魔法叶数量
-                        for (int j = 0; j < (currentPhase == 1 ? 3 : currentPhase == 2 ? 5 : 8); j++)
-                        {
-                            Vector2 spawnPosition;
-                            //实例化魔法叶
-                            if (currentPhase == 3)
-                            {
-                                float angle = j * (360f / 8);
-                                spawnPosition = transform.position + (Quaternion.Euler(0f, 0f, angle) * Vector2.right * 2f);
-                            }
-                            else
-                            {
-                                spawnPosition = transform.position;
-                            }
-                            GameObject magicalLeaf = ObjectPoolManager.SpawnObject(magicalLeafPrefab, spawnPosition, Quaternion.identity);
-                            magicalLeaf.GetComponent<MagicalLeafEmpty>().empty = this;
-                        }
-                        yield return new WaitForSeconds(currentPhase == 3 ? 2f : 0f);//重复释放魔法叶的延迟
-                    }
-                }
+                GameObject StarScatter = Instantiate(StarScatterPref, transform.position, Quaternion.identity);
+                StarScatter.GetComponent<StarScatter>().SetEmpty(this);
                 break;
+                ////技能1：魔法叶
+                //StartCoroutine(ReleaseLeaves());
+                //IEnumerator ReleaseLeaves()
+                //{
+                //    for (int i = 0; i < (currentPhase == 3 ? 2 : 1); i++) 
+                //    {//魔法叶数量
+                //        for (int j = 0; j < (currentPhase == 1 ? 3 : currentPhase == 2 ? 5 : 8); j++)
+                //        {
+                //            Vector2 spawnPosition;
+                //            //实例化魔法叶
+                //            if (currentPhase == 3)
+                //            {
+                //                float angle = j * (360f / 8);
+                //                spawnPosition = transform.position + (Quaternion.Euler(0f, 0f, angle) * Vector2.right * 2f);
+                //            }
+                //            else
+                //            {
+                //                spawnPosition = transform.position;
+                //            }
+                //            GameObject magicalLeaf = ObjectPoolManager.SpawnObject(magicalLeafPrefab, spawnPosition, Quaternion.identity);
+                //            magicalLeaf.GetComponent<MagicalLeafEmpty>().empty = this;
+                //        }
+                //        yield return new WaitForSeconds(currentPhase == 3 ? 2f : 0f);//重复释放魔法叶的延迟
+                //    }
+                //}
             case 2:
                 //技能2：暴风雪
-                if(currentPhase!= 1)
-                {
-                    return;
-                }
-                GameObject blizzard = Instantiate(blizzardPrefab, transform.position, Quaternion.identity);
-                blizzard.GetComponent<BlizzardEmpty>().empty = this;
-                Destroy(blizzard, 6f);//6秒后销毁暴风雪对象
+                //if(currentPhase!= 1)
+                //{
+                //    return;
+                //}
+                //GameObject blizzard = Instantiate(blizzardPrefab, transform.position, Quaternion.identity);
+                //blizzard.GetComponent<BlizzardEmpty>().empty = this;
+                //Destroy(blizzard, 6f);//6秒后销毁暴风雪对象
+                GameObject StarShoot = Instantiate(StarShootPref, transform.position, Quaternion.identity);
+                StarShoot.GetComponent<StarShoot>().SetEmpty(this);
                 break;
-            case 3://技能3：磷火
-                float WaitingWillOWisp;
-                float numWillOWisp;
-                float WillOWispDegree;
-                StartCoroutine(ReleaseWillOWisp());
-                IEnumerator ReleaseWillOWisp()
-                {
-                    if(currentPhase == 1)
-                    {
-                        numWillOWisp = 16;
-                        WillOWispDegree = 2;
-                        WaitingWillOWisp = 1f;
-                    }
-                    else if (currentPhase == 2)
-                    {
-                        numWillOWisp = 20;
-                        WillOWispDegree = 5;
-                        WaitingWillOWisp = 0.8f;
-                    }
-                    else
-                    {
-                        numWillOWisp = 20;
-                        WillOWispDegree = 10;
-                        WaitingWillOWisp = 0.4f;
-                    }
-                    for (int j = 0; j < WillOWispDegree; j++)
-                    {
-                        float increaseAngle = (currentPhase == 3 ? (Random.Range(0f, 14f)): 10f);
-                        float angleStep = 360f / numWillOWisp; // 计算每个WillOWisp之间的角度间隔
-                        for (int i = 0; i < numWillOWisp; i++)
-                        {
-                            float angle = j * increaseAngle + i * angleStep; // 计算当前WillOWisp的角度
-                            Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * WillOWispRadius; // 计算当前WillOWisp的生成位置
-                            WillOWispEmpty willOWisp = Instantiate(WillOWispPrefab, spawnPos, Quaternion.identity).GetComponent<WillOWispEmpty>();
-                            Vector3 direction = (spawnPos - transform.position).normalized;
-                            willOWisp.Initialize(currentPhase == 3 ? 8f : 4f, direction); // 设置WillOWisp的移动速度
-                            willOWisp.empty = this;
-                        }
-                        yield return new WaitForSeconds(WaitingWillOWisp);
-                    }
-                }
+            case 3:
+                GameObject StampStar = Instantiate(StampStarPref, transform.position, Quaternion.identity);
+                StampStar.GetComponent<StampStar>().SetEmpty(this);
+                //技能3：磷火
+                //float WaitingWillOWisp;
+                //float numWillOWisp;
+                //float WillOWispDegree;
+                //StartCoroutine(ReleaseWillOWisp());
+                //IEnumerator ReleaseWillOWisp()
+                //{
+                //    if(currentPhase == 1)
+                //    {
+                //        numWillOWisp = 16;
+                //        WillOWispDegree = 2;
+                //        WaitingWillOWisp = 1f;
+                //    }
+                //    else if (currentPhase == 2)
+                //    {
+                //        numWillOWisp = 20;
+                //        WillOWispDegree = 5;
+                //        WaitingWillOWisp = 0.8f;
+                //    }
+                //    else
+                //    {
+                //        numWillOWisp = 20;
+                //        WillOWispDegree = 10;
+                //        WaitingWillOWisp = 0.4f;
+                //    }
+                //    for (int j = 0; j < WillOWispDegree; j++)
+                //    {
+                //        float increaseAngle = (currentPhase == 3 ? (Random.Range(0f, 14f)): 10f);
+                //        float angleStep = 360f / numWillOWisp; // 计算每个WillOWisp之间的角度间隔
+                //        for (int i = 0; i < numWillOWisp; i++)
+                //        {
+                //            float angle = j * increaseAngle + i * angleStep; // 计算当前WillOWisp的角度
+                //            Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * WillOWispRadius; // 计算当前WillOWisp的生成位置
+                //            WillOWispEmpty willOWisp = Instantiate(WillOWispPrefab, spawnPos, Quaternion.identity).GetComponent<WillOWispEmpty>();
+                //            Vector3 direction = (spawnPos - transform.position).normalized;
+                //            willOWisp.Initialize(currentPhase == 3 ? 8f : 4f, direction); // 设置WillOWisp的移动速度
+                //            willOWisp.empty = this;
+                //        }
+                //        yield return new WaitForSeconds(WaitingWillOWisp);
+                //    }
+                //}
                 break;
             case 4://技能4：和睦相处
                 GameObject PlayNice = ObjectPoolManager.SpawnObject(PlayNicePrefab, transform.position, Quaternion.identity);
@@ -722,50 +730,48 @@ public class Mew : Empty
                 }
                 break;
             case 9://技能9：爱心印章
-                SkillType = PokemonType.TypeEnum.Fairy;
-                StartCoroutine(ReleaseHeartStamp());
-                IEnumerator ReleaseHeartStamp()
-                {
-                    float intervalTime = 1.5f;
-                    int Times = 2;
-                    if (currentPhase == 2)
-                    {
-                        intervalTime = 1.2f;
-                        Times = 2;
-                    }
+                //SkillType = PokemonType.TypeEnum.Fairy;
+                //StartCoroutine(ReleaseHeartStamp());
+                //IEnumerator ReleaseHeartStamp()
+                //{
+                //    float intervalTime = 1.5f;
+                //    int Times = 2;
+                //    if (currentPhase == 2)
+                //    {
+                //        intervalTime = 1.2f;
+                //        Times = 2;
+                //    }
 
-                    for (int i = 0; i < Times; i++) {
-                        float angleIncrement = 360f / heartStampCount;
-                        for (int j = 0; j < heartStampCount; j++)
-                        {
-                            float radius = 2f;
-                            float angle = j * angleIncrement;
-                            Vector3 heartStampPosition = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
-                            //Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
-                            HeartStampEmpty heartStamp = ObjectPoolManager.SpawnObject(HeartStampPrefab, heartStampPosition, Quaternion.identity).GetComponent<HeartStampEmpty>();
-                            heartStamp.phrase = 2;
-                            heartStamp.empty = this;
-                            yield return new WaitForSeconds(0.05f);
-                        }
+                //    for (int i = 0; i < Times; i++) {
+                //        float angleIncrement = 360f / heartStampCount;
+                //        for (int j = 0; j < heartStampCount; j++)
+                //        {
+                //            float radius = 2f;
+                //            float angle = j * angleIncrement;
+                //            Vector3 heartStampPosition = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
+                //            //Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+                //            HeartStampEmpty heartStamp = ObjectPoolManager.SpawnObject(HeartStampPrefab, heartStampPosition, Quaternion.identity).GetComponent<HeartStampEmpty>();
+                //            heartStamp.empty = this;
+                //            yield return new WaitForSeconds(0.05f);
+                //        }
 
-                        if(currentPhase == 3)
-                        {
-                            for (int j = 0; j < 16; j++)
-                            {
-                                float radius = 2.5f;
-                                float angle = j * 360f / 16;
-                                Vector3 heartStampPosition = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
-                                //Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
-                                HeartStampEmpty heartStamp = ObjectPoolManager.SpawnObject(HeartStampPrefab, heartStampPosition, Quaternion.identity).GetComponent<HeartStampEmpty>();
-                                heartStamp.phrase = 3;
-                                heartStamp.empty = this;
-                                yield return new WaitForSeconds(0.03f);
-                            }
-                        }
+                //        if(currentPhase == 3)
+                //        {
+                //            for (int j = 0; j < 16; j++)
+                //            {
+                //                float radius = 2.5f;
+                //                float angle = j * 360f / 16;
+                //                Vector3 heartStampPosition = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
+                //                //Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+                //                HeartStampEmpty heartStamp = ObjectPoolManager.SpawnObject(HeartStampPrefab, heartStampPosition, Quaternion.identity).GetComponent<HeartStampEmpty>();
+                //                heartStamp.empty = this;
+                //                yield return new WaitForSeconds(0.03f);
+                //            }
+                //        }
 
-                        yield return new WaitForSeconds(intervalTime);
-                    }
-                }
+                //        yield return new WaitForSeconds(intervalTime);
+                //    }
+                //}
                 break;
             case 10://技能10：鳞射
                 SkillType = PokemonType.TypeEnum.Dragon;
@@ -1370,8 +1376,17 @@ public class Mew : Empty
         ChangeType(randomSkillIndex);
         yield return new WaitForSeconds(0.5f);
         TeleportEnd();
-        UseSkill(randomSkillIndex);
-        SkillTimerUpdate(randomSkillIndex, 1);
+        if (testing)
+        {
+            int random = Random.Range(1, 4);
+            UseSkill(random);
+            SkillTimerUpdate(random, 1);
+        }
+        else
+        {
+            UseSkill(randomSkillIndex);
+            SkillTimerUpdate(randomSkillIndex, 1);
+        }
     }
     #endregion
 
@@ -1425,8 +1440,8 @@ public class Mew : Empty
             for (int j = 0; j < 12; j++)
             {
                 Vector3 secredFirePosition = startPoint + direction * (j * step);
-                GameObject willowispprefab = Instantiate(WillOWispPrefab, secredFirePosition, Quaternion.identity);
-                willowispprefab.GetComponent<WillOWispEmpty>().isStage = true;
+                //GameObject willowispprefab = Instantiate(WillOWispPrefab, secredFirePosition, Quaternion.identity);
+                //willowispprefab.GetComponent<WillOWispEmpty>().isStage = true;
                 yield return null;
             }
         }
@@ -1507,8 +1522,6 @@ public class Mew : Empty
     private IEnumerator Phase3Middle() 
     {
         yield return new WaitForSeconds(1f);
-        GameObject stellarize = Instantiate(Stellarize, transform.position, Quaternion.identity);
-        Destroy(stellarize, 1f);
         yield return new WaitForSeconds(1.5f);
         //首先先圆形释放会给玩家造成伤害的假心
         SkillType = PokemonType.TypeEnum.Fighting;
@@ -1681,7 +1694,7 @@ public class Mew : Empty
         int pbIndex = Random.Range(0, pbList.Length);
         PokemonBall pb = Instantiate(pbList[pbIndex],GetMewPosition, Quaternion.identity);
 
-        //梦幻嘎掉
+        //嘎掉
         player.CanNotUseSpaceItem = false;
         Invincible = false;
         EmptyHp = 0;
