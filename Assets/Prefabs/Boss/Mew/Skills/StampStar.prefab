@@ -126,7 +126,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.12
+  m_Radius: 0.3
 --- !u!50 &710212612966336292
 Rigidbody2D:
   serializedVersion: 4
@@ -285,12 +285,13 @@ MonoBehaviour:
   Baby: {fileID: 0}
   BabyLevel: 0
   Dmage: 0
-  SpDmage: 100
+  SpDmage: 120
   ProType: 14
   knockPoint: 2.5
   Blocktags:
   - Enviroment
   - Room
+  ExistTime: 9
   effects: []
   moveBehavior: 1
   moveSpeed: 5
@@ -303,6 +304,7 @@ MonoBehaviour:
   CloseTargetLeaveDistance: 0
   IsSpin: 1
   SpinSpeed: 1
+  isTargeting: 0
 --- !u!1 &736589149653040343
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,8 +315,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1770778695452401530}
   - component: {fileID: 2571483733184835890}
-  - component: {fileID: 4481313119259899130}
-  - component: {fileID: 2760684761520188723}
   - component: {fileID: 3388707954329287688}
   m_Layer: 0
   m_Name: StarLight
@@ -390,102 +390,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4481313119259899130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 736589149653040343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8f30b050827ae348a20b771aae47488, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rigidbody2D: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  empty: {fileID: 0}
-  Baby: {fileID: 0}
-  BabyLevel: 0
-  Dmage: 0
-  SpDmage: 100
-  ProType: 14
-  knockPoint: 2.5
-  Blocktags: []
-  effects:
-  - projectileEffect: 6
-    frozenPoint:
-      x: 0
-      y: 0
-    toxicPoint: 0
-    paralysisPoint: 0
-    burnPoint: 0
-    sleepPoint: 0
-    confusionPoint: 0.1
-  moveBehavior: 0
-  moveSpeed: 8
-  direction: {x: -0.918882, y: 0.39453244}
-  accerate: 0
-  Target: {fileID: 0}
-  NoInterval: 0
-  TargetStrength: 0.5
-  CloseTargetDistance: 8
-  CloseTargetLeaveDistance: 2
-  IsSpin: 0
-  SpinSpeed: 0
---- !u!60 &2760684761520188723
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 736589149653040343}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.34, y: 0.34}
-    newSize: {x: 0.34, y: 0.34}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.05571381, y: -0.04236732}
-      - {x: 0.16810954, y: 0.0042922245}
-      - {x: 0.05248483, y: 0.051228777}
-      - {x: 0.0039353995, y: 0.17094487}
-      - {x: -0.04266572, y: 0.058155823}
-      - {x: -0.16905516, y: 0.0033080047}
-      - {x: -0.039772753, y: -0.04769389}
-      - {x: 0.006690085, y: -0.16897528}
-  m_UseDelaunayMesh: 0
 --- !u!96 &3388707954329287688
 TrailRenderer:
   serializedVersion: 3
@@ -609,8 +513,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4859577488472177793}
   - component: {fileID: 5578090735051391886}
-  - component: {fileID: 8497084679040857399}
-  - component: {fileID: 510551902745712031}
   - component: {fileID: 338500029801335007}
   m_Layer: 0
   m_Name: StarLight (1)
@@ -686,102 +588,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8497084679040857399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6008650631002381567}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8f30b050827ae348a20b771aae47488, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rigidbody2D: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  empty: {fileID: 0}
-  Baby: {fileID: 0}
-  BabyLevel: 0
-  Dmage: 0
-  SpDmage: 100
-  ProType: 14
-  knockPoint: 2.5
-  Blocktags: []
-  effects:
-  - projectileEffect: 6
-    frozenPoint:
-      x: 0
-      y: 0
-    toxicPoint: 0
-    paralysisPoint: 0
-    burnPoint: 0
-    sleepPoint: 0
-    confusionPoint: 0.1
-  moveBehavior: 0
-  moveSpeed: 8
-  direction: {x: -0.918882, y: 0.39453244}
-  accerate: 0
-  Target: {fileID: 0}
-  NoInterval: 0
-  TargetStrength: 0.5
-  CloseTargetDistance: 8
-  CloseTargetLeaveDistance: 2
-  IsSpin: 0
-  SpinSpeed: 0
---- !u!60 &510551902745712031
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6008650631002381567}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.34, y: 0.34}
-    newSize: {x: 0.34, y: 0.34}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.05571381, y: -0.04236732}
-      - {x: 0.16810954, y: 0.0042922245}
-      - {x: 0.05248483, y: 0.051228777}
-      - {x: 0.0039353995, y: 0.17094487}
-      - {x: -0.04266572, y: 0.058155823}
-      - {x: -0.16905516, y: 0.0033080047}
-      - {x: -0.039772753, y: -0.04769389}
-      - {x: 0.006690085, y: -0.16897528}
-  m_UseDelaunayMesh: 0
 --- !u!96 &338500029801335007
 TrailRenderer:
   serializedVersion: 3
@@ -905,8 +711,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9164587970099089556}
   - component: {fileID: 8160892400862712894}
-  - component: {fileID: 9039715999072009540}
-  - component: {fileID: 8656920284285640383}
   - component: {fileID: 1015727847845408130}
   m_Layer: 0
   m_Name: StarLight
@@ -982,102 +786,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &9039715999072009540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6145251548814481978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8f30b050827ae348a20b771aae47488, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rigidbody2D: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  empty: {fileID: 0}
-  Baby: {fileID: 0}
-  BabyLevel: 0
-  Dmage: 0
-  SpDmage: 100
-  ProType: 14
-  knockPoint: 2.5
-  Blocktags: []
-  effects:
-  - projectileEffect: 6
-    frozenPoint:
-      x: 0
-      y: 0
-    toxicPoint: 0
-    paralysisPoint: 0
-    burnPoint: 0
-    sleepPoint: 0
-    confusionPoint: 0.1
-  moveBehavior: 0
-  moveSpeed: 8
-  direction: {x: -0.918882, y: 0.39453244}
-  accerate: 0
-  Target: {fileID: 0}
-  NoInterval: 0
-  TargetStrength: 0.5
-  CloseTargetDistance: 8
-  CloseTargetLeaveDistance: 2
-  IsSpin: 0
-  SpinSpeed: 0
---- !u!60 &8656920284285640383
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6145251548814481978}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.34, y: 0.34}
-    newSize: {x: 0.34, y: 0.34}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.05571381, y: -0.04236732}
-      - {x: 0.16810954, y: 0.0042922245}
-      - {x: 0.05248483, y: 0.051228777}
-      - {x: 0.0039353995, y: 0.17094487}
-      - {x: -0.04266572, y: 0.058155823}
-      - {x: -0.16905516, y: 0.0033080047}
-      - {x: -0.039772753, y: -0.04769389}
-      - {x: 0.006690085, y: -0.16897528}
-  m_UseDelaunayMesh: 0
 --- !u!96 &1015727847845408130
 TrailRenderer:
   serializedVersion: 3
@@ -1201,8 +909,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1437162030252251914}
   - component: {fileID: 8594180242343455679}
-  - component: {fileID: 2123802630669946515}
-  - component: {fileID: 3189339861680065424}
   - component: {fileID: 4193457530961823797}
   m_Layer: 0
   m_Name: StarLight
@@ -1278,102 +984,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2123802630669946515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8521097261432594498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8f30b050827ae348a20b771aae47488, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rigidbody2D: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  empty: {fileID: 0}
-  Baby: {fileID: 0}
-  BabyLevel: 0
-  Dmage: 0
-  SpDmage: 100
-  ProType: 14
-  knockPoint: 2.5
-  Blocktags: []
-  effects:
-  - projectileEffect: 6
-    frozenPoint:
-      x: 0
-      y: 0
-    toxicPoint: 0
-    paralysisPoint: 0
-    burnPoint: 0
-    sleepPoint: 0
-    confusionPoint: 0.1
-  moveBehavior: 0
-  moveSpeed: 8
-  direction: {x: -0.918882, y: 0.39453244}
-  accerate: 0
-  Target: {fileID: 0}
-  NoInterval: 0
-  TargetStrength: 0.5
-  CloseTargetDistance: 8
-  CloseTargetLeaveDistance: 2
-  IsSpin: 0
-  SpinSpeed: 0
---- !u!60 &3189339861680065424
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8521097261432594498}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.34, y: 0.34}
-    newSize: {x: 0.34, y: 0.34}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.05571381, y: -0.04236732}
-      - {x: 0.16810954, y: 0.0042922245}
-      - {x: 0.05248483, y: 0.051228777}
-      - {x: 0.0039353995, y: 0.17094487}
-      - {x: -0.04266572, y: 0.058155823}
-      - {x: -0.16905516, y: 0.0033080047}
-      - {x: -0.039772753, y: -0.04769389}
-      - {x: 0.006690085, y: -0.16897528}
-  m_UseDelaunayMesh: 0
 --- !u!96 &4193457530961823797
 TrailRenderer:
   serializedVersion: 3

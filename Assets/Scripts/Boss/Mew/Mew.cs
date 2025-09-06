@@ -10,12 +10,8 @@ public class Mew : Empty
     public GameObject StarScatterPref;//技能1
     public GameObject StarShootPref;//技能2
     public GameObject StampStarPref;//技能3
-    public float WillOWispRadius = 2f; // WillOWisp的生成半径
-    public GameObject PlayNicePrefab;//技能4
-    public GameObject TeraBlastPrefab;//技能5
-    public float laserLength = 10f; // 激光的长度
-    public float laserOffset = 1f; // 激光的偏移量
-    public LayerMask obstacleLayer;
+    public GameObject StarSlashPref;//技能4
+    public GameObject StarChargePref;//技能5
     public GameObject dashReticle;//技能6
     public GameObject PouncePrefab;
     public GameObject MagicalFirePrefab;//技能7
@@ -565,57 +561,63 @@ public class Mew : Empty
                 //    }
                 //}
                 break;
-            case 4://技能4：和睦相处
-                GameObject PlayNice = ObjectPoolManager.SpawnObject(PlayNicePrefab, transform.position, Quaternion.identity);
-                ClearStatusEffects();
-                ObjectPoolManager.ReturnObjectToPool(PlayNice, 5f);
+            case 4:
+                GameObject StarSlash = Instantiate(StarSlashPref, transform.position, Quaternion.identity);
+                StarSlash.GetComponent<StarSlash>().SetEmpty(this);
+                //技能4：和睦相处
+                //GameObject PlayNice = ObjectPoolManager.SpawnObject(PlayNicePrefab, transform.position, Quaternion.identity);
+                //ClearStatusEffects();
+                //ObjectPoolManager.ReturnObjectToPool(PlayNice, 5f);
                 break;
-            case 5://技能5：太晶爆发
+            case 5:
+                GameObject StarCharge = Instantiate(StarChargePref, transform.position, Quaternion.identity);
+                StarCharge.GetComponent<StarCharge>().SetEmpty(this);
+                //技能5：太晶爆发
                 //释放3道激光，分别位于90度、210度、330度的位置
-                StartCoroutine(ReleaseTeraBlast());
-                IEnumerator ReleaseTeraBlast()
-                {
-                    if (currentPhase == 1)
-                    {
-                        float[] angles = { 0f, 120f, 240f };
-                        for (int i = 0; i < 3; i++)
-                        {
-                            float angleoffset = Random.Range(0f, 120f);
-                            for (int j = 0; j < angles.Length; j++)
-                            {
-                                //计算激光的起始点和终点
-                                float angle = angles[j] + angleoffset;
-                                Vector3 startPoint = transform.position + new Vector3(1.5f * Mathf.Cos(Mathf.Deg2Rad * angle), 1.5f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
-                                Vector3 endPoint = transform.position + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
-                                TeraBlastEmpty Terablast = Instantiate(TeraBlastPrefab, startPoint, Quaternion.identity).GetComponent<TeraBlastEmpty>();
-                                Terablast.SetEndpoints(startPoint, endPoint, angle);
-                                Terablast.empty = this;
+                //StartCoroutine(ReleaseTeraBlast());
+                //IEnumerator ReleaseTeraBlast()
+                //{
+                //    if (currentPhase == 1)
+                //    {
+                //        float[] angles = { 0f, 120f, 240f };
+                //        for (int i = 0; i < 3; i++)
+                //        {
+                //            float angleoffset = Random.Range(0f, 120f);
+                //            for (int j = 0; j < angles.Length; j++)
+                //            {
+                //                //计算激光的起始点和终点
+                //                float angle = angles[j] + angleoffset;
+                //                Vector3 startPoint = transform.position + new Vector3(1.5f * Mathf.Cos(Mathf.Deg2Rad * angle), 1.5f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
+                //                Vector3 endPoint = transform.position + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
+                //                TeraBlastEmpty Terablast = Instantiate(TeraBlastPrefab, startPoint, Quaternion.identity).GetComponent<TeraBlastEmpty>();
+                //                Terablast.SetEndpoints(startPoint, endPoint, angle);
+                //                Terablast.empty = this;
 
-                            }
-                            yield return new WaitForSeconds(1.5f);
-                        }
+                //            }
+                //            yield return new WaitForSeconds(1.5f);
+                //        }
                     
-                    }
-                    else
-                    {
-                        float[] angles = { 0f, 60f, 120f, 180f, 240f, 300f };
-                        for (int i = 0; i < 6; i++)
-                        {
-                            float angleoffset = Random.Range(0f, 60f);
-                            for (int j = 0; j < angles.Length; j++)
-                            {
-                                //计算激光的起始点和终点
-                                float angle = angles[j] + angleoffset;
-                                Vector3 startPoint = transform.position + new Vector3(1.5f * Mathf.Cos(Mathf.Deg2Rad * angle), 1.5f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
-                                Vector3 endPoint = transform.position + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
-                                TeraBlastEmpty Terablast = Instantiate(TeraBlastPrefab, startPoint, Quaternion.identity).GetComponent<TeraBlastEmpty>();
-                                Terablast.SetEndpoints(startPoint, endPoint, angle);
-                                Terablast.empty = this;
-                            }
-                            yield return new WaitForSeconds(1.5f);
-                        }
-                    }
-                }
+                //    }
+                //    else
+                //    {
+                //        float[] angles = { 0f, 60f, 120f, 180f, 240f, 300f };
+                //        for (int i = 0; i < 6; i++)
+                //        {
+                //            float angleoffset = Random.Range(0f, 60f);
+                //            for (int j = 0; j < angles.Length; j++)
+                //            {
+                //                //计算激光的起始点和终点
+                //                float angle = angles[j] + angleoffset;
+                //                Vector3 startPoint = transform.position + new Vector3(1.5f * Mathf.Cos(Mathf.Deg2Rad * angle), 1.5f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
+                //                Vector3 endPoint = transform.position + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
+                //                TeraBlastEmpty Terablast = Instantiate(TeraBlastPrefab, startPoint, Quaternion.identity).GetComponent<TeraBlastEmpty>();
+                //                Terablast.SetEndpoints(startPoint, endPoint, angle);
+                //                Terablast.empty = this;
+                //            }
+                //            yield return new WaitForSeconds(1.5f);
+                //        }
+                //    }
+                //}
                 break;
             case 6://技能6：虫扑
                 GameObject pounce = Instantiate(PouncePrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
@@ -984,31 +986,31 @@ public class Mew : Empty
                 }
                 break;
             case 15://技能15：空气之刃
-                SkillType = PokemonType.TypeEnum.Flying;
-                StartCoroutine(ReleaseAirSlash());
-                IEnumerator ReleaseAirSlash()
-                {
-                    float intervalTime = 1.3f;
-                    int Times = 3;
-                    if (currentPhase == 2)
-                    {
-                        AirSlashPrefab.GetComponent<AirSlashMew>().numSplitAirSlashes = 8;
-                        intervalTime = 0.8f;
-                        Times = 5;
-                    }
-                    else if(currentPhase ==3)
-                    {
-                        AirSlashPrefab.GetComponent<AirSlashMew>().numSplitAirSlashes = 10;
-                        intervalTime = 0.3f;
-                        Times = 13;
-                    }
-                    for(int i = 0;i< Times;i++)
-                    {
-                        GameObject airSlash = Instantiate(AirSlashPrefab, transform.position, Quaternion.identity);
-                        airSlash.GetComponent<AirSlashMew>().empty = this;
-                        yield return new WaitForSeconds(intervalTime);
-                    }
-                }
+                //SkillType = PokemonType.TypeEnum.Flying;
+                //StartCoroutine(ReleaseAirSlash());
+                //IEnumerator ReleaseAirSlash()
+                //{
+                //    float intervalTime = 1.3f;
+                //    int Times = 3;
+                //    if (currentPhase == 2)
+                //    {
+                //        AirSlashPrefab.GetComponent<AirSlashMew>().numSplitAirSlashes = 8;
+                //        intervalTime = 0.8f;
+                //        Times = 5;
+                //    }
+                //    else if(currentPhase ==3)
+                //    {
+                //        AirSlashPrefab.GetComponent<AirSlashMew>().numSplitAirSlashes = 10;
+                //        intervalTime = 0.3f;
+                //        Times = 13;
+                //    }
+                //    for(int i = 0;i< Times;i++)
+                //    {
+                //        GameObject airSlash = Instantiate(AirSlashPrefab, transform.position, Quaternion.identity);
+                //        airSlash.GetComponent<AirSlashMew>().empty = this;
+                //        yield return new WaitForSeconds(intervalTime);
+                //    }
+                //}
                 break;
             case 16://技能16：淘金潮
                 SkillType = PokemonType.TypeEnum.Steel;
@@ -1378,7 +1380,7 @@ public class Mew : Empty
         TeleportEnd();
         if (testing)
         {
-            int random = Random.Range(1, 4);
+            int random = Random.Range(1, 6);
             UseSkill(random);
             SkillTimerUpdate(random, 1);
         }

@@ -38,20 +38,39 @@ public abstract class MewBaseSkill : MonoBehaviour, IMewSkill
         }
 
         isCasting = true;
-        yield return new WaitForSeconds(SkillStartup);
+        yield return StartCoroutine(Startup());
 
         for (int i = 1;i <= repeat; i++)
         {
-            StartCoroutine(CoreLogic());
-            yield return new WaitForSeconds(repeatTime);
+            yield return StartCoroutine(CoreLogic());
+            yield return StartCoroutine(SkillRepeat());
         }
 
-        yield return new WaitForSeconds(SkillEndup);
+        yield return StartCoroutine(Endup());
 
         SelfDestory();
         lastCastTime = Time.time;
         isCasting=false;
     }
+
+    public Transform GetPlayerTransform()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null) return player.transform;
+        else return null;
+    }
+
+    public Vector2 GetPlayerDirection()
+    {
+        Transform playerTransform = GetPlayerTransform();
+        if (playerTransform != null)
+        {
+            Vector2 direction = (playerTransform.position - transform.position).normalized;
+            return direction;
+        }
+        else return Vector2.zero;
+    }
+
     public void SelfDestory()
     {
         StopAllCoroutines();
@@ -65,5 +84,28 @@ public abstract class MewBaseSkill : MonoBehaviour, IMewSkill
 
     //ºËÐÄÂß¼­
     public abstract IEnumerator CoreLogic();
+    public virtual IEnumerator Startup()
+    {
+        if(SkillStartup > 0f)
+        {
+            yield return new WaitForSeconds(SkillStartup);
+        }
+    }
+
+    public virtual IEnumerator SkillRepeat()
+    {
+        if(repeatTime > 0f)
+        {
+            yield return new WaitForSeconds(repeatTime);
+        }
+    }
+
+    public virtual IEnumerator Endup()
+    {
+        if (SkillEndup > 0f)
+        {
+            yield return new WaitForSeconds(SkillEndup);
+        }
+    }
 
 }

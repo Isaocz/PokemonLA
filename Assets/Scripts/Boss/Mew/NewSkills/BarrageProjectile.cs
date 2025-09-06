@@ -42,6 +42,7 @@ public class BarrageProjectile : Projectile
     public string[] Blocktags;
 
     [Header("弹幕参数设置")]
+    public float ExistTime = 7f;
     public List<EffectData> effects = new List<EffectData>(); // 支持多个效果
 
     [Header("移动设置")]
@@ -62,16 +63,16 @@ public class BarrageProjectile : Projectile
 
     [Header("行为参数")]
     public float SpinSpeed;                         //旋转速度
+    public bool isTargeting = false;
+    public int FadeMode = 0;                        //消失渐变（0为未消失，2为即将消失）
 
     private bool isStopping = false;
-    private bool isTargeting = false;
-    private int FadeMode = 0;
     private float timer = 0f;
     private SpriteRenderer sr;
 
     private void Start()
     {
-        Destroy(gameObject, 7f);
+        Destroy(gameObject, ExistTime);
         rigidbody2D = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
     }
@@ -261,7 +262,7 @@ public class BarrageProjectile : Projectile
     }
 
 
-private void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         if (Blocktags != null)
         {
