@@ -18,6 +18,7 @@ public class SwiftStar : Skill
     private float progress = 0;
     private bool hit;
     private float timer;
+    private bool isAttacking; // 标记是否正在攻击
 
     private void Start()
     {
@@ -30,6 +31,29 @@ public class SwiftStar : Skill
         if (!hit)
         {
             StartExistenceTimer();
+
+            if (isAttacking)
+            {
+                transform.Rotate(0, 0, rotateSpeed);
+                if (target != null)
+                {
+                    transform.position = Vector2.MoveTowards(transform.position, target.transform.position, Speed * Time.deltaTime);
+                }
+                else
+                {
+                    // 如果目标丢失，继续向前移动
+                    transform.position += transform.right * Speed * Time.deltaTime;
+                }
+                return;
+            }
+
+            //检查center是否已经被删除
+            if (center == null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             if (target == null)
             {
                 progress += Time.deltaTime * surrundSpeed;
@@ -44,6 +68,7 @@ public class SwiftStar : Skill
             }
             else
             {
+                isAttacking = true;
                 transform.Rotate(0, 0, rotateSpeed);
                 transform.position = Vector2.MoveTowards(transform.position, target.transform.position, Speed * Time.deltaTime);
             }

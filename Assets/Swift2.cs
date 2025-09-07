@@ -61,6 +61,14 @@ public class Swift2 : Skill
         if (surplusStar < 0)
         {
             Destroy(this.gameObject);
+            return;
+        }
+
+        // 检查当前要访问的星星是否有效
+        if (stars[surplusStar] == null)
+        {
+            surplusStar--;
+            return;
         }
 
         else if (target != null)
@@ -79,13 +87,16 @@ public class Swift2 : Skill
             if (timer > ShootTime)
             {
                 timer = 0;
-                SwiftStar sss = stars[surplusStar].GetComponent<SwiftStar>();
-                if (sss != null)
+                if (stars[surplusStar] != null)
                 {
-                    sss.attack = true;
-                    sss.target = target;
+                    SwiftStar sss = stars[surplusStar].GetComponent<SwiftStar>();
+                    if (sss != null)
+                    {
+                        sss.attack = true;
+                        sss.target = target;
+                    }
+                    surplusStar--;
                 }
-                surplusStar--;
             }
         }
         
