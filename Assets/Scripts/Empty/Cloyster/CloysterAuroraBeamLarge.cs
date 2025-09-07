@@ -97,6 +97,7 @@ public class CloysterAuroraBeamLarge : MonoBehaviour
                     StartVFX.transform.GetChild(4).GetComponent<ParticleSystem>().Stop();
                     EndVFX.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
                     EndVFX.transform.GetChild(1).GetComponent<ParticleSystem>().Stop();
+                    EndVFX.transform.GetChild(2).GetComponent<ParticleSystem>().Stop();
                 }
 
             }

@@ -596,7 +596,7 @@ public class Avalugg : Empty
         for (int i = 0; i < 6; i++)
         {
             //·¢Éä±ù±¦
-            if (PositionIsBergmiteExist[i] != null && PositionIsBergmiteExist[i].NowState == Bergmite.BergmiteState.IdleInParent) { PositionIsBergmiteExist[i].Drop(TargetPositionList[i],0); }
+            if (PositionIsBergmiteExist[i] != null && PositionIsBergmiteExist[i].NowState == Bergmite.BergmiteState.IdleInParent) { PositionIsBergmiteExist[i].Drop(TargetPositionList[i]+(Vector2)ParentPokemonRoom.transform.position,0); }
         }
     }
 

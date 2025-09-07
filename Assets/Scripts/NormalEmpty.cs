@@ -4,7 +4,16 @@ using UnityEngine;
 
 public class NormalEmpty : Empty
 {
-    Vector2 Director;//敌人朝向
+    /// <summary>
+    /// 敌人朝向
+    /// </summary>
+    Vector2 Director;
+
+    /// <summary>
+    /// 敌人的目标的坐标
+    /// </summary>
+    Vector2 TargetPosition;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -64,7 +73,16 @@ public class NormalEmpty : Empty
 
     /*boss
         
+    /// <summary>
+    /// 敌人朝向
+    /// </summary>
     Vector2 Director;
+
+    /// <summary>
+    /// 敌人的目标的坐标
+    /// </summary>
+    Vector2 TargetPosition;
+
     // Start is called before the first frame update
     void Start()
     {

@@ -230,13 +230,19 @@ public class _mTool : MonoBehaviour
         {
             for (int i = 0; i < Parent.transform.childCount; i++)
             {
-                ParticleSystem ps = Parent.transform.GetChild(i).GetComponent<ParticleSystem>();
-                if (ps != null)
-                {
-                    var psmain = ps.main;
-                    psmain.loop = false;
-                    psmain.stopAction = ParticleSystemStopAction.Destroy;
-                    ps.transform.parent = null;
+                if (Parent.transform.GetChild(i).gameObject != null) {
+                    //移除孙对象的粒子效果
+                    if (Parent.transform.childCount !=  0) {
+                        RemoveAllPSChild(Parent.transform.GetChild(i).gameObject);
+                    }
+                    ParticleSystem ps = Parent.transform.GetChild(i).GetComponent<ParticleSystem>();
+                    if (ps != null)
+                    {
+                        var psmain = ps.main;
+                        psmain.loop = false;
+                        psmain.stopAction = ParticleSystemStopAction.Destroy;
+                        ps.transform.parent = null;
+                    }
                 }
             }
         }
