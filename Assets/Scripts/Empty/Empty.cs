@@ -790,7 +790,10 @@ public class Empty : Pokemon
     /// </summary>
     public virtual void DieEvent()
     {
-        
+        if (ParentEmptyByChild != null)
+        {
+            ParentEmptyByChild.ChildDie(this);
+        }
     }
 
 
@@ -1479,6 +1482,207 @@ public class Empty : Pokemon
         //实例化
         Instantiate(CTEffect, target.transform.position + Vector3.right * Random.Range(-0.5f, 0.5f) + Vector3.up * Random.Range(0.0f, 0.8f), Quaternion.identity, target.transform).SetActive(true);
     }
+
+
+
+
+
+    //■■■■■■■■■■■■■■■■■■■■有关子敌人对象■■■■■■■■■■■■■■■■■■■■■■
+
+    //=================================作为父对象====================================
+
+    /// <summary>
+    /// 子敌人对象的家Transform
+    /// </summary>
+    public Transform ChildHome;
+
+    /// <summary>
+    /// 子敌人对象列表
+    /// </summary>
+    public List<Empty> ChildrenList;
+
+    /// <summary>
+    /// 子敌人对象死去
+    /// </summary>
+    public virtual void ChildDie(Empty child)
+    {
+        for (int i = 0; i < ChildrenList.Count; i++)
+        {
+            if (ChildrenList[i] != null && child.gameObject == ChildrenList[i].gameObject) { 
+                ChildrenList[i].ChildLeaveHome();
+                //ChildrenList[i] = null;  
+            }
+        }
+    }
+
+    /// <summary>
+    /// 忽略所有自己和子敌人对象之间的碰撞
+    /// </summary>
+    public virtual void IgnoreCollisionParentChild()
+    {
+        List<Collider2D> CList = new List<Collider2D> { };
+        CList.Add(this.GetComponent<Collider2D>());
+        foreach (Empty child in ChildrenList)
+        {
+            if (child.gameObject != null) { CList.Add(child.transform.GetComponent<Collider2D>()); }
+        }
+        for (int i = 0; i < (CList.Count - 1); i++)
+        {
+            for (int j = i + 1; j < CList.Count; j++)
+            {
+                Physics2D.IgnoreCollision(CList[i], CList[j], true);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 忽略某个子敌人对象和其他子敌人对象以及自己的碰撞
+    /// </summary>
+    public virtual void IgnoreOneChildCollision(Empty child)
+    {
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), child.GetComponent<Collider2D>(), true);
+        foreach (Empty c in ChildrenList)
+        {
+            if (c != null && c.gameObject != child.gameObject)
+            {
+                Physics2D.IgnoreCollision(c.GetComponent<Collider2D>(), child.GetComponent<Collider2D>(), true);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 恢复某个子敌人对象和其他子敌人对象以及自己的碰撞
+    /// </summary>
+    public virtual void ResetOneChildCollision(Empty child)
+    {
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), child.GetComponent<Collider2D>(), false);
+        foreach (Empty c in ChildrenList)
+        {
+            if (c != null && c.gameObject != child.gameObject)
+            {
+                Physics2D.IgnoreCollision(c.GetComponent<Collider2D>(), child.GetComponent<Collider2D>(), false);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 返回活着的子敌人对象队列 并且更新ChildrenList
+    /// </summary>
+    /// <returns></returns>
+    public virtual List<Empty> GetAliveChildren()
+    {
+        List<Empty> output = new List<Empty> { };
+        for (int i = 0; i < ChildrenList.Count; i++)
+        {
+            if (ChildrenList[i] != null && !ChildrenList[i].isDie) { output.Add(ChildrenList[i]); }
+        }
+        ChildrenList.Clear();
+        ChildrenList = output;
+        return output;
+    }
+
+    /// <summary>
+    /// 死亡时清空子敌人对象的父对象
+    /// </summary>
+    public virtual void ParentDie()
+    {
+        GetAliveChildren();
+        for (int i = 0; i < ChildrenList.Count; i++)
+        {
+            if (ChildrenList[i] != null && !ChildrenList[i].isDie)
+            {
+                if (ChildrenList[i].transform.parent == ChildHome)
+                {
+                    ChildrenList[i].ChildLeaveHome();
+                }
+                if (ChildrenList[i].ParentEmptyByChild != null) { ChildrenList[i].ParentEmptyByChild = null; }
+            }
+        }
+    }
+
+
+
+    //=================================作为子对象====================================
+
+    /// <summary>
+    /// 自己作为子对象时的父对象
+    /// </summary>
+    public Empty ParentEmptyByChild;
+
+    /// <summary>
+    /// 子对象离开家 脱离母体
+    /// </summary>
+    public virtual void ChildLeaveHome()
+    {
+        if (ParentEmptyByChild != null && ParentEmptyByChild.ChildrenList.Contains(this))
+        {
+            ParentEmptyByChild.ChildrenList.Remove(this);
+        }
+        //设定父对象和家
+        if (ParentEmptyByChild != null)
+        {
+            transform.parent = ParentEmptyByChild.transform.parent;
+            ParentEmptyByChild = null;
+        }
+    }
+
+    /// <summary>
+    /// 子对象回到家家 返回母体
+    /// </summary>
+    public virtual void ChildBackHome(Empty parent)
+    {
+        //设定父对象和家
+        ParentEmptyByChild = parent;
+        transform.parent = ParentEmptyByChild.ChildHome;
+        if (ParentEmptyByChild != null && !ParentEmptyByChild.ChildrenList.Contains(this))
+        {
+            ParentEmptyByChild.ChildrenList.Add(this);
+        }
+    }
+
+    /// <summary>
+    /// 根据距离寻找离自己最近的父对象
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public virtual T SearchParentByDistence<T>() where T : Empty
+    {
+        List<T> OutputList = new List<T> { };
+        //如果父对象不为空
+        if (ParentEmptyByChild == null)
+        {
+            foreach (Transform t in transform.parent)
+            {
+                T ct = t.GetComponent<T>();
+                if (ct != null && ct.isActiveAndEnabled && !ct.isBorn && !ct.isDie)
+                {
+                    OutputList.Add(ct);
+                }
+            }
+        }
+
+
+        if(OutputList.Count == 0)
+        {
+            return default;
+        }
+        else
+        {
+            float MinDistence = 100.0f;
+            T output = null;
+            for (int i = 0; i < OutputList.Count; i++)
+            {
+                if (Vector2.Distance((Vector2)(OutputList[i].transform.position) , (Vector2)(transform.position)) < MinDistence ) {
+                    MinDistence = Vector2.Distance((Vector2)(OutputList[i].transform.position), (Vector2)(transform.position));
+                    output = OutputList[i];
+                }
+            }
+            return output;
+        }
+    }
+
+
+    //■■■■■■■■■■■■■■■■■■■■有关子对象■■■■■■■■■■■■■■■■■■■■■■
 
 
 }

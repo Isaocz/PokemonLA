@@ -104,6 +104,8 @@ public class Vanillish : Empty
             UpdateEmptyChangeHP();//判定生命值是否变化
             StateMaterialChange();//判定是否更换状态材质
 
+
+
             //特性雪隐 移速增加
             float WeatherSpeedAlpha = (Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus) ? 2.0f : 1.0f;
             switch (havePartnerState)
@@ -128,7 +130,7 @@ public class Vanillish : Empty
                             case SingleState.Beam:
 
                                 BeamTimer_Single -= Time.deltaTime;
-                                Debug.Log(BeamTimer_Single);
+                                //Debug.Log(BeamTimer_Single);
                                 if (BeamTimer_Single >= 0) {
                                     //设置方向
                                     Vector2 MoveDirector = (TargetPosition - (Vector2)transform.position).normalized;
@@ -172,6 +174,8 @@ public class Vanillish : Empty
                             case SingleState.Shake:
                                 break;
                         }
+                        //排序迷你冰
+                        SortChildren();
                     }
                     break;
                 case HavePartnerState.Partner:
@@ -179,6 +183,7 @@ public class Vanillish : Empty
                 case HavePartnerState.Father:
                     break;
             }
+
         }
     }
 
@@ -231,6 +236,17 @@ public class Vanillish : Empty
         Director = director;
         animator.SetFloat("LookX", director.x);
         animator.SetFloat("LookY", director.y);
+    }
+
+    public override void DieEvent()
+    {
+        base.DieEvent();
+        //清楚激光
+        if ( NowLunchIceBeam != null )
+        {
+            NowLunchIceBeam.StopBeam();
+            NowLunchIceBeam.transform.parent = null;
+        }
     }
 
     public IEnumerator CheckLook()
@@ -409,6 +425,11 @@ public class Vanillish : Empty
     float ShakeTimer_Single = 0;
 
     /// <summary>
+    /// 细雪
+    /// </summary>
+    public VanillishPodesSnow PodesSnow;
+
+    /// <summary>
     /// 摇晃开始
     /// </summary>
     public void ShakeStart_Single(float Timer)
@@ -417,6 +438,16 @@ public class Vanillish : Empty
         ShakeTimer_Single = Timer;
         havePartnerState = HavePartnerState.No;
         singleState = SingleState.Shake;
+        LunchIceMist();
+    }
+
+    void LunchIceMist()
+    {
+        if (!isFearDone)
+        {
+            VanillishPodesSnow ps = Instantiate(PodesSnow, transform.position + Vector3.up, Quaternion.identity);
+            ps.empty = this;
+        }
     }
 
     /// <summary>
@@ -428,6 +459,81 @@ public class Vanillish : Empty
         IdleStart_Single(TIME_AFTER_Shake_SINGLE);
     }
     //========================摇晃=================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //========================子迷你冰环绕=================================
+
+    void SortChildren()
+    {
+        if (ChildrenList.Count != 0)
+        {
+            //夹角列表
+            List<Vector2> AngleList = new List<Vector2> { };
+            //正在环绕的子对象的序列
+            List<Vanillite> babyVList = new List<Vanillite> { };
+
+            //遍历所有迷你冰 确认是否环绕
+            for (int i = 0; i < ChildrenList.Count; i++)
+            {
+                Vanillite babyV = ChildrenList[i].GetComponent<Vanillite>();
+                if (babyV != null && babyV.FamilyState == Vanillite.VanilaFamilyState.Father && babyV.fatherState == Vanillite.FatherState.Surround)
+                {
+                    babyVList.Add(babyV);
+                }
+            }
+
+            //遍历所有环绕的迷你冰 获得迷你冰夹角
+            for (int i = 0; i < babyVList.Count; i++)
+            {
+                float angle = _mTool.Angle_360Y(((Vector2)babyVList[i].transform.position - (Vector2)transform.position).normalized, Vector2.right);
+                AngleList.Add(new Vector2(angle, i));
+            }
+
+            AngleList.Sort((a, b) => a.x.CompareTo(b.x));
+            //Debug.Log(string.Join(",", AngleList));
+
+            //(21.40, 0.00),(54.00, 5.00),(60.55, 4.00),(197.93, 1.00),(248.73, 2.00),(291.30, 3.00)
+            for (int i = 0; i < AngleList.Count; i++)
+            {
+                babyVList[(int)AngleList[i].y].transform.SetSiblingIndex(i);
+
+                float NextAngle = 0.0f;
+                if (i >= AngleList.Count - 1)
+                {
+                    NextAngle = 360.0f + AngleList[0].x - AngleList[i].x;
+                }
+                else
+                {
+                    NextAngle = AngleList[i+1].x - AngleList[i].x;
+                }
+                if      (NextAngle < 360.0f / ((float)AngleList.Count)) { babyVList[(int)AngleList[i].y].SurroundRotationSpeed = 10; }
+                else if (NextAngle > 360.0f / ((float)AngleList.Count)) { babyVList[(int)AngleList[i].y].SurroundRotationSpeed = 30; }
+                else                                                    { babyVList[(int)AngleList[i].y].SurroundRotationSpeed = 20; }
+            }
+        }
+    }
+
+    //========================子迷你冰环绕=================================
+
+
+
+
+
+
 
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     //■■■■■■■■■■■■■■■■■■■■无伙伴■■■■■■■■■■■■■■■■■■■■■■

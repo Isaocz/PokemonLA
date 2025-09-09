@@ -72,7 +72,16 @@ public class VanillishIceBeam : MonoBehaviour
                     lineRenderer.startWidth += LeserWidth * (Time.deltaTime / 0.5f);
                     lineRenderer.endWidth += LeserWidth * (Time.deltaTime / 0.5f);
                 }
-                transform.rotation = Quaternion.AngleAxis(20.0f * Time.deltaTime, Vector3.forward) * transform.rotation;
+                float d1 = _mTool.Angle_360Y((ParentVanillish.TARGET_POSITION - (Vector2)ParentVanillish.transform.position), Vector3.right);
+                float d2 = _mTool.Angle_360Y((Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector2.right).normalized, Vector3.right);
+                if (d1 > 180) { d1 = d1 - 360; }
+                if (d2 > 180) { d2 = d2 - 360; }
+                float d = d1 - d2;
+                if (d > 180) { d = d - 360; }
+                else if (d < -180) { d = 360 + d; }
+                if (d < 0) { d = -15.0f; }
+                else { d = 15.0f; }
+                transform.rotation = Quaternion.AngleAxis(d * Time.deltaTime, Vector3.forward) * transform.rotation;
                 StartVFX.transform.position = lineRenderer.GetPosition(0);
                 rayPosition();
             }
@@ -116,8 +125,8 @@ public class VanillishIceBeam : MonoBehaviour
     {
         if (SonlineRenderer != null)
         {
-            SonlineRenderer.startWidth = lineRenderer.startWidth * 0.22f;
-            SonlineRenderer.endWidth = lineRenderer.endWidth * 0.22f;
+            SonlineRenderer.startWidth = lineRenderer.startWidth * 0.18f;
+            SonlineRenderer.endWidth = lineRenderer.endWidth * 0.18f;
             SonlineRenderer.SetPosition(0, lineRenderer.GetPosition(0));
             SonlineRenderer.SetPosition(1, lineRenderer.GetPosition(1));
         }

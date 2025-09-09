@@ -11,35 +11,39 @@ public class Vanillite : Empty
 {
 
     //迷你冰的父辈的状态
-    enum VanilaFamilyState
+    public enum VanilaFamilyState
     {
         Single,       //没有父辈
         Father,       //以多多冰为父辈
         Grandfather,  //以双双多多冰为父辈
     }
-    VanilaFamilyState FamilyState;
+    public VanilaFamilyState FamilyState;
 
     //迷你冰没有父辈时的状态机
-    enum SingleState
+    public enum SingleState
     {
-        Idle,
-        Move,
-        Blow,
-        Rush,
+        Idle,     //发呆
+        Move,     //移动
+        Blow,     //吹兵器
+        Rush,     //冲刺
     }
-    SingleState singleState;
+    public SingleState singleState;
 
     //迷你冰以多多冰为父辈时的状态机
-    enum FatherState
+    public enum FatherState
     {
+        Idle,     //发呆
+        Lunch,    //被发射
+        Back,     //返回母体
+        Surround, //环绕
     }
-    SingleState fatherState;
+    public FatherState fatherState;
 
     //迷你冰以双倍多多冰为父辈时的状态机
-    enum GrandfatherState
+    public enum GrandfatherState
     {
     }
-    SingleState grandfatherState;
+    public GrandfatherState grandfatherState;
 
 
     /// <summary>
@@ -77,11 +81,10 @@ public class Vanillite : Empty
 
 
         //初始化状态机（无父辈）
+        ChildLeaveHome();//保持单身
         FamilyState = VanilaFamilyState.Single;
         singleState = SingleState.Idle;
         IdleStart_Single(TIME_START_SINGLE);
-
-
 
         //初始化方向
         Director = new Vector2(-1,-1);
@@ -126,17 +129,16 @@ public class Vanillite : Empty
                                 {
                                     //设置方向
                                     MoveDirector = -MoveDirector;
-
                                     //移动
                                     rigidbody2D.position = new Vector2(
                                         Mathf.Clamp(rigidbody2D.position.x
                                             + (float)MoveDirector.x * Time.deltaTime * speed * WeatherSpeedAlpha * 2.0f,       //方向*速度
-                                        ParentPokemonRoom.RoomSize[2] - 0.0f + transform.parent.position.x, //最小值
-                                        ParentPokemonRoom.RoomSize[3] + 0.0f + transform.parent.position.x),//最大值
+                                        ParentPokemonRoom.RoomSize[2] - 0.0f + ParentPokemonRoom.transform.position.x, //最小值
+                                        ParentPokemonRoom.RoomSize[3] + 0.0f + ParentPokemonRoom.transform.position.x),//最大值
                                         Mathf.Clamp(rigidbody2D.position.y
                                             + (float)MoveDirector.y * Time.deltaTime * speed * WeatherSpeedAlpha * 2.0f,        //方向*速度 
-                                        ParentPokemonRoom.RoomSize[1] - 0.0f + transform.parent.position.y,  //最小值
-                                        ParentPokemonRoom.RoomSize[0] + 0.0f + transform.parent.position.y));//最大值
+                                        ParentPokemonRoom.RoomSize[1] - 0.0f + ParentPokemonRoom.transform.position.y,  //最小值
+                                        ParentPokemonRoom.RoomSize[0] + 0.0f + ParentPokemonRoom.transform.position.y));//最大值
                                     Director = _mTool.TiltMainVector2(MoveDirector);
                                     SetDirector(Director);
                                 }
@@ -148,12 +150,12 @@ public class Vanillite : Empty
                                         rigidbody2D.position = new Vector2(
                                             Mathf.Clamp(rigidbody2D.position.x
                                                 + (float)MoveDirector.x * Time.deltaTime * speed * WeatherSpeedAlpha,       //方向*速度
-                                            ParentPokemonRoom.RoomSize[2] - 0.0f + transform.parent.position.x, //最小值
-                                            ParentPokemonRoom.RoomSize[3] + 0.0f + transform.parent.position.x),//最大值
+                                            ParentPokemonRoom.RoomSize[2] - 0.0f + ParentPokemonRoom.transform.position.x, //最小值
+                                            ParentPokemonRoom.RoomSize[3] + 0.0f + ParentPokemonRoom.transform.position.x),//最大值
                                             Mathf.Clamp(rigidbody2D.position.y
                                                 + (float)MoveDirector.y * Time.deltaTime * speed * WeatherSpeedAlpha,        //方向*速度 
-                                            ParentPokemonRoom.RoomSize[1] - 0.0f + transform.parent.position.y,  //最小值
-                                            ParentPokemonRoom.RoomSize[0] + 0.0f + transform.parent.position.y));//最大值
+                                            ParentPokemonRoom.RoomSize[1] - 0.0f + ParentPokemonRoom.transform.position.y,  //最小值
+                                            ParentPokemonRoom.RoomSize[0] + 0.0f + ParentPokemonRoom.transform.position.y));//最大值
                                         Director = _mTool.TiltMainVector2(MoveDirector);
                                         SetDirector(Director);
                                     }
@@ -166,7 +168,6 @@ public class Vanillite : Empty
                                 break;
                             case SingleState.Rush:
                                 RushTimer_Single -= Time.deltaTime;
-                                Debug.Log(RushTimer_Single);
                                 if (RushTimer_Single <= 0 || isFearDone)
                                 {
                                     RushOver_Single();
@@ -177,12 +178,12 @@ public class Vanillite : Empty
                                     rigidbody2D.position = new Vector2(
                                         Mathf.Clamp(rigidbody2D.position.x
                                             + (float)RushDirector.x * Time.deltaTime * speed * 6.5f * WeatherSpeedAlpha,       //方向*速度
-                                        ParentPokemonRoom.RoomSize[2] - 0.0f + transform.parent.position.x, //最小值
-                                        ParentPokemonRoom.RoomSize[3] + 0.0f + transform.parent.position.x),//最大值
+                                        ParentPokemonRoom.RoomSize[2] - 0.0f + ParentPokemonRoom.transform.position.x, //最小值
+                                        ParentPokemonRoom.RoomSize[3] + 0.0f + ParentPokemonRoom.transform.position.x),//最大值
                                         Mathf.Clamp(rigidbody2D.position.y
                                             + (float)RushDirector.y * Time.deltaTime * speed * 6.5f * WeatherSpeedAlpha,        //方向*速度 
-                                        ParentPokemonRoom.RoomSize[1] - 0.0f + transform.parent.position.y,  //最小值
-                                        ParentPokemonRoom.RoomSize[0] + 0.0f + transform.parent.position.y));//最大值
+                                        ParentPokemonRoom.RoomSize[1] - 0.0f + ParentPokemonRoom.transform.position.y,  //最小值
+                                        ParentPokemonRoom.RoomSize[0] + 0.0f + ParentPokemonRoom.transform.position.y));//最大值
                                 }
                                 break;
                             case SingleState.Blow:
@@ -211,9 +212,56 @@ public class Vanillite : Empty
                     }
                     break;
                 case VanilaFamilyState.Father:
-                    switch (fatherState)
-                    {
-                        default: break;
+                    if (ParentEmptyByChild != null) {
+                        //父辈的位置
+                        Vector2 ParentPosition = ((Vector2)ParentEmptyByChild.transform.position);
+                        switch (fatherState)
+                        {
+                            case FatherState.Idle:
+                                IdleTimer_Father -= Time.deltaTime;
+                                //发呆结束后或恐惧时转进移动状态
+                                if (IdleTimer_Father <= 0)
+                                {
+                                    IdleOver_Father();
+                                    BackStart_Father(0);
+                                }
+                                break;
+                            case FatherState.Back:
+                                //距离父辈的距离大于一定时接近父辈
+                                if (Vector2.Distance(ParentPosition, (Vector2)transform.position) > SURROUND_DISTENCE) {
+                                    //设置方向
+                                    Vector2 MoveDirector = (ParentPosition - (Vector2)transform.position).normalized;
+                                    //不恐惧时移动
+                                    if (!isFearDone)
+                                    {
+                                        //移动
+                                        rigidbody2D.position = new Vector2(
+                                            Mathf.Clamp(rigidbody2D.position.x
+                                                + (float)MoveDirector.x * Time.deltaTime * speed * WeatherSpeedAlpha * 1.3f,       //方向*速度
+                                            ParentPokemonRoom.RoomSize[2] - 0.0f + ParentPokemonRoom.transform.position.x, //最小值
+                                            ParentPokemonRoom.RoomSize[3] + 0.0f + ParentPokemonRoom.transform.position.x),//最大值
+                                            Mathf.Clamp(rigidbody2D.position.y
+                                                + (float)MoveDirector.y * Time.deltaTime * speed * WeatherSpeedAlpha * 1.3f,        //方向*速度 
+                                            ParentPokemonRoom.RoomSize[1] - 0.0f + ParentPokemonRoom.transform.position.y,  //最小值
+                                            ParentPokemonRoom.RoomSize[0] + 0.0f + ParentPokemonRoom.transform.position.y));//最大值
+                                        Director = _mTool.TiltMainVector2(MoveDirector);
+                                        SetDirector(Director);
+                                    }
+                                }
+                                //小于等于时进入迅游状态
+                                else
+                                {
+                                    BackOver_Father();
+                                    SurroundStart_Father(0.0f);
+                                }
+                                break;
+                            case FatherState.Surround:
+                                //环绕
+                                Surround(surroundRotationSpeed);
+                                break;
+                            case FatherState.Lunch:
+                                break;
+                        }
                     }
                     break;
                 case VanilaFamilyState.Grandfather:
@@ -233,7 +281,17 @@ public class Vanillite : Empty
         if (isEmptyInfatuationDone) { UpdateInfatuationDmageCDTimer(); }//如果被魅惑，计算魅惑时间
         if (!isDie && !isBorn)//不处于正在死亡状态或正在出生状态时
         {
-            EmptyBeKnock();//判定是否被击退
+            //Debug.Log(NeedSearchParent);
+            //寻找父辈
+            if (NeedSearchParent)
+            {
+                NeedSearchParent = false;
+                SearchVanilliteParent();
+            }
+
+            //仅当单人巡逻状态时 判定是否被击退 
+            if (FamilyState == VanilaFamilyState.Single) { EmptyBeKnock(); }
+            
             //根据魅惑情况确实目标位置
             if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForDistanceEmpty() == null)
             {
@@ -324,6 +382,75 @@ public class Vanillite : Empty
         }
 
     }
+
+    /// <summary>
+    /// 是否需要寻找父辈
+    /// </summary>
+    bool NeedSearchParent = false;
+
+    /// <summary>
+    /// 寻找父亲
+    /// </summary>
+    public void SearchVanilliteParent()
+    {
+        Vaniluxe grandfather = SearchParentByDistence<Vaniluxe>();
+        //有祖父
+        if (grandfather != null)
+        {
+            Debug.Log("GrandFather");
+            ChildBackHome(grandfather);//回祖父家
+            FamilyState = VanilaFamilyState.Grandfather;
+        }
+        //无祖父
+        else
+        {
+            Vanillish father = SearchParentByDistence<Vanillish>();
+            //有父
+            if (father != null)
+            {
+                Debug.Log("Father");
+                ChildBackHome(father);//回父亲家
+                FamilyState = VanilaFamilyState.Single;
+                fatherState = FatherState.Idle;
+                IdleStart_Father(TIME_START_FATHER);
+            }
+            //无父
+            else
+            {
+                Debug.Log("Single");
+                ChildLeaveHome();//保持单身
+                FamilyState = VanilaFamilyState.Single;
+                singleState = SingleState.Idle;
+                IdleStart_Single(TIME_START_SINGLE);
+            }
+        }
+    }
+
+
+    
+    //复写出家
+    public override void ChildLeaveHome()
+    {
+        base.ChildLeaveHome();
+        //恢复碰撞体
+        if (ParentEmptyByChild != null)
+        {
+            ParentEmptyByChild.ResetOneChildCollision(this);
+        }
+    }
+
+    //复写回家
+    public override void ChildBackHome(Empty parent)
+    {
+        base.ChildBackHome(parent);
+        //忽略碰撞体
+        if (ParentEmptyByChild != null)
+        {
+            ParentEmptyByChild.IgnoreOneChildCollision(this);
+        }
+    }
+
+
     //■■■■■■■■■■■■■■■■■■■■共通■■■■■■■■■■■■■■■■■■■■■■
 
 
@@ -362,6 +489,7 @@ public class Vanillite : Empty
 
 
 
+
     //========================发呆=================================
 
     //开始后的冷却时间
@@ -392,6 +520,10 @@ public class Vanillite : Empty
         IdleTimer_Single = 0.0f;
     }
     //========================发呆=================================
+
+
+
+
 
 
 
@@ -549,6 +681,187 @@ public class Vanillite : Empty
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     //■■■■■■■■■■■■■■■■■■以多多冰为父辈■■■■■■■■■■■■■■■■■■■■
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+
+
+    //========================发呆=================================
+
+    //开始后的冷却时间
+    static float TIME_START_FATHER = 0.0f;
+
+    /// <summary>
+    /// 发呆计时器
+    /// </summary>
+    float IdleTimer_Father = 0;
+
+    /// <summary>
+    /// 发呆开始
+    /// </summary>
+    public void IdleStart_Father(float Timer)
+    {
+        IdleTimer_Father = Timer;
+        FamilyState = VanilaFamilyState.Father;
+        fatherState = FatherState.Idle;
+    }
+
+    /// <summary>
+    /// 发呆结束
+    /// </summary>
+    public void IdleOver_Father()
+    {
+        IdleTimer_Father = 0.0f;
+    }
+    //========================发呆=================================
+
+
+
+
+
+
+
+
+
+
+
+    //========================返回母体=================================
+
+    /// <summary>
+    /// 返回母体计时器
+    /// </summary>
+    float BackTimer_Father = 0;
+
+    /// <summary>
+    /// 返回母体开始
+    /// </summary>
+    public void BackStart_Father(float Timer)
+    {
+        BackTimer_Father = Timer;
+        FamilyState = VanilaFamilyState.Father;
+        fatherState = FatherState.Back;
+    }
+
+    /// <summary>
+    /// 返回母体结束
+    /// </summary>
+    public void BackOver_Father()
+    {
+        BackTimer_Father = 0.0f;
+    }
+    //========================返回母体=================================
+
+
+
+
+
+
+
+
+
+
+
+    //========================环绕=================================
+
+    //环绕距离
+    static float SURROUND_DISTENCE = 2.0f;
+
+ 
+    public float SurroundRotationSpeed
+    {
+        get { return surroundRotationSpeed; }
+        set { surroundRotationSpeed = value; }
+    }
+    float surroundRotationSpeed = 35.0f;
+
+    /// <summary>
+    /// 环绕计时器
+    /// </summary>
+    float SurroundTimer_Father = 0;
+
+    /// <summary>
+    /// 环绕开始
+    /// </summary>
+    public void SurroundStart_Father(float Timer)
+    {
+        SurroundTimer_Father = Timer;
+        FamilyState = VanilaFamilyState.Father;
+        fatherState = FatherState.Surround;
+        //静止刚体
+        rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
+    }
+
+    public void Surround( float RotationSpeed )
+    {
+        //父辈的位置
+        Vector2 ParentPosition = ((Vector2)ParentEmptyByChild.transform.position);
+        //环绕移动
+        //当前角度
+        float NowAngle = _mTool.Angle_360Y(((Vector2)transform.position - ParentPosition).normalized, Vector2.right);
+        //Debug.Log("Vector2" + ((Vector2)transform.position - ParentPosition).normalized);
+        //Debug.Log("NowAngle" + NowAngle);
+        float PlusAngle = (NowAngle + RotationSpeed * Time.deltaTime) % (360.0f);
+        //Debug.Log("PlusAngle" + PlusAngle);
+        //Debug.Log("Xcos" + Mathf.Cos(PlusAngle * Mathf.Deg2Rad) * SURROUND_DISTENCE);
+        //Debug.Log("Ysin" + Mathf.Sin(PlusAngle * Mathf.Deg2Rad) * SURROUND_DISTENCE);
+        transform.position = new Vector2(
+                   Mathf.Clamp(ParentPosition.x
+                       + Mathf.Cos(PlusAngle * Mathf.Deg2Rad) * SURROUND_DISTENCE,       //方向*速度
+                   ParentPokemonRoom.RoomSize[2] - 0.0f + ParentPokemonRoom.transform.position.x, //最小值
+                   ParentPokemonRoom.RoomSize[3] + 0.0f + ParentPokemonRoom.transform.position.x),//最大值
+                   Mathf.Clamp(ParentPosition.y
+                       + Mathf.Sin(PlusAngle * Mathf.Deg2Rad) * SURROUND_DISTENCE,        //方向*速度 
+                   ParentPokemonRoom.RoomSize[1] - 0.0f + ParentPokemonRoom.transform.position.y,  //最小值
+                   ParentPokemonRoom.RoomSize[0] + 0.0f + ParentPokemonRoom.transform.position.y));//最大值
+        //设置方向
+        SetDirector(_mTool.TiltMainVector2((Vector2)transform.position - ParentPosition));
+    }
+
+    /// <summary>
+    /// 环绕结束
+    /// </summary>
+    public void SurroundOver_Father()
+    {
+        SurroundTimer_Father = 0.0f;
+        //恢复刚体
+        rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+    }
+    //========================环绕=================================
+
+
+
+
+
+
+
+
+
+
+
+    //========================被发射=================================
+
+    /// <summary>
+    /// 被发射计时器
+    /// </summary>
+    float LunchTimer_Father = 0;
+
+    /// <summary>
+    /// 被发射开始
+    /// </summary>
+    public void LunchStart_Father(float Timer)
+    {
+        LunchTimer_Father = Timer;
+        FamilyState = VanilaFamilyState.Father;
+        fatherState = FatherState.Lunch;
+    }
+
+    /// <summary>
+    /// 被发射结束
+    /// </summary>
+    public void LunchOver_Father()
+    {
+        LunchTimer_Father = 0.0f;
+    }
+    //========================被发射=================================
+
 
 
 
