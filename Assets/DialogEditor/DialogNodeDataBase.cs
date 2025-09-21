@@ -27,7 +27,7 @@ namespace DialogueSystem
         private void OnValidate()
         {
 #if UNITY_EDITOR
-            AssetDatabase.SaveAssets();
+//            AssetDatabase.SaveAssets();
 #endif
         }
 

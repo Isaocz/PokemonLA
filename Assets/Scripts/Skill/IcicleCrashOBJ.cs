@@ -8,10 +8,15 @@ public class IcicleCrashOBJ : MonoBehaviour
     public int ColliderCount;
     public bool isUnBreakable;
 
+    /// <summary>
+    /// ÆÆËéµÄÊ±¼ä
+    /// </summary>
+    public float BreakTime;
+
     private void Start()
     {
         if (!isUnBreakable) {
-            Invoke("IceBreak", 20);
+            Invoke("IceBreak", BreakTime);
         }
     }
 

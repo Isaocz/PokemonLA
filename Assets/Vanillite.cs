@@ -42,6 +42,9 @@ public class Vanillite : Empty
     //迷你冰以双倍多多冰为父辈时的状态机
     public enum GrandfatherState
     {
+        Idle,     //发呆
+        Back,     //返回母体
+        Surround, //环绕
     }
     public GrandfatherState grandfatherState;
 
@@ -117,8 +120,15 @@ public class Vanillite : Empty
                                 //发呆结束后或恐惧时转进移动状态
                                 if (IdleTimer_Single <= 0 || isFearDone)
                                 {
-                                    IdleOver_Single();
-                                    MoveStart_Single();
+                                    if (SlowCount >= 1) {
+                                        SlowCount = 0;
+                                        Debug.Log(3);
+                                        SearchVanilliteParent();
+                                    }
+                                    else {
+                                        IdleOver_Single();
+                                        MoveStart_Single();
+                                    }
                                 }
                                 break;
                             case SingleState.Move:
@@ -212,55 +222,149 @@ public class Vanillite : Empty
                     }
                     break;
                 case VanilaFamilyState.Father:
-                    if (ParentEmptyByChild != null) {
+                    if (ParentEmptyByChild == null) {
                         //父辈的位置
-                        Vector2 ParentPosition = ((Vector2)ParentEmptyByChild.transform.position);
-                        switch (fatherState)
+                        SearchVanilliteParent();
+                    }
+                    else
+                    {
+                        if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis)
                         {
-                            case FatherState.Idle:
-                                IdleTimer_Father -= Time.deltaTime;
-                                //发呆结束后或恐惧时转进移动状态
-                                if (IdleTimer_Father <= 0)
-                                {
-                                    IdleOver_Father();
-                                    BackStart_Father(0);
-                                }
-                                break;
-                            case FatherState.Back:
-                                //距离父辈的距离大于一定时接近父辈
-                                if (Vector2.Distance(ParentPosition, (Vector2)transform.position) > SURROUND_DISTENCE) {
-                                    //设置方向
-                                    Vector2 MoveDirector = (ParentPosition - (Vector2)transform.position).normalized;
-                                    //不恐惧时移动
-                                    if (!isFearDone)
+
+                            Vector2 ParentPosition = ((Vector2)ParentEmptyByChild.transform.position);
+                            switch (fatherState)
+                            {
+                                case FatherState.Idle:
+                                    IdleTimer_Father -= Time.deltaTime;
+                                    //发呆结束后或恐惧时转进移动状态
+                                    if (IdleTimer_Father <= 0)
                                     {
-                                        //移动
-                                        rigidbody2D.position = new Vector2(
-                                            Mathf.Clamp(rigidbody2D.position.x
-                                                + (float)MoveDirector.x * Time.deltaTime * speed * WeatherSpeedAlpha * 1.3f,       //方向*速度
-                                            ParentPokemonRoom.RoomSize[2] - 0.0f + ParentPokemonRoom.transform.position.x, //最小值
-                                            ParentPokemonRoom.RoomSize[3] + 0.0f + ParentPokemonRoom.transform.position.x),//最大值
-                                            Mathf.Clamp(rigidbody2D.position.y
-                                                + (float)MoveDirector.y * Time.deltaTime * speed * WeatherSpeedAlpha * 1.3f,        //方向*速度 
-                                            ParentPokemonRoom.RoomSize[1] - 0.0f + ParentPokemonRoom.transform.position.y,  //最小值
-                                            ParentPokemonRoom.RoomSize[0] + 0.0f + ParentPokemonRoom.transform.position.y));//最大值
-                                        Director = _mTool.TiltMainVector2(MoveDirector);
-                                        SetDirector(Director);
+                                        IdleOver_Father();
+                                        BackStart_Father(0);
                                     }
-                                }
-                                //小于等于时进入迅游状态
-                                else
-                                {
+                                    break;
+                                case FatherState.Back:
+                                    //距离父辈的距离大于一定时接近父辈
+                                    if (Vector2.Distance(ParentPosition, (Vector2)transform.position) > SURROUND_DISTENCE)
+                                    {
+                                        //设置方向
+                                        Vector2 MoveDirector = (ParentPosition - (Vector2)transform.position).normalized;
+                                        //不恐惧时移动
+                                        if (!isFearDone)
+                                        {
+                                            //移动
+                                            rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+                                            //Debug.Log(name + rigidbody2D);
+                                            rigidbody2D.position = new Vector2(
+                                                Mathf.Clamp(rigidbody2D.position.x
+                                                    + (float)MoveDirector.x * Time.deltaTime * speed * WeatherSpeedAlpha * 1.3f,       //方向*速度
+                                                ParentPokemonRoom.RoomSize[2] - 0.0f + ParentPokemonRoom.transform.position.x, //最小值
+                                                ParentPokemonRoom.RoomSize[3] + 0.0f + ParentPokemonRoom.transform.position.x),//最大值
+                                                Mathf.Clamp(rigidbody2D.position.y
+                                                    + (float)MoveDirector.y * Time.deltaTime * speed * WeatherSpeedAlpha * 1.3f,        //方向*速度 
+                                                ParentPokemonRoom.RoomSize[1] - 0.0f + ParentPokemonRoom.transform.position.y,  //最小值
+                                                ParentPokemonRoom.RoomSize[0] + 0.0f + ParentPokemonRoom.transform.position.y));//最大值
+                                            Director = _mTool.TiltMainVector2(MoveDirector);
+                                            SetDirector(Director);
+                                        }
+                                    }
+                                    //小于等于时进入迅游状态
+                                    else
+                                    {
+                                        BackOver_Father();
+                                        SurroundStart_Father();
+                                    }
+                                    break;
+                                case FatherState.Surround:
+                                    //环绕
+                                    if (!isBlowingSnow_Father_Surround)
+                                    {
+                                        Surround(surroundRotationSpeed);
+                                    }
+                                    //吹雪
+                                    if (ParentEmptyByChild != null)
+                                    {
+                                        //吹雪
+                                        if (!isBlowCDSnow_Father_Surround)
+                                        {
+                                            //子体和母体之间的夹角
+                                            float angle1 = _mTool.Angle_360Y(((Vector2)(transform.position - ParentEmptyByChild.transform.position)).normalized, Vector2.right);
+                                            //玩家和子体之间的夹角
+                                            float angle2 = _mTool.Angle_360Y(((Vector2)(TargetPosition - (Vector2)transform.position)).normalized, Vector2.right);
+                                            //Debug.Log(Mathf.Abs(angle1 - angle2));
+                                            //Debug.Log(Vector2.Distance(TargetPosition, (Vector2)transform.position));
+                                            if (Mathf.Abs(angle1 - angle2) <= 7.0f && Vector2.Distance(TargetPosition, (Vector2)transform.position) <= 4.0f)
+                                            {
+                                                //夹角小于7时且近距离时 吹雪
+                                                //Debug.Log("angle1" + angle1 + "angle2" + angle2);
+                                                isBlowCDSnow_Father_Surround = true;
+                                                isBlowingSnow_Father_Surround = true;
+                                                animator.SetTrigger("Blow");
+                                                BlowSnow_SurroundTimer_Father = CDTIME_SNOWBLOW_SURROUND_FATHER;
+                                            }
+                                        }
+                                        //吹雪后进入冷却期间
+                                        else
+                                        {
+                                            //Debug.Log(Vector2.Distance(TargetPosition, (Vector2)transform.position));
+                                            BlowSnow_SurroundTimer_Father -= Time.deltaTime;
+                                            //冷却结束
+                                            if (BlowSnow_SurroundTimer_Father < 0.0f)
+                                            {
+                                                BlowSnow_SurroundTimer_Father = 0.0f;
+                                                isBlowCDSnow_Father_Surround = false;
+                                                isBlowingSnow_Father_Surround = false;
+                                            }
+                                        }
+                                    }
+                                    break;
+                                case FatherState.Lunch:
+                                    //移动
+                                    rigidbody2D.position = new Vector2(
+                                        Mathf.Clamp(rigidbody2D.position.x
+                                            + (float)LunchDirector.x * Time.deltaTime * speed * LunchSpeedAlpha,       //方向*速度
+                                        ParentPokemonRoom.RoomSize[2] - 0.0f + ParentPokemonRoom.transform.position.x, //最小值
+                                        ParentPokemonRoom.RoomSize[3] + 0.0f + ParentPokemonRoom.transform.position.x),//最大值
+                                        Mathf.Clamp(rigidbody2D.position.y
+                                            + (float)LunchDirector.y * Time.deltaTime * speed * LunchSpeedAlpha,        //方向*速度 
+                                        ParentPokemonRoom.RoomSize[1] - 0.0f + ParentPokemonRoom.transform.position.y,  //最小值
+                                        ParentPokemonRoom.RoomSize[0] + 0.0f + ParentPokemonRoom.transform.position.y));//最大值
+                                    Director = _mTool.TiltMainVector2(LunchDirector);
+
+                                    //移动速度衰减
+                                    LunchTimer_Father += Time.deltaTime;
+
+                                    LunchSpeedAlpha = -Mathf.Pow(LunchTimer_Father, 3.0f) * LUNCH_ATTENUATION + LUNCH_START_ALPHA_SPEED;
+                                    //Debug.Log(LunchTimer_Father+"+"+LunchSpeedAlpha);
+                                    SetDirector(Director);
+                                    if (LunchSpeedAlpha <= 0)
+                                    {
+                                        Debug.Log(LunchTimer_Father);
+                                        LunchOver_Father();
+                                        IdleStart_Single(TIME_AFTER_LUNCH_FATHER);
+                                    }
+                                    break;
+                            }
+                        }
+                        if (isSleepDone || isFearDone || isEmptyInfatuationDone)
+                        {
+                            animator.SetTrigger("Sleep");
+                            switch (fatherState)
+                            {
+                                case FatherState.Idle:
+                                    IdleOver_Father();
+                                    break;
+                                case FatherState.Back:
                                     BackOver_Father();
-                                    SurroundStart_Father(0.0f);
-                                }
-                                break;
-                            case FatherState.Surround:
-                                //环绕
-                                Surround(surroundRotationSpeed);
-                                break;
-                            case FatherState.Lunch:
-                                break;
+                                    break;
+                                case FatherState.Surround:
+                                    SurroundOver_Father();
+                                    break;
+                                case FatherState.Lunch:
+                                    LunchOver_Father();
+                                    break;
+                            }
+                            IdleStart_Single(0.0f);
                         }
                     }
                     break;
@@ -268,6 +372,123 @@ public class Vanillite : Empty
                     switch (grandfatherState)
                     {
                         default: break;
+                    }
+                    if (ParentEmptyByChild == null)
+                    {
+                        //父辈的位置
+                        SearchVanilliteParent();
+                    }
+                    else
+                    {
+                        if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis)
+                        {
+
+                            Vector2 ParentPosition = ((Vector2)ParentEmptyByChild.transform.position);
+                            switch (grandfatherState)
+                            {
+                                case GrandfatherState.Idle:
+                                    IdleTimer_Grandfather -= Time.deltaTime;
+                                    //发呆结束后或恐惧时转进移动状态
+                                    if (IdleTimer_Grandfather <= 0)
+                                    {
+                                        IdleOver_Grandfather();
+                                        BackStart_Grandfather(0);
+                                    }
+                                    break;
+                                case GrandfatherState.Back:
+                                    //距离父辈的距离大于一定时接近父辈
+                                    if (Vector2.Distance(ParentPosition, (Vector2)transform.position) > SURROUND_DISTENCE_GRANDFATHER)
+                                    {
+                                        //设置方向
+                                        Vector2 MoveDirector = (ParentPosition - (Vector2)transform.position).normalized;
+                                        //不恐惧时移动
+                                        if (!isFearDone)
+                                        {
+                                            //移动
+                                            rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+                                            //Debug.Log(name + rigidbody2D);
+                                            rigidbody2D.position = new Vector2(
+                                                Mathf.Clamp(rigidbody2D.position.x
+                                                    + (float)MoveDirector.x * Time.deltaTime * speed * WeatherSpeedAlpha * 1.3f,       //方向*速度
+                                                ParentPokemonRoom.RoomSize[2] - 0.0f + ParentPokemonRoom.transform.position.x, //最小值
+                                                ParentPokemonRoom.RoomSize[3] + 0.0f + ParentPokemonRoom.transform.position.x),//最大值
+                                                Mathf.Clamp(rigidbody2D.position.y
+                                                    + (float)MoveDirector.y * Time.deltaTime * speed * WeatherSpeedAlpha * 1.3f,        //方向*速度 
+                                                ParentPokemonRoom.RoomSize[1] - 0.0f + ParentPokemonRoom.transform.position.y,  //最小值
+                                                ParentPokemonRoom.RoomSize[0] + 0.0f + ParentPokemonRoom.transform.position.y));//最大值
+                                            Director = _mTool.TiltMainVector2(MoveDirector);
+                                            SetDirector(Director);
+                                        }
+                                    }
+                                    //小于等于时进入迅游状态
+                                    else
+                                    {
+                                        BackOver_Grandfather();
+                                        SurroundStart_Grandfather();
+                                    }
+                                    break;
+                                case GrandfatherState.Surround:
+                                    //环绕
+                                    if (!isBlowingSnow_Grandfather_Surround)
+                                    {
+                                        Surround(surroundRotationSpeed);
+                                    }
+                                    //吹雪
+                                    if (ParentEmptyByChild != null)
+                                    {
+                                        //吹雪
+                                        if (!isBlowCDSnow_Grandfather_Surround)
+                                        {
+                                            //子体和母体之间的夹角
+                                            float angle1 = _mTool.Angle_360Y(((Vector2)(transform.position - ParentEmptyByChild.transform.position)).normalized, Vector2.right);
+                                            //玩家和子体之间的夹角
+                                            float angle2 = _mTool.Angle_360Y(((Vector2)(TargetPosition - (Vector2)transform.position)).normalized, Vector2.right);
+                                            //Debug.Log(Mathf.Abs(angle1 - angle2));
+                                            //Debug.Log(Vector2.Distance(TargetPosition, (Vector2)transform.position));
+                                            if (Mathf.Abs(angle1 - angle2) <= 7.0f && Vector2.Distance(TargetPosition, (Vector2)transform.position) <= 4.0f)
+                                            {
+                                                //夹角小于7时且近距离时 吹雪
+                                                //Debug.Log("angle1" + angle1 + "angle2" + angle2);
+                                                isBlowCDSnow_Grandfather_Surround = true;
+                                                isBlowingSnow_Grandfather_Surround = true;
+                                                animator.SetTrigger("Blow");
+                                                BlowSnow_SurroundTimer_Grandfather = CDTIME_SNOWBLOW_SURROUND_GRANDFATHER;
+                                            }
+                                        }
+                                        //吹雪后进入冷却期间
+                                        else
+                                        {
+                                            //Debug.Log(Vector2.Distance(TargetPosition, (Vector2)transform.position));
+                                            BlowSnow_SurroundTimer_Grandfather -= Time.deltaTime;
+                                            //冷却结束
+                                            if (BlowSnow_SurroundTimer_Grandfather < 0.0f)
+                                            {
+                                                BlowSnow_SurroundTimer_Grandfather = 0.0f;
+                                                isBlowCDSnow_Grandfather_Surround = false;
+                                                isBlowingSnow_Grandfather_Surround = false;
+                                            }
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                        if (isSleepDone || isFearDone || isEmptyInfatuationDone)
+                        {
+                            animator.SetTrigger("Sleep");
+                            switch (grandfatherState)
+                            {
+                                case GrandfatherState.Idle:
+                                    IdleOver_Grandfather();
+                                    break;
+                                case GrandfatherState.Back:
+                                    BackOver_Grandfather();
+                                    break;
+                                case GrandfatherState.Surround:
+                                    SurroundOver_Grandfather();
+                                    break;
+                            }
+                            IdleStart_Single(0.0f);
+                        }
                     }
                     break;
             }
@@ -285,6 +506,7 @@ public class Vanillite : Empty
             //寻找父辈
             if (NeedSearchParent)
             {
+                Debug.Log(1);
                 NeedSearchParent = false;
                 SearchVanilliteParent();
             }
@@ -293,7 +515,7 @@ public class Vanillite : Empty
             if (FamilyState == VanilaFamilyState.Single) { EmptyBeKnock(); }
             
             //根据魅惑情况确实目标位置
-            if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForDistanceEmpty() == null)
+            if (!isEmptyInfatuationDone || _mTool.GetAllFromTransform<Empty>(ParentPokemonRoom.EmptyFile()).Count <= 1 || InfatuationForDistanceEmpty() == null)
             {
                 TargetPosition = player.transform.position;
                 if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
@@ -333,6 +555,16 @@ public class Vanillite : Empty
             if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))//被魅惑 且与其他敌人碰撞时
             {
                 InfatuationEmptyTouchHit(other.gameObject);//触发魅惑后触碰伤害
+            }
+        }
+
+        //被发射状态撞墙
+        if (FamilyState == VanilaFamilyState.Father && fatherState == FatherState.Lunch)
+        {
+            if (other.transform.tag == ("Player"))
+            {
+                LunchOver_Father();
+                IdleStart_Single(TIME_AFTER_LUNCH_FATHER);
             }
         }
     }
@@ -393,35 +625,39 @@ public class Vanillite : Empty
     /// </summary>
     public void SearchVanilliteParent()
     {
-        Vaniluxe grandfather = SearchParentByDistence<Vaniluxe>();
-        //有祖父
-        if (grandfather != null)
-        {
-            Debug.Log("GrandFather");
-            ChildBackHome(grandfather);//回祖父家
-            FamilyState = VanilaFamilyState.Grandfather;
-        }
-        //无祖父
-        else
+        if (!isDie && !isBorn)
         {
             Vanillish father = SearchParentByDistence<Vanillish>();
             //有父
             if (father != null)
             {
-                Debug.Log("Father");
+                //Debug.Log("Father");
                 ChildBackHome(father);//回父亲家
                 FamilyState = VanilaFamilyState.Single;
                 fatherState = FatherState.Idle;
                 IdleStart_Father(TIME_START_FATHER);
             }
-            //无父
             else
             {
-                Debug.Log("Single");
-                ChildLeaveHome();//保持单身
-                FamilyState = VanilaFamilyState.Single;
-                singleState = SingleState.Idle;
-                IdleStart_Single(TIME_START_SINGLE);
+                Vaniluxe grandfather = SearchParentByDistence<Vaniluxe>();
+                //有祖父
+                if (grandfather != null)
+                {
+                    //Debug.Log("GrandFather");
+                    ChildBackHome(grandfather);//回祖父家
+                    FamilyState = VanilaFamilyState.Grandfather;
+                    grandfatherState = GrandfatherState.Idle;
+                    IdleStart_Grandfather(TIME_START_GRANDFATHER);
+                }
+                //无父
+                else
+                {
+                    //Debug.Log("Single");
+                    ChildLeaveHome();//保持单身
+                    FamilyState = VanilaFamilyState.Single;
+                    singleState = SingleState.Idle;
+                    IdleStart_Single(TIME_START_SINGLE);
+                }
             }
         }
     }
@@ -431,24 +667,61 @@ public class Vanillite : Empty
     //复写出家
     public override void ChildLeaveHome()
     {
-        base.ChildLeaveHome();
         //恢复碰撞体
         if (ParentEmptyByChild != null)
         {
             ParentEmptyByChild.ResetOneChildCollision(this);
+        }
+        if (ParentEmptyByChild != null && ParentEmptyByChild.ChildrenList.Contains(this))
+        {
+            ParentEmptyByChild.ChildrenList.Remove(this);
+        }
+        //设定父对象和家
+        if (ParentEmptyByChild != null)
+        {
+            //transform.parent = ParentPokemonRoom.EmptyFile();
+            ParentEmptyByChild = null;
         }
     }
 
     //复写回家
     public override void ChildBackHome(Empty parent)
     {
-        base.ChildBackHome(parent);
+        //设定父对象和家
+        ParentEmptyByChild = parent;
+        //transform.parent = ParentEmptyByChild.ChildHome;
+        if (ParentEmptyByChild != null && !ParentEmptyByChild.ChildrenList.Contains(this))
+        {
+            ParentEmptyByChild.ChildrenList.Add(this);
+        }
+        //Debug.Log(ParentEmptyByChild);
         //忽略碰撞体
         if (ParentEmptyByChild != null)
         {
             ParentEmptyByChild.IgnoreOneChildCollision(this);
         }
     }
+
+    /// <summary>
+    /// 吹雪结束
+    /// </summary>
+    public void BlowOver()
+    {
+        switch (FamilyState)
+        {
+            case VanilaFamilyState.Single:
+                BlowOver_Single();
+                break;
+            case VanilaFamilyState.Father:
+                isBlowingSnow_Father_Surround = false;
+                break;
+            case VanilaFamilyState.Grandfather:
+                isBlowingSnow_Grandfather_Surround = false;
+                break;
+        }
+    }
+
+
 
 
     //■■■■■■■■■■■■■■■■■■■■共通■■■■■■■■■■■■■■■■■■■■■■
@@ -493,9 +766,11 @@ public class Vanillite : Empty
     //========================发呆=================================
 
     //开始后的冷却时间
-    static float TIME_START_SINGLE = 0.5f;
+    static float TIME_START_SINGLE = 1.2f;
     //冲刺后的冷却时间
     static float TIME_AFTER_BLOW_SINGLE = 4.3f;
+    //冲刺后的冷却时间
+    static float TIME_AFTER_LUNCH_FATHER = 0.5f;
 
     /// <summary>
     /// 发呆计时器
@@ -607,6 +882,11 @@ public class Vanillite : Empty
     //========================吹雪=================================
 
     /// <summary>
+    /// 吹雪次数
+    /// </summary>
+    int SlowCount = 0;
+
+    /// <summary>
     /// 细雪
     /// </summary>
     public VanillitePodesSnow PodesSnow;
@@ -648,6 +928,7 @@ public class Vanillite : Empty
     {
         BlowTimer_Single = 0.0f;
         IdleStart_Single(TIME_AFTER_BLOW_SINGLE);
+        SlowCount++;
     }
     //========================吹雪=================================
 
@@ -764,7 +1045,22 @@ public class Vanillite : Empty
     //环绕距离
     static float SURROUND_DISTENCE = 2.0f;
 
- 
+    //环绕期间吹雪冷却计时器
+    static float CDTIME_SNOWBLOW_SURROUND_FATHER = 10.0f;
+
+
+
+    /// <summary>
+    /// 在环绕期间，是否处于吹雪cd期间
+    /// </summary>
+    bool isBlowCDSnow_Father_Surround;
+
+    /// <summary>
+    /// 在环绕期间，是否在吹雪
+    /// </summary>
+    bool isBlowingSnow_Father_Surround;
+
+
     public float SurroundRotationSpeed
     {
         get { return surroundRotationSpeed; }
@@ -773,24 +1069,31 @@ public class Vanillite : Empty
     float surroundRotationSpeed = 35.0f;
 
     /// <summary>
-    /// 环绕计时器
+    /// 环绕吹雪计时器
     /// </summary>
-    float SurroundTimer_Father = 0;
+    float BlowSnow_SurroundTimer_Father = 0;
 
     /// <summary>
     /// 环绕开始
     /// </summary>
-    public void SurroundStart_Father(float Timer)
+    public void SurroundStart_Father()
     {
-        SurroundTimer_Father = Timer;
+        BlowSnow_SurroundTimer_Father = 0.0f;
         FamilyState = VanilaFamilyState.Father;
         fatherState = FatherState.Surround;
         //静止刚体
         rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
+        //设为不在吹雪状态
+        isBlowCDSnow_Father_Surround = false;
+        isBlowingSnow_Father_Surround = false;
+        //设定父对象和家
+        transform.parent = ParentEmptyByChild.ChildHome;
     }
 
     public void Surround( float RotationSpeed )
     {
+
+        RotationSpeed *= isEmptyConfusionDone ? 0.5f : 1.0f;
         //父辈的位置
         Vector2 ParentPosition = ((Vector2)ParentEmptyByChild.transform.position);
         //环绕移动
@@ -802,6 +1105,7 @@ public class Vanillite : Empty
         //Debug.Log("PlusAngle" + PlusAngle);
         //Debug.Log("Xcos" + Mathf.Cos(PlusAngle * Mathf.Deg2Rad) * SURROUND_DISTENCE);
         //Debug.Log("Ysin" + Mathf.Sin(PlusAngle * Mathf.Deg2Rad) * SURROUND_DISTENCE);
+        
         transform.position = new Vector2(
                    Mathf.Clamp(ParentPosition.x
                        + Mathf.Cos(PlusAngle * Mathf.Deg2Rad) * SURROUND_DISTENCE,       //方向*速度
@@ -811,6 +1115,7 @@ public class Vanillite : Empty
                        + Mathf.Sin(PlusAngle * Mathf.Deg2Rad) * SURROUND_DISTENCE,        //方向*速度 
                    ParentPokemonRoom.RoomSize[1] - 0.0f + ParentPokemonRoom.transform.position.y,  //最小值
                    ParentPokemonRoom.RoomSize[0] + 0.0f + ParentPokemonRoom.transform.position.y));//最大值
+        //Debug.Log(name + "+" + ParentPosition + "+" + transform.position);
         //设置方向
         SetDirector(_mTool.TiltMainVector2((Vector2)transform.position - ParentPosition));
     }
@@ -820,9 +1125,16 @@ public class Vanillite : Empty
     /// </summary>
     public void SurroundOver_Father()
     {
-        SurroundTimer_Father = 0.0f;
+        if (ParentEmptyByChild != null)
+        {
+            transform.parent = ParentPokemonRoom.EmptyFile();
+        }
+        BlowSnow_SurroundTimer_Father = 0.0f;
         //恢复刚体
         rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+        //设为不在吹雪状态
+        isBlowCDSnow_Father_Surround = false;
+        isBlowingSnow_Father_Surround = false;
     }
     //========================环绕=================================
 
@@ -838,19 +1150,48 @@ public class Vanillite : Empty
 
     //========================被发射=================================
 
+
+    /// <summary>
+    /// 发射的衰减速度
+    /// </summary>
+    static float LUNCH_ATTENUATION = 1400.0f;
+
+    /// <summary>
+    /// 发射的初始速度增加系数
+    /// </summary>
+    static float LUNCH_START_ALPHA_SPEED = 8.0f;
+
+
+
+
+
     /// <summary>
     /// 被发射计时器
     /// </summary>
     float LunchTimer_Father = 0;
 
     /// <summary>
+    /// 被发射的角度
+    /// </summary>
+    Vector2 LunchDirector = Vector2.zero;
+
+    /// <summary>
+    /// 发射的速度增加系数
+    /// </summary>
+    float LunchSpeedAlpha = 0;
+
+
+
+    /// <summary>
     /// 被发射开始
     /// </summary>
-    public void LunchStart_Father(float Timer)
+    public void LunchStart_Father(Vector2 LunchDir)
     {
-        LunchTimer_Father = Timer;
+        //LunchTimer_Father = Timer;
+        LunchDirector = LunchDir;
         FamilyState = VanilaFamilyState.Father;
         fatherState = FatherState.Lunch;
+        LunchSpeedAlpha = LUNCH_START_ALPHA_SPEED;
     }
 
     /// <summary>
@@ -859,6 +1200,8 @@ public class Vanillite : Empty
     public void LunchOver_Father()
     {
         LunchTimer_Father = 0.0f;
+        LunchDirector = Vector2.zero;
+        LunchSpeedAlpha = 0;
     }
     //========================被发射=================================
 
@@ -897,6 +1240,147 @@ public class Vanillite : Empty
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
 
+
+
+    //========================发呆=================================
+
+    //开始后的冷却时间
+    static float TIME_START_GRANDFATHER = 0.0f;
+
+    /// <summary>
+    /// 发呆计时器
+    /// </summary>
+    float IdleTimer_Grandfather = 0;
+
+    /// <summary>
+    /// 发呆开始
+    /// </summary>
+    public void IdleStart_Grandfather(float Timer)
+    {
+        IdleTimer_Grandfather = Timer;
+        FamilyState = VanilaFamilyState.Grandfather;
+        grandfatherState = GrandfatherState.Idle;
+    }
+
+    /// <summary>
+    /// 发呆结束
+    /// </summary>
+    public void IdleOver_Grandfather()
+    {
+        IdleTimer_Grandfather = 0.0f;
+    }
+    //========================发呆=================================
+
+
+
+
+
+
+
+
+
+
+
+    //========================返回母体=================================
+
+    /// <summary>
+    /// 返回母体计时器
+    /// </summary>
+    float BackTimer_Grandfather = 0;
+
+    /// <summary>
+    /// 返回母体开始
+    /// </summary>
+    public void BackStart_Grandfather(float Timer)
+    {
+        BackTimer_Grandfather = Timer;
+        FamilyState = VanilaFamilyState.Grandfather;
+        grandfatherState = GrandfatherState.Back;
+    }
+
+    /// <summary>
+    /// 返回母体结束
+    /// </summary>
+    public void BackOver_Grandfather()
+    {
+        BackTimer_Grandfather = 0.0f;
+    }
+    //========================返回母体=================================
+
+
+
+
+
+
+
+
+
+
+
+    //========================环绕=================================
+
+    //环绕距离
+    static float SURROUND_DISTENCE_GRANDFATHER = 2.0f;
+
+    //环绕期间吹雪冷却计时器
+    static float CDTIME_SNOWBLOW_SURROUND_GRANDFATHER = 10.0f;
+
+
+
+    /// <summary>
+    /// 在环绕期间，是否处于吹雪cd期间
+    /// </summary>
+    bool isBlowCDSnow_Grandfather_Surround;
+
+    /// <summary>
+    /// 在环绕期间，是否在吹雪
+    /// </summary>
+    bool isBlowingSnow_Grandfather_Surround;
+
+
+
+    /// <summary>
+    /// 环绕吹雪计时器
+    /// </summary>
+    float BlowSnow_SurroundTimer_Grandfather = 0;
+
+    /// <summary>
+    /// 环绕开始
+    /// </summary>
+    public void SurroundStart_Grandfather()
+    {
+        BlowSnow_SurroundTimer_Grandfather = 0.0f;
+        FamilyState = VanilaFamilyState.Grandfather;
+        grandfatherState = GrandfatherState.Surround;
+        //静止刚体
+        rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
+        //设为不在吹雪状态
+        isBlowCDSnow_Grandfather_Surround = false;
+        isBlowingSnow_Grandfather_Surround = false;
+        //设定父对象和家
+        transform.parent = ParentEmptyByChild.ChildHome;
+    }
+
+
+    /// <summary>
+    /// 环绕结束
+    /// </summary>
+    public void SurroundOver_Grandfather()
+    {
+        if (ParentEmptyByChild != null)
+        {
+            transform.parent = ParentPokemonRoom.EmptyFile();
+        }
+        BlowSnow_SurroundTimer_Grandfather = 0.0f;
+        //恢复刚体
+        rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+        //设为不在吹雪状态
+        isBlowCDSnow_Grandfather_Surround = false;
+        isBlowingSnow_Grandfather_Surround = false;
+        //设定父对象和家
+        transform.parent = ParentEmptyByChild.ChildHome;
+    }
+    //========================环绕=================================
 
 
 

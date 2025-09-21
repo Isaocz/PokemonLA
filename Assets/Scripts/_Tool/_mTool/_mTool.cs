@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Linq;
 
 public class _mTool : MonoBehaviour
 {
@@ -250,6 +251,26 @@ public class _mTool : MonoBehaviour
 
 
 
+    /// <summary>
+    /// 获取某个Transform旗下的的所有T
+    /// </summary>
+    /// <param name="Father"></param>
+    /// <returns></returns>
+    public static List<T> GetAllFromTransform<T>(Transform Parent)
+    {
+        List<T> Output = new List<T> { };
+        if (Parent.childCount != 0)
+        {
+            for (int i = 0; i < Parent.childCount; i++)
+            {
+                T t = Parent.GetChild(i).GetComponent<T>();
+                if (t != null) { Output.Add(t); }
+                Output = Output.Union(GetAllFromTransform<T>(Parent.GetChild(i))).ToList();
+            }
+        }
+        return Output;
+    }
+
 
     /// <summary>
     /// 给字符串的每个字符间插入一个空格
@@ -271,6 +292,15 @@ public class _mTool : MonoBehaviour
 
         string result = spacedString.ToString();
         return result;
+    }
+
+    /// <summary>
+    /// 输出一个list
+    /// </summary>
+    /// <param name="logList"></param>
+    public static void DebugLogList<T>(List<T> logList)
+    {
+        Debug.Log(string.Join("," , logList ));
     }
 
 }

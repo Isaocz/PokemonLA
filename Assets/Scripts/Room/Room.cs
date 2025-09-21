@@ -647,4 +647,18 @@ public class Room : MonoBehaviour
     //========================================获得房屋内所有道具===========================================
 
 
+
+    /// <summary>
+    /// 获取存放敌人的Transform
+    /// </summary>
+    /// <returns></returns>
+    public Transform EmptyFile()
+    {
+        if (Empty == null)
+        {
+            return gameObject.transform.GetChild(3);
+        }
+        return Empty.transform;
+    }
+
 }

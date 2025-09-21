@@ -41,7 +41,13 @@ public class SkillColliderRangeChangeByTime : MonoBehaviour
             Timer -= Time.deltaTime;
             if (Timer < Duration - StartDelay) {
                 Collider2D.enabled = true;
-                if (Timer <= FadeOutTime) { Collider2D.radius = Mathf.Clamp(Collider2D.radius - ((Time.deltaTime) * MaxCollider2DRadius) / FadeOutTime, 0, MaxCollider2DRadius); }
+                if (Timer <= FadeOutTime) { 
+                    Collider2D.radius = Mathf.Clamp(Collider2D.radius - ((Time.deltaTime) * MaxCollider2DRadius) / FadeOutTime, 0, MaxCollider2DRadius);
+                    if (Collider2D.radius < 0.01f)
+                    {
+                        Collider2D.enabled = false;
+                    }
+                }
                 else { Collider2D.radius = Mathf.Clamp(Collider2D.radius + ((Time.deltaTime) * MaxCollider2DRadius) / FadeInTime, 0, MaxCollider2DRadius); }
             }
         }

@@ -12,6 +12,11 @@ public class NormalEmpty : Empty
     /// <summary>
     /// 敌人的目标的坐标
     /// </summary>
+    public Vector2 TARGET_POSITION
+    {
+        get { return TargetPosition; }
+        set { TargetPosition = value; }
+    }
     Vector2 TargetPosition;
 
     // Start is called before the first frame update
@@ -55,6 +60,16 @@ public class NormalEmpty : Empty
         if (!isDie && !isBorn)//不处于正在死亡状态或正在出生状态时
         {
             EmptyBeKnock();//判定是否被击退
+
+            /**
+            //根据魅惑情况确实目标位置
+            if (!isEmptyInfatuationDone || _mTool.GetAllFromTransform<Empty>(ParentPokemonRoom.EmptyFile()).Count <= 1 || InfatuationForDistanceEmpty() == null)
+            {
+                TargetPosition = player.transform.position;
+                if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
+            }
+            else { TargetPosition = InfatuationForDistanceEmpty().transform.position; }
+            **/
         }
     }
 
@@ -71,6 +86,29 @@ public class NormalEmpty : Empty
         }
     }
 
+
+
+
+
+    /**
+    //■■■■■■■■■■■■■■■■■■■■共通■■■■■■■■■■■■■■■■■■■■■■
+    /// <summary>
+    /// 设置多多冰的动画机方向
+    /// </summary>
+    void SetDirector(Vector2 director)
+    {
+        Director = director;
+        animator.SetFloat("LookX", director.x);
+        animator.SetFloat("LookY", director.y);
+    }
+    //■■■■■■■■■■■■■■■■■■■■共通■■■■■■■■■■■■■■■■■■■■■■
+    **/
+
+
+
+
+
+
     /*boss
         
     /// <summary>
@@ -81,6 +119,11 @@ public class NormalEmpty : Empty
     /// <summary>
     /// 敌人的目标的坐标
     /// </summary>
+    public Vector2 TARGET_POSITION
+    {
+        get { return TargetPosition; }
+        set { TargetPosition = value; }
+    }
     Vector2 TargetPosition;
 
     // Start is called before the first frame update
@@ -136,6 +179,16 @@ public class NormalEmpty : Empty
 
         }
     }
+
+
+
+
+
+
+
+
+
+
 
     */
 

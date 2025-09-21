@@ -2,10 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VanillishIceBeam : MonoBehaviour
+public class VaniluxeIceBeam : MonoBehaviour
 {
-    public Vanillish ParentVanillish;
+    public Vaniluxe ParentVaniluex;
+
     public float Rotation;
+
+    /// <summary>
+    /// 初始发射位置增加量
+    /// </summary>
+    public float StartLocationPosition;
 
     float RayTimer;
 
@@ -62,7 +68,7 @@ public class VanillishIceBeam : MonoBehaviour
         {
             InfatuationDmageCDTimer -= Time.deltaTime;
         }
-        if (ParentVanillish != null && !ParentVanillish.isEmptyFrozenDone && !ParentVanillish.isSleepDone && !ParentVanillish.isCanNotMoveWhenParalysis && !ParentVanillish.isSilence)
+        if (ParentVaniluex != null && !ParentVaniluex.isEmptyFrozenDone && !ParentVaniluex.isSleepDone && !ParentVaniluex.isCanNotMoveWhenParalysis && !ParentVaniluex.isSilence)
         {
             RayTimer += Time.deltaTime;
             if (!isPSStop)
@@ -72,51 +78,9 @@ public class VanillishIceBeam : MonoBehaviour
                     lineRenderer.startWidth += LeserWidth * (Time.deltaTime / 0.5f);
                     lineRenderer.endWidth += LeserWidth * (Time.deltaTime / 0.5f);
                 }
-                /**
-                if (ParentVanillish.havePartnerState == Vanillish.HavePartnerState.Father && ParentVanillish.ParentEmptyByChild != null)
-                {
-                    float rotation = _mTool.Angle_360Y( (Vector3)(ParentVanillish.transform.position - ParentVanillish.ParentEmptyByChild.transform.position).normalized , Vector3.right);
-                    transform.rotation = Quaternion.AngleAxis(rotation, Vector3.forward);
-                }
-                else
-                {
-                    
-                }
-                **/
-                //发射角度
-                float rotationSpeed = 0;
-                //Debug.Log(ParentVanillish.havePartnerState);
-                //无伙伴状态
-                if (ParentVanillish.havePartnerState == Vanillish.HavePartnerState.No)
-                {
-                    float d1 = _mTool.Angle_360Y((ParentVanillish.TARGET_POSITION - (Vector2)ParentVanillish.transform.position), Vector3.right);
-                    float d2 = _mTool.Angle_360Y((Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector2.right).normalized, Vector3.right);
-                    if (d1 > 180) { d1 = d1 - 360; }
-                    if (d2 > 180) { d2 = d2 - 360; }
-                    rotationSpeed = d1 - d2;
-                    if (rotationSpeed > 180) { rotationSpeed = rotationSpeed - 360; }
-                    else if (rotationSpeed < -180) { rotationSpeed = 360 + rotationSpeed; }
-                    if (rotationSpeed < 0) { rotationSpeed = -Vanillish.BEAM_ROTATION_SPEED_SINGLE; }
-                    else { rotationSpeed = Vanillish.BEAM_ROTATION_SPEED_SINGLE; }
-                }
-                //伙伴状态
-                else if (ParentVanillish.havePartnerState == Vanillish.HavePartnerState.Partner)
-                {
-                    rotationSpeed = Vanillish.BEAM_ROTATION_SPEED_PARTNER;
-                    if (ParentVanillish.positionInPartnership == Empty.PositionInPartnershipEnum.BigBrother) { rotationSpeed *= (ParentVanillish.isReverseBeam ? -1.0f : 2.0f); }
-                    else { rotationSpeed *= (ParentVanillish.isReverseBeam ? 2.0f : -1.0f); }
-                }
-                else if (ParentVanillish.havePartnerState == Vanillish.HavePartnerState.Father && ParentVanillish.ParentEmptyByChild != null)
-                {
-                    float TargetRotation = _mTool.Angle_360Y((Vector3)(ParentVanillish.transform.position - ParentVanillish.ParentEmptyByChild.transform.position).normalized, Vector3.right);
-                    float NowRotation = transform.rotation.eulerAngles.z;
-                    float delta = (TargetRotation - NowRotation + 360) % 360;
-                    if (delta > 5) { rotationSpeed = 100; }
-                    else if (delta < -5) { rotationSpeed = -100; }
-                    else { rotationSpeed = 0; }
-                    //Debug.Log(delta);
-                }
-                rotationSpeed *= (ParentVanillish.isEmptyConfusionDone ? 0.4f : 1.0f) * ((Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus) ? 2.0f : 1.0f);
+                //发射角速度
+                float rotationSpeed = Vaniluxe.BEAM_ROTATION_SPEED * ( ParentVaniluex.isEmptyConfusionDone ? 0.5f : 1.0f ) * ((Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus) ? 2.0f : 1.0f);
+
                 transform.rotation = Quaternion.AngleAxis(rotationSpeed * Time.deltaTime, Vector3.forward) * transform.rotation;
                 StartVFX.transform.position = lineRenderer.GetPosition(0);
                 rayPosition();
@@ -130,10 +94,10 @@ public class VanillishIceBeam : MonoBehaviour
                     Destroy(transform.gameObject);
                 }
             }
-
         }
         else
         {
+            rayPosition();
             if (!isPSStop)
             {
                 rayPosition();
@@ -154,7 +118,7 @@ public class VanillishIceBeam : MonoBehaviour
 
     public void StopBeam()
     {
-        //ParentVanillish.NowLunchIceBeam = null;
+        //ParentVaniluex.NowLunchIceBeam = null;
         transform.GetChild(0).gameObject.SetActive(false);
         isPSStop = true;
         StartVFX.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
@@ -166,7 +130,7 @@ public class VanillishIceBeam : MonoBehaviour
         EndVFX.transform.GetChild(1).GetComponent<ParticleSystem>().Stop();
         EndVFX.transform.GetChild(2).GetComponent<ParticleSystem>().Stop();
         _mTool.RemoveAllPSChild(transform.gameObject);
-        ParentVanillish = null;
+        ParentVaniluex = null;
         Destroy(this.gameObject);
     }
 
@@ -191,7 +155,7 @@ public class VanillishIceBeam : MonoBehaviour
         RaycastHit2D hitinfo = Physics2D.Raycast(transform.position + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized, 20, LayerMask.GetMask("Player", "PlayerFly", "PlayerJump", "Enviroment", "Room"));
         RaycastHit2D hitinfoTop = Physics2D.Raycast(transform.position + t * (lineRenderer.startWidth / 6.0f) + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized, 20f, LayerMask.GetMask("Player", "PlayerFly", "PlayerJump", "Enviroment", "Room"));
         RaycastHit2D hitinfoBottom = Physics2D.Raycast(transform.position + b * (lineRenderer.startWidth / 6.0f) + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized, 20f, LayerMask.GetMask("Player", "PlayerFly", "PlayerJump", "Enviroment", "Room"));
-        if (ParentVanillish.isEmptyInfatuationDone)
+        if (ParentVaniluex.isEmptyInfatuationDone)
         {
             hitinfo = Physics2D.Raycast(transform.position + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized, 20, LayerMask.GetMask("Empty", "EmptyFly", "EmptyJump", "Enviroment", "Room"));
             hitinfoTop = Physics2D.Raycast(transform.position + t * (lineRenderer.startWidth / 6.0f) + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized, 20f, LayerMask.GetMask("Empty", "EmptyFly", "EmptyJump", "Enviroment", "Room"));
@@ -220,47 +184,60 @@ public class VanillishIceBeam : MonoBehaviour
 
 
             //如果击中敌方宝可梦，则造成伤害
-            if (!ParentVanillish.isEmptyInfatuationDone)
+            if (!ParentVaniluex.isEmptyInfatuationDone)
             {
                 if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Player")
                 {
                     PlayerControler p = EndRay.collider.GetComponent<PlayerControler>();
-                    Pokemon.PokemonHpChange(ParentVanillish.gameObject, EndRay.collider.gameObject, 0, 120, 0, PokemonType.TypeEnum.Ice);
+                    Pokemon.PokemonHpChange(ParentVaniluex.gameObject, EndRay.collider.gameObject, 0, 120, 0, PokemonType.TypeEnum.Ice);
                     if (p != null)
                     {
                         p.KnockOutPoint = 7f;
                         p.KnockOutDirection = (p.transform.position - transform.position).normalized;
-                        p.PlayerFrozenFloatPlus(0.3f, 1.2f);
+                        p.PlayerFrozenFloatPlus(0.5f,1.5f);
                     }
                 }
             }
             else
             {
-                if (EndRay.collider != null && EndRay.collider.gameObject != ParentVanillish.gameObject && InfatuationDmageCDTimer <= 0)
+                if (EndRay.collider.gameObject != ParentVaniluex.gameObject && InfatuationDmageCDTimer <= 0)
                 {
                     if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Empty")
                     {
                         Empty e = EndRay.collider.GetComponent<Empty>();
-                        Pokemon.PokemonHpChange(ParentVanillish.gameObject, EndRay.collider.gameObject, 0, 120, 0, PokemonType.TypeEnum.Ice);
+                        Pokemon.PokemonHpChange(ParentVaniluex.gameObject, EndRay.collider.gameObject, 0, 120, 0, PokemonType.TypeEnum.Ice);
                         InfatuationDmageCDTimer = 1.2f;
                     }
                 }
             }
+
+            if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Enviroment")
+            {
+                IcicleCrashOBJ icobj = EndRay.collider.transform.GetComponent<IcicleCrashOBJ>();
+                if (icobj != null)
+                {
+                    icobj.IceBreak();
+                }
+            }
+
+            //Debug.Log(transform.position);
+            //Debug.Log(transform.position + Vector3.up + ((Vector3)EndPoint - transform.position).normalized * StartLocationPosition);
             //如果有击中对象，将起始点和终点分别对应
-            lineRenderer.SetPosition(0, transform.position + Vector3.up + ((Vector3)EndPoint - transform.position).normalized * 1.4f);
+            lineRenderer.SetPosition(0, transform.position + Vector3.up + ((Vector3)EndPoint - transform.position).normalized * StartLocationPosition);
             lineRenderer.SetPosition(1, EndPoint);
 
         }
         else
         {
+            //Debug.Log(transform.position);
             //否则正常显示
-            lineRenderer.SetPosition(0, transform.position + Vector3.up + (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized * 1.4f);
+            lineRenderer.SetPosition(0, transform.position + Vector3.up + (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized * StartLocationPosition);
             lineRenderer.SetPosition(1, transform.position + Vector3.up + (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized * 20);
             EndPoint = transform.position + Vector3.up + (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized * 1.2f + (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized * 20;
         }
         EndVFX.transform.position = EndPoint;
 
-        ParentVanillish.SetDirector(_mTool.TiltMainVector2((EndPoint - (Vector2)transform.position).normalized));
+        ParentVaniluex.SetDirector(_mTool.TiltMainVector2((EndPoint - (Vector2)transform.position).normalized));
 
 
 

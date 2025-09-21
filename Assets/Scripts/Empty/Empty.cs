@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.Linq;
 
 public class EnumMultiAttribute : PropertyAttribute { }
 public class Empty : Pokemon
@@ -698,8 +699,6 @@ public class Empty : Pokemon
                 if (GetComponent<Collider2D>()) { GetComponent<Collider2D>().enabled = false; }
                 player.ChangeEx((int)(Exp * ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss ) ? 1.8f : 1.3f)));
                 player.ChangeHPW(HWP);
-                //死亡事件
-                DieEvent();
 
                 //给AP
                 if (FloorNum.GlobalFloorNum != null && ScoreCounter.Instance != null)
@@ -726,6 +725,8 @@ public class Empty : Pokemon
                     player.ReFreshAbllityPoint();
                 }
                 isDie = true;
+                //死亡事件
+                DieEvent();
             }
             
             animator.SetTrigger("Die");
@@ -790,9 +791,17 @@ public class Empty : Pokemon
     /// </summary>
     public virtual void DieEvent()
     {
+        if (ChildrenList.Count != 0)
+        {
+            ParentDie();
+        }
         if (ParentEmptyByChild != null)
         {
             ParentEmptyByChild.ChildDie(this);
+        }
+        if (PartnerEmpty != null)
+        {
+            DieAsPartner();
         }
     }
 
@@ -866,19 +875,21 @@ public class Empty : Pokemon
     {
         //输出的敌人目标
         Empty OutPutEmpty = null;
+        List<Empty> checkList = _mTool.GetAllFromTransform<Empty>(ParentPokemonRoom.EmptyFile());
+        //_mTool.DebugLogList<Empty>(checkList);
         //仅当房间敌人数多余1（也就是房间内有除该敌人以外的敌人）时，搜索敌人
-        if (transform.parent.childCount >= 1)
+        if (checkList.Count >= 1)
         {
             float D = 1000;
             //遍历当前房间内所有敌人
-            foreach (Transform e in transform.parent)
+            foreach (Empty e in checkList)
             {
                 //如果e不是自己,计算距离，如果小于当前距离输出e
                 if (e.gameObject != this.gameObject)
                 {                
                     if ((transform.position - e.transform.position).magnitude < D)     
                     {
-                        OutPutEmpty = e.GetComponent<Empty>();   
+                        OutPutEmpty = e;
                         D = (transform.position - e.transform.position).magnitude; 
                     }
                 }
@@ -1420,7 +1431,7 @@ public class Empty : Pokemon
     /// <param name="color">残影的颜色</param>
     protected void StartShadowCoroutine(float Interval, float disappearingSpeed, Color color)
     {
-        Debug.Log("StartSHadow");
+        //Debug.Log("StartSHadow");
         isShadowMove = true; // 开始冲刺
         ShadowCoroutine = StartCoroutine(StartShadow(Interval , disappearingSpeed , color)); // 启动协程
     }
@@ -1431,7 +1442,7 @@ public class Empty : Pokemon
     /// </summary>
     protected void StopShadowCoroutine()
     {
-        Debug.Log("StopSHadow");
+        //Debug.Log("StopSHadow");
         isShadowMove = false; // 设置停止冲刺
         if (ShadowCoroutine != null)
         {
@@ -1486,6 +1497,65 @@ public class Empty : Pokemon
 
 
 
+    /// <summary>
+    /// 收集所有子级和父级的 Collider2D，避免重复
+    /// </summary>
+    public void CollectAllColliders(Empty current, HashSet<Empty> visited, List<Collider2D> output)
+    {
+        if (current == null || visited.Contains(current)) return;
+
+        visited.Add(current);
+
+        Collider2D col = current.GetComponent<Collider2D>();
+        if (col != null && !output.Contains(col))
+        {
+            output.Add(col);
+        }
+
+        // 遍历子级
+        if (current.ChildrenList != null)
+        {
+            foreach (Empty child in current.ChildrenList)
+            {
+                CollectAllColliders(child, visited, output);
+            }
+        }
+
+        // 遍历父级
+        if (current.ParentEmptyByChild != null)
+        {
+            CollectAllColliders(current.ParentEmptyByChild, visited, output);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //■■■■■■■■■■■■■■■■■■■■有关子敌人对象■■■■■■■■■■■■■■■■■■■■■■
 
@@ -1516,12 +1586,15 @@ public class Empty : Pokemon
     }
 
     /// <summary>
-    /// 忽略所有自己和子敌人对象之间的碰撞
+    /// 忽略所有自己和子敌人对象和孙对象之间的碰撞
     /// </summary>
     public virtual void IgnoreCollisionParentChild()
     {
-        List<Collider2D> CList = new List<Collider2D> { };
-        CList.Add(this.GetComponent<Collider2D>());
+        List<Collider2D> CList = new List<Collider2D>();
+        HashSet<Empty> visited = new HashSet<Empty>();
+        CollectAllColliders(this, visited, CList);
+        Debug.Log(string.Join(",", CList));
+        //CList.Add(this.GetComponent<Collider2D>());
         foreach (Empty child in ChildrenList)
         {
             if (child.gameObject != null) { CList.Add(child.transform.GetComponent<Collider2D>()); }
@@ -1535,19 +1608,35 @@ public class Empty : Pokemon
         }
     }
 
+
+
     /// <summary>
     /// 忽略某个子敌人对象和其他子敌人对象以及自己的碰撞
     /// </summary>
     public virtual void IgnoreOneChildCollision(Empty child)
     {
-        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), child.GetComponent<Collider2D>(), true);
-        foreach (Empty c in ChildrenList)
+        //Debug.Log("NAME" + child.name);
+        List<Collider2D> CList = new List<Collider2D>();
+        HashSet<Empty> visited = new HashSet<Empty>();
+        CollectAllColliders(this, visited, CList);
+        //Physics2D.IgnoreCollision(GetComponent<Collider2D>(), child.GetComponent<Collider2D>(), true);
+        List<string> t = new List<string> { };
+        foreach (Collider2D c in CList)
         {
+            t.Add(c.name);
             if (c != null && c.gameObject != child.gameObject)
             {
-                Physics2D.IgnoreCollision(c.GetComponent<Collider2D>(), child.GetComponent<Collider2D>(), true);
+                //Debug.Log(c.name +"+"+ child.name);
+                Physics2D.IgnoreCollision(c, child.GetComponent<Collider2D>(), true);
             }
         }
+        if (child.ChildrenList.Count != 0) {
+            for (int i = 0; i < child.ChildrenList.Count; i++)
+            {
+                child.IgnoreOneChildCollision(child.ChildrenList[i]);
+            }
+        }
+        //Debug.Log(string.Join("," , t));
     }
 
     /// <summary>
@@ -1555,12 +1644,23 @@ public class Empty : Pokemon
     /// </summary>
     public virtual void ResetOneChildCollision(Empty child)
     {
-        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), child.GetComponent<Collider2D>(), false);
-        foreach (Empty c in ChildrenList)
+        List<Collider2D> CList = new List<Collider2D>();
+        HashSet<Empty> visited = new HashSet<Empty>();
+        CollectAllColliders(this, visited, CList);
+        Debug.Log(string.Join(",", CList));
+        //Physics2D.IgnoreCollision(GetComponent<Collider2D>(), child.GetComponent<Collider2D>(), false);
+        foreach (Collider2D c in CList)
         {
             if (c != null && c.gameObject != child.gameObject)
             {
-                Physics2D.IgnoreCollision(c.GetComponent<Collider2D>(), child.GetComponent<Collider2D>(), false);
+                Physics2D.IgnoreCollision(c, child.GetComponent<Collider2D>(), false);
+            }
+        }
+        if (child.ChildrenList.Count != 0)
+        {
+            for (int i = 0; i < child.ChildrenList.Count; i++)
+            {
+                child.ResetOneChildCollision(child.ChildrenList[i]);
             }
         }
     }
@@ -1582,23 +1682,33 @@ public class Empty : Pokemon
     }
 
     /// <summary>
-    /// 死亡时清空子敌人对象的父对象
+    /// 死亡时清空子敌人对象的父对象 并释放子敌人
     /// </summary>
     public virtual void ParentDie()
     {
         GetAliveChildren();
+        List<Empty> l = new List<Empty> { };
         for (int i = 0; i < ChildrenList.Count; i++)
         {
-            if (ChildrenList[i] != null && !ChildrenList[i].isDie)
+            l.Add(ChildrenList[i]);
+        }
+
+        for (int i = 0; i < l.Count; i++)
+        {
+            if (l[i] != null && !l[i].isDie)
             {
-                if (ChildrenList[i].transform.parent == ChildHome)
+                if (l[i].transform.parent == ChildHome)
                 {
-                    ChildrenList[i].ChildLeaveHome();
+                    //Debug.Log(ParentEmptyByChild);
+                    l[i].ChildLeaveHome();
+                    l[i].transform.parent = l[i].ParentPokemonRoom.EmptyFile();
                 }
-                if (ChildrenList[i].ParentEmptyByChild != null) { ChildrenList[i].ParentEmptyByChild = null; }
+                if (l[i].ParentEmptyByChild != null) { l[i].ParentEmptyByChild = null; }
             }
         }
     }
+
+
 
 
 
@@ -1614,6 +1724,7 @@ public class Empty : Pokemon
     /// </summary>
     public virtual void ChildLeaveHome()
     {
+        Debug.Log(ParentEmptyByChild);
         if (ParentEmptyByChild != null && ParentEmptyByChild.ChildrenList.Contains(this))
         {
             ParentEmptyByChild.ChildrenList.Remove(this);
@@ -1621,7 +1732,7 @@ public class Empty : Pokemon
         //设定父对象和家
         if (ParentEmptyByChild != null)
         {
-            transform.parent = ParentEmptyByChild.transform.parent;
+            transform.parent = ParentPokemonRoom.EmptyFile();
             ParentEmptyByChild = null;
         }
     }
@@ -1648,21 +1759,26 @@ public class Empty : Pokemon
     public virtual T SearchParentByDistence<T>() where T : Empty
     {
         List<T> OutputList = new List<T> { };
+        List<T> TList = _mTool.GetAllFromTransform<T>(ParentPokemonRoom.EmptyFile());
         //如果父对象不为空
         if (ParentEmptyByChild == null)
         {
-            foreach (Transform t in transform.parent)
+            for (int i = 0; i < TList.Count; i++)
             {
-                T ct = t.GetComponent<T>();
-                if (ct != null && ct.isActiveAndEnabled && !ct.isBorn && !ct.isDie)
+                T t = TList[i];
+                if (t.transform != this.transform)
                 {
-                    OutputList.Add(ct);
+                    T ct = t.GetComponent<T>();
+                    if (ct != null && ct.isActiveAndEnabled && !ct.isBorn && !ct.isDie)
+                    {
+                        OutputList.Add(ct);
+                    }
                 }
             }
         }
 
 
-        if(OutputList.Count == 0)
+        if (OutputList.Count == 0)
         {
             return default;
         }
@@ -1672,7 +1788,8 @@ public class Empty : Pokemon
             T output = null;
             for (int i = 0; i < OutputList.Count; i++)
             {
-                if (Vector2.Distance((Vector2)(OutputList[i].transform.position) , (Vector2)(transform.position)) < MinDistence ) {
+                if (Vector2.Distance((Vector2)(OutputList[i].transform.position), (Vector2)(transform.position)) < MinDistence)
+                {
                     MinDistence = Vector2.Distance((Vector2)(OutputList[i].transform.position), (Vector2)(transform.position));
                     output = OutputList[i];
                 }
@@ -1682,7 +1799,268 @@ public class Empty : Pokemon
     }
 
 
+
     //■■■■■■■■■■■■■■■■■■■■有关子对象■■■■■■■■■■■■■■■■■■■■■■
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //■■■■■■■■■■■■■■■■■■■■有关连携伙伴■■■■■■■■■■■■■■■■■■■■■■
+
+
+    //伙伴
+    public Empty PartnerEmpty
+    {
+        get { return partnerEmpty; }
+        set { partnerEmpty = value; }
+    }
+    public Empty partnerEmpty ;
+
+
+
+
+    //自己在伙伴关系中的地位
+    public enum PositionInPartnershipEnum
+    {
+        BigBrother, //大哥
+        LittleBoy,  //小弟
+        NoPartner,  //没有伙伴，或不处于伙伴状态
+    }
+    public PositionInPartnershipEnum PositionInPartnership
+    {
+        get { return positionInPartnership; }
+        set { positionInPartnership = value; }
+    }
+    public PositionInPartnershipEnum positionInPartnership = PositionInPartnershipEnum.NoPartner;
+
+
+
+    /// <summary>
+    /// 在当前房间内根据距离搜索伙伴
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public T SearchPartnerInRoomByDistence<T>() where T : Empty
+    {
+        //Debug.Log(this.name);
+        List<T> OutputList = new List<T> { };
+        foreach (Transform t in transform.parent)
+        {
+            if (t != this.transform) {
+                T ct = t.GetComponent<T>();
+                if (ct != null && ct.isActiveAndEnabled && !ct.isBorn && !ct.isDie && !ct.isSleepDone && !ct.isFearDone && !ct.isEmptyFrozenDone)
+                {
+                    //Debug.Log(ct.name + "+" + ct.isActiveAndEnabled + "+" + (ct != null && ct.isActiveAndEnabled && !ct.isBorn && !ct.isDie));
+                    OutputList.Add(ct);
+                }
+            }
+        }
+
+        if (OutputList.Count == 0)
+        {
+            return default;
+        }
+        else
+        {
+            float MinDistence = 100.0f;
+            T output = null;
+            for (int i = 0; i < OutputList.Count; i++)
+            {
+                if (Vector2.Distance((Vector2)(OutputList[i].transform.position), (Vector2)(transform.position)) < MinDistence)
+                {
+                    MinDistence = Vector2.Distance((Vector2)(OutputList[i].transform.position), (Vector2)(transform.position));
+                    output = OutputList[i];
+                }
+            }
+            partnerEmpty = output;
+            JudgePositionInPartnership();
+            return output;
+        }
+    }
+
+
+
+    /// <summary>
+    /// 通过比较确立伙伴关系中的地位
+    /// </summary>
+    public void JudgePositionInPartnership()
+    {
+        //没有伙伴则进入无伙伴状态
+        if (partnerEmpty == null) { 
+            this.positionInPartnership = PositionInPartnershipEnum.NoPartner;
+            return;
+        }
+        else
+        {
+            if (this.GetInstanceID() > partnerEmpty.GetInstanceID())
+            {
+                this.positionInPartnership = PositionInPartnershipEnum.BigBrother;
+                partnerEmpty.positionInPartnership = PositionInPartnershipEnum.LittleBoy;
+            }
+            else
+            {
+                this.positionInPartnership = PositionInPartnershipEnum.BigBrother;
+                partnerEmpty.positionInPartnership = PositionInPartnershipEnum.LittleBoy;
+            }
+        }
+    }
+
+
+
+
+    //自己作为伙伴死亡时
+    public void DieAsPartner()
+    {
+        RemovePartnership();
+    }
+
+
+    /// <summary>
+    /// 解除伙伴关系
+    /// </summary>
+    public void RemovePartnership()
+    {
+        if (partnerEmpty != null) {
+            partnerEmpty.positionInPartnership = PositionInPartnershipEnum.NoPartner;
+            partnerEmpty.partnerEmpty = null;
+        }
+
+    }
+
+
+
+
+    /**List
+         //伙伴
+    public List<Empty> PartnerEmpty
+    {
+        get { return partnerEmpty; }
+        set { partnerEmpty = value; }
+    }
+    List<Empty> partnerEmpty = new List<Empty> { };
+
+
+
+
+    //自己在伙伴关系中的地位
+    public enum PositionInPartnershipEnum
+    {
+        BigBrother, //大哥
+        LittleBoy,  //小弟
+        NoPartner,  //没有伙伴，或不处于伙伴状态
+    }
+    public PositionInPartnershipEnum PositionInPartnership
+    {
+        get { return positionInPartnership; }
+        set { positionInPartnership = value; }
+    }
+    PositionInPartnershipEnum positionInPartnership = PositionInPartnershipEnum.LittleBoy;
+
+
+    /// <summary>
+    /// 在当前房间内根据搜索伙伴
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public PositionInPartnershipEnum SearchPartnerInRoom<T>() where T : Empty
+    {
+        foreach (Transform t in transform.parent)
+        {
+            if (t != this.transform) {
+                T ct = t.GetComponent<T>();
+                Debug.Log(ct.name + "+" + ct.isActiveAndEnabled + "+" + (ct != null && ct.isActiveAndEnabled && !ct.isBorn && !ct.isDie));
+                if (ct != null && ct.isActiveAndEnabled && !ct.isBorn && !ct.isDie)
+                {
+                    partnerEmpty.Add(ct);
+                }
+            }
+        }
+        JudgePositionInPartnership();
+        Debug.Log(this.positionInPartnership);
+        return this.positionInPartnership;
+    }
+
+
+    /// <summary>
+    /// 通过比较确立伙伴关系中的地位
+    /// </summary>
+    public void JudgePositionInPartnership()
+    {
+        //初始化地位
+        ResetPositionInPartnership();
+        //判定地位
+        Empty big = this;
+        int MaxId = this.GetInstanceID();
+        //没有伙伴则进入无伙伴状态
+        if (partnerEmpty.Count == 0) { 
+            this.positionInPartnership = PositionInPartnershipEnum.NoPartner;
+            return;
+        }
+        for (int i = 0; i < partnerEmpty.Count; i++)
+        {
+            if (MaxId < partnerEmpty[i].GetInstanceID())
+            {
+                big = partnerEmpty[i];
+                MaxId = partnerEmpty[i].GetInstanceID();
+            }
+        }
+        big.positionInPartnership = PositionInPartnershipEnum.BigBrother;
+    }
+
+
+
+    /// <summary>
+    /// 初始化地位
+    /// </summary>
+    public void ResetPositionInPartnership()
+    {
+        this.positionInPartnership = PositionInPartnershipEnum.LittleBoy;
+        for (int i = 0; i < partnerEmpty.Count; i++)
+        {
+            partnerEmpty[i].positionInPartnership = PositionInPartnershipEnum.LittleBoy;
+        }
+    }
+
+
+    //自己作为伙伴死亡时
+    public void DieAsPartner()
+    {
+        RemovePartnership();
+    }
+
+
+    /// <summary>
+    /// 解除伙伴关系
+    /// </summary>
+    public void RemovePartnership()
+    {
+        for (int i = 0; i < partnerEmpty.Count; i++)
+        {
+            //从所有敌人伙伴列表中的伙伴列表中移除自己
+            partnerEmpty[i].partnerEmpty.Remove(this);
+            //所有敌人重置地位
+            partnerEmpty[i].ResetPositionInPartnership();
+        }
+        partnerEmpty.Clear();
+    }
+    **/
+
+
+    //■■■■■■■■■■■■■■■■■■■■有关连携伙伴■■■■■■■■■■■■■■■■■■■■■■
 
 }
