@@ -12,8 +12,9 @@ public class VaniluxeIcicleCrash : Projectile
 
     private void Start()
     {
-        Instantiate(IcicleCrash , transform.position + 0.25f * Vector3.up , Quaternion.identity);
+        
         AwakeProjectile();
+        Timer.Start(this, 0.15f, () => { Instantiate(IcicleCrash, transform.position + 0.25f * Vector3.up, Quaternion.identity); });
         Timer.Start(this, 5.0f, () => { Destroy(gameObject);  });
     }
 

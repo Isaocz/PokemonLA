@@ -447,7 +447,7 @@ public class Avalugg : Empty
     /// <summary>
     /// 发射冰宝的最大次数
     /// </summary>
-    public static int MAX_BERGMITE_LUNCH_COUNT = 1;
+    public static int MAX_BERGMITE_LUNCH_COUNT = 5;
 
     /// <summary>
     /// 发射冰宝的次数

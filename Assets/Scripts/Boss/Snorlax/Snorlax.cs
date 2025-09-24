@@ -335,10 +335,16 @@ public class Snorlax : Empty
 
     public void DropBerry()
     {
+        SnorlaxCameraShake();
         SnorlaxBerry BerryObj = Instantiate(BerryList[(Random.Range(0.0f, 1.0f) > 0.3f ? 0 : 1)], transform.position + new Vector3(0.7f, 0.721f, 0), Quaternion.identity, transform.parent);
         DestoryEvent += BerryObj.BerryDestoryAnimator;
         BerryObj = Instantiate(BerryList[(Random.Range(0.0f, 1.0f) > 0.3f ? 0 : 1)], transform.position + new Vector3(-0.7f, 0.721f, 0), Quaternion.identity, transform.parent);
         DestoryEvent += BerryObj.BerryDestoryAnimator;
+    }
+
+    public void SnorlaxCameraShake()
+    {
+        CameraShake(0.6f, 4.0f, true);
     }
 
     public void CallisImpact()

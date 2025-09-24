@@ -264,12 +264,15 @@ public class Haunter : Empty
             if (!isEmptyInfatuationDone && other.transform.tag == ("Player"))
             {
                 PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, DMAGE_SHADOWCLAW, 0, 0, PokemonType.TypeEnum.Ghost);
+                float alpha = 1.0f;
                 if (playerControler != null)
                 {
+                    alpha = isPlayerState(playerControler) ? 1.5f : 1.0f;
                     playerControler.KnockOutPoint = 3;
                     playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                 }
+                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, DMAGE_SHADOWCLAW * alpha, 0, 0, PokemonType.TypeEnum.Ghost);
+                Debug.Log(DMAGE_SHADOWCLAW * alpha);
                 GetCTEffect(other.transform);
             }
             if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
@@ -288,12 +291,15 @@ public class Haunter : Empty
             if (!isEmptyInfatuationDone && other.transform.tag == ("Player"))
             {
                 PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, DMAGE_SHADOWRUSH, 0, 0, PokemonType.TypeEnum.Ghost);
+                float alpha = 1.0f;
                 if (playerControler != null)
                 {
+                    alpha = isPlayerState(playerControler) ? 1.5f : 1.0f;
                     playerControler.KnockOutPoint = 3;
                     playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
                 }
+                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, DMAGE_SHADOWRUSH * alpha, 0, 0, PokemonType.TypeEnum.Ghost);
+                Debug.Log(DMAGE_SHADOWRUSH * alpha);
                 GetCTEffect(other.transform);
             }
             if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
@@ -390,6 +396,17 @@ public class Haunter : Empty
                 ShadowRushOver();
                 break;
         }
+    }
+
+
+    /// <summary>
+    /// 角色是否处于异常状态
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    bool isPlayerState(PlayerControler player)
+    {
+        return (player.isToxicDone) || (player.isBurnDone) || (player.isParalysisDone) || (player.isPlayerFrozenDone) || (player.isSleepDone);
     }
 
     //=============================攻击共通==============================
@@ -823,7 +840,7 @@ public class Haunter : Empty
     static float TIME_OF_ATK_SHADOWCLAW = 0.45f;
 
     //暗影爪的攻击力
-    public static int DMAGE_SHADOWCLAW = 105;
+    public static int DMAGE_SHADOWCLAW = 80;
 
     /// <summary>
     /// 暗影爪时间计时器
@@ -1033,7 +1050,7 @@ public class Haunter : Empty
     //=========冲刺状态==========
 
     //暗影冲刺的攻击力
-    public static int DMAGE_SHADOWRUSH = 130;
+    public static int DMAGE_SHADOWRUSH = 110;
     //暗影冲刺的攻击时间
     static float TIME_OF_ATK_SHADOWRUSH = 4.0f;
 

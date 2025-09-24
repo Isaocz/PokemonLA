@@ -463,7 +463,7 @@ public class Bergmite : Empty
     public void RunStart()
     {
         NowState = BergmiteState.Run;
-        //StartFrozenMistPS();
+        StartFrozenMistPS();
     }
 
 
@@ -490,7 +490,7 @@ public class Bergmite : Empty
     /// </summary>
     public void RunOver()
     {
-        //StopFrozenMistPS();
+        StopFrozenMistPS();
     }
 
     //============================×ßÂ·=================================

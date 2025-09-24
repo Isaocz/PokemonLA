@@ -296,7 +296,7 @@ public class Vaniluxe : Empty
     static float MOVE_STOP_DISTENCE = 0.3f;
 
     //激光的旋转角速度
-    public static float BEAM_ROTATION_SPEED = 60.0f;
+    public static float BEAM_ROTATION_SPEED = 48.0f;
 
     //冰柱的释放间隔
     static float ICICLE_CRASH_COUNT = 2;
@@ -425,10 +425,10 @@ public class Vaniluxe : Empty
     {
         float distance1 = Vector2.Distance(transform.position, Last);
         float distance2 = Vector2.Distance(transform.position, Now);
-        float distance = Mathf.Clamp(((1.65f * distance2) - 0.65f * distance1), 3.0f, 20.0f);
+        float distance = Mathf.Clamp(((1.8f * distance2) - 0.8f * distance1), 3.0f, 20.0f);
         float Angle1 = _mTool.Angle_360Y(((Vector3)Last - transform.position), Vector3.right);
         float Angle2 = _mTool.Angle_360Y(((Vector3)Now - transform.position), Vector3.right);
-        float Angle = (1.65f * Angle2) - 0.65f * Angle1;
+        float Angle = (1.8f * Angle2) - 0.8f * Angle1;
         //Debug.Log(distance1 +"+"+ distance2 + "+" + distance + "+" + Angle1 + "+" + Angle2 + "+" + Angle);
         Vector2 output = (transform.position + Quaternion.AngleAxis(Angle, Vector3.forward) * Vector2.right * distance);
         output = new Vector2(Mathf.Clamp(output.x, ParentPokemonRoom.transform.position.x + ParentPokemonRoom.RoomSize[2], ParentPokemonRoom.transform.position.x + ParentPokemonRoom.RoomSize[3]),
@@ -509,16 +509,16 @@ public class Vaniluxe : Empty
                 Vanillish babyVM = babyVList[(int)AngleList[i].y].GetComponent<Vanillish>();
                 if (babyVS != null)
                 {
-                    if (NextAngle < CountRound) { babyVS.SurroundRotationSpeed = 20.0f - (Mathf.Abs(NextAngle - CountRound) / CountRound) * 20.0f; }
-                    else if (NextAngle > CountRound) { babyVS.SurroundRotationSpeed = 20.0f + (Mathf.Abs(NextAngle - CountRound) / CountRound) * 60.0f; }
-                    else { babyVS.SurroundRotationSpeed = 20.0f; }
+                    if (NextAngle < CountRound) { babyVS.SurroundRotationSpeed = 16.0f - (Mathf.Abs(NextAngle - CountRound) / CountRound) * 16.0f; }
+                    else if (NextAngle > CountRound) { babyVS.SurroundRotationSpeed = 16.0f + (Mathf.Abs(NextAngle - CountRound) / CountRound) * 60.0f; }
+                    else { babyVS.SurroundRotationSpeed = 16.0f; }
                     babyVS.SurroundRotationSpeed *= (Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus) ? 2.0f : 1.0f;
                 }
                 else if (babyVM != null)
                 {
-                    if (NextAngle < CountRound) { babyVM.SurroundRotationSpeed = 20.0f - (Mathf.Abs(NextAngle - CountRound) / CountRound) * 20.0f; }
-                    else if (NextAngle > CountRound) { babyVM.SurroundRotationSpeed = 20.0f + (Mathf.Abs(NextAngle - CountRound) / CountRound) * 60.0f; }
-                    else { babyVM.SurroundRotationSpeed = 20.0f; }
+                    if (NextAngle < CountRound) { babyVM.SurroundRotationSpeed = 16.0f - (Mathf.Abs(NextAngle - CountRound) / CountRound) * 16.0f; }
+                    else if (NextAngle > CountRound) { babyVM.SurroundRotationSpeed = 16.0f + (Mathf.Abs(NextAngle - CountRound) / CountRound) * 60.0f; }
+                    else { babyVM.SurroundRotationSpeed = 16.0f; }
                     babyVM.SurroundRotationSpeed *= (Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus) ? 2.0f : 1.0f;
                 }
             }

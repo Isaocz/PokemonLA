@@ -106,6 +106,15 @@ public class SnorlaxBerry : MonoBehaviour
                 ParentSnorlax.EatBerry(BerryIndex);
                 ParentSnorlax.DestoryEvent -= DestoryBerry;
                 Destroy(gameObject);
+                return;
+            }
+            SnowmanSnorlax ParentSnowmanSnorlax = other.gameObject.GetComponent<SnowmanSnorlax>();
+            if (ParentSnowmanSnorlax != null && isCanBeEat)
+            {
+                ParentSnowmanSnorlax.EatBerry(BerryIndex);
+                ParentSnowmanSnorlax.DestoryEvent -= DestoryBerry;
+                Destroy(gameObject);
+                return;
             }
         }
     }
