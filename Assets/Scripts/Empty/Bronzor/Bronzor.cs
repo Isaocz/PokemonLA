@@ -41,6 +41,10 @@ public class Bronzor : Empty
         Director = new Vector2(((TargetPosition - (Vector2)transform.position).normalized.x > 0) ? 1 : -1, ((TargetPosition - (Vector2)transform.position).normalized.y > 0) ? 1 : -1);
         animator.SetFloat("LookX", Director.x);
         animator.SetFloat("LookY", Director.y);
+
+
+
+        StartOverEvent();
     }
 
 

@@ -100,6 +100,10 @@ public class Golbat : Empty
 
         //≥ı ºªØ
         SetNormalState();
+
+
+
+        StartOverEvent();
     }
 
     void SetNormalState()

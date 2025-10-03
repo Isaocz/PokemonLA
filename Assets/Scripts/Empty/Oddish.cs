@@ -38,8 +38,11 @@ public class Oddish : Empty
 
         transform.GetChild(4).DetachChildren();
 
-        
 
+
+
+
+        StartOverEvent();
     }
 
     // Update is called once per frame

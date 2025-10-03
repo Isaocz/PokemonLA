@@ -46,6 +46,10 @@ public class Jigglypuff : Empty
         animator.SetFloat("LookY", 1);
 
         RollTimer = 350;
+
+
+
+        StartOverEvent();
     }
 
 

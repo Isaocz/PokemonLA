@@ -28,6 +28,10 @@ public class Pincurchin : Empty
         //获取刚体目标 动画管理者目标 并让刚体的初始x坐标带入FirstX中
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
+
+
+
+        StartOverEvent();
     }
 
 

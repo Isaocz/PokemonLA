@@ -35,6 +35,11 @@ public class Ralts : Empty
         ConfusionCDTimer = 0;
         animator.SetFloat("LookX", -1);
         animator.SetFloat("LookY", -1);
+
+
+
+
+        StartOverEvent();
     }
 
 

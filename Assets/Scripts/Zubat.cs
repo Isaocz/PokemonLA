@@ -38,6 +38,10 @@ public class Zubat : Empty
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
         LastPosition = transform.position;
+
+
+
+        StartOverEvent();
     }
 
 

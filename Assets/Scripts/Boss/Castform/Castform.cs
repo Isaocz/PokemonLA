@@ -77,6 +77,9 @@ public class Castform : Empty
         SkillPer = 0f;
 
 
+
+
+        StartOverEvent();
     }
 
 

@@ -43,6 +43,10 @@ public class Solrock : Empty
         rigidbody2D = GetComponent<Rigidbody2D>();
 
         Director = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.forward) * Vector3.right;
+
+
+
+        StartOverEvent();
     }
 
 

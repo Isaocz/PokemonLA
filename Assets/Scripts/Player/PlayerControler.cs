@@ -1307,6 +1307,7 @@ public class PlayerControler : PlayerPokemon
         }
         else
         {
+
             PokemonType.TypeEnum enumVaue = (PokemonType.TypeEnum)SkillType;
             if ((int)SkillType != 19) {
                 ChangePoint = ChangePoint * (playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == PokemonType.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)

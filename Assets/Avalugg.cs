@@ -74,6 +74,10 @@ public class Avalugg : Empty
         IdleStart(IDLE_OF_AWAKE);
         //ÉèÖÃ±ùÎí
         SetFrozenMistByChild();
+
+
+
+        StartOverEvent();
     }
 
 

@@ -66,6 +66,10 @@ public class Cryogonal : Empty
         animator.SetFloat("LookX", Director.x);
 
         LastPosition = transform.position;
+
+
+
+        StartOverEvent();
     }
 
 

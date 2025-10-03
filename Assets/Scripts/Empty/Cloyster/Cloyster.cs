@@ -38,6 +38,10 @@ public class Cloyster : Empty
         animator.SetFloat("isClosing" , 1);
         DefAbilityPoint /= 2;
         DefChange(-1, 0.0f);
+
+
+
+        StartOverEvent();
     }
 
 

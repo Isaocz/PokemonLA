@@ -83,6 +83,9 @@ public class Corbat : Empty
         TurnCount = 0;
         NowState = State.NormalState;
 
+
+
+        StartOverEvent();
     }
 
 

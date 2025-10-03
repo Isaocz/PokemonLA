@@ -7,6 +7,7 @@ public class SubEmptyBody : Empty{
 
 
     int NowHP;
+    public int NowShield;
     public float NowFrozenPoint;
     public float NowToxicPoint;
     public float NowParalysisPoint;
@@ -55,6 +56,14 @@ public class SubEmptyBody : Empty{
         animator = ParentEmpty.animator;
         rigidbody2D = GetComponent<Rigidbody2D>();
         NowHP = EmptyHp;
+        NowShield = EmptyShield;
+        if (!ParentEmpty.isBorn && !ParentEmpty.isDie)
+        {
+            EmptyHp = ParentEmpty.EmptyHp;
+            EmptyShield = ParentEmpty.EmptyShield;
+            NowHP = EmptyHp;
+            NowShield = EmptyShield;
+        }
         NowFrozenPoint = GetEmptyFrozenPointFloat;
         NowToxicPoint = ToxicPointFloat;
         NowParalysisPoint = ParalysisPointFloat;
@@ -107,17 +116,54 @@ public class SubEmptyBody : Empty{
         if (!ParentEmpty.isDie && !ParentEmpty.isBorn)
         {
             StateMaterialChange();
+
+            NowHP = ParentEmpty.EmptyHp;
+            //体节生命不等于整体生命
             if (NowHP != EmptyHp)
             {
-                if (!ParentEmpty.isSubBodyEmptyInvincible) {
-                    Debug.Log("Hit");
+                Debug.Log("=========================Hit=========================" + "+" + NowHP + "+" + EmptyHp + ParentEmpty.isSubBodyEmptyInvincible);
+                if (!ParentEmpty.isSubBodyEmptyInvincible) {  
+                    //改变生命
                     if (NowHP > EmptyHp) { Pokemon.PokemonHpChange(null, ParentEmpty.gameObject, NowHP - EmptyHp, 0, 0, PokemonType.TypeEnum.IgnoreType); }
                     else if(NowHP < EmptyHp) { Pokemon.PokemonHpChange(null, ParentEmpty.gameObject, 0, 0, NowHP - EmptyHp, PokemonType.TypeEnum.IgnoreType); }
+                    //暂时无敌
                     ParentEmpty.isSubBodyEmptyInvincible = true;
-                    Timer.Start(this, 1.0f, () => { ParentEmpty.isSubBodyEmptyInvincible = false; });
+                    //无敌冷却一秒钟
+                    Timer.Start(this, 1.2f, () => { ParentEmpty.isSubBodyEmptyInvincible = false; });
+                    NowHP = EmptyHp;
                 }
-                NowHP = EmptyHp;
+                else
+                {
+                    NowHP = ParentEmpty.EmptyHp;
+                    EmptyHp = NowHP;
+                }
             }
+
+            NowShield = ParentEmpty.EmptyShield;
+            //体节护盾不等于整体护盾
+            if (NowShield != EmptyShield)
+            {
+                Debug.Log("=========================Hit=========================" + "+" + NowShield + "+" + EmptyShield + ParentEmpty.isSubBodyEmptyInvincible);
+                if (!ParentEmpty.isSubBodyEmptyInvincible)
+                {
+                    //改变生命
+                    if (NowShield > EmptyShield) { Pokemon.PokemonHpChange(null, ParentEmpty.gameObject, NowShield - EmptyShield, 0, 0, PokemonType.TypeEnum.IgnoreType); }
+                    else if (NowShield < EmptyShield) { Pokemon.PokemonHpChange(null, ParentEmpty.gameObject, 0, 0, NowShield - EmptyShield, PokemonType.TypeEnum.IgnoreType); }
+                    //暂时无敌
+                    ParentEmpty.isSubBodyEmptyInvincible = true;
+                    //无敌冷却一秒钟
+                    Timer.Start(this, 1.2f, () => { ParentEmpty.isSubBodyEmptyInvincible = false; });
+                    NowShield = EmptyShield;
+                }
+                else
+                {
+                    NowShield = ParentEmpty.EmptyShield;
+                    EmptyShield = NowShield;
+                }
+
+            }
+
+
 
             if (!isFrozenDef && NowFrozenPoint != GetEmptyFrozenPointFloat)
             {

@@ -153,6 +153,10 @@ public class CrystalOnix : Empty
         SetNowDirAndSubBodyPos(Director);
         IHShinePS = transform.GetChild(3).GetChild(0).GetChild(0).GetChild(0).GetChild(2).GetComponent<ParticleSystem>();
         RemoveIronHeadMode();
+
+
+
+        StartOverEvent();
     }
 
 

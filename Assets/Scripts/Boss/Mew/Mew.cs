@@ -238,6 +238,10 @@ public class Mew : Empty
                 }
             }
         }
+
+
+
+        StartOverEvent();
     }
 
     void Update()

@@ -58,7 +58,10 @@ public class poochyena : Empty
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
 
-        
+
+
+
+        StartOverEvent();
 
     }
 

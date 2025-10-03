@@ -72,6 +72,10 @@ public class SnowmanSnorlax : Empty
         animator.SetFloat("LookX", direction.x);
         animator.SetFloat("LookY", direction.y);
         SlamPer = 0.3f;
+
+
+
+        StartOverEvent();
     }
 
     // Update is called once per frame

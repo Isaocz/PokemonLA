@@ -58,6 +58,10 @@ public class Vaniluxe : Empty
 
         //≥ı º∑¢¥Ù
         IdleStart(TIME_START);
+
+
+
+        StartOverEvent();
     }
     
 

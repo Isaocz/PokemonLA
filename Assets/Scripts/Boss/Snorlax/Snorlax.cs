@@ -66,6 +66,11 @@ public class Snorlax : Empty
         animator.SetFloat("LookX" , direction.x);
         animator.SetFloat("LookY" , direction.y);
         SlamPer = 0.3f;
+
+
+
+
+        StartOverEvent();
     }
 
     // Update is called once per frame
@@ -190,6 +195,7 @@ public class Snorlax : Empty
 
 
         }
+
     }
     
     private void FixedUpdate()

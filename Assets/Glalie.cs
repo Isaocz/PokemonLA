@@ -73,6 +73,10 @@ public class Glalie : Empty
         IdleState(0.3f);
 
         DestoryEvent += DieBlest;
+
+
+
+        StartOverEvent();
     }
 
 

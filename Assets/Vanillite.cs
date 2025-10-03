@@ -92,6 +92,11 @@ public class Vanillite : Empty
         //初始化方向
         Director = new Vector2(-1,-1);
         SetDirector(Director);
+
+
+
+
+        StartOverEvent();
     }
 
 

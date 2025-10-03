@@ -15,6 +15,8 @@ public class Empty : Pokemon
     [Tooltip("当前HP")]
     public int EmptyHp;
     public int maxHP;
+    [Tooltip("当前护盾")]
+    public int EmptyShield;
     //敌人的等级
     [Tooltip("等级")]
     public int Emptylevel;
@@ -234,6 +236,13 @@ public class Empty : Pokemon
 
 
 
+    /// <summary>
+    /// 敌人是否被伤害过
+    /// </summary>
+    public bool isHurt { get { return ishurt; } set { ishurt = value; } }
+    bool ishurt;
+
+
 
 
 
@@ -314,7 +323,7 @@ public class Empty : Pokemon
     /// <returns></returns>
     protected int SetLevel(int PlayerLevel,int MaxLevel)
     {
-        StartCoroutine(SetInvincible(1.0f));
+        StartCoroutine(SetInvincible(1.2f));
         if (transform.parent.parent.GetComponent<Room>() != null) { ParentPokemonRoom = transform.parent.parent.GetComponent<Room>(); }
         FirstSpeed = speed;
         int OutPut;
@@ -392,6 +401,16 @@ public class Empty : Pokemon
         return (Ability * 2 * level) / 100 + 5;
     }
 
+
+
+    /// <summary>
+    /// 开始事件后的事件
+    /// </summary>
+    public virtual void StartOverEvent()
+    {
+        GetShield((int)(maxHP / 3.0f));
+    }
+
     //=============================初始化敌人数据================================
 
 
@@ -425,6 +444,7 @@ public class Empty : Pokemon
         }
         else
         {
+            //无敌
             if (isInvincible)
             {
                 return;
@@ -447,41 +467,57 @@ public class Empty : Pokemon
                 * ((Weather.GlobalWeather.isSunny && enumVaue == PokemonType.TypeEnum.Fire) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1)));
 
             float typeDef = (TypeDef[SkillType] < 0 ? (Mathf.Pow(1.2f, -TypeDef[SkillType])) : 1) * (TypeDef[SkillType] > 0 ? (Mathf.Pow(0.8f, TypeDef[SkillType])) : 1);
+
+            //发生血量改变前的血量
+            int BeforeHP = EmptyHp;
+            //发生血量改变前的护盾
+            int BeforeShield = EmptyShield;
+
+            //伤害
             if (Dmage + SpDmage >= 0)
             {
                 int allDmg = 0;
+                //正常伤害
                 if (SkillType != 19)
                 {
+                    allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (PokemonType.TYPE[SkillType][(int)EmptyType01]) * PokemonType.TYPE[SkillType][(int)EmptyType02]), 1, ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? (maxHP / MaxDmagePer()) : 100000));
+                    //标记为受伤状态
+                    if (allDmg > 0 && !ishurt) { ishurt = true; }
+                    //非超能场地
                     if (!isInPsychicTerrain) 
-                    { 
-                        allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (PokemonType.TYPE[SkillType][(int)EmptyType01]) * PokemonType.TYPE[SkillType][(int)EmptyType02]), 1, ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? (maxHP / MaxDmagePer()) : 100000));
-                        EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (PokemonType.TYPE[SkillType][(int)EmptyType01]) * PokemonType.TYPE[SkillType][(int)EmptyType02]), 1, ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? (maxHP / MaxDmagePer()) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP); 
+                    {
+                        EmptyBeingHurt(allDmg);
                     }
+                    //超能场地免疫低伤害
                     else
                     {
-                        if(Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (PokemonType.TYPE[SkillType][(int)EmptyType01]) * PokemonType.TYPE[SkillType][(int)EmptyType02]), 1, ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? (maxHP / MaxDmagePer()) : 100000))) > (int)(maxHP / 16))
+                        if(Mathf.Abs((int)allDmg) > (int)(maxHP / 16))
                         {
-                            allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (PokemonType.TYPE[SkillType][(int)EmptyType01]) * PokemonType.TYPE[SkillType][(int)EmptyType02]), 1, ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? (maxHP / MaxDmagePer()) : 100000));
-                            EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (PokemonType.TYPE[SkillType][(int)EmptyType01]) * PokemonType.TYPE[SkillType][(int)EmptyType02]), 1, ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? (maxHP / MaxDmagePer()) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP);
+                            EmptyBeingHurt(allDmg);
                         }
                     }
                 }
+                //
                 else
                 {
+                    allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? (maxHP / MaxDmagePer()) : 100000));
+                    //标记为受伤状态
+                    if (allDmg > 0 && !ishurt) { ishurt = true; }
+                    //非超能场地
                     if (!isInPsychicTerrain) 
                     {
-                        allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? (maxHP / MaxDmagePer()) : 100000));
-                        EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? (maxHP / MaxDmagePer()) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP); 
+                        EmptyBeingHurt(allDmg);
                     }
+                    //超能场地免疫低伤害
                     else
                     {
-                        if (Mathf.Abs((int)Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? (maxHP / MaxDmagePer()) : 100000))) > (int)(maxHP / 16))
+                        if (Mathf.Abs((int)allDmg) > (int)(maxHP / 16))
                         {
-                            allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? (maxHP / MaxDmagePer()) : 100000));
-                            EmptyHp = Mathf.Clamp(EmptyHp - Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? (maxHP / MaxDmagePer()) : 100000)), (IsBeFalseSwipe ? 1 : 0), maxHP);
+                            EmptyBeingHurt(allDmg);
                         }
                     }
                 }
+                //显示伤害数字
                 if (InitializePlayerSetting.GlobalPlayerSetting.isShowDamage && GetComponent<SubEmptyBody>() == null && FloatingDmg)
                 {
                     GameObject fd = Instantiate(FloatingDmg, transform.position + Vector3.right * Random.Range(-0.8f, 0.8f), Quaternion.identity) as GameObject;
@@ -497,6 +533,7 @@ public class Empty : Pokemon
                 EmptySleepRemove();
 
             }
+            //回血
             else
             {
                 EmptyHp = Mathf.Clamp(EmptyHp - (int)(Dmage + SpDmage), (IsBeFalseSwipe ? 1 : 0), maxHP);
@@ -515,25 +552,118 @@ public class Empty : Pokemon
                 + "typeDef=" + typeDef + "  "
                 + "Type.TYPE[SkillType][(int)EmptyType01]=" + PokemonType.TYPE[SkillType][(int)EmptyType01] + "  "
                 + "Type.TYPE[SkillType][(int)EmptyType02]=" + PokemonType.TYPE[SkillType][(int)EmptyType02] + "  ");
+            //伤害调用UI
             if ((int)Dmage + (int)SpDmage > 0)
             {
-                if (!isCanHitAnimation && animator != null) { animator.SetTrigger("Hit"); }
+                //血量发生改变则调用动画 护盾改变不调用
+                if (BeforeHP != EmptyHp) {
+                    if (!isCanHitAnimation && animator != null) { animator.SetTrigger("Hit"); }
+                }
                 //Debug.Log((float)EmptyHp / (float)maxHP + "=" + (float)EmptyHp + "/" + (float)maxHP);
                 uIHealth.Per = (float)EmptyHp / (float)maxHP;
                 uIHealth.ChangeHpDown();
+                uIHealth.ShieldPer = (float)EmptyShield / (float)maxHP;
+                uIHealth.ChangeShieldDown();
             }
+            //回血调用UI
             else
             {
                 uIHealth.Per = (float)EmptyHp / (float)maxHP;
                 uIHealth.ChangeHpUp();
             }
-
+            //刀背打
             if (IsBeFalseSwipe)
             {
                 IsBeFalseSwipe = false;
             }
         }
     }
+
+
+
+
+
+    void EmptyBeingHurt(int allDmg)
+    {
+        //有护盾时扣除护盾
+        if (EmptyShield > 0)
+        {
+            int BeforeShield = EmptyShield;
+            EmptyShield = Mathf.Clamp(EmptyShield - allDmg, 0, BeforeShield);
+            if (EmptyShield <= 0 && GetComponent<SubEmptyBody>() == null)
+            {
+                if (EmptyBossLevel == emptyBossLevel.Boss || EmptyBossLevel == emptyBossLevel.EndBoss || EmptyBossLevel == emptyBossLevel.MiniBoss) {  }
+                else
+                {
+                    GameObject ShieldBreakEffect = PublicEffect.StaticPublicEffectList.ReturnAPublicEffect(3);
+                    GameObject shieldBreakEffect = Instantiate(ShieldBreakEffect, transform.position + Vector3.up * 0.5f, Quaternion.identity);
+                    shieldBreakEffect.SetActive(true);
+                }
+                //护盾标志破裂
+                //uIHealth.BreakShieldMark();
+                ShieldBreakEvent();
+            }
+        }
+        //无护盾时扣除生命值
+        else
+        {
+            EmptyHp = Mathf.Clamp(EmptyHp - allDmg, (IsBeFalseSwipe ? 1 : 0), maxHP);
+        }
+    }
+
+    public void GetShield(int point)
+    {
+        //当前护盾为0 且护盾增加值大于0 获得ui护盾标志
+        //if (EmptyShield <= 0 && point > 0 )
+        //{
+        //    uIHealth.GetShieldMark();
+        //}
+
+        point = Mathf.Clamp(point, 0, maxHP);
+        EmptyShield += point;
+        uIHealth.ShieldPer = (float)EmptyShield / (float)maxHP;
+        //Debug.Log(uIHealth.ShieldPer);
+        uIHealth.ChangeShieldUp();
+        if (subEmptyBodyList.Count != 0)
+        {
+            for (int i = 0; i < subEmptyBodyList.Count; i++)
+            {
+                subEmptyBodyList[i].EmptyShield += point;
+                subEmptyBodyList[i].NowShield = subEmptyBodyList[i].EmptyShield;
+            }
+        }
+    } 
+
+    /// <summary>
+    /// 首次受伤时发生的事件
+    /// </summary>
+    public void FirstHurtEvent()
+    {
+        ishurt = true;
+        if (subEmptyBodyList.Count != 0)
+        {
+            for (int i = 0; i < subEmptyBodyList.Count; i++)
+            {
+                subEmptyBodyList[i].isHurt = true;
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 破盾事件
+    /// </summary>
+    public virtual void ShieldBreakEvent()
+    {
+        //非boss破盾时致盲
+        if (EmptyBossLevel != emptyBossLevel.Boss && EmptyBossLevel != emptyBossLevel.EndBoss)
+        {
+            Blind(1.5f , 10.0f);
+        }
+    }
+
+
+
     //====================敌人血量改变======================
 
 
@@ -551,8 +681,11 @@ public class Empty : Pokemon
     /// <param name="KnockOutPoint"></param>
     public void EmptyKnockOut(float KnockOutPoint)
     {
-        isHit = true;
-        KOPoint = KnockOutPoint;
+        //有护盾时不击退
+        if (EmptyShield <= 0) {
+            isHit = true;
+            KOPoint = KnockOutPoint;
+        }
     }
 
     /// <summary>

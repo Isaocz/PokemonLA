@@ -70,6 +70,10 @@ public class Haunter : Empty
         IdleEnter(TIME_OF_IDLE_START);
         //Éè¶¨×´Ì¬ÐòÁÐºÅ
         StateIndex = 0;
+
+
+
+        StartOverEvent();
     }
 
 

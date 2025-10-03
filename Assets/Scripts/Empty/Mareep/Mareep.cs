@@ -42,7 +42,10 @@ public class Mareep : Empty
         LastPostion = transform.position;
         Direction = RandomDirection();
         isEscapeTimer = 200;
-        
+
+
+
+        StartOverEvent();
     }
 
     public void EscapOver()

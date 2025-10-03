@@ -35,6 +35,10 @@ public class Woobat : Empty
         Charm = transform.GetChild(4).GetComponent<CharmWoobat>();
         Charm.ParentEmpty = this;
         isCharmPlaying = true;
+
+
+
+        StartOverEvent();
     }
 
 

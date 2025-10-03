@@ -33,6 +33,10 @@ public class Druddigon : Empty
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
         AI = transform.GetComponent<MyAstarAI>();
+
+
+
+        StartOverEvent();
     }
 
 

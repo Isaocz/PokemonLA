@@ -31,6 +31,10 @@ public class Drifloon : Empty
         rigidbody2D = GetComponent<Rigidbody2D>();
         direction = InitialDirection;
         IsReflect = true;
+
+
+
+        StartOverEvent();
     }
 
 

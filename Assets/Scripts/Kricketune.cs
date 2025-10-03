@@ -61,6 +61,10 @@ public class Kricketune : Empty
         ParentRoom = transform.parent.parent.GetComponent<Room>();
         isMoveDFlip = 1;
         SingSongPer = 1;
+
+
+
+        StartOverEvent();
     }
 
 

@@ -15,6 +15,9 @@ public class WaveCrash : Skill
 
     float HHPSpeed;
 
+
+    int SelfDmage;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -95,15 +98,16 @@ public class WaveCrash : Skill
                 if (target != null)
                 {
                     Instantiate(TackleBlast, target.transform.position, Quaternion.identity).GetComponent<DestoryState>().RemoveChild();
-                    int BeforeHP = target.EmptyHp;
+                    int BeforeHP = target.EmptyHp + target.EmptyShield;
                     HitAndKo(target);
-                    int DmageHP = Mathf.Clamp( target.EmptyHp - BeforeHP ,  0 , 10000);
+                    int DmageHP = Mathf.Clamp(BeforeHP - (target.EmptyHp + target.EmptyShield) ,  0 , 10000);
                     float Alpha = 3.0f;
                     if (SkillFrom == 2 && target.isSpeedChange)
                     {
                         Alpha = 10.0f;
                     }
-                    Pokemon.PokemonHpChange(null , player.gameObject , Damage / Alpha, 0 , 0 , PokemonType.TypeEnum.IgnoreType);
+                    SelfDmage = (int)((float)DmageHP / (float)Alpha);
+                    //Pokemon.PokemonHpChange(null , player.gameObject , 10, 0 , 0 , PokemonType.TypeEnum.IgnoreType);
 
                 }
             }
@@ -114,5 +118,6 @@ public class WaveCrash : Skill
     private void OnDestroy()
     {
         player.isInvincibleAlways = false;
+        Pokemon.PokemonHpChange(null, player.gameObject, SelfDmage, 0, 0, PokemonType.TypeEnum.IgnoreType);
     }
 }

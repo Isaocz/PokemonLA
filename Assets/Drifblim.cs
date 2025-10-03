@@ -36,6 +36,10 @@ public class Drifblim : Empty
         ShadowBallCD = 0f;
         IsShadowBall = false;
         IsReflect = true;
+
+
+
+        StartOverEvent();
     }
 
     void Update()

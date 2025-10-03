@@ -392,6 +392,7 @@ public class Skill : MonoBehaviour
             {
                 float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1) * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
                 if (player != null) {
+                    int EmptyBeforeHPandSHIELD = target.EmptyHp + target.EmptyShield;
                     int EmptyBeforeHP = target.EmptyHp;
                     if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
                     {
@@ -420,7 +421,7 @@ public class Skill : MonoBehaviour
                     }
                     //´Ö²ÚÆ¤·ô
                     if (target.Abillity == Empty.EmptyAbillity.RoughSkin && _mTool.ContainsSkillTag(SkillTag, SkillTagEnum.½Ó´¥Àà)) {
-                        Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHP - target.EmptyHp) / 4, 1, 10000), 0, 0, PokemonType.TypeEnum.IgnoreType); 
+                        Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHPandSHIELD - (target.EmptyHp+ target.EmptyShield)) / 4, 1, 10000), 0, 0, PokemonType.TypeEnum.IgnoreType); 
                     }
                     //±ù¶³Ö®Çû
                     if (target.Abillity == Empty.EmptyAbillity.IceBody && _mTool.ContainsSkillTag(SkillTag, SkillTagEnum.½Ó´¥Àà)){
@@ -448,6 +449,7 @@ public class Skill : MonoBehaviour
 
                 if (player != null)
                 {
+                    int EmptyBeforeHPandSHIELD = target.EmptyHp + target.EmptyShield;
                     int EmptyBeforeHP = target.EmptyHp;
                     if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
                     {
@@ -481,7 +483,7 @@ public class Skill : MonoBehaviour
                     }
                     //´Ö²ÚÆ¤·ô
                     if (target.Abillity == Empty.EmptyAbillity.RoughSkin && _mTool.ContainsSkillTag(SkillTag, SkillTagEnum.½Ó´¥Àà)) {
-                        Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHP - target.EmptyHp) / 4 , 1 , 10000), 0, 0, PokemonType.TypeEnum.IgnoreType); 
+                        Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHPandSHIELD - (target.EmptyHp + target.EmptyShield)) / 4 , 1 , 10000), 0, 0, PokemonType.TypeEnum.IgnoreType); 
                     }
                     //±ù¶³Ö®Çû
                     if (target.Abillity == Empty.EmptyAbillity.IceBody && _mTool.ContainsSkillTag(SkillTag, SkillTagEnum.½Ó´¥Àà))

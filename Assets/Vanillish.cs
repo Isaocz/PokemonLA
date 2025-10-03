@@ -99,6 +99,10 @@ public class Vanillish : Empty
         SetDirector(Director);
         //ÉèÖÃËÑË÷×´Ì¬ÎªÕæ
         //NeedSearchParent = true;
+
+
+
+        StartOverEvent();
     }
 
 

@@ -46,6 +46,10 @@ public class Kirlia : Empty
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator.SetFloat("LookX", -1);
         animator.SetFloat("LookY", -1);
+
+
+
+        StartOverEvent();
     }
 
 

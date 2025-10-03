@@ -38,7 +38,10 @@ public class Gastly : Empty
         Direction = Vector2.up;
         AtackTimer = 80;
 
-        
+
+
+
+        StartOverEvent();
 
     }
 

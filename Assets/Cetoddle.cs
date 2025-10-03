@@ -69,6 +69,9 @@ public class Cetoddle : Empty
         animator.SetFloat("LookY", -1.0f);
 
 
+
+        StartOverEvent();
+
     }
 
 

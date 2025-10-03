@@ -80,6 +80,10 @@ public class Masquerain : Empty
         // });
 
         // ChangeFaceTo(FACE_TO.BL);
+
+
+
+        StartOverEvent();
     }
 
     void Update()

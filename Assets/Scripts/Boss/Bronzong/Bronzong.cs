@@ -106,6 +106,9 @@ public class Bronzong : Empty
         PS1 = transform.GetChild(3).GetChild(0).GetChild(1).GetChild(0).GetComponent<ParticleSystem>();
         PS2 = transform.GetChild(3).GetChild(0).GetChild(1).GetChild(1).GetComponent<ParticleSystem>();
 
+
+
+        StartOverEvent();
     }
 
 

@@ -36,6 +36,10 @@ public class Mawile : Empty
         animator.SetFloat("LookX" , Director.x);
         animator.SetFloat("LookY" , Director.y);
         SweetScentTimer = 0;
+
+
+
+        StartOverEvent();
     }
 
 

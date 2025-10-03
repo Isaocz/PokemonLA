@@ -38,6 +38,10 @@ public class Kricketot : Empty
             DefChange(-2, 0.0f);
             SpDChange(-2, 0.0f);
         }
+
+
+
+        StartOverEvent();
     }
 
 

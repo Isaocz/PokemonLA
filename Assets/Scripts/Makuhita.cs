@@ -66,6 +66,10 @@ public class Makuhita : Empty
         MoveDir = RandomDir();
         animator.SetFloat("LookX", MoveDir.x);
         animator.SetFloat("LookY", MoveDir.y);
+
+
+
+        StartOverEvent();
     }
 
 

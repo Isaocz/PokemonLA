@@ -40,6 +40,10 @@ public class Bellibolt : Empty
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
         MaskAnimator = ThunderMask.transform.parent.GetComponent<Animator>();
+
+
+
+        StartOverEvent();
     }
 
 

@@ -82,6 +82,10 @@ public class Trapinch : Empty
 
         lastUseBite = -cdBite;
         lastUseSands = -cdSands;
+
+
+
+        StartOverEvent();
     }
 
     // Update is called once per frame

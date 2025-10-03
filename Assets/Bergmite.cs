@@ -83,6 +83,9 @@ public class Bergmite : Empty
         StopFrozenMistPS();
 
 
+
+
+        StartOverEvent();
     }
 
 

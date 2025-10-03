@@ -44,9 +44,9 @@ public class DoubleEdge : Skill
             Empty target = other.GetComponent<Empty>();
             if (target != null) {
                 Instantiate(TackleBlast, target.transform.position, Quaternion.identity);
-                int Dmage = target.EmptyHp;
+                int Dmage = target.EmptyHp + target.EmptyShield;
                 HitAndKo(target);
-                Dmage -= target.EmptyHp;
+                Dmage -= target.EmptyHp + target.EmptyShield;
                 DoneDmage += Dmage;
                 if(SkillFrom == 2 && target.EmptyHp <= 0 && !isHPPoinrPlus)
                 {

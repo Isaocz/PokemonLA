@@ -165,6 +165,11 @@ public class Onix : Empty
         SetNowDirAndSubBodyPos(Director);
         IHShinePS = transform.GetChild(3).GetChild(0).GetChild(0).GetChild(0).GetChild(2).GetComponent<ParticleSystem>();
         RemoveIronHeadMode();
+
+
+
+
+        StartOverEvent();
     }
 
 
@@ -296,7 +301,7 @@ public class Onix : Empty
                         break;
                     case State.BodyPress:
                         BodyPressFloatTimer += Time.deltaTime;
-                        Debug.Log(BodyPressFloatTimer);
+                        //Debug.Log(BodyPressFloatTimer);
                         if (!isBodyPressIns)
                         {
 

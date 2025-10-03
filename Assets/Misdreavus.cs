@@ -50,6 +50,10 @@ public class Misdreavus : Empty
         rigidbody2D = GetComponent<Rigidbody2D>();
 
         LastPosition = transform.position;
+
+
+
+        StartOverEvent();
     }
 
     // Update is called once per frame

@@ -33,6 +33,10 @@ public class Indeedee : Empty
 
         ProtectAnimation = PublicEffect.StaticPublicEffectList.ReturnAPublicEffect(1);
         Invoke("ProtectOtherEmpty" , 0.01f);
+
+
+
+        StartOverEvent();
     }
 
 

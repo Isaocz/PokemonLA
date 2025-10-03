@@ -2262,7 +2262,10 @@ public class Pokemon : MonoBehaviour
 
                 //触发特性女王的威严
                 if ((PlayerAttacked != null && PlayerAttacked.PlayerAbility == PlayerControler.PlayerAbilityList.女王的威严) && !PlayerAttacked.isSleepDone &&
-                    (Attacker != null && AttackerEmpty != null &&  ((AttackerSubEmpty != null && AttackerSubEmpty.ParentEmpty.EmptyHp == AttackerSubEmpty.ParentEmpty.maxHP ) || (AttackerSubEmpty == null && AttackerEmpty.EmptyHp == AttackerEmpty.maxHP))  )
+                        (Attacker != null && AttackerEmpty != null &&  
+                                ((AttackerSubEmpty != null && !AttackerSubEmpty.ParentEmpty.isHurt) ||
+                                (AttackerSubEmpty == null && !AttackerEmpty.isHurt))
+                        )
                     )
                 {
 
@@ -2539,8 +2542,11 @@ public class Pokemon : MonoBehaviour
                 if (Attacker != null && Attacker.GetComponent<SubEmptyBody>()) { AttackerSubEmpty = Attacker.GetComponent<SubEmptyBody>(); }
 
                 //触发特性女王的威严
-                if ((PlayerAttacked != null && PlayerAttacked.PlayerAbility == PlayerControler.PlayerAbilityList.女王的威严) &&
-                    (Attacker != null && AttackerEmpty != null && ((AttackerSubEmpty != null && AttackerSubEmpty.ParentEmpty.EmptyHp == AttackerSubEmpty.ParentEmpty.maxHP) || (AttackerSubEmpty == null && AttackerEmpty.EmptyHp == AttackerEmpty.maxHP)))
+                if ((PlayerAttacked != null && PlayerAttacked.PlayerAbility == PlayerControler.PlayerAbilityList.女王的威严) && !PlayerAttacked.isSleepDone &&
+                        (Attacker != null && AttackerEmpty != null &&
+                                ((AttackerSubEmpty != null && !AttackerSubEmpty.ParentEmpty.isHurt) ||
+                                (AttackerSubEmpty == null && !AttackerEmpty.isHurt))
+                        )
                     )
                 {
 

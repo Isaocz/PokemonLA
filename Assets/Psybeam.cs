@@ -108,10 +108,11 @@ public class Psybeam : Skill
             if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Empty")
             {
                 Empty target = EndRay.collider.GetComponent<Empty>();
-                int BeforeHp = target.EmptyHp;
+                int BeforeHp = target.EmptyHp + target.EmptyShield;
                 HitAndKo(target);
                 //如果成功造成伤害计算特效
-                if (BeforeHp - target.EmptyHp > 0) {
+                Debug.Log(BeforeHp - (target.EmptyHp + target.EmptyShield));
+                if (BeforeHp - (target.EmptyHp + target.EmptyShield) > 0) {
                     if (SkillFrom == 2)
                     {
                         if (target.isEmptyConfusionDone)

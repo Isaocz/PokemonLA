@@ -66,6 +66,10 @@ public class Exeggcute : Empty
         objects = new List<GameObject>();
 
         lastUseBomb = -cdBomb;
+
+
+
+        StartOverEvent();
     }
 
     // Update is called once per frame
