@@ -343,6 +343,8 @@ public class CreatEmptyStateMachineGeneratorWindow : EditorWindow
     //==========================有副状态的状态机=============================
 
 
+    //todo 添加check 是否所有副状态都和主状态匹配
+
     /// <summary>
     /// 副状态机结构
     /// </summary>

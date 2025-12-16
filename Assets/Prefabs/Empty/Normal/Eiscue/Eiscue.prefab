@@ -237,7 +237,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3415233130773382297}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -334,7 +334,7 @@ MonoBehaviour:
   skinRenderers: []
   animator: {fileID: 0}
   playerUIState: {fileID: 3871355681308194206}
-  speed: 2
+  speed: 4
   isEmptyFrozenDone: 0
   isFrozenDef: 1
   isFearDone: 0
@@ -385,6 +385,7 @@ MonoBehaviour:
   isConfusionDone: 0
   isConfusionStart: 0
   ConfusionPointFloat: 0
+  EmptyCD: 200875
   Knock: 5
   EmptyHp: 0
   maxHP: 0
@@ -425,6 +426,10 @@ MonoBehaviour:
   ParentEmptyByChild: {fileID: 0}
   partnerEmpty: {fileID: 0}
   positionInPartnership: 2
+  DefEmptyPointNotFrozen: 0
+  SpDEmptyPointNotFrozen: 0
+  eiscueIceShard: {fileID: 8270096138430392811, guid: 1c7a7afb0cf4bf4499601b597c2d540a, type: 3}
+  eiscueFrozenMist: {fileID: 2329985706518010525, guid: a50bebcf28a022b41b67b5a59bf04c5e, type: 3}
 --- !u!1 &4230548580177135354
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,6 +588,10 @@ PrefabInstance:
     - target: {fileID: 4316564553461515562, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
       propertyPath: m_Name
       value: EmptyUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 5529952408392898805, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7202884177668870445, guid: 77b34dc3c7e32af4cbcf8a3430f1c953, type: 3}
       propertyPath: m_Pivot.x

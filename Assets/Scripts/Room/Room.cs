@@ -172,6 +172,16 @@ public class Room : MonoBehaviour
             isVisit = false;
             if (RoomTag == 0 || RoomTag == 3)
             {
+                //重置所有敌人
+                List<Empty> eList = _mTool.GetAllFromTransform<Empty>(transform.GetChild(3).transform);
+                foreach (Empty e in eList)
+                {
+                    Empty e2 = Instantiate(PublicEmptyList.PrefabsEmptyList.FoundEmpty(e.EmptyCD), e.transform.position, Quaternion.identity, transform.GetChild(3).transform );
+                    e2.StoreSaveData(e);
+                    Destroy(e.gameObject);
+                }
+
+                //重置Empty File
                 transform.GetChild(3).gameObject.SetActive(false);
             }
         }

@@ -8,6 +8,41 @@ public class EnumMultiAttribute : PropertyAttribute { }
 public class Empty : Pokemon
 {
 
+    /// <summary>
+    /// 敌人识别码
+    /// </summary>
+    public string EmptyCD;
+
+    /// <summary>
+    /// 切换房间时保存的等级
+    /// </summary>
+    public int SaveLevel
+    {
+        get { return saveLevel; }
+        set { saveLevel = value; }
+    }
+    int saveLevel = -1;
+
+    /// <summary>
+    /// 切换房间时保存的血量
+    /// </summary>
+    public int SaveHp
+    {
+        get { return saveHp; }
+        set { saveHp = value; }
+    }
+    int saveHp = -1;
+
+    /// <summary>
+    /// 切换房间时保存的 护盾
+    /// </summary>
+    public int SaveShield
+    {
+        get { return saveShield; }
+        set { saveShield = value; }
+    }
+    int saveShield = -1;
+
 
     //攻击到玩家时造成的击退值声明4个变量，一个代表对玩家造成的伤害，一个代表击退值，一个表示移动的距离,一个表示移动速度，一个表示初始血量
     public float Knock = 5f;
@@ -347,6 +382,8 @@ public class Empty : Pokemon
         {
             OutPut = Mathf.Clamp(player.Level + (player.playerData.IsPassiveGetList[29] ? 5 : 0) + (Random.Range(-2, 2) ), (player.playerData.IsPassiveGetList[29] ? 10 : 5), 100);
         }
+        //读取继承数据
+        if (saveLevel != -1) { OutPut = saveLevel;  }
         return OutPut;
     }
 
@@ -408,8 +445,36 @@ public class Empty : Pokemon
     /// </summary>
     public virtual void StartOverEvent()
     {
-        GetShield((int)(maxHP / 3.0f));
+        //GetShield((int)(maxHP / 3.0f));
+
+        //如果存在继承数据 继承
+        if (saveHp != -1 && saveShield != -1)
+        {
+            if (saveHp < maxHP)
+            {
+                EmptyHp = saveHp;
+                uIHealth.Per = (float)EmptyHp / (float)maxHP;
+                uIHealth.ChangeHpDown();
+            }
+            if (saveShield > EmptyShield)
+            {
+                GetShield(saveShield - EmptyShield);
+            }
+        }
     }
+
+
+    /// <summary>
+    /// 存储预载数据
+    /// </summary>
+    /// <param name="e"></param>
+    public void StoreSaveData( Empty e)
+    {
+        SaveLevel = e.Emptylevel;
+        SaveHp = e.EmptyHp;
+        SaveShield = e.EmptyShield;
+    }
+
 
     //=============================初始化敌人数据================================
 
@@ -619,7 +684,7 @@ public class Empty : Pokemon
         //    uIHealth.GetShieldMark();
         //}
 
-        point = Mathf.Clamp(point, 0, maxHP);
+        point = Mathf.Clamp(point, 0, maxHP - EmptyShield);
         EmptyShield += point;
         uIHealth.ShieldPer = (float)EmptyShield / (float)maxHP;
         //Debug.Log(uIHealth.ShieldPer);
@@ -1320,7 +1385,10 @@ public class Empty : Pokemon
     /// <returns></returns>
     public bool isThisPointInRoom(Vector3 P)
     {
-        if(Mathf.Abs(P.x) <= 12.2f && Mathf.Abs(P.y) <= 7.1f)
+        if( Mathf.Abs(P.x) >= parentRoom.EmptyFile().transform.position.x + parentRoom.RoomSize[2] &&
+            Mathf.Abs(P.x) <= parentRoom.EmptyFile().transform.position.x + parentRoom.RoomSize[3] &&
+            Mathf.Abs(P.y) >= parentRoom.EmptyFile().transform.position.y + parentRoom.RoomSize[1] &&
+            Mathf.Abs(P.y) <= parentRoom.EmptyFile().transform.position.y + parentRoom.RoomSize[0])
         {
             return true;
         }
@@ -1902,6 +1970,7 @@ public class Empty : Pokemon
             for (int i = 0; i < TList.Count; i++)
             {
                 T t = TList[i];
+                //Debug.Log(t.gameObject.name);
                 if (t.transform != this.transform)
                 {
                     T ct = t.GetComponent<T>();

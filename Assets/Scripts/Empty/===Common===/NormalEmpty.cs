@@ -9,6 +9,13 @@ public class NormalEmpty : Empty
     /// </summary>
     Vector2 Director;
 
+    /**
+    /// <summary>
+    /// 计算当前速度,朝向时，采用的上一时间单位的位置坐标,通过携程执行
+    /// </summary>
+    Vector3 LastPosition;
+    **/
+
     /// <summary>
     /// 敌人的目标的坐标
     /// </summary>
@@ -50,8 +57,8 @@ public class NormalEmpty : Empty
     /// </summary>
     private static Dictionary<MainState, SubState[]> StateMap = new()
     {
-        { MainState.TODO, new[] { SubState.TODO,... },
-        { MainState.TODO, new[] { SubState.TODO,... },
+        { MainState.TODO, new[] { SubState.TODO,... }},
+        { MainState.TODO, new[] { SubState.TODO,... }},
         ....
     };
     **/
@@ -78,6 +85,8 @@ public class NormalEmpty : Empty
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
 
+        //启动计算方向携程
+        //StartCoroutine(CheckLook());
 
 
         StartOverEvent();
@@ -140,7 +149,7 @@ public class NormalEmpty : Empty
     /**
     //■■■■■■■■■■■■■■■■■■■■共通■■■■■■■■■■■■■■■■■■■■■■
     /// <summary>
-    /// 设置多多冰的动画机方向
+    /// 设置敌人的动画机方向
     /// </summary>
     void SetDirector(Vector2 director)
     {
@@ -148,6 +157,60 @@ public class NormalEmpty : Empty
         animator.SetFloat("LookX", director.x);
         animator.SetFloat("LookY", director.y);
     }
+
+
+    /// <summary>
+    /// 检查是否在移动和朝向
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator CheckLook()
+    {
+        while (true)
+        {
+            //一般状态时更改速度和朝向
+            if (!isDie && !isBorn && !isSleepDone && !isCanNotMoveWhenParalysis && !isEmptyFrozenDone && !isSilence && 更多条件 )
+            {
+                //根据当前位置和上一次FixedUpdate调用时的位置差计算速度
+                animator.SetFloat("Speed", Mathf.Abs((transform.position - LastPosition).magnitude));
+                //根据当前位置和上一次FixedUpdate调用时的位置差计算朝向 并传给动画组件
+                Director = _mTool.MainVector2((transform.position - LastPosition));
+                animator.SetFloat("LookX", Director.x);
+                animator.SetFloat("LookY", Director.y);
+                //Debug.Log(Director);
+                //重置位置
+                LastPosition = transform.position;
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+
+    }
+
+
+
+    /// <summary>
+    /// 刚体敌人在房间限制内移动
+    /// </summary>
+    /// <param name="dir">移动方向</param>
+    /// <param name="Speed">移动速度</param>
+    /// <param name="SpeedAlpha">移动速度的加成系数（乘算）</param>
+    /// <param name="RoomUpAlpha">房间上边界的限制系数</param>
+    /// <param name="RoomDownAlpha">房间下边界的限制系数</param>
+    /// <param name="RoomLeftAlpha">房间右边界的限制系数</param>
+    /// <param name="RoomRightAlpha">房间左边界的限制系数</param>
+    public void MoveBySpeedAndDir(Vector2 dir, float Speed, float SpeedAlpha, float RoomUpAlpha, float RoomDownAlpha, float RoomLeftAlpha, float RoomRightAlpha)
+    {
+
+        rigidbody2D.position = new Vector2(
+            Mathf.Clamp(rigidbody2D.position.x
+                + (float)dir.x * Time.deltaTime * Speed * SpeedAlpha,                    //方向*速度
+            ParentPokemonRoom.RoomSize[2] - RoomLeftAlpha + transform.parent.position.x, //最小值
+            ParentPokemonRoom.RoomSize[3] + RoomRightAlpha + transform.parent.position.x),//最大值
+            Mathf.Clamp(rigidbody2D.position.y
+                + (float)dir.y * Time.deltaTime * Speed * SpeedAlpha,                     //方向*速度 
+            ParentPokemonRoom.RoomSize[1] - RoomDownAlpha + transform.parent.position.y,  //最小值
+            ParentPokemonRoom.RoomSize[0] + RoomUpAlpha + transform.parent.position.y));//最大值
+    }
+    
 
 
     //InsertSubStateChange
@@ -171,6 +234,8 @@ public class NormalEmpty : Empty
 
     //■■■■■■■■■■■■■■■■■■■■状态机部分■■■■■■■■■■■■■■■■■■■■■■
     **/
+
+
 
 
 

@@ -86,23 +86,25 @@ public class EmptyTeamManger : MonoBehaviour
     public void EmptyTeamFixedUpdate()
     {
         //Debug.Log("fixedupdate");
-        int c = CheckQueueHead();
+        if (TeamQueue.Count != 0) {
+            int c = CheckQueueHead();
 
-        //如果连续检查 但排头不符合条件 增加计时器
-        if (c == 1)
-        {
-            CheckFaildTimer += Time.deltaTime;
-        }
-        //反之清零
-        else { CheckFaildTimer = 0.0f; }
-
-        //如果连续检查失败 则跳过排头
-        if (CheckFaildTimer >= TIMECheckFaild)
-        {
-            if (TeamQueue.Count > 1)
+            //如果连续检查 但排头不符合条件 增加计时器
+            if (c == 1)
             {
-                Empty JumpEmpty = TeamQueue.Dequeue();
-                TeamQueue.Enqueue(JumpEmpty);
+                CheckFaildTimer += Time.deltaTime;
+            }
+            //反之清零
+            else { CheckFaildTimer = 0.0f; }
+
+            //如果连续检查失败 则跳过排头
+            if (CheckFaildTimer >= TIMECheckFaild)
+            {
+                if (TeamQueue.Count > 1)
+                {
+                    Empty JumpEmpty = TeamQueue.Dequeue();
+                    TeamQueue.Enqueue(JumpEmpty);
+                }
             }
         }
     }
@@ -164,7 +166,17 @@ public class EmptyTeamManger : MonoBehaviour
         if (NowState == MangerState.Normal && TeamQueue.Count != 0)
         {
             //排空
-            while (TeamQueue.Peek() == null) { TeamQueue.Dequeue(); }
+            //Debug.Log(TeamQueue.Count);
+            //Debug.Log((string.Join(", ", TeamQueue)));
+            Empty e = null;
+            while (TeamQueue.Count > 0 && TeamQueue.TryPeek(out e) && e == null)
+            {
+                TeamQueue.Dequeue();
+            }
+            if (TeamQueue.Count == 0) { return 0; }
+
+
+
             //如果排头符合启动小队操作的条件
             if (EmptyTeamActCondition(TeamQueue.Peek()))
             {

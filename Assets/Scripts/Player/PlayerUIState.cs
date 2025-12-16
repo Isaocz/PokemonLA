@@ -96,6 +96,12 @@ public class PlayerUIState : MonoBehaviour
     bool IsHaveItem;
 
 
+    /// <summary>
+    /// 子状态UI，会跟随主状态一起变化
+    /// </summary>
+    public List<PlayerUIState> ChildrenUIStateList = new List<PlayerUIState> { };
+
+
     public void InstanceObjWhenEvlo(PlayerUIState OtherState)
     {
         IsSpeedDown = OtherState.IsSpeedDown;
@@ -271,6 +277,12 @@ public class PlayerUIState : MonoBehaviour
                 break;
         }
         SortAbllityChangeMark();
+
+        _mTool.RemoveNullInList<PlayerUIState>(ChildrenUIStateList);
+        foreach (PlayerUIState ui in ChildrenUIStateList)
+        {
+            ui.StatePlus(StateNum);
+        }
     }
 
     /// <summary>
@@ -419,6 +431,12 @@ public class PlayerUIState : MonoBehaviour
                 break;
         }
         SortAbllityChangeMark();
+
+        _mTool.RemoveNullInList<PlayerUIState>(ChildrenUIStateList);
+        foreach (PlayerUIState ui in ChildrenUIStateList)
+        {
+            ui.AbllityChange(AbllityIndex , ChangeLevel);
+        }
     }
 
     /// <summary>
@@ -435,6 +453,12 @@ public class PlayerUIState : MonoBehaviour
         if (MoveSpeChangeObj != null) { Destroy(MoveSpeChangeObj.gameObject); MoveSpeChangeLevel = 0; }
         if (HpChangeObj != null) { Destroy(HpChangeObj.gameObject); HpChangeLevel = 0; }
         if (LuckChangeObj != null) { Destroy(LuckChangeObj.gameObject); LuckChangeLevel = 0; }
+
+        _mTool.RemoveNullInList<PlayerUIState>(ChildrenUIStateList);
+        foreach (PlayerUIState ui in ChildrenUIStateList)
+        {
+            ui.RemoveAllAbllityChangeMark();
+        }
     }
 
     /// <summary>
@@ -562,7 +586,14 @@ public class PlayerUIState : MonoBehaviour
 
         }
         SortAbllityChangeMark();
+
+        _mTool.RemoveNullInList<PlayerUIState>(ChildrenUIStateList);
+        foreach (PlayerUIState ui in ChildrenUIStateList)
+        {
+            ui.StateDestory(StateNum);
+        }
     }
+
 
     public void StateSlowUP(int StateNum, float Per)
     {
@@ -642,6 +673,17 @@ public class PlayerUIState : MonoBehaviour
                 break;
         }
         SortAbllityChangeMark();
+
+        _mTool.RemoveNullInList<PlayerUIState>(ChildrenUIStateList);
+        foreach (PlayerUIState ui in ChildrenUIStateList)
+        {
+            ui.StateSlowUP(StateNum , Per);
+        }
     }
+
+
+
+
+
 
 }

@@ -38,11 +38,14 @@ public class MyAstarAI : MonoBehaviour
             currentWaypoint = 0;
         }
     }
+
+    public float InfatuationDistence = 3.0f;
+
     public void Update()
     {
         if (!ParentEmpty.isSleepDone && !ParentEmpty.isCanNotMoveWhenParalysis)
         {
-            if (!ParentEmpty.isEmptyInfatuationDone || ParentEmpty.InfatuationForRangeRayCastEmpty(3) == null)
+            if (!ParentEmpty.isEmptyInfatuationDone || ParentEmpty.InfatuationForRangeRayCastEmpty(InfatuationDistence) == null)
             {
                 if (ParentEmpty.isSubsititue && ParentEmpty.SubsititueTarget != null)
                 {
@@ -61,7 +64,7 @@ public class MyAstarAI : MonoBehaviour
             else
             {
                 //Debug.Log(ParentEmpty.isEmptyInfatuationDone);
-                targetPosition = ParentEmpty.InfatuationForRangeRayCastEmpty(3).transform;
+                targetPosition = ParentEmpty.InfatuationForRangeRayCastEmpty(InfatuationDistence).transform;
                 RunTargetPosition = targetPosition.position;
                 
             }

@@ -304,6 +304,13 @@ public class _mTool : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// ÅÅ¿ÕÄ³¸öList
+    /// </summary>
+    public static void RemoveNullInList<T>(List<T> list) where T : UnityEngine.Object
+    {
+        list.RemoveAll(item => item == null);
+    }
 
 
 

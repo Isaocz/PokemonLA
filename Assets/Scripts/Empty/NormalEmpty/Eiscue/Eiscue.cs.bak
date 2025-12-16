@@ -39,6 +39,7 @@ public partial class Eiscue : Empty
     {
         Idle_Frozen,    //冰冻发呆
         Walk_Frozen,    //冰冻走路
+        Shake_Frozen,    //冰冻摇晃
         Idle_NotFrozen, //不冰冻发呆
     }
     SubState NowState;
@@ -50,7 +51,7 @@ public partial class Eiscue : Empty
     /// </summary>
     private static Dictionary<MainState, SubState[]> StateMap = new()
     {
-        { MainState.Frozen, new[] { SubState.Idle_Frozen, SubState.Walk_Frozen } },
+        { MainState.Frozen, new[] { SubState.Idle_Frozen, SubState.Walk_Frozen, SubState.Shake_Frozen } },
         { MainState.NotFrozen, new[] { SubState.Idle_NotFrozen } }
     };
 
@@ -125,12 +126,12 @@ public partial class Eiscue : Empty
     {
         if (!isEmptyInfatuationDone && other.transform.tag == ("Player"))//未被魅惑 且与玩家碰撞时
         {
-            EmptyTouchHit(other.gameObject);//触发触碰伤害
+            //EmptyTouchHit(other.gameObject);//触发触碰伤害
 
         }
         if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))//被魅惑 且与其他敌人碰撞时
         {
-            InfatuationEmptyTouchHit(other.gameObject);//触发魅惑后触碰伤害
+            //InfatuationEmptyTouchHit(other.gameObject);//触发魅惑后触碰伤害
         }
     }
 
@@ -159,7 +160,6 @@ public partial class Eiscue : Empty
 
     //InsertSubStateChange
 
-
     //■■■■■■■■■■■■■■■■■■■■共通■■■■■■■■■■■■■■■■■■■■■■
 
 
@@ -177,7 +177,6 @@ public partial class Eiscue : Empty
 
     //■■■■■■■■■■■■■■■■■■■■状态机部分■■■■■■■■■■■■■■■■■■■■■■
     //InsertStateFunction
-
 
     //■■■■■■■■■■■■■■■■■■■■状态机部分■■■■■■■■■■■■■■■■■■■■■■
 

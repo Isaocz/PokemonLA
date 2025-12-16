@@ -59,6 +59,8 @@ public class HaunterShadowBall : Projectile
         if (!isCanNotMove)
         {
             transform.GetComponent<Collider2D>().enabled = false;
+            Destroy(transform.GetChild(1).gameObject);
+
             animator.SetTrigger("Over");
             isCanNotMove = true;
 
@@ -101,8 +103,4 @@ public class HaunterShadowBall : Projectile
         }
     }
 
-    public void DestroySelf()
-    {
-        Destroy(gameObject);
-    }
 }

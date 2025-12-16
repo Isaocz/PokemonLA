@@ -61,6 +61,12 @@ public class EmptyHpBar : MonoBehaviour
     public GameObject ShieldMark;
 
 
+    /// <summary>
+    /// 子血条列表，会随父血条一起变化
+    /// </summary>
+    public List<EmptyHpBar> ChildrenHpBarList = new List<EmptyHpBar> { };
+
+
     //获得血条的初始长度，既最大长度
     // Start is called before the first frame update
     void Awake()
@@ -95,14 +101,14 @@ public class EmptyHpBar : MonoBehaviour
         //当调用血量上升函数时血条缓慢增加到指定值，反之缓慢减少到指定值
         if (isHpUp)
         {
-            timer -= ((ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.Boss || ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.EndBoss) ? 0.18f : 2.3f)*Time.deltaTime;
+            timer -= ((ParentEmpty != null && (ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.Boss || ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.EndBoss)) ? 0.18f : 2.3f)*Time.deltaTime;
             timer = Mathf.Clamp(timer, 0.0f, 1.0f);
             HpMask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalSize * (1.0f - timer));
             ChangeHpUp();
         }
         if (isHpDown)
         {
-            timer += ((ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.Boss || ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.EndBoss) ? 0.18f : 2.3f) * Time.deltaTime;
+            timer += ((ParentEmpty != null && (ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.Boss || ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.EndBoss)) ? 0.18f : 2.3f) * Time.deltaTime;
             timer = Mathf.Clamp(timer, 0.0f, 1.0f);
             HpMask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalSize * (1.0f - timer));
             ChangeHpDown();
@@ -112,14 +118,14 @@ public class EmptyHpBar : MonoBehaviour
         if (isShieldUp)
         {
             Debug.Log("UP");
-            shieldTimer -= ((ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.Boss || ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.EndBoss) ? 0.18f : 2.3f) * Time.deltaTime * SPEED_SHIELD_BAR_UP;
+            shieldTimer -= ((ParentEmpty != null && (ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.Boss || ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.EndBoss)) ? 0.18f : 2.3f) * Time.deltaTime * SPEED_SHIELD_BAR_UP;
             shieldTimer = Mathf.Clamp(shieldTimer, 0.0f, 1.0f);
             ShieldMask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalSize * (1.0f - shieldTimer));
             ChangeShieldUp();
         }
         if (isShieldDown)
         {
-            shieldTimer += ((ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.Boss || ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.EndBoss) ? 0.18f : 2.3f) * Time.deltaTime;
+            shieldTimer += ((ParentEmpty != null && (ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.Boss || ParentEmpty.EmptyBossLevel == Empty.emptyBossLevel.EndBoss)) ? 0.18f : 2.3f) * Time.deltaTime;
             shieldTimer = Mathf.Clamp(shieldTimer, 0.0f, 1.0f);
             ShieldMask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalSize * (1.0f - shieldTimer));
             ChangeShieldDown();
@@ -166,6 +172,15 @@ public class EmptyHpBar : MonoBehaviour
     //两个函数分别为表示表示血条增加和血条减少的函数
     public void ChangeHpUp()
     {
+        if (!isHpUp) 
+        {
+            _mTool.RemoveNullInList<EmptyHpBar>(ChildrenHpBarList);
+            foreach (EmptyHpBar ui in ChildrenHpBarList)
+            {
+                ui.Per = Per;
+                ui.ChangeHpUp();
+            }
+        }
         isHpUp = true;
         if (timer <= 1 - per)
         {
@@ -176,6 +191,15 @@ public class EmptyHpBar : MonoBehaviour
     }
     public void ChangeHpDown()
     {
+        if (!isHpDown)
+        {
+            _mTool.RemoveNullInList<EmptyHpBar>(ChildrenHpBarList);
+            foreach (EmptyHpBar ui in ChildrenHpBarList)
+            {
+                ui.Per = Per;
+                ui.ChangeHpDown();
+            }
+        }
         isHpDown = true;
         if (timer >= 1 - per)
         {
@@ -189,6 +213,15 @@ public class EmptyHpBar : MonoBehaviour
     //两个函数分别为表示表示护盾增加和血条减少的函数
     public void ChangeShieldUp()
     {
+        if (!isShieldUp)
+        {
+            _mTool.RemoveNullInList<EmptyHpBar>(ChildrenHpBarList);
+            foreach (EmptyHpBar ui in ChildrenHpBarList)
+            {
+                ui.ShieldPer = ShieldPer;
+                ui.ChangeShieldUp();
+            }
+        }
         isShieldUp = true;
         Debug.Log(isShieldUp + "+" + shieldTimer + "+" + shieldPer);
         if (shieldTimer <= 1 - shieldPer)
@@ -208,6 +241,15 @@ public class EmptyHpBar : MonoBehaviour
     }
     public void ChangeShieldDown()
     {
+        if (!isShieldDown)
+        {
+            _mTool.RemoveNullInList<EmptyHpBar>(ChildrenHpBarList);
+            foreach (EmptyHpBar ui in ChildrenHpBarList)
+            {
+                ui.ShieldPer = ShieldPer;
+                ui.ChangeShieldDown();
+            }
+        }
         isShieldDown = true;
         if (shieldTimer >= 1 - shieldPer)
         {
@@ -272,5 +314,22 @@ public class EmptyHpBar : MonoBehaviour
         isFading = true;
         fadeduration = FadeDuration;
         fadeReverse = Reverse;
+    }
+
+
+    /// <summary>
+    /// 设置子UI
+    /// </summary>
+    public void SetChildrenUI( EmptyHpBar ParentHP )
+    {
+        per = ParentHP.per;
+        timer = 1 - per;
+        timer = Mathf.Clamp(timer, 0.0f, 1.0f);
+        HpMask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalSize * (1.0f - timer));
+
+        shieldPer = ParentHP.shieldPer;
+        shieldTimer = 1 - shieldPer;
+        shieldTimer = Mathf.Clamp(shieldTimer, 0.0f, 1.0f);
+        shieldTimer = Mathf.Clamp(shieldTimer, 0.0f, 1.0f);
     }
 }

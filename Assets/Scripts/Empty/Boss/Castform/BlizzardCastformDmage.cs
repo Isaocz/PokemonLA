@@ -19,8 +19,8 @@ public class BlizzardCastformDmage : MonoBehaviour
         {
             // 对玩家造成伤害
             PlayerControler playerControler = other.GetComponent<PlayerControler>();
-            if (ParentEmpty != null) { Pokemon.PokemonHpChange(ParentEmpty.gameObject, other.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Electric); }
-            else { Pokemon.PokemonHpChange(null, other.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Electric); }
+            if (ParentEmpty != null) { Pokemon.PokemonHpChange(ParentEmpty.gameObject, other.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Ice); }
+            else { Pokemon.PokemonHpChange(null, other.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Ice); }
             if (playerControler != null)
             {
                 playerControler.KnockOutPoint = 6.5f;

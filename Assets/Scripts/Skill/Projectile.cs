@@ -17,7 +17,10 @@ public class Projectile : MonoBehaviour
     public int Dmage;
     public int SpDmage;
     public PokemonType.TypeEnum ProType;
-    
+
+    protected float _MaxDistence;
+
+
     // Start is called before the first frame update
 
 
@@ -25,6 +28,7 @@ public class Projectile : MonoBehaviour
     {
         BornPosition = transform.position;
         if (GetComponent<SpriteRenderer>() != null) { spriteRenderer = GetComponent<SpriteRenderer>(); }
+        else { spriteRenderer = GetComponentInChildren<SpriteRenderer>(); }
         if (GetComponent<Rigidbody2D>() != null) { rigidbody2D = GetComponent<Rigidbody2D>(); }
     }
 
@@ -43,6 +47,11 @@ public class Projectile : MonoBehaviour
             }
 
         }
+    }
+
+    public void SetMaxDistence(float dis)
+    {
+        _MaxDistence = dis;
     }
 
 

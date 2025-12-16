@@ -20,6 +20,24 @@ public partial class Eiscue : Empty
     Vector2 TargetPosition;
 
 
+    /// <summary>
+    /// 未冰冻状态的防御和特防种族值
+    /// </summary>
+    public int DefEmptyPointNotFrozen;
+    public int SpDEmptyPointNotFrozen;
+
+
+    //冰企鹅的冰砾
+    public EiscueIceShard eiscueIceShard;
+
+    //冰企鹅的冰雾
+    public EiscueFrozenMist eiscueFrozenMist;
+
+
+
+
+
+    //==============================状态机枚举===================================
 
     /// <summary>
     /// 主状态
@@ -39,6 +57,7 @@ public partial class Eiscue : Empty
     {
         Idle_Frozen,    //冰冻发呆
         Walk_Frozen,    //冰冻走路
+        Shake_Frozen,    //冰冻摇晃
         Idle_NotFrozen, //不冰冻发呆
     }
     SubState NowState;
@@ -50,11 +69,11 @@ public partial class Eiscue : Empty
     /// </summary>
     private static Dictionary<MainState, SubState[]> StateMap = new()
     {
-        { MainState.Frozen, new[] { SubState.Idle_Frozen, SubState.Walk_Frozen } },
+        { MainState.Frozen, new[] { SubState.Idle_Frozen, SubState.Walk_Frozen, SubState.Shake_Frozen } },
         { MainState.NotFrozen, new[] { SubState.Idle_NotFrozen } }
     };
 
-
+    //==============================状态机枚举===================================
 
 
 
@@ -77,7 +96,6 @@ public partial class Eiscue : Empty
         //获取刚体目标 动画管理者目标 并让刚体的初始x坐标带入FirstX中
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
-
 
 
         StartOverEvent();
@@ -105,8 +123,9 @@ public partial class Eiscue : Empty
                 //●主状态：【冰冻】状态
                 case MainState.Frozen:
                     // 当处于冰冻 睡眠 致盲 麻痹状态时主状态【冰冻】停运
-                    if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis) /* TODO【冰冻】状态停运的额外条件 */
+                    if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis && !isFearDone) /* TODO【冰冻】状态停运的额外条件 */
                     {
+                        animator.ResetTrigger("Sleep");
                         //判断副状态
                         switch (NowState)
                         {
@@ -116,25 +135,62 @@ public partial class Eiscue : Empty
                                 if (Idle_FrozenTimer <= 0)         //计时器时间到时间，结束【冰冻发呆】状态
                                 {
                                     Idle_FrozenOver();
-                                    //TODO添加下一个状态的开始方法
+                                    Walk_FrozenStart(TIME_WALK_FROZEN);
                                 }
                                 break;
                             //【冰冻走路】状态
                             case SubState.Walk_Frozen:
                                 Walk_FrozenTimer -= Time.deltaTime;//【冰冻走路】计时器时间减少
+                                if ( isWalkMoving )
+                                {
+                                    //移动
+                                    rigidbody2D.position = new Vector2(
+                                        Mathf.Clamp(rigidbody2D.position.x
+                                            + (float)MoveVector.x * Time.deltaTime * speed ,       //方向*速度
+                                        ParentPokemonRoom.RoomSize[2] - 0.0f + ParentPokemonRoom.transform.position.x, //最小值
+                                        ParentPokemonRoom.RoomSize[3] + 0.0f + ParentPokemonRoom.transform.position.x),//最大值
+                                        Mathf.Clamp(rigidbody2D.position.y
+                                            + (float)MoveVector.y * Time.deltaTime * speed ,        //方向*速度 
+                                        ParentPokemonRoom.RoomSize[1] - 0.0f + ParentPokemonRoom.transform.position.y,  //最小值
+                                        ParentPokemonRoom.RoomSize[0] + 0.0f + ParentPokemonRoom.transform.position.y));//最大值
+                                }
                                 if (Walk_FrozenTimer <= 0)         //计时器时间到时间，结束【冰冻走路】状态
                                 {
                                     Walk_FrozenOver();
-                                    //TODO添加下一个状态的开始方法
+                                    Shake_FrozenStart();
                                 }
                                 break;
+                            //【冰冻摇晃】状态
+                            case SubState.Shake_Frozen:
+                                //Shake_FrozenTimer -= Time.deltaTime;//【冰冻摇晃】计时器时间减少
+                                //if (Shake_FrozenTimer <= 0)         //计时器时间到时间，结束【冰冻摇晃】状态
+                                //{
+                                //    Shake_FrozenOver();
+                                    //TODO添加下一个状态的开始方法
+                                //}
+                                break;
                         }
+                    }
+
+                    if ( ( isSleepDone || isCanNotMoveWhenParalysis || isSilence || isFearDone ) && NowState != SubState.Idle_Frozen )
+                    {
+                        animator.SetTrigger("Sleep");
+                        switch (NowState)
+                        {
+                            case SubState.Walk_Frozen:
+                                Walk_FrozenOver();
+                                break;
+                            case SubState.Shake_Frozen:
+                                Shake_FrozenOver();
+                                break;
+                        }
+                        Idle_FrozenStart(TIME_IDLE_FROZEN_SLEEPAWAKE);
                     }
                     break;
                 //●主状态：【不冰冻】状态
                 case MainState.NotFrozen:
                     // 当处于冰冻 睡眠 致盲 麻痹状态时主状态【不冰冻】停运
-                    if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis) /* TODO【不冰冻】状态停运的额外条件 */
+                    if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis && !isFearDone) /* TODO【不冰冻】状态停运的额外条件 */
                     {
                         //判断副状态
                         switch (NowState)
@@ -146,6 +202,7 @@ public partial class Eiscue : Empty
                                 {
                                     Idle_NotFrozenOver();
                                     //TODO添加下一个状态的开始方法
+                                    FrozenHead();
                                 }
                                 break;
                         }
@@ -243,7 +300,6 @@ public partial class Eiscue : Empty
         return 0;
     }
 
-
     //■■■■■■■■■■■■■■■■■■■■共通■■■■■■■■■■■■■■■■■■■■■■
 
 
@@ -273,11 +329,30 @@ public partial class Eiscue : Empty
 
 
     //开始后的冷却时间
-    static float TIME_IDLE_FROZEN_START = 0.0f; //TODO需修改时间
+    static float TIME_IDLE_FROZEN_START = 0.1f; //TODO需修改时间
+
+    //睡眠状态解除后的冷却时间
+    static float TIME_IDLE_FROZEN_SLEEPAWAKE = 0.4f; //TODO需修改时间
+
+    //重新冰冻后的冷却时间
+    static float TIME_IDLE_REFROZEN = 1.2f; //TODO需修改时间
 
     //冰冻走路后的冷却时间
     static float TIME_IDLE_FROZEN_WALK_FROZEN = 0.0f; //TODO需修改时间
 
+
+    //冰冻摇晃后的冷却时间
+    static float TIME_IDLE_FROZEN_SHAKE_FROZEN = 1.4f; //TODO需修改时间
+
+
+    void FrozenHead()
+    {
+        animator.SetBool("Frozen" , true);
+        Idle_FrozenStart(TIME_IDLE_REFROZEN);
+        GetShield((int)(maxHP/4.0f));
+        DefAbilityPoint = AbilityForLevel(Emptylevel, DefEmptyPoint)/* * 1.2f */;//设定防御力
+        SpdAbilityPoint = AbilityForLevel(Emptylevel, SpdEmptyPoint)/* * 1.2f */;//设定特防
+    }
 
 
     /// <summary>
@@ -314,6 +389,8 @@ public partial class Eiscue : Empty
 
 
 
+    //走路时长
+    static float TIME_WALK_FROZEN = 1.0f; //TODO需修改时间
 
     /// <summary>
     /// 冰冻走路计时器
@@ -326,7 +403,9 @@ public partial class Eiscue : Empty
     public void Walk_FrozenStart(float Timer)
     {
         Walk_FrozenTimer = Timer;
+        animator.SetBool("Walk" , true);
         ChangeSubState(SubState.Walk_Frozen);
+        NormalLunchCount = false;
     }
 
     /// <summary>
@@ -334,11 +413,120 @@ public partial class Eiscue : Empty
     /// <summary>
     public void Walk_FrozenOver()
     {
+        animator.SetBool("Walk", false);
+        NormalLunchCount = false;
         Walk_FrozenTimer = 0;
     }
 
 
+    /// <summary>
+    /// 是否处于正在移动状态
+    /// </summary>
+    bool isWalkMoving;
+
+    /// <summary>
+    /// 移动方向
+    /// </summary>
+    Vector2 MoveVector;
+
+    /// <summary>
+    /// 移动开始
+    /// </summary>
+    public void WalkMoverStart()
+    {
+        isWalkMoving = true;
+        MoveVector = Quaternion.AngleAxis( Random.Range(0 , 360) , Vector3.forward ) * Vector2.right;
+    }
+
+
+    /// <summary>
+    /// 移动结束
+    /// </summary>
+    public void WalkMoverOver()
+    {
+        isWalkMoving = false;
+        LunchNormalIceShard();
+    }
+
+
+    bool NormalLunchCount = false;
+
+    /// <summary>
+    /// 每走一步发射冰砾
+    /// </summary>
+    void LunchNormalIceShard()
+    {
+        if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis) {
+            if (isEmptyConfusionDone)
+            {
+                float startRotation = (NormalLunchCount) ? 30.0f : 90.0f;
+                NormalLunchCount = !NormalLunchCount;
+                for (int i = 0; i < 3; i++)
+                {
+                    Vector2 LunchRotation = (Quaternion.AngleAxis(startRotation + i * 120.0f, Vector3.forward) * Vector2.right).normalized;
+                    EiscueIceShard iS = Instantiate(eiscueIceShard, transform.position + (Vector3)LunchRotation, Quaternion.Euler(0, 0, startRotation + i * 120.0f));
+                    iS.empty = this;
+                    iS.LaunchNotForce(LunchRotation, 2.2f);
+                    //iS.isSplit = false;
+                    //iS.isMist = false;
+                    iS.SetMaxDistence(10.6f);
+                }
+            }
+            else
+            {
+                float startRotation = (NormalLunchCount) ? 45.0f : 90.0f;
+                NormalLunchCount = !NormalLunchCount;
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 LunchRotation = (Quaternion.AngleAxis(startRotation + i * 90.0f, Vector3.forward) * Vector2.right).normalized;
+                    EiscueIceShard iS = Instantiate(eiscueIceShard, transform.position + (Vector3)LunchRotation, Quaternion.Euler(0, 0, startRotation + i * 90.0f));
+                    iS.empty = this;
+                    iS.LaunchNotForce(LunchRotation, 2.2f);
+                    //iS.isSplit = false;
+                    //iS.isMist = false;
+                    iS.SetMaxDistence(10.6f);
+                }
+            }
+        }
+    }
+
     //=========================冰冻走路============================
+
+
+
+
+
+
+    //=========================冰冻摇晃============================
+
+
+
+
+    /// <summary>
+    /// 冰冻摇晃计时器
+    /// <summary>
+    //float Shake_FrozenTimer = 0;
+
+    /// <summary>
+    /// 冰冻摇晃开始
+    /// <summary>
+    public void Shake_FrozenStart()
+    {
+        //Shake_FrozenTimer = Timer;
+        ChangeSubState(SubState.Shake_Frozen);
+    }
+
+    /// <summary>
+    /// 冰冻摇晃结束
+    /// <summary>
+    public void Shake_FrozenOver()
+    {
+        Idle_FrozenStart(TIME_IDLE_FROZEN_SHAKE_FROZEN);
+        //Shake_FrozenTimer = 0;
+    }
+
+
+    //=========================冰冻摇晃============================
 
 
 
@@ -359,9 +547,38 @@ public partial class Eiscue : Empty
 
     //=========================不冰冻发呆============================
 
+    /// <summary>
+    /// 破盾时转化为解冻头
+    /// </summary>
+    public override void ShieldBreakEvent()
+    {
+        base.ShieldBreakEvent();
+        animator.SetBool("Frozen" , false);
+        Idle_NotFrozenStart(TIME_IDLE_NOTFROZEN_START);
+        DefAbilityPoint = AbilityForLevel(Emptylevel, DefEmptyPointNotFrozen)/* * 1.2f */;//设定防御力
+        SpdAbilityPoint = AbilityForLevel(Emptylevel, SpDEmptyPointNotFrozen)/* * 1.2f */;//设定特防
+        Instantiate(eiscueFrozenMist , transform.position , Quaternion.identity);
+        //LunchIceShardShieldBreak();
+    }
+
+    void LunchIceShardShieldBreak()
+    {
+        float startRotation = 0.0f;
+        for (int i = 0; i < 6; i++)
+        {
+            Vector2 LunchRotation = (Quaternion.AngleAxis(startRotation + i * 60.0f, Vector3.forward) * Vector2.right).normalized;
+            EiscueIceShard iS = Instantiate(eiscueIceShard, transform.position + (Vector3)LunchRotation, Quaternion.Euler(0, 0, startRotation + i * 60.0f));
+            iS.empty = this;
+            iS.LaunchNotForce(LunchRotation, 4.2f);
+            //iS.isSplit = true;
+            //iS.isMist = true;
+            //iS.SetMaxDistence(3.6f);
+        }
+    }
+
 
     //开始后的冷却时间
-    static float TIME_IDLE_NOTFROZEN_START = 0.0f; //TODO需修改时间
+    static float TIME_IDLE_NOTFROZEN_START = 6.0f; //TODO需修改时间
 
 
     /// <summary>
@@ -392,7 +609,6 @@ public partial class Eiscue : Empty
 
 
     //==■==■==■==■==■==■==■主状态：不冰冻状态■==■==■==■==■==■==■==
-
 
 
 
