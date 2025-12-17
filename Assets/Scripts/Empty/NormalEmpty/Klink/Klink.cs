@@ -135,7 +135,7 @@ public class Klink : Empty
                             //【单个齿轮发呆】状态
                             case SubState.Idle_Single:
                                 Idle_SingleTimer -= Time.deltaTime;//【单个齿轮发呆】计时器时间减少
-                                if (Idle_SingleTimer <= 0)         //计时器时间到时间，结束【单个齿轮发呆】状态
+                                if (Idle_SingleTimer <= 0 || isFearDone)         //计时器时间到时间，结束【单个齿轮发呆】状态
                                 {
                                     Idle_SingleOver();
                                     if (SearchParent() == MainState.Single)
@@ -196,10 +196,10 @@ public class Klink : Empty
 
                                     //横向移动折返
                                     if (HMoveDir.x > 0 && ((transform.position.x >= (ParentPokemonRoom.transform.position.x + ParentPokemonRoom.RoomSize[3] - DISTENCE_Y_VMOVE)))) {
-                                        HMoveDir = Vector2.left; isCanVMoveCount++;
+                                        HMoveDir = Vector2.left; isCanVMoveCount++; isCanHTurn = true;
                                     }
                                     if (HMoveDir.x < 0 && ((transform.position.x <= (ParentPokemonRoom.transform.position.x + ParentPokemonRoom.RoomSize[2] + DISTENCE_Y_VMOVE)))) {
-                                        HMoveDir = Vector2.right; isCanVMoveCount++;
+                                        HMoveDir = Vector2.right; isCanVMoveCount++; isCanHTurn = true;
                                     }
                                     dir += HMoveDir;
                                     dir = dir.normalized;
@@ -218,47 +218,72 @@ public class Klink : Empty
                                     }
 
                                     //在高速模式时检测到玩家进入攻击状态
-                                    if (isHighSpeed) {
-                                        //当横向移动到板边不能使用圆圈攻击
-                                        if (
-                                            transform.position.x >= (ParentPokemonRoom.transform.position.x + ParentPokemonRoom.RoomSize[3] - RADIUS_CIRCLEATK) ||
-                                            transform.position.x <= (ParentPokemonRoom.transform.position.x + ParentPokemonRoom.RoomSize[2] + RADIUS_CIRCLEATK)
-                                            )
+                                    if (isHighSpeed)
+                                    {
+                                        if (!isFearDone)
                                         {
-                                            
-                                            if (isCanVMoveCount > 1) {
-                                                
-                                                RaycastHit2D ray;
-                                                if (MoveSingleMode == MOVE_SINGLE_MODE.UpMove)
+                                            //当横向移动到板边不能使用圆圈攻击
+                                            if (
+                                                transform.position.x >= (ParentPokemonRoom.transform.position.x + ParentPokemonRoom.RoomSize[3] - RADIUS_CIRCLEATK) ||
+                                                transform.position.x <= (ParentPokemonRoom.transform.position.x + ParentPokemonRoom.RoomSize[2] + RADIUS_CIRCLEATK)
+                                                )
+                                            {
+
+                                                if (isCanVMoveCount > 1)
                                                 {
-                                                    ray = Physics2D.Raycast(transform.position, Vector2.down, 20.0f, LayerMask.GetMask("Room", "Player", "PlayerFly", "PlayerJump", "Empty", "EmptyFly", "EmptyJump"));
+
+                                                    RaycastHit2D ray;
+                                                    if (MoveSingleMode == MOVE_SINGLE_MODE.UpMove)
+                                                    {
+                                                        ray = Physics2D.Raycast(transform.position, Vector2.down, 20.0f, LayerMask.GetMask("Room", "Player", "PlayerFly", "PlayerJump", "Empty", "EmptyFly", "EmptyJump"));
+                                                    }
+                                                    else
+                                                    {
+                                                        ray = Physics2D.Raycast(transform.position, Vector2.up, 20.0f, LayerMask.GetMask("Room", "Player", "PlayerFly", "PlayerJump", "Empty", "EmptyFly", "EmptyJump"));
+                                                    }
+                                                    if (ray.collider && ((!isEmptyInfatuationDone && ray.collider.gameObject.tag == "Player") || (isEmptyInfatuationDone && ray.collider.gameObject.tag == "Empty")))
+                                                    {
+                                                        isCanVMoveCount = 0;
+                                                        dir = Vector2.zero;
+                                                        if (MoveSingleMode == MOVE_SINGLE_MODE.UpMove) { VMoveDir = Vector2.down; }
+                                                        else { VMoveDir = Vector2.up; }
+                                                        MoveSingleMode = MOVE_SINGLE_MODE.VMove;
+                                                    }
                                                 }
-                                                else
+                                            }
+                                            //当可以使用圆圈攻击
+                                            else
+                                            {
+                                                if (useCircleAtkSingle)
                                                 {
-                                                    ray = Physics2D.Raycast(transform.position, Vector2.up, 20.0f, LayerMask.GetMask("Room", "Player", "PlayerFly", "PlayerJump", "Empty", "EmptyFly", "EmptyJump"));
-                                                }
-                                                if (ray.collider && ((!isEmptyInfatuationDone && ray.collider.gameObject.tag == "Player") || (isEmptyInfatuationDone && ray.collider.gameObject.tag == "Empty")))
-                                                {
-                                                    isCanVMoveCount = 0;
-                                                    dir = Vector2.zero;
-                                                    if (MoveSingleMode == MOVE_SINGLE_MODE.UpMove) { VMoveDir = Vector2.down; }
-                                                    else { VMoveDir = Vector2.up; }
-                                                    MoveSingleMode = MOVE_SINGLE_MODE.VMove;
+                                                    useCircleAtkSingle = false;
+                                                    Move_SingleOver();
+                                                    CircleAtk_SingleStart(T_CIRCLEATK);
+                                                    if (MoveSingleMode == MOVE_SINGLE_MODE.UpMove) { CircleAtkDir.y = -1; }
+                                                    else if (MoveSingleMode == MOVE_SINGLE_MODE.DownMove) { CircleAtkDir.y = 1; }
+                                                    CircleAtkDir.x = dir.x;
                                                 }
                                             }
                                         }
-                                        //当可以使用圆圈攻击
+                                    }
+                                    if (isFearDone && isCanHTurn)
+                                    {
+                                        
+                                        RaycastHit2D ray;
+                                        if (MoveSingleMode == MOVE_SINGLE_MODE.UpMove)
+                                        {
+                                            ray = Physics2D.Raycast(transform.position, Vector2.down, 20.0f, LayerMask.GetMask("Room", "Player", "PlayerFly", "PlayerJump", "Empty", "EmptyFly", "EmptyJump"));
+                                        }
                                         else
                                         {
-                                            if (useCircleAtkSingle)
-                                            {
-                                                useCircleAtkSingle = false;
-                                                Move_SingleOver();
-                                                CircleAtk_SingleStart(T_CIRCLEATK);
-                                                if (MoveSingleMode == MOVE_SINGLE_MODE.UpMove) { CircleAtkDir.y = -1; }
-                                                else if (MoveSingleMode == MOVE_SINGLE_MODE.DownMove) { CircleAtkDir.y = 1; }
-                                                CircleAtkDir.x = dir.x;
-                                            }
+                                            ray = Physics2D.Raycast(transform.position, Vector2.up, 20.0f, LayerMask.GetMask("Room", "Player", "PlayerFly", "PlayerJump", "Empty", "EmptyFly", "EmptyJump"));
+                                        }
+                                        if (ray.collider && ((!isEmptyInfatuationDone && ray.collider.gameObject.tag == "Player") || (isEmptyInfatuationDone && ray.collider.gameObject.tag == "Empty")))
+                                        {
+                                            Debug.Log("aaa");
+                                            isCanHTurn = false;
+                                            HMoveDir = -HMoveDir;
+                                            dir = HMoveDir;
                                         }
                                     }
                                 }
@@ -278,7 +303,7 @@ public class Klink : Empty
                                 }
 
                                 //移动
-                                MoveBySpeedAndDir(dir, speed, SpeedAlpha * SpeedAlphaVMove , 0.2f, 0.2f, 0.2f, 0.2f);
+                                MoveBySpeedAndDir(dir, speed, SpeedAlpha * SpeedAlphaVMove * (isEmptyConfusionDone ? 0.5f :1.0f) , 0.2f, 0.2f, 0.2f, 0.2f);
                                 //Move_SingleOver();
                                 //CircleAtk_SingleStart();
                                 //TODO添加下一个状态的开始方法
@@ -287,9 +312,9 @@ public class Klink : Empty
                             case SubState.CircleAtk_Single:
                                 CircleAtk_SingleTimer -= Time.deltaTime;//【单个齿轮圆圈攻击】计时器时间减少
                                 //移动
-                                MoveBySpeedAndDir(Quaternion.AngleAxis( (-CircleAtkDir.y * CircleAtkDir.x) * (T_CIRCLEATK - CircleAtk_SingleTimer)*Omega_CIRCLEATK , Vector3.forward) * ((-CircleAtkDir.x) * Vector2.right), V_CIRCLEATK, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-                                Debug.Log(CircleAtkDir);
-                                if (CircleAtk_SingleTimer <= 0)         //计时器时间到时间，结束【单个齿轮圆圈攻击】状态
+                                MoveBySpeedAndDir(Quaternion.AngleAxis( (-CircleAtkDir.y * CircleAtkDir.x) * (T_CIRCLEATK - CircleAtk_SingleTimer)*Omega_CIRCLEATK * (isEmptyConfusionDone ? 0.5f : 1.0f), Vector3.forward) * ((-CircleAtkDir.x) * Vector2.right), V_CIRCLEATK , 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+                                //Debug.Log(CircleAtkDir);
+                                if (CircleAtk_SingleTimer <= 0 || isFearDone)         //计时器时间到时间，结束【单个齿轮圆圈攻击】状态
                                 {
                                     CircleAtk_SingleOver();
                                     Idle_SingleStart(TIME_IDLE_SINGLE_START);
@@ -297,6 +322,23 @@ public class Klink : Empty
                                 }
                                 break;
                         }
+                    }
+                    if ((isSleepDone || isSilence ) && subState != SubState.Idle_Single)
+                    {
+                        animator.SetTrigger("Sleep");
+                        animator.SetBool("HighSpeed", false);
+                        switch (subState)
+                        {
+                            case SubState.Move_Single:
+                                Move_SingleOver();
+                                break;
+                            case SubState.CircleAtk_Single:
+                                CircleAtk_SingleOver();
+                                break;
+                        }
+                        HighSpeedModeOver();
+                        HighSpeedModeOut();
+                        Idle_SingleStart(TIME_IDLE_SINGLE_START);
                     }
                     break;
                 //●主状态：【跟随中齿轮】状态
@@ -506,6 +548,11 @@ public class Klink : Empty
                 break;
             case MainState.WithLGear:
                 break;
+        }
+
+        if (other.transform.tag == ("Empty"))
+        {
+            HMoveDir = -HMoveDir; isCanVMoveCount++; isCanHTurn = true;
         }
     }
 
@@ -848,11 +895,18 @@ public class Klink : Empty
     static float SPEED_ALPHA_HIGH = 3.7f; 
 
     //普通状态时的速度
-    static float SPEED_ALPHA_NORMAL = 1.0f; 
+    static float SPEED_ALPHA_NORMAL = 1.0f;
 
 
-
+    /// <summary>
+    /// 速度是否提升
+    /// </summary>
     bool isHighSpeed = false;
+
+    /// <summary>
+    /// 攻击力是否提升
+    /// </summary>
+    bool isAtkUP = false;
 
     public float SpeedAlpha = SPEED_ALPHA_NORMAL;
 
@@ -870,9 +924,14 @@ public class Klink : Empty
     /// </summary>
     public void HighSpeedModeStart()
     {
-        isHighSpeed = true;
-        SpeedAlpha = SPEED_ALPHA_HIGH;
-        AtkChange(2 , 0.0f);
+        if (isHighSpeed == false) {
+            isHighSpeed = true;
+            SpeedAlpha = SPEED_ALPHA_HIGH;
+        }
+        if(isAtkUP == false){
+            AtkChange(2, 0.0f);
+            isAtkUP = true;
+        }
     }
 
     /// <summary>
@@ -880,10 +939,16 @@ public class Klink : Empty
     /// </summary>
     public void HighSpeedModeOver()
     {
-        isHighSpeed = false;
-        animator.SetBool("HighSpeed", false);
+        if (isHighSpeed == true) {
+            isHighSpeed = false;
+            animator.SetBool("HighSpeed", false);
+        }
         SpeedAlpha = SPEED_ALPHA_NORMAL;
-        AtkChange(-2, 0.0f);
+        if (isAtkUP == true)
+        {
+            AtkChange(-2, 0.0f);
+            isAtkUP = false;
+        }
     }
 
     /// <summary>
@@ -1031,6 +1096,10 @@ public class Klink : Empty
     /// </summary>
     int isCanVMoveCount = 0;
 
+    /// <summary>
+    /// 是否可以横向转向
+    /// </summary>
+    bool isCanHTurn = false;
 
 
 
