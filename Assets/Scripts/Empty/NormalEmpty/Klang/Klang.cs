@@ -123,7 +123,7 @@ public class Klang : Empty
                 //●主状态：【单个中齿轮】状态
                 case MainState.Single:
                     // 当处于冰冻 睡眠 致盲 麻痹状态时主状态【单个中齿轮】停运
-                    if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis) /* TODO【单个中齿轮】状态停运的额外条件 */
+                    if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis && !isFearDone) /* TODO【单个中齿轮】状态停运的额外条件 */
                     {
                         //判断副状态
                         switch (subState)
@@ -133,29 +133,77 @@ public class Klang : Empty
                                 Idle_SingleTimer -= Time.deltaTime;//【单个中齿轮发呆】计时器时间减少
                                 if (Idle_SingleTimer <= 0)         //计时器时间到时间，结束【单个中齿轮发呆】状态
                                 {
-                                    Idle_SingleOver();
+                                    if (isHighSpeed)
+                                    {
+                                        Idle_SingleOver();
+                                        Rush_SingleStart(TIME_RUSH_SINGLE);
+                                    }
+                                    else
+                                    {
+                                        if (!animator.GetBool("HighSpeed")) {
+                                            HighSpeedModeEnter();
+                                        }
+                                    }
+                                    
                                     //TODO添加下一个状态的开始方法
                                 }
                                 break;
                             //【单个中齿轮冲刺】状态
                             case SubState.Rush_Single:
                                 Rush_SingleTimer -= Time.deltaTime;//【单个中齿轮冲刺】计时器时间减少
+
+
                                 if (Rush_SingleTimer <= 0)         //计时器时间到时间，结束【单个中齿轮冲刺】状态
                                 {
                                     Rush_SingleOver();
-                                    //TODO添加下一个状态的开始方法
+                                    if (RushCount >= 3)
+                                    {
+                                        RushCount = 0;
+                                        CircleAtk_SingleStart(TIME_CIRCLE_ATK_SINGLE);
+                                    }
+                                    else
+                                    {
+                                        Idle_SingleStart(TIME_IDLE_SINGLE_RUSH_SINGLE_SHORT);
+                                    } 
                                 }
+
+                                //冲刺
+                                MoveBySpeedAndDir(RushDir, speed, SpeedAlpha * SPEED_ALPHA_RUSH * (isEmptyConfusionDone ? 0.5f : 1.0f), 0.2f, 0.2f, 0.2f, 0.2f);
                                 break;
                             //【单个中齿轮圆圈攻击】状态
                             case SubState.CircleAtk_Single:
                                 CircleAtk_SingleTimer -= Time.deltaTime;//【单个中齿轮圆圈攻击】计时器时间减少
+                                //移动
+                                MoveBySpeedAndDir(Quaternion.AngleAxis(-CircleAtkTurn * (TIME_CIRCLE_ATK_SINGLE - CircleAtk_SingleTimer) * (isEmptyConfusionDone ? 0.5f : 1.0f) * Omega_CIRCLEATK, Vector3.forward) * CircleAtkDir, V_CIRCLEATK, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+                                Debug.Log(CircleAtkDir);
+                                Debug.Log(RadiusCircleAtk);
+                                Debug.Log(Omega_CIRCLEATK);
                                 if (CircleAtk_SingleTimer <= 0)         //计时器时间到时间，结束【单个中齿轮圆圈攻击】状态
                                 {
                                     CircleAtk_SingleOver();
+                                    Idle_SingleStart(TIME_IDLE_SINGLE_CIRCLEATK_SINGLE);
                                     //TODO添加下一个状态的开始方法
                                 }
                                 break;
                         }
+                    }
+                    if ( (isSleepDone || isSilence || isFearDone) && (subState != SubState.Idle_Single || isHighSpeed || animator.GetBool("HighSpeed") ) )
+                    {
+                        RushCount = 0;
+                        animator.SetTrigger("Sleep");
+                        animator.SetBool("HighSpeed", false);
+                        switch (subState)
+                        {
+                            case SubState.Rush_Single:
+                                Rush_SingleOver();
+                                break;
+                            case SubState.CircleAtk_Single:
+                                CircleAtk_SingleOver();
+                                break;
+                        }
+                        HighSpeedModeOver();
+                        HighSpeedModeOut();
+                        Idle_SingleStart(TIME_IDLE_SINGLE_START);
                     }
                     break;
                 //●主状态：【携带小齿轮】状态
@@ -261,7 +309,79 @@ public class Klang : Empty
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //■■■■■■■■■■■■■■■■■■■■碰撞■■■■■■■■■■■■■■■■■■■■■■
+
+
+
+    /// <summary>
+    /// 高速模式碰撞威力
+    /// </summary>
+    static int DMAGE_HIGH_SPEED = 25;
+
+    /// <summary>
+    /// 齿轮飞盘碰撞威力
+    /// </summary>
+    static int DMAGE_CIRCLE_ATK = 50;
+
+
+
     private void OnCollisionEnter2D(Collision2D other)
+    {
+        switch (FamilyState)
+        {
+            case MainState.Single:
+                if (isHighSpeed)
+                {
+                    //圆盘攻击
+                    if (subState == SubState.CircleAtk_Single)
+                    {
+                        CircleAtkTouch(other);
+                    }
+                    //高速攻击
+                    else
+                    {
+                        HighSpeedTouch(other);
+                    }
+                }
+                //低速攻击
+                else
+                {
+                    NormalTouch(other);
+                }
+                break;
+            case MainState.HaveSGear:
+                break;
+            case MainState.WithLGear:
+                break;
+        }
+    }
+
+
+
+
+
+    /// <summary>
+    /// 低速模式触碰伤害
+    /// </summary>
+    void NormalTouch(Collision2D other)
     {
         if (!isEmptyInfatuationDone && other.transform.tag == ("Player"))//未被魅惑 且与玩家碰撞时
         {
@@ -275,10 +395,70 @@ public class Klang : Empty
     }
 
 
+    /// <summary>
+    /// 高速模式触碰伤害
+    /// </summary>
+    void HighSpeedTouch(Collision2D other)
+    {
+        if (!isEmptyInfatuationDone && other.transform.tag == ("Player"))//未被魅惑 且与玩家碰撞时
+        {
+            PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
+            Pokemon.PokemonHpChange(this.gameObject, other.gameObject, DMAGE_HIGH_SPEED, 0, 0, PokemonType.TypeEnum.Steel);
+            if (playerControler != null)
+            {
+                playerControler.KnockOutPoint = 3.0f;
+                playerControler.KnockOutDirection = (new Vector2(Director.y, Director.x)).normalized;
+            }
+        }
+        if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))//被魅惑 且与其他敌人碰撞时
+        {
+            Empty e = other.gameObject.GetComponent<Empty>();
+            Pokemon.PokemonHpChange(this.gameObject, e.gameObject, DMAGE_HIGH_SPEED, 0, 0, PokemonType.TypeEnum.Steel);
+        }
+    }
+
+
+    /// <summary>
+    /// 圆盘攻击触碰伤害
+    /// </summary>
+    void CircleAtkTouch(Collision2D other)
+    {
+        if (!isEmptyInfatuationDone && other.transform.tag == ("Player"))//未被魅惑 且与玩家碰撞时
+        {
+            PlayerControler playerControler = other.gameObject.GetComponent<PlayerControler>();
+            Pokemon.PokemonHpChange(this.gameObject, other.gameObject, DMAGE_CIRCLE_ATK, 0, 0, PokemonType.TypeEnum.Steel);
+            if (playerControler != null)
+            {
+                playerControler.KnockOutPoint = 7.0f;
+                playerControler.KnockOutDirection = (new Vector2(Director.y, Director.x)).normalized;
+            }
+        }
+        if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))//被魅惑 且与其他敌人碰撞时
+        {
+            Empty e = other.gameObject.GetComponent<Empty>();
+            Pokemon.PokemonHpChange(this.gameObject, e.gameObject, DMAGE_CIRCLE_ATK, 0, 0, PokemonType.TypeEnum.Steel);
+        }
+    }
+
+    //■■■■■■■■■■■■■■■■■■■■碰撞■■■■■■■■■■■■■■■■■■■■■■
 
 
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //■■■■■■■■■■■■■■■■■■■■共通■■■■■■■■■■■■■■■■■■■■■■
     /// <summary>
     /// 设置敌人的动画机方向
@@ -376,7 +556,132 @@ public class Klang : Empty
     }
 
     //■■■■■■■■■■■■■■■■■■■■共通■■■■■■■■■■■■■■■■■■■■■■
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //■■■■■■■■■■■■■■■■■■■■换挡■■■■■■■■■■■■■■■■■■■■■■
+
+
+    //高速状态时的速度
+    static float SPEED_ALPHA_HIGH = 3.7f;
+
+    //普通状态时的速度
+    static float SPEED_ALPHA_NORMAL = 1.0f;
+
+
+    /// <summary>
+    /// 速度是否提升
+    /// </summary>
+    bool isHighSpeed = false;
+
+    /// <summary>
+    /// 攻击力是否提升
+    /// </summary>
+    bool isAtkUP = false;
+
+    public float SpeedAlpha = SPEED_ALPHA_NORMAL;
+
+    /// <summary>
+    /// 准备进入高速模式
+    /// </summary>
+    public void HighSpeedModeEnter()
+    {
+
+        animator.SetBool("HighSpeed", true);
+    }
+
+    /// <summary>
+    /// 进入高速模式
+    /// </summary>
+    public void HighSpeedModeStart()
+    {
+        if (isHighSpeed == false)
+        {
+            isHighSpeed = true;
+            SpeedAlpha = SPEED_ALPHA_HIGH;
+        }
+        if (isAtkUP == false)
+        {
+            AtkChange(2, 0.0f);
+            isAtkUP = true;
+        }
+    }
+
+    /// <summary>
+    /// 高速模式结束 开始减速
+    /// </summary>
+    public void HighSpeedModeOver()
+    {
+        if (isHighSpeed == true)
+        {
+            isHighSpeed = false;
+            animator.SetBool("HighSpeed", false);
+        }
+        SpeedAlpha = SPEED_ALPHA_NORMAL;
+        if (isAtkUP == true)
+        {
+            AtkChange(-2, 0.0f);
+            isAtkUP = false;
+        }
+    }
+
+    /// <summary>
+    /// 减速完毕，回到低速模式
+    /// </summary>
+    public void HighSpeedModeOut()
+    {
+
+    }
+    //■■■■■■■■■■■■■■■■■■■■换挡■■■■■■■■■■■■■■■■■■■■■■
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -404,14 +709,19 @@ public class Klang : Empty
 
 
     //开始后的冷却时间
-    static float TIME_IDLE_SINGLE_START = 0.0f; //TODO需修改时间
+    static float TIME_IDLE_SINGLE_START = 0.5f;
 
-    //单个中齿轮冲刺后的冷却时间
-    static float TIME_IDLE_SINGLE_RUSH_SINGLE = 0.0f; //TODO需修改时间
+
+    //单个中齿轮冲刺后的短冷却时间
+    static float TIME_IDLE_SINGLE_RUSH_SINGLE_SHORT = 0.25f;
+
+
+    //单个中齿轮冲刺三次后的冷却时间
+    static float TIME_IDLE_SINGLE_RUSH_SINGLE_LONG = 1.0f;
 
 
     //单个中齿轮圆圈攻击后的冷却时间
-    static float TIME_IDLE_SINGLE_CIRCLEATK_SINGLE = 0.0f; //TODO需修改时间
+    static float TIME_IDLE_SINGLE_CIRCLEATK_SINGLE = 7.0f; //TODO需修改时间
 
 
 
@@ -447,7 +757,15 @@ public class Klang : Empty
 
     //=========================单个中齿轮冲刺============================
 
+    /// <summary>
+    /// 冲刺时间
+    /// </summary>
+    static float TIME_RUSH_SINGLE = 0.4f; //TODO需修改时间
 
+    /// <summary>
+    /// 冲刺速度加成
+    /// </summary>
+    static float SPEED_ALPHA_RUSH = 2.0f; //TODO需修改时间
 
 
     /// <summary>
@@ -456,12 +774,28 @@ public class Klang : Empty
     float Rush_SingleTimer = 0;
 
     /// <summary>
+    /// 冲刺方向
+    /// </summary>
+    Vector2 RushDir;
+
+    /// <summary>
+    /// 冲刺的次数
+    /// </summary>
+    int RushCount = 0;
+
+    /// <summary>
     /// 单个中齿轮冲刺开始
     /// <summary>
     public void Rush_SingleStart(float Timer)
     {
         Rush_SingleTimer = Timer;
         ChangeSubState(SubState.Rush_Single);
+        RushDir = (TargetPosition - (Vector2)transform.position).normalized;
+        //开启残影
+        if (ShadowCoroutine == null)
+        {
+            StartShadowCoroutine(0.1f, 1.5f, new Color(0.6603774f, 0.6603774f, 0.6603774f, 0.6f));
+        }
     }
 
     /// <summary>
@@ -470,10 +804,22 @@ public class Klang : Empty
     public void Rush_SingleOver()
     {
         Rush_SingleTimer = 0;
+        RushCount++;
+        //关闭残影
+        if (ShadowCoroutine != null)
+        {
+            StopShadowCoroutine();
+        }
+        RushDir = Vector2.zero;
     }
 
 
     //=========================单个中齿轮冲刺============================
+
+
+
+
+
 
 
 
@@ -485,10 +831,51 @@ public class Klang : Empty
 
 
 
+
+
+    //圆形攻击的角速度
+    static float Omega_CIRCLEATK { get { return 360.0f / TIME_CIRCLE_ATK_SINGLE; } }
+
+    /// <summary>
+    /// 圆形攻击的周期（转一圈）
+    /// </summary>
+    static float TIME_CIRCLE_ATK_SINGLE = 0.8f; //TODO需修改时间
+
+
+
+
+
+
+
+    /// <summary>
+    /// 圆形攻击的半径
+    /// </summary>
+    float RadiusCircleAtk ;
+
+    /// <summary>
+    /// 圆形攻击的线速度
+    /// </summary>
+    float V_CIRCLEATK { get { return Mathf.Deg2Rad * Omega_CIRCLEATK * RadiusCircleAtk; } }
+
+    /// <summary>
+    /// 圆形攻击的速度向量
+    /// </summary>
+    Vector2 CircleAtkDir = new Vector2(0, 0);
+
+    /// <summary>
+    /// 圆形攻击的顺逆时针方向
+    /// </summary>
+    float CircleAtkTurn;
+
     /// <summary>
     /// 单个中齿轮圆圈攻击计时器
     /// <summary>
     float CircleAtk_SingleTimer = 0;
+
+
+
+
+
 
     /// <summary>
     /// 单个中齿轮圆圈攻击开始
@@ -497,6 +884,20 @@ public class Klang : Empty
     {
         CircleAtk_SingleTimer = Timer;
         ChangeSubState(SubState.CircleAtk_Single);
+
+        if (Random.Range(0.0f, 1.0f) > 0.5f)
+        {
+            CircleAtkTurn = 1;
+        }
+        else { CircleAtkTurn = -1; }
+
+        RadiusCircleAtk = Mathf.Clamp( Vector2.Distance(TargetPosition, (Vector2)transform.position) , 3.0f , 6.0f );
+        CircleAtkDir = Quaternion.AngleAxis(CircleAtkTurn * 90.0f , Vector3.forward) * (TargetPosition - (Vector2)transform.position).normalized;
+        //开启残影
+        if (ShadowCoroutine == null)
+        {
+            StartShadowCoroutine(0.04f, 1.8f, new Color(0.6603774f, 0.6603774f, 0.6603774f, 0.6f));
+        }
     }
 
     /// <summary>
@@ -505,7 +906,17 @@ public class Klang : Empty
     public void CircleAtk_SingleOver()
     {
         CircleAtk_SingleTimer = 0;
+        CircleAtkTurn = 1;
+        HighSpeedModeOver();
+        //关闭残影
+        if (ShadowCoroutine != null)
+        {
+            StopShadowCoroutine();
+        }
     }
+
+
+
 
 
     //=========================单个中齿轮圆圈攻击============================

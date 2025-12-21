@@ -36,6 +36,10 @@ public class SkillArrow : MonoBehaviour
     /// </summary>
     public SpriteRenderer ArrowBody;
 
+    SpriteRenderer ArrowLineHead;
+
+    SpriteRenderer ArrowLineBody;
+
 
 
     /// <summary>
@@ -46,7 +50,7 @@ public class SkillArrow : MonoBehaviour
         get { return isTargetMode; }
         set { isTargetMode = value; }
     }
-    bool isTargetMode = false;
+    bool isTargetMode = true;
 
 
     /// <summary>
@@ -63,12 +67,7 @@ public class SkillArrow : MonoBehaviour
     /// <summary>
     /// 目标物体
     /// </summary>
-    public Transform TargetTransform
-    {
-        get { return targetTransform; }
-        set { targetTransform = value; }
-    }
-    Transform targetTransform;
+    public Transform targetTransform;
 
 
     /// <summary>
@@ -106,6 +105,8 @@ public class SkillArrow : MonoBehaviour
     {
         SetArrow();
         //SetTarget(new Vector2(5.0f, 5.0f));
+        ArrowLineHead = ArrowHead.transform.GetChild(0).GetComponent<SpriteRenderer>();
+        ArrowLineBody = ArrowBody.transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
 
 
@@ -117,7 +118,9 @@ public class SkillArrow : MonoBehaviour
             if (ArrowTimer <= FadeInTime)
             {
                 ArrowHead.color = new Color(ArrowHead.color.r, ArrowHead.color.g, ArrowHead.color.b, ArrowTimer / FadeInTime);
-                ArrowBody.color = new Color(ArrowBody.color.r, ArrowBody.color.g, ArrowBody.color.b, ArrowTimer / FadeInTime); ;
+                ArrowBody.color = new Color(ArrowBody.color.r, ArrowBody.color.g, ArrowBody.color.b, ArrowTimer / FadeInTime);
+                ArrowLineHead.color = new Color(ArrowLineHead.color.r, ArrowLineHead.color.g, ArrowLineHead.color.b, ArrowTimer / FadeInTime);
+                ArrowLineBody.color = new Color(ArrowLineBody.color.r, ArrowLineBody.color.g, ArrowLineBody.color.b, ArrowTimer / FadeInTime); 
             }
             //持续时间模式
             if (Duration > 0.0f)
@@ -133,7 +136,9 @@ public class SkillArrow : MonoBehaviour
             if (ArrowTimer <= FadeOutTime)
             {
                 ArrowHead.color = new Color(ArrowHead.color.r, ArrowHead.color.g, ArrowHead.color.b, (FadeOutTime - ArrowTimer) / FadeOutTime);
-                ArrowBody.color = new Color(ArrowBody.color.r, ArrowBody.color.g, ArrowBody.color.b, (FadeOutTime - ArrowTimer) / FadeOutTime); ;
+                ArrowBody.color = new Color(ArrowBody.color.r, ArrowBody.color.g, ArrowBody.color.b, (FadeOutTime - ArrowTimer) / FadeOutTime);
+                ArrowLineHead.color = new Color(ArrowLineHead.color.r, ArrowLineHead.color.g, ArrowLineHead.color.b, (FadeOutTime - ArrowTimer) / FadeOutTime);
+                ArrowLineBody.color = new Color(ArrowLineBody.color.r, ArrowLineBody.color.g, ArrowLineBody.color.b, (FadeOutTime - ArrowTimer) / FadeOutTime); 
             }
         }
 
@@ -153,8 +158,15 @@ public class SkillArrow : MonoBehaviour
     public void SetArrow()
     {
         //设置颜色
-        ArrowHead.color = ArrowColor;
-        ArrowBody.color = ArrowColor;
+        var hc = ArrowHead.color;
+        hc.r = ArrowColor.r;
+        hc.g = ArrowColor.g;
+        hc.b = ArrowColor.b;
+        var bc = ArrowBody.color;
+        bc.r = ArrowColor.r;
+        bc.g = ArrowColor.g;
+        bc.b = ArrowColor.b;
+
 
         //设置宽度
         ArrowHead.transform.parent.localScale = new Vector3(ArrowScale, ArrowScale,1.0f);
@@ -187,5 +199,10 @@ public class SkillArrow : MonoBehaviour
         ArrowTimer = 0.0f;
     }
 
+    public void FollowATarget(Transform t)
+    {
+        IsTargetMode = true;
+        targetTransform = t;
+    }
 
 }
