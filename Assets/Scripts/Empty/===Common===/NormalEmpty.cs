@@ -129,6 +129,38 @@ public class NormalEmpty : Empty
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //■■■■■■■■■■■■■■■■■■■■碰撞■■■■■■■■■■■■■■■■■■■■■■
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (!isEmptyInfatuationDone && other.transform.tag == ("Player"))//未被魅惑 且与玩家碰撞时
@@ -141,6 +173,95 @@ public class NormalEmpty : Empty
             InfatuationEmptyTouchHit(other.gameObject);//触发魅惑后触碰伤害
         }
     }
+
+
+
+
+
+
+
+
+
+    /**
+
+    //=================================碰壁反弹=======================================
+
+
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        Rebound_BeLunch();
+    }
+
+
+    /// <summary>
+    /// 反弹限制计时器的时间上限
+    /// </summary>
+    static float TIME_REBOUND_CD = 0.1f;
+
+    /// <summary>
+    /// 反弹限制计时器 防止在一次碰撞中多次反弹
+    /// </summary>
+    float ReboundTimer;
+
+    /// <summary>
+    /// 被发射时发生反弹
+    /// </summary>
+    bool Rebound_BeLunch()
+    {
+        //当前时间
+        float now = Time.time;
+
+        if (now - ReboundTimer < TIME_REBOUND_CD) { return false; } // 防抖：0.1s 内忽略
+
+        ReboundTimer = now;
+
+        //碰撞方向
+        Vector2 HitVector = Vector2.right;
+        {
+            Vector2 EmptyCenter = (Vector2)transform.position + GetComponent<Collider2D>().offset;
+            float[] DistenceList = new float[] { 0.0f, 0.0f, 0.0f, 0.0f };
+            RaycastHit2D RPRay = Physics2D.Raycast(EmptyCenter, Vector2.right, LayerMask.GetMask("Room"));
+            RaycastHit2D UPRay = Physics2D.Raycast(EmptyCenter, Vector2.up, LayerMask.GetMask("Room"));
+            RaycastHit2D LPRay = Physics2D.Raycast(EmptyCenter, Vector2.left, LayerMask.GetMask("Room"));
+            RaycastHit2D DPRay = Physics2D.Raycast(EmptyCenter, Vector2.down, LayerMask.GetMask("Room"));
+            if (RPRay) { DistenceList[0] = RPRay.distance; Debug.DrawLine(EmptyCenter, RPRay.point, Color.red, 0.1f); }
+            if (UPRay) { DistenceList[1] = UPRay.distance; Debug.DrawLine(EmptyCenter, UPRay.point, Color.red, 0.1f); }
+            if (LPRay) { DistenceList[2] = LPRay.distance; Debug.DrawLine(EmptyCenter, LPRay.point, Color.red, 0.1f); }
+            if (DPRay) { DistenceList[3] = DPRay.distance; Debug.DrawLine(EmptyCenter, DPRay.point, Color.red, 0.1f); }
+            float MinDistence = DistenceList[0];
+            int MinIndex = 0;
+            for (int i = 1; i < 4; i++)
+            {
+                if (MinDistence > DistenceList[i])
+                {
+                    MinDistence = DistenceList[i];
+                    MinIndex = i;
+                }
+            }
+            Debug.Log("R" + DistenceList[0] + "U" + DistenceList[1] + "L" + DistenceList[2] + "D" + DistenceList[3] + "+" + MinDistence);
+            HitVector = _mTool.MainVector2(Quaternion.AngleAxis(MinIndex * 90.0f, Vector3.forward) * HitVector);
+        }
+
+        //LunchDirector = new Vector2(LunchDirector.x * (HitVector.x == 0 ? 1 : -1), LunchDirector.y * (HitVector.y == 0 ? 1 : -1));
+        return true;
+
+    }
+
+
+    //=================================碰壁反弹=======================================
+
+    **/
+
+
+    //■■■■■■■■■■■■■■■■■■■■碰撞■■■■■■■■■■■■■■■■■■■■■■
+
+
+
+
+
+
+
+
 
 
 

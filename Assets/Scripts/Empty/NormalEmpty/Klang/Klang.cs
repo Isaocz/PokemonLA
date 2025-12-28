@@ -34,7 +34,7 @@ public class Klang : Empty
     /// <summary>
     /// 主状态
     /// </summary>
-    enum MainState
+    public enum MainState
     {
         Single,     //单个中齿轮 
         HaveSGear,  //携带小齿轮
@@ -46,14 +46,15 @@ public class Klang : Empty
     /// <summary>
     /// 副状态
     /// </summary>
-    enum SubState
+    public enum SubState
     {
         Idle_Single,         //单个中齿轮发呆
         Rush_Single,         //单个中齿轮冲刺
         CircleAtk_Single,    //单个中齿轮圆圈攻击
         Idle_HaveSGear,      //携带小齿轮发呆
-        Rush_WithLGear,      //携带小齿轮冲刺
-        LunchSGear_WithLGear,//携带小齿轮发射小齿轮
+        Move_HaveSGear,      //携带小齿轮移动
+        Rush_HaveSGear,      //携带小齿轮冲刺
+        LunchSGear_HaveSGear,//携带小齿轮发射小齿轮
         Idle_WithLGear,      //跟随大齿轮发呆
         Surround_WithLGear,  //跟随大齿轮环绕
         Back_WithLGear,      //跟随大齿轮返回
@@ -68,7 +69,7 @@ public class Klang : Empty
     private static Dictionary<MainState, SubState[]> StateMap = new()
     {
         { MainState.Single, new[] { SubState.Idle_Single, SubState.Rush_Single, SubState.CircleAtk_Single } },
-        { MainState.HaveSGear, new[] { SubState.Idle_HaveSGear, SubState.Rush_WithLGear, SubState.LunchSGear_WithLGear } },
+        { MainState.HaveSGear, new[] { SubState.Idle_HaveSGear, SubState.Move_HaveSGear, SubState.Rush_HaveSGear, SubState.LunchSGear_HaveSGear } },
         { MainState.WithLGear, new[] { SubState.Idle_WithLGear, SubState.Surround_WithLGear, SubState.Back_WithLGear } },
     };
 
@@ -135,8 +136,12 @@ public class Klang : Empty
                                 {
                                     if (isHighSpeed)
                                     {
-                                        Idle_SingleOver();
-                                        Rush_SingleStart(TIME_RUSH_SINGLE);
+                                        if (SearchParent() == MainState.Single)
+                                        {
+                                            Debug.Log("Single");
+                                            Idle_SingleOver();
+                                            Rush_SingleStart(TIME_RUSH_SINGLE);
+                                        }
                                     }
                                     else
                                     {
@@ -175,9 +180,9 @@ public class Klang : Empty
                                 CircleAtk_SingleTimer -= Time.deltaTime;//【单个中齿轮圆圈攻击】计时器时间减少
                                 //移动
                                 MoveBySpeedAndDir(Quaternion.AngleAxis(-CircleAtkTurn * (TIME_CIRCLE_ATK_SINGLE - CircleAtk_SingleTimer) * (isEmptyConfusionDone ? 0.5f : 1.0f) * Omega_CIRCLEATK, Vector3.forward) * CircleAtkDir, V_CIRCLEATK, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-                                Debug.Log(CircleAtkDir);
-                                Debug.Log(RadiusCircleAtk);
-                                Debug.Log(Omega_CIRCLEATK);
+                                //Debug.Log(CircleAtkDir);
+                                //Debug.Log(RadiusCircleAtk);
+                                //Debug.Log(Omega_CIRCLEATK);
                                 if (CircleAtk_SingleTimer <= 0)         //计时器时间到时间，结束【单个中齿轮圆圈攻击】状态
                                 {
                                     CircleAtk_SingleOver();
@@ -217,68 +222,149 @@ public class Klang : Empty
                             //【携带小齿轮发呆】状态
                             case SubState.Idle_HaveSGear:
                                 Idle_HaveSGearTimer -= Time.deltaTime;//【携带小齿轮发呆】计时器时间减少
+                                //Debug.Log(GetSurroundChild());
                                 if (Idle_HaveSGearTimer <= 0)         //计时器时间到时间，结束【携带小齿轮发呆】状态
                                 {
-                                    Idle_HaveSGearOver();
+                                    if (SearchParent() == MainState.HaveSGear)
+                                    {
+                                        Idle_HaveSGearOver();
+                                        Move_HaveSGearStart();
+                                    }
+
                                     //TODO添加下一个状态的开始方法
+                                }
+                                break;
+                            //【携带小齿轮移动】状态
+                            case SubState.Move_HaveSGear:
+                                Vector2 LocalPosition = transform.position - ParentPokemonRoom.transform.position;
+                                if ( LocalPosition.x <= ParentPokemonRoom.RoomSize[3] - 4.0f &&
+                                     LocalPosition.x >= ParentPokemonRoom.RoomSize[2] + 4.0f &&
+                                     LocalPosition.y <= ParentPokemonRoom.RoomSize[0] - 3.5f &&
+                                     LocalPosition.y >= ParentPokemonRoom.RoomSize[1] + 3.5f 
+                                    )
+                                {
+                                    if (GetSurroundChild().Count >= 1) {
+                                        Move_HaveSGearOver();
+                                        LunchSGear_HaveSGearStart();
+                                    }
+                                }
+                                else
+                                {
+                                    MoveBySpeedAndDir((ParentPokemonRoom.transform.position - transform.position).normalized, speed, SpeedAlpha * SPEED_ALPHA_MOVE_HAVESGEAR, 3.3f, 3.3f, 2.0f, 2.0f);
                                 }
                                 break;
                             //【携带小齿轮冲刺】状态
-                            case SubState.Rush_WithLGear:
-                                Rush_WithLGearTimer -= Time.deltaTime;//【携带小齿轮冲刺】计时器时间减少
-                                if (Rush_WithLGearTimer <= 0)         //计时器时间到时间，结束【携带小齿轮冲刺】状态
-                                {
-                                    Rush_WithLGearOver();
-                                    //TODO添加下一个状态的开始方法
-                                }
+                            case SubState.Rush_HaveSGear:
+                                MoveBySpeedAndDir(Rush_HaveSGear_Dir, speed, SpeedAlpha * SPEED_ALPHA_RUSH , 3.3f, 3.3f, 2.0f, 2.0f);
                                 break;
                             //【携带小齿轮发射小齿轮】状态
-                            case SubState.LunchSGear_WithLGear:
-                                LunchSGear_WithLGearTimer -= Time.deltaTime;//【携带小齿轮发射小齿轮】计时器时间减少
-                                if (LunchSGear_WithLGearTimer <= 0)         //计时器时间到时间，结束【携带小齿轮发射小齿轮】状态
+                            case SubState.LunchSGear_HaveSGear:
+                                if (!(LunchSGear_HaveSGearTimer >= TIME_LUNCH_SGEAR_CD))
                                 {
-                                    LunchSGear_WithLGearOver();
-                                    //TODO添加下一个状态的开始方法
+                                    if (LunchCount <= COUNT_LUNCH_SGEAR) {
+                                        LunchSGear_HaveSGearTimer += Time.deltaTime;//【携带小齿轮发射小齿轮】计时器时间增加 
+                                    }   
+                                }
+                                else      //计时器时间到时间，发射小齿轮
+                                {
+                                    //发射小齿轮
+                                    if (LunchCount < COUNT_LUNCH_SGEAR) {
+                                        
+                                        LunchSGear_HaveSGearTimer = 0.0f;
+                                        LunchASGear();
+                                    }
+                                    //发射完后的下一次开始加速
+                                    else
+                                    {
+                                        //加速完毕 开始冲刺
+                                        if (isHighSpeed && GetSurroundChild().Count == ChildrenList.Count)
+                                        {
+                                            LunchSGear_HaveSGearOver();
+                                            Rush_HaveSGearStart();
+                                        }
+                                        //开始加速
+                                        else
+                                        {
+                                            if (!animator.GetBool("HighSpeed"))
+                                            {
+                                                HighSpeedModeEnter();
+                                            }
+                                        }
+                                    }
                                 }
                                 break;
                         }
                     }
+                    if ((isEmptyFrozenDone || isSleepDone || isSilence) && (subState != SubState.Idle_HaveSGear || isHighSpeed || animator.GetBool("HighSpeed")))
+                    {
+                        animator.SetTrigger("Sleep");
+                        animator.SetBool("HighSpeed", false);
+                        switch (subState)
+                        {
+                            case SubState.LunchSGear_HaveSGear:
+                                LunchSGear_HaveSGearOver();
+                                break;
+                            case SubState.Move_HaveSGear:
+                                Move_HaveSGearOver();
+                                break;
+                            case SubState.Rush_HaveSGear:
+                                Rush_HaveSGearOver(false);
+                                break;
+                        }
+                        HighSpeedModeOver();
+                        HighSpeedModeOut();
+                        Idle_HaveSGearStart(TIME_IDLE_HAVESGEAR_START);
+                    }
+                    //恐惧时进入单人状态
+                    if (isFearDone || isEmptyInfatuationDone)
+                    {
+                        HaveChild2SingleHaveChild();
+                    }
+                    SortChildren();
                     break;
                 //●主状态：【跟随大齿轮】状态
                 case MainState.WithLGear:
-                    // 当处于冰冻 睡眠 致盲 麻痹状态时主状态【跟随大齿轮】停运
-                    if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis) /* TODO【跟随大齿轮】状态停运的额外条件 */
+                    if (ParentEmptyByChild == null)
                     {
-                        //判断副状态
-                        switch (subState)
+                        //父辈的位置
+                        SearchParent();
+                    }
+                    else
+                    {
+                        // 当处于冰冻 睡眠 致盲 麻痹状态时主状态【跟随大齿轮】停运
+                        if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis) /* TODO【跟随大齿轮】状态停运的额外条件 */
                         {
-                            //【跟随大齿轮发呆】状态
-                            case SubState.Idle_WithLGear:
-                                Idle_WithLGearTimer -= Time.deltaTime;//【跟随大齿轮发呆】计时器时间减少
-                                if (Idle_WithLGearTimer <= 0)         //计时器时间到时间，结束【跟随大齿轮发呆】状态
-                                {
-                                    Idle_WithLGearOver();
-                                    //TODO添加下一个状态的开始方法
-                                }
-                                break;
-                            //【跟随大齿轮环绕】状态
-                            case SubState.Surround_WithLGear:
-                                Surround_WithLGearTimer -= Time.deltaTime;//【跟随大齿轮环绕】计时器时间减少
-                                if (Surround_WithLGearTimer <= 0)         //计时器时间到时间，结束【跟随大齿轮环绕】状态
-                                {
-                                    Surround_WithLGearOver();
-                                    //TODO添加下一个状态的开始方法
-                                }
-                                break;
-                            //【跟随大齿轮返回】状态
-                            case SubState.Back_WithLGear:
-                                Back_WithLGearTimer -= Time.deltaTime;//【跟随大齿轮返回】计时器时间减少
-                                if (Back_WithLGearTimer <= 0)         //计时器时间到时间，结束【跟随大齿轮返回】状态
-                                {
-                                    Back_WithLGearOver();
-                                    //TODO添加下一个状态的开始方法
-                                }
-                                break;
+                            //判断副状态
+                            switch (subState)
+                            {
+                                //【跟随大齿轮发呆】状态
+                                case SubState.Idle_WithLGear:
+                                    Idle_WithLGearTimer -= Time.deltaTime;//【跟随大齿轮发呆】计时器时间减少
+                                    if (Idle_WithLGearTimer <= 0)         //计时器时间到时间，结束【跟随大齿轮发呆】状态
+                                    {
+                                        Idle_WithLGearOver();
+                                        //TODO添加下一个状态的开始方法
+                                    }
+                                    break;
+                                //【跟随大齿轮环绕】状态
+                                case SubState.Surround_WithLGear:
+                                    Surround_WithLGearTimer -= Time.deltaTime;//【跟随大齿轮环绕】计时器时间减少
+                                    if (Surround_WithLGearTimer <= 0)         //计时器时间到时间，结束【跟随大齿轮环绕】状态
+                                    {
+                                        Surround_WithLGearOver();
+                                        //TODO添加下一个状态的开始方法
+                                    }
+                                    break;
+                                //【跟随大齿轮返回】状态
+                                case SubState.Back_WithLGear:
+                                    Back_WithLGearTimer -= Time.deltaTime;//【跟随大齿轮返回】计时器时间减少
+                                    if (Back_WithLGearTimer <= 0)         //计时器时间到时间，结束【跟随大齿轮返回】状态
+                                    {
+                                        Back_WithLGearOver();
+                                        //TODO添加下一个状态的开始方法
+                                    }
+                                    break;
+                            }
                         }
                     }
                     break;
@@ -368,6 +454,39 @@ public class Klang : Empty
                 }
                 break;
             case MainState.HaveSGear:
+                switch (subState)
+                {
+                    case SubState.Idle_HaveSGear:
+                        //高速攻击
+                        if (isHighSpeed){HighSpeedTouch(other);}
+                        //低速攻击
+                        else{ NormalTouch(other);}
+                        break;
+                    case SubState.Move_HaveSGear:
+                        //高速攻击
+                        if (isHighSpeed) { HighSpeedTouch(other); }
+                        //低速攻击
+                        else { NormalTouch(other); }
+                        break;
+                    case SubState.LunchSGear_HaveSGear:
+                        //高速攻击
+                        if (isHighSpeed) { HighSpeedTouch(other); }
+                        //低速攻击
+                        else { NormalTouch(other); }
+                        break;
+                    case SubState.Rush_HaveSGear:
+                        //碰壁停止
+                        if (other.gameObject.tag == "Room")
+                        {
+                            Rush_HaveSGearOver(true);
+                            Idle_HaveSGearStart(TIME_IDLE_HAVESGEAR_RUSH_WITHLGEAR);
+                        }
+                        //圆盘攻击
+                        if (isHighSpeed) { CircleAtkTouch(other); }
+                        //低速攻击
+                        else { NormalTouch(other); }
+                        break;
+                }
                 break;
             case MainState.WithLGear:
                 break;
@@ -421,7 +540,7 @@ public class Klang : Empty
     /// <summary>
     /// 圆盘攻击触碰伤害
     /// </summary>
-    void CircleAtkTouch(Collision2D other)
+    public void CircleAtkTouch(Collision2D other)
     {
         if (!isEmptyInfatuationDone && other.transform.tag == ("Player"))//未被魅惑 且与玩家碰撞时
         {
@@ -554,6 +673,227 @@ public class Klang : Empty
         }
         return 0;
     }
+
+
+    /// <summary>
+    /// 搜索父辈
+    /// </summary>
+    /// <returns></returns>
+    public MainState SearchParent()
+    {
+        if (!isDie && !isBorn && !isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis && !isFearDone && !isEmptyInfatuationDone)
+        {
+            Klinklang parentFather = SearchParentByDistence<Klinklang>();
+            //有齿轮怪
+            if (parentFather != null && !parentFather.isFearDone)
+            {
+                //Debug.Log("齿轮怪");
+                ChildBackHome(parentFather);//回齿轮怪家
+                FamilyState = MainState.WithLGear;
+                subState = SubState.Idle_WithLGear;
+                Idle_WithLGearStart(TIME_IDLE_WITHLGEAR_START);
+                return MainState.WithLGear;
+            }
+            //无父
+            else
+            {
+                //有子
+                if (ChildrenList.Count != 0) {
+                    //Debug.Log("Single");
+                    ChildLeaveHome();//保持单身
+                    if (FamilyState == MainState.Single) { Single2HaveChild(); }
+                    FamilyState = MainState.HaveSGear;
+                    subState = SubState.Idle_HaveSGear;
+                    Idle_HaveSGearStart(TIME_IDLE_HAVESGEAR_START);
+                    return MainState.HaveSGear;
+                }
+                //无子
+                else
+                {
+                    //Debug.Log("HaveChild");
+                    ChildLeaveHome();//保持单身
+                    if (FamilyState == MainState.HaveSGear) { HaveChild2Single(); }
+                    FamilyState = MainState.Single;
+                    subState = SubState.Idle_Single;
+                    Idle_SingleStart(TIME_IDLE_SINGLE_START);
+                    return MainState.Single;
+                }
+
+            }
+        }
+        return MainState.Single;
+    }
+
+
+
+    /// <summary>
+    /// 单身模式转化为携带小齿轮模式
+    /// </summary>
+    public void Single2HaveChild()
+    {
+        if( FamilyState == MainState.Single ){
+            RushCount = 0;
+            animator.SetTrigger("Sleep");
+            animator.SetBool("HighSpeed", false);
+            switch (subState)
+            {
+                case SubState.Idle_Single:
+                    Idle_SingleOver();
+                    break;
+                case SubState.Rush_Single:
+                    Rush_SingleOver();
+                    break;
+                case SubState.CircleAtk_Single:
+                    CircleAtk_SingleOver();
+                    break;
+            }
+            HighSpeedModeOver();
+            HighSpeedModeOut();
+            Idle_HaveSGearStart(TIME_IDLE_HAVESGEAR_START);
+        }
+    }
+
+
+
+
+
+    /// <summary>
+    /// 携带小齿轮模式转化为单身模式
+    /// </summary>
+    public void HaveChild2Single()
+    {
+        if (FamilyState == MainState.HaveSGear && ChildrenList.Count == 0)
+        {
+            HaveChild2SingleHaveChild();
+        }
+    }
+
+
+
+
+    /// <summary>
+    /// 携带小齿轮模式转化为单身模式(带有小齿轮时)
+    /// </summary>
+    public void HaveChild2SingleHaveChild()
+    {
+        //RushCount = 0;
+        animator.SetTrigger("Sleep");
+        animator.SetBool("HighSpeed", false);
+        switch (subState)
+        {
+            case SubState.Idle_HaveSGear:
+                Idle_HaveSGearOver();
+                break;
+            case SubState.Move_HaveSGear:
+                Move_HaveSGearOver();
+                break;
+            case SubState.LunchSGear_HaveSGear:
+                LunchSGear_HaveSGearOver();
+                break;
+            case SubState.Rush_HaveSGear:
+                Rush_HaveSGearOver(false);
+                break;
+        }
+        HighSpeedModeOver();
+        HighSpeedModeOut();
+        ChildLeaveHome();
+        Idle_SingleStart(TIME_IDLE_SINGLE_START);
+        List<Klink> kl = new List<Klink> { };
+        for (int i = 0; i < ChildrenList.Count; i++)
+        {
+            kl.Add(ChildrenList[i].GetComponent<Klink>());
+        }
+        for (int i = 0; i < kl.Count; i++)
+        {
+            kl[i].WithM2Single();
+        }
+
+    }
+
+
+
+    /// <summary>
+    ///  获取·有多少正在环绕的小齿轮
+    /// </summary>
+    public List<Klink> GetSurroundChild()
+    {
+        List<Klink> skList = new List<Klink> { };
+        for (int i = 0; i < ChildrenList.Count; i++){
+            Klink sk = ChildrenList[i].GetComponent<Klink>();
+            if (sk.FamilyState == Klink.MainState.WithMGear && sk.subState == Klink.SubState.Surround_WithMGear) { skList.Add(sk); }
+        }
+        return skList;
+
+
+    }
+
+
+
+
+
+
+
+
+    //========================子齿轮儿环绕=================================
+
+
+
+
+    /// <summary>
+    /// 排序子齿轮儿
+    /// </summary>
+    void SortChildren()
+    {
+        if (ChildrenList.Count != 0)
+        {
+            //夹角列表
+            List<Vector2> AngleList = new List<Vector2> { };
+            //正在环绕的子对象的序列
+            List<Klink> babySKList = new List<Klink> { };
+
+            //遍历所有齿轮儿 确认是否环绕
+            for (int i = 0; i < ChildrenList.Count; i++)
+            {
+                Klink babySK = ChildrenList[i].GetComponent<Klink>();
+                if (babySK != null && babySK.FamilyState == Klink.MainState.WithMGear && babySK.subState == Klink.SubState.Surround_WithMGear)
+                {
+                    babySKList.Add(babySK);
+                }
+            }
+
+            //遍历所有环绕的齿轮儿 获得齿轮儿夹角
+            for (int i = 0; i < babySKList.Count; i++)
+            {
+                float angle = _mTool.Angle_360Y(((Vector2)babySKList[i].transform.position - (Vector2)transform.position).normalized, Vector2.right);
+                AngleList.Add(new Vector2(angle, i));
+            }
+
+            AngleList.Sort((a, b) => a.x.CompareTo(b.x));
+            //Debug.Log(string.Join(",", AngleList));
+
+            //(21.40, 0.00),(54.00, 5.00),(60.55, 4.00),(197.93, 1.00),(248.73, 2.00),(291.30, 3.00)
+            for (int i = 0; i < AngleList.Count; i++)
+            {
+                babySKList[(int)AngleList[i].y].transform.SetSiblingIndex(i);
+
+                float NextAngle = 0.0f;
+                if (i >= AngleList.Count - 1)
+                {
+                    NextAngle = 360.0f + AngleList[0].x - AngleList[i].x;
+                }
+                else
+                {
+                    NextAngle = AngleList[i + 1].x - AngleList[i].x;
+                }
+                float CountRound = 360.0f / ((float)AngleList.Count);
+                if (NextAngle < CountRound) { babySKList[(int)AngleList[i].y].SurroundRotationSpeed = 40.0f * SpeedAlpha - (Mathf.Abs(NextAngle - CountRound) / CountRound) * 20.0f; }
+                else if (NextAngle > CountRound) { babySKList[(int)AngleList[i].y].SurroundRotationSpeed = 40.0f * SpeedAlpha + (Mathf.Abs(NextAngle - CountRound) / CountRound) * 60.0f; }
+                else { babySKList[(int)AngleList[i].y].SurroundRotationSpeed = 40.0f * SpeedAlpha; }
+            }
+        }
+    }
+
+    //========================子齿轮儿环绕=================================
 
     //■■■■■■■■■■■■■■■■■■■■共通■■■■■■■■■■■■■■■■■■■■■■
 
@@ -737,6 +1077,11 @@ public class Klang : Empty
     {
         Idle_SingleTimer = Timer;
         ChangeSubState(SubState.Idle_Single);
+        //关闭残影
+        if (ShadowCoroutine != null)
+        {
+            StopShadowCoroutine();
+        }
     }
 
     /// <summary>
@@ -765,7 +1110,7 @@ public class Klang : Empty
     /// <summary>
     /// 冲刺速度加成
     /// </summary>
-    static float SPEED_ALPHA_RUSH = 2.0f; //TODO需修改时间
+    static float SPEED_ALPHA_RUSH = 1.9f; //TODO需修改时间
 
 
     /// <summary>
@@ -934,6 +1279,20 @@ public class Klang : Empty
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //==■==■==■==■==■==■==■主状态：携带小齿轮状态■==■==■==■==■==■==■==
 
 
@@ -942,10 +1301,10 @@ public class Klang : Empty
 
 
     //开始后的冷却时间
-    static float TIME_IDLE_HAVESGEAR_START = 0.0f; //TODO需修改时间
+    static float TIME_IDLE_HAVESGEAR_START = 0.5f; //TODO需修改时间
 
     //携带小齿轮冲刺后的冷却时间
-    static float TIME_IDLE_HAVESGEAR_RUSH_WITHLGEAR = 0.0f; //TODO需修改时间
+    static float TIME_IDLE_HAVESGEAR_RUSH_WITHLGEAR = 9.0f; //TODO需修改时间
 
 
     //携带小齿轮发射小齿轮后的冷却时间
@@ -965,6 +1324,12 @@ public class Klang : Empty
     {
         Idle_HaveSGearTimer = Timer;
         ChangeSubState(SubState.Idle_HaveSGear);
+        //Debug.Log("lunch");
+        //关闭残影
+        if (ShadowCoroutine != null)
+        {
+            StopShadowCoroutine();
+        }
     }
 
     /// <summary>
@@ -975,7 +1340,6 @@ public class Klang : Empty
         Idle_HaveSGearTimer = 0;
     }
 
-
     //=========================携带小齿轮发呆============================
 
 
@@ -983,33 +1347,203 @@ public class Klang : Empty
 
 
 
+
+
+
+
+
+    //=========================携带小齿轮移动============================
+
+
+    /// <summary>
+    /// 移动速度加成
+    /// </summary>
+    static float SPEED_ALPHA_MOVE_HAVESGEAR = 0.4f; //TODO需修改时间
+
+    /// <summary>
+    /// 冲刺的角度
+    /// </summary>
+    Vector2 Move_HaveSGear_Dir;
+
+
+
+    /// <summary>
+    /// 携带小齿轮冲刺开始
+    /// <summary>
+    public void Move_HaveSGearStart()
+    {
+        ChangeSubState(SubState.Move_HaveSGear);
+        //关闭残影
+        if (ShadowCoroutine != null)
+        {
+            StopShadowCoroutine();
+        }
+    }
+
+    /// <summary>
+    /// 携带小齿轮冲刺结束
+    /// <summary>
+    public void Move_HaveSGearOver()
+    {
+
+    }
+
+
+    //=========================携带小齿轮移动============================
+
+
+
+
+
+
+
+
+
+
+
+
     //=========================携带小齿轮冲刺============================
 
+
+
+
+    /// <summary>
+    /// 冲刺的角度
+    /// </summary>
+    Vector2 Rush_HaveSGear_Dir;
 
 
 
     /// <summary>
     /// 携带小齿轮冲刺计时器
     /// <summary>
-    float Rush_WithLGearTimer = 0;
+    //float Rush_HaveSGearTimer = 0;
 
     /// <summary>
     /// 携带小齿轮冲刺开始
     /// <summary>
-    public void Rush_WithLGearStart(float Timer)
+    public void Rush_HaveSGearStart()
     {
-        Rush_WithLGearTimer = Timer;
-        ChangeSubState(SubState.Rush_WithLGear);
+        //Rush_HaveSGearTimer = Timer;
+        ChangeSubState(SubState.Rush_HaveSGear);
+        Rush_HaveSGear_Dir = Quaternion.AngleAxis(isEmptyConfusionDone ? (Random.Range(-30.0f, 30.0f)) : 0, Vector3.forward) * (TargetPosition - (Vector2)transform.position).normalized;
+        //开启残影
+        if (ShadowCoroutine == null)
+        {
+            StartShadowCoroutine(0.04f, 1.8f, new Color(0.6603774f, 0.6603774f, 0.6603774f, 0.6f));
+        }
+        //开启小齿轮残影
+        List<Klink> skList = GetSurroundChild();
+        for (int i = 0; i < skList.Count; i++)
+        {
+            skList[i].SurroundWithRushMGear = true;
+            if (skList[i].ShadowCoroutine == null)
+            {
+                skList[i].StartShadowCoroutine(0.04f, 1.8f, new Color(0.6603774f, 0.6603774f, 0.6603774f, 0.6f));
+            }
+        }
     }
 
     /// <summary>
     /// 携带小齿轮冲刺结束
     /// <summary>
-    public void Rush_WithLGearOver()
+    public void Rush_HaveSGearOver(bool isLunchAll)
     {
-        Rush_WithLGearTimer = 0;
+        //Rush_HaveSGearTimer = 0;
+        if (isLunchAll) {
+            //发射所有小齿轮
+            LunchAllSGear_RushOver();
+            //摇晃镜头
+            CameraShake(0.3f, 2.5f, true);
+        }
+        Rush_HaveSGear_Dir = Vector2.zero;
+        //关闭残影
+        if (ShadowCoroutine != null)
+        {
+            StopShadowCoroutine();
+        }
+        //关闭小齿轮残影
+        List<Klink> skList = GetSurroundChild();
+        for (int i = 0; i < skList.Count; i++)
+        {
+            skList[i].SurroundWithRushMGear = false;
+            if (skList[i].ShadowCoroutine != null)
+            {
+                skList[i].StopShadowCoroutine();
+            }
+        }
+        //减速
+        HighSpeedModeOver();
+
+
     }
 
+
+    /// <summary>
+    /// 冲刺碰壁结束后发射所有小齿轮
+    /// </summary>
+    void LunchAllSGear_RushOver()
+    {
+        //确定发射中心轴方向
+        //碰撞方向
+        Vector2 LunchCenterVector = Vector2.right;
+        {
+            Vector2 EmptyCenter = (Vector2)transform.position + GetComponent<Collider2D>().offset;
+            float[] DistenceList = new float[] { 0.0f, 0.0f, 0.0f, 0.0f };
+            RaycastHit2D RPRay = Physics2D.Raycast(EmptyCenter, Vector2.right,1000.0f, LayerMask.GetMask("Room"));
+            RaycastHit2D UPRay = Physics2D.Raycast(EmptyCenter, Vector2.up, 1000.0f, LayerMask.GetMask("Room"));
+            RaycastHit2D LPRay = Physics2D.Raycast(EmptyCenter, Vector2.left, 1000.0f, LayerMask.GetMask("Room"));
+            RaycastHit2D DPRay = Physics2D.Raycast(EmptyCenter, Vector2.down, 1000.0f, LayerMask.GetMask("Room"));
+            if (RPRay) { DistenceList[0] = RPRay.distance; /** Debug.Log(RPRay.collider.gameObject.name); Debug.DrawLine(EmptyCenter, RPRay.point, Color.black, 0.5f); **/}
+            if (UPRay) { DistenceList[1] = UPRay.distance; /** Debug.Log(UPRay.collider.gameObject.name); Debug.DrawLine(EmptyCenter, UPRay.point, Color.black, 0.5f); **/}
+            if (LPRay) { DistenceList[2] = LPRay.distance; /** Debug.Log(LPRay.collider.gameObject.name); Debug.DrawLine(EmptyCenter, LPRay.point, Color.black, 0.5f); **/}
+            if (DPRay) { DistenceList[3] = DPRay.distance; /** Debug.Log(DPRay.collider.gameObject.name); Debug.DrawLine(EmptyCenter, DPRay.point, Color.black, 0.5f); **/}
+            LunchCenterVector = new Vector2(  ((DistenceList[0] - DistenceList[2])/(ParentPokemonRoom.RoomSize[0] - ParentPokemonRoom.RoomSize[1]))   ,( (DistenceList[1] - DistenceList[3]) / (ParentPokemonRoom.RoomSize[3] - ParentPokemonRoom.RoomSize[2])  ) );
+            LunchCenterVector = LunchCenterVector.normalized;
+            Debug.Log(DistenceList[0] +"+"+ DistenceList[1]+"+"+ DistenceList[2] + "+" + DistenceList[3] + "+" + LunchCenterVector);
+            //StartCoroutine( testline(EmptyCenter , RPRay.point, UPRay.point, LPRay.point, DPRay.point));
+        }
+
+        List<Klink> skList = GetSurroundChild();
+        
+        if (skList.Count == 1)
+        {
+            for (int i = 0; i < skList.Count; i++)
+            {
+                skList[i].BeLunch_MGearRush(Quaternion.AngleAxis( isEmptyConfusionDone ? (Random.Range(-30.0f,30.0f)) : 0 , Vector3.forward) * LunchCenterVector);
+            }
+        }
+        else
+        {
+            
+            //每个被发射小齿轮间隔的角度
+            float PerAngle = Mathf.Clamp((90.0f / (float)(skList.Count - 1)), 0.0f, 25.0f);
+            //所有小齿轮的发射角度和
+            float AllAngle = PerAngle * (float)(skList.Count - 1);
+            //第一个小齿轮的发射角度
+            Vector2 LunchStartVector = Quaternion.AngleAxis(-(AllAngle / 2.0f), Vector3.forward) * LunchCenterVector;
+
+            for (int i = 0; i < skList.Count; i++)
+            {
+                Vector2 LunchDirchild = Quaternion.AngleAxis(PerAngle * i, Vector3.forward) * LunchStartVector;
+                skList[i].BeLunch_MGearRush(Quaternion.AngleAxis(isEmptyConfusionDone ? (Random.Range(-30.0f, 30.0f)) : 0, Vector3.forward) * LunchDirchild);
+            }
+        }
+    }
+
+
+    /**
+    IEnumerator testline(Vector2 EmptyCenter , Vector2 R , Vector2 U, Vector2 L, Vector2 D )
+    {
+        while (true) {
+            Debug.DrawLine(EmptyCenter, R, Color.black, 0.5f);
+            Debug.DrawLine(EmptyCenter, U, Color.black, 0.5f);
+            Debug.DrawLine(EmptyCenter, L, Color.black, 0.5f);
+            Debug.DrawLine(EmptyCenter, D, Color.black, 0.5f);
+            yield return new WaitForSeconds(1.0f);
+        }
+    }
+    **/
 
     //=========================携带小齿轮冲刺============================
 
@@ -1018,39 +1552,93 @@ public class Klang : Empty
 
 
 
+
+
+
     //=========================携带小齿轮发射小齿轮============================
 
 
+    /// <summary>
+    /// 发射小齿轮的间隔CD
+    /// </summary>
+    static float TIME_LUNCH_SGEAR_CD = 0.95f;
 
+
+    /// <summary>
+    /// 发射小齿轮的最小次数
+    /// </summary>
+    static int COUNT_LUNCH_SGEAR = 3;
+
+
+
+    /// <summary>
+    /// 发射次数
+    /// </summary>
+    int LunchCount = 0;
 
     /// <summary>
     /// 携带小齿轮发射小齿轮计时器
     /// <summary>
-    float LunchSGear_WithLGearTimer = 0;
+    float LunchSGear_HaveSGearTimer = 0;
 
     /// <summary>
     /// 携带小齿轮发射小齿轮开始
     /// <summary>
-    public void LunchSGear_WithLGearStart(float Timer)
+    public void LunchSGear_HaveSGearStart()
     {
-        LunchSGear_WithLGearTimer = Timer;
-        ChangeSubState(SubState.LunchSGear_WithLGear);
+        //LunchSGear_HaveSGearTimer = Timer;
+        ChangeSubState(SubState.LunchSGear_HaveSGear);
+        LunchASGear();
+        LunchCount = 0;
+        //关闭残影
+        if (ShadowCoroutine != null)
+        {
+            StopShadowCoroutine();
+        }
     }
 
     /// <summary>
     /// 携带小齿轮发射小齿轮结束
     /// <summary>
-    public void LunchSGear_WithLGearOver()
+    public void LunchSGear_HaveSGearOver()
     {
-        LunchSGear_WithLGearTimer = 0;
+        LunchSGear_HaveSGearTimer = 0;
+        LunchCount = 0;
     }
 
+
+
+
+    /// <summary>
+    /// 发射一个小齿轮
+    /// </summary>
+    public void LunchASGear()
+    {
+        List<Klink> skList = GetSurroundChild();
+        if (skList.Count > 0 && skList[0].BeLunch())
+        {
+            LunchCount++;
+        }
+    }
 
     //=========================携带小齿轮发射小齿轮============================
 
 
 
     //==■==■==■==■==■==■==■主状态：携带小齿轮状态■==■==■==■==■==■==■==
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

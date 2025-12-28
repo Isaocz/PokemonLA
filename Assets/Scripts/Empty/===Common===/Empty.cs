@@ -1620,11 +1620,11 @@ public class Empty : Pokemon
     /// <summary>
     /// 生成残影用的协程
     /// </summary>
-    protected Coroutine ShadowCoroutine;
+    public Coroutine ShadowCoroutine;
     /// <summary>
     /// 是否生成残影
     /// </summary>
-    protected bool isShadowMove = false;
+    public bool isShadowMove = false;
 
 
     /// <summary>
@@ -1633,7 +1633,7 @@ public class Empty : Pokemon
     /// <param name="Interval">生成残影的间隔</param>
     /// <param name="disappearingSpeed">残影的消失速度</param>
     /// <param name="color">残影的颜色</param>
-    protected void StartShadowCoroutine(float Interval, float disappearingSpeed, Color color)
+    public void StartShadowCoroutine(float Interval, float disappearingSpeed, Color color)
     {
         //Debug.Log("StartSHadow");
         isShadowMove = true; // 开始冲刺
@@ -1644,7 +1644,7 @@ public class Empty : Pokemon
     /// <summary>
     /// 停止残影协程
     /// </summary>
-    protected void StopShadowCoroutine()
+    public void StopShadowCoroutine()
     {
         //Debug.Log("StopSHadow");
         isShadowMove = false; // 设置停止冲刺

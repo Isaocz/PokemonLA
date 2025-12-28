@@ -54,6 +54,7 @@ public class Klink : Empty
         Idle_WithMGear,      //跟随中齿轮发呆
         Surround_WithMGear,  //跟随中齿轮环绕
         Lunched_WithMGear,   //跟随中齿轮被发射
+        MGearRushLunched_WithMGear,   //跟随中齿轮中齿轮冲刺后被发射
         Back_WithMGear,      //跟随中齿轮返回
         Idle_WithLGear,      //跟随大齿轮发呆
         Surround_WithLGear,  //跟随大齿轮环绕
@@ -69,7 +70,7 @@ public class Klink : Empty
     private static Dictionary<MainState, SubState[]> StateMap = new()
     {
         { MainState.Single, new[] { SubState.Idle_Single, SubState.Move_Single, SubState.CircleAtk_Single } },
-        { MainState.WithMGear, new[] { SubState.Idle_WithMGear, SubState.Surround_WithMGear, SubState.Lunched_WithMGear, SubState.Back_WithMGear } },
+        { MainState.WithMGear, new[] { SubState.Idle_WithMGear, SubState.Surround_WithMGear, SubState.Lunched_WithMGear, SubState.MGearRushLunched_WithMGear, SubState.Back_WithMGear } },
         { MainState.WithLGear, new[] { SubState.Idle_WithLGear, SubState.Surround_WithLGear, SubState.Back_WithLGear } },
     };
     
@@ -101,7 +102,7 @@ public class Klink : Empty
 
         //开局发呆
         Idle_SingleStart(TIME_IDLE_SINGLE_START);
-
+        GetShield(maxHP/5);
         StartOverEvent();
     }
 
@@ -208,13 +209,19 @@ public class Klink : Empty
                                     //低速模式时 到达时间后进入高速模式
                                     if (!isHighSpeed && Move_SingleTimer >= TIME_ENTER_HIGHSPEED_MOVE_SINGLE)
                                     {
-                                        HighSpeedModeEnter();
+                                        if (SearchParent() == MainState.Single)
+                                        {
+                                            HighSpeedModeEnter();
+                                        }
                                     }
                                     //高速模式时 到达时间后进入低速模式
                                     if (isHighSpeed && Move_SingleTimer >= TIME_OVER_HIGHSPEED_MOVE_SINGLE)
                                     {
-                                        HighSpeedModeOver();
-                                        Move_SingleTimer = 0;
+                                        if (SearchParent() == MainState.Single)
+                                        {
+                                            HighSpeedModeOver();
+                                            Move_SingleTimer = 0;
+                                        }
                                     }
 
                                     //在高速模式时检测到玩家进入攻击状态
@@ -316,9 +323,12 @@ public class Klink : Empty
                                 //Debug.Log(CircleAtkDir);
                                 if (CircleAtk_SingleTimer <= 0 || isFearDone)         //计时器时间到时间，结束【单个齿轮圆圈攻击】状态
                                 {
-                                    CircleAtk_SingleOver();
-                                    Idle_SingleStart(TIME_IDLE_SINGLE_START);
-                                    //TODO添加下一个状态的开始方法
+                                    if (SearchParent() == MainState.Single)
+                                    {
+                                        CircleAtk_SingleOver();
+                                        Idle_SingleStart(TIME_IDLE_SINGLE_START);
+                                        //TODO添加下一个状态的开始方法
+                                    }
                                 }
                                 break;
                         }
@@ -374,20 +384,54 @@ public class Klink : Empty
                                     break;
                                 //【跟随中齿轮被发射】状态
                                 case SubState.Lunched_WithMGear:
-                                    Lunched_WithMGearTimer -= Time.deltaTime;//【跟随中齿轮被发射】计时器时间减少
-                                    if (Lunched_WithMGearTimer <= 0)         //计时器时间到时间，结束【跟随中齿轮被发射】状态
+                                    //Lunched_WithMGearTimer -= Time.deltaTime;//【跟随中齿轮被发射】计时器时间减少
+                                    //if (Lunched_WithMGearTimer <= 0)         //计时器时间到时间，结束【跟随中齿轮被发射】状态
+                                    //{
+                                    //    Lunched_WithMGearOver();
+                                    //    //TODO添加下一个状态的开始方法
+                                    //}
+                                    if (LunchTurnCount >= 3 &&  Vector3.Distance(transform.position , ParentEmptyByChild.transform.position) <= SURROUND_DISTENCE)
+                                    {
+                                        Debug.Log("Back");
+                                        Lunched_WithMGearOver();
+                                        Back_WithMGearStart();
+                                    }
+                                    MoveBySpeedAndDir(LunchDirector, speed, SpeedAlpha * SPEED_LUNCH_ALPHA, 3.4f, 3.4f, 2.1f, 2.1f);
+                                    break;
+                                //【跟随中齿轮中齿轮冲刺时被发射】状态
+                                case SubState.MGearRushLunched_WithMGear:
+                                    if(isSpeedDown_MGearRushLunched){
+                                        MGearRushLunched_WithMGearTimer -= Time.deltaTime;//【跟随中齿轮中齿轮冲刺时被发射】计时器时间减少
+                                    }
+                                    if (MGearRushLunched_WithMGearTimer <= 0)         //计时器时间到时间，结束【跟随中齿轮中齿轮冲刺时被发射】状态
                                     {
                                         Lunched_WithMGearOver();
-                                        //TODO添加下一个状态的开始方法
+                                        Idle_WithMGearStart(TIME_IDLE_WITHMGEAR_MGEARRUSHLUNCHED_WITHMGEAR);
                                     }
+                                    if (MGearRushLunchTurnCount >= 2 )
+                                    {
+                                        //开始减速
+                                        if (animator.GetBool("HighSpeed"))
+                                        {
+                                            HighSpeedModeOver();
+                                            //关闭残影
+                                            if (ShadowCoroutine != null)
+                                            {
+                                                StopShadowCoroutine();
+                                            }
+                                        }
+                                    }
+                                    //Debug.Log(name + "+" + MGearRushLunchDirector);
+                                    MoveBySpeedAndDir(MGearRushLunchDirector, speed, SpeedAlpha * MGearRushLunchSpeedAlpha, 3.4f, 3.4f, 2.1f, 2.1f);
                                     break;
                                 //【跟随中齿轮返回】状态
                                 case SubState.Back_WithMGear:
-                                    //距离父辈的距离大于一定时接近父辈
-                                    if (Vector2.Distance(ParentPosition, (Vector2)transform.position) > SURROUND_DISTENCE)
+                                    //距离父辈环绕轨道的距离大于一定时接近父辈
+                                    if (Mathf.Abs(Vector2.Distance(ParentPosition, (Vector2)transform.position) - SURROUND_DISTENCE) > 0.2f)
                                     {
                                         //设置方向
                                         Vector2 MoveDirector = (ParentPosition - (Vector2)transform.position).normalized;
+                                        if (Vector2.Distance(ParentPosition, (Vector2)transform.position) < SURROUND_DISTENCE) { MoveDirector = -MoveDirector; }
                                         //不恐惧时移动
                                         if (!isFearDone)
                                         {
@@ -397,12 +441,12 @@ public class Klink : Empty
                                             rigidbody2D.position = new Vector2(
                                                 Mathf.Clamp(rigidbody2D.position.x
                                                     + (float)MoveDirector.x * Time.deltaTime * speed ,       //方向*速度
-                                                ParentPokemonRoom.RoomSize[2] - 0.0f + ParentPokemonRoom.transform.position.x, //最小值
-                                                ParentPokemonRoom.RoomSize[3] + 0.0f + ParentPokemonRoom.transform.position.x),//最大值
+                                                ParentPokemonRoom.RoomSize[2] - 2.1f + ParentPokemonRoom.transform.position.x, //最小值
+                                                ParentPokemonRoom.RoomSize[3] + 2.1f + ParentPokemonRoom.transform.position.x),//最大值
                                                 Mathf.Clamp(rigidbody2D.position.y
                                                     + (float)MoveDirector.y * Time.deltaTime * speed ,        //方向*速度 
-                                                ParentPokemonRoom.RoomSize[1] - 0.0f + ParentPokemonRoom.transform.position.y,  //最小值
-                                                ParentPokemonRoom.RoomSize[0] + 0.0f + ParentPokemonRoom.transform.position.y));//最大值
+                                                ParentPokemonRoom.RoomSize[1] - 3.4f + ParentPokemonRoom.transform.position.y,  //最小值
+                                                ParentPokemonRoom.RoomSize[0] + 3.4f + ParentPokemonRoom.transform.position.y));//最大值
                                             Director = _mTool.TiltMainVector2(MoveDirector);
                                             SetDirector(Director);
                                         }
@@ -415,6 +459,34 @@ public class Klink : Empty
                                     }
                                     break;
                             }
+                        }
+                        if ((isEmptyFrozenDone || isSleepDone || isSilence) && subState != SubState.Idle_WithMGear )
+                        {
+                            animator.SetTrigger("Sleep");
+                            animator.SetBool("HighSpeed", false);
+                            switch (subState)
+                            {
+                                case SubState.Lunched_WithMGear:
+                                    Lunched_WithMGearOver();
+                                    break;
+                                case SubState.MGearRushLunched_WithMGear:
+                                    MGearRushLunched_WithMGearOver();
+                                    break;
+                                case SubState.Back_WithMGear:
+                                    Back_WithMGearOver();
+                                    break;
+                                case SubState.Surround_WithMGear:
+                                    Surround_WithMGearOver();
+                                    break;
+                            }
+                            HighSpeedModeOver();
+                            HighSpeedModeOut();
+                            Idle_WithMGearStart(TIME_IDLE_WITHMGEAR_START);
+                        }
+                        //恐惧时进入单人状态
+                        if (isFearDone || isEmptyInfatuationDone)
+                        {
+                            WithM2Single();
                         }
                     }
                     break;
@@ -545,6 +617,78 @@ public class Klink : Empty
                 }
                 break;
             case MainState.WithMGear:
+                if (ParentEmptyByChild == null)
+                {
+                    //父辈的位置
+                    SearchParent();
+                }
+                else
+                {
+                    switch (subState)
+                    {
+                        case SubState.Back_WithMGear:
+                            //高速攻击
+                            if (isHighSpeed)
+                            {
+                                HighSpeedTouch(other);
+                            }
+                            //低速攻击
+                            else
+                            {
+                                NormalTouch(other);
+                            }
+                            break;
+                        case SubState.Idle_WithMGear:
+                            //高速攻击
+                            if (isHighSpeed)
+                            {
+                                HighSpeedTouch(other);
+                            }
+                            //低速攻击
+                            else
+                            {
+                                NormalTouch(other);
+                            }
+                            break;
+                        case SubState.Lunched_WithMGear:
+                            CircleAtkTouch(other);
+                            break;
+                        case SubState.MGearRushLunched_WithMGear:
+                            //高速攻击
+                            if (isHighSpeed)
+                            {
+                                CircleAtkTouch(other);
+                            }
+                            //低速攻击
+                            else
+                            {
+                                NormalTouch(other);
+                            }
+                            break;
+                        case SubState.Surround_WithMGear:
+                            //环绕时中齿轮是否冲刺
+                            if (surroundWithRushMGear)
+                            {
+                                Debug.Log("Rush");
+                                ParentEmptyByChild.GetComponent<Klang>().CircleAtkTouch(other);
+                            }
+                            else
+                            {
+                                Debug.Log("NotRush");
+                                //高速攻击
+                                if (isHighSpeed)
+                                {
+                                    HighSpeedTouch(other);
+                                }
+                                //低速攻击
+                                else
+                                {
+                                    NormalTouch(other);
+                                }
+                            }
+                            break;
+                    }
+                }
                 break;
             case MainState.WithLGear:
                 break;
@@ -555,6 +699,10 @@ public class Klink : Empty
             HMoveDir = -HMoveDir; isCanVMoveCount++; isCanHTurn = true;
         }
     }
+
+
+
+
 
 
     /// <summary>
@@ -618,6 +766,160 @@ public class Klink : Empty
             Pokemon.PokemonHpChange(this.gameObject, e.gameObject, DMAGE_CIRCLE_ATK, 0, 0, PokemonType.TypeEnum.Steel);
         }
     }
+
+
+
+
+
+
+
+
+    //=================================碰壁反弹=======================================
+
+
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        switch (FamilyState)
+        {
+            case MainState.Single:
+                break;
+            case MainState.WithMGear:
+                if (ParentEmptyByChild == null)
+                {
+                    //父辈的位置
+                    SearchParent();
+                }
+                else
+                {
+                    switch (subState)
+                    {
+                        case SubState.Back_WithMGear:
+                            break;
+                        case SubState.Idle_WithMGear:
+                            break;
+                        case SubState.Lunched_WithMGear:
+                            if (other.transform.tag == ("Room"))
+                            {
+                                Rebound_BeLunch();
+                            }
+                            break;
+                        case SubState.Surround_WithMGear:
+                            break;
+                        case SubState.MGearRushLunched_WithMGear:
+                            if (other.transform.tag == ("Room"))
+                            {
+                                Rebound_BeLunch();
+                            }
+                            break;
+                    }
+                }
+                break;
+            case MainState.WithLGear:
+                break;
+        }
+    }
+
+
+    /// <summary>
+    /// 反弹限制计时器的时间上限
+    /// </summary>
+    static float TIME_REBOUND_CD = 0.1f;
+
+    /// <summary>
+    /// 反弹限制计时器 防止在一次碰撞中多次反弹
+    /// </summary>
+    float ReboundTimer;
+
+
+
+    /// <summary>
+    /// 被发射时发生反弹
+    /// </summary>
+    bool Rebound_BeLunch()
+    {
+        //当前时间
+        float now = Time.time;
+
+        if (now - ReboundTimer < TIME_REBOUND_CD) { return false; } // 防抖：0.1s 内忽略
+
+        ReboundTimer = now;
+
+        //碰撞方向
+        Vector2 HitVector = Vector2.right;
+        {
+            Vector2 EmptyCenter = (Vector2)transform.position + GetComponent<Collider2D>().offset;
+            float[] DistenceList = new float[]{ 0.0f, 0.0f, 0.0f, 0.0f };
+            RaycastHit2D RPRay = Physics2D.Raycast(EmptyCenter, Vector2.right, LayerMask.GetMask("Room"));
+            RaycastHit2D UPRay = Physics2D.Raycast(EmptyCenter, Vector2.up, LayerMask.GetMask("Room"));
+            RaycastHit2D LPRay = Physics2D.Raycast(EmptyCenter, Vector2.left, LayerMask.GetMask("Room"));
+            RaycastHit2D DPRay = Physics2D.Raycast(EmptyCenter, Vector2.down, LayerMask.GetMask("Room"));
+            if (RPRay) { DistenceList[0] = RPRay.distance;  Debug.DrawLine(EmptyCenter, RPRay.point, Color.red, 0.1f); }
+            if (UPRay) { DistenceList[1] = UPRay.distance;  Debug.DrawLine(EmptyCenter, UPRay.point, Color.red, 0.1f); }
+            if (LPRay) { DistenceList[2] = LPRay.distance;  Debug.DrawLine(EmptyCenter, LPRay.point, Color.red, 0.1f); }
+            if (DPRay) { DistenceList[3] = DPRay.distance;  Debug.DrawLine(EmptyCenter, DPRay.point, Color.red, 0.1f); }
+            float MinDistence = DistenceList[0];
+            int MinIndex = 0;
+            for (int i = 1; i < 4; i++)
+            {
+                if (MinDistence > DistenceList[i])
+                {
+                    MinDistence = DistenceList[i];
+                    MinIndex = i;
+                }
+            }
+            //Debug.Log("R" + DistenceList[0] + "U" + DistenceList[1] + "L" + DistenceList[2] + "D" + DistenceList[3] + "+" + MinDistence);
+            HitVector = _mTool.MainVector2(Quaternion.AngleAxis(MinIndex * 90.0f , Vector3.forward) * HitVector);
+        }
+
+        //一般被发射
+        if (subState == SubState.Lunched_WithMGear)
+        {
+            //Debug.Log(HitVector);
+            LunchTurnCount++;
+            if (LunchTurnCount == 1)
+            {
+                LunchDirector = new Vector2(LunchDirector.x * (HitVector.x == 0 ? 1 : -1), LunchDirector.y * (HitVector.y == 0 ? 1 : -1));
+            }
+            else
+            {
+                LunchDirector = LunchDir(LunchTurnCount);
+            }
+        }
+        //跟随中齿轮冲刺后被发射
+        else if (subState == SubState.MGearRushLunched_WithMGear)
+        {
+            MGearRushLunchTurnCount++;
+            //第零次反弹被忽略 按照既定发射方向
+            if (MGearRushLunchTurnCount != 0)
+            {
+                //被反弹
+                MGearRushLunchDirector = new Vector2(MGearRushLunchDirector.x * (HitVector.x == 0 ? 1 : -1), MGearRushLunchDirector.y * (HitVector.y == 0 ? 1 : -1));
+            }
+            //减速后碰壁
+            if (!isHighSpeed)
+            {
+                //取消冲刺
+                if (MGearRushLunchSpeedAlpha != 1.0f)
+                {
+                    MGearRushLunchSpeedAlpha = 1.0f;
+                    isSpeedDown_MGearRushLunched = true;
+                }
+            }
+
+        }
+
+        return true;
+
+    }
+
+
+
+
+
+
+
+
+    //=================================碰壁反弹=======================================
 
 
     //■■■■■■■■■■■■■■■■■■■■碰撞■■■■■■■■■■■■■■■■■■■■■■
@@ -733,7 +1035,7 @@ public class Klink : Empty
         {
             Klinklang parentFather = SearchParentByDistence<Klinklang>();
             //有齿轮怪
-            if (parentFather != null)
+            if (parentFather != null && !parentFather.isFearDone)
             {
                 //Debug.Log("齿轮怪");
                 ChildBackHome(parentFather);//回齿轮怪家
@@ -746,7 +1048,7 @@ public class Klink : Empty
             {
                 Klang father = SearchParentByDistence<Klang>();
                 //有齿轮组
-                if (father != null)
+                if (father != null && !father.isFearDone)
                 {
                     //Debug.Log("齿轮组");
                     ChildBackHome(father);//回齿轮组家
@@ -788,6 +1090,7 @@ public class Klink : Empty
         if (ParentEmptyByChild != null)
         {
             //transform.parent = ParentPokemonRoom.EmptyFile();
+            ParentEmptyByChild.GetComponent<Klang>().HaveChild2Single();
             ParentEmptyByChild = null;
         }
     }
@@ -801,6 +1104,7 @@ public class Klink : Empty
         if (ParentEmptyByChild != null && !ParentEmptyByChild.ChildrenList.Contains(this))
         {
             ParentEmptyByChild.ChildrenList.Add(this);
+            ParentEmptyByChild.GetComponent<Klang>().Single2HaveChild();
         }
         //Debug.Log(ParentEmptyByChild);
         //忽略碰撞体
@@ -839,6 +1143,30 @@ public class Klink : Empty
             }
         }
         return 0;
+    }
+
+
+    public void WithM2Single()
+    {
+        switch (subState)
+        {
+            case SubState.Lunched_WithMGear:
+                Lunched_WithMGearOver();
+                break;
+            case SubState.MGearRushLunched_WithMGear:
+                MGearRushLunched_WithMGearOver();
+                break;
+            case SubState.Back_WithMGear:
+                Back_WithMGearOver();
+                break;
+            case SubState.Surround_WithMGear:
+                Surround_WithMGearOver();
+                break;
+        }
+        HighSpeedModeOver();
+        HighSpeedModeOut();
+        Idle_SingleStart(TIME_IDLE_SINGLE_START);
+        ChildLeaveHome();
     }
 
 
@@ -1033,6 +1361,11 @@ public class Klink : Empty
     {
         Idle_SingleTimer = Timer;
         ChangeSubState(SubState.Idle_Single);
+        //关闭残影
+        if (ShadowCoroutine != null)
+        {
+            StopShadowCoroutine();
+        }
     }
 
     /// <summary>
@@ -1241,6 +1574,16 @@ public class Klink : Empty
 
 
 
+    
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1267,6 +1610,9 @@ public class Klink : Empty
     //跟随中齿轮返回后的冷却时间
     static float TIME_IDLE_WITHMGEAR_BACK_WITHMGEAR = 0.0f; //TODO需修改时间
 
+    //跟随中齿轮中齿轮冲刺后被发射后的冷却时间
+    static float TIME_IDLE_WITHMGEAR_MGEARRUSHLUNCHED_WITHMGEAR = 7.0f; //TODO需修改时间
+
 
 
     /// <summary>
@@ -1281,6 +1627,11 @@ public class Klink : Empty
     {
         Idle_WithMGearTimer = Timer;
         ChangeSubState(SubState.Idle_WithMGear);
+        //关闭残影
+        if (ShadowCoroutine != null)
+        {
+            StopShadowCoroutine();
+        }
     }
 
     /// <summary>
@@ -1307,6 +1658,18 @@ public class Klink : Empty
 
 
 
+    /// <summary>
+    /// 是否环绕在正在冲刺的中齿轮
+    /// </summary>
+    public bool SurroundWithRushMGear
+    {
+        get { return surroundWithRushMGear; }
+        set { surroundWithRushMGear = value; }
+    }
+    bool surroundWithRushMGear = false;
+
+
+
     public float SurroundRotationSpeed
     {
         get { return surroundRotationSpeed; }
@@ -1326,6 +1689,13 @@ public class Klink : Empty
         rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
         //设定父对象和家
         transform.parent = ParentEmptyByChild.ChildHome;
+        ParentEmptyByChild.GetComponent<Klang>().Single2HaveChild();
+        HighSpeedModeEnter();
+        //关闭残影
+        if (ShadowCoroutine != null)
+        {
+            StopShadowCoroutine();
+        }
     }
 
     /// <summary>
@@ -1343,7 +1713,7 @@ public class Klink : Empty
         float NowAngle = _mTool.Angle_360Y(((Vector2)transform.position - ParentPosition).normalized, Vector2.right);
         //Debug.Log("Vector2" + ((Vector2)transform.position - ParentPosition).normalized);
         //Debug.Log("NowAngle" + NowAngle);
-        float PlusAngle = (NowAngle + RotationSpeed * Time.deltaTime) % (360.0f);
+        float PlusAngle = (NowAngle + RotationSpeed * Time.deltaTime * SpeedAlpha ) % (360.0f);
         //Debug.Log("PlusAngle" + PlusAngle);
         //Debug.Log("Xcos" + Mathf.Cos(PlusAngle * Mathf.Deg2Rad) * SURROUND_DISTENCE);
         //Debug.Log("Ysin" + Mathf.Sin(PlusAngle * Mathf.Deg2Rad) * SURROUND_DISTENCE);
@@ -1385,35 +1755,238 @@ public class Klink : Empty
 
 
 
+
+
+
     //=========================跟随中齿轮被发射============================
 
 
 
+    /// <summary>
+    /// 发射的初始速度增加系数
+    /// </summary>
+    static float SPEED_LUNCH_ALPHA = 1.65f;
+
+
+
+    /// <summary>
+    /// 被发射的角度
+    /// </summary>
+    Vector2 LunchDirector = Vector2.zero;
+
+    /// <summary>
+    /// 发射的速度增加系数
+    /// </summary>
+    float LunchSpeedAlpha = 0;
 
     /// <summary>
     /// 跟随中齿轮被发射计时器
     /// <summary>
-    float Lunched_WithMGearTimer = 0;
+    //float Lunched_WithMGearTimer = 0;
+
+    /// <summary>
+    /// 被发射的反弹计数
+    /// <summary>
+    int LunchTurnCount = 0;
+
+
+    /// <summary>
+    /// 被发射 发射失败时返回false
+    /// <summary>
+    public bool BeLunch()
+    {
+        if (subState == SubState.Surround_WithMGear && isHighSpeed) {
+            //结束环绕
+            Surround_WithMGearOver();
+            //开始发射
+            Lunched_WithMGearStart();
+            return true;
+        }
+        return false;
+    }
+
 
     /// <summary>
     /// 跟随中齿轮被发射开始
     /// <summary>
-    public void Lunched_WithMGearStart(float Timer)
+    public void Lunched_WithMGearStart()
     {
-        Lunched_WithMGearTimer = Timer;
+        //Lunched_WithMGearTimer = Timer;
         ChangeSubState(SubState.Lunched_WithMGear);
+        LunchTurnCount = 0;
+        LunchDirector = LunchDir(LunchTurnCount);
+        //开启残影
+        if (ShadowCoroutine == null)
+        {
+            StartShadowCoroutine(0.04f, 1.8f, new Color(0.6603774f, 0.6603774f, 0.6603774f, 0.6f));
+        }
     }
+
 
     /// <summary>
     /// 跟随中齿轮被发射结束
     /// <summary>
     public void Lunched_WithMGearOver()
     {
-        Lunched_WithMGearTimer = 0;
+        //Lunched_WithMGearTimer = 0;
+        //关闭残影
+        if (ShadowCoroutine != null)
+        {
+            StopShadowCoroutine();
+        }
     }
 
 
+    /// <summary>
+    /// 小齿轮发射的角度
+    /// </summary>
+    public Vector2 LunchDir(int count)
+    {
+        Vector2 dir = (TargetPosition - (Vector2)transform.position).normalized;
+        switch (count)
+        {
+            case 0:
+                dir = Quaternion.AngleAxis((isEmptyConfusionDone || (ParentEmptyByChild != null && ParentEmptyByChild.isEmptyConfusionDone)) ? (Random.Range(-30.0f, 30.0f)) : 0, Vector3.forward) * (TargetPosition - (Vector2)transform.position).normalized;
+                break;
+            case 1:
+                //dir = (TargetPosition - (Vector2)transform.position).normalized;
+                break;
+            case 2:
+                dir = Quaternion.AngleAxis(isEmptyConfusionDone ? (Random.Range(-30.0f, 30.0f)) : 0, Vector3.forward) * (TargetPosition - (Vector2)transform.position).normalized;
+                break;
+            case 3:
+                dir = ((Vector2)ParentEmptyByChild.transform.position - (Vector2)transform.position).normalized;
+                break;
+            default:
+                dir = ((Vector2)ParentEmptyByChild.transform.position - (Vector2)transform.position).normalized;
+                break;
+        }
+        return dir;
+    }
+
+
+
+
+
+
+
     //=========================跟随中齿轮被发射============================
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //=========================跟随中齿轮中齿轮冲刺后被发射============================
+
+
+    /// <summary>
+    /// 跟随中齿轮中齿轮冲刺后被发射速度逐渐变为0需要的时间
+    /// <summary>
+    static float TIME_MGEARRUSHLUNCH_SPEEDDOWN = 2.8f;
+
+    /// <summary>
+    /// 跟随中齿轮被发射计时器
+    /// <summary>
+    float MGearRushLunched_WithMGearTimer = 0;
+
+    /// <summary>
+    /// 中齿轮冲刺后被发射的角度
+    /// </summary>
+    Vector2 MGearRushLunchDirector = Vector2.zero;
+
+    /// <summary>
+    /// 被发射的反弹计数
+    /// <summary>
+    int MGearRushLunchTurnCount = 0;
+
+    /// <summary>
+    /// 是否开始减速
+    /// </summary>
+    bool isSpeedDown_MGearRushLunched = false;
+
+    /// <summary>
+    /// 发射的速度增加系数
+    /// </summary>
+    float MGearRushLunchSpeedAlpha = 1.0f;
+
+    /// <summary>
+    /// 被发射 发射失败时返回false
+    /// <summary>
+    public bool BeLunch_MGearRush( Vector2 Dir)
+    {
+        Debug.Log(name + "+" + (subState == SubState.Surround_WithMGear) + "+" + isHighSpeed);
+        if (subState == SubState.Surround_WithMGear )
+        {
+            if (!isHighSpeed && !animator.GetBool("HighSpeed")) { HighSpeedModeStart(); }
+            //结束环绕
+            Surround_WithMGearOver();
+            //开始发射
+            MGearRushLunchDirector = Dir;
+            MGearRushLunched_WithMGearStart();
+            return true;
+        }
+        return false;
+    }
+
+
+    /// <summary>
+    /// 跟随中齿轮被发射开始
+    /// <summary>
+    public void MGearRushLunched_WithMGearStart()
+    {
+        MGearRushLunched_WithMGearTimer = TIME_MGEARRUSHLUNCH_SPEEDDOWN;
+        ChangeSubState(SubState.MGearRushLunched_WithMGear);
+        MGearRushLunchTurnCount = 0;
+        isSpeedDown_MGearRushLunched = false;
+        MGearRushLunchSpeedAlpha = SPEED_LUNCH_ALPHA;
+        //开启残影
+        if (ShadowCoroutine == null)
+        {
+            StartShadowCoroutine(0.04f, 1.8f, new Color(0.6603774f, 0.6603774f, 0.6603774f, 0.6f));
+        }
+    }
+
+
+    /// <summary>
+    /// 跟随中齿轮被发射结束
+    /// <summary>
+    public void MGearRushLunched_WithMGearOver()
+    {
+        MGearRushLunched_WithMGearTimer = 0;
+        MGearRushLunchSpeedAlpha = 1.0f;
+        isSpeedDown_MGearRushLunched = false;
+        //关闭残影
+        if (ShadowCoroutine != null)
+        {
+            StopShadowCoroutine();
+        }
+    }
+
+
+
+
+
+
+
+
+
+    //=========================跟随中齿轮中齿轮冲刺后被发射============================
+
+
+
+
+
+
+
+
 
 
 
@@ -1453,6 +2026,25 @@ public class Klink : Empty
 
 
     //==■==■==■==■==■==■==■主状态：跟随中齿轮状态■==■==■==■==■==■==■==
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
