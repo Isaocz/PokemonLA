@@ -540,7 +540,7 @@ GameObject:
   - component: {fileID: 5988874675239414635}
   m_Layer: 0
   m_Name: PiplupNPC
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -575,7 +575,7 @@ Animator:
   m_GameObject: {fileID: 8767347100389407889}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 90e896266b6c86646905a66aa6c00d8a, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5118914c65390274d9ead282704ceb2b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -666,9 +666,25 @@ MonoBehaviour:
   - {fileID: -2303997766882576965, guid: 041511759d5be8947a6394ab5af93fa8, type: 3}
   - {fileID: -1632632501269007243, guid: 041511759d5be8947a6394ab5af93fa8, type: 3}
   - {fileID: 2293384271713804334, guid: 041511759d5be8947a6394ab5af93fa8, type: 3}
+  isTeleporting: 0
   npcState: 0
+  npcAction: 0
   location: 0
+  InitialState: 2
+  InitialLocation: 1
+  InitialTransform: {x: -4.34, y: 10.36, z: 0}
+  TimeTable:
+  - StartPosition: {x: -4.34, y: 10.36, z: 0}
+    EndPosition: {x: -4.34, y: 15, z: 0}
+    StartTime: 10
+    EndTime: 20
+  - StartPosition: {x: -4.34, y: 15, z: 0}
+    EndPosition: {x: 0, y: 15, z: 0}
+    StartTime: 20
+    EndTime: 30
   Director: {x: 0, y: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
+  moveSpeed: 2
 --- !u!61 &1443726071196752872
 BoxCollider2D:
   m_ObjectHideFlags: 0

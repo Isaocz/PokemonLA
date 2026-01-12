@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 
 public class TownDoor : MonoBehaviour
@@ -19,9 +18,9 @@ public class TownDoor : MonoBehaviour
     //传送后玩家的面对方向
     public Vector2 PlayerR;
 
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("存在" + other);
         if (other.tag == "Player")
         {
             town.State = ParentHouse;
@@ -57,11 +56,11 @@ public class TownDoor : MonoBehaviour
             Invoke("SetCameraBoard", 1.2f);
             Invoke("SetCameraStop", 3.5f);
         }
-        else if (other.tag == "NPC")
+        else if (other.tag == "NPC" && !other.isTrigger)
         {
             TownNPC tnpc = other.GetComponent<TownNPC>();
             
-            if (tnpc != null)
+            if (tnpc != null && !tnpc.isTeleporting)
             {
                 Townnpc = tnpc;
                 Animator animator = tnpc.GetComponent<Animator>();
@@ -69,6 +68,9 @@ public class TownDoor : MonoBehaviour
                 {
                     animator.SetFloat("Speed", 0);
                 }
+
+                tnpc.isTeleporting = true;
+
                 Invoke("TeleportNPC", 1.1f);
             }
         }
@@ -96,6 +98,7 @@ public class TownDoor : MonoBehaviour
 
     }
 
+
     void TeleportNPC()
     {
         Debug.Log("已经传送" + Townnpc);
@@ -113,9 +116,11 @@ public class TownDoor : MonoBehaviour
         }
         else
         {
-            Townnpc.transform.position = town.InstancePlayerPosition();
+            Townnpc.transform.position = Townnpc.InstanceNPCPosition();
         }
-
+        Townnpc.isTeleporting = false;
+        Townnpc.StopAvoidance();
+        Townnpc.RecalculatePath();
     }
     /// <summary>
     /// 将TownMap中的TownPlayerState的枚举转化成TownNPC类中的NPCLocation的枚举，其包含的名字必须相同，若不相同Parse方法会抛出错误
