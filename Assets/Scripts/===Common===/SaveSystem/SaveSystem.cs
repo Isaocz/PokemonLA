@@ -96,6 +96,9 @@ public class SaveData
     /// </summary>
     public NPCDialogState TownNPCDialogState;
 
+    //===================TODO=======================
+    //增加小镇时间TownGlobalTimer的存储
+    //===================TODO=======================
 
     public SaveData(int saveIndex, string saveName, string lastGameTime)
     {

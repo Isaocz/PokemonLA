@@ -11,6 +11,7 @@ public class PiplupNPC : TownNPC
         NPCStart();
 
         //■■！！TODO初始化状态机location，npcState
+        Initialize();
 
         //初始化方向
         SetDirector(new Vector2(0,-1));
