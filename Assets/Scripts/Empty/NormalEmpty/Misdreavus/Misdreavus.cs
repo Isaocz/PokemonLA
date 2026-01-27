@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Misdreavus : Empty
 {
-    private Vector3 targetPosition;
+    private Vector3 TargetPosition;
     private Vector3 direction;
     private string currentState;
 
@@ -92,20 +92,22 @@ public class Misdreavus : Empty
             EmptyBeKnock();
             if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
             {
-                if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForDistanceEmpty() == null)
+                //根据魅惑情况确实目标位置
+                Transform InfatuationTarget = InfatuationForDistanceEmpty();
+                if (!isEmptyInfatuationDone || (ParentPokemonRoom.GetEmptyList().Count + ParentPokemonRoom.GetEmptyCloneList().Count) <= 1 || InfatuationTarget == null)
                 {
-                    targetPosition = player.transform.position;
-                    if (isSubsititue && SubsititueTarget != null) { targetPosition = SubsititueTarget.transform.position; }
+                    TargetPosition = player.transform.position;
+                    if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
                 }
-                else { targetPosition = InfatuationForDistanceEmpty().transform.position; }
+                else { TargetPosition = InfatuationTarget.transform.position; }
 
                 if (!isFearDone)
                 {
-                    if ((targetPosition - transform.position).magnitude <= 1.0f)
+                    if ((TargetPosition - transform.position).magnitude <= 1.0f)
                     {
                         speed = 0.5f;
                     }
-                    else if ((targetPosition - transform.position).magnitude > 1.0f && (targetPosition - transform.position).magnitude <= 3.0f)
+                    else if ((TargetPosition - transform.position).magnitude > 1.0f && (TargetPosition - transform.position).magnitude <= 3.0f)
                     {
                         speed = 2.0f;
                     }
@@ -113,7 +115,7 @@ public class Misdreavus : Empty
                     {
                         speed = 4.0f;
                     }
-                    direction = (targetPosition - transform.position).normalized;
+                    direction = (TargetPosition - transform.position).normalized;
                     direction = (Quaternion.AngleAxis(isEmptyConfusionDone ? 30 : 0, Vector3.forward) * direction).normalized;
                     animator.SetFloat("LookX", (direction.x >= 0 ? 1 : -1));
                     animator.SetFloat("LookY", (direction.y >= 0 ? 1 : -1));
@@ -123,11 +125,11 @@ public class Misdreavus : Empty
                 else
                 {
                     speed = 6.0f;
-                    direction = (targetPosition - transform.position).normalized;
+                    direction = (TargetPosition - transform.position).normalized;
                     direction = (Quaternion.AngleAxis(isEmptyConfusionDone ? 150 : 180, Vector3.forward) * direction).normalized;
                     animator.SetFloat("LookX", (direction.x >= 0 ? 1 : -1));
                     animator.SetFloat("LookY", (direction.y >= 0 ? 1 : -1));
-                    if ((targetPosition - transform.position).magnitude >= 2.5f)
+                    if ((TargetPosition - transform.position).magnitude >= 2.5f)
                     {
                         rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)direction.x * Time.deltaTime * speed, -15f + transform.parent.position.x, 15f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)direction.y * Time.deltaTime * speed, -10f + transform.parent.position.y, 10f + transform.parent.position.y));
                     }

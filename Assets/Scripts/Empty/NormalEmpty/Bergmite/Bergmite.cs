@@ -314,12 +314,13 @@ public class Bergmite : Empty
         {
             if (NowState != BergmiteState.Jump && NowState != BergmiteState.IdleInParent && NowState != BergmiteState.Drop ) { EmptyBeKnock(); } //判定是否被击退
             //根据魅惑情况确实目标位置
-            if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForDistanceEmpty() == null)
+            Transform InfatuationTarget = InfatuationForDistanceEmpty();
+            if (!isEmptyInfatuationDone || (ParentPokemonRoom.GetEmptyList().Count + ParentPokemonRoom.GetEmptyCloneList().Count) <= 1 || InfatuationTarget == null)
             {
                 TargetPosition = player.transform.position;
                 if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
             }
-            else { TargetPosition = InfatuationForDistanceEmpty().transform.position; }
+            else { TargetPosition = InfatuationTarget.transform.position; }
         }
     }
 

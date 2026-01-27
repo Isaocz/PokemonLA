@@ -273,6 +273,26 @@ public class _mTool : MonoBehaviour
 
 
     /// <summary>
+    /// 获取某个Transform第一层子对象中的T
+    /// </summary>
+    /// <param name="Father"></param>
+    /// <returns></returns>
+    public static List<T> GetAll<T>(Transform Parent)
+    {
+        List<T> Output = new List<T> { };
+        if (Parent.childCount != 0)
+        {
+            for (int i = 0; i < Parent.childCount; i++)
+            {
+                T t = Parent.GetChild(i).GetComponent<T>();
+                if (t != null) { Output.Add(t); }
+            }
+        }
+        return Output;
+    }
+
+
+    /// <summary>
     /// 给字符串的每个字符间插入一个空格
     /// </summary>
     public static string AddSpaceInString( string s )
@@ -316,6 +336,38 @@ public class _mTool : MonoBehaviour
 
 
 
+
+
+    /// <summary>
+    /// 忽略某个特定碰撞箱的射线检测
+    /// </summary>
+    /// <param name="origin"></param>
+    /// <param name="dir"></param>
+    /// <param name="distance"></param>
+    /// <param name="layerMask"></param>
+    /// <param name="ignore"></param>
+    /// <returns></returns>
+    public static RaycastHit2D RaycastIgnoreCollider(Vector2 origin, Vector2 dir, float distance, int layerMask, List<Collider2D> ignore)
+    {
+        var hits = Physics2D.RaycastAll(origin, dir, distance, layerMask);
+
+        RaycastHit2D closest = default;
+        float minDist = float.MaxValue;
+
+        foreach (var h in hits)
+        {
+            if (ignore.Contains(h.collider))
+                continue; // 忽略指定 collider
+
+            if (h.distance < minDist)
+            {
+                minDist = h.distance;
+                closest = h;
+            }
+        }
+
+        return closest;
+    }
 
 
 

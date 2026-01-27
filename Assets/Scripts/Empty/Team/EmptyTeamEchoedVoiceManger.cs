@@ -20,6 +20,7 @@ public class EmptyTeamEchoedVoiceManger : EmptyTeamManger
         EmptyTeamFixedUpdate();
     }
 
+
     protected override bool EmptyTeamEnqueueCondition(Empty empty)
     {
         bool output = false;

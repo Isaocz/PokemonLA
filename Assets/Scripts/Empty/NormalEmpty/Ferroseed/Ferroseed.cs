@@ -143,6 +143,8 @@ public class Ferroseed : Empty
                     TargetPosition = InfatuationForDistanceEmpty().transform.position;
                 }
 
+
+
             }
             if ((isSleepDone || isFearDone || isEmptyFrozenDone || isSilence) && !isIdle)
             {

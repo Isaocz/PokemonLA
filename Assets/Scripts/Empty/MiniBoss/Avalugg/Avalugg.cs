@@ -150,12 +150,13 @@ public class Avalugg : Empty
         {
             EmptyBeKnockByTransform();//判定是否被击退
             //根据魅惑情况确实目标位置
-            if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || InfatuationForDistanceEmpty() == null)
+            Transform InfatuationTarget = InfatuationForDistanceEmpty();
+            if (!isEmptyInfatuationDone || (ParentPokemonRoom.GetEmptyList().Count + ParentPokemonRoom.GetEmptyCloneList().Count) <= 1 || InfatuationTarget == null)
             {
                 TargetPosition = player.transform.position;
                 if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
             }
-            else { TargetPosition = InfatuationForDistanceEmpty().transform.position; }
+            else { TargetPosition = InfatuationTarget.transform.position; }
         }
     }
 
@@ -233,7 +234,7 @@ public class Avalugg : Empty
     /// <summary>
     /// 忽略所有冰宝和冰岩怪之间的碰撞
     /// </summary>
-    public void IgnoreCollisionParentChild()
+    public override void IgnoreCollisionParentChild()
     {
         List<Collider2D> CList = new List<Collider2D> { };
         CList.Add(this.GetComponent<Collider2D>());

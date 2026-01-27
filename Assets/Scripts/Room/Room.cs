@@ -69,6 +69,7 @@ public class Room : MonoBehaviour
     public float RoomWeight = 1.0f;
 
 
+
     /// <summary>
     /// 是否第一次进入房间
     /// </summary>
@@ -658,6 +659,32 @@ public class Room : MonoBehaviour
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //========================================获得房屋内所有敌人===========================================
+
+
     /// <summary>
     /// 获取存放敌人的Transform
     /// </summary>
@@ -671,4 +698,61 @@ public class Room : MonoBehaviour
         return Empty.transform;
     }
 
+
+
+
+
+
+    //该房间的敌人列表
+    public List<Empty> EmptyList = new List<Empty> { };
+
+    //获取该房间的敌人列表
+    public List<Empty> GetEmptyList()
+    {
+        _mTool.RemoveNullInList<Empty>(EmptyList);
+        return EmptyList;
+    }
+    //增加某个敌人
+    public void AddEmptyList(Empty e)
+    {
+        _mTool.RemoveNullInList<Empty>(EmptyList);
+        if (!EmptyList.Contains(e)){EmptyList.Add(e);}
+    }
+    //移除某个敌人
+    public void RemoveEmptyList(Empty e)
+    {
+        _mTool.RemoveNullInList<Empty>(EmptyList);
+        if (EmptyList.Contains(e)) { EmptyList.Remove(e); }
+    }
+
+
+
+
+
+
+    //该房间的敌人分身列表
+    public List<NormalEmptyCloneBody> EmptyCloneList = new List<NormalEmptyCloneBody> { };
+
+    //获取该房间的敌人列表
+    public List<NormalEmptyCloneBody> GetEmptyCloneList()
+    {
+        _mTool.RemoveNullInList<NormalEmptyCloneBody>(EmptyCloneList);
+        return EmptyCloneList;
+    }
+    //增加某个敌人
+    public void AddEmptyCloneList(NormalEmptyCloneBody ec)
+    {
+        _mTool.RemoveNullInList<NormalEmptyCloneBody>(EmptyCloneList);
+        if (!EmptyCloneList.Contains(ec)) { EmptyCloneList.Add(ec); }
+    }
+    //移除某个敌人
+    public void RemoveEmptyCloneList(NormalEmptyCloneBody ec)
+    {
+        _mTool.RemoveNullInList<NormalEmptyCloneBody>(EmptyCloneList);
+        if (EmptyCloneList.Contains(ec)) { EmptyCloneList.Remove(ec); }
+    }
+
+
+
+    //========================================获得房屋内所有敌人===========================================
 }

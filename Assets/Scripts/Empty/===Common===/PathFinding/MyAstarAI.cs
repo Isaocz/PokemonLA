@@ -20,6 +20,11 @@ public class MyAstarAI : MonoBehaviour
     Vector3 RunTargetPosition;
     Vector3 LastPosition;
     bool isEscape;
+
+    /// <summary>
+    /// 是否根据射线检测搜索目标
+    /// </summary>
+    public bool isSearchTargetByRayCast;
     public void Start()
     {
         ParentEmpty = GetComponent<Empty>();
@@ -45,7 +50,11 @@ public class MyAstarAI : MonoBehaviour
     {
         if (!ParentEmpty.isSleepDone && !ParentEmpty.isCanNotMoveWhenParalysis)
         {
-            if (!ParentEmpty.isEmptyInfatuationDone || ParentEmpty.InfatuationForRangeRayCastEmpty(InfatuationDistence) == null)
+            Transform TargetTransform = null;
+            if (isSearchTargetByRayCast) { TargetTransform = ParentEmpty.InfatuationForRangeRayCastEmpty(InfatuationDistence); }
+            else                         { TargetTransform = ParentEmpty.InfatuationForDistanceEmpty(); }
+
+            if (!ParentEmpty.isEmptyInfatuationDone || TargetTransform == null)
             {
                 if (ParentEmpty.isSubsititue && ParentEmpty.SubsititueTarget != null)
                 {
@@ -64,7 +73,7 @@ public class MyAstarAI : MonoBehaviour
             else
             {
                 //Debug.Log(ParentEmpty.isEmptyInfatuationDone);
-                targetPosition = ParentEmpty.InfatuationForRangeRayCastEmpty(InfatuationDistence).transform;
+                targetPosition = TargetTransform.transform;
                 RunTargetPosition = targetPosition.position;
                 
             }

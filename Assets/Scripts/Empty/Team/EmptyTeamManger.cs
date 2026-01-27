@@ -83,10 +83,10 @@ public class EmptyTeamManger : MonoBehaviour
     /// <summary>
     /// 在小队管理器FixedUpdate时调用
     /// </summary>
-    public void EmptyTeamFixedUpdate()
+    public virtual void EmptyTeamFixedUpdate()
     {
         //Debug.Log("fixedupdate");
-        if (TeamQueue.Count != 0) {
+        if (TeamQueue.Count > 1) {
             int c = CheckQueueHead();
 
             //如果连续检查 但排头不符合条件 增加计时器
@@ -163,7 +163,7 @@ public class EmptyTeamManger : MonoBehaviour
     /// </summary>
     int CheckQueueHead()
     {
-        if (NowState == MangerState.Normal && TeamQueue.Count != 0)
+        if (NowState == MangerState.Normal && TeamQueue.Count > 1)
         {
             //排空
             //Debug.Log(TeamQueue.Count);

@@ -193,9 +193,14 @@ public class VanillishIceBeam : MonoBehaviour
         RaycastHit2D hitinfoBottom = Physics2D.Raycast(transform.position + b * (lineRenderer.startWidth / 6.0f) + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized, 20f, LayerMask.GetMask("Player", "PlayerFly", "PlayerJump", "Enviroment", "Room"));
         if (ParentVanillish.isEmptyInfatuationDone)
         {
-            hitinfo = Physics2D.Raycast(transform.position + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized, 20, LayerMask.GetMask("Empty", "EmptyFly", "EmptyJump", "Enviroment", "Room"));
-            hitinfoTop = Physics2D.Raycast(transform.position + t * (lineRenderer.startWidth / 6.0f) + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized, 20f, LayerMask.GetMask("Empty", "EmptyFly", "EmptyJump", "Enviroment", "Room"));
-            hitinfoBottom = Physics2D.Raycast(transform.position + b * (lineRenderer.startWidth / 6.0f) + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized, 20f, LayerMask.GetMask("Empty", "EmptyFly", "EmptyJump", "Enviroment", "Room"));
+            int mask = LayerMask.GetMask("Empty", "EmptyFly", "EmptyJump", "Enviroment", "Room");
+            List<Collider2D> ignore = new List<Collider2D> { ParentVanillish.GetComponent<Collider2D>() };
+            hitinfo = _mTool.RaycastIgnoreCollider(transform.position + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized, 20f, mask , ignore);
+            hitinfoTop = _mTool.RaycastIgnoreCollider(transform.position + t * (lineRenderer.startWidth / 6.0f) + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized, 20f, mask, ignore);
+            hitinfoBottom = _mTool.RaycastIgnoreCollider(transform.position + b * (lineRenderer.startWidth / 6.0f) + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized, 20f, mask, ignore);
+            //Debug.DrawRay(transform.position + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized * hitinfo.distance, Color.red);
+            //Debug.DrawRay(transform.position + t * (lineRenderer.startWidth / 6.0f) + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized * hitinfoTop.distance, Color.red);
+            //Debug.DrawRay(transform.position + b * (lineRenderer.startWidth / 6.0f) + Vector3.up, (Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * Vector3.right).normalized * hitinfoBottom.distance, Color.red);
         }
 
 
@@ -217,7 +222,8 @@ public class VanillishIceBeam : MonoBehaviour
             }
 
             if (EndPoint == Vector2.zero) { EndPoint = hitinfo.point; }
-
+            //Debug.Log(EndPoint);
+            //Debug.Log(EndRay.collider.gameObject.name);
 
             //如果击中敌方宝可梦，则造成伤害
             if (!ParentVanillish.isEmptyInfatuationDone)

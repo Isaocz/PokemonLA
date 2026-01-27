@@ -518,14 +518,15 @@ public class Vanillite : Empty
 
             //仅当单人巡逻状态时 判定是否被击退 
             if (FamilyState == VanilaFamilyState.Single) { EmptyBeKnock(); }
-            
+
             //根据魅惑情况确实目标位置
-            if (!isEmptyInfatuationDone || _mTool.GetAllFromTransform<Empty>(ParentPokemonRoom.EmptyFile()).Count <= 1 || InfatuationForDistanceEmpty() == null)
+            Transform InfatuationTarget = InfatuationForDistanceEmpty();
+            if (!isEmptyInfatuationDone || (ParentPokemonRoom.GetEmptyList().Count + ParentPokemonRoom.GetEmptyCloneList().Count) <= 1 || InfatuationTarget == null)
             {
                 TargetPosition = player.transform.position;
                 if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
             }
-            else { TargetPosition = InfatuationForDistanceEmpty().transform.position; }
+            else { TargetPosition = InfatuationTarget.transform.position; }
         }
     }
 

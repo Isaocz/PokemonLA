@@ -446,6 +446,8 @@ public class Empty : Pokemon
     public virtual void StartOverEvent()
     {
         //GetShield((int)(maxHP / 3.0f));
+        //添加敌人至房间敌人列表
+        ParentPokemonRoom.AddEmptyList(this);
 
         //如果存在继承数据 继承
         if (saveHp != -1 && saveShield != -1)
@@ -562,7 +564,7 @@ public class Empty : Pokemon
                         }
                     }
                 }
-                //
+                //无属性伤害
                 else
                 {
                     allDmg = Mathf.Clamp((int)((Dmage + SpDmage) * typeDef), 1, ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? (maxHP / MaxDmagePer()) : 100000));
@@ -596,7 +598,7 @@ public class Empty : Pokemon
                     }
                 }
                 EmptySleepRemove();
-
+                HitEvent();
             }
             //回血
             else
@@ -725,6 +727,15 @@ public class Empty : Pokemon
         {
             Blind(1.5f , 10.0f);
         }
+    }
+
+
+    /// <summary>
+    /// 受伤发生的事件
+    /// </summary>
+    public virtual void HitEvent()
+    {
+
     }
 
 
@@ -935,7 +946,9 @@ public class Empty : Pokemon
     /// </summary>
     public void EmptyDestroy()
     {
-        if(DropItem != null)
+        //从房间敌人列表中被移除
+        ParentPokemonRoom.RemoveEmptyList(this);
+        if (DropItem != null)
         {
             EmptyDrop();
         }
@@ -949,6 +962,8 @@ public class Empty : Pokemon
     /// <param name="time"></param>
     public void EmptyDelayDestroy(float time)
     {
+        //从房间敌人列表中被移除
+        ParentPokemonRoom.RemoveEmptyList(this);
         if (DropItem != null)
         {
             EmptyDrop();
@@ -989,6 +1004,10 @@ public class Empty : Pokemon
     /// </summary>
     public virtual void DieEvent()
     {
+        //从房间敌人列表中被移除
+        ParentPokemonRoom.RemoveEmptyList(this);
+
+        // 子敌人相关
         if (ChildrenList.Count != 0)
         {
             ParentDie();
@@ -1032,8 +1051,9 @@ public class Empty : Pokemon
     /// 对于通过射线检测范围内目标的敌人，在着迷时使用此方法寻找敌人
     /// </summary>
     /// <param name="Range">该敌人的视野范围</param>
-    public Empty InfatuationForRangeRayCastEmpty(float Range)
+    public Transform InfatuationForRangeRayCastEmpty(float Range)
     {
+        /**
         //输出的敌人目标
         Empty OutPutEmpty = null;
         //仅当房间敌人数多余1（也就是房间内有除该敌人以外的敌人）时，搜索敌人
@@ -1060,17 +1080,82 @@ public class Empty : Pokemon
             }
         }
         return OutPutEmpty;
+        **/
+        //输出的敌人目标
+        Transform OutPutEmptyTransform = null;
+        //List<Empty> EmptyCheckList = _mTool.GetAll<Empty>(ParentPokemonRoom.EmptyFile());
+        //List<NormalEmptyCloneBody> EmptyCloneCheckList = _mTool.GetAll<NormalEmptyCloneBody>(ParentPokemonRoom.EmptyFile());
+        List<Empty> EmptyCheckList = ParentPokemonRoom.GetEmptyList();
+        List<NormalEmptyCloneBody> EmptyCloneCheckList = ParentPokemonRoom.GetEmptyCloneList();
+        //仅当房间敌人数多余1（也就是房间内有除该敌人以外的敌人）时，搜索敌人
+        if (EmptyCheckList.Count + EmptyCloneCheckList.Count >= 1)
+        {
+            float D = 1000;
+            //遍历当前房间内所有敌人
+            foreach (Empty e in EmptyCheckList)
+            {
+                //如果e不是自己,计算距离，如果小于当前距离输出e
+                if (e.gameObject != this.gameObject)
+                {
+                    RaycastHit2D SearchTarget = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), new Vector2(e.transform.position.x - transform.position.x, e.transform.position.y - transform.position.y), Range, LayerMask.GetMask("Empty", "Enviroment", "Room", "EmptyFly"));
+                    if (SearchTarget.collider != null && SearchTarget.collider.gameObject != gameObject && (SearchTarget.transform.tag == "Empty" || SearchTarget.transform.tag == "EmptyFly"))
+                    {
+                        if ((transform.position - e.transform.position).magnitude < D)
+                        {
+                            OutPutEmptyTransform = e.transform;
+                            D = (transform.position - e.transform.position).magnitude;
+                        }
+                    }
+                }
+            }
+            //遍历当前房间内所有敌人 敌人幻影
+            foreach (NormalEmptyCloneBody ec in EmptyCloneCheckList)
+            {
+                //如果e不是自己的分身,计算距离，如果小于当前距离输出e
+                if (ec.ParentEmpty != this.gameObject)
+                {
+                    RaycastHit2D SearchTarget = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.5f), new Vector2(ec.transform.position.x - transform.position.x, ec.transform.position.y - transform.position.y), Range, LayerMask.GetMask("Empty", "Enviroment", "Room", "EmptyFly"));
+                    if (SearchTarget.collider != null && SearchTarget.collider.gameObject != gameObject && (SearchTarget.transform.tag == "Empty" || SearchTarget.transform.tag == "EmptyFly"))
+                    {
+                        if ((transform.position - ec.transform.position).magnitude < D)
+                        {
+                            OutPutEmptyTransform = ec.transform;
+                            D = (transform.position - ec.transform.position).magnitude;
+                        }
+                    }
+                }
+            }
+        }
+
+        //检查目标是敌人还是幻影
+        if (isEmptyInfatuationDone)
+        {
+            if (OutPutEmptyTransform != null)
+            {
+                Empty OutPutEmpty = OutPutEmptyTransform.GetComponent<Empty>();
+                if (OutPutEmpty != null) { InfatuationTargetEmpty = OutPutEmpty; }
+                else { InfatuationTargetEmpty = null; }
+            }
+        }
+        else { InfatuationTargetEmpty = null; }
+
+
+        //返回输出目标
+        return OutPutEmptyTransform;
     }
 
 
+
+    protected Empty InfatuationTargetEmpty;
 
 
     /// <summary>
     /// 对于不通过射线检测的敌人（如耿鬼这种锁定玩家的飞行敌人），在着迷时使用此方法，计算离自己距离最近的敌人
     /// </summary>
     /// <returns></returns>
-    public Empty InfatuationForDistanceEmpty()
+    public Transform InfatuationForDistanceEmpty()
     {
+        /**
         //输出的敌人目标
         Empty OutPutEmpty = null;
         List<Empty> checkList = _mTool.GetAllFromTransform<Empty>(ParentPokemonRoom.EmptyFile());
@@ -1093,7 +1178,68 @@ public class Empty : Pokemon
                 }
             }
         }
+        InfatuationTargetEmpty = OutPutEmpty;
         return OutPutEmpty;
+        **/
+
+        //输出的敌人目标
+        Transform OutPutEmptyTransform = null;
+        //List<Empty> EmptyCheckList = _mTool.GetAll<Empty>(ParentPokemonRoom.EmptyFile());
+        //List<NormalEmptyCloneBody> EmptyCloneCheckList = _mTool.GetAll<NormalEmptyCloneBody>(ParentPokemonRoom.EmptyFile());
+        List<Empty> EmptyCheckList = ParentPokemonRoom.GetEmptyList();
+        List<NormalEmptyCloneBody> EmptyCloneCheckList = ParentPokemonRoom.GetEmptyCloneList();
+        //Debug.Log(this.name);
+        //_mTool.DebugLogList<Empty>(EmptyCheckList);
+        //_mTool.DebugLogList<NormalEmptyCloneBody>(EmptyCloneCheckList);
+        //仅当房间敌人数多余1（也就是房间内有除该敌人以外的敌人）时，搜索敌人
+        if (EmptyCheckList.Count + EmptyCloneCheckList.Count >= 1)
+        {
+            float D = 1000;
+            //遍历当前房间内所有敌人
+            foreach (Empty e in EmptyCheckList)
+            {
+                //如果e不是自己,计算距离，如果小于当前距离输出e
+                if (e.gameObject != this.gameObject)
+                {
+                    if ((transform.position - e.transform.position).magnitude < D)
+                    {
+                        OutPutEmptyTransform = e.transform;
+                        D = (transform.position - e.transform.position).magnitude;
+                    }
+                }
+            }
+            //遍历当前房间内所有敌人 敌人幻影
+            foreach (NormalEmptyCloneBody ec in EmptyCloneCheckList)
+            {
+                //如果e不是自己的分身,计算距离，如果小于当前距离输出e
+                //Debug.Log(ec.ParentEmpty + "+" + name + "+" + (ec.ParentEmpty.gameObject.GetInstanceID() != this.gameObject.GetInstanceID()));
+                if (ec.ParentEmpty.gameObject.GetInstanceID() != this.gameObject.GetInstanceID())
+                {
+                    if ((transform.position - ec.transform.position).magnitude < D)
+                    {
+                        OutPutEmptyTransform = ec.transform;
+                        D = (transform.position - ec.transform.position).magnitude;
+                    }
+                }
+            }
+        }
+
+        //Debug.Log(OutPutEmptyTransform +"+"+ name);
+        //检查目标是敌人还是幻影
+        if (isEmptyInfatuationDone)
+        {
+            if (OutPutEmptyTransform != null)
+            {
+                Empty OutPutEmpty = OutPutEmptyTransform.GetComponent<Empty>();
+                if (OutPutEmpty != null) { InfatuationTargetEmpty = OutPutEmpty; }
+                else { InfatuationTargetEmpty = null; }
+            }
+        }
+        else { InfatuationTargetEmpty = null; }
+
+        //返回输出目标
+        return OutPutEmptyTransform;
+
     }
 
     //===============================着迷时搜索其他敌人=================================
@@ -1311,7 +1457,7 @@ public class Empty : Pokemon
     public GameObject FindAtkTarget(float radius)
     {
         GameObject target = null;
-        Empty nearlyEmptyObj = InfatuationForRangeRayCastEmpty(radius);
+        Transform nearlyEmptyObj = InfatuationForRangeRayCastEmpty(radius);
         if (!isEmptyInfatuationDone || transform.parent.childCount <= 1 || nearlyEmptyObj == null)
         {
             if (isSubsititue && SubsititueTarget != null && Vector3.Distance(transform.position, SubsititueTarget.transform.position) <= radius)
