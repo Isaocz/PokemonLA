@@ -36,6 +36,77 @@ public class Pokemon : MonoBehaviour
     protected bool isStateInvincible = false;
 
 
+    //===================动画机速度=========================
+
+    //动画速度最小值
+    static float Min_AnimatorSpeed_Alpha = 0.0f;
+
+    //动画速度最大值
+    static float Max_AnimatorSpeed_Alpha = 2.00f;
+
+    /// <summary>
+    /// 加速增减值列表
+    /// </summary>
+    [SerializeField]
+    public Dictionary<string , float> AnimatorSpeedList = new Dictionary<string, float> { };
+
+    /// <summary>
+    /// 动画机加速
+    /// </summary>
+    /// <param name="alpha"></param>
+    public void AnimatorSpeedUp(string key, float alpha)
+    {
+        if (!AnimatorSpeedList.ContainsKey(key))
+        {
+            AnimatorSpeedList.Add(key, alpha);
+            SetAnimatorSpeed();
+        }
+    }
+
+    /// <summary>
+    /// 动画机减速
+    /// </summary>
+    /// <param name="alpha"></param>
+    public void AnimatorSpeedDown(string key)
+    {
+        if (AnimatorSpeedList.TryGetValue(key, out float v))
+        {
+            AnimatorSpeedList.Remove(key);
+            SetAnimatorSpeed();
+        }
+    }
+
+    public void AnimatorSpeedReset()
+    {
+        AnimatorSpeedList.Clear();
+        AnimatorSpeedList = new Dictionary<string, float> { };
+        SetAnimatorSpeed();
+    }
+
+    protected float AnimatorSpeedAlpha
+    {
+        get
+        {
+            float output = 1;
+            foreach (float v in AnimatorSpeedList.Values)
+            {
+                output *= v;
+            }
+            output = Mathf.Clamp(output, Min_AnimatorSpeed_Alpha, Max_AnimatorSpeed_Alpha);
+            return output;
+        }
+    }
+
+    protected void SetAnimatorSpeed()
+    {
+        animator.speed = AnimatorSpeedAlpha;
+    }
+
+
+    //===================动画机速度=========================
+
+
+
     //当前宝可梦处于青草场地中
     public bool isInGrassyTerrain
     {
@@ -165,7 +236,7 @@ public class Pokemon : MonoBehaviour
         {
             SetSkinRenderersMaterial(FrozenMaterial);
         }
-        animator.speed = 0;
+        AnimatorSpeedUp("Frozen", 0);
     }
     public void MarterialChangeToSpeedDown()
     {
@@ -312,6 +383,38 @@ public class Pokemon : MonoBehaviour
 
     //***************************************************************************对敌人的函数*********************************************************************************
 
+
+    /// <summary>
+    /// 是否防御特殊状态（不防御能力值加减）只读不可设置
+    /// </summary>
+    public bool IsDefState
+    {
+        //任何一个状态防御激活都防御状态，全部不激活时才可被施加状态
+        get { return (isDefStateByNormal || isDefStateByExplosion); }
+    }
+
+    /// <summary>
+    /// 一般的防御特殊状态
+    /// </summary>
+    public bool IsDefStateByNormal
+    {
+        get { return isDefStateByNormal; }
+        set { isDefStateByNormal = value; }
+    }
+    bool isDefStateByNormal = false;
+
+    /// <summary>
+    /// 自爆时防御特殊状态
+    /// </summary>
+    public bool IsDefStateByExplosion
+    {
+        get { return isDefStateByExplosion; }
+        set { isDefStateByExplosion = value; }
+    }
+    bool isDefStateByExplosion = false;
+
+
+
     //===========================================================================冷冻的函数=====================================================================================
 
 
@@ -340,7 +443,7 @@ public class Pokemon : MonoBehaviour
     {
         FrozenTimeFloat = FrozenTime;
         if (GetComponent<Empty>() != null && isColdDown != 0) { FrozenPer += 0.25f * isColdDown; }
-        if (!isFrozenDef && Random.Range(0.0f, 1.0f) <= FrozenPer) {
+        if (!IsDefState && !isFrozenDef && Random.Range(0.0f, 1.0f) <= FrozenPer) {
             if (!isInMistyTerrain && !isFrozenDone)
             {
                 EmptyFrozenPointFloat += FrozenPoint * FrozenResistance;
@@ -368,14 +471,15 @@ public class Pokemon : MonoBehaviour
                     SpeedBefoerChange = speed;
                     speed = 0;
                     isEmptyFrozenDone = true;
-                    animator.speed = 0;
-                    Debug.Log(animator.speed);
+                    //animator.speed = 0;
+                    AnimatorSpeedUp("Frozen" , 0);
+                    //Debug.Log(animator.speed);
                     foreach (SpriteRenderer s in skinRenderers)
                     {
                         Animator A = s.gameObject.GetComponent<Animator>();
                         if (A != null)
                         {
-                            A.speed = 0;
+                            A.speed = animator.speed;
                             
                         }
                     }
@@ -401,13 +505,14 @@ public class Pokemon : MonoBehaviour
             isSpeedChange = false;
             isEmptyFrozenDone = false;
             MarterialChangeToNurmal();
-            animator.speed = 1;
+            //animator.speed = 1;
+            AnimatorSpeedDown("Frozen");
             foreach (SpriteRenderer s in skinRenderers)
             {
                 Animator A = s.gameObject.GetComponent<Animator>();
                 if (A != null)
                 {
-                    A.speed = 1;
+                    A.speed = animator.speed;
                 }
             }
             FrozenTimeFloat = 0;
@@ -438,7 +543,7 @@ public class Pokemon : MonoBehaviour
     public void Fear(float FearTime, float FearPoint)
     {
         FearTimeFloat = FearTime;
-        if (!isFearDone && !isFearDef)
+        if (!IsDefState && !isFearDone && !isFearDef)
         {
             EmptyFearPointFloat += FearPoint * OtherStateResistance;
             if (!isFearStart && EmptyFearPointFloat < 1)
@@ -503,7 +608,7 @@ public class Pokemon : MonoBehaviour
     public void Blind(float BlindTimer, float BlinderPoint)
     {
         BlindTimeFloat = BlindTimer;
-        if (!isBlindDone && !isBlindDef)
+        if (!IsDefState && !isBlindDone && !isBlindDef)
         {
             EmptyBlindPoint += BlinderPoint * OtherStateResistance;
             Debug.Log(EmptyBlindPoint);
@@ -562,7 +667,7 @@ public class Pokemon : MonoBehaviour
     public void EmptyToxicDone(float ToxicPoint, float ToxicTime, float ToxicPer)
     {
         ToxicTimeFloat = ToxicTime;
-        if (!isToxicDef && Random.Range(0.0f, 1.0f) <= ToxicPer)
+        if (!IsDefState && !isToxicDef && Random.Range(0.0f, 1.0f) <= ToxicPer)
         {
             Empty EmptyObj = GetComponent<Empty>();
             if (!isInMistyTerrain && !isToxicDef && EmptyObj.EmptyType01 != PokemonType.TypeEnum.Poison && EmptyObj.EmptyType01 != PokemonType.TypeEnum.Steel && EmptyObj.EmptyType02 != PokemonType.TypeEnum.Poison && EmptyObj.EmptyType02 != PokemonType.TypeEnum.Steel && !isToxicDone)
@@ -628,7 +733,7 @@ public class Pokemon : MonoBehaviour
     public void EmptyBurnDone(float BurnPoint, float BurnTime, float BurnPer)
     {
         BurnTimeFloat = BurnTime;
-        if (!isBurnDef && Random.Range(0.0f, 1.0f) <= BurnPer)
+        if (!IsDefState && !isBurnDef && Random.Range(0.0f, 1.0f) <= BurnPer)
         {
             Empty EmptyObj = GetComponent<Empty>();
             if (!isInMistyTerrain && !isBurnDef && EmptyObj.EmptyType01 != PokemonType.TypeEnum.Fire && EmptyObj.EmptyType02 != PokemonType.TypeEnum.Fire && !isBurnDone)
@@ -695,7 +800,7 @@ public class Pokemon : MonoBehaviour
     public void EmptySleepDone(float SleepPoint, float SleepTime, float SleepPer)
     {
         SleepTimeFloat = SleepTime;
-        if (!isSleepDef && Random.Range(0.0f, 1.0f) <= SleepPer)
+        if (!IsDefState && !isSleepDef && Random.Range(0.0f, 1.0f) <= SleepPer)
         {
             Empty EmptyObj = GetComponent<Empty>();
             if (!isInMistyTerrain && !isSleepDef && !isSleepDone && !isInElectricTerrain && !isInUproarState)
@@ -758,7 +863,7 @@ public class Pokemon : MonoBehaviour
     public void EmptyParalysisDone(float ParalysisPoint, float ParalysisTime, float ParalysisPer)
     {
         ParalysisTimeFloat = ParalysisTime;
-        if (!isParalysisDef && Random.Range(0.0f, 1.0f) <= ParalysisPer + ((isInSuperElectricTerrain) ? 0.2f : 0))
+        if (!IsDefState && !isParalysisDef && Random.Range(0.0f, 1.0f) <= ParalysisPer + ((isInSuperElectricTerrain) ? 0.2f : 0))
         {
             Empty EmptyObj = GetComponent<Empty>();
             if (!isInMistyTerrain && !isParalysisDef && EmptyObj.EmptyType01 != PokemonType.TypeEnum.Electric && EmptyObj.EmptyType02 != PokemonType.TypeEnum.Electric)
@@ -859,7 +964,7 @@ public class Pokemon : MonoBehaviour
     {
         
         ConfusionTimeFloat = ConfusionTimer;
-        if (!isInMistyTerrain && !isEmptyConfusionDone && !isConfusionDef)
+        if (!IsDefState && !isInMistyTerrain && !isEmptyConfusionDone && !isConfusionDef)
         {
             EmptyConfusionPoint += ConfusionPoint * OtherStateResistance;
             //Debug.Log(EmptyConfusionPoint);
@@ -939,7 +1044,7 @@ public class Pokemon : MonoBehaviour
     public void EmptyInfatuation(float InfatuationTimer, float InfatuationPoint)
     {
         InfatuationTimeFloat = InfatuationTimer;
-        if (!isEmptyInfatuationDone && !EmptyInfatuationDef)
+        if (!IsDefState && !isEmptyInfatuationDone && !EmptyInfatuationDef)
         {
             EmptyInfatuationPoint += InfatuationPoint * OtherStateResistance;
             if (!isEmptyInfatuationStart && EmptyInfatuationPoint < 1)
@@ -1339,7 +1444,7 @@ public class Pokemon : MonoBehaviour
     public void EmptyCurse(float CurseTimer, float CursePoint)
     {
         CurseTimeFloat = CurseTimer;
-        if (!isEmptyCurseDone && !EmptyCurseDef)
+        if (!IsDefState && !isEmptyCurseDone && !EmptyCurseDef)
         {
             EmptyCursePoint += CursePoint * OtherStateResistance;
             if (!isEmptyCurseStart && EmptyCursePoint < 1)
@@ -1402,6 +1507,12 @@ public class Pokemon : MonoBehaviour
 
 
 
+
+
+
+
+
+
     //***************************************************************************对自己的函数*********************************************************************************
 
 
@@ -1425,7 +1536,8 @@ public class Pokemon : MonoBehaviour
                 isSpeedChange = true;
                 playerUIState.StatePlus(0);
                 MarterialChangeToSpeedDown();
-                animator.speed = 0.55f;
+                AnimatorSpeedUp("PlayerSpeedDown" , 0.55f);
+                //animator.speed = 0.55f;
             }
             else if (GetComponent<Empty>() != null)
             {
@@ -1433,7 +1545,8 @@ public class Pokemon : MonoBehaviour
                 isSpeedChange = true;
                 playerUIState.StatePlus(0);
                 MarterialChangeToSpeedDown();
-                animator.speed = 0.7f;
+                AnimatorSpeedUp("EmptySpeedDown", 0.7f);
+                //animator.speed = 0.7f;
             }
         }
     }
@@ -1450,7 +1563,9 @@ public class Pokemon : MonoBehaviour
             playerUIState.StateDestory(0);
             // GetComponent<SpriteRenderer>().material.color = new Color(1, 1, 1, 1);
             MarterialChangeToNurmal();
-            animator.speed = 1;
+            //animator.speed = 1;
+            AnimatorSpeedDown("EmptySpeedDown");
+            AnimatorSpeedDown("PlayerSpeedDown");
             if (GetComponent<PlayerData>() != null)
             {
                 GetComponent<PlayerData>().MoveSpwBounsAlways += 4;
@@ -1523,6 +1638,7 @@ public class Pokemon : MonoBehaviour
                         Timer.Start(this , FrozenTime , ()=> { PlayerFrozenRemove(); });
                         player.ReFreshAbllityPoint();
                     }
+                    AnimatorSpeedUp("Frozen", 0);
                     MarterialChangeToFrozen();
                 }
                 if (GetComponent<PlayerControler>() != null)
@@ -1557,7 +1673,7 @@ public class Pokemon : MonoBehaviour
                 */
                 //冰冻解除的效果
                 PlayerControler player = transform.GetComponent<PlayerControler>();
-                animator.speed = 1;
+                AnimatorSpeedDown("Frozen");
                 player.ReFreshAbllityPoint();
             }
             isPlayerFrozenStart = false;
@@ -1569,7 +1685,7 @@ public class Pokemon : MonoBehaviour
 
 
 
-    //===========================================================================中毒的函数=====================================================================================
+    //===========================================================================冰冻的函数=====================================================================================
 
 
 
@@ -1945,7 +2061,7 @@ public class Pokemon : MonoBehaviour
             }
             SleepPointFloat = 0;
             playerUIState.StateSlowUP(6, 0);
-            animator.speed = 1;
+            AnimatorSpeedReset();
             playerUIState.StateDestory(6);
             if (transform.GetComponent<PlayerControler>() != null && isSleepDone)
             {
@@ -2290,6 +2406,7 @@ public class Pokemon : MonoBehaviour
                         }
                     }
                 }
+                //Debug.Log("AtkPower:" + AtkPower + "   SpAPower;" + SpAPower);
             }
             else
             {

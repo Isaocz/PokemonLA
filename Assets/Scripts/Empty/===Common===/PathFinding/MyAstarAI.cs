@@ -22,6 +22,16 @@ public class MyAstarAI : MonoBehaviour
     bool isEscape;
 
     /// <summary>
+    /// 是否自动设置速度
+    /// </summary>
+    public bool isAutoSetSpeed = true;
+
+    /// <summary>
+    /// 停止界限 当和目标到达停止界限时停止运动
+    /// </summary>
+    public float StopLimitDistence = 0.5f;
+
+    /// <summary>
     /// 是否根据射线检测搜索目标
     /// </summary>
     public bool isSearchTargetByRayCast;
@@ -80,8 +90,11 @@ public class MyAstarAI : MonoBehaviour
 
 
 
-
-            speed = ParentEmpty.speed;
+            if (isAutoSetSpeed) {
+                speed = ParentEmpty.speed;
+            }
+            //Debug.Log(!ParentEmpty.isBorn && !ParentEmpty.isDie && !ParentEmpty.isHit && !ParentEmpty.isSilence && !ParentEmpty.isEmptyFrozenDone && !isCanNotMove);
+            //Debug.Log(!ParentEmpty.isBorn + "+" + !ParentEmpty.isDie + "+" + !ParentEmpty.isHit + "+" + !ParentEmpty.isSilence + "+" + !ParentEmpty.isEmptyFrozenDone + "+" + !isCanNotMove);
             if (!ParentEmpty.isBorn && !ParentEmpty.isDie && !ParentEmpty.isHit && !ParentEmpty.isSilence && !ParentEmpty.isEmptyFrozenDone && !isCanNotMove)
             {
                 RePathFind++;
@@ -144,8 +157,11 @@ public class MyAstarAI : MonoBehaviour
                 }
 
                 Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
+                //Debug.Log(path.vectorPath[currentWaypoint] +"+"+ dir);
+                //_mTool.DebugLogList<Vector3>(path.vectorPath);
                 if (ParentEmpty.isEmptyConfusionDone) {  dir = (Quaternion.AngleAxis(Random.Range(-100 , 100) , Vector3.forward)* dir); }
                 Vector3 velocity = dir * (ParentEmpty.isFearDone ? speed * 2 : speed);
+                nextWaypointDistance = (float)(Mathf.Floor((Vector3.Distance( Vector3.zero , velocity) * Time.deltaTime)/0.05f)+ 1) * 0.05f;
                 if ((transform.position - RunTargetPosition).magnitude >= 0.5f)
                 {
                     transform.position += velocity * Time.deltaTime;
@@ -173,5 +189,11 @@ public class MyAstarAI : MonoBehaviour
             }
             LastPosition = transform.position;
         }
+    }
+
+
+    public void SetSpeed(float speedS , float speedAlpha)
+    {
+        speed = speedS * speedAlpha;
     }
 }

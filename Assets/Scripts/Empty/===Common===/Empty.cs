@@ -1023,6 +1023,61 @@ public class Empty : Pokemon
     }
 
 
+    /// <summary>
+    /// 敌人爆炸
+    /// </summary>
+    public virtual void EmptyEcplosionEvent()
+    {
+        
+    }
+
+
+    /// <summary>
+    /// 敌人爆炸死亡
+    /// </summary>
+    public virtual void EmptyEcplosionDie()
+    {
+        //isDeadrattle = (!isEmptyFrozenDone) && (!isFearDone) && (!isBlindDone);
+        FrozenRemove();
+        Destroy(rigidbody2D);
+        RemoveChild();
+        if (!isDie)
+        {
+            if (GetComponent<Collider2D>()) { GetComponent<Collider2D>().enabled = false; }
+            player.ChangeEx((int)(Exp * ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss) ? 1.8f : 1.3f)));
+            player.ChangeHPW(HWP);
+
+            //给AP
+            if (FloorNum.GlobalFloorNum != null && ScoreCounter.Instance != null)
+            {
+                ScoreCounter.Instance.EmptyBounsAP += APBounsPoint.EmptyBouns(this, FloorNum.GlobalFloorNum.FloorNumber);
+            }
+
+            if (player.playerData.IsPassiveGetList[134] && (EmptyType01 == PokemonType.TypeEnum.Dark || EmptyType02 == PokemonType.TypeEnum.Dark)) { player.ChangeHPW(HWP); }
+            Room r = transform.parent.parent.GetComponent<Room>();
+            if (r == null) { r = ParentPokemonRoom; }
+            r.isClear -= 1;
+
+            if (DestoryEvent != null) { DestoryEvent(); }
+            if (player.playerData.IsPassiveGetList[89] && player.playerData.AttackWeightCount < 6)
+            {
+                player.playerData.AttackWeightCount++;
+                player.playerData.AtkBounsJustOneRoom++;
+                player.ReFreshAbllityPoint();
+            }
+            if (player.playerData.IsPassiveGetList[90] && player.playerData.SpAtkSpecsCount < 6)
+            {
+                player.playerData.SpAtkSpecsCount++;
+                player.playerData.SpABounsJustOneRoom++;
+                player.ReFreshAbllityPoint();
+            }
+            isDie = true;
+            //死亡事件
+            DieEvent();
+        }
+
+    }
+
 
     //=============================死亡事件===========================
 
@@ -1257,7 +1312,7 @@ public class Empty : Pokemon
         if (rigidbody2D != null) {
             if (rigidbody2D.bodyType != RigidbodyType2D.Static) { rigidbody2D.velocity = Vector2.zero; }
         }
-        if (isShake) { ShakeUpdate(); }
+        //if (isShake) { ShakeUpdate(); }
         if (isToxicDone) { EmptyToxic(); }
         if (isBurnDone) { EmptyBurn(); }
         if (isParalysisDone) { EmptyParalysisJudge(); } else { isCanNotMoveWhenParalysis = false; }
@@ -1642,10 +1697,12 @@ public class Empty : Pokemon
 
     //=================镜头摇晃======================
 
+    /**
     void ShakeUpdate()
     {
         if (isShake)
         {
+            Debug.Log(ShakeTime);
             ShakeTime -= Time.deltaTime;
             CSTimer += Time.deltaTime;
             if (CSTimer >= 0.05f) { CSTimer = 0; ShakePower = -ShakePower; }
@@ -1663,19 +1720,22 @@ public class Empty : Pokemon
                 ParentPokemonRoom.transform.GetChild(2).position += Time.deltaTime * ShakePower * Vector3.up;
                 ParentPokemonRoom.transform.GetChild(6).position += Time.deltaTime * ShakePower * Vector3.up;
             }
-            if (ShakeTime <= 0) { isShake = false; ShakeTime = 0; isHorizontalShake = false; ShakePower = 0; CSTimer = 0; 
+            if (ShakeTime <= 0) { isShake = false; ShakeTime = 0; isHorizontalShake = false; ShakePower = 0; CSTimer = 0;
                 ParentPokemonRoom.transform.GetChild(0).localPosition = Vector3.zero;
                 ParentPokemonRoom.transform.GetChild(1).localPosition = Vector3.zero;
                 ParentPokemonRoom.transform.GetChild(2).localPosition = Vector3.zero;
                 ParentPokemonRoom.transform.GetChild(6).localPosition = Vector3.zero;
             }
         }
-        else if(ParentPokemonRoom.transform.GetChild(0).localPosition != Vector3.zero)
+        else
         {
-            ParentPokemonRoom.transform.GetChild(0).localPosition = Vector3.zero;
-            ParentPokemonRoom.transform.GetChild(1).localPosition = Vector3.zero;
-            ParentPokemonRoom.transform.GetChild(2).localPosition = Vector3.zero;
-            ParentPokemonRoom.transform.GetChild(6).localPosition = Vector3.zero;
+            if (ParentPokemonRoom.transform.GetChild(0).localPosition != Vector3.zero)
+            {
+                ParentPokemonRoom.transform.GetChild(0).localPosition = Vector3.zero;
+                ParentPokemonRoom.transform.GetChild(1).localPosition = Vector3.zero;
+                ParentPokemonRoom.transform.GetChild(2).localPosition = Vector3.zero;
+                ParentPokemonRoom.transform.GetChild(6).localPosition = Vector3.zero;
+            }
         }
     }
 
@@ -1691,7 +1751,7 @@ public class Empty : Pokemon
     {
         if (!isShake) { isShake = true; ShakeTime = time; isHorizontalShake = isHorizontal; ShakePower = Power;  }
     }
-
+    **/
     //=================镜头摇晃======================
 
 
@@ -1779,11 +1839,11 @@ public class Empty : Pokemon
     /// <param name="Interval">生成残影的间隔</param>
     /// <param name="disappearingSpeed">残影的消失速度</param>
     /// <param name="color">残影的颜色</param>
-    public void StartShadowCoroutine(float Interval, float disappearingSpeed, Color color)
+    public void StartShadowCoroutine(float Interval, float disappearingSpeed, Color color, Vector2 offset = default)
     {
         //Debug.Log("StartSHadow");
         isShadowMove = true; // 开始冲刺
-        ShadowCoroutine = StartCoroutine(StartShadow(Interval , disappearingSpeed , color)); // 启动协程
+        ShadowCoroutine = StartCoroutine(StartShadow(Interval , disappearingSpeed , color , offset)); // 启动协程
     }
 
 
@@ -1809,11 +1869,12 @@ public class Empty : Pokemon
     /// <param name="disappearingSpeed">残影的消失速度</param>
     /// <param name="color">残影的颜色</param>
     /// <returns></returns>
-    IEnumerator StartShadow( float Interval , float disappearingSpeed, Color color)
+    IEnumerator StartShadow( float Interval , float disappearingSpeed, Color color, Vector2 offset)
     {
         while (isShadowMove)
         {
-            InstantiateShadow(disappearingSpeed , color);
+            //Debug.Log("shadow");
+            InstantiateShadow(disappearingSpeed , color, offset);
             yield return new WaitForSeconds(Interval); // 等待间隔时间
         }
     }
@@ -1823,11 +1884,11 @@ public class Empty : Pokemon
     /// </summary>
     /// <param name="disappearingSpeed">残影的消失速度</param>
     /// <param name="color">残影的颜色</param>
-    void InstantiateShadow(float disappearingSpeed , Color color)
+    void InstantiateShadow(float disappearingSpeed , Color color , Vector2 offset)
     {
         if (!isDie && !isBorn && !isSleepDone && !isEmptyFrozenDone && !isSilence && !isCanNotMoveWhenParalysis && !isFearDone)
         {
-            Instantiate(emptyShadow, transform.position, Quaternion.identity).SetNormalEmptyShadow(disappearingSpeed, GetSkinRenderers(), color);
+            Instantiate(emptyShadow, transform.position, Quaternion.identity).SetNormalEmptyShadow(disappearingSpeed, GetSkinRenderers(), color , offset);
         }  
     }
 

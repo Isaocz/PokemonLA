@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Room : MonoBehaviour
 {
 
-    
+
 
 
 
@@ -55,7 +55,7 @@ public class Room : MonoBehaviour
     public int isClear;
     protected GameObject Empty;
 
-    public int RoomTag; 
+    public int RoomTag;
     protected GameObject Player;
     protected PlayerControler playerControler;
 
@@ -86,7 +86,7 @@ public class Room : MonoBehaviour
     /// <summary>
     /// 房间的尺寸，玩家仅允许在这个区域内被击退，使用位移技能，敌人的移动也被限制在这个范围，依次为上下左右
     /// </summary>
-    public float[] RoomSize = new float[] { 7.3f, -7.3f,-12.0f,  12.0f };
+    public float[] RoomSize = new float[] { 7.3f, -7.3f, -12.0f, 12.0f };
 
 
 
@@ -119,7 +119,7 @@ public class Room : MonoBehaviour
         ;
         Player = GameObject.FindObjectOfType<PlayerControler>().gameObject;
         playerControler = Player.GetComponent<PlayerControler>();
-        if(RoomTag == 0 || RoomTag == -1 || RoomTag == 3)
+        if (RoomTag == 0 || RoomTag == -1 || RoomTag == 3)
         {
             SetFloor();
         }
@@ -130,7 +130,7 @@ public class Room : MonoBehaviour
 
     private void Update()
     {
-        if(playerControler == null)
+        if (playerControler == null)
         {
             Player = GameObject.FindObjectOfType<PlayerControler>().gameObject;
             playerControler = Player.GetComponent<PlayerControler>();
@@ -139,18 +139,20 @@ public class Room : MonoBehaviour
         {
             isVisit = true;
             isInThisRoom = true;
+            //房间摇晃
+            if (isShake) { ShakeUpdate(); }
 
             //初次进入房间给与AP
-            if(!isFirstTimeEntry) {
+            if (!isFirstTimeEntry) {
                 isFirstTimeEntry = true;
                 //给AP
                 if (FloorNum.GlobalFloorNum != null && ScoreCounter.Instance != null)
                 {
-                    ScoreCounter.Instance.RoomBounsAP += APBounsPoint.RoomBouns( FloorNum.GlobalFloorNum.FloorNumber);
+                    ScoreCounter.Instance.RoomBounsAP += APBounsPoint.RoomBouns(FloorNum.GlobalFloorNum.FloorNumber);
                 }
             }
 
-            if(RoomTag == 0 || RoomTag == 3)
+            if (RoomTag == 0 || RoomTag == 3)
             {
                 transform.GetChild(3).gameObject.SetActive(true);
                 transform.GetChild(4).gameObject.SetActive(true);
@@ -177,7 +179,7 @@ public class Room : MonoBehaviour
                 List<Empty> eList = _mTool.GetAllFromTransform<Empty>(transform.GetChild(3).transform);
                 foreach (Empty e in eList)
                 {
-                    Empty e2 = Instantiate(PublicEmptyList.PrefabsEmptyList.FoundEmpty(e.EmptyCD), e.transform.position, Quaternion.identity, transform.GetChild(3).transform );
+                    Empty e2 = Instantiate(PublicEmptyList.PrefabsEmptyList.FoundEmpty(e.EmptyCD), e.transform.position, Quaternion.identity, transform.GetChild(3).transform);
                     e2.StoreSaveData(e);
                     Destroy(e.gameObject);
                 }
@@ -188,8 +190,8 @@ public class Room : MonoBehaviour
         }
         if (isVisit && !isMapCreated)
         {
-           
-            string MiniMapRoomName = new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y  / 24.0f), 0).ToString();
+
+            string MiniMapRoomName = new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f), 0).ToString();
             Transform room = UiMiniMap.Instance.transform.Find(MiniMapRoomName);
             if (room)
             {
@@ -200,7 +202,7 @@ public class Room : MonoBehaviour
             }
 
             string MiniMapRoomNameUp = new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f + 1), 0).ToString();
-            if(UiMiniMap.Instance.transform.Find(MiniMapRoomNameUp) != null) 
+            if (UiMiniMap.Instance.transform.Find(MiniMapRoomNameUp) != null)
             {
                 Color x = UiMiniMap.Instance.transform.Find(MiniMapRoomNameUp).GetComponent<Image>().color;
                 if (x.a == 0) {
@@ -211,7 +213,7 @@ public class Room : MonoBehaviour
                     else { UiMiniMap.Instance.VisitedRoomList.Add(RoomUPBlock); }
                 }
             }
-            string MiniMapRoomNameDown = new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f -1), 0).ToString();
+            string MiniMapRoomNameDown = new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f - 1), 0).ToString();
             if (UiMiniMap.Instance.transform.Find(MiniMapRoomNameDown) != null)
             {
                 Color x = UiMiniMap.Instance.transform.Find(MiniMapRoomNameDown).GetComponent<Image>().color;
@@ -224,9 +226,9 @@ public class Room : MonoBehaviour
                     else { UiMiniMap.Instance.VisitedRoomList.Add(RoomDownBlock); }
                 }
             }
-               
+
             string MiniMapRoomNameLeft = new Vector3Int((int)(transform.position.x / 30.0f + 1), (int)(transform.position.y / 24.0f), 0).ToString();
-            if (UiMiniMap.Instance.transform.Find(MiniMapRoomNameLeft) != null) 
+            if (UiMiniMap.Instance.transform.Find(MiniMapRoomNameLeft) != null)
             {
                 Color x = UiMiniMap.Instance.transform.Find(MiniMapRoomNameLeft).GetComponent<Image>().color;
                 if (x.a == 0)
@@ -238,7 +240,7 @@ public class Room : MonoBehaviour
                     else { UiMiniMap.Instance.VisitedRoomList.Add(RoomLeftBlock); }
                 }
             }
-            string MiniMapRoomNameRight = new Vector3Int((int)(transform.position.x / 30.0f - 1), (int)(transform.position.y/ 24.0f), 0).ToString();
+            string MiniMapRoomNameRight = new Vector3Int((int)(transform.position.x / 30.0f - 1), (int)(transform.position.y / 24.0f), 0).ToString();
             if (UiMiniMap.Instance.transform.Find(MiniMapRoomNameRight) != null)
             {
                 Color x = UiMiniMap.Instance.transform.Find(MiniMapRoomNameRight).GetComponent<Image>().color;
@@ -252,14 +254,14 @@ public class Room : MonoBehaviour
                 }
             }
 
-                isMapCreated = true;
+            isMapCreated = true;
         }
 
-        if ( isVisit && (RoomTag == 0 || RoomTag == 3) && !isItemDrop && isClear <= 0 && RandomDropItem != null)
+        if (isVisit && (RoomTag == 0 || RoomTag == 3) && !isItemDrop && isClear <= 0 && RandomDropItem != null)
         {
             isItemDrop = true;
             Debug.Log(1);
-            Instantiate( RandomDropItem , transform.position+DropItemPosion , Quaternion.identity , transform );
+            Instantiate(RandomDropItem, transform.position + DropItemPosion, Quaternion.identity, transform);
             if (playerControler.playerData.IsPassiveGetList[134] && transform.GetComponent<BossRoom>() == null) {
                 if (Random.Range(0.0f, 1.0f) + ((float)playerControler.LuckPoint / 30) >= 0.65f) { Instantiate(RandomDropItem, transform.position + DropItemPosion + Vector3.up * 0.2f, Quaternion.identity, transform); }
             }
@@ -274,9 +276,9 @@ public class Room : MonoBehaviour
 
     public void SetFloor()
     {
-        for (int i = 0;i<30;i++)
+        for (int i = 0; i < 30; i++)
         {
-            for(int j = 0; j<24; j++)
+            for (int j = 0; j < 24; j++)
             {
                 float x = Random.Range(0.0f, 1.0f);
                 if (FloorFile.OutPutWeightIndex(x) != -1)
@@ -294,17 +296,17 @@ public class Room : MonoBehaviour
         MapCreater mapCreater = MapCreater.FindObjectOfType<MapCreater>();
 
         //获取当前房间的虚拟坐标
-        Vector3Int NowRoomPoint = new Vector3Int ((int)(transform.position.x / 30), (int)(transform.position.y / 24), 0);
+        Vector3Int NowRoomPoint = new Vector3Int((int)(transform.position.x / 30), (int)(transform.position.y / 24), 0);
 
 
-           
-        if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.up)) 
-        {     
-            GameObject Wallup = Instantiate(WallU.gameObject, new Vector3(transform.position.x + WallU.Offset.x, transform.position.y + WallU.Offset.y, 0), Quaternion.identity,transform.GetChild(1));  isWallAround[0] = true;      
+
+        if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.up))
+        {
+            GameObject Wallup = Instantiate(WallU.gameObject, new Vector3(transform.position.x + WallU.Offset.x, transform.position.y + WallU.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); isWallAround[0] = true;
         }
-        else if (mapCreater.PCRoomPoint == NowRoomPoint + Vector3Int.up)       
-        {        
-            GameObject gatewayup = Instantiate(PCGateWayUp, new Vector3(transform.position.x, transform.position.y + 6.7f, 0), Quaternion.identity,gameObject.transform); isWallAround[0] = false;
+        else if (mapCreater.PCRoomPoint == NowRoomPoint + Vector3Int.up)
+        {
+            GameObject gatewayup = Instantiate(PCGateWayUp, new Vector3(transform.position.x, transform.position.y + 6.7f, 0), Quaternion.identity, gameObject.transform); isWallAround[0] = false;
         }
         else if (mapCreater.StoreRoomPoint == NowRoomPoint + Vector3Int.up)
         {
@@ -312,34 +314,34 @@ public class Room : MonoBehaviour
         }
         else if (mapCreater.BossRoomPoint == NowRoomPoint + Vector3Int.up)
         {
-            GameObject gatewayup = Instantiate(BossGateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity , gameObject.transform); isWallAround[0] = false;
+            GameObject gatewayup = Instantiate(BossGateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform); isWallAround[0] = false;
         }
         else if (NowRoomPoint + Vector3Int.up != Vector3Int.zero && ((mapCreater.SkillShopRoomPoint == NowRoomPoint + Vector3Int.up)
             || (mapCreater.MewRoomPoint == NowRoomPoint + Vector3Int.up)
             || (mapCreater.BabyCenterRoomPoint == NowRoomPoint + Vector3Int.up)
             || (mapCreater.MintRoomPoint == NowRoomPoint + Vector3Int.up)
-            || (mapCreater.BerryTreeRoomPoint == NowRoomPoint + Vector3Int.up) ))
+            || (mapCreater.BerryTreeRoomPoint == NowRoomPoint + Vector3Int.up)))
         {
             GameObject gatewayup = Instantiate(LockedGateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform); isWallAround[0] = false;
             gatewayup.GetComponent<LockedDoorSetText>().SetLockedDoorText(mapCreater, NowRoomPoint + Vector3Int.up);
         }
         else
-        {            
+        {
             GameObject gatewayup = Instantiate(GateWayUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform); isWallAround[0] = false;
         }
 
-        
 
 
 
-            
-        if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.down))       
-        {        
+
+
+        if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.down))
+        {
             GameObject Walldown = Instantiate(WallD.gameObject, new Vector3(transform.position.x + WallD.Offset.x, transform.position.y + WallD.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); isWallAround[1] = true;
         }
         else if (mapCreater.BossRoomPoint == NowRoomPoint + Vector3Int.down)
         {
-            Instantiate(BossGateWayDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity , transform); isWallAround[1] = false;
+            Instantiate(BossGateWayDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity, transform); isWallAround[1] = false;
         }
         else if (NowRoomPoint + Vector3Int.down != Vector3Int.zero && ((mapCreater.SkillShopRoomPoint == NowRoomPoint + Vector3Int.down)
     || (mapCreater.MewRoomPoint == NowRoomPoint + Vector3Int.down)
@@ -350,8 +352,8 @@ public class Room : MonoBehaviour
             GameObject gatewayup = Instantiate(LockedGateWayDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity, transform);
             gatewayup.GetComponent<LockedDoorSetText>().SetLockedDoorText(mapCreater, NowRoomPoint + Vector3Int.down); isWallAround[1] = false;
         }
-        else         
-        {       
+        else
+        {
             GameObject gatewaydown = Instantiate(GateWayDown, new Vector3(transform.position.x, transform.position.y - 8.35f, 0), Quaternion.identity, gameObject.transform); isWallAround[1] = false;
         }
 
@@ -360,14 +362,14 @@ public class Room : MonoBehaviour
 
 
 
-            
-        if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.left))        
-        {       
+
+        if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.left))
+        {
             GameObject Wallleft = Instantiate(WallL.gameObject, new Vector3(transform.position.x + WallL.Offset.x, transform.position.y + WallL.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); isWallAround[3] = true;
-        }        
-        else if (mapCreater.PCRoomPoint == NowRoomPoint + Vector3Int.left)          
-        {    
-            GameObject gatewayleft = Instantiate(PCGateWayLeft, new Vector3(transform.position.x - 13.8f, transform.position.y -2.84f, 0), Quaternion.identity, gameObject.transform); isWallAround[3] = false;
+        }
+        else if (mapCreater.PCRoomPoint == NowRoomPoint + Vector3Int.left)
+        {
+            GameObject gatewayleft = Instantiate(PCGateWayLeft, new Vector3(transform.position.x - 13.8f, transform.position.y - 2.84f, 0), Quaternion.identity, gameObject.transform); isWallAround[3] = false;
         }
         else if (mapCreater.StoreRoomPoint == NowRoomPoint + Vector3Int.left)
         {
@@ -375,7 +377,7 @@ public class Room : MonoBehaviour
         }
         else if (mapCreater.BossRoomPoint == NowRoomPoint + Vector3Int.left)
         {
-            GameObject gatewayleft = Instantiate(BossGateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90),transform); isWallAround[3] = false;
+            GameObject gatewayleft = Instantiate(BossGateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), transform); isWallAround[3] = false;
         }
         else if (NowRoomPoint + Vector3Int.left != Vector3Int.zero && ((mapCreater.SkillShopRoomPoint == NowRoomPoint + Vector3Int.left)
     || (mapCreater.MewRoomPoint == NowRoomPoint + Vector3Int.left)
@@ -387,8 +389,8 @@ public class Room : MonoBehaviour
             gatewayup.GetComponent<LockedDoorSetText>().SetLockedDoorText(mapCreater, NowRoomPoint + Vector3Int.left);
         }
         else
-            {
-                GameObject gatewayleft = Instantiate(GateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isWallAround[3] = false;
+        {
+            GameObject gatewayleft = Instantiate(GateWayLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isWallAround[3] = false;
         }
 
 
@@ -396,14 +398,14 @@ public class Room : MonoBehaviour
 
 
 
-           
-        if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.right))          
-        {         
+
+        if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.right))
+        {
             GameObject Wallright = Instantiate(WallR.gameObject, new Vector3(transform.position.x + WallR.Offset.x, transform.position.y + WallR.Offset.y, 0), Quaternion.identity, transform.GetChild(1)); isWallAround[2] = true;
-        }               
+        }
         else if (mapCreater.PCRoomPoint == NowRoomPoint + Vector3Int.right)
-            {
-                GameObject gatewayright = Instantiate(PCGateWayRight, new Vector3(transform.position.x+13.8f, transform.position.y - 2.84f, 0), Quaternion.identity, gameObject.transform); isWallAround[2] = false;
+        {
+            GameObject gatewayright = Instantiate(PCGateWayRight, new Vector3(transform.position.x + 13.8f, transform.position.y - 2.84f, 0), Quaternion.identity, gameObject.transform); isWallAround[2] = false;
         }
         else if (mapCreater.StoreRoomPoint == NowRoomPoint + Vector3Int.right)
         {
@@ -423,11 +425,11 @@ public class Room : MonoBehaviour
             gatewayup.GetComponent<LockedDoorSetText>().SetLockedDoorText(mapCreater, NowRoomPoint + Vector3Int.right);
         }
         else
-            {
-                GameObject gatewayright = Instantiate(GateWayRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isWallAround[2] = false;
+        {
+            GameObject gatewayright = Instantiate(GateWayRight, new Vector3(transform.position.x + 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isWallAround[2] = false;
         }
 
-        }
+    }
 
 
 
@@ -498,7 +500,7 @@ public class Room : MonoBehaviour
         {
             if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.up))
             {
-                if (!isNextFloorDoorExit) { GameObject gatewayup = Instantiate(bossRoom.NextFloorDoorUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform); isNextFloorDoorExit = true; isWallAround[0] = false; if (Wallup!=null) { Destroy(Wallup.gameObject); } }
+                if (!isNextFloorDoorExit) { GameObject gatewayup = Instantiate(bossRoom.NextFloorDoorUp, new Vector3(transform.position.x, transform.position.y + 9.7f, 0), Quaternion.identity, gameObject.transform); isNextFloorDoorExit = true; isWallAround[0] = false; if (Wallup != null) { Destroy(Wallup.gameObject); } }
             }
 
 
@@ -510,7 +512,7 @@ public class Room : MonoBehaviour
 
             if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.left))
             {
-                if (!isNextFloorDoorExit ) { GameObject gatewayleft = Instantiate(bossRoom.NextFloorDoorLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isNextFloorDoorExit = true; isWallAround[3] = false; if (Wallleft != null) { Destroy(Wallleft.gameObject); } }
+                if (!isNextFloorDoorExit) { GameObject gatewayleft = Instantiate(bossRoom.NextFloorDoorLeft, new Vector3(transform.position.x - 13f, transform.position.y - 0.7135f, 0), Quaternion.Euler(0, 0, 90), gameObject.transform); isNextFloorDoorExit = true; isWallAround[3] = false; if (Wallleft != null) { Destroy(Wallleft.gameObject); } }
             }
 
             if (!mapCreater.VRoom.ContainsKey(NowRoomPoint + Vector3Int.right))
@@ -533,9 +535,9 @@ public class Room : MonoBehaviour
 
     private IEnumerator DeleteObjectsCoroutine()
     {
-        for(;;) 
+        for (; ; )
         {
-            if (playerControler!= null && playerControler.playerData.IsPassiveGetList[57])
+            if (playerControler != null && playerControler.playerData.IsPassiveGetList[57])
             {
                 DeleteGrass(transform);
             }
@@ -551,7 +553,7 @@ public class Room : MonoBehaviour
             Transform child = parent.GetChild(i);
 
             // 如果子对象有NormalGrass脚本，销毁该对象
-            if (child.TryGetComponent<NormalGress>(out var normalGrass)|| child.TryGetComponent<GressPlayerINOUT>(out var normalgrass))
+            if (child.TryGetComponent<NormalGress>(out var normalGrass) || child.TryGetComponent<GressPlayerINOUT>(out var normalgrass))
             {
                 Destroy(child.gameObject);
             }
@@ -579,7 +581,7 @@ public class Room : MonoBehaviour
 
 
 
-    public bool isPointInRoon(Vector2 point , float WallWeight)
+    public bool isPointInRoon(Vector2 point, float WallWeight)
     {
         //Debug.Log("Point"+"+"+point + "+"+ (point.x < transform.position.x + RoomSize[3] - WallWeight) + "+"+ (point.x > transform.position.x + RoomSize[2] + WallWeight) + "+" + (point.y < transform.position.y + RoomSize[0] - WallWeight) + "+"+ (point.y > transform.position.y + RoomSize[1] + WallWeight));
         if (
@@ -648,10 +650,10 @@ public class Room : MonoBehaviour
                 if (item.GetComponent<PokemonBall>() != null && item.GetComponent<PokemonBall>().isEmpty) { Destroy(item.gameObject); }
                 else if (item.GetComponent<SkillBall>() != null && item.GetComponent<SkillBall>().isEmpty) { Destroy(item.gameObject); }
                 else { ItemList.Add(item); }
-                
+
             }
         }
-        UiMiniMap.Instance.MiniMapItemMark(new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f), 0) , ItemList );
+        UiMiniMap.Instance.MiniMapItemMark(new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f), 0), ItemList);
 
     }
 
@@ -716,7 +718,7 @@ public class Room : MonoBehaviour
     public void AddEmptyList(Empty e)
     {
         _mTool.RemoveNullInList<Empty>(EmptyList);
-        if (!EmptyList.Contains(e)){EmptyList.Add(e);}
+        if (!EmptyList.Contains(e)) { EmptyList.Add(e); }
     }
     //移除某个敌人
     public void RemoveEmptyList(Empty e)
@@ -755,4 +757,94 @@ public class Room : MonoBehaviour
 
 
     //========================================获得房屋内所有敌人===========================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //========================================房间摇晃===========================================
+
+
+    /// <summary>
+    /// 房间摇晃
+    /// </summary>
+    void ShakeUpdate()
+    {
+        if (isShake)
+        {
+            //Debug.Log(ShakeTime);
+            ShakeTime -= Time.deltaTime;
+            CSTimer += Time.deltaTime;
+            if (CSTimer >= 0.05f) { 
+                CSTimer = 0; 
+                ShakePower = -ShakePower;
+                transform.GetChild(0).localPosition = Vector3.zero;
+                transform.GetChild(1).localPosition = Vector3.zero;
+                transform.GetChild(2).localPosition = Vector3.zero;
+                transform.GetChild(6).localPosition = Vector3.zero;
+            }
+            if (isHorizontalShake)
+            {
+                transform.GetChild(0).position += Time.deltaTime * ShakePower * Vector3.right;
+                transform.GetChild(1).position += Time.deltaTime * ShakePower * Vector3.right;
+                transform.GetChild(2).position += Time.deltaTime * ShakePower * Vector3.right;
+                transform.GetChild(6).position += Time.deltaTime * ShakePower * Vector3.right;
+            }
+            else
+            {
+                transform.GetChild(0).position += Time.deltaTime * ShakePower * Vector3.up;
+                transform.GetChild(1).position += Time.deltaTime * ShakePower * Vector3.up;
+                transform.GetChild(2).position += Time.deltaTime * ShakePower * Vector3.up;
+                transform.GetChild(6).position += Time.deltaTime * ShakePower * Vector3.up;
+            }
+            if (ShakeTime <= 0)
+            {
+                isShake = false; ShakeTime = 0; isHorizontalShake = false; ShakePower = 0; CSTimer = 0;
+                transform.GetChild(0).localPosition = Vector3.zero;
+                transform.GetChild(1).localPosition = Vector3.zero;
+                transform.GetChild(2).localPosition = Vector3.zero;
+                transform.GetChild(6).localPosition = Vector3.zero;
+            }
+        }
+        else
+        {
+            if (transform.GetChild(0).localPosition != Vector3.zero)
+            {
+                transform.GetChild(0).localPosition = Vector3.zero;
+                transform.GetChild(1).localPosition = Vector3.zero;
+                transform.GetChild(2).localPosition = Vector3.zero;
+                transform.GetChild(6).localPosition = Vector3.zero;
+            }
+        }
+    }
+
+
+    bool isShake;
+    float ShakeTime;
+    float CSTimer;
+    bool isHorizontalShake;
+    float ShakePower;
+    Vector3 PRoomNowPosition;
+
+    /// <summary>
+    /// 开启房间摇晃
+    /// </summary>
+    /// <param name="time"></param>
+    /// <param name="Power"></param>
+    /// <param name="isHorizontal"></param>
+    public void CameraShake(float time, float Power, bool isHorizontal)
+    {
+        if (!isShake || (isShake && ShakePower <= Power)) { isShake = true; ShakeTime = time; isHorizontalShake = isHorizontal; ShakePower = Power; }
+    }
+
+    //========================================房间摇晃===========================================
 }

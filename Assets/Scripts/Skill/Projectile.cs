@@ -13,7 +13,20 @@ public class Projectile : MonoBehaviour
     public int BabyLevel;
     protected Vector3 BornPosition;
     float Speed;
+
+
+
+
+    //·ÉÐÐ½Ç¶È
+    public Vector2 LunchDir
+    {
+        get { return LunchDirection; }
+        set { LunchDirection = value; }
+    }
     protected Vector2 LunchDirection;
+
+
+
     public int Dmage;
     public int SpDmage;
     public PokemonType.TypeEnum ProType;
@@ -70,6 +83,7 @@ public class Projectile : MonoBehaviour
         rigidbody2D.AddForce(direction * force);
     }
 
+
     public void LaunchNotForce(Vector2 direction, float speed)
     {
         //Debug.Log(direction);
@@ -78,6 +92,7 @@ public class Projectile : MonoBehaviour
     protected void MoveNotForce()
     {
         //Debug.Log ((LunchDirection.x * Speed * Time.deltaTime).ToString() +  (LunchDirection.y * Speed * Time.deltaTime).ToString() + name );
+        //Debug.Log (LunchDir );
         transform.position = transform.position + new Vector3(LunchDirection.x * Speed * Time.deltaTime , LunchDirection.y * Speed * Time.deltaTime, 0);
     }
 }

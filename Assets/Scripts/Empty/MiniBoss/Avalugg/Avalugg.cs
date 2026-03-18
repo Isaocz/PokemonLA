@@ -584,7 +584,7 @@ public class Avalugg : Empty
     public void JumpGround()
     {
         JumpLunchBergmite();
-        CameraShake(2.4f , 6.5f , true);
+        ParentPokemonRoom.CameraShake(2.4f , 6.5f , true);
         SetFrozenMistByChild();
         LunchAvalanche();
     }

@@ -13,12 +13,21 @@ public class EmptyTrace : MonoBehaviour
     float timer;//计时器
     public float Waittime = 0.5f;//开始追踪时间
     public float distance;//跟踪距离
-    private float angle_fix = 80f;//每次修正的角度
+    private float angle_fix = 80f;//每次修正的发射角度（Mode = TraceMode.FixRotation时使用）
     private float angle_differ = 10;//允许的差异角度
-
+    public float Lunchdir_fix = 80f;//每次修正的发射角度（Mode = TraceMode.FixLunchDir时使用）
 
     Projectile ParentProjectel;
     Empty ParentEmpty;
+
+
+    public enum TraceMode
+    {
+        FixRotation,
+        FixLunchDir,
+    }
+    public TraceMode Mode = TraceMode.FixRotation;
+
 
     // Start is called before the first frame update
     void Start()
@@ -61,6 +70,7 @@ public class EmptyTrace : MonoBehaviour
                 //检测到敌人时则执行追踪
                 if (Target != null)
                 {
+                    Debug.Log(Target.name);
                     //对需要追踪物体和自身间的角度求解运算
                     Vector2 row = (Target.transform.position - transform.position).normalized;
                     //获取两物体间夹角
@@ -73,19 +83,41 @@ public class EmptyTrace : MonoBehaviour
                     float angle3 = ((angle1 - angle2) + 360) % 360;
 
 
-                    //对物体的角度做修正，使得物体x轴指向需要追踪的目标
-                    //朝向需要追踪对象的方向调整角度，按照设定的值进行调整
-                    if (angle3 < 180 - angle_differ)
+                    switch (Mode)
                     {
-                        Quaternion reAngle = Quaternion.Euler(0, 0, transform.eulerAngles.z - Time.deltaTime * (angle_fix + timer * 100));
-                        transform.rotation = reAngle;
+                        case TraceMode.FixRotation:
+                            //对物体的角度做修正，使得物体x轴指向需要追踪的目标
+                            //朝向需要追踪对象的方向调整角度，按照设定的值进行调整
+                            if (angle3 < 180 - angle_differ)
+                            {
+                                Quaternion reAngle = Quaternion.Euler(0, 0, transform.eulerAngles.z - Time.deltaTime * (angle_fix + timer * 100));
+                                transform.rotation = reAngle;
+                            }
+                            else if (angle3 > 180 + angle_differ)
+                            {
+                                Quaternion reAngle = Quaternion.Euler(0, 0, transform.eulerAngles.z + Time.deltaTime * (angle_fix + timer * 100));
+                                transform.rotation = reAngle;
+                            }
+                            break;
+                        case TraceMode.FixLunchDir:
+                            //对飞弹的发射角度做修正，使得发射角度指向需要追踪的目标
+                            //朝向需要追踪对象的方向调整角度，按照设定的值进行调整
+                            //对飞弹的发射角度做修正，使得发射角度指向需要追踪的目标
+                            Vector2 LunchD = ParentProjectel.LunchDir.normalized;
+                            Vector2 TargetD = (Target.transform.position - transform.position).normalized;
+                            float cross = LunchD.x * TargetD.y - LunchD.y * TargetD.x;
+                            if (cross > 0)
+                            {
+                                ParentProjectel.LunchDir = Quaternion.AngleAxis(Lunchdir_fix * Time.deltaTime, Vector3.forward) * ParentProjectel.LunchDir;
+                                Debug.Log(transform.position + "+" + Target.transform.position + "+" + "L");
+                            }
+                            else
+                            {
+                                ParentProjectel.LunchDir = Quaternion.AngleAxis(-Lunchdir_fix * Time.deltaTime, Vector3.forward) * ParentProjectel.LunchDir;
+                                Debug.Log(transform.position + "+" + Target.transform.position + "+" + "R");
+                            }
+                            break;
                     }
-                    else if (angle3 > 180 + angle_differ)
-                    {
-                        Quaternion reAngle = Quaternion.Euler(0, 0, transform.eulerAngles.z + Time.deltaTime * (angle_fix + timer * 100));
-                        transform.rotation = reAngle;
-                    }
-
                 }
             }
 

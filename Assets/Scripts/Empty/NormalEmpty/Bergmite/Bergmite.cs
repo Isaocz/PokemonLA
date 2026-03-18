@@ -714,7 +714,7 @@ public class Bergmite : Empty
     /// </summary>
     public void LunchIceShard()
     {
-        CameraShake(0.3f, 2.5f, true);
+        ParentPokemonRoom.CameraShake(0.3f, 2.5f, true);
         if (!isFearDone && !isSilence && !isSleepDone)
         {
             Debug.Log(Director);

@@ -661,7 +661,7 @@ public class CrystalOnix : Empty
             {
                 Director.x = -Director.x; SpeedAChangeTimer = 0;
                 if (NowState == State.NormalState && !isSpeedAChange) { SpeedAlpha--; isSpeedAChange = true; }
-                CameraShake(0.6f, 3.0f, true); FallARockTomb();
+                ParentPokemonRoom.CameraShake(0.6f, 3.0f, true); FallARockTomb();
                 if (isIronHead && SpeedAlpha <= 1) { RemoveIronHeadMode(); }
             }
 
@@ -677,7 +677,7 @@ public class CrystalOnix : Empty
                 || (SearchPlayerR03.collider != null && (SearchPlayerR03.transform.tag == "Room")))
             {
                 Director.x = -Director.x; SpeedAChangeTimer = 0; if (NowState == State.NormalState && !isSpeedAChange) { SpeedAlpha--; isSpeedAChange = true; }
-                CameraShake(0.6f, 3.0f, true); FallARockTomb();
+                ParentPokemonRoom.CameraShake(0.6f, 3.0f, true); FallARockTomb();
                 if (isIronHead && SpeedAlpha <= 1) { RemoveIronHeadMode(); }
             }
         }
@@ -694,7 +694,7 @@ public class CrystalOnix : Empty
                 || (SearchPlayerD03.collider != null && (SearchPlayerD03.transform.tag == "Room")))
             {
                 Director.y = -Director.y; SpeedAChangeTimer = 0; if (NowState == State.NormalState && !isSpeedAChange) { SpeedAlpha--; isSpeedAChange = true; }
-                CameraShake(0.6f, 3.0f, true); FallARockTomb();
+                ParentPokemonRoom.CameraShake(0.6f, 3.0f, true); FallARockTomb();
                 if (isIronHead && SpeedAlpha <= 1) { RemoveIronHeadMode(); }
             }
         }
@@ -710,7 +710,7 @@ public class CrystalOnix : Empty
             {
 
                 Director.y = -Director.y; SpeedAChangeTimer = 0; if (NowState == State.NormalState && !isSpeedAChange) { SpeedAlpha--; isSpeedAChange = true; }
-                CameraShake(0.6f, 3.0f, true); FallARockTomb();
+                ParentPokemonRoom.CameraShake(0.6f, 3.0f, true); FallARockTomb();
                 if (isIronHead && SpeedAlpha <= 1) { RemoveIronHeadMode(); }
             }
         }

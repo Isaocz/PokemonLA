@@ -290,7 +290,8 @@ public class SnowmanSnorlax : Empty
                 break;
             case 2:
                 speed = 3;
-                animator.speed = 1.2f;
+                AnimatorSpeedUp("Berry", 1.2f);
+                //animator.speed = 1.2f;
                 break;
         }
     }
@@ -381,7 +382,7 @@ public class SnowmanSnorlax : Empty
 
     public void SnorlaxCameraShake()
     {
-        CameraShake(0.6f, 4.0f, true);
+        ParentPokemonRoom.CameraShake(0.6f, 4.0f, true);
     }
 
 

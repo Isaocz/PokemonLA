@@ -9,6 +9,12 @@ public class DestoryState : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void RemoveGrandPSPSAndDestorySelf()
+    {
+        _mTool.RemoveAllPSChild(gameObject);
+        Destroy(gameObject);
+    }
+
     public void RemoveChild()
     {
         transform.DetachChildren();
@@ -26,4 +32,6 @@ public class DestoryState : MonoBehaviour
         }
         //transform.DetachChildren();
     }
+
+
 }

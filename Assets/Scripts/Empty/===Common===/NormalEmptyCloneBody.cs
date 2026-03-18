@@ -153,11 +153,11 @@ public class NormalEmptyCloneBody : MonoBehaviour
     /// <param name="Interval">生成残影的间隔</param>
     /// <param name="disappearingSpeed">残影的消失速度</param>
     /// <param name="color">残影的颜色</param>
-    public void StartShadowCoroutine(float Interval, float disappearingSpeed, Color color)
+    public void StartShadowCoroutine(float Interval, float disappearingSpeed, Color color, Vector2 offset = default)
     {
         //Debug.Log("StartSHadow");
         isShadowMove = true; // 开始冲刺
-        ShadowCoroutine = StartCoroutine(StartShadow(Interval, disappearingSpeed, color)); // 启动协程
+        ShadowCoroutine = StartCoroutine(StartShadow(Interval, disappearingSpeed, color, offset)); // 启动协程
     }
 
 
@@ -183,11 +183,11 @@ public class NormalEmptyCloneBody : MonoBehaviour
     /// <param name="disappearingSpeed">残影的消失速度</param>
     /// <param name="color">残影的颜色</param>
     /// <returns></returns>
-    IEnumerator StartShadow(float Interval, float disappearingSpeed, Color color)
+    IEnumerator StartShadow(float Interval, float disappearingSpeed, Color color, Vector2 offset)
     {
         while (isShadowMove)
         {
-            InstantiateShadow(disappearingSpeed, color);
+            InstantiateShadow(disappearingSpeed, color, offset);
             yield return new WaitForSeconds(Interval); // 等待间隔时间
         }
     }
@@ -197,9 +197,9 @@ public class NormalEmptyCloneBody : MonoBehaviour
     /// </summary>
     /// <param name="disappearingSpeed">残影的消失速度</param>
     /// <param name="color">残影的颜色</param>
-    void InstantiateShadow(float disappearingSpeed, Color color)
+    void InstantiateShadow(float disappearingSpeed, Color color, Vector2 offset)
     {
-        Instantiate(emptyShadow, transform.position, Quaternion.identity).SetNormalEmptyShadow(disappearingSpeed, GetSkinRenderers(), color);
+        Instantiate(emptyShadow, transform.position, Quaternion.identity).SetNormalEmptyShadow(disappearingSpeed, GetSkinRenderers(), color, offset);
     }
 
     //=================有关残影生成======================

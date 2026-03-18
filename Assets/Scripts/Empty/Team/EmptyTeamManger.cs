@@ -60,7 +60,7 @@ public class EmptyTeamManger : MonoBehaviour
     /// </summary>
     public void EmptyTeamStart()
     {
-        Debug.Log("start");
+        //Debug.Log("start");
         NowState = MangerState.StartDelay;
         GetTeamQueue();
         if (TeamQueue.Count != 0)//如果队列为空，不启动管理器

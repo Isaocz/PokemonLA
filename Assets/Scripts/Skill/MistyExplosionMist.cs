@@ -52,13 +52,15 @@ public class MistyExplosionMist : Skill
 
     public void Boom()
     {
-        ExistenceTime = 2.0f;
-        CircleCollider.radius = 0;
-        isBoom = true;
-        Destroy(MistOb01.gameObject , 0.5f);
-        Destroy(MistOb02.gameObject , 0.5f);
-        Destroy(MistOb03.gameObject , 0.5f);
-        ExplosionOb.SetActive(true);
+        if (!isBoom) {
+            ExistenceTime = 2.0f;
+            CircleCollider.radius = 0;
+            isBoom = true;
+            Destroy(MistOb01.gameObject, 0.5f);
+            Destroy(MistOb02.gameObject, 0.5f);
+            Destroy(MistOb03.gameObject, 0.5f);
+            ExplosionOb.SetActive(true);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)

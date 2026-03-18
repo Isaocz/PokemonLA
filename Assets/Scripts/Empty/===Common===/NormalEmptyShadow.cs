@@ -18,14 +18,18 @@ public class NormalEmptyShadow : MonoBehaviour
     /// 残影的渲染obj
     /// </summary>
     SpriteRenderer SpriteChildGOBJ;
-    
+    /// <summary>
+    /// 残影偏移量
+    /// </summary>
+    Vector2 SpriteOffset = Vector2.zero;
+
 
     /// <summary>
     /// 设置残影
     /// </summary>
     /// <param name="disappearingSpeed"></param>
     /// <param name="spriteList"></param>
-    public void SetNormalEmptyShadow(float disappearingSpeed , List<SpriteRenderer> spriteList , Color color)
+    public void SetNormalEmptyShadow(float disappearingSpeed , List<SpriteRenderer> spriteList , Color color , Vector2 offset)
     {
         DisappearingSpeed = disappearingSpeed;
 
@@ -34,6 +38,8 @@ public class NormalEmptyShadow : MonoBehaviour
         SpriteChildGOBJ.sprite = spriteList[0].sprite;
         SpriteChildGOBJ.sortingOrder = spriteList[0].sortingOrder - 1;
         SpriteChildGOBJ.color = color;
+        SpriteOffset = offset;
+        SpriteChildGOBJ.transform.localPosition = SpriteOffset;
         spriteRDList.Add(SpriteChildGOBJ);
 
         //如果有多个残影 生成需要的残影  并放入到spriteRDList当中

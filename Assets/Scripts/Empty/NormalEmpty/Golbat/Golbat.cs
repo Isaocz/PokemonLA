@@ -132,7 +132,7 @@ public class Golbat : Empty
 
             if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
             {
-                if (animator.speed == 0) { animator.speed = 1; }
+                if (animator.speed == 0) { AnimatorSpeedReset(); }
                 //根据魅惑情况确实目标位置
                 Transform InfatuationTarget = InfatuationForDistanceEmpty();
                 if (!isEmptyInfatuationDone || (ParentPokemonRoom.GetEmptyList().Count + ParentPokemonRoom.GetEmptyCloneList().Count) <= 1 || InfatuationTarget == null)

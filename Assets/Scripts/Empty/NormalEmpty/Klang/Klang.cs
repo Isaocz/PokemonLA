@@ -1455,7 +1455,7 @@ public class Klang : Empty
             //发射所有小齿轮
             LunchAllSGear_RushOver();
             //摇晃镜头
-            CameraShake(0.3f, 2.5f, true);
+            ParentPokemonRoom.CameraShake(0.3f, 2.5f, true);
         }
         Rush_HaveSGear_Dir = Vector2.zero;
         //关闭残影

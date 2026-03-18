@@ -405,7 +405,7 @@ public class Onix : Empty
         if (!isPSPlaying) { PlayAllPS(); }
     }
 
-    public void JumpShake() { CameraShake( 1.0f , 6.0f ,false ); if (isPSPlaying) { PauseAllPS(); } }
+    public void JumpShake() { ParentPokemonRoom.CameraShake( 1.0f , 6.0f ,false ); if (isPSPlaying) { PauseAllPS(); } }
 
     public void AllBodyBodyPressJumpStart()
     {
@@ -696,7 +696,7 @@ public class Onix : Empty
             {
                 Director.x = -Director.x; SpeedAChangeTimer = 0;
                 if ( NowState == State.NormalState && !isSpeedAChange) { SpeedAlpha--; isSpeedAChange = true;  }
-                CameraShake(0.6f, 3.0f, true); FallARockTomb();
+                ParentPokemonRoom.CameraShake(0.6f, 3.0f, true); FallARockTomb();
                 if (isIronHead && SpeedAlpha <= 1 ) { RemoveIronHeadMode(); }
             }
 
@@ -711,7 +711,7 @@ public class Onix : Empty
                 || (SearchPlayerR03.collider != null && (SearchPlayerR03.transform.tag == "Room")))
             {
                 Director.x = -Director.x; SpeedAChangeTimer = 0; if (NowState == State.NormalState && !isSpeedAChange) { SpeedAlpha--; isSpeedAChange = true;  }
-                CameraShake(0.6f, 3.0f, true); FallARockTomb();
+                ParentPokemonRoom.CameraShake(0.6f, 3.0f, true); FallARockTomb();
                 if (isIronHead && SpeedAlpha <= 1) { RemoveIronHeadMode(); }
             }
         }
@@ -727,7 +727,7 @@ public class Onix : Empty
                 || (SearchPlayerD03.collider != null && (SearchPlayerD03.transform.tag == "Room")))
             {
                 Director.y = -Director.y; SpeedAChangeTimer = 0; if (NowState == State.NormalState && !isSpeedAChange) { SpeedAlpha--; isSpeedAChange = true; }
-                CameraShake(0.6f, 3.0f, true); FallARockTomb();
+                ParentPokemonRoom.CameraShake(0.6f, 3.0f, true); FallARockTomb();
                 if (isIronHead && SpeedAlpha <= 1) { RemoveIronHeadMode(); }
             }
         }
@@ -742,7 +742,7 @@ public class Onix : Empty
             {
                 
                 Director.y = -Director.y; SpeedAChangeTimer = 0; if (NowState == State.NormalState && !isSpeedAChange) { SpeedAlpha--; isSpeedAChange = true; }
-                CameraShake(0.6f, 3.0f, true); FallARockTomb();
+                ParentPokemonRoom.CameraShake(0.6f, 3.0f, true); FallARockTomb();
                 if (isIronHead && SpeedAlpha <= 1) { RemoveIronHeadMode(); }
             }
         }

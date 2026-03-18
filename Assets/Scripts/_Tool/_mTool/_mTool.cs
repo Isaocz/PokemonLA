@@ -9,6 +9,37 @@ public class _mTool : MonoBehaviour
 {
 
 
+    static public List<Vector2> StepCircle_8 = new List<Vector2>
+    { new Vector2(1,0) , new Vector2(0.7071067f ,0.7071067f ) ,
+      new Vector2(0,1) , new Vector2(-0.7071067f ,0.7071067f )  , 
+      new Vector2(-1,0) ,  new Vector2(-0.7071067f ,-0.7071067f ) , 
+      new Vector2(0,-1) ,  new Vector2(0.7071067f ,-0.7071067f )  };
+
+
+    static public List<Vector2> StepCircle_12 = new List<Vector2>
+    { new Vector2(1,0)  , new Vector2(0.8660254f ,0.5f ) ,new Vector2(0.5f ,0.8660254f ) ,
+      new Vector2(0,1)  , new Vector2(-0.8660254f ,0.5f ) ,new Vector2(-0.5f ,0.8660254f ) ,
+      new Vector2(-1,0) , new Vector2(-0.8660254f ,-0.5f ) ,new Vector2(-0.5f ,-0.8660254f ) ,
+      new Vector2(0,-1) , new Vector2(0.8660254f ,-0.5f ) ,new Vector2(0.5f ,-0.8660254f ) };
+
+
+    static public List<Vector2> StepCircleVectorList(int step , float distence , float startAngle)
+    {
+        List<Vector2> Output = new List<Vector2> { };
+        float angle = 360 / (float)step;
+        for (int i = 0; i < step; i++)
+        {
+            Output.Add(Quaternion.AngleAxis(i*angle + startAngle, Vector3.forward) * Vector2.right * distence);
+        }
+        return Output;
+    }
+
+
+
+
+
+
+
     public static float Angle_360(Vector3 from_, Vector3 to_)
     {
         if (from_.x <= 0)
@@ -331,6 +362,23 @@ public class _mTool : MonoBehaviour
     {
         list.RemoveAll(item => item == null);
     }
+
+
+    /// <summary>
+    /// ÂÒÐòÏ´ÅÆList
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list"></param>
+    public static void RandomShuffleList<T>(List<T> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int rand = Random.Range(0, i + 1);
+            (list[i], list[rand]) = (list[rand], list[i]);
+        }
+    }
+
+
 
 
 

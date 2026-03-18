@@ -76,8 +76,8 @@ public class NormalEmpty : Empty
         EmptyHpForLevel(Emptylevel);//设定血量
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);//设定攻击力
         SpAAbilityPoint = AbilityForLevel(Emptylevel, SpAEmptyPoint);//设定特攻
-        DefAbilityPoint = AbilityForLevel(Emptylevel, DefEmptyPoint)/* * 1.2f */;//设定防御力
-        SpdAbilityPoint = AbilityForLevel(Emptylevel, SpdEmptyPoint)/* * 1.2f */;//设定特防
+        DefAbilityPoint = AbilityForLevel(Emptylevel, DefEmptyPoint)/* 【TODO】MiniBoss * 1.2f / Boss * 1.5f; */;//设定防御力
+        SpdAbilityPoint = AbilityForLevel(Emptylevel, SpdEmptyPoint)/* 【TODO】MiniBoss * 1.2f / Boss * 1.5f; */;//设定特防
         SpeedAbilityPoint = AbilityForLevel(Emptylevel, SpeedEmptyPoint);//设定速度
         Exp = BaseExp * Emptylevel / 7;//设定击败后获取的经验
 
@@ -252,6 +252,8 @@ public class NormalEmpty : Empty
     //=================================碰壁反弹=======================================
 
     **/
+
+
 
 
     //■■■■■■■■■■■■■■■■■■■■碰撞■■■■■■■■■■■■■■■■■■■■■■

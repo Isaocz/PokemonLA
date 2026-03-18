@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LittleTreeBeKickDown : MonoBehaviour
+public class LittleTreeBeKickDown : ObjectBeKickDown
 {
     public GameObject PS1;
     public GameObject PS2;
 
-    public bool isBeKickDown
-    {
-        get { return IsBeKickDown; }
-        set { IsBeKickDown = value; }
-    }
-    bool IsBeKickDown;
 
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -22,8 +16,7 @@ public class LittleTreeBeKickDown : MonoBehaviour
             PlayerControler Player = other.gameObject.GetComponent<PlayerControler>();
             if (Player != null && Player.PlayerBodySize == 2)
             {
-                isBeKickDown = true;
-                BekickDown();
+                BeKickDown();
             }
         }
     }
@@ -33,9 +26,9 @@ public class LittleTreeBeKickDown : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void BekickDown()
+    public override void BeKickDown()
     {
-
+        isBeKickDown = true;
         GetComponent<Animator>().SetTrigger("KickDown");
         Instantiate(PS1, transform.position, Quaternion.identity);
         Instantiate(PS2, transform.position, Quaternion.identity);

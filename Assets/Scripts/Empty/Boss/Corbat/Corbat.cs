@@ -102,7 +102,7 @@ public class Corbat : Empty
             if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
             {
 
-                if (animator.speed == 0) { animator.speed = 1;}
+                if (animator.speed == 0) { AnimatorSpeedReset(); }
                 TargetPosition = player.transform.position;
                 if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
 

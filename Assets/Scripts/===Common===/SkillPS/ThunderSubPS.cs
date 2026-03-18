@@ -5,6 +5,8 @@ using UnityEngine;
 public class ThunderSubPS : MonoBehaviour
 {
 
+    public float OverTime;
+
     ParticleSystem PS;
     float SubTimer;
     int isSubLunched;
@@ -18,7 +20,7 @@ public class ThunderSubPS : MonoBehaviour
     private void Update()
     {
         SubTimer += Time.deltaTime;
-        if (SubTimer >= 0.74f && isSubLunched <= 3)
+        if (SubTimer >= OverTime && isSubLunched <= 3)
         {
             isSubLunched ++;
             PS.TriggerSubEmitter(0);

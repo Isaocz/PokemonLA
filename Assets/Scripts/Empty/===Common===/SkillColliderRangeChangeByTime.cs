@@ -39,6 +39,7 @@ public class SkillColliderRangeChangeByTime : MonoBehaviour
     {
         if (Time.timeScale != 0) {
             Timer -= Time.deltaTime;
+            //Debug.Log(Timer +"+"+ (Duration - StartDelay));
             if (Timer < Duration - StartDelay) {
                 Collider2D.enabled = true;
                 if (Timer <= FadeOutTime) { 
