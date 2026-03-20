@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7076288546296795799}
   - component: {fileID: 3085883633285678198}
   m_Layer: 0
-  m_Name: TestSkill
+  m_Name: TestSkill003Paralysis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,7 +69,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.6
+  m_Radius: 0.7
 --- !u!50 &7076288546296795799
 Rigidbody2D:
   serializedVersion: 4
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf27c095a775cdf498059d49ec0ee84d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SkillIndex: 10000
+  SkillIndex: 20003
   player: {fileID: 0}
   baby: {fileID: 0}
   ExistenceTime: 0.01
@@ -147,7 +147,7 @@ MonoBehaviour:
   isBurn: 0
   BurnTime: 12
   BurnPoint: 10
-  isParalysis: 0
+  isParalysis: 1
   ParalysisTime: 300
   ParalysisPoint: 10
   isToxic: 0
@@ -157,7 +157,7 @@ MonoBehaviour:
   SleepTime: 20
   SleepPoint: 10
   isFear: 0
-  FearTime: 5
+  FearTime: 2
   FearPoint: 10
   isBlind: 0
   BlindTime: 2
@@ -172,8 +172,8 @@ MonoBehaviour:
   ColdTime: 5
   isCurse: 0
   CurseTime: 30
-  isSpeDown: 1
-  SpeDownTime: 10
+  isSpeDown: 0
+  SpeDownTime: 0
   isAtkDown: 0
   AtkDownTime: 2
   isDefDown: 0

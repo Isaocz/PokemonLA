@@ -1,3 +1,5 @@
+/**
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,7 +46,7 @@ public class PrefabCreator
 
 
 
-        /**
+        /
         for (int i = 0; i < vList.Count; i++)
         {
             //Instantiate(Hex, transform.position + vList[i] * Radius, Quaternion.LookRotation(vList[i]), transform);
@@ -55,7 +57,7 @@ public class PrefabCreator
             instance.transform.rotation = Quaternion.LookRotation(vList[i]);
             instance.transform.parent = parent.transform;
         }
-        **/
+        /
     }
 
 
@@ -136,3 +138,5 @@ public class PrefabCreator
 
 
 }
+
+**/

@@ -96,6 +96,8 @@ public class MapCreater : MonoBehaviour
     List<int> RoomWhiteList = new List<int> { };
 
 
+    //是否为boss测试地图
+    public bool isBossTestMap = false;
 
     //========================一些控制根据道具特性等生成地图的变量==============================
 
@@ -163,18 +165,30 @@ public class MapCreater : MonoBehaviour
             }
             FloorNum.GlobalFloorNum.isBossRoomBeCreated[BossRoom.GetComponent<BossRoom>().BossIndex] = true;
         }
+        //测试场景
         else
         {
-            isBornMewRoom = Random.Range(0.0f, 1.0f) <= 0.25f;
-            isBornBabyCenterRoom = Random.Range(0.0f, 1.0f) <= 0.3f;
-            isBornMintRoom = Random.Range(0.0f, 1.0f) <= 0.3f;
-            isBornBerryTreeRoom = Random.Range(0.0f, 1.0f) <= 0.08f;
-            //StepMin = 8;
+            //boss测试地图
+            if (isBossTestMap)
+            {
+                isBornMewRoom = false;
+                isBornBabyCenterRoom = false;
+                isBornMintRoom = false;
+                isBornBerryTreeRoom = false;
+            }
+            else
+            {
+                isBornMewRoom = Random.Range(0.0f, 1.0f) <= 0.25f;
+                isBornBabyCenterRoom = Random.Range(0.0f, 1.0f) <= 0.3f;
+                isBornMintRoom = Random.Range(0.0f, 1.0f) <= 0.3f;
+                isBornBerryTreeRoom = Random.Range(0.0f, 1.0f) <= 0.08f;
+                //StepMin = 8;
+            }
             BossRoom = BossRoomList[Random.Range(0,BossRoomList.Count)];
         }
-        Debug.Log(isBornMewRoom);
-        Debug.Log(isBornBabyCenterRoom);
-        Debug.Log(isBornMintRoom);
+        //Debug.Log(isBornMewRoom);
+        //Debug.Log(isBornBabyCenterRoom);
+        //Debug.Log(isBornMintRoom);
 
 
         for (int i = 0; i < BaseRoomList.RoomList.Count; i++)
@@ -340,8 +354,11 @@ public class MapCreater : MonoBehaviour
         //如果当前虚拟房间点不是一个虚拟房间，使该房间变为虚拟房间
         if (!VRoom.ContainsKey(NowChechPoint)) { VRoom.Add(NowChechPoint, 0); }
 
+        //boss测试模式只要一个房间
+        if (isBossTestMap) { return; }
+
         //当当前虚拟房间数大于需要生成的最小房间数时，房间生成概率降低10%
-        if(RoomCount > StepMin) { per -= DecaySpeed; }
+        if (RoomCount > StepMin) { per -= DecaySpeed; }
 
         float s1 = Random.Range(0.0f, 0.8f) - (NowChechPoint == Vector3Int.zero ? 0.6f : 0);
         //进行一次随机如果小于生成概率就随机向某个方向生成一个虚拟房间
@@ -421,7 +438,20 @@ public class MapCreater : MonoBehaviour
     void BuiledPCroom()
     {
         if (!isPCRoomSpawn) {
-            //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
+            //●Boss测试房间
+            if (isBossTestMap)
+            {
+                Vector3Int BossTestPoint = Vector3Int.left;
+                string Testroomname = BossTestPoint.ToString();
+                VRoom.Add(BossTestPoint, 0);
+                PCRoomPoint = BossTestPoint;
+                isPCRoomSpawn = true;
+                Room room = Instantiate(PCRoomUp, new Vector3(BossTestPoint.x * 30, BossTestPoint.y * 24, 0), Quaternion.identity);
+                room.transform.name = "PC" + Testroomname;
+                RRoom.Add(BossTestPoint, room);
+                return;
+            }
+            //●遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
             foreach (Vector3Int item in VRoom.Keys)
             {
                 if (Vector3Int.Distance(item, Vector3Int.zero) > (Mathf.Sqrt(StepMin)) / SpawnR && item != BossRoomPoint && item != StoreRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
@@ -501,7 +531,20 @@ public class MapCreater : MonoBehaviour
     void BuiledStoreRoom()
     {
         if (!isStoreRoomSpawn) {
-            //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
+            //●Boss测试房间
+            if (isBossTestMap)
+            {
+                Vector3Int BossTestPoint = Vector3Int.right;
+                string Testroomname = BossTestPoint.ToString();
+                VRoom.Add(BossTestPoint, 0);
+                StoreRoomPoint = BossTestPoint;
+                isStoreRoomSpawn = true;
+                Room room = Instantiate(StoreRoomUp, new Vector3(BossTestPoint.x * 30, BossTestPoint.y * 24, 0), Quaternion.identity);
+                room.transform.name = "Store" + Testroomname;
+                RRoom.Add(BossTestPoint, room);
+                return;
+            }
+            //●遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
             foreach (Vector3Int item in VRoom.Keys)
             {
                 if (item != BossRoomPoint && item != PCRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
@@ -581,7 +624,21 @@ public class MapCreater : MonoBehaviour
     void BuiledBossRoom()
     {
         if (!isBossRoomSpawn) {
-            //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
+            //●Boss测试房间
+            if (isBossTestMap)
+            {
+                Vector3Int BossTestPoint = Vector3Int.up;
+                string Testroomname = BossTestPoint.ToString();
+                VRoom.Add(BossTestPoint, 0);
+                BossRoomPoint = BossTestPoint;
+                isBossRoomSpawn = true;
+                Room room = Instantiate(BossRoom, new Vector3(BossTestPoint.x * 30, BossTestPoint.y * 24, 0), Quaternion.identity);
+                room.transform.name = "Boss" + Testroomname;
+                room.CreatNextFloorWall();
+                RRoom.Add(BossTestPoint, room);
+                return;
+            }
+            //●遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
             foreach (Vector3Int item in VRoom.Keys)
             {
                 if (Vector3Int.Distance(item, Vector3Int.zero) > (Mathf.Sqrt(StepMin)) / SpawnR && item != StoreRoomPoint && item != PCRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
@@ -684,7 +741,21 @@ public class MapCreater : MonoBehaviour
 
         if (!isSkillShopRoomSpawn)
         {
-            //遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
+            //●Boss测试房间
+            if (isBossTestMap)
+            {
+                Vector3Int BossTestPoint = Vector3Int.down;
+                string Testroomname = BossTestPoint.ToString();
+                VRoom.Add(BossTestPoint, 0);
+                SkillShopRoomPoint = BossTestPoint;
+                isSkillShopRoomSpawn = true;
+                Room room = Instantiate(SkillShopRoom, new Vector3(BossTestPoint.x * 30, BossTestPoint.y * 24, 0), Quaternion.identity);
+                room.transform.name = "SkillShop" + Testroomname;
+                RRoom.Add(BossTestPoint, room);
+                room.CreatWall();
+                return;
+            }
+            //●遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
             foreach (Vector3Int item in VRoom.Keys)
             {
                 if (item != BossRoomPoint && item != StoreRoomPoint && item != PCRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)

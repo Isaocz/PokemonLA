@@ -134,4 +134,36 @@ public class PokemonBall : IteamPickUp
     {
         isPickUp = true;
     }
+
+
+
+
+
+
+    /// <summary>
+    /// 获取指定道具 失败则获取随机道具
+    /// </summary>
+    /// <param name="Index"></param>
+    /// <returns></returns>
+    public bool SetPassiveItemIndex(int Index)
+    {
+        if (Index < passiveList.SpritesList.Length && Index >= 0)
+        {
+            PassiveDropIndex = Index;
+            return true;
+        }
+        else
+        {
+            PassiveDropIndex = passiveList.GetARandomItemIndex(0, PassiveItemPool.All);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 获取全道具池的随机道具
+    /// </summary>
+    public void SetRandomPassiveItemIndex( )
+    {
+        PassiveDropIndex = passiveList.GetARandomItemIndex(0, PassiveItemPool.All);
+    }
 }

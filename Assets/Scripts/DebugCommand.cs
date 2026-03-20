@@ -1,64 +1,37 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Reflection;
 
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+public class DebugCommandAttribute : Attribute
+{
+    public string CommandId { get; }
+    public string Description { get; }
+
+    public DebugCommandAttribute(string id, string desc)
+    {
+        CommandId = id.ToLower();
+        Description = desc;
+    }
+}
 public class DebugCommandBase
 {
-    private string _commandId;
-    private string _commandDescription;
-    private string _commandFormat;
+    public string commandId;
+    public string description;
+    public MethodInfo method;
+    public object targetInstance;
 
-    public string commandId { get { return _commandId; } }
-    public string commandDescription { get { return _commandDescription; } }
-    public string commandFormat { get { return _commandFormat; } }
+    public ParameterInfo[] parameters => method.GetParameters();
 
-    public DebugCommandBase(string id, string description, string format)
+    public DebugCommandBase(string id, string desc, MethodInfo m, object instance)
     {
-        _commandId = id;
-        _commandDescription = description;
-        _commandFormat = format;
-    }
-}
-
-public class DebugCommand : DebugCommandBase
-{
-    private Action command;
-    public DebugCommand(string id, string description, string format, Action command) : base(id, description, format)
-    {
-        this.command = command;
+        commandId = id;
+        description = desc;
+        method = m;
+        targetInstance = instance;
     }
 
-    public void invoke()
+    public void Invoke(object[] args)
     {
-        command.Invoke();
-    }
-}
-
-public class DebugCommand<T1> : DebugCommandBase
-{
-    private Action<T1> command;
-    public DebugCommand(string id, string description, string format, Action<T1> command) : base(id, description, format)
-    {
-        this.command = command;
-    }
-
-    public void invoke(T1 value)
-    {
-        command.Invoke(value);
-    }
-}
-
-public class DebugCommand<T1, T2> : DebugCommandBase
-{
-    private Action<T1, T2> command;
-    public DebugCommand(string id, string description, string format, Action<T1, T2> command) : base(id, description, format)
-    {
-        this.command = command;
-    }
-
-    public void invoke(T1 value1, T2 value2)
-    {
-        command.Invoke(value1, value2);
+        method.Invoke(targetInstance, args);
     }
 }

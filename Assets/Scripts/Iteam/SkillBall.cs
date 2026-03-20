@@ -70,9 +70,9 @@ public class SkillBall : IteamPickUp
             if (isThereAreSkillMechine)
             {
                 isEmpty = true;
-                string SkillMachineName = "「";
+                string SkillMachineName = "";
                 if (GetSkill.SkillIndex % 10 < 10) { SkillMachineName += "0"; }
-                SkillMachineName += (GetSkill.SkillIndex).ToString() + (GetSkill.SkillChineseName).ToString() + "」";
+                SkillMachineName += (GetSkill.SkillIndex).ToString() + (GetSkill.SkillChineseName).ToString() + "";
                 UIGetANewItem.UI.GetANewItem(3, SkillMachineName);
                 isThereAreSkillMechine = false;
                 playerControler.animator.SetTrigger("Happy");
@@ -84,5 +84,64 @@ public class SkillBall : IteamPickUp
         }
     }
 
+    /// <summary>
+    /// 设置技能
+    /// </summary>
+    /// <param name="Index"></param>
+    public bool SetSkill(int Index)
+    {
+        int SkillIndex = (Index / 2) * 3 - ((Index % 2 == 0) ? 2 : 0 );
+        if (SkillIndex < SetSkillPPUPFalse.Instence.SkillList.Count)
+        {
+            GetSkill = SetSkillPPUPFalse.Instence.SkillList[SkillIndex];
+            return true;
+        }
+        RandomSetSkill();
+        return false;
+    }
+
+
+    /// <summary>
+    /// 随机设置全技能池技能
+    /// </summary>
+    /// <param name="Index"></param>
+    public void RandomSetSkill()
+    {
+        int SkillIndex = Random.Range(0, (SetSkillPPUPFalse.Instence.SkillList.Count / 3));
+        SkillIndex = SkillIndex * 3;
+        if (SkillIndex < SetSkillPPUPFalse.Instence.SkillList.Count)
+        {
+            GetSkill = SetSkillPPUPFalse.Instence.SkillList[SkillIndex];
+            Debug.Log(SkillIndex);
+            if (GetSkill == null) { RandomSetSkill(); }
+        }
+    }
+
+
+    /// <summary>
+    /// 获取测试技能
+    /// </summary>
+    /// <param name="Index"></param>
+    public bool SetStateTestSkill(TestSkill.StateTestType type)
+    {
+        int SkillIndex = (int)type;
+        if (SkillIndex < SetSkillPPUPFalse.Instence.TestSkillList.Count)
+        {
+            GetSkill = SetSkillPPUPFalse.Instence.TestSkillList[SkillIndex];
+            if (GetSkill == null) { RandomSetSkill(); return false; }
+            return true;
+        }
+        return false;
+    }
+
+
+    /// <summary>
+    /// 获取清图测试技能
+    /// </summary>
+    /// <param name="Index"></param>
+    public void SetKillAllSkill()
+    {
+        GetSkill = SetSkillPPUPFalse.Instence.KillAllSkillList[0];
+    }
 
 }

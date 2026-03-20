@@ -4,6 +4,28 @@ using UnityEngine;
 
 public class TestSkill : Skill
 {
+    //测试种类
+    public enum StateTestType
+    {
+        Froze,
+        Burn,
+        Paralysis,
+        Toxic,
+        Sleep,
+        Fear,
+        Blind,
+        Confusion,
+        Infatuation,
+        Cold,
+        Curse,
+        SpeDown,
+        AtkDown,
+        DefDown,
+        SpADown,
+        SpDDown,
+    }
+
+
     Vector2 direction;
     Vector3 StartPostion;
     bool isCanNotMove;
@@ -63,6 +85,10 @@ public class TestSkill : Skill
     [Header("是否被诅咒")]
     public bool isCurse;
     public float CurseTime;
+
+    [Header("是否减速")]
+    public bool isSpeDown;
+    public float SpeDownTime;
 
     [Header("是否被攻击下降")]
     public bool isAtkDown;
@@ -159,5 +185,6 @@ public class TestSkill : Skill
         if (isDefDown) { target.DefChange(-1, DefDownTime); }
         if (isSpADown) { target.SpAChange(-1, SpADownTime); }
         if (isSpDDown) { target.SpDChange(-1, SpDDownTime); }
+        if (isSpeDown) { target.SpeedChange(); target.SpeedRemove01(SpeDownTime * target.OtherStateResistance); }
     }
 }

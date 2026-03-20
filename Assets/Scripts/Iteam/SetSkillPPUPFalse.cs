@@ -4,10 +4,21 @@ using UnityEngine;
 
 public class SetSkillPPUPFalse : MonoBehaviour
 {
+
+    public static SetSkillPPUPFalse Instence;
+
     public List<Skill> SkillList;
+
+
+    public List<Skill> TestSkillList;
+
+    public List<Skill> KillAllSkillList;
+
+
     private void Awake()
     {
-        for(int i = 0; i < SkillList.Count; i++)
+        Instence = this;
+        for (int i = 0; i < SkillList.Count; i++)
         {
             if (SkillList[i] != null) {
                 SkillList[i].isPPUP = false;

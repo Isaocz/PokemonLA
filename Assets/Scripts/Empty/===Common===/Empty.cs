@@ -358,6 +358,8 @@ public class Empty : Pokemon
     /// <returns></returns>
     protected int SetLevel(int PlayerLevel,int MaxLevel)
     {
+
+        //正常场景
         StartCoroutine(SetInvincible(1.2f));
         if (transform.parent.parent.GetComponent<Room>() != null) { ParentPokemonRoom = transform.parent.parent.GetComponent<Room>(); }
         FirstSpeed = speed;
@@ -384,6 +386,9 @@ public class Empty : Pokemon
         }
         //读取继承数据
         if (saveLevel != -1) { OutPut = saveLevel;  }
+
+        //boss测试场景
+        if (FloorNum.GlobalFloorNum == null && MapCreater.StaticMap.isBossTestMap) { return 50; }
         return OutPut;
     }
 

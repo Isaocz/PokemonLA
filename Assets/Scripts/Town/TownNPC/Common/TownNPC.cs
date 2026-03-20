@@ -84,7 +84,8 @@ public class TownNPC : NPC<PlayerPokemon>
     private bool isFollowingPath = false;
 
     [Header("避障设置")]
-    public LayerMask obstacleLayers = LayerMask.GetMask("NPC", "Player");
+    //！！非法！！→ public LayerMask obstacleLayers = LayerMask.GetMask("NPC", "Player");【转移到awake()】
+    public LayerMask obstacleLayers;
     public float obstacleCheckDistance = 1.5f;
     public float obstacleCheckRadius = 0.3f;
     public float avoidanceDistance = 2f;
@@ -95,6 +96,11 @@ public class TownNPC : NPC<PlayerPokemon>
     private float originalSpeedBeforeAvoidance;
     private Coroutine avoidanceCoroutine;
 
+
+    private void Awake()
+    {
+        obstacleLayers = LayerMask.GetMask("NPC", "Player");
+    }
 
     /// <summary>
     /// 初始化
