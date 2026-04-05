@@ -62,8 +62,7 @@ public class RapidSpin : Skill
     {
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            HitAndKo(target);
+            HitAndKo(other.gameObject);
         }
     }
 

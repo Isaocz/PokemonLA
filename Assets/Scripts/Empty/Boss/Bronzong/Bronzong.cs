@@ -319,6 +319,8 @@ public class Bronzong : Empty
                 EmptyTouchHit(other.gameObject);
             }
         }
+
+
     }
 
 

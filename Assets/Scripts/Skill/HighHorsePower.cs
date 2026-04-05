@@ -64,7 +64,7 @@ public class HighHorsePower : Skill
         {
             Empty target = other.GetComponent<Empty>();
             Instantiate(HighHorsePowerEffect , other.transform.position , Quaternion.identity);
-            HitAndKo(target);
+            HitAndKo(other.gameObject);
         }
     }
 
@@ -85,8 +85,9 @@ public class HighHorsePower : Skill
             {
                 Empty target = other.gameObject.GetComponent<Empty>();
                 Instantiate(HighHorsePowerEffect, other.transform.position, Quaternion.identity);
-                HitAndKo(target);
+                HitAndKo(other.gameObject);
             }
+            
         }
     }
 

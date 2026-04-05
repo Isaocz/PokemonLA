@@ -25,11 +25,7 @@ public class RockTombRockFall : MonoBehaviour
     {
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            if (target != null)
-            {
-                ParentRockTomb.HitAndKo(target);
-            }
+            ParentRockTomb.HitAndKo(other.gameObject);
         }
     }
 

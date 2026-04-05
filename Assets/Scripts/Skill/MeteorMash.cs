@@ -20,9 +20,9 @@ public class MeteorMash : Skill
         if (other.tag == "Empty")
         {
             Empty e = other.GetComponent<Empty>();
+            HitAndKo(other.gameObject);
             if (e != null)
             {
-                HitAndKo(e);
                 if (SkillFrom == 2)
                 {
                     Debug.Log((float)(PokemonType.TYPE[9][(int)e.EmptyType01]));

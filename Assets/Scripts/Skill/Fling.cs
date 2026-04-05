@@ -99,17 +99,15 @@ public class Fling : Skill
             if (other.tag == "Empty")
             {
                 Empty target = other.GetComponent<Empty>();
+                HitAndKo(other.gameObject);
                 if (target != null)
                 {
-                    HitAndKo(target);
+                    if (Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 30) > 0.4f)
+                    {
+                        ItemDrop();
+                    }
+                    else { ItemBreak(); }
                 }
-
-                if (Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 30) > 0.4f)
-                {
-                    ItemDrop();
-                }
-                else { ItemBreak(); }
-
             }
             else if (other.tag == "Room" || other.tag == "Enviroment")
             {

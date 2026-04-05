@@ -54,9 +54,15 @@ public class DrainingKiss : Skill
         if (other.tag == "Empty" && other.isTrigger == false)
         {
             Empty target = other.GetComponent<Empty>();
-            int hp = target.EmptyHp;
-            HitAndKo(target);
-            Drain(hp,target.EmptyHp,0.75f);
+            int hp = 0;
+            if (target != null)
+            {
+                hp = target.EmptyHp;
+            }
+            HitAndKo(other.gameObject);
+            if (target != null) {
+                Drain(hp, target.EmptyHp, 0.75f);
+            }
             isCanNotMove = true;
             DrainingKissOverPS.gameObject.SetActive(true);
             DrainingKissOverPS.Play();

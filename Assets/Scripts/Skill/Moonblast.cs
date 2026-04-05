@@ -61,15 +61,18 @@ public class Moonblast : Skill
             if (collision.CompareTag("Empty"))
             {
                 Empty enemy = collision.GetComponent<Empty>();
+                HitAndKo(collision.gameObject);
                 if (enemy != null)
                 {
-                    HitAndKo(enemy);
                     if (Random.Range(0f, 1f) + player.LuckPoint / 30f > 0.8f)
                     {
                         enemy.SpDChange(-1, 0f);
                     }
-                    ishit = true;
-                    timeChange = false;
+                }
+                ishit = true;
+                timeChange = false;
+                if (enemy != null)
+                {
                     if (SkillFrom == 2)
                     {
                         canBFborn = true;

@@ -243,9 +243,9 @@ public class Waterfall : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
+            HitAndKo(other.gameObject);
             if (target != null)
             {
-                HitAndKo(target);
                 if (Random.Range(0.0f , 1.0f) + ((float)player.LuckPoint / 30.0f) >= 0.8f ) {
                     target.Fear(3.0f , 1.0f);
                 }

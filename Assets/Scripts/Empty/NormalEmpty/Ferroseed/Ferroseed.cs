@@ -234,7 +234,10 @@ public class Ferroseed : Empty
         {
             //InfatuationEmptyTouchHit(other.gameObject);
             Empty e = other.gameObject.GetComponent<Empty>();
-            Pokemon.PokemonHpChange(gameObject, e.gameObject, dmage, 0, 0, PokemonType.TypeEnum.Steel);
+            if (e != null)
+            {
+                Pokemon.PokemonHpChange(gameObject, e.gameObject, dmage, 0, 0, PokemonType.TypeEnum.Steel);
+            }
         }
     }
 

@@ -26,9 +26,9 @@ public class Whirlpool : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
+            HitAndKo(other.gameObject);
             if (target != null)
             {
-                HitAndKo(target);
                 if (!target.isSpeedChange && SkillFrom == 2) {
                     target.SpeedChange();
                 }

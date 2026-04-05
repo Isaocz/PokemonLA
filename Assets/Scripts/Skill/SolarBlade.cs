@@ -129,8 +129,8 @@ public class SolarBlade : GrassSkill
                         Damage /= 2;
                     }
                 }
-                HitAndKo(target);
             }
+            HitAndKo(collision.gameObject);
         }
     }
 

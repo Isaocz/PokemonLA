@@ -38,7 +38,7 @@ public class LowKick : Skill
             {
                 Damage = Power(MoveSpeed());
                 Debug.Log(MoveSpeed() + "+" + Damage);
-                HitAndKo(Target);
+                HitAndKo(Target.gameObject);
                 Target = null;
                 Destroy(gameObject);
             }
@@ -106,6 +106,10 @@ public class LowKick : Skill
         {
             Empty e = other.GetComponent<Empty>();
             if (e != null) { Target = e; }
+            else
+            {
+                HitAndKo(other.gameObject);
+            }
         }
     }
 }

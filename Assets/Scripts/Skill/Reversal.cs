@@ -43,9 +43,8 @@ public class Reversal : Skill
         if (other.tag == "Empty")
         {
             IsTriggerDone = true;
-            Empty target = other.GetComponent<Empty>();
             FlailDamage(((float)(player.Hp)) / ((float)(player.maxHp)));
-            HitAndKo(target);
+            HitAndKo(other.gameObject);
             if (animator != null) { animator.SetTrigger("Hit"); }
             gameObject.transform.position = other.transform.position;
         }

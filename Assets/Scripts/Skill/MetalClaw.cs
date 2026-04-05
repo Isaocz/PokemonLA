@@ -56,8 +56,8 @@ public class MetalClaw : Skill
                         }
                     }
                 }
-                HitAndKo(target);
             }
+            HitAndKo(other.gameObject);
         }
     }
 }

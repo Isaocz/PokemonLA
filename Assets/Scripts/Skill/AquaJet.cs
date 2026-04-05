@@ -67,6 +67,7 @@ public class AquaJet : Skill
             if (other.gameObject.tag == "Empty")
             {
                 Empty target = other.gameObject.GetComponent<Empty>();
+                HitAndKo(other.gameObject);
                 if (target != null)
                 {
                     Instantiate(TackleBlast, target.transform.position, Quaternion.identity).GetComponent<DestoryState>().RemoveChild();
@@ -75,8 +76,7 @@ public class AquaJet : Skill
                         if (target.isSpeedChange) { Damage *= 1.3f; }
                         if (Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 10.0f) >= 0.5f) { target.SpeedChange(); target.SpeedRemove01(3.0f * target.OtherStateResistance); }
                     }
-                    HitAndKo(target);
-                    
+                   
                 }
             }
             else if (other.tag == "Projectel")

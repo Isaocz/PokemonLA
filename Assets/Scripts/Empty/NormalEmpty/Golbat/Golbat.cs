@@ -274,8 +274,11 @@ public class Golbat : Empty
             if (NowState == State.Rush)
             {
                 Empty e = other.gameObject.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(this.gameObject, e.gameObject, 50, 0, 0, PokemonType.TypeEnum.Poison);
-                e.EmptyToxicDone(1f, 5, 0.5f);
+                if (e != null)
+                {
+                    Pokemon.PokemonHpChange(this.gameObject, e.gameObject, 50, 0, 0, PokemonType.TypeEnum.Poison);
+                    e.EmptyToxicDone(1f, 5, 0.5f);
+                }
             }
             else
             {

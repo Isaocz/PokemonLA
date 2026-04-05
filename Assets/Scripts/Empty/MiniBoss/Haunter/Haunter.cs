@@ -284,8 +284,11 @@ public class Haunter : Empty
             if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
             {
                 Empty e = other.gameObject.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(this.gameObject, e.gameObject, DMAGE_SHADOWCLAW, 0, 0, PokemonType.TypeEnum.Ghost);
-                GetCTEffect(other.transform);
+                if (e != null)
+                {
+                    Pokemon.PokemonHpChange(this.gameObject, e.gameObject, DMAGE_SHADOWCLAW, 0, 0, PokemonType.TypeEnum.Ghost);
+                    GetCTEffect(other.transform);
+                }
             }
         }
         else if (NowState == HaunterState.Rush)
@@ -311,8 +314,11 @@ public class Haunter : Empty
             if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
             {
                 Empty e = other.gameObject.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(this.gameObject, e.gameObject, DMAGE_SHADOWRUSH, 0, 0, PokemonType.TypeEnum.Ghost);
-                GetCTEffect(other.transform);
+                if (e != null)
+                {
+                    Pokemon.PokemonHpChange(this.gameObject, e.gameObject, DMAGE_SHADOWRUSH, 0, 0, PokemonType.TypeEnum.Ghost);
+                    GetCTEffect(other.transform);
+                }
             }
         }
         else

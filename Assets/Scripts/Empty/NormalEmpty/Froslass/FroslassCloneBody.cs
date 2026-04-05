@@ -19,7 +19,7 @@ public class FroslassCloneBody : NormalEmptyCloneBody
     private void Start()
     {
         Timer.Start(this, DispearTime, () => {
-            animator.SetTrigger("Over");
+            SetCloneShadowOver();
         });
     }
 
@@ -38,10 +38,17 @@ public class FroslassCloneBody : NormalEmptyCloneBody
     {
         if (collision.gameObject.tag != "Room" && collision.gameObject.tag != "Enviroment")
         {
-            animator.SetTrigger("Over");
+            SetCloneShadowOver();
         }
     }
 
+    /// <summary>
+    /// ª√”∞œ˚ ß
+    /// </summary>
+    public override void SetCloneShadowOver()
+    {
+        animator.SetTrigger("Over");
+    }
 
 
     /// <summary>

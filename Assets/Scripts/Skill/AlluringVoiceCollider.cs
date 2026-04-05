@@ -16,8 +16,8 @@ public class AlluringVoiceCollider : MonoBehaviour
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            ParentDV.HitAndKo(target);
-            if (target.SpAUpLevel > 0 || target.SpDUpLevel > 0 || target.AtkUpLevel > 0 || target.DefUpLevel > 0) 
+            ParentDV.HitAndKo(other.gameObject);
+            if (target != null && target.SpAUpLevel > 0 || target.SpDUpLevel > 0 || target.AtkUpLevel > 0 || target.DefUpLevel > 0) 
             {
                 target.ConfusionFloatPlus(1);
             }

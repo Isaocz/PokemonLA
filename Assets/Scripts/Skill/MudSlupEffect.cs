@@ -29,9 +29,9 @@ public class MudSlupEffect : MonoBehaviour
         {
             
             target = other.GetComponent<Empty>();
-            if (ParentMudSlup != null) { ParentMudSlup.HitAndKo(target); }
-            if (ParentSubMudSlup != null) { ParentSubMudSlup.HitAndKo(target); }
-            if (!Empties.Contains(target))
+            if (ParentMudSlup != null) { ParentMudSlup.HitAndKo(other.gameObject); }
+            else if (ParentSubMudSlup != null) { ParentSubMudSlup.HitAndKo(other.gameObject); }
+            if (target != null && !Empties.Contains(target))
             {
                 Empties.Add(target);
                 target.Blind(3, 1);

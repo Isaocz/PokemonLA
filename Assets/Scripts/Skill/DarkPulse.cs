@@ -33,9 +33,9 @@ public class DarkPulse : Skill
 
         if (collision.tag == "Empty") {
             Empty e = collision.GetComponent<Empty>();
+            HitAndKo(collision.gameObject);
             if ( e != null)
             {
-                HitAndKo(e);
                 if (Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 20.0f) > 0.8f)
                 {
                     e.Fear(4.0f, 1);

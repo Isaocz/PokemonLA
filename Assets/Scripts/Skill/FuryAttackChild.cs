@@ -29,12 +29,8 @@ public class FuryAttackChild : Skill
 
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            if (target != null)
-            {
-                ParentFuryAttack.HitAndKo(target);
-                if (animator != null) { animator.SetTrigger("Hit"); }
-            }
+            ParentFuryAttack.HitAndKo(other.gameObject);
+            if (animator != null) { animator.SetTrigger("Hit"); }
         }
 
     }

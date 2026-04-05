@@ -46,5 +46,7 @@ public class ConfusionBronzong : Projectile
                 playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
             }
         }
+
+
     }
 }

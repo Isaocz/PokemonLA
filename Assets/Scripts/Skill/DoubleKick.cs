@@ -50,12 +50,8 @@ public class DoubleKick : Skill
     {
         if (other.tag == "Empty")
         {
-            Empty e = other.GetComponent<Empty>();
-            if (e != null)
-            {
-                HitAndKo(e);
-                if (SkillFrom == 2 && !isCTLUp) { CTLevel++; isCTLUp = true; }
-            }
+            HitAndKo(other.gameObject);
+            if (SkillFrom == 2 && !isCTLUp) { CTLevel++; isCTLUp = true; }
         }
     }
 

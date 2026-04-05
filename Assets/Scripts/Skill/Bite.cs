@@ -27,12 +27,14 @@ public class Bite : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            HitAndKo(target);
-            if (SkillFrom == 2 && target.TypeDef[17] >= 0) { target.TypeDef[17]--; }
-            //if (animator != null) { animator.SetTrigger("Hit"); }
-            if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.7f)
-            {
-                target.Fear(2.5f, 1);
+            HitAndKo(other.gameObject);
+            if (target != null ) {
+                if (SkillFrom == 2 && target.TypeDef[17] >= 0) { target.TypeDef[17]--; }
+                //if (animator != null) { animator.SetTrigger("Hit"); }
+                if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.7f)
+                {
+                    target.Fear(2.5f, 1);
+                } 
             }
         }
     }

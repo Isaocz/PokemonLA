@@ -42,8 +42,8 @@ public class FoulPlay : Skill
                         Pokemon.PokemonHpChange(null, player.gameObject,0 , 0, player.maxHp / 16, PokemonType.TypeEnum.IgnoreType);
                     }
                 }
-                HitAndKo(target);
             }
+            HitAndKo(other.gameObject);
             if (animator != null) { animator.SetTrigger("Hit"); }
         }
     }

@@ -53,10 +53,13 @@ public class FuryCutter : Skill
         {
 
             Empty target = other.GetComponent<Empty>();
-            if (target != null) {
-
-                int BeforeHP = target.EmptyHp;
-                HitAndKo(target);
+            int BeforeHP = 0;
+            if (target != null)
+            {
+                BeforeHP = target.EmptyHp;
+            }
+            HitAndKo(other.gameObject);
+            if (target != null) { 
                 int AfterHP = target.EmptyHp;
                 if (SkillFrom == 2) { Drain(BeforeHP , AfterHP , DrainBounsPer); }
                 if (Count == 0) {

@@ -41,9 +41,9 @@ public class DarkPulsePar : Skill
         if(collision.CompareTag("Empty"))
         {
             Empty enemy = collision.GetComponent<Empty>();
-            if( enemy != null )
+            HitAndKo(collision.gameObject);
+            if ( enemy != null )
             {
-                HitAndKo(enemy);
                 targetPosition = transform.position;
                 if (Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 15.0f) > 0.8f)
                 {

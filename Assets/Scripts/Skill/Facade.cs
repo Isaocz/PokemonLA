@@ -53,8 +53,7 @@ public class Facade : Skill
         if (other.tag == "Empty")
         {
             IsTriggerDone = true;
-            Empty target = other.GetComponent<Empty>();
-            HitAndKo(target);
+            HitAndKo(other.gameObject);
             if (animator != null) { animator.SetTrigger("Hit"); }
             gameObject.transform.position = other.transform.position;
         }

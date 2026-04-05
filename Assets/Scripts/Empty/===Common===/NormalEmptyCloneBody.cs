@@ -60,6 +60,16 @@ public class NormalEmptyCloneBody : MonoBehaviour
     }
     Empty parentEmpty;
 
+
+    /// <summary>
+    /// 幻影消失
+    /// </summary>
+    public virtual void SetCloneShadowOver()
+    {
+
+    }
+
+
     /// <summary>
     /// 销毁自己
     /// </summary>

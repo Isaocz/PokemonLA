@@ -15,11 +15,7 @@ public class DigCollider : MonoBehaviour
     {
         if (other.tag == "Empty")
         {
-            Empty e = other.GetComponent<Empty>();
-            if (e != null)
-            {
-                ParentDig.HitAndKo(e);
-            }
+            ParentDig.HitAndKo(other.gameObject);
         }
     }
 }

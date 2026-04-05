@@ -70,6 +70,16 @@ public class MismagiusCloneBody : NormalEmptyCloneBody
     }
 
 
+    /// <summary>
+    /// ª√”∞œ˚ ß
+    /// </summary>
+    public override void SetCloneShadowOver()
+    {
+        SetCloneShadowOver(true);
+    }
+
+
+
 
 
     private void Update()

@@ -75,8 +75,8 @@ public class Liquidation : Skill
                     }
                     if (SkillFrom == 2 && target.isSpeedChange) { Damage *= 1.5f; }
                     Instantiate(TackleBlast, target.transform.position, Quaternion.identity).GetComponent<DestoryState>().RemoveChild();
-                    HitAndKo(target);
                 }
+                HitAndKo(other.gameObject);
             }
         }
     }

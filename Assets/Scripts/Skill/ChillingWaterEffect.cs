@@ -24,9 +24,9 @@ public class ChillingWaterEffect : MonoBehaviour
         if (other.tag == "Empty")
         {
             target = other.GetComponent<Empty>();
+            if (ParentChillingWater != null) { ParentChillingWater.HitAndKo(other.gameObject); }
             if (ParentChillingWater != null && target != null)
             {
-                ParentChillingWater.HitAndKo(target);
                 ParentChillingWater.EffectTrigger( target );
             }
 

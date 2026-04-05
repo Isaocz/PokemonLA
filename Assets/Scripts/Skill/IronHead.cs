@@ -32,9 +32,9 @@ public class IronHead : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
+            HitAndKo(other.gameObject);
             if (target != null)
             {
-                HitAndKo(target);
                 if(SkillFrom == 2 && target.EmptyHp <= 0 && !isBounsDone)
                 {
                     isBounsDone = true;
@@ -46,10 +46,10 @@ public class IronHead : Skill
                     }
                     player.ReFreshAbllityPoint();
                 }
-                HitEffect.transform.parent = target.transform;
-                HitEffect.SetActive(true);
-                if (animator != null) { animator.SetTrigger("Hit"); }
             }
+            HitEffect.transform.parent = other.transform;
+            HitEffect.SetActive(true);
+            if (animator != null) { animator.SetTrigger("Hit"); }
         }
     }
 }

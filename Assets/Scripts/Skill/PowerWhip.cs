@@ -41,11 +41,7 @@ public class PowerWhip : Skill
     {
         if (other.tag == "Empty")
         {
-            Empty e = other.GetComponent<Empty>();
-            if ( e != null)
-            {
-                HitAndKo(e);
-            }
+            HitAndKo(other.gameObject);
         }
     }
 

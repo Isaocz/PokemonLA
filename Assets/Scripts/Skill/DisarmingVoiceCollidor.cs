@@ -16,9 +16,12 @@ public class DisarmingVoiceCollidor : MonoBehaviour
     {
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            ParentDV.HitAndKo(target);
-            ParentDV.SkillFrom02();
+            if (ParentDV != null)
+            {
+                ParentDV.HitAndKo(other.gameObject);
+                ParentDV.SkillFrom02();
+            }
+
         }
     }
 }

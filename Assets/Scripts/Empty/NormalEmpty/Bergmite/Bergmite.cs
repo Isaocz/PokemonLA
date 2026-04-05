@@ -341,7 +341,11 @@ public class Bergmite : Empty
             if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))
             {
                 Empty e = other.gameObject.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(this.gameObject, e.gameObject, 40, 0, 0, PokemonType.TypeEnum.Ice);
+                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 40, 0, 0, PokemonType.TypeEnum.Ice);
+                if (e != null)
+                {
+
+                }
             }
         }
         else

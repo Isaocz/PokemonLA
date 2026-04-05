@@ -53,10 +53,9 @@ public class IcicleSpearIce : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
+            HitAndKo(other.gameObject);
             if (target != null)
             {
-                //Debug.Log(player);
-                HitAndKo(target);
                 if(SkillFrom == 2)
                 {
                     target.Frozen(7.5f, 1, 0.05f + ((float)player.LuckPoint / 30));

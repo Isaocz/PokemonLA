@@ -48,7 +48,7 @@ public class VanillitePodesSnowPSCollision : MonoBehaviour
             {
 
                 Empty e = other.GetComponent<Empty>();
-                if (!isAtkedEmpty.Contains(e))
+                if (e != null && !isAtkedEmpty.Contains(e))
                 {
                     isAtkedEmpty.Add(e);
                     Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Ice);

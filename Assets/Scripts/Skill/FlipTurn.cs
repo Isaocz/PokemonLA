@@ -62,8 +62,8 @@ public class FlipTurn : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            if (SkillFrom == 2 && Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 10.0f) >= 0.5f) { target.SpeedChange(); target.SpeedRemove01(3.0f * target.OtherStateResistance); }
-            HitAndKo(target);
+            if (target != null && SkillFrom == 2 && Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 10.0f) >= 0.5f) { target.SpeedChange(); target.SpeedRemove01(3.0f * target.OtherStateResistance); }
+            HitAndKo(other.gameObject);
             if (animator != null) { animator.SetTrigger("Hit"); }
             GameObject ps1 = transform.GetChild(0).gameObject;
             GameObject ps2 = transform.GetChild(1).gameObject;

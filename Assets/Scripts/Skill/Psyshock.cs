@@ -62,11 +62,11 @@ public class Psyshock : Skill
                 if (nearestEnemy != null)
                 {
                     Empty target = nearestEnemy.GetComponent<Empty>();
-                    HitAndKo(target);
+                    HitAndKo(nearestEnemy.gameObject);
                     isPSHitDone = true;
                     lineRenderer.SetPosition(0, transform.position);
                     lineRenderer.SetPosition(1, target.transform.position);
-                    summonPoint = target.transform.position;
+                    if (target != null ) { summonPoint = target.transform.position; }
                 }
             }
             else
@@ -135,8 +135,7 @@ public class Psyshock : Skill
         {
             if (hitinfo.collider != null && hitinfo.collider.gameObject.tag == "Empty")
             {
-                Empty target = hitinfo.collider.GetComponent<Empty>();
-                HitAndKo(target);
+                HitAndKo(hitinfo.collider.gameObject);
                 isPSHitDone = true;
             }
             //如果有击中对象，将起始点和终点分别对应
@@ -164,7 +163,7 @@ public class Psyshock : Skill
 
 
 
-
+    /*
     public void PsychockHitAndKo(Empty target)
     {
         BeforeHitEvent(target);
@@ -205,7 +204,7 @@ public class Psyshock : Skill
 
     }
 
-
+    */
 
 
 

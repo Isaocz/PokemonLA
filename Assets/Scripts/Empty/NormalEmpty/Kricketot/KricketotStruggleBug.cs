@@ -64,7 +64,11 @@ public class KricketotStruggleBug : Projectile
             if (other.tag == ("Empty") && empty.isEmptyInfatuationDone)
             {
                 Empty e = other.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Bug);   
+                if (e != null)
+                {
+                    Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Bug);
+
+                }
             }
         }
     }

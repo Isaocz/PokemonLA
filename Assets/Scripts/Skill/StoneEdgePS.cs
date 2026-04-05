@@ -20,11 +20,7 @@ public class StoneEdgePS : MonoBehaviour
     {
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            if (target != null)
-            {
-                ParentStoneEdge.HitAndKo(target);
-            }
+            ParentStoneEdge.HitAndKo(other.gameObject);
         }
         
     }

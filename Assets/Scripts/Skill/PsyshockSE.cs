@@ -18,15 +18,13 @@ public class PsyshockSE : Skill
         {
             if (collider.CompareTag("Empty"))
             {
-                Empty enemy = collider.GetComponent<Empty>();
-                if (enemy != null)
-                {
-                    HitAndKo(enemy);
-                }
+                HitAndKo(collider.gameObject);
             }
         }
     }
 
+
+    /**
     public void PsychockHitAndKo(Empty target)
     {
         BeforeHitEvent(target);
@@ -39,7 +37,7 @@ public class PsyshockSE : Skill
             if (TargetList.Count == 0) { TargetList.Add(new EmptyList(target, false, 0.0f)); }
             for (int i = 0; i < TargetList.Count; i++)
             {
-                if (TargetList[i].Target == target) { isTargetExitInList = true; TCEell = TargetList[i]; ListIndex = i; /* Debug.Log("xxx" + TargetList[i].isMultipleDamageColdDown); */ break; }
+                if (TargetList[i].Target == target) { isTargetExitInList = true; TCEell = TargetList[i]; ListIndex = i; break; }
             }
             if (!isTargetExitInList)
             {
@@ -94,7 +92,7 @@ public class PsyshockSE : Skill
 
     }
 
-
+    **/
 
 
 

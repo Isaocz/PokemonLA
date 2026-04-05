@@ -13,9 +13,9 @@ public class HyperVoice : Skill
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Empty target = collision.GetComponent<Empty>();
+        HitAndKo(collision.gameObject);
         if (target != null)
         {
-            HitAndKo(target);
             if (SkillFrom == 2) { target.EmptyConfusion(5,1); }
         }
     }

@@ -20,10 +20,14 @@ public class MagicalFireEffect : MonoBehaviour
             Destroy(this.gameObject);
             if (collision.tag == "Empty") {
                 Empty target = collision.GetComponent<Empty>();
-                ParentMF.HitAndKo(target);
-                if (!ParentMF.isSpDownDone) { target.SpAChange(-1, 0.0f); ParentMF.isSpDownDone = true; }
-                if (ParentMF.SkillFrom == 2) {
-                    target.EmptyBurnDone(0.4f, 10.0f, 0.1f + ((float)ParentMF.player.LuckPoint / 30.0f));
+                ParentMF.HitAndKo(collision.gameObject);
+                if (target != null)
+                {
+                    if (!ParentMF.isSpDownDone) { target.SpAChange(-1, 0.0f); ParentMF.isSpDownDone = true; }
+                    if (ParentMF.SkillFrom == 2)
+                    {
+                        target.EmptyBurnDone(0.4f, 10.0f, 0.1f + ((float)ParentMF.player.LuckPoint / 30.0f));
+                    }
                 }
             }
         }

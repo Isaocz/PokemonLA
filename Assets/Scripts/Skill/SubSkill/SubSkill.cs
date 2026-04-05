@@ -31,11 +31,15 @@ public class SubSkill : MonoBehaviour
 
     //代表会心一击等级的变量
     public int CTLevel;
+    public int CTDamage;
 
     public Skill MainSkill;
     public SubSkill subskill;
 
     public bool isPlusSkill;
+
+
+
 
 
 
@@ -60,19 +64,23 @@ public class SubSkill : MonoBehaviour
     public bool isImmediately;
 
 
+    // 攻击种类（扑击等）
+    public Pokemon.SpecialAttackTypes AttackType;
+
+
     //用于多端攻击的构造体
     struct EmptyList
     {
 
 
-        public EmptyList(Empty target, bool v1, float v2) : this()
+        public EmptyList(GameObject target, bool v1, float v2) : this()
         {
             Target = target;
             isMultipleDamageColdDown = v1;
             MultipleDamageColdDownTimer = v2;
         }
 
-        public Empty Target;
+        public GameObject Target;
         public bool isMultipleDamageColdDown { get; set; }
         public float MultipleDamageColdDownTimer { get; set; }
 
@@ -126,81 +134,163 @@ public class SubSkill : MonoBehaviour
 
 
     //对敌人target造成伤害和击退
-    public void HitAndKo(Empty target)
+    public void HitAndKo(GameObject target)
     {
-        EmptyList TCEell = new EmptyList(target, false, 0.0f);
-        int ListIndex = 0;
-
-        if (isMultipleDamage)
+        Empty emptyTarget = target.GetComponent<Empty>();
+        if (emptyTarget != null)
         {
-            bool isTargetExitInList = false;
-            if (TargetList.Count == 0) { TargetList.Add(new EmptyList(target, false, 0.0f)); }
-            for (int i = 0; i < TargetList.Count; i++)
-            {
-                if (TargetList[i].Target == target) { isTargetExitInList = true; TCEell = TargetList[i]; ListIndex = i; Debug.Log("xxx" + TargetList[i].isMultipleDamageColdDown); break; }
-            }
-            if (!isTargetExitInList)
-            {
-                TargetList.Add(TCEell);
-            }
-        }
+            EmptyList TCEell = new EmptyList(emptyTarget.gameObject, false, 0.0f);
+            int ListIndex = 0;
 
 
-
-
-        if (!isHitDone || (isMultipleDamage && !TCEell.isMultipleDamageColdDown))
-        {
-            if (Damage == 0)
-            {
-                if (Random.Range(0.0f, 1.0f) >= 0.04f + 0.01f * player.LuckPoint)
-                {
-                    Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage, 0, (PokemonType.TypeEnum)SkillType);
-                    //target.EmptyHpChange(0, (SpDamage * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.SpAAbilityPoint) / (250 * target.SpdAbilityPoint) + 2, SkillType);
-                }
-                else
-                {
-                    Pokemon.PokemonHpChange(player.gameObject, target.gameObject, 0, SpDamage*1.5f, 0, (PokemonType.TypeEnum)SkillType);
-                    //target.EmptyHpChange(0, (SpDamage * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.SpAAbilityPoint) / (250 * target.SpdAbilityPoint) + 2, SkillType);
-                }
-
-
-            }
-            else if (SpDamage == 0)
-            {
-                if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
-                {
-                    Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage, 0, 0, (PokemonType.TypeEnum)SkillType);
-                    //target.EmptyHpChange((Damage * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint) + 2, 0, SkillType);
-                }
-                else
-                {
-                    Pokemon.PokemonHpChange(player.gameObject, target.gameObject, Damage*1.5f, 0, 0, (PokemonType.TypeEnum)SkillType);
-                    //target.EmptyHpChange((Damage * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint) + 2, 0, SkillType);
-                }
-
-            }
-            target.EmptyKnockOut(KOPoint);
-            isHitDone = true;
             if (isMultipleDamage)
             {
-                TCEell.isMultipleDamageColdDown = true;
-                TargetList[ListIndex] = TCEell;
-            }
-            if (player.playerData.IsPassiveGetList[26])
-            {
-                if (SkillTag != null)
+                bool isTargetExitInList = false;
+                if (TargetList.Count == 0) { TargetList.Add(new EmptyList(emptyTarget.gameObject, false, 0.0f)); }
+                for (int i = 0; i < TargetList.Count; i++)
                 {
-                    foreach (Skill.SkillTagEnum i in SkillTag)
-                    {
-                        if (i == Skill.SkillTagEnum.接触类) { target.EmptyToxicDone(1 , 30 , 0.4f + (float)player.LuckPoint); }
-                    }
+                    if (TargetList[i].Target == emptyTarget.gameObject) { isTargetExitInList = true; TCEell = TargetList[i]; ListIndex = i; /*Debug.Log("xxx" + TargetList[i].isMultipleDamageColdDown)*/; break; }
+                }
+                if (!isTargetExitInList)
+                {
+                    TargetList.Add(TCEell);
                 }
             }
-            if (player.playerData.IsPassiveGetList[25] && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.8f)
+            if (!isHitDone || (isMultipleDamage && !TCEell.isMultipleDamageColdDown))
             {
-                target.Fear(3.0f, 1);
+                if (Damage == 0)
+                {
+                    float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1) * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+                    if (player != null)
+                    {
+                        int EmptyBeforeHPandSHIELD = emptyTarget.EmptyHp + emptyTarget.EmptyShield;
+                        int EmptyBeforeHP = emptyTarget.EmptyHp;
+                        if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
+                        {
+                            if (AttackType == Pokemon.SpecialAttackTypes.None)
+                            {
+                                Pokemon.PokemonHpChange(player.gameObject, emptyTarget.gameObject, 0, SpDamage * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f), 0, (PokemonType.TypeEnum)SkillType);
+                            }
+                            else
+                            {
+                                Pokemon.PokemonHpChange(player.gameObject, emptyTarget.gameObject, 0, SpDamage * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f), 0, (PokemonType.TypeEnum)SkillType, AttackType);
+
+                            }
+                        }
+                        else
+                        {
+                            if (AttackType == Pokemon.SpecialAttackTypes.None)
+                            {
+                                Pokemon.PokemonHpChange(player.gameObject, emptyTarget.gameObject, 0, SpDamage * 1.5f * (Mathf.Pow(1.2f, CTDamage)) * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1 * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f)), 0, (PokemonType.TypeEnum)SkillType, true);
+                            }
+                            else
+                            {
+                                Pokemon.PokemonHpChange(player.gameObject, emptyTarget.gameObject, 0, SpDamage * 1.5f * (Mathf.Pow(1.2f, CTDamage)) * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1 * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f)), 0, (PokemonType.TypeEnum)SkillType, AttackType, true);
+
+                            }
+                            Skill.GetCTEffect(emptyTarget);
+                        }
+                        //粗糙皮肤
+                        if (emptyTarget.Abillity == Empty.EmptyAbillity.RoughSkin && _mTool.ContainsSkillTag(SkillTag, Skill.SkillTagEnum.接触类))
+                        {
+                            Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHPandSHIELD - (emptyTarget.EmptyHp + emptyTarget.EmptyShield)) / 4, 1, 10000), 0, 0, PokemonType.TypeEnum.IgnoreType);
+                        }
+                        //冰冻之躯
+                        if (emptyTarget.Abillity == Empty.EmptyAbillity.IceBody && _mTool.ContainsSkillTag(SkillTag, Skill.SkillTagEnum.接触类))
+                        {
+                            player.PlayerFrozenFloatPlus(0.25f, 2.0f);
+                        }
+                    }
+                }
+                else if (SpDamage == 0)
+                {
+                    float WeatherAlpha = ((Weather.GlobalWeather.isRain && SkillType == 11) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1) * ((Weather.GlobalWeather.isRain && SkillType == 10) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 11) ? 0.5f : 1) * ((Weather.GlobalWeather.isSunny && SkillType == 10) ? (Weather.GlobalWeather.isSunnyPlus ? 1.8f : 1.3f) : 1);
+
+                    if (player != null)
+                    {
+                        int EmptyBeforeHPandSHIELD = emptyTarget.EmptyHp + emptyTarget.EmptyShield;
+                        int EmptyBeforeHP = emptyTarget.EmptyHp;
+                        if (Random.Range(0.0f, 1.0f) >= 0.04f * Mathf.Pow(2, CTLevel) + 0.01f * player.LuckPoint)
+                        {
+
+                            if (AttackType == Pokemon.SpecialAttackTypes.None)
+                            {
+                                Pokemon.PokemonHpChange(player.gameObject, emptyTarget.gameObject, Damage * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f), 0, 0, (PokemonType.TypeEnum)SkillType);
+                            }
+                            else
+                            {
+                                Pokemon.PokemonHpChange(player.gameObject, emptyTarget.gameObject, Damage * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f), 0, 0, (PokemonType.TypeEnum)SkillType, AttackType);
+
+                            }
+                            //Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? ((target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1) : 1))) + 2, 0, SkillType);
+
+                        }
+                        else
+                        {
+                            if (AttackType == Pokemon.SpecialAttackTypes.None)
+                            {
+                                Pokemon.PokemonHpChange(player.gameObject, emptyTarget.gameObject, Damage * 1.5f * (Mathf.Pow(1.2f, CTDamage) * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f)), 0, 0, (PokemonType.TypeEnum)SkillType, true);
+                            }
+                            else
+                            {
+                                Pokemon.PokemonHpChange(player.gameObject, emptyTarget.gameObject, Damage * 1.5f * (Mathf.Pow(1.2f, CTDamage) * (player.playerData.IsPassiveGetList[55] ? BulletGraze.instance.DamageImprovement : 1) * (player.playerData.IsPassiveGetList[58] ? 1.5f : 1f)), 0, 0, (PokemonType.TypeEnum)SkillType, AttackType, true);
+
+                            }
+                            Skill.GetCTEffect(emptyTarget);
+                            //Debug.Log(player);//target.EmptyHpChange((Damage * WeatherAlpha * (SkillType == player.PlayerType01 ? 1.5f : 1) * (SkillType == player.PlayerType02 ? 1.5f : 1) * (player.PlayerTeraTypeJOR == 0 ? (SkillType == player.PlayerTeraType ? 1.5f : 1) : (SkillType == player.PlayerTeraTypeJOR ? 1.5f : 1)) * 1.5f * (2 * player.Level + 10) * player.AtkAbilityPoint) / (250 * target.DefAbilityPoint * ((Weather.GlobalWeather.isSandstorm ? (( target.EmptyType01 == Type.TypeEnum.Rock || target.EmptyType02 == Type.TypeEnum.Rock) ? 1.5f : 1 ) : 1)) ) + 2, 0, SkillType);
+
+                        }
+                        //粗糙皮肤
+                        if (emptyTarget.Abillity == Empty.EmptyAbillity.RoughSkin && _mTool.ContainsSkillTag(SkillTag, Skill.SkillTagEnum.接触类))
+                        {
+                            Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHPandSHIELD - (emptyTarget.EmptyHp + emptyTarget.EmptyShield)) / 4, 1, 10000), 0, 0, PokemonType.TypeEnum.IgnoreType);
+                        }
+                        //冰冻之躯
+                        if (emptyTarget.Abillity == Empty.EmptyAbillity.IceBody && _mTool.ContainsSkillTag(SkillTag, Skill.SkillTagEnum.接触类))
+                        {
+                            player.PlayerFrozenFloatPlus(0.25f, 2.0f);
+                        }
+                    }
+                }
+                emptyTarget.EmptyKnockOut(KOPoint);
+                isHitDone = true;
+                if (isMultipleDamage)
+                {
+                    TCEell.isMultipleDamageColdDown = true;
+                    TargetList[ListIndex] = TCEell;
+                }
             }
         }
+        else
+        {
 
+            EmptyList TCEell = new EmptyList(target.gameObject, false, 0.0f);
+            int ListIndex = 0;
+
+            if (isMultipleDamage)
+            {
+                bool isTargetExitInList = false;
+                if (TargetList.Count == 0) { TargetList.Add(new EmptyList(target.gameObject, false, 0.0f)); }
+                for (int i = 0; i < TargetList.Count; i++)
+                {
+                    if (TargetList[i].Target == target.gameObject) { isTargetExitInList = true; TCEell = TargetList[i]; ListIndex = i; /* Debug.Log("xxx" + TargetList[i].isMultipleDamageColdDown); */ break; }
+                }
+                if (!isTargetExitInList)
+                {
+                    TargetList.Add(TCEell);
+                }
+            }
+            if (!isHitDone || (isMultipleDamage && !TCEell.isMultipleDamageColdDown))
+            {
+                Pokemon.PokemonHpChange(null, target.gameObject, Damage, SpDamage, 0, (PokemonType.TypeEnum)SkillType);
+                isHitDone = true;
+                if (isMultipleDamage)
+                {
+                    TCEell.isMultipleDamageColdDown = true;
+                    TargetList[ListIndex] = TCEell;
+                }
+
+            }
+        }
     }
 }

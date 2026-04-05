@@ -45,6 +45,62 @@ public class Electivire : Empty
 
 
 
+    //==============================音效枚举===================================
+
+    /// <summary>
+    /// 音效种类枚举
+    /// </summary>
+    public enum ElectivireSE
+    {
+
+        BigFall,
+        Fall,
+        Step,
+        Punch,
+        EleBlast,
+        FireBlast,
+        IceBlast,
+    }
+
+    /// <summary>
+    /// 一次性音效播放器生成
+    /// </summary>
+    public EnemyAudioPlayer audioPlayer;
+    /// <summary>
+    /// 循环音效音效播放器生成
+    /// </summary>
+    public LoopingSEAudioPlayer loopPlayer;
+
+    void PunchOverAudio(PunchType punchType)
+    {
+        switch (punchType)
+        {
+            case PunchType.Ice:
+                audioPlayer.Play(ElectivireSE.IceBlast, transform.position);
+                break;
+            case PunchType.Fire:
+                audioPlayer.Play(ElectivireSE.FireBlast, transform.position);
+                break;
+            case PunchType.Thunder:
+                audioPlayer.Play(ElectivireSE.EleBlast, transform.position);
+                break;
+        }
+    }
+
+
+    //==============================音效枚举===================================
+
+
+
+
+
+
+
+
+
+
+
+
     //==============================拳击类型===================================
 
     /// <summary>
@@ -177,6 +233,8 @@ public class Electivire : Empty
         //启动计算方向携程
         StartCoroutine(CheckLook());
 
+        //初始发呆
+        Normal_IdleStart(TIME_NORMAL_IDLE_START);
 
         StartOverEvent();
 
@@ -206,9 +264,10 @@ public class Electivire : Empty
                 case MainState.Normal:
 
                     //●判断是否转进愤怒状态
-                    if (NowSubState != SubState.Normal_BigRoar && ((float)EmptyHp / (float)maxHP) < HP_NORMAL2ANGRY)
+                    if (NowSubState != SubState.Normal_BigRoar && ((float)EmptyHp / (float)maxHP) < HP_NORMAL2ANGRY && (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis && !isFearDone))
                     {
                         ResetAllState_Normal();
+                        AngryEffect(new Vector2(0.9f, 2.4f), this.gameObject, new Vector3(1.6f, 1.6f, 0));
                         Normal_BigRoarStart();
                     }
 
@@ -247,13 +306,13 @@ public class Electivire : Empty
                                         Normal_TriPunchStart();
                                     }
                                     //路线2 接近后触发连打吼叫小跳连打吼叫小跳连打
-                                    if (TargetDistence <= DISTENCE_NORMAL_COMBAT_TOW || (TargetDistence <= (DISTENCE_NORMAL_COMBAT_TOW + 1.0f) && Normal_RunTimer >= TIME_NORMAL_COMBAT_EASYMODE_TOW))
+                                    else if(TargetDistence <= DISTENCE_NORMAL_COMBAT_TOW || (TargetDistence <= (DISTENCE_NORMAL_COMBAT_TOW + 1.0f) && Normal_RunTimer >= TIME_NORMAL_COMBAT_EASYMODE_TOW))
                                     {
                                         Normal_RunOver();
                                         Normal_SmallRoarStart();
                                     }
                                     //路线3 距离远后触发蓄力拳
-                                    if (TargetDistence >= DISTENCE_NORMAL_COMBAT_THREE || (TargetDistence >= DISTENCE_NORMAL_COMBAT_THREE - 1.0f && Normal_RunTimer >= TIME_NORMAL_COMBAT_EASYMODE_THREE))
+                                    else if (TargetDistence >= DISTENCE_NORMAL_COMBAT_THREE || (TargetDistence >= DISTENCE_NORMAL_COMBAT_THREE - 1.0f && Normal_RunTimer >= TIME_NORMAL_COMBAT_EASYMODE_THREE))
                                     {
                                         Normal_RunOver();
                                         Normal_ChargePunchStart();
@@ -285,9 +344,11 @@ public class Electivire : Empty
                             //【一般_蓄力拳_3】状态
                             case SubState.Normal_ChargePunch:
                                 //蓄力或者冲刺时计时器增加
+                                if (chargePunchArrowObj != null) { chargePunchArrowObj.SetTarget(TargetPosition); }
                                 if (isCharge_Normal_ChargePunch || isMove_Normal_ChargePunch)
                                 {
                                     Normal_ChargePunchTimer += Time.deltaTime;//【一般_蓄力拳_3】计时器时间增加
+                                    
                                 }
                                 //蓄力时可以转向
                                 if (isCharge_Normal_ChargePunch)
@@ -299,6 +360,7 @@ public class Electivire : Empty
                                 if (isCharge_Normal_ChargePunch && Normal_ChargePunchTimer >= TIME_NORMAL_CHARGEPUNCH_CHARGE)
                                 {
                                     animator.SetInteger("HeavyPunch", 2);
+                                    OverChargePunchArrow();
                                 }
                                 //冲刺完毕后转进发呆
                                 if (isMove_Normal_ChargePunch && Normal_ChargePunchTimer >= TIME_NORMAL_CHARGEPUNCH_RUSH)
@@ -422,9 +484,10 @@ public class Electivire : Empty
 
 
                     //●判断是否转进超级愤怒状态
-                    if (!superAngry && NowSubState != SubState.Angry_MegaRoar && ((float)EmptyHp / (float)maxHP) < HP_ANGRY2SUPERANGRY)
+                    if (!superAngry && NowSubState != SubState.Angry_MegaRoar && ((float)EmptyHp / (float)maxHP) < HP_ANGRY2SUPERANGRY && (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis && !isFearDone))
                     {
                         ResetAllState_Normal();
+                        AngryEffect(new Vector2(0.9f, 2.4f), this.gameObject, new Vector3(1.6f, 1.6f, 0));
                         Angry_MegaRoarStart();
                     }
 
@@ -491,7 +554,7 @@ public class Electivire : Empty
                                     }
                                     //【TODO】路线21 接近后触发（50%）吼跳打 跳吼打 跳吼快打 连招（距离远触发小爆裂拳（近身战） 距离不远不触发（快速休息））
                                     //【TODO】路线22 接近后触发（50%）连打蓄力拳连打蓄力拳 连招
-                                    if (TargetDistence <= DISTENCE_ANGRY_COMBAT_TOW || (TargetDistence <= (DISTENCE_ANGRY_COMBAT_TOW + 1.0f) && Angry_RunTimer >= TIME_ANGRY_COMBAT_EASYMODE_TOW))
+                                    else if (TargetDistence <= DISTENCE_ANGRY_COMBAT_TOW || (TargetDistence <= (DISTENCE_ANGRY_COMBAT_TOW + 1.0f) && Angry_RunTimer >= TIME_ANGRY_COMBAT_EASYMODE_TOW))
                                     {
                                         Angry_RunOver();
                                         float f = Random.Range(0.0f, 1.0f);
@@ -512,7 +575,7 @@ public class Electivire : Empty
                                     }
                                     //【TODO】路线31 距离远后触发（50%）流星拳波流星拳波流星拳波超级蓄力拳（真气拳）
                                     //【TODO】路线32 距离远后触发（50%）蓄力拳蓄力拳蓄力拳大跳大吼
-                                    if (TargetDistence >= DISTENCE_ANGRY_COMBAT_THREE || (TargetDistence >= DISTENCE_ANGRY_COMBAT_THREE - 1.0f && Angry_RunTimer >= TIME_ANGRY_COMBAT_EASYMODE_THREE))
+                                    else if(TargetDistence >= DISTENCE_ANGRY_COMBAT_THREE || (TargetDistence >= DISTENCE_ANGRY_COMBAT_THREE - 1.0f && Angry_RunTimer >= TIME_ANGRY_COMBAT_EASYMODE_THREE))
                                     {
                                         Angry_RunOver();
                                         float f = Random.Range(0.0f, 1.0f);
@@ -558,9 +621,11 @@ public class Electivire : Empty
                             //【愤怒_蓄力拳_12】状态
                             case SubState.Angry_ChargePunch:
                                 //蓄力或者冲刺时计时器增加
+                                if (chargePunchArrowObj != null) { chargePunchArrowObj.SetTarget(TargetPosition); }
                                 if (isCharge_Angry_ChargePunch || isMove_Angry_ChargePunch)
                                 {
                                     Angry_ChargePunchTimer += Time.deltaTime;//【愤怒_蓄力拳_12】计时器时间增加
+                                    
                                 }
                                 //蓄力时可以转向
                                 if (isCharge_Angry_ChargePunch)
@@ -572,6 +637,7 @@ public class Electivire : Empty
                                 if (isCharge_Angry_ChargePunch && Angry_ChargePunchTimer >= TIME_ANGRY_CHARGEPUNCH_CHARGE)
                                 {
                                     animator.SetInteger("HeavyPunch", 2);
+                                    OverChargePunchArrow();
                                 }
                                 //冲刺完毕后转进发呆
                                 if (isMove_Angry_ChargePunch && Angry_ChargePunchTimer >= TIME_ANGRY_CHARGEPUNCH_RUSH)
@@ -694,9 +760,11 @@ public class Electivire : Empty
                             //【愤怒_超级蓄力拳_18】状态
                             case SubState.Angry_SuperChargePunch:
                                 //蓄力或者冲刺时计时器增加
+                                if (chargePunchArrowObj != null) { chargePunchArrowObj.SetTarget(TargetPosition); }
                                 if (isCharge_Angry_SuperChargePunch || isMove_Angry_SuperChargePunch)
                                 {
                                     Angry_SuperChargePunchTimer += Time.deltaTime;//【愤怒_超级蓄力拳_18】计时器时间增加
+                                    
                                 }
                                 //蓄力时可以转向
                                 if (isCharge_Angry_SuperChargePunch)
@@ -708,6 +776,7 @@ public class Electivire : Empty
                                 if (isCharge_Angry_SuperChargePunch && Angry_SuperChargePunchTimer >= TIME_ANGRY_SUPERCHARGEPUNCH_CHARGE)
                                 {
                                     animator.SetInteger("HeavyPunch", 2);
+                                    OverChargePunchArrow();
                                 }
                                 //冲刺完毕后转进发呆
                                 if (isMove_Angry_SuperChargePunch && Angry_SuperChargePunchTimer >= TIME_ANGRY_SUPERCHARGEPUNCH_RUSH)
@@ -723,6 +792,7 @@ public class Electivire : Empty
                             //【愤怒_流星拳波_19】状态
                             case SubState.Angry_StarPunch:
                                 //蓄力或者冲刺时计时器增加
+                                if (chargePunchArrowObj != null) { chargePunchArrowObj.SetTarget(TargetPosition); }
                                 if (isCharge_Angry_StarPunch)
                                 {
                                     Angry_StarPunchTimer += Time.deltaTime;//【愤怒_流星拳波_19】计时器时间增加
@@ -737,6 +807,7 @@ public class Electivire : Empty
                                 if (animator.GetInteger("HeavyPunch") == 2)
                                 {
                                     animator.SetInteger("HeavyPunch", 3);
+                                    OverChargePunchArrow();
                                 }
                                 //蓄力完毕后转进发射
                                 if (isCharge_Angry_StarPunch && Angry_StarPunchTimer >= TIME_ANGRY_STARPUNCH_CHARGE * (IsSuperAngryState ? 0.2f : 1.0f))
@@ -789,14 +860,9 @@ public class Electivire : Empty
             EmptyBeKnock();//判定是否被击退
 
 
-            //根据魅惑情况确实目标位置
-            Transform InfatuationTarget = InfatuationForDistanceEmpty();
-            if (!isEmptyInfatuationDone || (ParentPokemonRoom.GetEmptyList().Count + ParentPokemonRoom.GetEmptyCloneList().Count) <= 1 || InfatuationTarget == null)
-            {
-                TargetPosition = player.transform.position;
-                if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
-            }
-            else { TargetPosition = InfatuationTarget.transform.position; }
+            //确实目标位置
+            TargetPosition = player.transform.position;
+            if (isSubsititue && SubsititueTarget != null) { TargetPosition = SubsititueTarget.transform.position; }
 
         }
     }
@@ -891,107 +957,104 @@ public class Electivire : Empty
     {
         if (other.transform.tag == ("Player"))//与玩家碰撞时
         {
-            PlayerControler p = other.gameObject.GetComponent<PlayerControler>();
-            if (p != null) {
-                switch (NowMainState)
-                {
-                    case MainState.Normal:
-                        switch (NowSubState)
-                        {
-                            case SubState.Normal_Idle:         //一般_发呆_0
-                                EmptyTouchHit(other.gameObject);//触发触碰伤害
-                                break;
-                            case SubState.Normal_Run:          //一般_奔跑追踪_1
-                                EmptyTouchHit(other.gameObject);//触发触碰伤害
-                                break;
-                            case SubState.Normal_TriPunch:     //一般_连续三练拳_2
-                                IceFireThuderPunchHit(p);
-                                break;
-                            case SubState.Normal_ChargePunch:  //一般_蓄力拳_3
-                                if (isMove_Normal_ChargePunch)
-                                {
-                                    DynamicPunchHit(p.gameObject);
-                                }
-                                else { EmptyTouchHit(other.gameObject); }
-                                break;
-                            case SubState.Normal_CloseCombat:  //一般_近身战(小爆裂拳（近身战状态）)_4
-                                if (isMove_Normal_CloseCombat)
-                                {
-                                    CloseCombathHit(p);
-                                }
-                                else { EmptyTouchHit(other.gameObject); }
-                                break;
-                            case SubState.Normal_ORaPunch:     //一般_快速连打拳_5
-                                ORaPunchHit(p);
-                                break;
-                            case SubState.Normal_SmallRoar:    //一般_小吼叫_6
-                                EmptyTouchHit(other.gameObject);//触发触碰伤害
-                                break;
-                            case SubState.Normal_SmallJump:    //一般_小跳_7
-                                EmptyTouchHit(other.gameObject);//触发触碰伤害
-                                break;
-                            case SubState.Normal_BigRoar:      //一般_大吼叫_8
-                                //(无触碰伤害 防止无法触发地震伤害)
-                                break;
-                        }
-                        break;
-                    case MainState.Angry:
-                        switch (NowSubState)
-                        {
-                            case SubState.Angry_Idle:                //愤怒_发呆_9
-                                EmptyTouchHit(other.gameObject);//触发触碰伤害
-                                break;
-                            case SubState.Angry_Run:                 //愤怒_奔跑追踪_10
-                                EmptyTouchHit(other.gameObject);//触发触碰伤害
-                                break;
-                            case SubState.Angry_TriPunch:            //愤怒_连续三练拳_11
-                                IceFireThuderPunchHit(p);
-                                break;
-                            case SubState.Angry_ChargePunch:         //愤怒_蓄力拳_12
-                                if (isMove_Angry_ChargePunch)
-                                {
-                                    DynamicPunchHit(p.gameObject);
-                                }
-                                else { EmptyTouchHit(other.gameObject); }
-                                break;
-                            case SubState.Angry_CloseCombat:         //愤怒_近身战_20
-                                if (isMove_Angry_CloseCombat)
-                                {
-                                    CloseCombathHit(p);
-                                }
-                                else { EmptyTouchHit(other.gameObject); }
-                                break;
-                            case SubState.Angry_OraPunch:            //愤怒_连续近身拳_13
-                                ORaPunchHit(p);
-                                break;
-                            case SubState.Angry_SmallRoar:           //愤怒_小吼叫_14
-                                EmptyTouchHit(other.gameObject);//触发触碰伤害
-                                break;
-                            case SubState.Angry_SmallJump:           //愤怒_小跳_15
-                                EmptyTouchHit(other.gameObject);//触发触碰伤害
-                                break;
-                            case SubState.Angry_BigRoar:             //愤怒_大吼叫_16
-                                //(无触碰伤害 防止无法触发大吼叫伤害)
-                                break;
-                            case SubState.Angry_BigJump:             //愤怒_大跳_16
-                                //(无触碰伤害 防止无法触发地震伤害)
-                                break;
-                            case SubState.Angry_SuperChargePunch:    //愤怒_超级蓄力拳_18
-                                if (isMove_Angry_SuperChargePunch)
-                                {
-                                    DynamicPunchHit(p.gameObject);
-                                }
-                                else { EmptyTouchHit(other.gameObject); }
-                                break;
-                            case SubState.Angry_StarPunch:           //愤怒_流星拳波_19
-                                //(无触碰伤害 防止无法触发流星拳波伤害)
-                                break;
-                            case SubState.Angry_MegaRoar:             //愤怒_转状态大吼_16
-                                //(无触碰伤害 防止无法触发转状态大吼伤害)
-                                break;
-                        }
-                        break;
-                }
+            switch (NowMainState)
+            {
+                case MainState.Normal:
+                    switch (NowSubState)
+                    {
+                        case SubState.Normal_Idle:         //一般_发呆_0
+                            EmptyTouchHit(other.gameObject);//触发触碰伤害
+                            break;
+                        case SubState.Normal_Run:          //一般_奔跑追踪_1
+                            EmptyTouchHit(other.gameObject);//触发触碰伤害
+                            break;
+                        case SubState.Normal_TriPunch:     //一般_连续三练拳_2
+                            IceFireThuderPunchHit(other.gameObject);
+                            break;
+                        case SubState.Normal_ChargePunch:  //一般_蓄力拳_3
+                            if (isMove_Normal_ChargePunch)
+                            {
+                                DynamicPunchHit(other.gameObject);
+                            }
+                            else { EmptyTouchHit(other.gameObject); }
+                            break;
+                        case SubState.Normal_CloseCombat:  //一般_近身战(小爆裂拳（近身战状态）)_4
+                            if (isMove_Normal_CloseCombat)
+                            {
+                                CloseCombathHit(other.gameObject);
+                            }
+                            else { EmptyTouchHit(other.gameObject); }
+                            break;
+                        case SubState.Normal_ORaPunch:     //一般_快速连打拳_5
+                            ORaPunchHit(other.gameObject);
+                            break;
+                        case SubState.Normal_SmallRoar:    //一般_小吼叫_6
+                            EmptyTouchHit(other.gameObject);//触发触碰伤害
+                            break;
+                        case SubState.Normal_SmallJump:    //一般_小跳_7
+                            EmptyTouchHit(other.gameObject);//触发触碰伤害
+                            break;
+                        case SubState.Normal_BigRoar:      //一般_大吼叫_8
+                                                           //(无触碰伤害 防止无法触发地震伤害)
+                            break;
+                    }
+                    break;
+                case MainState.Angry:
+                    switch (NowSubState)
+                    {
+                        case SubState.Angry_Idle:                //愤怒_发呆_9
+                            EmptyTouchHit(other.gameObject);//触发触碰伤害
+                            break;
+                        case SubState.Angry_Run:                 //愤怒_奔跑追踪_10
+                            EmptyTouchHit(other.gameObject);//触发触碰伤害
+                            break;
+                        case SubState.Angry_TriPunch:            //愤怒_连续三练拳_11
+                            IceFireThuderPunchHit(other.gameObject);
+                            break;
+                        case SubState.Angry_ChargePunch:         //愤怒_蓄力拳_12
+                            if (isMove_Angry_ChargePunch)
+                            {
+                                DynamicPunchHit(other.gameObject);
+                            }
+                            else { EmptyTouchHit(other.gameObject); }
+                            break;
+                        case SubState.Angry_CloseCombat:         //愤怒_近身战_20
+                            if (isMove_Angry_CloseCombat)
+                            {
+                                CloseCombathHit(other.gameObject);
+                            }
+                            else { EmptyTouchHit(other.gameObject); }
+                            break;
+                        case SubState.Angry_OraPunch:            //愤怒_连续近身拳_13
+                            ORaPunchHit(other.gameObject);
+                            break;
+                        case SubState.Angry_SmallRoar:           //愤怒_小吼叫_14
+                            EmptyTouchHit(other.gameObject);//触发触碰伤害
+                            break;
+                        case SubState.Angry_SmallJump:           //愤怒_小跳_15
+                            EmptyTouchHit(other.gameObject);//触发触碰伤害
+                            break;
+                        case SubState.Angry_BigRoar:             //愤怒_大吼叫_16
+                                                                 //(无触碰伤害 防止无法触发大吼叫伤害)
+                            break;
+                        case SubState.Angry_BigJump:             //愤怒_大跳_16
+                                                                 //(无触碰伤害 防止无法触发地震伤害)
+                            break;
+                        case SubState.Angry_SuperChargePunch:    //愤怒_超级蓄力拳_18
+                            if (isMove_Angry_SuperChargePunch)
+                            {
+                                DynamicPunchHit(other.gameObject);
+                            }
+                            else { EmptyTouchHit(other.gameObject); }
+                            break;
+                        case SubState.Angry_StarPunch:           //愤怒_流星拳波_19
+                                                                 //(无触碰伤害 防止无法触发流星拳波伤害)
+                            break;
+                        case SubState.Angry_MegaRoar:             //愤怒_转状态大吼_16
+                                                                  //(无触碰伤害 防止无法触发转状态大吼伤害)
+                            break;
+                    }
+                    break;
             }
         }
     }
@@ -1001,27 +1064,37 @@ public class Electivire : Empty
     /// 属性（冰火雷）拳
     /// </summary>
     /// <param name="player"></param>
-    void IceFireThuderPunchHit(PlayerControler player)
+    void IceFireThuderPunchHit(GameObject PlayerGameobj)
     {
+        PlayerControler p = PlayerGameobj.GetComponent<PlayerControler>();
         switch (nowPunchType)
         {
             case PunchType.Ice:
-                Pokemon.PokemonHpChange(this.gameObject, player.gameObject, DMAGE_ICEPUNCH, 0, 0, PokemonType.TypeEnum.Ice);
-                player.KnockOutPoint = KOPOINT_ICEPUNCH;
-                player.KnockOutDirection = (player.transform.position - this.transform.position).normalized;
-                player.PlayerFrozenFloatPlus(0.5f, 0.8f);
+                Pokemon.PokemonHpChange(this.gameObject, PlayerGameobj.gameObject, DMAGE_ICEPUNCH, 0, 0, PokemonType.TypeEnum.Ice);
+                if (p != null)
+                {
+                    p.KnockOutPoint = KOPOINT_ICEPUNCH;
+                    p.KnockOutDirection = (p.transform.position - this.transform.position).normalized;
+                    p.PlayerFrozenFloatPlus(0.5f, 0.8f);
+                }
                 break;
             case PunchType.Fire:
-                Pokemon.PokemonHpChange(this.gameObject, player.gameObject, DMAGE_FIREPUNCH, 0, 0, PokemonType.TypeEnum.Ice);
-                player.KnockOutPoint = KOPOINT_FIREPUNCH;
-                player.KnockOutDirection = (player.transform.position - this.transform.position).normalized;
-                player.BurnFloatPlus(0.35f);
+                Pokemon.PokemonHpChange(this.gameObject, PlayerGameobj.gameObject, DMAGE_FIREPUNCH, 0, 0, PokemonType.TypeEnum.Ice);
+                if (p != null)
+                {
+                    p.KnockOutPoint = KOPOINT_FIREPUNCH;
+                    p.KnockOutDirection = (p.transform.position - this.transform.position).normalized;
+                    p.BurnFloatPlus(0.35f);
+                }
                 break;
             case PunchType.Thunder:
-                Pokemon.PokemonHpChange(this.gameObject, player.gameObject, DMAGE_THUNDERPUNCH, 0, 0, PokemonType.TypeEnum.Ice);
-                player.KnockOutPoint = KOPOINT_THUNDERPUNCH;
-                player.KnockOutDirection = (player.transform.position - this.transform.position).normalized;
-                player.ParalysisFloatPlus(0.15f);
+                Pokemon.PokemonHpChange(this.gameObject, PlayerGameobj.gameObject, DMAGE_THUNDERPUNCH, 0, 0, PokemonType.TypeEnum.Ice);
+                if (p != null)
+                {
+                    p.KnockOutPoint = KOPOINT_THUNDERPUNCH;
+                    p.KnockOutDirection = (p.transform.position - this.transform.position).normalized;
+                    p.ParalysisFloatPlus(0.15f);
+                }
                 break;
         }
     }
@@ -1031,20 +1104,27 @@ public class Electivire : Empty
     /// 快速连打拳
     /// </summary>
     /// <param name="player"></param>
-    void ORaPunchHit(PlayerControler player)
+    void ORaPunchHit(GameObject PlayerGameobj)
     {
+        PlayerControler p = PlayerGameobj.GetComponent<PlayerControler>();
         switch (nowPunchType)
         {
             case PunchType.NormalFight:
-                Pokemon.PokemonHpChange(this.gameObject, player.gameObject, DMAGE_ORAPUNCH, 0, 0, PokemonType.TypeEnum.Fighting);
-                player.KnockOutPoint = KOPOINT_ORAPUNCH;
-                player.KnockOutDirection = (player.transform.position - this.transform.position).normalized;
+                Pokemon.PokemonHpChange(this.gameObject, PlayerGameobj.gameObject, DMAGE_ORAPUNCH, 0, 0, PokemonType.TypeEnum.Fighting);
+                if (p != null)
+                {
+                    p.KnockOutPoint = KOPOINT_ORAPUNCH;
+                    p.KnockOutDirection = (p.transform.position - this.transform.position).normalized;
+                }
                 break;
             case PunchType.Thunder:
-                Pokemon.PokemonHpChange(this.gameObject, player.gameObject, DMAGE_ORAPUNCH_THUNDER, 0, 0, PokemonType.TypeEnum.Electric);
-                player.KnockOutPoint = KOPOINT_ORAPUNCH_THUNDER;
-                player.KnockOutDirection = (player.transform.position - this.transform.position).normalized;
-                player.ParalysisFloatPlus(0.1f);
+                Pokemon.PokemonHpChange(this.gameObject, PlayerGameobj.gameObject, DMAGE_ORAPUNCH_THUNDER, 0, 0, PokemonType.TypeEnum.Electric);
+                if (p != null)
+                {
+                    p.KnockOutPoint = KOPOINT_ORAPUNCH_THUNDER;
+                    p.KnockOutDirection = (p.transform.position - this.transform.position).normalized;
+                    p.ParalysisFloatPlus(0.1f);
+                }
                 break;
         }
     }
@@ -1054,21 +1134,28 @@ public class Electivire : Empty
     /// 小爆裂拳（近身战状态）
     /// </summary>
     /// <param name="player"></param>
-    void CloseCombathHit(PlayerControler player)
+    void CloseCombathHit(GameObject PlayerGameobj)
     {
+        PlayerControler p = PlayerGameobj.GetComponent<PlayerControler>();
         if (nowPunchType == PunchType.Thunder)
         {
-            Pokemon.PokemonHpChange(this.gameObject, player.gameObject, DMAGE_SMALLDYNAMICPUNCH, 0, 0, PokemonType.TypeEnum.Electric);
-            player.KnockOutPoint = KOPOINT_SMALLDYNAMICPUNCH;
-            player.KnockOutDirection = (player.transform.position - this.transform.position).normalized;
-            player.ParalysisFloatPlus(0.1f);
+            Pokemon.PokemonHpChange(this.gameObject, PlayerGameobj.gameObject, DMAGE_SMALLDYNAMICPUNCH, 0, 0, PokemonType.TypeEnum.Electric);
+            if (p != null)
+            {
+                p.KnockOutPoint = KOPOINT_SMALLDYNAMICPUNCH;
+                p.KnockOutDirection = (p.transform.position - this.transform.position).normalized;
+                p.ParalysisFloatPlus(0.1f);
+            }
         }
         else
         {
-            Pokemon.PokemonHpChange(this.gameObject, player.gameObject, DMAGE_SMALLDYNAMICPUNCH, 0, 0, PokemonType.TypeEnum.Fighting);
-            player.KnockOutPoint = KOPOINT_SMALLDYNAMICPUNCH;
-            player.KnockOutDirection = (player.transform.position - this.transform.position).normalized;
-            player.ConfusionFloatPlus(0.1f);
+            Pokemon.PokemonHpChange(this.gameObject, PlayerGameobj.gameObject, DMAGE_SMALLDYNAMICPUNCH, 0, 0, PokemonType.TypeEnum.Fighting);
+            if (p != null)
+            {
+                p.KnockOutPoint = KOPOINT_SMALLDYNAMICPUNCH;
+                p.KnockOutDirection = (p.transform.position - this.transform.position).normalized;
+                p.ConfusionFloatPlus(0.1f);
+            }
         }
     }
 
@@ -1081,21 +1168,27 @@ public class Electivire : Empty
     public void DynamicPunchHit(GameObject PlayerGameobj)
     {
         PlayerControler p = PlayerGameobj.gameObject.GetComponent<PlayerControler>();
+        if (NowSubState == SubState.Angry_SuperChargePunch)
+        {
+            Pokemon.PokemonHpChange(this.gameObject, PlayerGameobj.gameObject, DMAGE_SUPERCHARGEPUNCH, 0, 0, PokemonType.TypeEnum.Electric);
+        }
+        else
+        {
+            Pokemon.PokemonHpChange(this.gameObject, PlayerGameobj.gameObject, DMAGE_DYNAMICPUNCH, 0, 0, PokemonType.TypeEnum.Fighting);
+        }
         if (p != null)
         {
             if (NowSubState == SubState.Angry_SuperChargePunch)
             {
-                Pokemon.PokemonHpChange(this.gameObject, player.gameObject, DMAGE_SUPERCHARGEPUNCH, 0, 0, PokemonType.TypeEnum.Electric);
-                player.KnockOutPoint = KOPOINT_SUPERCHARGEPUNCH;
-                player.KnockOutDirection = (player.transform.position - this.transform.position).normalized;
-                player.ParalysisFloatPlus(0.2f);
+                p.KnockOutPoint = KOPOINT_SUPERCHARGEPUNCH;
+                p.KnockOutDirection = (p.transform.position - this.transform.position).normalized;
+                p.ParalysisFloatPlus(0.2f);
             }
             else
             {
-                Pokemon.PokemonHpChange(this.gameObject, player.gameObject, DMAGE_DYNAMICPUNCH, 0, 0, PokemonType.TypeEnum.Fighting);
-                player.KnockOutPoint = KOPOINT_DYNAMICPUNCH;
-                player.KnockOutDirection = (player.transform.position - this.transform.position).normalized;
-                player.ConfusionFloatPlus(0.25f);
+                p.KnockOutPoint = KOPOINT_DYNAMICPUNCH;
+                p.KnockOutDirection = (p.transform.position - this.transform.position).normalized;
+                p.ConfusionFloatPlus(0.25f);
             }
         }
     }
@@ -1110,12 +1203,12 @@ public class Electivire : Empty
     public void SuperChargePunchHit(GameObject PlayerGameobj)
     {
         PlayerControler p = PlayerGameobj.gameObject.GetComponent<PlayerControler>();
+        Pokemon.PokemonHpChange(this.gameObject, PlayerGameobj.gameObject, DMAGE_SUPERCHARGEPUNCH, 0, 0, PokemonType.TypeEnum.Electric);
         if (p != null)
         {
-            Pokemon.PokemonHpChange(this.gameObject, player.gameObject, DMAGE_SUPERCHARGEPUNCH, 0, 0, PokemonType.TypeEnum.Electric);
-            player.KnockOutPoint = KOPOINT_SUPERCHARGEPUNCH;
-            player.KnockOutDirection = (player.transform.position - this.transform.position).normalized;
-            player.ParalysisFloatPlus(0.2f);
+            p.KnockOutPoint = KOPOINT_SUPERCHARGEPUNCH;
+            p.KnockOutDirection = (p.transform.position - this.transform.position).normalized;
+            p.ParalysisFloatPlus(0.2f);
         }
     }
 
@@ -1259,6 +1352,8 @@ public class Electivire : Empty
     public void InstantiateRunDust()
     {
         Instantiate(RunDust, transform.position, Quaternion.identity);
+        ParentPokemonRoom.CameraShake(0.3f, 0.8f, true);
+        audioPlayer.Play(ElectivireSE.Step, transform.position);
     }
 
     /// <summary>
@@ -1507,6 +1602,7 @@ public class Electivire : Empty
     /// </summary>
     public void AnimatorEvent_LightPunch_Start()
     {
+        audioPlayer.Play(ElectivireSE.Punch,transform.position);
         switch (NowSubState)
         {
             case SubState.Normal_TriPunch:
@@ -1550,6 +1646,7 @@ public class Electivire : Empty
     /// </summary>
     public void AnimatorEvent_LightPunch_Over()
     {
+        PunchOverAudio(nowPunchType);
         switch (NowSubState)
         {
             case SubState.Normal_TriPunch:
@@ -1818,6 +1915,7 @@ public class Electivire : Empty
     /// </summary>
     public void AnimatorEvent_HeavyPunch_Start()
     {
+        audioPlayer.Play(ElectivireSE.Punch, transform.position);
         switch (NowSubState)
         {
             case SubState.Normal_CloseCombat:
@@ -1909,6 +2007,7 @@ public class Electivire : Empty
     /// </summary>
     public void AnimatorEvent_HeavyPunch_Over()
     {
+        PunchOverAudio(nowPunchType);
         switch (NowSubState)
         {
             case SubState.Normal_CloseCombat:
@@ -2321,6 +2420,7 @@ public class Electivire : Empty
     /// </summary>
     public void AnimatorEvent_SmallJump_Over()
     {
+        audioPlayer.Play(ElectivireSE.Fall, transform.position);
         switch (NowSubState)
         {
             case SubState.Normal_SmallJump:
@@ -2457,6 +2557,7 @@ public class Electivire : Empty
     /// </summary>
     public void AnimatorEvent_BigJump_Over()
     {
+        audioPlayer.Play(ElectivireSE.BigFall, transform.position);
         switch (NowSubState)
         {
             case SubState.Angry_BigJump:
@@ -2579,7 +2680,7 @@ public class Electivire : Empty
     //路线3 距离远后触发蓄力拳
 
     //发动连招1需要的时间
-    static float TIME_NORMAL_COMBAT_ONE = 7.0f/*7.0f*/;
+    static float TIME_NORMAL_COMBAT_ONE = 5.0f/*7.0f*/;
 
 
     //发动连招2需要的距离
@@ -2594,6 +2695,12 @@ public class Electivire : Empty
     //发动连招3长时间易触发)需要的时间
     static float TIME_NORMAL_COMBAT_EASYMODE_THREE = 5.0f;
 
+
+
+
+
+    public SkillArrow chargePunchArrowPrefabs;
+    SkillArrow chargePunchArrowObj;
 
 
 
@@ -2853,6 +2960,7 @@ public class Electivire : Empty
         isMove_Normal_ChargePunch = false;
         animator.SetInteger("HeavyPunch", 1);
         nowPunchType = PunchType.DynamicPunch;
+        SetChargePunchArrow();
     }
 
     /// <summary>
@@ -2868,6 +2976,27 @@ public class Electivire : Empty
         animator.SetInteger("HeavyPunch", 0);
     }
 
+
+
+    void SetChargePunchArrow()
+    {
+        if (chargePunchArrowObj != null)
+        {
+            Destroy(chargePunchArrowObj);
+        }
+        chargePunchArrowObj = Instantiate(chargePunchArrowPrefabs , transform.position , Quaternion.identity , transform);
+        chargePunchArrowObj.SetTarget(TargetPosition);
+
+    }
+
+    void OverChargePunchArrow()
+    {
+        if (chargePunchArrowObj != null)
+        {
+            chargePunchArrowObj.transform.parent = null;
+            chargePunchArrowObj.ArrowOver();
+        }
+    }
 
     //=========================一般_蓄力拳_3============================
 
@@ -3388,7 +3517,7 @@ public class Electivire : Empty
 
 
     //发动连招10需要的时间
-    static float TIME_ANGRY_COMBAT_ONE = 4.8f/*7.0f*/;
+    static float TIME_ANGRY_COMBAT_ONE = 4.0f/*7.0f*/;
 
 
     //发动连招20需要的距离
@@ -3725,6 +3854,7 @@ public class Electivire : Empty
         isMove_Angry_ChargePunch = false;
         animator.SetInteger("HeavyPunch", 1);
         nowPunchType = PunchType.DynamicPunch;
+        SetChargePunchArrow();
     }
 
     /// <summary>
@@ -4262,6 +4392,7 @@ public class Electivire : Empty
         isMove_Angry_SuperChargePunch = false;
         animator.SetInteger("HeavyPunch", 1);
         nowPunchType = PunchType.SuperChargePunch;//TODO 超级追踪拳特效
+        SetChargePunchArrow();
     }
 
     /// <summary>
@@ -4336,6 +4467,7 @@ public class Electivire : Empty
         animator.SetInteger("HeavyPunch", 1);
         nowPunchType = PunchType.StarPunch;
         LsatTargetPosition_Predict_Angry_StarPunch_Angle = 0;
+        SetChargePunchArrow();
     }
 
     /// <summary>

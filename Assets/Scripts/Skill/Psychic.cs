@@ -31,11 +31,12 @@ public class Psychic : Skill
         if (collision.CompareTag("Empty") && !ishit)
         {
             Empty enemy = collision.GetComponent<Empty>();
+            HitAndKo(collision.gameObject);
+            ishit = true;
+            animator.SetTrigger("Over");
             if (enemy != null)
             {
-                HitAndKo(enemy);
-                ishit = true;
-                animator.SetTrigger("Over");
+
 
                 if (Random.Range(0f, 1f) + player.LuckPoint / 30f > 0.8)
                     enemy.SpDChange(-1, 0f);

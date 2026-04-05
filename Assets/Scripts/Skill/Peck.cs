@@ -27,12 +27,8 @@ public class Peck : Skill
 
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            if (target != null)
-            {
-                HitAndKo(target);
-                if (animator != null) { animator.SetTrigger("Hit"); }
-            }
+            HitAndKo(other.gameObject);
+            if (animator != null) { animator.SetTrigger("Hit"); }
         }
 
     }

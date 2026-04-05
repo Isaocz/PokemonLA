@@ -38,9 +38,8 @@ public class TakeDown : Skill
     {
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            Instantiate(TackleBlast, target.transform.position, Quaternion.identity );
-            HitAndKo(target);
+            Instantiate(TackleBlast, other.transform.position, Quaternion.identity );
+            HitAndKo(other.gameObject);
         }
         if (other.tag == "Enviroment" || other.tag == "Room" || other.gameObject.tag == "Water")
         {

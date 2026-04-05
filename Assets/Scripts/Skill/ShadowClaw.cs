@@ -63,11 +63,7 @@ public class ShadowClaw : Skill
 
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            if (target != null)
-            {
-                HitAndKo(target);
-            }
+            HitAndKo(other.gameObject);
         }
     }
 

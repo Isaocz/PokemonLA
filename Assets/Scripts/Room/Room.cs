@@ -89,8 +89,10 @@ public class Room : MonoBehaviour
     public float[] RoomSize = new float[] { 7.3f, -7.3f, -12.0f, 12.0f };
 
 
-
-
+    /// <summary>
+    /// 房间虚拟坐标
+    /// </summary>
+    public Vector3Int RoomIndex;
 
 
 
@@ -181,6 +183,7 @@ public class Room : MonoBehaviour
                 {
                     Empty e2 = Instantiate(PublicEmptyList.PrefabsEmptyList.FoundEmpty(e.EmptyCD), e.transform.position, Quaternion.identity, transform.GetChild(3).transform);
                     e2.StoreSaveData(e);
+                    e.StoreDestoryEvent();
                     Destroy(e.gameObject);
                 }
 
@@ -581,6 +584,16 @@ public class Room : MonoBehaviour
 
 
 
+    //========================================房间内某点===========================================
+
+
+
+    /// <summary>
+    /// 某点是否在房间内
+    /// </summary>
+    /// <param name="point"></param>
+    /// <param name="WallWeight"></param>
+    /// <returns></returns>
     public bool isPointInRoon(Vector2 point, float WallWeight)
     {
         //Debug.Log("Point"+"+"+point + "+"+ (point.x < transform.position.x + RoomSize[3] - WallWeight) + "+"+ (point.x > transform.position.x + RoomSize[2] + WallWeight) + "+" + (point.y < transform.position.y + RoomSize[0] - WallWeight) + "+"+ (point.y > transform.position.y + RoomSize[1] + WallWeight));
@@ -597,6 +610,64 @@ public class Room : MonoBehaviour
         //Debug.Log("F");
         return false;
     }
+
+
+
+    /// <summary>
+    /// 从某点的某方向到房边界
+    /// </summary>
+    /// <param name="origin">原点</param>
+    /// <param name="dir">方向</param>
+    /// <returns></returns>
+    public Vector2 GetRoomBoundaryByRaycastTo(Vector2 origin, Vector2 dir)
+    {
+        dir.Normalize();
+
+        float minX = RoomSize[2] + transform.position.x;
+        float maxX = RoomSize[3] + transform.position.x;
+        float minY = RoomSize[1] + transform.position.y;
+        float maxY = RoomSize[0] + transform.position.y;
+
+        List<float> tList = new List<float>();
+
+        // 与左右边界相交
+        if (Mathf.Abs(dir.x) > 0.0001f)
+        {
+            float t1 = (minX - origin.x) / dir.x;
+            float t2 = (maxX - origin.x) / dir.x;
+            if (t1 > 0) tList.Add(t1);
+            if (t2 > 0) tList.Add(t2);
+        }
+
+        // 与上下边界相交
+        if (Mathf.Abs(dir.y) > 0.0001f)
+        {
+            float t3 = (minY - origin.y) / dir.y;
+            float t4 = (maxY - origin.y) / dir.y;
+            if (t3 > 0) tList.Add(t3);
+            if (t4 > 0) tList.Add(t4);
+        }
+
+        // 取最小正 t
+        float tMin = Mathf.Min(tList.ToArray());
+
+        return origin + dir * tMin;
+    }
+
+
+
+    //========================================房间内某点===========================================
+
+
+
+
+
+
+
+
+
+
+
 
 
 

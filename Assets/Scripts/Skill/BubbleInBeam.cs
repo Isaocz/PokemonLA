@@ -34,8 +34,7 @@ public class BubbleInBeam : Skill
     {
         if (collision.CompareTag("Empty") || (SkillFrom == 2 ? false : collision.CompareTag("Enviroment"))) 
         {
-            Empty target = collision.GetComponent<Empty>();
-            HitAndKo(target);
+            HitAndKo(collision.gameObject);
             animator.SetTrigger("Boom");
             Destroy(gameObject, 0.13f);
         }

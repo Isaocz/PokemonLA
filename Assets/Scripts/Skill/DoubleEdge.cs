@@ -42,10 +42,12 @@ public class DoubleEdge : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            if (target != null) {
-                Instantiate(TackleBlast, target.transform.position, Quaternion.identity);
-                int Dmage = target.EmptyHp + target.EmptyShield;
-                HitAndKo(target);
+
+            Instantiate(TackleBlast, other.transform.position, Quaternion.identity);
+            int Dmage = target.EmptyHp + target.EmptyShield;
+            HitAndKo(other.gameObject);
+            if (target != null)
+            {
                 Dmage -= target.EmptyHp + target.EmptyShield;
                 DoneDmage += Dmage;
                 if(SkillFrom == 2 && target.EmptyHp <= 0 && !isHPPoinrPlus)

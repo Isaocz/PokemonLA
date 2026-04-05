@@ -24,9 +24,9 @@ public class SandTomb : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
+            HitAndKo(other.gameObject);
             if (target != null)
             {
-                HitAndKo(target);
                 if (!SlienceEmptyList.Contains(target))
                 {
                     SlienceEmptyList.Add(target);

@@ -26,15 +26,12 @@ public class LastResort : Skill
 
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            if (target != null ) {
-                HitAndKo(target);
-                if (animator != null) { animator.SetTrigger("Hit"); }
-                transform.GetChild(0).gameObject.SetActive(true);
-                transform.GetChild(0).position = target.transform.position;
-                transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
-                transform.GetChild(0).parent = null;
-            }
+            HitAndKo(other.gameObject);
+            if (animator != null) { animator.SetTrigger("Hit"); }
+            transform.GetChild(0).gameObject.SetActive(true);
+            transform.GetChild(0).position = other.transform.position;
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
+            transform.GetChild(0).parent = null;
         }
 
     }

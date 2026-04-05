@@ -59,10 +59,10 @@ public class AvaluggFrozenMistCollision : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         PlayerControler p = other.GetComponent<PlayerControler>();
+        Pokemon.PokemonHpChange(null, other.gameObject, 1, 0, 0, PokemonType.TypeEnum.IgnoreType);
         if (p != null)
         {
             p.PlayerFrozenFloatPlus(FrozenPoint, FrozenTime);
-            Pokemon.PokemonHpChange(null, other.gameObject, 1, 0, 0, PokemonType.TypeEnum.IgnoreType);
             p.KnockOutPoint = 3f;
             p.KnockOutDirection = (p.transform.position - transform.position).normalized;
         }

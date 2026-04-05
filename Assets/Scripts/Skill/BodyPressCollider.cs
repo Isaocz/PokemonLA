@@ -15,11 +15,7 @@ public class BodyPressCollider : MonoBehaviour
     {
         if (other.tag == "Empty")
         {
-            Empty e = other.GetComponent<Empty>();
-            if (e != null)
-            {
-                ParentBodyPress.HitAndKo(e);
-            }
+            ParentBodyPress.HitAndKo(other.gameObject);
         }
     }
 }

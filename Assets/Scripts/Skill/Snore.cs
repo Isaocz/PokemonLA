@@ -31,8 +31,8 @@ public class Snore : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            HitAndKo(target);
-            if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.7f)
+            HitAndKo(other.gameObject);
+            if (target != null && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.7f)
             {
                 target.Fear(2.5f, 1);
             }

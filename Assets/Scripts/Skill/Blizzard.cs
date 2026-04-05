@@ -73,8 +73,8 @@ public class Blizzard : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            HitAndKo(target);
-            if (!IsFrozenDone)
+            HitAndKo(other.gameObject);
+            if (target != null && !IsFrozenDone)
             {
                 target.Frozen(7.5f, 1, 0.1f + (float)player.LuckPoint / 30);
                 IsFrozenDone = true;

@@ -11,15 +11,15 @@ public class PinecoBlast : Projectile
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
+            Pokemon.PokemonHpChange(Baby.gameObject, other.gameObject, Dmage, SpDmage, 0, ProType);
             if (target != null) {
                 target.EmptyKnockOut(10);
-                Pokemon.PokemonHpChange(Baby.gameObject, target.gameObject, Dmage, SpDmage, 0, ProType);
             }
         }
         else if (other.tag == "Player")
         {
             PlayerControler p = other.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(Baby.gameObject, p.gameObject, Dmage, SpDmage, 0, ProType);
+            Pokemon.PokemonHpChange(Baby.gameObject, other.gameObject, Dmage, SpDmage, 0, ProType);
             if (p != null)
             {
                 p.KnockOutPoint = 10;

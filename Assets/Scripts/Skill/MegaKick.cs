@@ -24,12 +24,8 @@ public class MegaKick : Skill
     {
         if (other.tag == "Empty")
         {
-            Empty e = other.GetComponent<Empty>();
-            if (e != null)
-            {
-                HitAndKo(e);
-                if (SkillFrom == 2 && ExistenceTime > 0.5f) { ExistenceTime = 0.4f; }
-            }
+            HitAndKo(other.gameObject);
+            if (SkillFrom == 2 && ExistenceTime > 0.5f) { ExistenceTime = 0.4f; }
         }
     }
 

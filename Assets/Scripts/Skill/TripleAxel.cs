@@ -27,10 +27,10 @@ public class TripleAxel : Skill
         if (other.tag == "Empty")
         {
             Empty e = other.GetComponent<Empty>();
+            HitAndKo(other.gameObject);
+            isKickDone = true;
             if (e != null)
             {
-                HitAndKo(e);
-                isKickDone = true;
                 switch (KickCount) 
                 {
                     case 0:

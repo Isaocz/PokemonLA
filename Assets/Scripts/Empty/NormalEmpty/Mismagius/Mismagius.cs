@@ -361,7 +361,7 @@ public class Mismagius : Empty
                 int AfterHp = -1;
                 //获取受伤前血量
                 if (e != null) { BeforeHp = e.EmptyHp; }
-                Pokemon.PokemonHpChange(this.gameObject, e.gameObject, 0, SPDMAGE_EATDREAM, 0, PokemonType.TypeEnum.Psychic);
+                Pokemon.PokemonHpChange(this.gameObject, other.gameObject, 0, SPDMAGE_EATDREAM, 0, PokemonType.TypeEnum.Psychic);
                 //获取受伤后血量
                 if (e != null) { AfterHp = e.EmptyHp; }
                 //如果造成了伤害且攻击了玩家 吸血

@@ -108,37 +108,42 @@ public class Psybeam : Skill
             if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Empty")
             {
                 Empty target = EndRay.collider.GetComponent<Empty>();
-                int BeforeHp = target.EmptyHp + target.EmptyShield;
-                HitAndKo(target);
-                //如果成功造成伤害计算特效
-                Debug.Log(BeforeHp - (target.EmptyHp + target.EmptyShield));
-                if (BeforeHp - (target.EmptyHp + target.EmptyShield) > 0) {
-                    if (SkillFrom == 2)
-                    {
-                        if (target.isEmptyConfusionDone)
+                int BeforeHp = 0;
+                if (target != null) {
+                    BeforeHp = target.EmptyHp + target.EmptyShield;
+                }
+                HitAndKo(EndRay.collider.gameObject);
+                if (target != null) {
+                    //如果成功造成伤害计算特效
+                    Debug.Log(BeforeHp - (target.EmptyHp + target.EmptyShield));
+                    if (BeforeHp - (target.EmptyHp + target.EmptyShield) > 0) {
+                        if (SkillFrom == 2)
                         {
-                            if (player.Skill01 != null && player.Skill01.SkillIndex != SkillIndex && player.Skill01.SkillType == 14)
+                            if (target.isEmptyConfusionDone)
                             {
-                                player.MinusSkillCDTime(1, 0.5f, false);
-                            }
-                            if (player.Skill02 != null && player.Skill02.SkillIndex != SkillIndex && player.Skill02.SkillType == 14)
-                            {
-                                player.MinusSkillCDTime(2, 0.5f, false);
-                            }
-                            if (player.Skill03 != null && player.Skill03.SkillIndex != SkillIndex && player.Skill03.SkillType == 14)
-                            {
-                                player.MinusSkillCDTime(3, 0.5f, false);
-                            }
-                            if (player.Skill04 != null && player.Skill04.SkillIndex != SkillIndex && player.Skill04.SkillType == 14)
-                            {
-                                player.MinusSkillCDTime(4, 0.5f, false);
+                                if (player.Skill01 != null && player.Skill01.SkillIndex != SkillIndex && player.Skill01.SkillType == 14)
+                                {
+                                    player.MinusSkillCDTime(1, 0.5f, false);
+                                }
+                                if (player.Skill02 != null && player.Skill02.SkillIndex != SkillIndex && player.Skill02.SkillType == 14)
+                                {
+                                    player.MinusSkillCDTime(2, 0.5f, false);
+                                }
+                                if (player.Skill03 != null && player.Skill03.SkillIndex != SkillIndex && player.Skill03.SkillType == 14)
+                                {
+                                    player.MinusSkillCDTime(3, 0.5f, false);
+                                }
+                                if (player.Skill04 != null && player.Skill04.SkillIndex != SkillIndex && player.Skill04.SkillType == 14)
+                                {
+                                    player.MinusSkillCDTime(4, 0.5f, false);
+                                }
                             }
                         }
-                    }
-                    Debug.Log("XXX");
-                    if (Random.Range(0f, 1f) + (float)player.LuckPoint / 30 > 0.9f)
-                    {
-                        target.EmptyConfusion(10.0f, 1.0f);
+                        Debug.Log("XXX");
+                        if (Random.Range(0f, 1f) + (float)player.LuckPoint / 30 > 0.9f)
+                        {
+                            target.EmptyConfusion(10.0f, 1.0f);
+                        }
                     }
                 }
             }

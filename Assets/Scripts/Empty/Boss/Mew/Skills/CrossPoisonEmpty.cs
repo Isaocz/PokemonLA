@@ -80,5 +80,6 @@ public class CrossPoisonEmpty : Projectile
             }
             playerControler.ToxicFloatPlus(0.3f);
         }
+
     }
 }

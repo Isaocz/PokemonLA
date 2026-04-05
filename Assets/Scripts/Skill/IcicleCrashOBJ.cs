@@ -8,6 +8,17 @@ public class IcicleCrashOBJ : MonoBehaviour
     public int ColliderCount;
     public bool isUnBreakable;
 
+
+    /// <summary>
+    /// 碰撞碎裂的最小次数
+    /// </summary>
+    public int COUNT_BREAKNEED_MIN = 1;
+
+    /// <summary>
+    /// 碰撞碎裂的最大次数
+    /// </summary>
+    public int COUNT_BREAKNEED_MAX = 6;
+
     /// <summary>
     /// 破碎的时间
     /// </summary>
@@ -22,10 +33,10 @@ public class IcicleCrashOBJ : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (!isBreak && other.gameObject.tag != "Enviroment" && other.gameObject.tag != "Room" && other.gameObject.tag != "Item" && other.gameObject.tag != "Spike")
+        if (!isUnBreakable && !isBreak && other.gameObject.tag != "Enviroment" && other.gameObject.tag != "Room" && other.gameObject.tag != "Item" && other.gameObject.tag != "Spike")
         {
             ColliderCount++;
-            if (ColliderCount >= Random.Range(1, 6))
+            if (ColliderCount >= Random.Range(COUNT_BREAKNEED_MIN, COUNT_BREAKNEED_MAX))
             {
                 IceBreak();
             }

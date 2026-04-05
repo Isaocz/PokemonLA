@@ -24,9 +24,9 @@ public class PsychicNoise : Skill
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Empty target = collision.GetComponent<Empty>();
+        HitAndKo(collision.gameObject);
         if (target != null)
         {
-            HitAndKo(target);
             if (!EmptyFearList.Contains(target))
             {
                 EmptyFearList.Add(target);

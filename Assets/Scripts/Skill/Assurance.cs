@@ -42,11 +42,9 @@ public class Assurance : Skill
     {
         if (collision.tag == "Empty")
         {
-            Empty target = collision.GetComponent<Empty>();
-            if (target != null)
-            {
-                HitAndKo(target);
-            }
+
+            HitAndKo(collision.gameObject);
+
         }
     }
 

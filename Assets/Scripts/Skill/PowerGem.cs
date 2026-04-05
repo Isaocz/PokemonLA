@@ -156,9 +156,7 @@ public class PowerGem : Skill
                 //如果击中敌方宝可梦，则造成伤害
                 if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Empty")
                 {
-                    Empty target = EndRay.collider.GetComponent<Empty>();
-
-                    HitAndKo(target);
+                    HitAndKo(EndRay.collider.gameObject);
 
                 }
                 //如果有击中对象，将起始点和终点分别对应

@@ -35,10 +35,9 @@ public class BrineEffect : MonoBehaviour
                     }
                 }
                 else { ParentBrine.SpDmageDoubleReset(); }
-                ParentBrine.HitAndKo(target);
             }
             
-
+            ParentBrine.HitAndKo(other.gameObject);
         }
     }
 

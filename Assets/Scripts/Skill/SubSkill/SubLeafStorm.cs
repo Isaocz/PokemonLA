@@ -14,11 +14,7 @@ public class SubLeafStorm : Skill
     {
         if (collision.CompareTag("Empty"))
         {
-            Empty target = collision.GetComponent<Empty>();
-            if (target != null)
-            {
-                HitAndKo(target);
-            }
+            HitAndKo(collision.gameObject);
         }
     }
 }

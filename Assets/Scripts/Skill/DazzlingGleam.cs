@@ -20,10 +20,7 @@ public class DazzlingGleam : Skill
     {
         if (collision != null && collision.tag == "Empty")
         {
-            Empty target = collision.GetComponent<Empty>();
-            if (target != null) {
-                HitAndKo(target);
-            }
+            HitAndKo(collision.gameObject);
         }
     }
 

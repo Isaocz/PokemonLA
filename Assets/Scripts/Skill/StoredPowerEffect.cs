@@ -53,15 +53,10 @@ public class StoredPowerEffect : Skill
     {
         if (collision.CompareTag("Empty"))
         {
-
-            Empty target = collision.GetComponent<Empty>();
-            if (target != null)
-            {
-                SpDamage = ParentSP.SpDamage;
-                HitAndKo(target);
-                isCanNotMove = true;
-                GetComponent<Collider2D>().enabled = false;
-            }
+            SpDamage = ParentSP.SpDamage;
+            HitAndKo(collision.gameObject);
+            isCanNotMove = true;
+            GetComponent<Collider2D>().enabled = false;
         }
         if ((collision.CompareTag("Enviroment") || collision.CompareTag("Room")))
         {

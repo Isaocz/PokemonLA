@@ -77,11 +77,17 @@ public class GigaDrain : GrassSkill
             if (other.tag == "Empty")
             {
                 Empty target = other.GetComponent<Empty>();
-                int hp = target.EmptyHp;
-                HitAndKo(target);
-                Drain(hp,target.EmptyHp,DrainPer);
-                DrainPS();
-                BallBreak();
+                int hp = 0;
+                if (target != null) {
+                    hp = target.EmptyHp;
+                }
+                HitAndKo(other.gameObject);
+                if (target != null)
+                {
+                    Drain(hp, target.EmptyHp, DrainPer);
+                    DrainPS();
+                    BallBreak();
+                }
             }
             else if (other.tag == "Room" || other.tag == "Enviroment")
             {

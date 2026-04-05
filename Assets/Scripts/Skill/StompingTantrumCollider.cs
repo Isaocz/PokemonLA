@@ -17,19 +17,15 @@ public class StompingTantrumCollider : MonoBehaviour
     {
         if (other.tag == "Empty")
         {
-            Empty e = other.GetComponent<Empty>();
-            if (e != null)
+            if (ParentST != null)
             {
-                if (ParentST != null)
-                {
-                    ParentST.isSTHitDone = true;
-                    ParentST.HitAndKo(e);
-                }
-                else if (ParentSubST != null)
-                {
-                    ParentSubST.isSTHitDone = true;
-                    ParentSubST.HitAndKo(e);
-                }
+                ParentST.isSTHitDone = true;
+                ParentST.HitAndKo(other.gameObject);
+            }
+            else if (ParentSubST != null)
+            {
+                ParentSubST.isSTHitDone = true;
+                ParentSubST.HitAndKo(other.gameObject);
             }
         }
         if ((ParentST != null && ParentST.SkillFrom == 2) || (ParentSubST != null && ParentSubST.isPlusSkill)) {

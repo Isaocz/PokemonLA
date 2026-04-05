@@ -165,8 +165,8 @@ public class SolarBeamPlayer : GrassSkill
                             SpDamage /= 2;
                         }
                     }
-                    HitAndKo(e);
                 }
+                HitAndKo(EndRay.collider.gameObject);
             }
             //如果有击中对象，将起始点和终点分别对应
             lineRenderer.SetPosition(0, transform.position);

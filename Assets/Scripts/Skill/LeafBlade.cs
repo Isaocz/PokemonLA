@@ -54,7 +54,7 @@ public class LeafBlade : Skill
             atkTimer = 0f;
             attackCount++;
             targetEnemy = other.GetComponent<Empty>();
-            HitAndKo(targetEnemy);
+            HitAndKo(other.gameObject);
 
             if (attackCount >= Counts)
             {

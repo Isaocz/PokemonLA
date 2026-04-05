@@ -50,7 +50,10 @@ public class VanillishPodesSnowCollision : MonoBehaviour
                 if (!isAtkedEmpty.Contains(e))
                 {
                     isAtkedEmpty.Add(e);
-                    Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Ice);
+                    if (e != null)
+                    {
+                        Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Ice);
+                    }
                 }
             }
         }

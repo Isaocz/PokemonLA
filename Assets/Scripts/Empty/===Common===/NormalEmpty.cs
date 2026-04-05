@@ -335,6 +335,17 @@ public class NormalEmpty : Empty
             ParentPokemonRoom.RoomSize[0] + RoomUpAlpha + transform.parent.position.y));//最大值
     }
     
+        /// <summary>
+    /// 混乱时角度偏转
+    /// </summary>
+    Vector2 ConfusionDir( Vector2 dir , float Alpha)
+    {
+        if (isEmptyConfusionDone)
+        {
+            return Quaternion.AngleAxis(Random.Range(-Alpha, Alpha), Vector3.forward) * dir;
+        }
+        return dir;
+    }
 
 
     //InsertSubStateChange

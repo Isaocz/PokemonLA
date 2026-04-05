@@ -54,9 +54,11 @@ public class WillOWisp : Projectile
             if(other.tag == "Empty" && other.gameObject != empty.gameObject)
             {
                 Empty e = other.GetComponent<Empty>();
-                e.EmptyBurnDone(0.4f , 10f , 1);
-                Pokemon.PokemonHpChange(null, e.gameObject, 0, 1, 0, PokemonType.TypeEnum.IgnoreType);
-                
+                if (e != null)
+                {
+                    e.EmptyBurnDone(0.4f, 10f, 1);
+                    Pokemon.PokemonHpChange(null, e.gameObject, 0, 1, 0, PokemonType.TypeEnum.IgnoreType);
+                }
             }
             gameObject.transform.localScale -= new Vector3(0.15f, 0.15f, 0.15f);
             if(gameObject.transform.localScale.x <= 0.3)

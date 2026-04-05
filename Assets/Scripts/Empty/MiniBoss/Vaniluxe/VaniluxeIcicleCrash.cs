@@ -40,7 +40,11 @@ public class VaniluxeIcicleCrash : Projectile
             if (other.tag == ("Empty") && empty.isEmptyInfatuationDone)
             {
                 Empty e = other.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Ice);
+                if (e != null)
+                {
+                    Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Ice);
+                }
+
             }
         }
     }

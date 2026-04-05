@@ -88,8 +88,7 @@ public class EnergyBall : GrassSkill
         {
             if (other.tag == "Empty")
             {
-                Empty target = other.GetComponent<Empty>();
-                HitAndKo(target);
+                HitAndKo(other.gameObject);
                 BallBreak();
                 if (SkillFrom == 2) {  BornGrass(); }
             }

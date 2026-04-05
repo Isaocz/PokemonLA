@@ -24,6 +24,7 @@ public class WaterPulseEffect : MonoBehaviour
         if (other.tag == "Empty")
         {
             target = other.GetComponent<Empty>();
+            ParentWaterPulse.HitAndKo(other.gameObject);
             if (ParentWaterPulse != null && target != null)
             {
                 /*
@@ -39,7 +40,7 @@ public class WaterPulseEffect : MonoBehaviour
                 }
                 else { ParentWaterPulse.SpDmageDoubleReset(); }
                 */
-                ParentWaterPulse.HitAndKo(target);
+                
                 ParentWaterPulse.Confusion(target);
             }
 

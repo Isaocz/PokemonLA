@@ -65,13 +65,9 @@ public class Swift : Skill
     {//»÷ÖÐµÐ¹Ö»òÕßÇ½±ÚÍ£Ö¹ÒÆ¶¯
         if (collision.CompareTag("Empty"))
         {
-            Empty target = collision.GetComponent<Empty>();
-            if (target != null)
-            {
-                HitAndKo(target);
-                isHit = true;
-                isMove = false;
-            }
+            HitAndKo(collision.gameObject);
+            isHit = true;
+            isMove = false;
         }
         else if (collision.CompareTag("Room") || ((collision.CompareTag("Enviroment"))) )
         {

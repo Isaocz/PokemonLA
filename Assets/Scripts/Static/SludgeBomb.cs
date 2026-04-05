@@ -80,7 +80,9 @@ public class SludgeBomb : Skill
                 if (target != null)
                 {
                     if (SkillFrom == 2 && target.isToxicDone) { SpDamage += 30; }
-                    HitAndKo(target);
+                }
+                HitAndKo(other.gameObject);
+                if (target != null) { 
                     target.EmptyToxicDone(1,30, 0.3f + (float)player.LuckPoint / 10);
                 }
                 BallBreak();

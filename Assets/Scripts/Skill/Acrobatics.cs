@@ -27,12 +27,9 @@ public class Acrobatics : Skill
 
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            if (target != null) {
-                if (player.spaceItem == null) { Damage *= 2; }
-                HitAndKo(target);
-                if (animator != null) { animator.SetTrigger("Hit"); }
-            }
+            if (player.spaceItem == null) { Damage *= 2; }
+            if (animator != null) { animator.SetTrigger("Hit"); }
+            HitAndKo(other.gameObject);
         }
 
     }

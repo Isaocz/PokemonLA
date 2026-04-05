@@ -37,10 +37,9 @@ public class ExpandingForce : Skill
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Empty enemy = collision.GetComponent<Empty>();
+        HitAndKo(collision.gameObject);
         if (enemy != null)
         {
-            HitAndKo(enemy);
-
             if (SkillFrom == 2) {
                 if (player.Skill01 && player.Skill01.SkillType == 14) { player.MinusSkillCDTime( 1 , 0.08f , false); }
                 if (player.Skill02 && player.Skill02.SkillType == 14) { player.MinusSkillCDTime( 2 , 0.08f , false); }

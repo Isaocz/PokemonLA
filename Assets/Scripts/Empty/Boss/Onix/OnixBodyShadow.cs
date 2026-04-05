@@ -220,6 +220,8 @@ public class OnixBodyShadow : SubEmptyBody
                 ParentEmpty.EmptyTouchHit(other.gameObject);
             }
         }
+
+
         if (other.transform.tag == ("Enviroment") || other.gameObject.GetComponent<BossDoorBillboard>()) { Physics2D.IgnoreCollision(BodyCollider2D, other.collider, true); }
     }
 

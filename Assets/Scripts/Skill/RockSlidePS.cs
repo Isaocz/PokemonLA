@@ -18,9 +18,9 @@ public class RockSlidePS : MonoBehaviour
         if(other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            if(target != null)
+            ParentRS.HitAndKo(other.gameObject);
+            if (target != null)
             {
-                ParentRS.HitAndKo(target);
                 if (!TargetList.Contains(target))
                 {
                     TargetList.Add(target);

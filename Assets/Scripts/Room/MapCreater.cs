@@ -98,6 +98,8 @@ public class MapCreater : MonoBehaviour
 
     //是否为boss测试地图
     public bool isBossTestMap = false;
+    //boos测试地图boss房位置
+    int BossTest_BossDoorTestIndex = 0;
 
     //========================一些控制根据道具特性等生成地图的变量==============================
 
@@ -245,6 +247,7 @@ public class MapCreater : MonoBehaviour
             if(item == new Vector3Int(0, 0, 0))
             {
                 Room room = Instantiate(StarRoom, new Vector3(item.x * 30, item.y * 24, 0), Quaternion.identity);
+                room.RoomIndex = item;
                 room.CreatWall();
                 room.transform.name = roomname;
                 RRoom.Add(item, room);
@@ -257,6 +260,7 @@ public class MapCreater : MonoBehaviour
                     
                     BaseRoom = SwithABaseRoom(item);
                     Room room = Instantiate(BaseRoom, new Vector3(item.x * 30, item.y * 24, 0), Quaternion.identity);
+                    room.RoomIndex = item;
                     room.CreatWall();
                     room.transform.name = roomname;
                     if (!RRoom.ContainsKey(item)) { RRoom.Add(item, room); }
@@ -441,12 +445,20 @@ public class MapCreater : MonoBehaviour
             //●Boss测试房间
             if (isBossTestMap)
             {
-                Vector3Int BossTestPoint = Vector3Int.left;
+                Vector3Int BossTestPoint = Vector3Int.down;
+                switch (BossTest_BossDoorTestIndex%4)
+                {
+                    case 0: BossTestPoint = Vector3Int.up; break;
+                    case 1: BossTestPoint = Vector3Int.down; break;
+                    case 2: BossTestPoint = Vector3Int.left; break;
+                    case 3: BossTestPoint = Vector3Int.right; break;
+                }
                 string Testroomname = BossTestPoint.ToString();
                 VRoom.Add(BossTestPoint, 0);
                 PCRoomPoint = BossTestPoint;
                 isPCRoomSpawn = true;
                 Room room = Instantiate(PCRoomUp, new Vector3(BossTestPoint.x * 30, BossTestPoint.y * 24, 0), Quaternion.identity);
+                room.RoomIndex = BossTestPoint;
                 room.transform.name = "PC" + Testroomname;
                 RRoom.Add(BossTestPoint, room);
                 return;
@@ -474,6 +486,7 @@ public class MapCreater : MonoBehaviour
                             PCRoomPoint = NowPCRoomPoint;
                             isPCRoomSpawn = true;
                             Room room = Instantiate(PCRoomUp, new Vector3(NowPCRoomPoint.x * 30, NowPCRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowPCRoomPoint;
                             room.transform.name = "PC" + roomname;
                             RRoom.Add(NowPCRoomPoint, room);
                             return;
@@ -489,6 +502,7 @@ public class MapCreater : MonoBehaviour
                             PCRoomPoint = NowPCRoomPoint;
                             isPCRoomSpawn = true;
                             Room room = Instantiate(PCRoomLeft, new Vector3(NowPCRoomPoint.x * 30, NowPCRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowPCRoomPoint;
                             room.transform.name = "PC" + roomname;
                             RRoom.Add(NowPCRoomPoint, room);
                             return;
@@ -504,6 +518,7 @@ public class MapCreater : MonoBehaviour
                             PCRoomPoint = NowPCRoomPoint;
                             isPCRoomSpawn = true;
                             Room room = Instantiate(PCRoomRight, new Vector3(NowPCRoomPoint.x * 30, NowPCRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowPCRoomPoint;
                             room.transform.name = "PC" + roomname;
                             RRoom.Add(NowPCRoomPoint, room);
                             return;
@@ -534,12 +549,20 @@ public class MapCreater : MonoBehaviour
             //●Boss测试房间
             if (isBossTestMap)
             {
-                Vector3Int BossTestPoint = Vector3Int.right;
+                Vector3Int BossTestPoint = Vector3Int.down;
+                switch (BossTest_BossDoorTestIndex % 4)
+                {
+                    case 0: BossTestPoint = Vector3Int.down; break;
+                    case 1: BossTestPoint = Vector3Int.left; break;
+                    case 2: BossTestPoint = Vector3Int.right; break;
+                    case 3: BossTestPoint = Vector3Int.up; break;
+                }
                 string Testroomname = BossTestPoint.ToString();
                 VRoom.Add(BossTestPoint, 0);
                 StoreRoomPoint = BossTestPoint;
                 isStoreRoomSpawn = true;
                 Room room = Instantiate(StoreRoomUp, new Vector3(BossTestPoint.x * 30, BossTestPoint.y * 24, 0), Quaternion.identity);
+                room.RoomIndex = BossTestPoint;
                 room.transform.name = "Store" + Testroomname;
                 RRoom.Add(BossTestPoint, room);
                 return;
@@ -567,6 +590,7 @@ public class MapCreater : MonoBehaviour
                             StoreRoomPoint = NowStoreRoomPoint;
                             isStoreRoomSpawn = true;
                             Room room = Instantiate(StoreRoomUp, new Vector3(NowStoreRoomPoint.x * 30, NowStoreRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowStoreRoomPoint;
                             room.transform.name = "Store" + roomname;
                             RRoom.Add(NowStoreRoomPoint, room);
                             return;
@@ -582,6 +606,7 @@ public class MapCreater : MonoBehaviour
                             StoreRoomPoint = NowStoreRoomPoint;
                             isStoreRoomSpawn = true;
                             Room room = Instantiate(StoreRoomLeft, new Vector3(NowStoreRoomPoint.x * 30, NowStoreRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowStoreRoomPoint;
                             room.transform.name = "Store" + roomname;
                             RRoom.Add(NowStoreRoomPoint, room);
                             return;
@@ -597,6 +622,7 @@ public class MapCreater : MonoBehaviour
                             StoreRoomPoint = NowStoreRoomPoint;
                             isStoreRoomSpawn = true;
                             Room room = Instantiate(StoreRoomRight, new Vector3(NowStoreRoomPoint.x * 30, NowStoreRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowStoreRoomPoint;
                             room.transform.name = "Store" + roomname;
                             RRoom.Add(NowStoreRoomPoint, room);
                             return;
@@ -627,12 +653,20 @@ public class MapCreater : MonoBehaviour
             //●Boss测试房间
             if (isBossTestMap)
             {
-                Vector3Int BossTestPoint = Vector3Int.up;
+                Vector3Int BossTestPoint = Vector3Int.down;
+                switch (BossTest_BossDoorTestIndex % 4)
+                {
+                    case 0: BossTestPoint = Vector3Int.left; break;
+                    case 1: BossTestPoint = Vector3Int.right; break;
+                    case 2: BossTestPoint = Vector3Int.up; break;
+                    case 3: BossTestPoint = Vector3Int.down; break;
+                }
                 string Testroomname = BossTestPoint.ToString();
                 VRoom.Add(BossTestPoint, 0);
                 BossRoomPoint = BossTestPoint;
                 isBossRoomSpawn = true;
                 Room room = Instantiate(BossRoom, new Vector3(BossTestPoint.x * 30, BossTestPoint.y * 24, 0), Quaternion.identity);
+                room.RoomIndex = BossTestPoint;
                 room.transform.name = "Boss" + Testroomname;
                 room.CreatNextFloorWall();
                 RRoom.Add(BossTestPoint, room);
@@ -661,6 +695,7 @@ public class MapCreater : MonoBehaviour
                             BossRoomPoint = NowBossRoomPoint;
                             isBossRoomSpawn = true;
                             Room room = Instantiate(BossRoom, new Vector3(NowBossRoomPoint.x * 30, NowBossRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowBossRoomPoint;
                             room.transform.name = "Boss" + roomname;
                             room.CreatNextFloorWall();
                             RRoom.Add(NowBossRoomPoint, room);
@@ -677,6 +712,7 @@ public class MapCreater : MonoBehaviour
                             BossRoomPoint = NowBossRoomPoint;
                             isBossRoomSpawn = true;
                             Room room = Instantiate(BossRoom, new Vector3(NowBossRoomPoint.x * 30, NowBossRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowBossRoomPoint;
                             room.transform.name = "Boos" + roomname;
                             room.CreatNextFloorWall();
                             RRoom.Add(NowBossRoomPoint, room);
@@ -693,6 +729,7 @@ public class MapCreater : MonoBehaviour
                             BossRoomPoint = NowBossRoomPoint;
                             isBossRoomSpawn = true;
                             Room room = Instantiate(BossRoom, new Vector3(NowBossRoomPoint.x * 30, NowBossRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowBossRoomPoint;
                             room.transform.name = "Boss" + roomname;
                             room.CreatNextFloorWall();
                             RRoom.Add(NowBossRoomPoint, room);
@@ -710,6 +747,7 @@ public class MapCreater : MonoBehaviour
                             BossRoomPoint = NowBossRoomPoint;
                             isBossRoomSpawn = true;
                             Room room = Instantiate(BossRoom, new Vector3(NowBossRoomPoint.x * 30, NowBossRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowBossRoomPoint;
                             room.transform.name = "Boss" + roomname;
                             room.CreatNextFloorWall();
                             RRoom.Add(NowBossRoomPoint, room);
@@ -745,11 +783,19 @@ public class MapCreater : MonoBehaviour
             if (isBossTestMap)
             {
                 Vector3Int BossTestPoint = Vector3Int.down;
+                switch (BossTest_BossDoorTestIndex % 4)
+                {
+                    case 0: BossTestPoint = Vector3Int.right; break;
+                    case 1: BossTestPoint = Vector3Int.up; break;
+                    case 2: BossTestPoint = Vector3Int.down; break;
+                    case 3: BossTestPoint = Vector3Int.left; break;
+                }
                 string Testroomname = BossTestPoint.ToString();
                 VRoom.Add(BossTestPoint, 0);
                 SkillShopRoomPoint = BossTestPoint;
                 isSkillShopRoomSpawn = true;
                 Room room = Instantiate(SkillShopRoom, new Vector3(BossTestPoint.x * 30, BossTestPoint.y * 24, 0), Quaternion.identity);
+                room.RoomIndex = BossTestPoint;
                 room.transform.name = "SkillShop" + Testroomname;
                 RRoom.Add(BossTestPoint, room);
                 room.CreatWall();
@@ -779,6 +825,7 @@ public class MapCreater : MonoBehaviour
                             SkillShopRoomPoint = NowSkillShopRoomPoint;
                             isSkillShopRoomSpawn = true;
                             Room room = Instantiate(SkillShopRoom, new Vector3(NowSkillShopRoomPoint.x * 30, NowSkillShopRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowSkillShopRoomPoint;
                             room.transform.name = "SkillShop" + roomname;
                             RRoom.Add(NowSkillShopRoomPoint, room);
                             room.CreatWall();
@@ -798,6 +845,7 @@ public class MapCreater : MonoBehaviour
                             SkillShopRoomPoint = NowSkillShopRoomPoint;
                             isSkillShopRoomSpawn = true;
                             Room room = Instantiate(SkillShopRoom, new Vector3(NowSkillShopRoomPoint.x * 30, NowSkillShopRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowSkillShopRoomPoint;
                             room.transform.name = "SkillShop" + roomname;
                             RRoom.Add(NowSkillShopRoomPoint, room);
                             room.CreatWall();
@@ -816,6 +864,7 @@ public class MapCreater : MonoBehaviour
                             SkillShopRoomPoint = NowSkillShopRoomPoint;
                             isSkillShopRoomSpawn = true;
                             Room room = Instantiate(SkillShopRoom, new Vector3(NowSkillShopRoomPoint.x * 30, NowSkillShopRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowSkillShopRoomPoint;
                             room.transform.name = "SkillShop" + roomname;
                             RRoom.Add(NowSkillShopRoomPoint, room);
                             room.CreatWall();
@@ -834,6 +883,7 @@ public class MapCreater : MonoBehaviour
                             SkillShopRoomPoint = NowSkillShopRoomPoint;
                             isSkillShopRoomSpawn = true;
                             Room room = Instantiate(SkillShopRoom, new Vector3(NowSkillShopRoomPoint.x * 30, NowSkillShopRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowSkillShopRoomPoint;
                             room.transform.name = "SkillShop" + roomname;
                             RRoom.Add(NowSkillShopRoomPoint, room);
                             room.CreatWall();
@@ -887,6 +937,7 @@ public class MapCreater : MonoBehaviour
                             MewRoomPoint = NowMewRoomPoint;
                             isMewRoomSpawn = true;
                             Room room = Instantiate(MewsRoom, new Vector3(NowMewRoomPoint.x * 30, NowMewRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowMewRoomPoint;
                             room.transform.name = "SkillShop" + roomname;
                             RRoom.Add(NowMewRoomPoint, room);
                             if (FloorNum.GlobalFloorNum != null) { FloorNum.GlobalFloorNum.isMewRoomBeCreated = true; }
@@ -907,6 +958,7 @@ public class MapCreater : MonoBehaviour
                             MewRoomPoint = NowMewRoomPoint;
                             isMewRoomSpawn = true;
                             Room room = Instantiate(MewsRoom, new Vector3(NowMewRoomPoint.x * 30, NowMewRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowMewRoomPoint;
                             room.transform.name = "MewRoom" + roomname;
                             RRoom.Add(NowMewRoomPoint, room);
                             if (FloorNum.GlobalFloorNum != null)
@@ -929,6 +981,7 @@ public class MapCreater : MonoBehaviour
                             MewRoomPoint = NowMewRoomPoint;
                             isMewRoomSpawn = true;
                             Room room = Instantiate(MewsRoom, new Vector3(NowMewRoomPoint.x * 30, NowMewRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowMewRoomPoint;
                             room.transform.name = "MewRoom" + roomname;
                             RRoom.Add(NowMewRoomPoint, room);
                             if (FloorNum.GlobalFloorNum != null)
@@ -951,6 +1004,7 @@ public class MapCreater : MonoBehaviour
                             MewRoomPoint = NowMewRoomPoint;
                             isMewRoomSpawn = true;
                             Room room = Instantiate(MewsRoom, new Vector3(NowMewRoomPoint.x * 30, NowMewRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowMewRoomPoint;
                             room.transform.name = "MewRoom" + roomname;
                             RRoom.Add(NowMewRoomPoint, room);
                             if (FloorNum.GlobalFloorNum != null)
@@ -1008,6 +1062,7 @@ public class MapCreater : MonoBehaviour
                             BabyCenterRoomPoint = NowBabyCenterRoomPoint;
                             isBabyCenterRoomSpawn = true;
                             Room room = Instantiate(BabyCenterRoom, new Vector3(NowBabyCenterRoomPoint.x * 30, NowBabyCenterRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowBabyCenterRoomPoint;
                             room.transform.name = "BabyCenter" + roomname;
                             RRoom.Add(NowBabyCenterRoomPoint, room);
                             room.CreatWall();
@@ -1031,6 +1086,7 @@ public class MapCreater : MonoBehaviour
                             BabyCenterRoomPoint = NowBabyCenterRoomPoint;
                             isBabyCenterRoomSpawn = true;
                             Room room = Instantiate(BabyCenterRoom, new Vector3(NowBabyCenterRoomPoint.x * 30, NowBabyCenterRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowBabyCenterRoomPoint;
                             room.transform.name = "BabyCenter" + roomname;
                             RRoom.Add(NowBabyCenterRoomPoint, room);
                             room.CreatWall();
@@ -1053,6 +1109,7 @@ public class MapCreater : MonoBehaviour
                             BabyCenterRoomPoint = NowBabyCenterRoomPoint;
                             isBabyCenterRoomSpawn = true;
                             Room room = Instantiate(BabyCenterRoom, new Vector3(NowBabyCenterRoomPoint.x * 30, NowBabyCenterRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowBabyCenterRoomPoint;
                             room.transform.name = "BabyCenter" + roomname;
                             RRoom.Add(NowBabyCenterRoomPoint, room);
                             room.CreatWall();
@@ -1075,6 +1132,7 @@ public class MapCreater : MonoBehaviour
                             BabyCenterRoomPoint = NowBabyCenterRoomPoint;
                             isBabyCenterRoomSpawn = true;
                             Room room = Instantiate(BabyCenterRoom, new Vector3(NowBabyCenterRoomPoint.x * 30, NowBabyCenterRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowBabyCenterRoomPoint;
                             room.transform.name = "BabyCenter" + roomname;
                             RRoom.Add(NowBabyCenterRoomPoint, room);
                             room.CreatWall();
@@ -1132,6 +1190,7 @@ public class MapCreater : MonoBehaviour
                             MintRoomPoint = NowMintRoomPoint;
                             isMintRoomSpawn = true;
                             Room room = Instantiate(MintRoom, new Vector3(NowMintRoomPoint.x * 30, NowMintRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowMintRoomPoint;
                             room.transform.name = "Mint" + roomname;
                             RRoom.Add(NowMintRoomPoint, room);
                             room.CreatWall();
@@ -1155,6 +1214,7 @@ public class MapCreater : MonoBehaviour
                             MintRoomPoint = NowMintRoomPoint;
                             isMintRoomSpawn = true;
                             Room room = Instantiate(MintRoom, new Vector3(NowMintRoomPoint.x * 30, NowMintRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowMintRoomPoint;
                             room.transform.name = "Mint" + roomname;
                             RRoom.Add(NowMintRoomPoint, room);
                             room.CreatWall();
@@ -1177,6 +1237,7 @@ public class MapCreater : MonoBehaviour
                             MintRoomPoint = NowMintRoomPoint;
                             isMintRoomSpawn = true;
                             Room room = Instantiate(MintRoom, new Vector3(NowMintRoomPoint.x * 30, NowMintRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowMintRoomPoint;
                             room.transform.name = "Mint" + roomname;
                             RRoom.Add(NowMintRoomPoint, room);
                             room.CreatWall();
@@ -1199,6 +1260,7 @@ public class MapCreater : MonoBehaviour
                             MintRoomPoint = NowMintRoomPoint;
                             isMintRoomSpawn = true;
                             Room room = Instantiate(MintRoom, new Vector3(NowMintRoomPoint.x * 30, NowMintRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowMintRoomPoint;
                             room.transform.name = "Mint" + roomname;
                             RRoom.Add(NowMintRoomPoint, room);
                             room.CreatWall();
@@ -1256,6 +1318,7 @@ public class MapCreater : MonoBehaviour
                             BerryTreeRoomPoint = NowBerryTreeRoomPoint;
                             isBerryTreeRoomSpawn = true;
                             Room room = Instantiate(BerryTreeRoom, new Vector3(NowBerryTreeRoomPoint.x * 30, NowBerryTreeRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowBerryTreeRoomPoint;
                             room.transform.name = "BerryTree" + roomname;
                             RRoom.Add(NowBerryTreeRoomPoint, room);
                             room.CreatWall();
@@ -1275,6 +1338,7 @@ public class MapCreater : MonoBehaviour
                             BerryTreeRoomPoint = NowBerryTreeRoomPoint;
                             isBerryTreeRoomSpawn = true;
                             Room room = Instantiate(BerryTreeRoom, new Vector3(NowBerryTreeRoomPoint.x * 30, NowBerryTreeRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowBerryTreeRoomPoint;
                             room.transform.name = "BerryTree" + roomname;
                             RRoom.Add(NowBerryTreeRoomPoint, room);
                             room.CreatWall();
@@ -1293,6 +1357,7 @@ public class MapCreater : MonoBehaviour
                             BerryTreeRoomPoint = NowBerryTreeRoomPoint;
                             isBerryTreeRoomSpawn = true;
                             Room room = Instantiate(BerryTreeRoom, new Vector3(NowBerryTreeRoomPoint.x * 30, NowBerryTreeRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowBerryTreeRoomPoint;
                             room.transform.name = "BerryTree" + roomname;
                             RRoom.Add(NowBerryTreeRoomPoint, room);
                             room.CreatWall();
@@ -1311,6 +1376,7 @@ public class MapCreater : MonoBehaviour
                             BerryTreeRoomPoint = NowBerryTreeRoomPoint;
                             isBerryTreeRoomSpawn = true;
                             Room room = Instantiate(BerryTreeRoom, new Vector3(NowBerryTreeRoomPoint.x * 30, NowBerryTreeRoomPoint.y * 24, 0), Quaternion.identity);
+                            room.RoomIndex = NowBerryTreeRoomPoint;
                             room.transform.name = "BerryTree" + roomname;
                             RRoom.Add(NowBerryTreeRoomPoint, room);
                             room.CreatWall();

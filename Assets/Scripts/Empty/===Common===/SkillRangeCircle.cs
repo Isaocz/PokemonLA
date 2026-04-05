@@ -25,7 +25,7 @@ public class SkillRangeCircle : MonoBehaviour
     {
         Timer += Time.deltaTime;
 
-        if (Timer > StartDelay && (Timer < (StartDelay + Duration - FadeOutTime))) {
+        if (Timer > StartDelay && (Timer < (StartDelay + FadeInTime))) {
             CircleSprite.color = new Color(CircleSprite.color.r, CircleSprite.color.g, CircleSprite.color.b, Mathf.Clamp(CircleSprite.color.a + (Time.deltaTime * MaxAlpha)/(FadeInTime) , 0,MaxAlpha) );
         }
         else if ((Timer > (StartDelay + Duration - FadeOutTime)))
@@ -33,7 +33,7 @@ public class SkillRangeCircle : MonoBehaviour
             CircleSprite.color = new Color(CircleSprite.color.r, CircleSprite.color.g, CircleSprite.color.b, Mathf.Clamp(CircleSprite.color.a - (Time.deltaTime * MaxAlpha) / (FadeOutTime), 0, MaxAlpha));
         }
 
-        if (Timer > Duration) { Destroy(gameObject); }
+        if (Timer > StartDelay + Duration) { Destroy(gameObject); }
 
     }
 

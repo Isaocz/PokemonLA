@@ -26,7 +26,8 @@ public class BulletPunch : Skill
         if (other.tag == "Empty")
         {
             target = other.GetComponent<Empty>();
-            if (ParentBulletPunch != null) { ParentBulletPunch.HitAndKo(target); Instantiate(TackleBlast, other.transform.position, Quaternion.identity); }
+            ParentBulletPunch.HitAndKo(other.gameObject);
+            if (ParentBulletPunch != null) {  Instantiate(TackleBlast, other.transform.position, Quaternion.identity); }
         }
         else if (other.tag == "Projectel")
         {

@@ -28,9 +28,8 @@ public class Surf : Skill
                     target.SpeedChange();
                     target.SpeedRemove01(3.0f * target.OtherStateResistance);
                 }
-                HitAndKo(target);
             }
-
+            HitAndKo(other.gameObject);
 
         }
     }

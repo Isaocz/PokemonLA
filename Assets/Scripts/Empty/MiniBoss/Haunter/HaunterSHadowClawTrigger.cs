@@ -23,8 +23,11 @@ public class HaunterSHadowClawTrigger : MonoBehaviour
         if (ParentShadowClaw.ParentHaunter.isEmptyInfatuationDone && other.transform.tag == ("Empty"))
         {
             Empty e = other.gameObject.GetComponent<Empty>();
-            Pokemon.PokemonHpChange(ParentShadowClaw.ParentHaunter.gameObject, e.gameObject, Haunter.DMAGE_SHADOWCLAW, 0, 0, PokemonType.TypeEnum.Ghost);
-            ParentShadowClaw.ParentHaunter.GetCTEffect(other.transform);
+            if (e != null)
+            {
+                Pokemon.PokemonHpChange(ParentShadowClaw.ParentHaunter.gameObject, e.gameObject, Haunter.DMAGE_SHADOWCLAW, 0, 0, PokemonType.TypeEnum.Ghost);
+                ParentShadowClaw.ParentHaunter.GetCTEffect(other.transform);
+            }
         }
     }
 }

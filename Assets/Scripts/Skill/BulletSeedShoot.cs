@@ -34,23 +34,19 @@ public class BulletSeedShoot : Skill
         if (!collision.isTrigger) {
             if (collision.CompareTag("Empty"))
             {
-                Empty target = collision.GetComponent<Empty>();
-                if (target != null)
+                HitAndKo(collision.gameObject);
+                if (transform.childCount != 0) { transform.GetChild(0).gameObject.SetActive(true); }
+                transform.DetachChildren();
+                if (ParentBS.SkillFrom == 2)
                 {
-                    HitAndKo(target);
-                    transform.GetChild(0).gameObject.SetActive(true);
-                    transform.DetachChildren();
-                    if (ParentBS.SkillFrom == 2) { 
-                        ParentBS.BornAGrass(transform.position);
+                    ParentBS.BornAGrass(transform.position);
 
-                        if (Random.Range(0.0f , 1.0f)>0.6f && ParentBS.player.isInSuperGrassyTerrain)
-                        {
-                            ParentBS.BornAGrass(player.transform.position + Vector3.up + Vector3.right);
-                        }
+                    if (Random.Range(0.0f, 1.0f) > 0.6f && ParentBS.player.isInSuperGrassyTerrain)
+                    {
+                        ParentBS.BornAGrass(player.transform.position + Vector3.up + Vector3.right);
                     }
-                    Destroy(gameObject);
-                    
                 }
+                Destroy(gameObject);
             }
             if (collision.CompareTag("Enviroment") || collision.CompareTag("Room"))
             {

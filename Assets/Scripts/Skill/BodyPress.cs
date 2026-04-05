@@ -84,7 +84,7 @@ public class BodyPress : Skill
 
 
 
-
+    /**
     public void BodyPressHitAndKo(Empty target)
     {
 
@@ -98,7 +98,7 @@ public class BodyPress : Skill
             if (TargetList.Count == 0) { TargetList.Add(new EmptyList(target, false, 0.0f)); }
             for (int i = 0; i < TargetList.Count; i++)
             {
-                if (TargetList[i].Target == target) { isTargetExitInList = true; TCEell = TargetList[i]; ListIndex = i; /* Debug.Log("xxx" + TargetList[i].isMultipleDamageColdDown); */ break; }
+                if (TargetList[i].Target == target) { isTargetExitInList = true; TCEell = TargetList[i]; ListIndex = i;  break; }
             }
             if (!isTargetExitInList)
             {
@@ -154,5 +154,5 @@ public class BodyPress : Skill
 
     }
 
-
+    **/
 }

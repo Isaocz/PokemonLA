@@ -190,8 +190,8 @@ public class WeatherBallPkayer : Skill
                                 break;
                         }
                     }
-                    HitAndKo(target);
                 }
+                HitAndKo(other.gameObject);
                 BallBreak();
             }
             else if (other.tag == "Room" || other.tag == "Enviroment")

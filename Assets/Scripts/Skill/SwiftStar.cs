@@ -93,13 +93,9 @@ public class SwiftStar : Skill
     {
         if (collision.CompareTag("Empty"))
         {
-            Empty target = collision.GetComponent<Empty>();
-            if (target != null)
-            {
-                HitAndKo(target);
-                GetComponent<Collider2D>().enabled = false;
-                hit = true;
-            }
+            HitAndKo(collision.gameObject);
+            GetComponent<Collider2D>().enabled = false;
+            hit = true;
         }
     }
 }

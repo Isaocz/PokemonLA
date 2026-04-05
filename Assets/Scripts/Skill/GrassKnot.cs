@@ -61,7 +61,7 @@ public class GrassKnot : GrassSkill
             {
                 SpDamage = Power(MoveSpeed());
                 Debug.Log(SpDamage);
-                HitAndKo(Target);
+                HitAndKo(Target.gameObject);
                 Target = null;
                 OnKnotDestroy();
                 Destroy(gameObject);
@@ -132,6 +132,10 @@ public class GrassKnot : GrassSkill
         {
             Empty e = other.GetComponent<Empty>();
             if (e != null) { Target = e; }
+            else
+            {
+                HitAndKo(other.gameObject);
+            }
         }
     }
 }

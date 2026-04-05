@@ -20,9 +20,9 @@ public class IcePunch : Skill
         if (other.tag == "Empty")
         {
             Empty e = other.GetComponent<Empty>();
+            HitAndKo(other.gameObject);
             if (e != null)
             {
-                HitAndKo(e);
                 if (SkillFrom != 2)
                 {
                     e.Frozen(7.5f, 1, 0.1f + (float)(player.LuckPoint / 30));

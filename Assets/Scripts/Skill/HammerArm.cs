@@ -20,13 +20,9 @@ public class HammerArm : Skill
     {
         if (other.tag == "Empty")
         {
-            Empty e = other.GetComponent<Empty>();
-            if (e != null)
-            {
-                HitAndKo(e);
-                player.SpeedChange();
-                player.SpeedRemove01(5.0f);
-            }
+            HitAndKo(other.gameObject);
+            player.SpeedChange();
+            player.SpeedRemove01(5.0f);
         }
     }
 }

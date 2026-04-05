@@ -20,9 +20,9 @@ public class ThunderPunch : Skill
         if (other.tag == "Empty")
         {
             Empty e = other.GetComponent<Empty>();
+            HitAndKo(other.gameObject);
             if (e != null)
             {
-                HitAndKo(e);
                 if (SkillFrom != 2)
                 {
                     e.EmptyParalysisDone(1, 10, 0.1f + (float)(player.LuckPoint / 30));

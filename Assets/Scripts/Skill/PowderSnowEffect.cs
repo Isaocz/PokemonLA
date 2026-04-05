@@ -21,7 +21,7 @@ public class PowderSnowEffect : MonoBehaviour
         if (other.tag == "Empty")
         {
             target = other.GetComponent<Empty>();
-            if (!IsFrozenDone)
+            if (target != null && !IsFrozenDone)
             {
                 if (PowderSnow_02 != null) {
                     Instantiate(PowderSnow_02, target.transform.position + new Vector3(Random.Range(-0.77f, 0.77f), Random.Range(0.0f, 0.3f), 0), Quaternion.identity, target.transform);
@@ -32,7 +32,7 @@ public class PowderSnowEffect : MonoBehaviour
                 if (ParentPowderSnow.SkillFrom == 2) { target.Frozen(15f, 2, 0.3f + (float)ParentPowderSnow.player.LuckPoint / 30); }
                 else { target.Frozen(7.5f, 1, 0.3f + (float)ParentPowderSnow.player.LuckPoint / 30); }
             }
-            gameObject.transform.parent.GetComponent<MudSlup>().HitAndKo(target);
+            gameObject.transform.parent.GetComponent<MudSlup>().HitAndKo(other.gameObject); ;
             IsFrozenDone = true;
             
         }

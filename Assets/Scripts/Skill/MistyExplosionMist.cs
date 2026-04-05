@@ -72,7 +72,7 @@ public class MistyExplosionMist : Skill
                 GameObject p = null;
                 if (player != null) { p = player.gameObject; }
                 if (other.tag == "Empty") {
-                    HitAndKo(other.GetComponent<Empty>()); 
+                    HitAndKo(other.gameObject); 
                     if (SkillFrom == 2 && player != null) {
                         if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 > 0.5f)
                         {

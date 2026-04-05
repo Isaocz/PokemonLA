@@ -29,15 +29,18 @@ public class Crunch : Skill
             Empty target = other.GetComponent<Empty>();
 
             //if (animator != null) { animator.SetTrigger("Hit"); }
-            if (SkillFrom == 2 && target.DefUpLevel >= 0) { target.DefChange(-1, 0); Pokemon.PokemonHpChange(null, player.gameObject, player.maxHp / 4, 0, 0, PokemonType.TypeEnum.IgnoreType); player.KnockOutDirection = Vector2.zero; player.KnockOutPoint = 0; }
-            else {
-                if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.8f)
+            if (target != null)
+            {
+                if (SkillFrom == 2 && target.DefUpLevel >= 0) { target.DefChange(-1, 0); Pokemon.PokemonHpChange(null, player.gameObject, player.maxHp / 4, 0, 0, PokemonType.TypeEnum.IgnoreType); player.KnockOutDirection = Vector2.zero; player.KnockOutPoint = 0; }
+                else
                 {
-                    target.DefChange(-1, 0);
+                    if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.8f)
+                    {
+                        target.DefChange(-1, 0);
+                    }
                 }
             }
-            
-            HitAndKo(target);
+            HitAndKo(other.gameObject);
         }
     }
 }

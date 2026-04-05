@@ -17,9 +17,9 @@ public class BulldozeCollider : MonoBehaviour
         if (other.tag == "Empty")
         {
             Empty e = other.GetComponent<Empty>();
+            ParentBulldoze.HitAndKo(other.gameObject);
             if (e != null)
             {
-                ParentBulldoze.HitAndKo(e);
                 if (!Empties.Contains(e))
                 {
                     Empties.Add(e);

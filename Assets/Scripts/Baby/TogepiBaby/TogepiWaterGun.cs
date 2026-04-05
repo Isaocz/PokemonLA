@@ -52,7 +52,7 @@ public class TogepiWaterGun : Projectile
                     isDmageDonw = true;
                     //Debug.Log(transform.gameObject);\
                     Empty target = other.GetComponent<Empty>();
-                    Pokemon.PokemonHpChange(Baby.gameObject, target.gameObject, Dmage, SpDmage, 0, ProType);
+                    Pokemon.PokemonHpChange(Baby.gameObject, other.gameObject, Dmage, SpDmage, 0, ProType);
                     //target.EmptyHpChange(Mathf.Clamp( (int)((float)(10 * (2 * BabyLevel + 10) *30) / (float)(250 * target.DefAbilityPoint  + 2)), 1 , 100000), 0, 12);
 
                 }

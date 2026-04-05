@@ -27,10 +27,14 @@ public class FalseSwipe : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            if (target != null) {
-                int BeforeHP = target.EmptyHp;
+            int BeforeHP = 0;
+            if (target != null)
+            {
+                BeforeHP = target.EmptyHp;
                 target.IsBeFalseSwipe = true;
-                HitAndKo(target);
+            }
+            HitAndKo(other.gameObject);
+            if (target != null) {  
                 target.IsBeFalseSwipe = false;
                 if (animator != null) { animator.SetTrigger("Hit"); }
                 if (SkillFrom == 2 && BeforeHP != 1 && target.EmptyHp == 1)

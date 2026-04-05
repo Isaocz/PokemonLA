@@ -34,7 +34,12 @@ public class DiglettMudShot : MonoBehaviour
                     if (other.tag == ("Empty") && EmptyDiglett.isEmptyInfatuationDone)
                     {
                         Empty e = other.GetComponent<Empty>();
-                        Pokemon.PokemonHpChange(EmptyDiglett.gameObject, e.gameObject, 0, 55, 0, PokemonType.TypeEnum.Ground);
+                        Pokemon.PokemonHpChange(EmptyDiglett.gameObject, other.gameObject, 0, 55, 0, PokemonType.TypeEnum.Ground);
+                        if (e != null)
+                        {
+
+                        }
+
                     }
                 }
             }

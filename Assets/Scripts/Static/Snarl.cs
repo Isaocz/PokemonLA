@@ -72,9 +72,9 @@ public class Snarl : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
+            HitAndKo(other.gameObject);
             if (target != null)
             {
-                HitAndKo(target);
                 target.SpAChange(-1, SpAdowntime);
                 GameObject se = Instantiate(snarleffect, target.transform.position, Quaternion.identity);
                 Destroy(se, 0.5f);

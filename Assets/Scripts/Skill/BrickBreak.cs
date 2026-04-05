@@ -39,9 +39,8 @@ public class BrickBreak : Skill
                 {
                     CTLevel = 5;
                 }
-                HitAndKo(target);
             }
-            
+            HitAndKo(other.gameObject);
         }
     }
 

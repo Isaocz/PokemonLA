@@ -16,4 +16,15 @@ public class SubDoubleHit : SubSkill
 
         StartExistenceTimer();
     }
+
+    public GameObject TackleBlast;
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Empty")
+        {
+            Empty target = other.GetComponent<Empty>();
+            Instantiate(TackleBlast, other.transform.position, Quaternion.identity);
+            HitAndKo(other.gameObject);
+        }
+    }
 }

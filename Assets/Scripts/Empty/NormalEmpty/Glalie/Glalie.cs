@@ -211,7 +211,10 @@ public class Glalie : Empty
             if (isBiteMove)
             {
                 Empty e = other.gameObject.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(this.gameObject, e.gameObject, 80, 0, 0, PokemonType.TypeEnum.Dark);
+                if (e != null)
+                {
+                    Pokemon.PokemonHpChange(this.gameObject, e.gameObject, 80, 0, 0, PokemonType.TypeEnum.Dark);
+                }
             }
             else
             {

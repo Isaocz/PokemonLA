@@ -21,8 +21,7 @@ public class MagicalLeafEffect : MonoBehaviour
         }
         if (other.tag == "Empty"||other.tag == "EmptyFly")
         {
-            Empty target = other.gameObject.GetComponent<Empty>();
-            ParentML.HitAndKo(target);
+            ParentML.HitAndKo(other.gameObject);
             DestroyLeaf();
         }
         if (other.tag == "Room")

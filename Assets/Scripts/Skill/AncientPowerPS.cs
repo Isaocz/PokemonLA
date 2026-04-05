@@ -29,9 +29,9 @@ public class AncientPowerPS : MonoBehaviour
         if (other.tag == "Empty")
         {
             target = other.GetComponent<Empty>();
-            ParentAC.HitAndKo(target);
+            ParentAC.HitAndKo(other.gameObject);
 
-            if (ParentAC.SkillFrom == 2 && target.EmptyHp<=0 && !isAbllityUODone) {
+            if (target != null && ParentAC.SkillFrom == 2 && target.EmptyHp<=0 && !isAbllityUODone) {
                 Debug.Log(isAbllityUODone);
                 isAbllityUODone = true;
                 if (ParentAC.player.playerData.AtkBounsJustOneRoom <= 8) ParentAC.player.playerData.AtkBounsJustOneRoom += 1;
@@ -43,7 +43,7 @@ public class AncientPowerPS : MonoBehaviour
             }
 
             ParentAC.isParticleCollider = true;
-            if (!Empties.Contains(target))
+            if (target != null && !Empties.Contains(target))
             {
                 Empties.Add(target);
             }

@@ -60,10 +60,10 @@ public class IceShard : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            HitAndKo(target);
+            HitAndKo(other.gameObject);
             animator.SetTrigger("Break");
             IceBreak();
-            if (SkillFrom == 2 && target.isEmptyFrozenDone && BornGameOBJ.gameObject != other.gameObject) {
+            if (target != null && SkillFrom == 2 && target.isEmptyFrozenDone && BornGameOBJ.gameObject != other.gameObject) {
                 Debug.Log(transform.rotation.eulerAngles);
                 BornGameOBJ = other.gameObject;
                 if (transform.rotation.eulerAngles != new Vector3(0, 0, 0)) Instantiate(gameObject,transform.position,Quaternion.Euler(new Vector3(0,0,0)));

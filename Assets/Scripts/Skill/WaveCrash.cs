@@ -95,11 +95,14 @@ public class WaveCrash : Skill
             if (other.gameObject.tag == "Empty")
             {
                 Empty target = other.gameObject.GetComponent<Empty>();
+                int BeforeHP = 0;
                 if (target != null)
                 {
                     Instantiate(TackleBlast, target.transform.position, Quaternion.identity).GetComponent<DestoryState>().RemoveChild();
-                    int BeforeHP = target.EmptyHp + target.EmptyShield;
-                    HitAndKo(target);
+                    BeforeHP = target.EmptyHp + target.EmptyShield;
+                }
+                HitAndKo(other.gameObject);
+                if (target != null) { 
                     int DmageHP = Mathf.Clamp(BeforeHP - (target.EmptyHp + target.EmptyShield) ,  0 , 10000);
                     float Alpha = 3.0f;
                     if (SkillFrom == 2 && target.isSpeedChange)

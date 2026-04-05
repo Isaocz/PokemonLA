@@ -154,7 +154,7 @@ public class FlashCannon : Skill
                         target.SpDChange(-1, 0);
                     }
                 }
-                HitAndKo(target);
+                HitAndKo(EndRay.collider.gameObject);
             }
             if (DirectionRight) { EndPoint.y = transform.position.y; }
             else { EndPoint.x = transform.position.x; }

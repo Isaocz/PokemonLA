@@ -112,9 +112,9 @@ public class IceBeam : Skill
             {
                 Empty target = EndRay.collider.GetComponent<Empty>();
                 IcicleCrashOBJ Ice = EndRay.collider.GetComponent<IcicleCrashOBJ>();
+                HitAndKo(EndRay.collider.gameObject);
                 if (target != null)
                 {
-                    HitAndKo(target);
                     if (!FrozenList.Contains(target))
                     {
                         target.Frozen(7.5f, 1, 0.1f + ((float)player.LuckPoint / 30));

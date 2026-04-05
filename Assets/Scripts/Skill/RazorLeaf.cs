@@ -62,8 +62,7 @@ public class RazorLeaf : Skill
     {
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            HitAndKo(target);
+            HitAndKo(other.gameObject);
             LeafBreak();
         }
         else if ((other.tag == "Room" || other.tag == "Enviroment") && !other.isTrigger)

@@ -176,8 +176,11 @@ public class HaunterSludgeBomb : Projectile
             {
                 SludgeBombBreak();
                 Empty e = other.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Poison);
-                e.EmptyToxicDone(1f , 5.0f , 0.5f);
+                if (e != null)
+                {
+                    Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, SpDmage, 0, PokemonType.TypeEnum.Poison);
+                    e.EmptyToxicDone(1f, 5.0f, 0.5f);
+                }
             }
             else if (other.tag == "Room" || other.tag == "Enviroment")
             {

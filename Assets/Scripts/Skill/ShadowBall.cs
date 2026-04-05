@@ -64,8 +64,8 @@ public class ShadowBall : Skill
             {
 
                 Empty target = other.GetComponent<Empty>();
+                HitAndKo(other.gameObject);
                 if (target != null) {
-                    HitAndKo(target);
                     if (Random.Range(0f, 1f) + (float)player.LuckPoint / 30 > 0.8f)
                     {
                         target.SpAChange(-1,0.0f);

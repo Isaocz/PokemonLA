@@ -127,9 +127,9 @@ public class HydroPump : Skill
             if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Empty")
             {
                 Empty e = EndRay.collider.GetComponent<Empty>();
+                HitAndKo(EndRay.collider.gameObject);
                 if (e != null)
                 {
-                    HitAndKo(e);
                     if (SkillFrom == 2 && !e.isSpeedChange)
                     {
                         e.SpeedChange();

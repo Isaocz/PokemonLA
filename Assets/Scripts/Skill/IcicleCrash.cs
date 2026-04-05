@@ -32,9 +32,9 @@ public class IcicleCrash : Skill
         if(other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            if(target != null)
+            HitAndKo(other.gameObject);
+            if (target != null)
             {
-                HitAndKo(target);
                 if(Random.Range(0.0f , 1.0f) + ((float)player.LuckPoint/30) >= 0.7f)
                 {
                     target.Fear(2.5f, 1);

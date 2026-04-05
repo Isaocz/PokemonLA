@@ -58,12 +58,12 @@ public class IceSpinner : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            if (!IsFrozenDone)
+            if (!IsFrozenDone && target != null)
             {
                 target.Frozen(7.5f, 1, 0.2f + (float)player.LuckPoint / 30);
                 IsFrozenDone = true;
             }
-            HitAndKo(target);
+            HitAndKo(other.gameObject);
         }
         if (other.GetComponent<GrassyTerrain>())
         {

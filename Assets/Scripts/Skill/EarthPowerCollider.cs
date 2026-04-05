@@ -17,13 +17,13 @@ public class EarthPowerCollider : MonoBehaviour
         if (other.tag == "Empty")
         {
             Empty e = other.GetComponent<Empty>();
-            if (ParentEarthPower.SkillFrom == 2 && e.isBlindDone)
+            if (e != null && ParentEarthPower.SkillFrom == 2 && e.isBlindDone)
             {
                 ParentEarthPower.SpDamage = 120;
             }
+            ParentEarthPower.HitAndKo(other.gameObject);
             if (e != null)
             {
-                ParentEarthPower.HitAndKo(e);
                 if (!Empties.Contains(e)) {
                     Empties.Add(e);
                     if (Random.Range(0.0f, 1.0f) + ((float)ParentEarthPower.player.LuckPoint / 30) > 0.9f )

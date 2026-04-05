@@ -83,9 +83,9 @@ public class Rollout : Skill
             if (other.gameObject.tag == "Empty")
             {
                 Empty target = other.gameObject.GetComponent<Empty>();
+                HitAndKo(other.gameObject);
                 if (target != null)
                 {
-                    HitAndKo(target);
                     AddSubRollout();
                     if (SkillFrom == 2) {
                         Instantiate(SR, transform.position, Quaternion.identity);

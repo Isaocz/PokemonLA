@@ -25,9 +25,9 @@ public class DynamicPunch : Skill
         if (other.tag == "Empty")
         {
             Empty e = other.GetComponent<Empty>();
+            HitAndKo(other.gameObject);
             if (e != null)
             {
-                HitAndKo(e);
                 e.EmptyConfusion(5.0f, 1);
             }
         }

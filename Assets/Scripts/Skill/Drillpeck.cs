@@ -44,11 +44,7 @@ public class Drillpeck : Skill
             MoveStopF();
             if (other.gameObject.tag == "Empty")
             {
-                Empty target = other.gameObject.GetComponent<Empty>();
-                if (target != null)
-                {
-                    HitAndKo(target);
-                }
+                HitAndKo(other.gameObject);
             }
         }
     }

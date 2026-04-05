@@ -61,10 +61,15 @@ public class Uturn : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            int hp = target.EmptyHp;
-            HitAndKo(target);
-            if (SkillFrom == 2) { Drain(hp, target.EmptyHp, 0.25f); }
-            if (animator != null) { animator.SetTrigger("Hit"); }
+            int hp = 0;
+            if (target != null) {
+                hp = target.EmptyHp;
+            }
+            HitAndKo(other.gameObject);
+            if (target != null) {
+                if (SkillFrom == 2) { Drain(hp, target.EmptyHp, 0.25f); }
+                if (animator != null) { animator.SetTrigger("Hit"); }
+            }
         }
 
     }

@@ -28,9 +28,9 @@ public class Endeavor : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
+            if (animator != null) { animator.SetTrigger("Hit"); }
+            HitAndKo(other.gameObject);
             if (target != null) {
-                HitAndKo(target);
-                if (animator != null) { animator.SetTrigger("Hit"); }
                 if (!(target.EmptyBossLevel == Empty.emptyBossLevel.Boss || target.EmptyBossLevel == Empty.emptyBossLevel.EndBoss) && target.EmptyHp > player.Hp)
                 {
                     Pokemon.PokemonHpChange(null, target.gameObject, target.EmptyHp - player.Hp, 0, 0, PokemonType.TypeEnum.IgnoreType);

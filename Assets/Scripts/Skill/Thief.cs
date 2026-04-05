@@ -57,8 +57,8 @@ public class Thief : Skill
                 {
                     if (SkillFrom == 2) { Pokemon.PokemonHpChange(null, player.gameObject, player.maxHp / 8, 0, 0, PokemonType.TypeEnum.IgnoreType); player.KnockOutDirection = Vector2.zero;player.KnockOutPoint = 0; }
                 }
-                HitAndKo(target);
             }
+            HitAndKo(other.gameObject);
             if (animator != null) { animator.SetTrigger("Hit"); }
         }
     }

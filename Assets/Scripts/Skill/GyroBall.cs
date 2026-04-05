@@ -76,7 +76,7 @@ public class GyroBall : Skill
                 Damage = (int)(Power((float)MoveSpeed()) * Power2(player.speed) * ((SkillFrom == 2)? ( (((float)player.DefAbilityPoint) / ((float)Target.DefAbilityPoint)) * (((float)player.SpdAbilityPoint) / ((float)Target.SpdAbilityPoint)) ) : 1));
                 Debug.Log(((SkillFrom == 2) ? ((((float)player.DefAbilityPoint) / ((float)Target.DefAbilityPoint)) * (((float)player.SpdAbilityPoint) / ((float)Target.SpdAbilityPoint))) : 1));
                 Debug.Log(Damage);
-                HitAndKo(Target);
+                HitAndKo(Target.gameObject);
                 Target = null;
             }
         }
@@ -95,6 +95,10 @@ public class GyroBall : Skill
                 if (target != null)
                 {
                     Target = target;
+                }
+                else
+                {
+                    HitAndKo(other.gameObject);
                 }
             }
         }

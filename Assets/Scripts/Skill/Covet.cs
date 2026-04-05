@@ -57,8 +57,8 @@ public class Covet : Skill
                     }
                     Subtarget.ParentEmpty.DropItem = null;
                 }
-                HitAndKo(target);
             }
+            HitAndKo(collision.gameObject);
         }
     }
 

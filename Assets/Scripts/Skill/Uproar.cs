@@ -25,7 +25,8 @@ public class Uproar : Skill
         Empty target = collision.GetComponent<Empty>();
         if (target != null)
         {
-            if (SkillFrom == 2) {
+            if (SkillFrom == 2)
+            {
                 if (target.isSleepDone)
                 {
                     target.DefChange(-2, 7.5f);
@@ -33,7 +34,9 @@ public class Uproar : Skill
                 }
             }
             target.EmptySleepRemove();
-            HitAndKo(target);
+        }
+        HitAndKo(collision.gameObject);
+        if (target != null) { 
             UproarEmptyList.Add(target);
             target.IsInUproarState = true;
             //if (SkillFrom == 2) { target.EmptyConfusion(5, 1); }

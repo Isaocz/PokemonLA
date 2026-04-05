@@ -40,9 +40,8 @@ public class GigaImpact : Skill
     {
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            Instantiate(TackleBlast, target.transform.position, Quaternion.identity);
-            HitAndKo(target);
+            Instantiate(TackleBlast, other.transform.position, Quaternion.identity);
+            HitAndKo(other.gameObject);
         }
     }
 
@@ -56,10 +55,10 @@ public class GigaImpact : Skill
             transform.GetChild(2).GetComponent<ParticleSystem>().Stop();
             if (other.gameObject.tag == "Empty")
             {
-                Empty target = other.gameObject.GetComponent<Empty>();
-                Instantiate(TackleBlast, target.transform.position, Quaternion.identity);
-                HitAndKo(target);
+                HitAndKo(other.gameObject);
+                Instantiate(TackleBlast, other.transform.position, Quaternion.identity);
             }
+            
         }
     }
 

@@ -99,7 +99,7 @@ public class Empty : Pokemon
     public float SpeedAbilityPoint { get { return SpeedAbility; } set { SpeedAbility = value; } }
     float SpeedAbility;
 
-    public bool isCanHitAnimation { get { return iscanHitAnimation; } set { iscanHitAnimation = value; } }bool iscanHitAnimation;
+    public bool isCanHitAnimation { get { return iscanHitAnimation; } set { iscanHitAnimation = value; } } bool iscanHitAnimation;
 
 
     /// <summary>
@@ -356,7 +356,7 @@ public class Empty : Pokemon
     /// <param name="PlayerLevel"></param>
     /// <param name="MaxLevel"></param>
     /// <returns></returns>
-    protected int SetLevel(int PlayerLevel,int MaxLevel)
+    protected int SetLevel(int PlayerLevel, int MaxLevel)
     {
 
         //正常场景
@@ -366,7 +366,7 @@ public class Empty : Pokemon
         int OutPut;
         if (!(EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss))
         {
-            OutPut = Mathf.Clamp( PlayerLevel + (player.playerData.IsPassiveGetList[29] ? 5 : 0) + (Random.Range(-2, 2)  ) , 1  , 100 );
+            OutPut = Mathf.Clamp(PlayerLevel + (player.playerData.IsPassiveGetList[29] ? 5 : 0) + (Random.Range(-2, 2)), 1, 100);
             if (FloorNum.GlobalFloorNum != null)
             {
                 OutPut = Mathf.Clamp(OutPut + FloorNum.GlobalFloorNum.EmptyLevelAlpha[FloorNum.GlobalFloorNum.FloorNumber], 1, 100);
@@ -382,10 +382,10 @@ public class Empty : Pokemon
         }
         else
         {
-            OutPut = Mathf.Clamp(player.Level + (player.playerData.IsPassiveGetList[29] ? 5 : 0) + (Random.Range(-2, 2) ), (player.playerData.IsPassiveGetList[29] ? 10 : 5), 100);
+            OutPut = Mathf.Clamp(player.Level + (player.playerData.IsPassiveGetList[29] ? 5 : 0) + (Random.Range(-2, 2)), (player.playerData.IsPassiveGetList[29] ? 10 : 5), 100);
         }
         //读取继承数据
-        if (saveLevel != -1) { OutPut = saveLevel;  }
+        if (saveLevel != -1) { OutPut = saveLevel; }
 
         //boss测试场景
         if (FloorNum.GlobalFloorNum == null && MapCreater.StaticMap.isBossTestMap) { return 50; }
@@ -472,10 +472,20 @@ public class Empty : Pokemon
 
 
     /// <summary>
+    /// 敌人因玩家tp被销毁时触发的事件
+    /// </summary>
+    public virtual void StoreDestoryEvent()
+    {
+
+    }
+
+
+
+    /// <summary>
     /// 存储预载数据
     /// </summary>
     /// <param name="e"></param>
-    public void StoreSaveData( Empty e)
+    public void StoreSaveData(Empty e)
     {
         SaveLevel = e.Emptylevel;
         SaveHp = e.EmptyHp;
@@ -508,7 +518,7 @@ public class Empty : Pokemon
     /// <param name="Dmage">物攻伤害</param>
     /// <param name="SpDmage">特攻伤害</param>
     /// <param name="SkillType">伤害属性（数字参考Type.cs）</param>
-    public void EmptyHpChange(float  Dmage , float SpDmage , int SkillType, bool Crit = false)
+    public virtual void EmptyHpChange(float Dmage, float SpDmage, int SkillType, bool Crit = false)
     {
         if (isShadow && Dmage + SpDmage >= 0)
         {
@@ -556,14 +566,14 @@ public class Empty : Pokemon
                     //标记为受伤状态
                     if (allDmg > 0 && !ishurt) { ishurt = true; }
                     //非超能场地
-                    if (!isInPsychicTerrain) 
+                    if (!isInPsychicTerrain)
                     {
                         EmptyBeingHurt(allDmg);
                     }
                     //超能场地免疫低伤害
                     else
                     {
-                        if(Mathf.Abs((int)allDmg) > (int)(maxHP / 16))
+                        if (Mathf.Abs((int)allDmg) > (int)(maxHP / 16))
                         {
                             EmptyBeingHurt(allDmg);
                         }
@@ -576,7 +586,7 @@ public class Empty : Pokemon
                     //标记为受伤状态
                     if (allDmg > 0 && !ishurt) { ishurt = true; }
                     //非超能场地
-                    if (!isInPsychicTerrain) 
+                    if (!isInPsychicTerrain)
                     {
                         EmptyBeingHurt(allDmg);
                     }
@@ -619,7 +629,7 @@ public class Empty : Pokemon
 
             //Debug.Log(Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000) + " + " + "Dmage:" + (int)(Dmage + SpDmage));
             Debug.Log(
-                "Dmage=" + Dmage + "  " 
+                "Dmage=" + Dmage + "  "
                 + "SpDmage=" + SpDmage + "  "
                 + "typeDef=" + typeDef + "  "
                 + "Type.TYPE[SkillType][(int)EmptyType01]=" + PokemonType.TYPE[SkillType][(int)EmptyType01] + "  "
@@ -664,7 +674,7 @@ public class Empty : Pokemon
             EmptyShield = Mathf.Clamp(EmptyShield - allDmg, 0, BeforeShield);
             if (EmptyShield <= 0 && GetComponent<SubEmptyBody>() == null)
             {
-                if (EmptyBossLevel == emptyBossLevel.Boss || EmptyBossLevel == emptyBossLevel.EndBoss || EmptyBossLevel == emptyBossLevel.MiniBoss) {  }
+                if (EmptyBossLevel == emptyBossLevel.Boss || EmptyBossLevel == emptyBossLevel.EndBoss || EmptyBossLevel == emptyBossLevel.MiniBoss) { }
                 else
                 {
                     GameObject ShieldBreakEffect = PublicEffect.StaticPublicEffectList.ReturnAPublicEffect(3);
@@ -704,7 +714,7 @@ public class Empty : Pokemon
                 subEmptyBodyList[i].NowShield = subEmptyBodyList[i].EmptyShield;
             }
         }
-    } 
+    }
 
     /// <summary>
     /// 首次受伤时发生的事件
@@ -730,7 +740,7 @@ public class Empty : Pokemon
         //非boss破盾时致盲
         if (EmptyBossLevel != emptyBossLevel.Boss && EmptyBossLevel != emptyBossLevel.EndBoss)
         {
-            Blind(1.5f , 10.0f);
+            Blind(1.5f, 10.0f);
         }
     }
 
@@ -846,7 +856,7 @@ public class Empty : Pokemon
                 }
             }
         }
-        
+
     }
 
 
@@ -862,7 +872,7 @@ public class Empty : Pokemon
         if (isInfatuationDmageDone)
         {
             InfatuationDmageCDTimer += Time.deltaTime;
-            if(InfatuationDmageCDTimer >= 0.8)
+            if (InfatuationDmageCDTimer >= 0.8)
             {
                 InfatuationDmageCDTimer = 0; isInfatuationDmageDone = false;
             }
@@ -911,16 +921,16 @@ public class Empty : Pokemon
             if (!isDie)
             {
                 if (GetComponent<Collider2D>()) { GetComponent<Collider2D>().enabled = false; }
-                player.ChangeEx((int)(Exp * ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss ) ? 1.8f : 1.3f)));
+                player.ChangeEx((int)(Exp * ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss) ? 1.8f : 1.3f)));
                 player.ChangeHPW(HWP);
 
                 //给AP
                 if (FloorNum.GlobalFloorNum != null && ScoreCounter.Instance != null)
                 {
-                    ScoreCounter.Instance.EmptyBounsAP += APBounsPoint.EmptyBouns(this , FloorNum.GlobalFloorNum.FloorNumber);
+                    ScoreCounter.Instance.EmptyBounsAP += APBounsPoint.EmptyBouns(this, FloorNum.GlobalFloorNum.FloorNumber);
                 }
 
-                if (player.playerData.IsPassiveGetList[134] && (EmptyType01 == PokemonType.TypeEnum.Dark || EmptyType02 == PokemonType.TypeEnum.Dark) ) { player.ChangeHPW(HWP); }
+                if (player.playerData.IsPassiveGetList[134] && (EmptyType01 == PokemonType.TypeEnum.Dark || EmptyType02 == PokemonType.TypeEnum.Dark)) { player.ChangeHPW(HWP); }
                 Room r = transform.parent.parent.GetComponent<Room>();
                 if (r == null) { r = ParentPokemonRoom; }
                 r.isClear -= 1;
@@ -942,7 +952,7 @@ public class Empty : Pokemon
                 //死亡事件
                 DieEvent();
             }
-            
+
             animator.SetTrigger("Die");
         }
     }
@@ -959,7 +969,7 @@ public class Empty : Pokemon
         }
         Destroy(gameObject);
     }
-    
+
 
     /// <summary>
     /// 延迟销毁敌人
@@ -973,13 +983,13 @@ public class Empty : Pokemon
         {
             EmptyDrop();
         }
-        Destroy(gameObject  ,time);
+        Destroy(gameObject, time);
     }
-    
+
     public void EmptyDrop()
     {
         if (IsHaveDropItem) {
-            
+
             if ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss))
             {
                 Vector2 DropPosition = new Vector2(Mathf.Clamp(transform.position.x, parentRoom.transform.position.x - 12.0f, parentRoom.transform.position.x + 12.0f), Mathf.Clamp(transform.position.y, parentRoom.transform.position.y - 7.0f, parentRoom.transform.position.y + 7.0f));
@@ -1033,7 +1043,7 @@ public class Empty : Pokemon
     /// </summary>
     public virtual void EmptyEcplosionEvent()
     {
-        
+
     }
 
 
@@ -1364,7 +1374,7 @@ public class Empty : Pokemon
     void EmptyToxic()
     {
         EmptyToxicTimer += Time.deltaTime;
-        if(EmptyToxicTimer >= 2)
+        if (EmptyToxicTimer >= 2)
         {
             EmptyToxicTimer += Time.deltaTime;
             PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 16) * ToxicResistance, 1, (EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? 8 : 10), 0, 0, PokemonType.TypeEnum.IgnoreType);
@@ -1389,7 +1399,7 @@ public class Empty : Pokemon
         if (EmptyBurnTimer >= 2)
         {
             EmptyBurnTimer += Time.deltaTime;
-            PokemonHpChange(null , this.gameObject , Mathf.Clamp((((float)maxHP) / 16) * BurnResistance, 1, (EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? 8 : 10), 0 , 0 , PokemonType.TypeEnum.IgnoreType);
+            PokemonHpChange(null, this.gameObject, Mathf.Clamp((((float)maxHP) / 16) * BurnResistance, 1, (EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? 8 : 10), 0, 0, PokemonType.TypeEnum.IgnoreType);
             //EmptyHpChange(Mathf.Clamp((((float)maxHP) / 16) * BurnResistance, 1, isBoos ? 8 : 10), 0, 19);
             EmptyBurnTimer = 0;
         }
@@ -1474,7 +1484,7 @@ public class Empty : Pokemon
     {
         if (EmptyCurseTimer == 0)
         {
-            PokemonHpChange(null, this.gameObject, Mathf.Clamp(( ((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? ((float)EmptyHp) : ((float)maxHP)) / 4), 1, 10000), 0, 0, PokemonType.TypeEnum.IgnoreType);
+            PokemonHpChange(null, this.gameObject, Mathf.Clamp((((EmptyBossLevel == Empty.emptyBossLevel.Boss || EmptyBossLevel == Empty.emptyBossLevel.EndBoss || EmptyBossLevel == Empty.emptyBossLevel.MiniBoss) ? ((float)EmptyHp) : ((float)maxHP)) / 4), 1, 10000), 0, 0, PokemonType.TypeEnum.IgnoreType);
         }
         EmptyCurseTimer += Time.deltaTime;
         if (EmptyCurseTimer >= 5)
@@ -1498,7 +1508,7 @@ public class Empty : Pokemon
     {
         if (EmptyGrassyTerrainTimer == 0)
         {
-            PokemonHpChange(null, this.gameObject, 0, 0, (int)Mathf.Clamp(( (float)maxHP / 16), 1, 10), PokemonType.TypeEnum.IgnoreType);
+            PokemonHpChange(null, this.gameObject, 0, 0, (int)Mathf.Clamp(((float)maxHP / 16), 1, 10), PokemonType.TypeEnum.IgnoreType);
         }
         EmptyGrassyTerrainTimer += Time.deltaTime;
         if (EmptyGrassyTerrainTimer >= 5)
@@ -1524,7 +1534,7 @@ public class Empty : Pokemon
             {
                 target = SubsititueTarget;
             }
-            else if(Vector3.Distance(transform.position, player.transform.position) <= radius)
+            else if (Vector3.Distance(transform.position, player.transform.position) <= radius)
             {
                 target = player.gameObject;
             }
@@ -1555,29 +1565,29 @@ public class Empty : Pokemon
     {
         foreach (Transform child in transform)
         {
-            if(child.GetComponent<ParticleSystem>() != null)
+            if (child.GetComponent<ParticleSystem>() != null)
             {
                 child.transform.parent = transform.parent.parent;
                 ParticleSystem _ps = child.GetComponent<ParticleSystem>();
                 var main = _ps.main;
-                _ps.Stop(true,ParticleSystemStopBehavior.StopEmitting);
+                _ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                 main.loop = false;
             }
         }
     }
-    
+
 
     /// <summary>
     /// 多用于检测敌人传送后检测传送的点有没有障碍物
     /// </summary>
     /// <returns></returns>
-    public bool isThisPointEmpty( Vector3 P )
+    public bool isThisPointEmpty(Vector3 P)
     {
         RaycastHit2D SearchEmpty01 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.left + Vector2.up, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
         RaycastHit2D SearchEmpty02 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.left + Vector2.down, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
         RaycastHit2D SearchEmpty03 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.right + Vector2.up, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
         RaycastHit2D SearchEmpty04 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.right + Vector2.down, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
-        RaycastHit2D SearchEmpty05 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.left, 0.6f, LayerMask.GetMask("Enviroment" , "Water"));
+        RaycastHit2D SearchEmpty05 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.left, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
         RaycastHit2D SearchEmpty06 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.down, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
         RaycastHit2D SearchEmpty07 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.right, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
         RaycastHit2D SearchEmpty08 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.down, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
@@ -1591,7 +1601,7 @@ public class Empty : Pokemon
     /// <returns></returns>
     public bool isThisPointInRoom(Vector3 P)
     {
-        if( Mathf.Abs(P.x) >= parentRoom.EmptyFile().transform.position.x + parentRoom.RoomSize[2] &&
+        if (Mathf.Abs(P.x) >= parentRoom.EmptyFile().transform.position.x + parentRoom.RoomSize[2] &&
             Mathf.Abs(P.x) <= parentRoom.EmptyFile().transform.position.x + parentRoom.RoomSize[3] &&
             Mathf.Abs(P.y) >= parentRoom.EmptyFile().transform.position.y + parentRoom.RoomSize[1] &&
             Mathf.Abs(P.y) <= parentRoom.EmptyFile().transform.position.y + parentRoom.RoomSize[0])
@@ -1602,7 +1612,7 @@ public class Empty : Pokemon
         {
             return false;
         }
-        
+
     }
 
 
@@ -1687,6 +1697,34 @@ public class Empty : Pokemon
     }
 
     //===================================多身体构造的敌人（三地鼠 ， 大岩蛇等）使用的函数===========================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //===================================生成愤怒特效===========================================
+    
+    /// <summary>
+    /// 生成愤怒特效
+    /// </summary>
+    protected static void AngryEffect(Vector2 offset , GameObject empty , Vector3 Scale)
+    {
+        GameObject AngryEffect = PublicEffect.StaticPublicEffectList.ReturnAPublicEffect(2);
+        GameObject a = Instantiate(AngryEffect, empty.transform.position + (Vector3)offset, Quaternion.identity);
+        a.SetActive(true);
+        a.transform.localScale = Scale;
+    }
+
+    //===================================生成愤怒特效===========================================
+
 
 
 

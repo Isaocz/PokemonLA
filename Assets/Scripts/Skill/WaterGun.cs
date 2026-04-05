@@ -70,9 +70,8 @@ public class WaterGun : Skill
                 WaterGunBreak();
                 if (target != null) {
                     if (SkillFrom == 2 && Random.Range(0.0f, 1.0f) + ((float)player.LuckPoint / 10.0f) >= 0.5f) { target.SpeedChange(); target.SpeedRemove01(3.0f * target.OtherStateResistance); }
-                    HitAndKo(target);
-                    
                 }
+                HitAndKo(other.gameObject);
             }
             else if (other.tag == "Room" || other.tag == "Enviroment")
             {

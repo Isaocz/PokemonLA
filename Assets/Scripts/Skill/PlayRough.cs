@@ -28,7 +28,7 @@ public class PlayRough : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            HitAndKo(target);
+            HitAndKo(other.gameObject);
             if (SkillFrom == 2)
             {
                 if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 < 0.8f) { player.ButterflyManger.BornABF(FairyButterfly.ButterflyType.ºìÉ«ÂýËÙ¹¥»÷ÐÍ); }
@@ -47,7 +47,7 @@ public class PlayRough : Skill
                 transform.localScale = player.PlayerLocalScal;
                 transform.DetachChildren();
             }
-            if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.9f)
+            if (target != null && Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.9f)
             {
                 target.AtkChange(-1, 0.0f);
             }

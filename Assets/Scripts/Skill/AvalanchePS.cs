@@ -20,18 +20,17 @@ public class AvalanchePS : MonoBehaviour
     {
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            if (target != null)
+
+            if (ParentAva != null)
             {
-                if (ParentAva != null) {
-                    ParentAva.HitAndKo(target);
-                }
-                else if (ParentSubAva != null)
-                {
-                    ParentSubAva.HitAndKo(target);
-                }
-                
+                ParentAva.HitAndKo(other.gameObject);
             }
+            else if (ParentSubAva != null)
+            {
+                ParentSubAva.HitAndKo(other.gameObject);
+            }
+
+
         }
     }
 }

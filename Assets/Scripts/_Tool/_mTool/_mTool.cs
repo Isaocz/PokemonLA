@@ -22,7 +22,13 @@ public class _mTool : MonoBehaviour
       new Vector2(-1,0) , new Vector2(-0.8660254f ,-0.5f ) ,new Vector2(-0.5f ,-0.8660254f ) ,
       new Vector2(0,-1) , new Vector2(0.8660254f ,-0.5f ) ,new Vector2(0.5f ,-0.8660254f ) };
 
-
+    /// <summary>
+    /// 切分圆为等角度向量
+    /// </summary>
+    /// <param name="step"></param>
+    /// <param name="distence"></param>
+    /// <param name="startAngle"></param>
+    /// <returns></returns>
     static public List<Vector2> StepCircleVectorList(int step , float distence , float startAngle)
     {
         List<Vector2> Output = new List<Vector2> { };
@@ -260,22 +266,29 @@ public class _mTool : MonoBehaviour
     {
         if (Parent.transform.childCount != 0)
         {
+            // 先把所有子物体缓存下来，避免 childCount 变化
+            List<Transform> children = new List<Transform>();
             for (int i = 0; i < Parent.transform.childCount; i++)
             {
-                if (Parent.transform.GetChild(i).gameObject != null) {
-                    //移除孙对象的粒子效果
-                    if (Parent.transform.childCount !=  0) {
-                        RemoveAllPSChild(Parent.transform.GetChild(i).gameObject);
-                    }
-                    ParticleSystem ps = Parent.transform.GetChild(i).GetComponent<ParticleSystem>();
-                    if (ps != null)
-                    {
-                        var psmain = ps.main;
-                        psmain.loop = false;
-                        psmain.stopAction = ParticleSystemStopAction.Destroy;
-                        ps.transform.parent = null;
-                    }
+                children.Add(Parent.transform.GetChild(i));
+            }
+
+
+            for (int i = 0; i < children.Count; i++)
+            {
+                //移除孙对象的粒子效果
+                RemoveAllPSChild(children[i].gameObject);
+
+                ParticleSystem ps = children[i].GetComponent<ParticleSystem>();
+                if (ps != null)
+                {
+                    var psmain = ps.main;
+                    psmain.loop = false;
+                    psmain.stopAction = ParticleSystemStopAction.Destroy;
+                    // 安全 detach
+                    children[i].SetParent(null);
                 }
+
             }
         }
     }

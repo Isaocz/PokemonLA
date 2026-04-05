@@ -28,9 +28,12 @@ public class PsychicFangs : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            if (target != null) {
+            if (target != null)
+            {
                 if (SkillFrom == 2) { target.TypeDef[14]--; }
-                HitAndKo(target);
+            }
+            HitAndKo(other.gameObject);
+            if (target != null) { 
                 if (target.AtkUpLevel > 0) { target.AtkChange(-target.AtkUpLevel, 0); target.ResetAtk(); }
                 if (target.DefUpLevel > 0) { target.DefChange(-target.DefUpLevel, 0); target.ResetDef();  }
                 if (target.SpAUpLevel > 0) { target.SpAChange(-target.SpAUpLevel, 0); target.ResetSpA(); }

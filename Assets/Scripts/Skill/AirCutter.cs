@@ -79,11 +79,7 @@ public class AirCutter : Skill
         if (other.tag == "Empty" || other.tag == "Room")
         {
             isDestory = true;
-            Empty target = other.GetComponent<Empty>();
-            if (target != null)
-            {
-                HitAndKo(target);
-            }
+            HitAndKo(other.gameObject);
         }
     }
 }

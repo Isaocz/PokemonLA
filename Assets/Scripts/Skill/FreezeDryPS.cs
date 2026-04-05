@@ -36,9 +36,8 @@ public class FreezeDryPS : MonoBehaviour
 
                 }
                 FrozeList.Add(target);
-
-                ParentFreezeDry.HitAndKo(target);
             }
+            ParentFreezeDry.HitAndKo(other.gameObject);
         }
     }
 }

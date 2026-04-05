@@ -97,7 +97,12 @@ public class HaunterShadowBall : Projectile
                 else if (empty.isEmptyInfatuationDone && collision.tag == "Empty" && collision.gameObject != empty.gameObject)
                 {
                     Empty e = collision.GetComponent<Empty>();
-                    Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, 80, 0, PokemonType.TypeEnum.Ghost);
+                    if (e != null)
+                    {
+                        Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, 80, 0, PokemonType.TypeEnum.Ghost);
+                    }
+
+
                 }
             }
         }

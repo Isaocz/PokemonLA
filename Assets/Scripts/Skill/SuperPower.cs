@@ -40,14 +40,13 @@ public class SuperPower : Skill
         {
             
             Empty target = other.GetComponent<Empty>();
-            if (target != null) {
-                
-                if (animator != null) { animator.SetTrigger("Hit"); }
-                HitPS.transform.parent = target.transform.parent;
-                HitPS.transform.position = target.transform.position;
-                HitPS.SetActive(true);
-
-                if(SkillFrom == 2 && (player.playerData.AtkBounsJustOneRoom + player.playerData.AtkBounsAlways) > 0)
+            if (animator != null) { animator.SetTrigger("Hit"); }
+            HitPS.transform.parent = other.transform.parent;
+            HitPS.transform.position = other.transform.position;
+            HitPS.SetActive(true);
+            if (target != null)
+            {
+                if (SkillFrom == 2 && (player.playerData.AtkBounsJustOneRoom + player.playerData.AtkBounsAlways) > 0)
                 {
                     Debug.Log("SuperPowerPlus");
                     int N = player.playerData.AtkBounsJustOneRoom + player.playerData.AtkBounsAlways;
@@ -56,14 +55,10 @@ public class SuperPower : Skill
                     player.ReFreshAbllityPoint();
                     CTLevel += N;
                     CTDamage += N;
-                    HitAndKo(target);
-                    
                 }
-                else
-                {
-                    HitAndKo(target);
-                }
-
+            }
+                HitAndKo(other.gameObject);
+            if (target != null) { 
                 if (!isAbllityUODone)
                 {
                     isAbllityUODone = true;

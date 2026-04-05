@@ -214,8 +214,11 @@ public class GlalieIceShard : Projectile
             if (other.tag == ("Empty") && empty.isEmptyInfatuationDone)
             {
                 Empty e = other.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Ice);
-                e.Frozen(5.0f , 0.3f , 1);
+                if (e != null)
+                {
+                    Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Ice);
+                    e.Frozen(5.0f, 0.3f, 1);
+                }
             }
             
         }

@@ -26,13 +26,13 @@ public class KnockOff : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            if (target.IsHaveDropItem)
+            if (target != null && target.IsHaveDropItem)
             {
                 target.EmptyDrop();
                 Damage *= 1.5f;
             }
-            Instantiate(TackleBlast, target.transform.position, Quaternion.identity);
-            HitAndKo(target);
+            Instantiate(TackleBlast, other.transform.position, Quaternion.identity);
+            HitAndKo(other.gameObject);
             isKnockOffHitDone = true;
         }
     }

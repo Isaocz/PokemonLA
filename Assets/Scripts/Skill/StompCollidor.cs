@@ -16,15 +16,16 @@ public class StompCollidor : MonoBehaviour
         if (other.tag == "Empty")
         {
             Empty e = other.GetComponent<Empty>();
-            if (e != null)
+            if (e != null && ParentST != null)
             {
-                if (ParentST != null)
-                {
-                    ParentST.isSTHitDone = true;
-                    ParentST.HitAndKo(e);
-                    if ( Random.Range(0.0f , 1.0f) + ((float)ParentST.player.LuckPoint/30) > ((ParentST.SkillFrom == 2)?0.4f:0.7f ) ) { e.Fear(2.5f, 1); } 
-                }
+                ParentST.isSTHitDone = true;
             }
+            ParentST.HitAndKo(other.gameObject);
+            if (e != null && ParentST != null)
+            {
+                if (Random.Range(0.0f, 1.0f) + ((float)ParentST.player.LuckPoint / 30) > ((ParentST.SkillFrom == 2) ? 0.4f : 0.7f)) { e.Fear(2.5f, 1); }
+            }
+            
         }
     }
 }

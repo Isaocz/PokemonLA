@@ -20,9 +20,9 @@ public class IcyWindPS : MonoBehaviour
         {
 
             target = other.GetComponent<Empty>();
-            if (target.isEmptyFrozenDone) { ParentIW.SpDamage *= 2; }
-            ParentIW.HitAndKo(target);
-            if (!Empties.Contains(target))
+            if (target.isEmptyFrozenDone && target != null) { ParentIW.SpDamage *= 2; }
+            ParentIW.HitAndKo(other.gameObject);
+            if (target != null && !Empties.Contains(target) && target != null)
             {
                 Empties.Add(target);
                 target.SpeedChange();

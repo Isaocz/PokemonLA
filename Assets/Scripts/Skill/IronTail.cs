@@ -41,7 +41,7 @@ public class IronTail : Skill
             {
                 if (SkillFrom == 2)
                 {
-                    if (Random.Range(0.0f , 1.0f) > 0.5f)
+                    if (Random.Range(0.0f, 1.0f) > 0.5f)
                     {
                         if (player.playerData.DefBounsAlways + player.playerData.DefBounsJustOneRoom > 0)
                         {
@@ -78,17 +78,18 @@ public class IronTail : Skill
                         }
                     }
                 }
-
-                HitAndKo(target);
+            }
+            HitAndKo(other.gameObject);
+            if (target != null) { 
                 if (Random.Range(0.0f, 1.0f) + (float)player.LuckPoint / 30 >= 0.7f)
                 {
                     target.DefChange(-1, 0.0f);
                 }
-                HitEffect.transform.parent = null;
-                HitEffect.SetActive(true);
-                HitEffect.transform.localScale = new Vector3(1,1,1);
-                if (animator != null) { animator.SetTrigger("Hit"); }
             }
+            HitEffect.transform.parent = null;
+            HitEffect.SetActive(true);
+            HitEffect.transform.localScale = new Vector3(1, 1, 1);
+            if (animator != null) { animator.SetTrigger("Hit"); }
         }
     }
 }

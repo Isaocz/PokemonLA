@@ -18,13 +18,11 @@ public class DualWingbeatSon : MonoBehaviour
     {
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            if (target != null) {
-                Instantiate(TackleBlast, target.transform.position, Quaternion.identity);
-                ParentDualWingbeat.HitAndKo(target);
-                if (ParentDualWingbeat.SkillFrom == 2) {
-                    ParentDualWingbeat.AddSubDW();
-                }
+            ParentDualWingbeat.HitAndKo(other.gameObject);
+            Instantiate(TackleBlast, other.transform.position, Quaternion.identity);
+            if (ParentDualWingbeat.SkillFrom == 2)
+            {
+                ParentDualWingbeat.AddSubDW();
             }
         }
     }

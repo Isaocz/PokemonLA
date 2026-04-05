@@ -109,14 +109,16 @@ public class SmackDown : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            SmackDownTarget = target;
-            StartPosition = target.transform.GetChild(3).localPosition;
-            StartScale = target.transform.GetChild(3).localScale;
-            if (SmackDownTarget.gameObject.layer == 16)
-            {
-                SmackDownTarget.gameObject.layer = 9;
+            if (target != null) {
+                SmackDownTarget = target;
+                StartPosition = target.transform.GetChild(3).localPosition;
+                StartScale = target.transform.GetChild(3).localScale;
+                if (SmackDownTarget.gameObject.layer == 16)
+                {
+                    SmackDownTarget.gameObject.layer = 9;
+                } 
             }
-            HitAndKo(target);
+            HitAndKo(other.gameObject);
             StoneBreak();
             if (SkillFrom == 2) { Instantiate(SealthRock, transform.position, Quaternion.identity); }
         }

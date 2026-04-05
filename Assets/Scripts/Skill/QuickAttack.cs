@@ -63,8 +63,7 @@ public class QuickAttack : Skill
     {
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            HitAndKo(target);
+            HitAndKo(other.gameObject);
         }
         if (other.tag == "Enviroment" || other.tag == "Room" || other.gameObject.tag == "Water")
         {

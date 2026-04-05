@@ -447,6 +447,7 @@ public class Corbat : Empty
             TurnCount++;
             if (isXcutMove) { isXCutStop = true; }
         }
+
     }
 
     public void CallXCutStartFalse()

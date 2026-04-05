@@ -533,7 +533,10 @@ public class Klang : Empty
         if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))//被魅惑 且与其他敌人碰撞时
         {
             Empty e = other.gameObject.GetComponent<Empty>();
-            Pokemon.PokemonHpChange(this.gameObject, e.gameObject, DMAGE_HIGH_SPEED, 0, 0, PokemonType.TypeEnum.Steel);
+            if (e != null)
+            {
+                Pokemon.PokemonHpChange(this.gameObject, e.gameObject, DMAGE_HIGH_SPEED, 0, 0, PokemonType.TypeEnum.Steel);
+            }
         }
     }
 
@@ -556,7 +559,10 @@ public class Klang : Empty
         if (isEmptyInfatuationDone && other.transform.tag == ("Empty"))//被魅惑 且与其他敌人碰撞时
         {
             Empty e = other.gameObject.GetComponent<Empty>();
-            Pokemon.PokemonHpChange(this.gameObject, e.gameObject, DMAGE_CIRCLE_ATK, 0, 0, PokemonType.TypeEnum.Steel);
+            if (e != null)
+            {
+                Pokemon.PokemonHpChange(this.gameObject, e.gameObject, DMAGE_CIRCLE_ATK, 0, 0, PokemonType.TypeEnum.Steel);
+            }
         }
     }
 

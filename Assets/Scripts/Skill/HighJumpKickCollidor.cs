@@ -15,15 +15,12 @@ public class HighJumpKickCollidor : MonoBehaviour
     {
         if (other.tag == "Empty")
         {
-            Empty e = other.GetComponent<Empty>();
-            if (e != null)
+            if (ParentHJK != null)
             {
-                if (ParentHJK != null)
-                {
-                    ParentHJK.isHJKHitDone = true;
-                    ParentHJK.HitAndKo(e);
-                }
+                ParentHJK.isHJKHitDone = true;
+                ParentHJK.HitAndKo(other.gameObject);
             }
+
         }
     }
 }

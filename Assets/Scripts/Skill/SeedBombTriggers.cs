@@ -11,8 +11,7 @@ public class SeedBombTriggers : MonoBehaviour
     {
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            ParentSB.HitAndKo(target);
+            ParentSB.HitAndKo(other.gameObject);
         }
     }
 }

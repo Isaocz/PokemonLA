@@ -23,9 +23,10 @@ public class AssuranceNew : Skill
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
-            if ((float)target.EmptyHp <= (float)target.maxHP / 2.0f) { Damage *= 2; }
-            Instantiate(TackleBlast, target.transform.position, Quaternion.identity);
-            HitAndKo(target);
+            HitAndKo(other.gameObject);
+            Instantiate(TackleBlast, other.transform.position, Quaternion.identity);
+            if (target != null && (float)target.EmptyHp <= (float)target.maxHP / 2.0f) { Damage *= 2; }
+            
         }
     }
 

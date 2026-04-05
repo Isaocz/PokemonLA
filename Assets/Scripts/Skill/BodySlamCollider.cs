@@ -16,9 +16,9 @@ public class BodySlamCollider : MonoBehaviour
         if (other.tag == "Empty")
         {
             Empty e = other.GetComponent<Empty>();
+            ParentBodySlam.HitAndKo(other.gameObject);
             if (e != null)
             {
-                ParentBodySlam.HitAndKo(e);
                 if (ParentBodySlam.SkillFrom == 2)
                 {
                     e.EmptyParalysisDone(1, 10, 0.5f + ((float)ParentBodySlam.player.LuckPoint / 30));

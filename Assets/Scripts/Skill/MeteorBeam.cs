@@ -164,11 +164,7 @@ public class MeteorBeam : Skill
             //如果击中敌方宝可梦，则造成伤害
             if (EndRay.collider != null && EndRay.collider.gameObject.tag == "Empty")
             {
-                Empty e = EndRay.collider.GetComponent<Empty>();
-                if (e != null)
-                {
-                    HitAndKo(e);
-                }
+                HitAndKo(EndRay.collider.gameObject);
             }
             //如果有击中对象，将起始点和终点分别对应
             lineRenderer.SetPosition(0, transform.position);

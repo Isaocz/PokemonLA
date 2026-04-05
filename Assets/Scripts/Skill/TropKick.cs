@@ -36,7 +36,9 @@ public class TropKick : GrassSkill
             if (e != null)
             {
                 if (SkillFrom == 2 && (player.InGressCount.Count != 0 || AlreadyBornBlockList.Contains(new Vector3((int)player.transform.position.x, (int)player.transform.position.y, (int)player.transform.position.z)))) { CTLevel++; }
-                HitAndKo(e);
+            }
+            HitAndKo(other.gameObject);
+            if (e != null) {  
                 e.AtkChange(-1, 15.0f);
             }
         }

@@ -442,9 +442,10 @@ public class Pokemon : MonoBehaviour
     public void Frozen(float FrozenTime, float FrozenPoint, float FrozenPer)
     {
         FrozenTimeFloat = FrozenTime;
-        if (GetComponent<Empty>() != null && isColdDown != 0) { FrozenPer += 0.25f * isColdDown; }
+        Empty EmptyObj = GetComponent<Empty>();
+        if (EmptyObj != null && isColdDown != 0) { FrozenPer += 0.25f * isColdDown; }
         if (!IsDefState && !isFrozenDef && Random.Range(0.0f, 1.0f) <= FrozenPer) {
-            if (!isInMistyTerrain && !isFrozenDone)
+            if (!isInMistyTerrain && !isFrozenDone && EmptyObj != null && EmptyObj.EmptyType01 != PokemonType.TypeEnum.Ice && EmptyObj.EmptyType02 != PokemonType.TypeEnum.Ice)
             {
                 EmptyFrozenPointFloat += FrozenPoint * FrozenResistance;
                 if (!isFrozenStart && EmptyFrozenPointFloat < 1)
@@ -2270,6 +2271,7 @@ public class Pokemon : MonoBehaviour
 
 
         //决定被攻击者
+        //被攻击者为敌人
         if (Attacked.GetComponent<Empty>() != null)
         {
             Empty EmptyAttacked = Attacked.GetComponent<Empty>();
@@ -2367,7 +2369,8 @@ public class Pokemon : MonoBehaviour
                 EmptyAttacked.EmptyHpChange(-HpUpValue, 0, 19, Critial);
             }
         }
-        if (Attacked.GetComponent<PlayerControler>() != null)
+        //被攻击者为玩家
+        else if (Attacked.GetComponent<PlayerControler>() != null)
         {
             PlayerControler PlayerAttacked = Attacked.GetComponent<PlayerControler>();
             if (HpUpValue == 0)
@@ -2406,14 +2409,15 @@ public class Pokemon : MonoBehaviour
                         }
                     }
                 }
-                //Debug.Log("AtkPower:" + AtkPower + "   SpAPower;" + SpAPower);
+                Debug.Log("AtkPower:" + AtkPower + "   SpAPower;" + SpAPower +"+" + "   Type;" + SkillType);
             }
             else
             {
                 PlayerAttacked.ChangeHp(HpUpValue, 0, 19, Critial);
             }
         }
-        if(Attacked.GetComponent<Substitute>() != null)
+        //被攻击者为替身
+        else if (Attacked.GetComponent<Substitute>() != null)
         {
             Substitute SubstotuteAttacked = Attacked.GetComponent<Substitute>();
             if (HpUpValue == 0)
@@ -2422,6 +2426,24 @@ public class Pokemon : MonoBehaviour
                      ((AtkPower == 0) ? 0 : Mathf.Clamp( (-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250) , -10000 , -1 ) ),
                      ((SpAPower == 0) ? 0 : Mathf.Clamp( (-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250) , -10000 , -1 ) ),
                     (int)SkillType);
+            }
+        }
+        //被攻击者为可破坏环境物
+        else if (Attacked.GetComponent<BreakableEnviroment>() != null)
+        {
+            BreakableEnviroment breakableEnviroment = Attacked.GetComponent<BreakableEnviroment>();
+            if (HpUpValue == 0)
+            {
+                breakableEnviroment.BeHit(breakableEnviroment.GetHitHitPoint((int)AtkPower+ (int)SpAPower , SkillType));
+            }
+        }
+        //被攻击者为敌人幻影
+        else if (Attacked.GetComponent<NormalEmptyCloneBody>() != null)
+        {
+            NormalEmptyCloneBody normalEmptyCloneBody = Attacked.GetComponent<NormalEmptyCloneBody>();
+            if (HpUpValue == 0)
+            {
+                normalEmptyCloneBody.SetCloneShadowOver();
             }
         }
     }
@@ -2543,7 +2565,8 @@ public class Pokemon : MonoBehaviour
 
 
         //决定被攻击者
-        if (Attacked.GetComponent<Empty>() != null)
+        //被攻击者为敌人
+        if (Attacked != null && Attacked.GetComponent<Empty>() != null)
         {
             Empty EmptyAttacked = Attacked.GetComponent<Empty>();
             if (HpUpValue == 0)
@@ -2649,7 +2672,8 @@ public class Pokemon : MonoBehaviour
                 EmptyAttacked.EmptyHpChange(-HpUpValue, 0, 19, Critial);
             }
         }
-        if (Attacked.GetComponent<PlayerControler>() != null)
+        //被攻击者为玩家
+        else if (Attacked != null && Attacked.GetComponent<PlayerControler>() != null)
         {
             PlayerControler PlayerAttacked = Attacked.GetComponent<PlayerControler>();
             if (HpUpValue == 0)
@@ -2690,7 +2714,8 @@ public class Pokemon : MonoBehaviour
                 PlayerAttacked.ChangeHp(HpUpValue, 0, 19, Critial);
             }
         }
-        if (Attacked.GetComponent<Substitute>() != null)
+        //被攻击者为替身
+        else if (Attacked != null && Attacked.GetComponent<Substitute>() != null)
         {
             Substitute SubstotuteAttacked = Attacked.GetComponent<Substitute>();
             if (HpUpValue == 0)
@@ -2699,6 +2724,24 @@ public class Pokemon : MonoBehaviour
                      ((AtkPower == 0) ? 0 : Mathf.Clamp((-AtkPower * TerrainAlpha * (Attacker == null ? 1 : AttackerATK) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250), -10000, -1)),
                      ((SpAPower == 0) ? 0 : Mathf.Clamp((-SpAPower * TerrainAlpha * (Attacker == null ? 1 : AttackerSpA) * (Attacker == null ? 1 : (2 * AttackerLevel + 10))) / (250), -10000, -1)),
                     (int)SkillType);
+            }
+        }
+        //被攻击者为可破坏环境物
+        else if (Attacked != null && Attacked.GetComponent<BreakableEnviroment>() != null)
+        {
+            BreakableEnviroment breakableEnviroment = Attacked.GetComponent<BreakableEnviroment>();
+            if (HpUpValue == 0)
+            {
+                breakableEnviroment.BeHit(breakableEnviroment.GetHitHitPoint((int)AtkPower + (int)SpAPower, SkillType));
+            }
+        }
+        //被攻击者为敌人幻影
+        else if (Attacked != null && Attacked.GetComponent<NormalEmptyCloneBody>() != null && Attacker != null && Attacker.GetComponent<Empty>() == null)
+        {
+            NormalEmptyCloneBody normalEmptyCloneBody = Attacked.GetComponent<NormalEmptyCloneBody>();
+            if (HpUpValue == 0)
+            {
+                normalEmptyCloneBody.SetCloneShadowOver();
             }
         }
     }

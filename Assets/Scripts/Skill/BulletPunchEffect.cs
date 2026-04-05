@@ -24,7 +24,8 @@ public class BulletPunchEffect : MonoBehaviour
         if (other.tag == "Empty")
         {
             target = other.GetComponent<Empty>();
-            if (ParentBulletPunch != null) { ParentBulletPunch.HitAndKo(target); Instantiate(TackleBlast, other.transform.position, Quaternion.identity); }
+            
+            if (ParentBulletPunch != null) { ParentBulletPunch.HitAndKo(other.gameObject); Instantiate(TackleBlast, other.transform.position, Quaternion.identity); }
         }
         else if (other.tag == "Projectel")
         {

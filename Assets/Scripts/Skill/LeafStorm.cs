@@ -23,9 +23,9 @@ public class LeafStorm : Skill
         if (collision.CompareTag("Empty"))
         {
             Empty target = collision.GetComponent<Empty>();
+            HitAndKo(collision.gameObject);
             if (target != null)
             {
-                HitAndKo(target);
                 if (!isDown && player.playerData.SpABounsJustOneRoom > -8)
                 {
                     player.playerData.SpABounsJustOneRoom -= 2;

@@ -26,8 +26,8 @@ public class MudShotEffect : MonoBehaviour
         if (other.tag == "Empty")
         {
             target = other.GetComponent<Empty>();
-            if (ParentMudShot != null) { ParentMudShot.HitAndKo(target); }
-            if (!Empties.Contains(target))
+            if (ParentMudShot != null) { ParentMudShot.HitAndKo(other.gameObject); }
+            if (target != null && !Empties.Contains(target))
             {
                 Empties.Add(target);
                 target.SpeedChange();

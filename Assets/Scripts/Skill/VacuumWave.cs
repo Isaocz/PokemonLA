@@ -74,14 +74,9 @@ public class VacuumWave : Skill
         {
             if (other.tag == "Empty")
             {
-                Empty target = other.GetComponent<Empty>();
                 PunchBreak();
-                if (target != null)
-                {
-                    Instantiate(TackleBlast , other.transform.position , Quaternion.identity);
-                    HitAndKo(target);
-
-                }
+                Instantiate(TackleBlast, other.transform.position, Quaternion.identity);
+                HitAndKo(other.gameObject);
             }
             else if (other.tag == "Room" || other.tag == "Enviroment")
             {

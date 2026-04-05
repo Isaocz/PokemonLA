@@ -181,6 +181,11 @@ public class CloysterAuroraBeamLarge : MonoBehaviour
                         Empty e = EndRay.collider.GetComponent<Empty>();
                         Pokemon.PokemonHpChange(ParentCloyster.gameObject, EndRay.collider.gameObject, 0, 80, 0, PokemonType.TypeEnum.Ice);
                         InfatuationDmageCDTimer = 1.2f;
+                        if (e != null)
+                        {
+
+                        }
+
                     }
                 }
             }

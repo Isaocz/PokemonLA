@@ -33,9 +33,9 @@ public class Explosion : Skill
             if (player != null) { p = player.gameObject; }
             if (other.tag == "Empty")
             {
-                HitAndKo(other.GetComponent<Empty>());
+                HitAndKo(other.gameObject);
             }
-            else if (other.tag == "Player")
+            else if (other.tag == "Player" && p != null)
             {
                 Pokemon.PokemonHpChange(p, other.gameObject, Damage, 0, 0, PokemonType.TypeEnum.Normal);
                 other.GetComponent<PlayerControler>().KnockOutPoint = KOPoint/2.0f;

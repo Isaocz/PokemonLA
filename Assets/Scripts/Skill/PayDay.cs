@@ -49,14 +49,14 @@ public class PayDay : Skill
         if (collision.CompareTag("Empty"))
         {
             Empty enemy = collision.GetComponent<Empty>();
+            HitAndKo(collision.gameObject);
+            var main = PS.main;
+            main.loop = false;
+            hit = true;
+            sr.color = new Color(0, 0, 0, 0);
+            transform.GetChild(1).gameObject.SetActive(true);
             if (enemy)
             {
-                HitAndKo(enemy);
-                var main = PS.main;
-                main.loop = false;
-                hit = true;
-                sr.color = new Color(0,0,0,0);
-                transform.GetChild(1).gameObject.SetActive(true);
                 if (enemy.EmptyHp <= 0 && !isdrop)
                 {
                     isdrop = true;

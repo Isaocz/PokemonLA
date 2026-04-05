@@ -58,9 +58,9 @@ public class Confusion : Skill
             {
 
                 Empty target = other.GetComponent<Empty>();
+                HitAndKo(other.gameObject);
                 if (target != null)
                 {
-                    HitAndKo(target);
                     if (Random.Range(0f, 1f) + (float)player.LuckPoint / 30 > 0.9f)
                     {
                         target.EmptyConfusion(10.0f, 1.0f);

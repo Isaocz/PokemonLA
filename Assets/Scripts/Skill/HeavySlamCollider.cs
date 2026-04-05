@@ -15,11 +15,7 @@ public class HeavySlamCollider : MonoBehaviour
     {
         if (other.tag == "Empty")
         {
-            Empty e = other.GetComponent<Empty>();
-            if (e != null)
-            {
-                ParentHeavySlam.HitAndKo(e);
-            }
+            ParentHeavySlam.HitAndKo(other.gameObject);
         }
     }
 }

@@ -41,12 +41,7 @@ public class Earthquake : Skill
     {       
         if (other.tag == "Empty")      
         {       
-            Empty target = other.GetComponent<Empty>();
-            HitAndKo(target);  
-            if(SkillFrom == 2)
-            {
-                
-            }
+            HitAndKo(other.gameObject);
         }
     }
 

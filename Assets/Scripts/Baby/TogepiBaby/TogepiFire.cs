@@ -68,7 +68,7 @@ public class TogepiFire : Projectile
             if (other.tag == "Empty")
             {
                 Empty target = other.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(Baby.gameObject, target.gameObject, Dmage, SpDmage, 0, ProType);
+                Pokemon.PokemonHpChange(Baby.gameObject, other.gameObject, Dmage, SpDmage, 0, ProType);
             }
             gameObject.transform.localScale -= new Vector3(0.15f, 0.15f, 0.15f);
             if (gameObject.transform.localScale.x <= 0.3)

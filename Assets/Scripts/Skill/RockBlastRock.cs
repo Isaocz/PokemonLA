@@ -50,12 +50,7 @@ public class RockBlastRock : Skill
     {
         if (other.tag == "Empty")
         {
-            Empty target = other.GetComponent<Empty>();
-            if (target != null)
-            {
-                //Debug.Log(player);
-                HitAndKo(target);
-            }
+            HitAndKo(other.gameObject);
             isCanNotMove = true;
             transform.GetChild(0).gameObject.SetActive(true);
             transform.GetChild(1).gameObject.SetActive(true);

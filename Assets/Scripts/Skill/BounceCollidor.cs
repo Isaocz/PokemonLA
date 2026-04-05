@@ -16,12 +16,11 @@ public class BounceCollidor : MonoBehaviour
         if (other.tag == "Empty")
         {
             Empty e = other.GetComponent<Empty>();
+            if (ParentBo != null) { ParentBo.isBoHitDone = true; ParentBo.HitAndKo(other.gameObject); }
             if (e != null)
             {
                 if (ParentBo != null)
                 {
-                    ParentBo.isBoHitDone = true;
-                    ParentBo.HitAndKo(e);
                     e.EmptyParalysisDone(1, 10, 0.3f + ((float)ParentBo.player.LuckPoint / 30));
                 }
             }

@@ -19,9 +19,9 @@ public class HardPressCollider : MonoBehaviour
             if (e != null)
             {
                 ParentHardPress.Damage = (int)((100.0f * (((float)e.EmptyHp) / ((float)e.maxHP))) * ParentHardPress.DmageImproveAlpha());
-                ParentHardPress.HitAndKo(e);
                 Debug.Log(ParentHardPress.Damage);
             }
+            ParentHardPress.HitAndKo(other.gameObject);
         }
     }
 }
