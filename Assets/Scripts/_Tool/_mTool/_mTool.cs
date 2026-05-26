@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
@@ -23,7 +23,7 @@ public class _mTool : MonoBehaviour
       new Vector2(0,-1) , new Vector2(0.8660254f ,-0.5f ) ,new Vector2(0.5f ,-0.8660254f ) };
 
     /// <summary>
-    /// ÇĞ·ÖÔ²ÎªµÈ½Ç¶ÈÏòÁ¿
+    /// åˆ‡åˆ†åœ†ä¸ºç­‰è§’åº¦å‘é‡
     /// </summary>
     /// <param name="step"></param>
     /// <param name="distence"></param>
@@ -64,7 +64,7 @@ public class _mTool : MonoBehaviour
 
 
     /// <summary>
-    /// ¼ì²éÄ³¸ö¼¼ÄÜµÄ¼¼ÄÜ±êÇ©ÖĞÊÇ·ñº¬ÓĞÄ³¸ö±êÇ©£¨Èç¼ì²éÄ³¸ö¼¼ÄÜµÄËùÓĞ±êÇ©ÖĞÊÇ·ñº¬ÓĞ½Ó´¥ĞÔ±êÇ©£©
+    /// æ£€æŸ¥æŸä¸ªæŠ€èƒ½çš„æŠ€èƒ½æ ‡ç­¾ä¸­æ˜¯å¦å«æœ‰æŸä¸ªæ ‡ç­¾ï¼ˆå¦‚æ£€æŸ¥æŸä¸ªæŠ€èƒ½çš„æ‰€æœ‰æ ‡ç­¾ä¸­æ˜¯å¦å«æœ‰æ¥è§¦æ€§æ ‡ç­¾ï¼‰
     /// </summary>
     public static bool ContainsSkillTag( Skill.SkillTagEnum[] TagList , Skill.SkillTagEnum TargetTag)
     {
@@ -77,7 +77,7 @@ public class _mTool : MonoBehaviour
     }
 
     /// <summary>
-    /// Êä³öÄ¿±êÏòÁ¿µÄÕı¹æ·½Ïò
+    /// è¾“å‡ºç›®æ ‡å‘é‡çš„æ­£è§„æ–¹å‘
     /// </summary>
     /// <returns></returns>
     public static Vector2 MainVector2( Vector2 Input )
@@ -105,6 +105,54 @@ public class _mTool : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// æ±‚å°„çº¿ P + tD ä¸åœ†å¿ƒ Cã€åŠå¾„ R çš„å¦ä¸€ä¸ªäº¤ç‚¹ï¼ˆæ’é™¤ t=0 çš„å½“å‰ç‚¹ï¼‰
+    /// </summary>
+    /// <param name="P">èµ·å§‹ç‚¹</param>
+    /// <param name="D">æ–¹å‘</param>
+    /// <param name="C">åœ†å¿ƒ</param>
+    /// <param name="R">åŠå¾„</param>
+    /// <returns></returns>
+    public static Vector2 GetOppositeCircleIntersection(Vector2 P, Vector2 D, Vector2 C, float R)
+    {
+        // å°„çº¿å‚æ•°æ–¹ç¨‹ï¼šP + tD
+        // åœ†æ–¹ç¨‹ï¼š(X - C)^2 = R^2
+        // ä»£å…¥å¾—åˆ°ä¸€å…ƒäºŒæ¬¡æ–¹ç¨‹ï¼ša tÂ² + b t + c = 0
+
+        Vector2 f = P - C;
+
+        float a = Vector2.Dot(D, D);          // =1ï¼Œå› ä¸º D æ˜¯ normalizedï¼Œä½†å†™å®Œæ•´æ›´ç¨³
+        float b = 2 * Vector2.Dot(D, f);
+        float c = Vector2.Dot(f, f) - R * R;
+
+        float discriminant = b * b - 4 * a * c;
+
+        // ç†è®ºä¸Šå¿…å®šæœ‰ä¸¤ä¸ªäº¤ç‚¹ï¼ˆä½ ä¿è¯ P åœ¨åœ†ä¸Šï¼‰
+        if (discriminant < 0)
+        {
+            // ä¸åº”è¯¥å‘ç”Ÿï¼Œä½†ä¸ºäº†å®‰å…¨è¿”å›å½“å‰ç‚¹
+            return P;
+        }
+
+        float sqrtD = Mathf.Sqrt(discriminant);
+
+        // ä¸¤ä¸ªè§£
+        float t1 = (-b - sqrtD) / (2 * a);
+        float t2 = (-b + sqrtD) / (2 * a);
+
+        // t=0 æ˜¯å½“å‰ç‚¹ï¼Œå¦ä¸€ä¸ªå°±æ˜¯ç›®æ ‡ç‚¹
+        float t = (Mathf.Abs(t1) < 0.0001f) ? t2 : t1;
+
+        return P + D * t;
+    }
+
+
+
+
+
+
+
+
     public static Vector2 TiltMainVector2(Vector2 Input)
     {
         return new Vector2(((Input.x < 0) ? -1 : 1), ((Input.y < 0) ? -1 : 1));
@@ -112,32 +160,32 @@ public class _mTool : MonoBehaviour
 
     public static string[] Tips = new string[]
     {
-        "Ä³Ò»ÊôĞÔµÄµÖ¿¹Á¦Ã¿ÌáÉıÒ»¼¶£¬ÊÜµ½¸ÃÊôĞÔµÄÉËº¦¾Í»á¼õÉÙÎªÔ­±¾µÄ80%",
-        "Ä³Ò»ÊôĞÔµÄµÖ¿¹Á¦Ã¿ÏÂ½µÒ»¼¶£¬ÊÜµ½¸ÃÊôĞÔµÄÉËº¦¾Í»áÔö¼ÓÎªÔ­±¾µÄ120%",
-        "Ã¿¸öÇøÓò¶¼»áÓĞ¾«ÁéÖĞĞÄ£¬ÓÑºÃÉÌµê£¬¼¼ÄÜÉÌµê",
-        "²»ÒªÍüÁËÔÚ¾«ÁéÖĞĞÄ²é¿´ÓÊ¼ş",
-        "ÉÕÉË»áÈÃ¹¥»÷ÏÂ½µ£¬ÖĞ¶¾»áÈÃÌØ¹¥ÏÂ½µ",
-        "Áé¸Ğ±¬·¢Ê±»áÏëµ½ĞÂµÄ¼¼ÄÜ",
-        "×¢ÒâÔÜÇ®£¬²»ÄÜ×öĞ¡Íµ£¡",
-        "Ò°ÉúµÄ²İ´ÔÖĞ¿ÉÄÜÓĞÒÅÊ§µÄµÀ¾ß£¬×¢Òâ¼ì²é",
-        "´ò°ÜÍ·Ä¿±¦¿ÉÃÎ»ñµÃµÄ½±Àø¿ÉÒÔÓÃÓÚÔÚ¼¼ÄÜÉÌµêÑ§Ï°¼¼ÄÜ",
-        "Ò»´ÎĞÔµÀ¾ßÔÚÊ¹ÓÃºó»áÏûÊ§",
-        "Ğ¯´ø±»¶¯µÀ¾ßºó¾Í»á×Ô¶¯´¥·¢Õâ¸ö±»¶¯µÀ¾ßµÄĞ§¹û",
-        "ÄÜÁ¦±ä»¯ºÍÊôĞÔµÖ¿¹Á¦¿ÉÒÔÔÚ²Ëµ¥½çÃæ²é¿´",
-        "±»¶¯µÀ¾ßµÄĞ§¹û¿ÉÒÔÔÚ±³°ü½çÃæ²é¿´",
-        "Àë¿ªµ±Ç°ÇøÓòÇ°ÍùÏÂÒ»ÇøÓòÊ±×¢Òâ¿´Â·ÅÆ£¡ÒÔ±ã×¼±¸ÏÂÒ»ÇøÓòĞèÒªµÄµÀ¾ß",
-        "Í¬ÊôĞÔÕĞÊ½¼ä´æÔÚÒ»Ğ©Á¬Ğ¯Ğ§¹û",
-        "ÓĞĞ©ÊÊºÏÖ²ÎïÉú³¤µÄÇøÓò»á³öÏÖ¹ûÊ÷£¬×¢Òâ¼ì²é",
-        "×¢ÒâµØÁâºÍ¶¾Áâ",
-        "´óÌåĞÍµÄ±¦¿ÉÃÎ¿ÉÒÔÖ±½ÓÌ¤±âÒ»Ğ©ÕÏ°­Îï£¬µ«ÊÇÒ²»á±äµÃ²»¿É±ÜÃâµØÎŞ·¨Í¨¹ıÒ»Ğ©ÏİÚå",
-        "Ğ¡ÌåĞÍµÄ±¦¿ÉÃÎ¿ÉÒÔÇáËÉµÄÍ¨¹ı¸´ÔÓµÄÃÔ¹¬£¬µ«ÊÇ¶Ô¾Ş´óµÄÕÏ°­ÎïºÁÎŞ°ì·¨",
-        "¿ÉÒÔÔÚ¾«ÁéÖĞĞÄµÄÔÓÖ¾¼Ü´¦²é¿´¸ü¶àÌáÊ¾",
-        "¿ÉÒÔÊ¹ÓÃÁã»¨Ç®Ë¢ĞÂÓÑºÃÉÌµêµÄÉÌÆ·£¬µ«ÊÇ»áÔ½À´Ô½¹ó£¬ÉÌÆ·Ò²»áÔ½À´Ô½ÉÙ",
-        "ÒòÎªÌ«¾§ÄÜÁ¿Ï¡Êè£¬±¾µØÇøµÄÌ«¾§»¯ÓëÆäËûµØÇø²»Ì«ÏàÍ¬¡£±¾µØÇøÌ«¾§»¯µÄĞ§¹û¸üÏñÊÇ»ñµÃÁËÒ»¸ö¶îÍâµÄÊôĞÔ¡£",
-        "Í·Ä¿±¦¿ÉÃÎÓĞÇ¿´óµÄÉúÃüÁ¦£¬ÔÚÊÜµ½¹ı¸ßÉËº¦Ê±¿ÉÒÔµÖÓùÒ»²¿·Ö",
-        "¿ÉÒÔÔÚSkill½çÃæÍ¨¹ıÍÏ¶¯¼¼ÄÜ¸Ä±ä¼¼ÄÜµÄË³Ğò£¬´îÅä³ö¸üÒ×ÓÚ²Ù×÷µÄ×éºÏ",
-        "²»ÒªÔÚÃÎ»ÃÅÔ±ßÊÍ·Å¼¼ÄÜ£¬·ñÔòºó¹û×Ô¸º£¡",
-        "Èç¹û±»ÕÏ°­ÎïÀ§×¡£¬¿ÉÒÔÔÚÔ­µØµÈ´ı£¬Ê¹ÓÃ½ô¼±ÌÓÍÑ°´Å¥ÍÑÀëÀ§¾³"
+        "æŸä¸€å±æ€§çš„æŠµæŠ—åŠ›æ¯æå‡ä¸€çº§ï¼Œå—åˆ°è¯¥å±æ€§çš„ä¼¤å®³å°±ä¼šå‡å°‘ä¸ºåŸæœ¬çš„80%",
+        "æŸä¸€å±æ€§çš„æŠµæŠ—åŠ›æ¯ä¸‹é™ä¸€çº§ï¼Œå—åˆ°è¯¥å±æ€§çš„ä¼¤å®³å°±ä¼šå¢åŠ ä¸ºåŸæœ¬çš„120%",
+        "æ¯ä¸ªåŒºåŸŸéƒ½ä¼šæœ‰ç²¾çµä¸­å¿ƒï¼Œå‹å¥½å•†åº—ï¼ŒæŠ€èƒ½å•†åº—",
+        "ä¸è¦å¿˜äº†åœ¨ç²¾çµä¸­å¿ƒæŸ¥çœ‹é‚®ä»¶",
+        "çƒ§ä¼¤ä¼šè®©æ”»å‡»ä¸‹é™ï¼Œä¸­æ¯’ä¼šè®©ç‰¹æ”»ä¸‹é™",
+        "çµæ„Ÿçˆ†å‘æ—¶ä¼šæƒ³åˆ°æ–°çš„æŠ€èƒ½",
+        "æ³¨æ„æ”’é’±ï¼Œä¸èƒ½åšå°å·ï¼",
+        "é‡ç”Ÿçš„è‰ä¸›ä¸­å¯èƒ½æœ‰é—å¤±çš„é“å…·ï¼Œæ³¨æ„æ£€æŸ¥",
+        "æ‰“è´¥å¤´ç›®å®å¯æ¢¦è·å¾—çš„å¥–åŠ±å¯ä»¥ç”¨äºåœ¨æŠ€èƒ½å•†åº—å­¦ä¹ æŠ€èƒ½",
+        "ä¸€æ¬¡æ€§é“å…·åœ¨ä½¿ç”¨åä¼šæ¶ˆå¤±",
+        "æºå¸¦è¢«åŠ¨é“å…·åå°±ä¼šè‡ªåŠ¨è§¦å‘è¿™ä¸ªè¢«åŠ¨é“å…·çš„æ•ˆæœ",
+        "èƒ½åŠ›å˜åŒ–å’Œå±æ€§æŠµæŠ—åŠ›å¯ä»¥åœ¨èœå•ç•Œé¢æŸ¥çœ‹",
+        "è¢«åŠ¨é“å…·çš„æ•ˆæœå¯ä»¥åœ¨èƒŒåŒ…ç•Œé¢æŸ¥çœ‹",
+        "ç¦»å¼€å½“å‰åŒºåŸŸå‰å¾€ä¸‹ä¸€åŒºåŸŸæ—¶æ³¨æ„çœ‹è·¯ç‰Œï¼ä»¥ä¾¿å‡†å¤‡ä¸‹ä¸€åŒºåŸŸéœ€è¦çš„é“å…·",
+        "åŒå±æ€§æ‹›å¼é—´å­˜åœ¨ä¸€äº›è¿æºæ•ˆæœ",
+        "æœ‰äº›é€‚åˆæ¤ç‰©ç”Ÿé•¿çš„åŒºåŸŸä¼šå‡ºç°æœæ ‘ï¼Œæ³¨æ„æ£€æŸ¥",
+        "æ³¨æ„åœ°è±å’Œæ¯’è±",
+        "å¤§ä½“å‹çš„å®å¯æ¢¦å¯ä»¥ç›´æ¥è¸æ‰ä¸€äº›éšœç¢ç‰©ï¼Œä½†æ˜¯ä¹Ÿä¼šå˜å¾—ä¸å¯é¿å…åœ°æ— æ³•é€šè¿‡ä¸€äº›é™·é˜±",
+        "å°ä½“å‹çš„å®å¯æ¢¦å¯ä»¥è½»æ¾çš„é€šè¿‡å¤æ‚çš„è¿·å®«ï¼Œä½†æ˜¯å¯¹å·¨å¤§çš„éšœç¢ç‰©æ¯«æ— åŠæ³•",
+        "å¯ä»¥åœ¨ç²¾çµä¸­å¿ƒçš„æ‚å¿—æ¶å¤„æŸ¥çœ‹æ›´å¤šæç¤º",
+        "å¯ä»¥ä½¿ç”¨é›¶èŠ±é’±åˆ·æ–°å‹å¥½å•†åº—çš„å•†å“ï¼Œä½†æ˜¯ä¼šè¶Šæ¥è¶Šè´µï¼Œå•†å“ä¹Ÿä¼šè¶Šæ¥è¶Šå°‘",
+        "å› ä¸ºå¤ªæ™¶èƒ½é‡ç¨€ç–ï¼Œæœ¬åœ°åŒºçš„å¤ªæ™¶åŒ–ä¸å…¶ä»–åœ°åŒºä¸å¤ªç›¸åŒã€‚æœ¬åœ°åŒºå¤ªæ™¶åŒ–çš„æ•ˆæœæ›´åƒæ˜¯è·å¾—äº†ä¸€ä¸ªé¢å¤–çš„å±æ€§ã€‚",
+        "å¤´ç›®å®å¯æ¢¦æœ‰å¼ºå¤§çš„ç”Ÿå‘½åŠ›ï¼Œåœ¨å—åˆ°è¿‡é«˜ä¼¤å®³æ—¶å¯ä»¥æŠµå¾¡ä¸€éƒ¨åˆ†",
+        "å¯ä»¥åœ¨Skillç•Œé¢é€šè¿‡æ‹–åŠ¨æŠ€èƒ½æ”¹å˜æŠ€èƒ½çš„é¡ºåºï¼Œæ­é…å‡ºæ›´æ˜“äºæ“ä½œçš„ç»„åˆ",
+        "ä¸è¦åœ¨æ¢¦å¹»æ—è¾¹é‡Šæ”¾æŠ€èƒ½ï¼Œå¦åˆ™åæœè‡ªè´Ÿï¼",
+        "å¦‚æœè¢«éšœç¢ç‰©å›°ä½ï¼Œå¯ä»¥åœ¨åŸåœ°ç­‰å¾…ï¼Œä½¿ç”¨ç´§æ€¥é€ƒè„±æŒ‰é’®è„±ç¦»å›°å¢ƒ"
     };
 
 
@@ -149,15 +197,15 @@ public class _mTool : MonoBehaviour
     [DllImport("user32.dll", EntryPoint = "keybd_event")]
 
     public static extern void Keybd_event(
-        byte bvk,//ĞéÄâ¼üÖµ ESC¼ü¶ÔÓ¦µÄÊÇ27
+        byte bvk,//è™šæ‹Ÿé”®å€¼ ESCé”®å¯¹åº”çš„æ˜¯27
         byte bScan,//0
-        int dwFlags,//0Îª°´ÏÂ£¬1°´×¡£¬2ÊÍ·Å
+        int dwFlags,//0ä¸ºæŒ‰ä¸‹ï¼Œ1æŒ‰ä½ï¼Œ2é‡Šæ”¾
         int dwExtraInfo//
     );
 
 
     /// <summary>
-    /// »ñµÃÄ³Ò»TransformµÄ×îºóÒ»¸öÎ´±»½ûÓÃµÄËï¶ÔÏó
+    /// è·å¾—æŸä¸€Transformçš„æœ€åä¸€ä¸ªæœªè¢«ç¦ç”¨çš„å­™å¯¹è±¡
     /// </summary>
     /// <param name="Parent"></param>
     /// <returns></returns>
@@ -175,7 +223,7 @@ public class _mTool : MonoBehaviour
     }
 
     /// <summary>
-    /// »ñµÃÄ³Ò»TransformµÄ×îºóÒ»¸öÎ´±»½ûÓÃµÄ×Ó¶ÔÏó
+    /// è·å¾—æŸä¸€Transformçš„æœ€åä¸€ä¸ªæœªè¢«ç¦ç”¨çš„å­å¯¹è±¡
     /// </summary>
     /// <param name="Parent"></param>
     /// <returns></returns>
@@ -200,21 +248,21 @@ public class _mTool : MonoBehaviour
     }
 
     /// <summary>
-    /// »ñÈ¡Ä³Ò»¸öTransformÔÚÆä·òTransformÖĞµÄĞòÁĞºÅ£¨²»°üº¬±»½ûÓÃ¶ÔÏó£© ÎŞ¸¸¶ÔÏóÊ±·µ»Ø-1
+    /// è·å–æŸä¸€ä¸ªTransformåœ¨å…¶å¤«Transformä¸­çš„åºåˆ—å·ï¼ˆä¸åŒ…å«è¢«ç¦ç”¨å¯¹è±¡ï¼‰ æ— çˆ¶å¯¹è±¡æ—¶è¿”å›-1
     /// </summary>
     /// <param name="Child"></param>
     /// <returns></returns>
     public static int GetChildIndex(Transform Child)
     {
         int output = -1;
-        //ÎŞ¸¸¶ÔÏóÊ±
+        //æ— çˆ¶å¯¹è±¡æ—¶
         if (Child.transform.parent == null || !Child.gameObject.activeInHierarchy) { return output; }
-        //ÓĞ¸¸¶ÔÏóÊ±
+        //æœ‰çˆ¶å¯¹è±¡æ—¶
         else
         {
-            //»ñÈ¡¸¸¶ÔÏó
+            //è·å–çˆ¶å¯¹è±¡
             Transform Parent = Child.transform.parent;
-            //¼ì²éËùÓĞ·Ç½ûÓÃ×Ó¶ÔÏó
+            //æ£€æŸ¥æ‰€æœ‰éç¦ç”¨å­å¯¹è±¡
             for (int i = 0; i < Parent.childCount; i++)
             {
                 if (Parent.GetChild(i).gameObject.activeInHierarchy)
@@ -230,7 +278,7 @@ public class _mTool : MonoBehaviour
 
 
     /// <summary>
-    /// ÄÜÁ¦ËæÌáÉı¶ÎË¥¼õµÄº¯Êı£¬¿ÉÓÃÓÚÆäËûË¥¼õ , isClearBodyÎªÊÇ·ñÓĞÌØĞÔºã¾»Ö®Çû£¬ÓĞµÄ»°¼õËã·ù¶È½µµÍ
+    /// èƒ½åŠ›éšæå‡æ®µè¡°å‡çš„å‡½æ•°ï¼Œå¯ç”¨äºå…¶ä»–è¡°å‡ , isClearBodyä¸ºæ˜¯å¦æœ‰ç‰¹æ€§æ’å‡€ä¹‹èº¯ï¼Œæœ‰çš„è¯å‡ç®—å¹…åº¦é™ä½
     /// </summary>
     /// <param name="Level"></param>
     /// <returns></returns>
@@ -245,7 +293,7 @@ public class _mTool : MonoBehaviour
     }
 
     /// <summary>
-    /// É¾³ıÄ³Ò»¶ÔÏóËùÓĞµÄ×Ó¶ÔÏó
+    /// åˆ é™¤æŸä¸€å¯¹è±¡æ‰€æœ‰çš„å­å¯¹è±¡
     /// </summary>
     public static void RemoveAllChild(GameObject Parent)
     {
@@ -260,13 +308,13 @@ public class _mTool : MonoBehaviour
 
 
     /// <summary>
-    /// ½â³ıÄ³Ò»¶ÔÏóÆìÏÂËùÓĞµÄÁ£×ÓÌØĞ§£¬½«ÕâĞ©Á£×ÓÌØĞ§·ÅÖÃÓÚ×îÍâ³¡¾°£¬²¢ÇÒÊ¹ËûÃÇ²»ÔÙÑ­»·²¢²¥·ÅÍê±ÏºóÉ¾³ı
+    /// è§£é™¤æŸä¸€å¯¹è±¡æ——ä¸‹æ‰€æœ‰çš„ç²’å­ç‰¹æ•ˆï¼Œå°†è¿™äº›ç²’å­ç‰¹æ•ˆæ”¾ç½®äºæœ€å¤–åœºæ™¯ï¼Œå¹¶ä¸”ä½¿ä»–ä»¬ä¸å†å¾ªç¯å¹¶æ’­æ”¾å®Œæ¯•ååˆ é™¤
     /// </summary>
     public static void RemoveAllPSChild(GameObject Parent)
     {
         if (Parent.transform.childCount != 0)
         {
-            // ÏÈ°ÑËùÓĞ×ÓÎïÌå»º´æÏÂÀ´£¬±ÜÃâ childCount ±ä»¯
+            // å…ˆæŠŠæ‰€æœ‰å­ç‰©ä½“ç¼“å­˜ä¸‹æ¥ï¼Œé¿å… childCount å˜åŒ–
             List<Transform> children = new List<Transform>();
             for (int i = 0; i < Parent.transform.childCount; i++)
             {
@@ -276,7 +324,7 @@ public class _mTool : MonoBehaviour
 
             for (int i = 0; i < children.Count; i++)
             {
-                //ÒÆ³ıËï¶ÔÏóµÄÁ£×ÓĞ§¹û
+                //ç§»é™¤å­™å¯¹è±¡çš„ç²’å­æ•ˆæœ
                 RemoveAllPSChild(children[i].gameObject);
 
                 ParticleSystem ps = children[i].GetComponent<ParticleSystem>();
@@ -285,7 +333,7 @@ public class _mTool : MonoBehaviour
                     var psmain = ps.main;
                     psmain.loop = false;
                     psmain.stopAction = ParticleSystemStopAction.Destroy;
-                    // °²È« detach
+                    // å®‰å…¨ detach
                     children[i].SetParent(null);
                 }
 
@@ -296,7 +344,7 @@ public class _mTool : MonoBehaviour
 
 
     /// <summary>
-    /// »ñÈ¡Ä³¸öTransformÆìÏÂµÄµÄËùÓĞT
+    /// è·å–æŸä¸ªTransformæ——ä¸‹çš„çš„æ‰€æœ‰T
     /// </summary>
     /// <param name="Father"></param>
     /// <returns></returns>
@@ -317,7 +365,7 @@ public class _mTool : MonoBehaviour
 
 
     /// <summary>
-    /// »ñÈ¡Ä³¸öTransformµÚÒ»²ã×Ó¶ÔÏóÖĞµÄT
+    /// è·å–æŸä¸ªTransformç¬¬ä¸€å±‚å­å¯¹è±¡ä¸­çš„T
     /// </summary>
     /// <param name="Father"></param>
     /// <returns></returns>
@@ -337,7 +385,7 @@ public class _mTool : MonoBehaviour
 
 
     /// <summary>
-    /// ¸ø×Ö·û´®µÄÃ¿¸ö×Ö·û¼ä²åÈëÒ»¸ö¿Õ¸ñ
+    /// ç»™å­—ç¬¦ä¸²çš„æ¯ä¸ªå­—ç¬¦é—´æ’å…¥ä¸€ä¸ªç©ºæ ¼
     /// </summary>
     public static string AddSpaceInString( string s )
     {
@@ -348,7 +396,7 @@ public class _mTool : MonoBehaviour
             spacedString.Append(c).Append(' ');
         }
 
-        // ÒÆ³ı×îºóÒ»¸ö¶àÓàµÄ¿Õ¸ñ
+        // ç§»é™¤æœ€åä¸€ä¸ªå¤šä½™çš„ç©ºæ ¼
         if (spacedString.Length > 0)
         {
             spacedString.Length--;
@@ -359,7 +407,7 @@ public class _mTool : MonoBehaviour
     }
 
     /// <summary>
-    /// Êä³öÒ»¸ölist
+    /// è¾“å‡ºä¸€ä¸ªlist
     /// </summary>
     /// <param name="logList"></param>
     public static void DebugLogList<T>(List<T> logList)
@@ -369,7 +417,7 @@ public class _mTool : MonoBehaviour
 
 
     /// <summary>
-    /// ÅÅ¿ÕÄ³¸öList
+    /// æ’ç©ºæŸä¸ªList
     /// </summary>
     public static void RemoveNullInList<T>(List<T> list) where T : UnityEngine.Object
     {
@@ -378,7 +426,7 @@ public class _mTool : MonoBehaviour
 
 
     /// <summary>
-    /// ÂÒĞòÏ´ÅÆList
+    /// ä¹±åºæ´—ç‰ŒList
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="list"></param>
@@ -400,7 +448,7 @@ public class _mTool : MonoBehaviour
 
 
     /// <summary>
-    /// ºöÂÔÄ³¸öÌØ¶¨Åö×²ÏäµÄÉäÏß¼ì²â
+    /// å¿½ç•¥æŸä¸ªç‰¹å®šç¢°æ’ç®±çš„å°„çº¿æ£€æµ‹
     /// </summary>
     /// <param name="origin"></param>
     /// <param name="dir"></param>
@@ -418,7 +466,7 @@ public class _mTool : MonoBehaviour
         foreach (var h in hits)
         {
             if (ignore.Contains(h.collider))
-                continue; // ºöÂÔÖ¸¶¨ collider
+                continue; // å¿½ç•¥æŒ‡å®š collider
 
             if (h.distance < minDist)
             {

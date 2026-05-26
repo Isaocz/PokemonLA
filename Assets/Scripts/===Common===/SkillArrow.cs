@@ -4,6 +4,22 @@ using UnityEngine;
 
 public class SkillArrow : MonoBehaviour
 {
+
+    /// <summary>
+    /// 冲刺指示箭头的颜色 冰系
+    /// </summary>
+    static public Color COLOR_SKILLARROW_ICE = new Color(0.4588235f, 0.7176471f, 1.0f, 1.0f);
+
+    /// <summary>
+    /// 冲刺指示箭头的颜色 恶系
+    /// </summary>
+    static public Color COLOR_SKILLARROW_DARK = new Color(0.6509804f, 0.1294118f, 0.0627451f, 1.0f);
+
+    /// <summary>
+    /// 冲刺指示箭头的颜色 毒系
+    /// </summary>
+    static public Color COLOR_SKILLARROW_POSION = new Color(0.8f, 0.05490196f, 0.8f, 1.0f);
+
     /// <summary>
     /// 箭头角度
     /// </summary>
@@ -138,7 +154,11 @@ public class SkillArrow : MonoBehaviour
                 ArrowHead.color = new Color(ArrowHead.color.r, ArrowHead.color.g, ArrowHead.color.b, (FadeOutTime - ArrowTimer) / FadeOutTime);
                 ArrowBody.color = new Color(ArrowBody.color.r, ArrowBody.color.g, ArrowBody.color.b, (FadeOutTime - ArrowTimer) / FadeOutTime);
                 ArrowLineHead.color = new Color(ArrowLineHead.color.r, ArrowLineHead.color.g, ArrowLineHead.color.b, (FadeOutTime - ArrowTimer) / FadeOutTime);
-                ArrowLineBody.color = new Color(ArrowLineBody.color.r, ArrowLineBody.color.g, ArrowLineBody.color.b, (FadeOutTime - ArrowTimer) / FadeOutTime); 
+                ArrowLineBody.color = new Color(ArrowLineBody.color.r, ArrowLineBody.color.g, ArrowLineBody.color.b, (FadeOutTime - ArrowTimer) / FadeOutTime);
+                if (ArrowHead.color.a <= 0.03f)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
 
@@ -162,11 +182,12 @@ public class SkillArrow : MonoBehaviour
         hc.r = ArrowColor.r;
         hc.g = ArrowColor.g;
         hc.b = ArrowColor.b;
+        ArrowHead.color = hc;
         var bc = ArrowBody.color;
         bc.r = ArrowColor.r;
         bc.g = ArrowColor.g;
         bc.b = ArrowColor.b;
-
+        ArrowBody.color = bc;
 
         //设置宽度
         ArrowHead.transform.parent.localScale = new Vector3(ArrowScale, ArrowScale,1.0f);

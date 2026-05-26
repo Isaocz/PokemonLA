@@ -37,6 +37,19 @@ public class SkillRangeCircle : MonoBehaviour
 
     }
 
+
+    /// <summary>
+    /// Ö¸Ê¾È¦½áÊø
+    /// </summary>
+    public void OverCircle()
+    {
+        if (!(Timer > (StartDelay + Duration - FadeOutTime))) {
+            Timer = StartDelay + Duration - FadeOutTime;
+        }
+    }
+
+
+
     public void DestroyCircle()
     {
         Timer = (StartDelay + Duration - FadeOutTime);

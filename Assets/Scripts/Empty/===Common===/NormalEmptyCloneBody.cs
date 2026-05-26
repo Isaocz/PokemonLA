@@ -85,7 +85,7 @@ public class NormalEmptyCloneBody : MonoBehaviour
     /// 初始化分身
     /// </summary>
     /// <param name="ParentE"></param>
-    public void SetCloneBody(Empty ParentE)
+    public virtual void SetCloneBody(Empty ParentE)
     {
         parentEmpty = ParentE;
         Shadow.transform.localPosition = ParentE.transform.GetChild(0).localPosition;

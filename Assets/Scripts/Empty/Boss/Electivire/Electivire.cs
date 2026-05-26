@@ -1501,7 +1501,8 @@ public class Electivire : Empty
         if (AngryBigRoarObj != null ) { Destroy(AngryBigRoarObj); }
         if( SuperAngrySmallRoarObj != null ) { Destroy(SuperAngrySmallRoarObj); }
         if( AngryMegaRoarObj != null ) { Destroy(AngryMegaRoarObj); }
-        
+        //结束冲刺箭头
+        OverChargePunchArrow();
         //eqObj
     }
 

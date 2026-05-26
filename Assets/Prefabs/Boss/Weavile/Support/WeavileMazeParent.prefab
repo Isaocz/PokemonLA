@@ -1,0 +1,186 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8396434173422232234
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8207351836756590039}
+  - component: {fileID: 2109412658995715987}
+  - component: {fileID: 2680412096349233493}
+  m_Layer: 0
+  m_Name: WeavileMazeParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8207351836756590039
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8396434173422232234}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4871811601645368162}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2109412658995715987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8396434173422232234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207fa9b7565d8414281ca5a9938beeb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MazeCreator: {fileID: 2680412096349233493}
+  ParentWeavile: {fileID: 0}
+  animator: {fileID: 4173201751857174274}
+--- !u!114 &2680412096349233493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8396434173422232234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6a3d4acd3d90e94a875ff2ef325fc57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WallHorizontalPrefab: {fileID: 8380276968265005317, guid: 94c4273df4481e64f994e4875f865012, type: 3}
+  WallLeftPrefab: {fileID: 3796029691730190593, guid: 2790156ac89d69441aba38a5ac82c9b2, type: 3}
+  WallRightPrefab: {fileID: 4595701585801688837, guid: bc2d2e47a6e018a42ae410c59ebc6de3, type: 3}
+  CellSize: 2
+--- !u!1001 &2388924410669142127
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8207351836756590039}
+    m_Modifications:
+    - target: {fileID: 2331688711371251648, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_Color.b
+      value: 0.6412583
+      objectReference: {fileID: 0}
+    - target: {fileID: 2331688711371251648, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_Color.g
+      value: 0.28261834
+      objectReference: {fileID: 0}
+    - target: {fileID: 2331688711371251648, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8207547
+      objectReference: {fileID: 0}
+    - target: {fileID: 2937385463974660993, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: UVModule.sprites.Array.data[0].sprite
+      value: 
+      objectReference: {fileID: 1420946554, guid: 1b68cfd51bc9dcc4ea61d374cfd3851d, type: 3}
+    - target: {fileID: 2937385463974660993, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.b
+      value: 0.6015516
+      objectReference: {fileID: 0}
+    - target: {fileID: 2937385463974660993, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.g
+      value: 0.26032394
+      objectReference: {fileID: 0}
+    - target: {fileID: 2937385463974660993, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.r
+      value: 0.735849
+      objectReference: {fileID: 0}
+    - target: {fileID: 4603387761427204731, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5700642827608111096, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: UVModule.sprites.Array.data[0].sprite
+      value: 
+      objectReference: {fileID: 1420946554, guid: 1b68cfd51bc9dcc4ea61d374cfd3851d, type: 3}
+    - target: {fileID: 5700642827608111096, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.b
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5700642827608111096, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.g
+      value: 0.25882354
+      objectReference: {fileID: 0}
+    - target: {fileID: 5700642827608111096, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.r
+      value: 0.7372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846104907180157133, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_Name
+      value: WeavileSuportLightBalll
+      objectReference: {fileID: 0}
+    - target: {fileID: 7114294118846784269, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7114294118846784269, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7114294118846784269, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7114294118846784269, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7114294118846784269, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7114294118846784269, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7114294118846784269, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7114294118846784269, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7114294118846784269, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7114294118846784269, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8286988134589041514, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1500276225, guid: 66ed55eafa97fde429071857cf3b804a, type: 3}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+--- !u!95 &4173201751857174274 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1787114287480538989, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+  m_PrefabInstance: {fileID: 2388924410669142127}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4871811601645368162 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7114294118846784269, guid: 3738c1a6eb51f2042b215fe7731fc4cd, type: 3}
+  m_PrefabInstance: {fileID: 2388924410669142127}
+  m_PrefabAsset: {fileID: 0}

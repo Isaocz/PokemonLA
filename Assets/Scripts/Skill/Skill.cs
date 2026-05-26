@@ -363,6 +363,7 @@ public class Skill : MonoBehaviour
     /// <param name="emptyTarget"></param>
     public virtual void HitAndKo(GameObject target)
     {
+        //Debug.Log(target.name);
         Empty emptyTarget = target.GetComponent<Empty>();
         if (emptyTarget != null) {
             BeforeHitEvent(emptyTarget);
@@ -517,7 +518,7 @@ public class Skill : MonoBehaviour
 
 
                 //道具136 贝壳铃
-                if (player.playerData.IsPassiveGetList[136] && !emptyTarget.Invincible)
+                if (player.playerData.IsPassiveGetList[136] && !emptyTarget.GetTotalInvicible)
                 {
                     Drain(BeforeHP, emptyTarget.EmptyHp, 0.1f);
                 }
@@ -637,7 +638,7 @@ public class Skill : MonoBehaviour
                 }
 
                 //道具059 金假牙
-                if (player.playerData.IsPassiveGetList[59] && !target.Invincible && (subEmpty == null? true : !subEmpty.ParentEmpty.isSubBodyEmptyInvincible) && Random.Range(0.0f, 1.0f) + Mathf.Clamp(((float)player.LuckPoint / 30) , -1.0f , 0.5f ) > 0.8f)
+                if (player.playerData.IsPassiveGetList[59] && !target.GetTotalInvicible && (subEmpty == null? true : !subEmpty.ParentEmpty.isSubBodyEmptyInvincible) && Random.Range(0.0f, 1.0f) + Mathf.Clamp(((float)player.LuckPoint / 30) , -1.0f , 0.5f ) > 0.8f)
                 {
                     Instantiate(PassiveItemGameObjList.ObjList.List[18] , transform.position , Quaternion.identity).GetComponent<RandomStarMoney>().isLunch = true;
                 }

@@ -47,7 +47,7 @@ public class MewHpLeftUI : MonoBehaviour
             if (mew.currentPhase != 3)
             {
                 float healthPercentage = (float)ParentEmpty.EmptyHp / ParentEmpty.maxHP * 100f;
-                if (ParentEmpty.Invincible)
+                if (ParentEmpty.GetTotalInvicible)
                 {
                     healthText.color = new Color(Mathf.PingPong(Time.time, 1), Mathf.PingPong(Time.time + 0.5f, 1), Mathf.PingPong(Time.time + 1f, 1));
                     healthText.text = "(Invincible) " + healthPercentage.ToString("F1") + "%";

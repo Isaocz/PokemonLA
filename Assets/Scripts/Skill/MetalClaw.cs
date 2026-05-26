@@ -28,7 +28,7 @@ public class MetalClaw : Skill
     //当飞弹与目标碰撞时，如果目标时敌人，获取敌人的血量，并使敌人扣血
     private void OnTriggerEnter2D(Collider2D other)
     {
-
+        Debug.Log(other.gameObject.name);
         if (other.tag == "Empty")
         {
             Empty target = other.GetComponent<Empty>();
@@ -58,6 +58,7 @@ public class MetalClaw : Skill
                 }
             }
             HitAndKo(other.gameObject);
+            
         }
     }
 }

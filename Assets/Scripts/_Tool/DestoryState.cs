@@ -34,4 +34,10 @@ public class DestoryState : MonoBehaviour
     }
 
 
+    public void SetUnActive()
+    {
+        gameObject.SetActive(false);
+    }
+
+
 }

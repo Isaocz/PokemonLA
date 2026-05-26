@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class VoltorbExplosion : Projectile
 {
-    public float KOPoint = 10.0f;
+    public float KOPoint = 7.5f;
 
     bool isDestory;
 

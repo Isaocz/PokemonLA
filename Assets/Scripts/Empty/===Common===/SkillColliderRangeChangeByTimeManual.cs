@@ -48,7 +48,7 @@ public class SkillColliderRangeChangeByTimeManual : MonoBehaviour
             }
             else
             {
-                if (Timer < StartDelay + FadeInTime)
+                if (Timer <= StartDelay + FadeInTime)
                 {
                     Timer += Time.deltaTime;
                     if (Timer > StartDelay)

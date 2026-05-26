@@ -116,13 +116,34 @@ public class Empty : Pokemon
     //声明2个布尔值，表示目标对象是否死亡,表示目标是否被攻击
     public bool isDie = false;
     public bool isHit = false;
+
+
     //无敌状态
+    //总无敌 每有一个无敌效果就无敌 全部false时才不无敌
+    public bool GetTotalInvicible {
+        get { return Invincible || InvincibleProtect; }
+    }
+
+    //普通无敌
     private bool isInvincible = false;
     public bool Invincible
     {
         get { return isInvincible; }
         set { isInvincible = value; }
     }
+
+    //被保护无敌
+    private bool isInvincibleProtect = false;
+    public bool InvincibleProtect
+    {
+        get { return isInvincibleProtect; }
+        set { isInvincibleProtect = value; }
+    }
+
+
+
+
+
     //一个击退计时器，一个被击退值
     float KOTimer = 0;
     float KOPoint;
@@ -485,7 +506,7 @@ public class Empty : Pokemon
     /// 存储预载数据
     /// </summary>
     /// <param name="e"></param>
-    public void StoreSaveData(Empty e)
+    public virtual void StoreSaveData(Empty e)
     {
         SaveLevel = e.Emptylevel;
         SaveHp = e.EmptyHp;
@@ -526,11 +547,6 @@ public class Empty : Pokemon
         }
         else
         {
-            //无敌
-            if (isInvincible)
-            {
-                return;
-            }
 
             PokemonType.TypeEnum enumVaue = (PokemonType.TypeEnum)SkillType;
 
@@ -558,6 +574,11 @@ public class Empty : Pokemon
             //伤害
             if (Dmage + SpDmage >= 0)
             {
+                //无敌
+                if (GetTotalInvicible)
+                {
+                    return;
+                }
                 int allDmg = 0;
                 //正常伤害
                 if (SkillType != 19)
@@ -626,6 +647,7 @@ public class Empty : Pokemon
                     fd.transform.GetComponent<damageShow>().SetText(allRecover, Crit, true, false);
                 }
             }
+
 
             //Debug.Log(Mathf.Clamp((int)((Dmage + SpDmage) * typeDef * (Type.TYPE[SkillType][(int)EmptyType01]) * Type.TYPE[SkillType][(int)EmptyType02]), 1, 100000) + " + " + "Dmage:" + (int)(Dmage + SpDmage));
             Debug.Log(
@@ -1882,11 +1904,11 @@ public class Empty : Pokemon
     /// <param name="Interval">生成残影的间隔</param>
     /// <param name="disappearingSpeed">残影的消失速度</param>
     /// <param name="color">残影的颜色</param>
-    public void StartShadowCoroutine(float Interval, float disappearingSpeed, Color color, Vector2 offset = default)
+    public void StartShadowCoroutine(float Interval, float disappearingSpeed, Color color, Vector2 offset = default , Transform offseTransform = null)
     {
         //Debug.Log("StartSHadow");
         isShadowMove = true; // 开始冲刺
-        ShadowCoroutine = StartCoroutine(StartShadow(Interval , disappearingSpeed , color , offset)); // 启动协程
+        ShadowCoroutine = StartCoroutine(StartShadow(Interval , disappearingSpeed , color , offset , offseTransform)); // 启动协程
     }
 
 
@@ -1912,12 +1934,12 @@ public class Empty : Pokemon
     /// <param name="disappearingSpeed">残影的消失速度</param>
     /// <param name="color">残影的颜色</param>
     /// <returns></returns>
-    IEnumerator StartShadow( float Interval , float disappearingSpeed, Color color, Vector2 offset)
+    IEnumerator StartShadow( float Interval , float disappearingSpeed, Color color, Vector2 offset , Transform offsetT)
     {
         while (isShadowMove)
         {
             //Debug.Log("shadow");
-            InstantiateShadow(disappearingSpeed , color, offset);
+            InstantiateShadow(disappearingSpeed , color, offset , offsetT);
             yield return new WaitForSeconds(Interval); // 等待间隔时间
         }
     }
@@ -1927,11 +1949,13 @@ public class Empty : Pokemon
     /// </summary>
     /// <param name="disappearingSpeed">残影的消失速度</param>
     /// <param name="color">残影的颜色</param>
-    void InstantiateShadow(float disappearingSpeed , Color color , Vector2 offset)
+    void InstantiateShadow(float disappearingSpeed , Color color , Vector2 offset, Transform offsetT)
     {
         if (!isDie && !isBorn && !isSleepDone && !isEmptyFrozenDone && !isSilence && !isCanNotMoveWhenParalysis && !isFearDone)
         {
-            Instantiate(emptyShadow, transform.position, Quaternion.identity).SetNormalEmptyShadow(disappearingSpeed, GetSkinRenderers(), color , offset);
+            Vector3 t = offsetT == null ? Vector3.zero : (offsetT.position - transform.position);
+            
+            Instantiate(emptyShadow, transform.position + t, Quaternion.identity).SetNormalEmptyShadow(disappearingSpeed, GetSkinRenderers(), color , offset);
         }  
     }
 

@@ -52,7 +52,7 @@ public class Indeedee : Empty
                 {
                     ProtectList.Add(ChildEmpty);
                     Instantiate(ProtectAnimation, ChildEmpty.transform.position, Quaternion.identity, ChildEmpty.transform).SetActive(true);
-                    ChildEmpty.Invincible = true;
+                    ChildEmpty.InvincibleProtect = true;
                 }
             }
         }
@@ -76,7 +76,7 @@ public class Indeedee : Empty
         if (!isAnotherIndedee) {
             for (int i = 0; i < ProtectList.Count; i++)
             {
-                ProtectList[i].Invincible = false;
+                ProtectList[i].InvincibleProtect = false;
             }
             ProtectList.Clear();
         }

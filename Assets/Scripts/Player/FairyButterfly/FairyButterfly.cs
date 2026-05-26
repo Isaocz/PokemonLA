@@ -100,7 +100,7 @@ public class FairyButterfly : MonoBehaviour
         if (other.tag == "Empty")
         {
             Empty e = other.GetComponent<Empty>();
-            if (e != null && !e.Invincible)
+            if (e != null && !e.GetTotalInvicible)
             {
                 if (player.SpAAbilityPoint >= player.AtkAbilityPoint)
                 {

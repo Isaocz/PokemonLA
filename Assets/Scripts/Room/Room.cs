@@ -612,6 +612,23 @@ public class Room : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 确保某点在房间尺寸内
+    /// </summary>
+    /// <param name="p"></param>
+    /// <returns></returns>
+    public Vector2 EnsurePointReachesRoom(Vector2 p)
+    {
+        return new Vector2(
+    Mathf.Clamp(p.x,
+        RoomSize[2] + transform.position.x, //最小值
+        RoomSize[3] + transform.position.x),//最大值
+    Mathf.Clamp(p.y,
+        RoomSize[1] + transform.position.y,  //最小值
+        RoomSize[0] + transform.position.y));//最大值
+    }
+
+
 
     /// <summary>
     /// 从某点的某方向到房边界

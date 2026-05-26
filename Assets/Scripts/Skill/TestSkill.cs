@@ -170,21 +170,23 @@ public class TestSkill : Skill
 
     void StateDone( Empty target )
     {
-        if (isFroze) { target.Frozen(FrozeTime, FrozePoint, 1); }
-        if (isBurn) { target.EmptyBurnDone(BurnPoint, BurnTime, 1); }
-        if (isParalysis) { target.EmptyParalysisDone(ParalysisPoint, ParalysisTime, 1); }
-        if (isToxic) { target.EmptyToxicDone(ToxicPoint, ToxicTime, 1); }
-        if (isSleep) { target.EmptySleepDone(SleepPoint, SleepTime, 1); }
-        if (isFear) { target.Fear(FearTime, FearPoint); }
-        if (isBlind) { target.Blind(BlindTime, BlindPoint); }
-        if (isConfusion) {  target.EmptyConfusion(ConfusionTime, ConfusionPoint);}
-        if (isInfatuation) { target.EmptyInfatuation(InfatuationTime, InfatuationPoint ); }
-        if (isCold) { target.Cold(ColdTime); }
-        if (isCurse) { target.EmptyCurse(CurseTime, 0.5f); }
-        if (isAtkDown) { target.AtkChange(-1, AtkDownTime); }
-        if (isDefDown) { target.DefChange(-1, DefDownTime); }
-        if (isSpADown) { target.SpAChange(-1, SpADownTime); }
-        if (isSpDDown) { target.SpDChange(-1, SpDDownTime); }
-        if (isSpeDown) { target.SpeedChange(); target.SpeedRemove01(SpeDownTime * target.OtherStateResistance); }
+        if (target != null) {
+            if (isFroze) { target.Frozen(FrozeTime, FrozePoint, 1); }
+            if (isBurn) { target.EmptyBurnDone(BurnPoint, BurnTime, 1); }
+            if (isParalysis) { target.EmptyParalysisDone(ParalysisPoint, ParalysisTime, 1); }
+            if (isToxic) { target.EmptyToxicDone(ToxicPoint, ToxicTime, 1); }
+            if (isSleep) { target.EmptySleepDone(SleepPoint, SleepTime, 1); }
+            if (isFear) { target.Fear(FearTime, FearPoint); }
+            if (isBlind) { target.Blind(BlindTime, BlindPoint); }
+            if (isConfusion) { target.EmptyConfusion(ConfusionTime, ConfusionPoint); }
+            if (isInfatuation) { target.EmptyInfatuation(InfatuationTime, InfatuationPoint); }
+            if (isCold) { target.Cold(ColdTime); }
+            if (isCurse) { target.EmptyCurse(CurseTime, 0.5f); }
+            if (isAtkDown) { target.AtkChange(-1, AtkDownTime); }
+            if (isDefDown) { target.DefChange(-1, DefDownTime); }
+            if (isSpADown) { target.SpAChange(-1, SpADownTime); }
+            if (isSpDDown) { target.SpDChange(-1, SpDDownTime); }
+            if (isSpeDown) { target.SpeedChange(); target.SpeedRemove01(SpeDownTime * target.OtherStateResistance); }
+        }
     }
 }

@@ -45,6 +45,16 @@ public class BreakableEnviroment : MonoBehaviour
     /// </summary>
     public bool isUnBreakable;
 
+    /// <summary>
+    /// 可破坏物被保护
+    /// </summary>
+    public bool InvincibleProtect
+    {
+        get { return invincibleProtect; }
+        set { invincibleProtect = value; }
+    }
+    bool invincibleProtect;
+
 
 
 
@@ -84,12 +94,17 @@ public class BreakableEnviroment : MonoBehaviour
     /// <param name="point"></param>
     public void BeHit(int point)
     {
-        ColliderCount = Mathf.Clamp(ColliderCount + point, 0, MaxHP);
-        HpBar.Per = (float)(MaxHP - ColliderCount) / (float)MaxHP;
-        HpBar.ChangeHpDown();
-        if (ColliderCount >= MaxHP)
+        
+        if (!InvincibleProtect)
         {
-            Break();
+
+            ColliderCount = Mathf.Clamp(ColliderCount + point, 0, MaxHP);
+            HpBar.Per = (float)(MaxHP - ColliderCount) / (float)MaxHP;
+            HpBar.ChangeHpDown();
+            if (ColliderCount >= MaxHP)
+            {
+                Break();
+            }
         }
     }
 
