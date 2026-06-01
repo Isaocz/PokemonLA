@@ -344,6 +344,23 @@ public class DebugController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 开启控制台
+    /// </summary>
+    public void ForceOpenConsole()
+    {
+        showConsole = true;
+    }
+
+    /// <summary>
+    /// 关闭控制台
+    /// </summary>
+    public void ForceCloseConsole()
+    {
+        showConsole = false;
+    }
+
+
     private void OnGUI()
     {
         if (!showConsole)

@@ -205,7 +205,7 @@ public class InitializePlayerSetting : MonoBehaviour
             isShowBouns = PlayerPrefs.GetInt("ShowBouns");
 
             //高亮显示
-            if (!PlayerPrefs.HasKey("Highlight")) { PlayerPrefs.SetInt("Highlight", 0); }
+            if (!PlayerPrefs.HasKey("Highlight")) { PlayerPrefs.SetInt("Highlight", 1); }
             isHighlight = intToBool(PlayerPrefs.GetInt("Highlight"));
 
             //摇杆与十字键

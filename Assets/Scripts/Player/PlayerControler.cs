@@ -546,6 +546,8 @@ public class PlayerControler : PlayerPokemon
             if (InitialSkill03 != null) { Skill03 = InitialSkill03; }
             if (InitialSkill04 != null) { Skill04 = InitialSkill04; }
         }
+        //开启高亮光环
+        SetHighLightHalo();
     }
 
 
@@ -769,20 +771,10 @@ public class PlayerControler : PlayerPokemon
                         isInvincible = false;
                     }
                 }
-
-                //是否开启玩家高光
-                if ( this.transform.childCount >= 7 && this.transform.GetChild(6).GetComponent<PlayerHighLight>())
-                {
-                    if (InitializePlayerSetting.GlobalPlayerSetting.isHighlight)
-                    {
-                        this.transform.GetChild(6).gameObject.SetActive(true);
-                    }
-                    else
-                    {
-                        this.transform.GetChild(6).gameObject.SetActive(false);
-                    }
-                }
             }
+
+
+
 
             //异常状态CD
             {
@@ -2985,5 +2977,44 @@ public class PlayerControler : PlayerPokemon
     }
 
     //===========================所有触发被动道具时使用的函数======================================
+
+
+
+
+
+
+
+
+
+
+    //===========================玩家指示光环======================================
+
+    /// <summary>
+    /// 高亮指示光环
+    /// </summary>
+    public PlayerHighLight HighLightHalo;
+
+    /// <summary>
+    /// 设置高亮指示光环
+    /// </summary>
+    public void SetHighLightHalo()
+    {
+        if(HighLightHalo != null)
+        {
+            if (InitializePlayerSetting.GlobalPlayerSetting.isHighlight)
+            {
+                HighLightHalo.gameObject.SetActive(true);
+            }
+            else
+            {
+                HighLightHalo.gameObject.SetActive(false);
+            }
+        }
+    }
+
+
+    //===========================玩家指示光环======================================
+
+
 
 }

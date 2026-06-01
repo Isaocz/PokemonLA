@@ -218,8 +218,8 @@ public class Electivire : Empty
         EmptyHpForLevel(Emptylevel);//设定血量
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);//设定攻击力
         SpAAbilityPoint = AbilityForLevel(Emptylevel, SpAEmptyPoint);//设定特攻
-        DefAbilityPoint = AbilityForLevel(Emptylevel, DefEmptyPoint)/* 【TODO】MiniBoss * 1.2f / Boss * 1.5f; */;//设定防御力
-        SpdAbilityPoint = AbilityForLevel(Emptylevel, SpdEmptyPoint)/* 【TODO】MiniBoss * 1.2f / Boss * 1.5f; */;//设定特防
+        DefAbilityPoint = AbilityForLevel(Emptylevel, DefEmptyPoint) * 1.5f;//设定防御力
+        SpdAbilityPoint = AbilityForLevel(Emptylevel, SpdEmptyPoint) * 1.5f;//设定特防
         SpeedAbilityPoint = AbilityForLevel(Emptylevel, SpeedEmptyPoint);//设定速度
         Exp = BaseExp * Emptylevel / 7;//设定击败后获取的经验
 
@@ -272,7 +272,7 @@ public class Electivire : Empty
                     }
 
                     //●当处于冰冻 睡眠 致盲 麻痹状态时主状态【一般_0】停运
-                    if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis) /* TODO【一般_0】状态停运的额外条件 */
+                    if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis) 
                     {
                         //判断副状态
                         switch (NowSubState)
@@ -334,7 +334,7 @@ public class Electivire : Empty
                                 //if (Normal_TriPunchTimer <= 0)         //计时器时间到时间，结束【一般_连续三练拳_2】状态
                                 //{
                                 //    Normal_TriPunchOver();
-                                //    //TODO添加下一个状态的开始方法
+                                //    //添加下一个状态的开始方法
                                 //}
                                 if (isMove_Normal_TriPunch)
                                 {
@@ -404,12 +404,6 @@ public class Electivire : Empty
                                 break;
                             //【一般_快速连打拳_5】状态
                             case SubState.Normal_ORaPunch:
-                                //Normal_ORaPunchTimer -= Time.deltaTime;//【一般_快速连打拳_5】计时器时间减少
-                                //if (Normal_ORaPunchTimer <= 0)         //计时器时间到时间，结束【一般_快速连打拳_5】状态
-                                //{
-                                //    Normal_ORaPunchOver();
-                                //    //TODO添加下一个状态的开始方法
-                                //}
                                 if (isMove_Normal_ORaPunch_Rush)
                                 {
                                     MoveBySpeedAndDir(Dir_Normal_ORaPunch_Rush, speed, SPEEDALPHA_NORMAL_ORAPUNCH_RUSH, 0.0f, 0.0f, 0.0f, 0.0f);
@@ -446,12 +440,6 @@ public class Electivire : Empty
                                 break;
                             //【一般_大吼叫_8】状态
                             case SubState.Normal_BigRoar:
-                                //Normal_BigRoarTimer -= Time.deltaTime;//【一般_大吼叫_8】计时器时间减少
-                                //if (Normal_BigRoarTimer <= 0)         //计时器时间到时间，结束【一般_大吼叫_8】状态
-                                //{
-                                //    Normal_BigRoarOver();
-                                //    //TODO添加下一个状态的开始方法
-                                //}
                                 //大吼叫开始计时
                                 if (isStart_Normal_BigRoar)
                                 {
@@ -492,7 +480,7 @@ public class Electivire : Empty
                     }
 
                     //●当处于冰冻 睡眠 致盲 麻痹状态时主状态【愤怒_1】停运
-                    if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis) /* TODO【愤怒_1】状态停运的额外条件 */
+                    if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis) 
                     {
                         //判断副状态
                         switch (NowSubState)
@@ -504,7 +492,6 @@ public class Electivire : Empty
                                 {
                                     Angry_IdleOver();
                                     Angry_RunStart();
-                                    //TODO添加下一个状态的开始方法
                                 }
                                 break;
                             //【愤怒_奔跑追踪_10】状态
@@ -530,9 +517,8 @@ public class Electivire : Empty
                                     }
                                     
                                     float TargetDistence = Vector2.Distance(TargetPosition, (Vector2)transform.position);
-                                    //转换为其他状态【TODO】
                                     //路线11 长时间追击后触发（50%）三练拳近身战*2
-                                    //【TODO】路线12 长时间追击后触发（50%）小跳 小跳 大跳 大吼
+                                    //路线12 长时间追击后触发（50%）小跳 小跳 大跳 大吼
                                     if (Angry_RunTimer >= TIME_ANGRY_COMBAT_ONE)
                                     {
                                         Angry_RunOver();
@@ -552,8 +538,8 @@ public class Electivire : Empty
                                         //NowCombat_Angry = COMBATROUND.ANGRY_COMBAT12;
                                         //Angry_SmallJumpStart();
                                     }
-                                    //【TODO】路线21 接近后触发（50%）吼跳打 跳吼打 跳吼快打 连招（距离远触发小爆裂拳（近身战） 距离不远不触发（快速休息））
-                                    //【TODO】路线22 接近后触发（50%）连打蓄力拳连打蓄力拳 连招
+                                    //路线21 接近后触发（50%）吼跳打 跳吼打 跳吼快打 连招（距离远触发小爆裂拳（近身战） 距离不远不触发（快速休息））
+                                    //路线22 接近后触发（50%）连打蓄力拳连打蓄力拳 连招
                                     else if (TargetDistence <= DISTENCE_ANGRY_COMBAT_TOW || (TargetDistence <= (DISTENCE_ANGRY_COMBAT_TOW + 1.0f) && Angry_RunTimer >= TIME_ANGRY_COMBAT_EASYMODE_TOW))
                                     {
                                         Angry_RunOver();
@@ -573,8 +559,8 @@ public class Electivire : Empty
                                         //NowCombat_Angry = COMBATROUND.ANGRY_COMBAT22;
                                         //Angry_OraPunchStart();
                                     }
-                                    //【TODO】路线31 距离远后触发（50%）流星拳波流星拳波流星拳波超级蓄力拳（真气拳）
-                                    //【TODO】路线32 距离远后触发（50%）蓄力拳蓄力拳蓄力拳大跳大吼
+                                    //路线31 距离远后触发（50%）流星拳波流星拳波流星拳波超级蓄力拳（真气拳）
+                                    //路线32 距离远后触发（50%）蓄力拳蓄力拳蓄力拳大跳大吼
                                     else if(TargetDistence >= DISTENCE_ANGRY_COMBAT_THREE || (TargetDistence >= DISTENCE_ANGRY_COMBAT_THREE - 1.0f && Angry_RunTimer >= TIME_ANGRY_COMBAT_EASYMODE_THREE))
                                     {
                                         Angry_RunOver();
@@ -607,12 +593,6 @@ public class Electivire : Empty
                                 break;
                             //【愤怒_连续三练拳_11】状态
                             case SubState.Angry_TriPunch:
-                                //Angry_TriPunchTimer -= Time.deltaTime;//【愤怒_连续三练拳_11】计时器时间减少
-                                //if (Angry_TriPunchTimer <= 0)         //计时器时间到时间，结束【愤怒_连续三练拳_11】状态
-                                //{
-                                //    Angry_TriPunchOver();
-                                //    //TODO添加下一个状态的开始方法
-                                //}
                                 if (isMove_Angry_TriPunch)
                                 {
                                     MoveBySpeedAndDir(Dir_TriPunch_Angry, speed, SPEEDALPHA_ANGRY_TRIPUNCH, 0.0f, 0.0f, 0.0f, 0.0f);
@@ -2711,16 +2691,16 @@ public class Electivire : Empty
 
 
     //开始后的冷却时间
-    static float TIME_NORMAL_IDLE_START = 0.5f; //TODO需修改时间
+    static float TIME_NORMAL_IDLE_START = 0.5f; 
 
     //一般_连招1后的冷却时间
-    static float TIME_NORMAL_IDLE_COMBATONE = 2.8f; //TODO需修改时间
+    static float TIME_NORMAL_IDLE_COMBATONE = 2.8f; 
 
     //一般_连招2后的冷却时间
-    static float TIME_NORMAL_IDLE_COMBATTWO = 4.3f; //TODO需修改时间
+    static float TIME_NORMAL_IDLE_COMBATTWO = 4.3f; 
 
     //一般_连招3后的冷却时间
-    static float TIME_NORMAL_IDLE_COMBATTHREE = 1.5f; //TODO需修改时间
+    static float TIME_NORMAL_IDLE_COMBATTHREE = 1.5f; 
 
 
 
@@ -3193,7 +3173,7 @@ public class Electivire : Empty
         get { return (player.playerData.DefBounsAlways + player.playerData.DefBounsJustOneRoom) < -1; }
         //set { isMarked_Player_SmallRoar = value; }
     }
-    //public bool isMarked_Player_SmallRoar = false;//TODO
+    //public bool isMarked_Player_SmallRoar = false;
 
 
 
@@ -3626,28 +3606,28 @@ public class Electivire : Empty
     //路线32 距离远后触发（50%）蓄力拳蓄力拳蓄力拳大跳大吼
 
     //开始后的冷却时间
-    static float TIME_ANGRY_IDLE_START = 0.5f; //TODO需修改时间
+    static float TIME_ANGRY_IDLE_START = 0.5f; 
 
     //一般_连招11后的冷却时间
-    static float TIME_ANGRY_IDLE_COMBAT11 = 2.0f; //TODO需修改时间
+    static float TIME_ANGRY_IDLE_COMBAT11 = 2.0f; 
 
     //一般_连招12后的冷却时间
-    static float TIME_ANGRY_IDLE_COMBAT12 = 3.5f; //TODO需修改时间
+    static float TIME_ANGRY_IDLE_COMBAT12 = 3.5f; 
 
     //一般_连招21后的冷却时间
-    static float TIME_ANGRY_IDLE_COMBAT21 = 6.2f; //TODO需修改时间
+    static float TIME_ANGRY_IDLE_COMBAT21 = 6.2f; 
 
     //一般_连招21后的（快速）冷却时间
-    static float TIME_ANGRY_IDLE_COMBAT21_FAST = 3.5f; //TODO需修改时间
+    static float TIME_ANGRY_IDLE_COMBAT21_FAST = 3.5f; 
 
     //一般_连招22后的冷却时间
-    static float TIME_ANGRY_IDLE_COMBAT22 = 2.5f; //TODO需修改时间
+    static float TIME_ANGRY_IDLE_COMBAT22 = 2.5f; 
 
     //一般_连招31后的冷却时间
-    static float TIME_ANGRY_IDLE_COMBAT31 = 3.5f; //TODO需修改时间
+    static float TIME_ANGRY_IDLE_COMBAT31 = 3.5f; 
 
     //一般_连招32后的冷却时间
-    static float TIME_ANGRY_IDLE_COMBAT32 = 3.5f; //TODO需修改时间
+    static float TIME_ANGRY_IDLE_COMBAT32 = 3.5f; 
 
 
 
@@ -4392,7 +4372,7 @@ public class Electivire : Empty
         isCharge_Angry_SuperChargePunch = false;
         isMove_Angry_SuperChargePunch = false;
         animator.SetInteger("HeavyPunch", 1);
-        nowPunchType = PunchType.SuperChargePunch;//TODO 超级追踪拳特效
+        nowPunchType = PunchType.SuperChargePunch;
         SetChargePunchArrow();
     }
 

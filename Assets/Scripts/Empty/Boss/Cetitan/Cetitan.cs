@@ -321,6 +321,7 @@ public class Cetitan : Empty
                     //●当处于冰冻 睡眠 致盲 麻痹状态时主状态【一般】停运
                     if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isCanNotMoveWhenParalysis)
                     {
+                        
                         //判断副状态
                         switch (NowSubState)
                         {
@@ -512,7 +513,7 @@ public class Cetitan : Empty
                     }
 
                     //●判断是否转进愤怒3状态
-                    if ((NowAngryLevel == AngryLevel.LEVEL1 || NowAngryLevel == AngryLevel.LEVEL2) && NowSubState != SubState.Angry_Roar && ((float)EmptyHp / (float)maxHP) < HP_ANGRYL22ANGRYL3)
+                    if ((NowAngryLevel == AngryLevel.LEVEL1 || NowAngryLevel == AngryLevel.LEVEL2) && NowSubState != SubState.Angry_Roar && ((float)EmptyHp / (float)maxHP) < HP_ANGRYL22ANGRYL3 && (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isFearDone && !isCanNotMoveWhenParalysis))
                     {
                         ResetAllState_Normal();
                         Angry_RoarStart(TIME_ANGRY_ROAR);
@@ -1514,7 +1515,7 @@ public class Cetitan : Empty
         IsDefStateByNormal = false;
 
 
-        //【TODO】重置主状态机参数
+        //重置主状态机参数
         Position_Combat040_Normal_Jump_Target = Vector2.zero;
         Combat110_Count_IcicleCrash = 0;
         Combat230_Count_IcileCrash = 0;
@@ -1561,7 +1562,7 @@ public class Cetitan : Empty
         animator.SetInteger("IceBeam", 0);
 
 
-        //【TODO】消除实例
+        //消除实例
         Break_AllIcicleCrash();
         if (SpinnerObj != null) { SpinnerObj.SpinnerOver(); }
         if (IceFangObj != null) { Destroy(IceFangObj.gameObject); }
@@ -2678,6 +2679,9 @@ Mathf.Clamp((float)Position_ic3.y, ParentPokemonRoom.RoomSize[1] + transform.par
     /// <param name="Spacing">距离间隔</param>
     public void Lunch_IcicleCrash_Line(Vector2 StartPos, Vector2 OverPos, float Interval, float Spacing)
     {
+        //确保起始点和终点在房间内
+        StartPos = ParentPokemonRoom.EnsurePointReachesRoom(StartPos);
+        OverPos = ParentPokemonRoom.EnsurePointReachesRoom(OverPos);
         StartCoroutine(Lunch_IcicleCrash_Line_Coroutine(StartPos, OverPos, Interval, Spacing));
     }
 
