@@ -795,6 +795,7 @@ public class PlayerControler : PlayerPokemon
                 {
                     if (!Is01imprison)
                     {
+                        if (skillBar01.isImprison) { skillBar01.isImprison = false; }
                         Skill01Timer += Time.deltaTime;
                         if (Skill01Timer >= GetSkillIndexCD(1))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill01.ColdDown * (Skill01.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
                         {
@@ -804,6 +805,7 @@ public class PlayerControler : PlayerPokemon
                     }
                     else
                     {
+                        if (!skillBar01.isImprison) { skillBar01.isImprison = true; }
                         imprisonTime01 -= Time.deltaTime;
                         if(imprisonTime01 <= 0)
                         {
@@ -816,6 +818,7 @@ public class PlayerControler : PlayerPokemon
                 {
                     if (!Is02imprison)
                     {
+                        if (skillBar02.isImprison) { skillBar02.isImprison = false; }
                         Skill02Timer += Time.deltaTime;
                         if (Skill02Timer >= GetSkillIndexCD(2))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill02.ColdDown * (Skill02.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
                         {
@@ -825,6 +828,7 @@ public class PlayerControler : PlayerPokemon
                     }
                     else
                     {
+                        if (!skillBar02.isImprison) { skillBar02.isImprison = true; }
                         imprisonTime02 -= Time.deltaTime;
                         if (imprisonTime02 <= 0)
                         {
@@ -837,6 +841,7 @@ public class PlayerControler : PlayerPokemon
                 {
                     if (!Is03imprison)
                     {
+                        if (skillBar03.isImprison) { skillBar03.isImprison = false; }
                         Skill03Timer += Time.deltaTime;
                         if (Skill03Timer >= GetSkillIndexCD(3))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill03.ColdDown * (Skill03.isPPUP ? 0.625f : 1)) * (1 - ((float)SpeedAbilityPoint / 500)))
                         {
@@ -846,6 +851,7 @@ public class PlayerControler : PlayerPokemon
                     }
                     else
                     {
+                        if (!skillBar03.isImprison) { skillBar03.isImprison = true; }
                         imprisonTime03 -= Time.deltaTime;
                         if (imprisonTime03 <= 0)
                         {
@@ -858,6 +864,7 @@ public class PlayerControler : PlayerPokemon
                 {
                     if (!Is04imprison)
                     {
+                        if (skillBar04.isImprison) { skillBar04.isImprison = false; }
                         Skill04Timer += Time.deltaTime;
                         if (Skill04Timer >= GetSkillIndexCD(4))//(isParalysisDone ? 1.8f : 1.0f) * ( Skill04.ColdDown * (Skill04.isPPUP ? 0.625f : 1) )* (1 - ((float)SpeedAbilityPoint / 500)))
                         {
@@ -867,6 +874,7 @@ public class PlayerControler : PlayerPokemon
                     }
                     else
                     {
+                        if (!skillBar04.isImprison) { skillBar04.isImprison = true; }
                         imprisonTime04 -= Time.deltaTime;
                         if (imprisonTime04 <= 0)
                         {
@@ -1952,6 +1960,10 @@ public class PlayerControler : PlayerPokemon
             case 1:
                 Skill01 = NewSkill;
                 skillBar01.GetSkill(Skill01);
+                if (Is01imprison) { 
+                    Is01imprison = false;
+                    imprisonTime01 = 0.0f;
+                }
                 if (SkillPanel.StaticSkillPanel != null)
                 {
                     SkillPanel.StaticSkillPanel.transform.GetChild(6).gameObject.SetActive(true);
@@ -1961,6 +1973,11 @@ public class PlayerControler : PlayerPokemon
             case 2:
                 Skill02 = NewSkill;
                 skillBar02.GetSkill(Skill02);
+                if (Is02imprison)
+                {
+                    Is02imprison = false;
+                    imprisonTime02 = 0.0f;
+                }
                 if (SkillPanel.StaticSkillPanel != null) {
                     SkillPanel.StaticSkillPanel.transform.GetChild(7).gameObject.SetActive(true);
                     SkillPanel.StaticSkillPanel.transform.GetChild(7).GetComponent<UIPanleSkillBar>().GetSkill_Panle(NewSkill, this);
@@ -1969,6 +1986,11 @@ public class PlayerControler : PlayerPokemon
             case 3:
                 Skill03 = NewSkill;
                 skillBar03.GetSkill(Skill03);
+                if (Is03imprison)
+                {
+                    Is03imprison = false;
+                    imprisonTime03 = 0.0f;
+                }
                 if (SkillPanel.StaticSkillPanel != null)
                 {
                     SkillPanel.StaticSkillPanel.transform.GetChild(8).gameObject.SetActive(true);
@@ -1978,6 +2000,11 @@ public class PlayerControler : PlayerPokemon
             case 4:
                 Skill04 = NewSkill;
                 skillBar04.GetSkill(Skill04);
+                if (Is04imprison)
+                {
+                    Is04imprison = false;
+                    imprisonTime04 = 0.0f;
+                }
                 if (SkillPanel.StaticSkillPanel != null)
                 {
                     SkillPanel.StaticSkillPanel.transform.GetChild(9).gameObject.SetActive(true);
@@ -2326,6 +2353,46 @@ public class PlayerControler : PlayerPokemon
             skillBar04.CDPlus((isTimeMode ? MinusCDTimerPer : GetSkillIndexCD(4) * MinusCDTimerPer));
         }
     }
+
+
+    /// <summary>
+    /// 重置技能cd（重新开始读条）
+    /// </summary>
+    /// <param name="SkillIndex"></param>
+    /// <param name="MinusCDTimerPer"></param>
+    /// <param name="isTimeMode"></param>
+    public void SetZeroSkillCDTime(int SkillIndex)
+    {
+        switch (SkillIndex)
+        {
+            case 1:
+                Skill01Timer = 0;
+                isSkill01CD = true;
+                skillBar01.isCDStart = true;
+                skillBar01.SetZero();
+                break;
+            case 2:
+                Skill02Timer = 0;
+                isSkill02CD = true;
+                skillBar02.isCDStart = true;
+                skillBar02.SetZero();
+                break;
+            case 3:
+                Skill03Timer = 0;
+                isSkill03CD = true;
+                skillBar03.isCDStart = true;
+                skillBar03.SetZero();
+                break;
+            case 4:
+                Skill04Timer = 0;
+                isSkill04CD = true;
+                skillBar04.isCDStart = true;
+                skillBar04.SetZero();
+                break;
+        }
+    }
+
+
 
     /// <summary>
     /// //声明一个函数，调用时结束表示正在使用技能，无法移动的状态

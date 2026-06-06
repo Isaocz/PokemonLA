@@ -212,6 +212,10 @@ public class DragSkillBar : MonoBehaviour , IBeginDragHandler , IDragHandler , I
         Skill[] OriginalSkillOrderList = new Skill[] { (player.Skill01 != null ? player.Skill01 : null), (player.Skill02 != null ? player.Skill02 : null), (player.Skill03 != null ? player.Skill03 : null), (player.Skill04 != null ? player.Skill04 : null) };
         bool[] OriginalSkillisCDList = new bool[] { (player.Skill01 != null ? player.isSkill01CD : false), (player.Skill02 != null ? player.isSkill02CD : false), (player.Skill03 != null ? player.isSkill03CD : false), (player.Skill04 != null ? player.isSkill04CD : false) };
         float[] OriginalSkillCDList = new float[] { (player.Skill01 != null ? player._Skill01Timer : 0), (player.Skill02 != null ? player._Skill02Timer : 0), (player.Skill03 != null ? player._Skill03Timer : 0), (player.Skill04 != null ? player._Skill04Timer : 0) };
+        
+        bool[] OriginalIsImprisonList = new bool[] { (player.Skill01 != null ? player.Is01imprison : false), (player.Skill02 != null ? player.Is02imprison : false), (player.Skill03 != null ? player.Is03imprison : false), (player.Skill04 != null ? player.Is04imprison : false) };
+        float[] OriginalImprisonTimerList = new float[] { (player.Skill01 != null ? player.imprisonTime01 : 0.0f), (player.Skill02 != null ? player.imprisonTime02 : 0.0f), (player.Skill03 != null ? player.imprisonTime03 : 0.0f), (player.Skill04 != null ? player.imprisonTime04 : 0.0f) };
+
 
         //Debug.Log(player.isSkill01CD.ToString() + player.isSkill02CD.ToString() + player.isSkill03CD.ToString() + player.isSkill04CD.ToString());
         //Debug.Log(player._Skill01Timer.ToString() + "+" + player._Skill02Timer.ToString() + "+" + player._Skill03Timer.ToString() + "+" + player._Skill04Timer.ToString());
@@ -227,17 +231,27 @@ public class DragSkillBar : MonoBehaviour , IBeginDragHandler , IDragHandler , I
                     player.isSkill01CD = OriginalSkillisCDList[1];
                     player._Skill01Timer = OriginalSkillCDList[1];
                     player.Skill01 = OriginalSkillOrderList[1];
+                    player.Is01imprison = OriginalSkillOrderList[1];
+                    player.imprisonTime01 = OriginalImprisonTimerList[1];
                     break;
                 case "SkillPanelBar03":
                     player.isSkill01CD = OriginalSkillisCDList[2];
                     player._Skill01Timer = OriginalSkillCDList[2];
                     player.Skill01 = OriginalSkillOrderList[2];
+                    player.Is01imprison = OriginalSkillOrderList[2];
+                    player.imprisonTime01 = OriginalImprisonTimerList[2];
                     break;
                 case "SkillPanelBar04":
                     player.isSkill01CD = OriginalSkillisCDList[3];
                     player._Skill01Timer = OriginalSkillCDList[3];
                     player.Skill01 = OriginalSkillOrderList[3];
+                    player.Is01imprison = OriginalSkillOrderList[3];
+                    player.imprisonTime01 = OriginalImprisonTimerList[3];
                     break;
+            }
+            if (player.Is01imprison)
+            {
+                player.SetZeroSkillCDTime(1);
             }
         }
 
@@ -248,6 +262,8 @@ public class DragSkillBar : MonoBehaviour , IBeginDragHandler , IDragHandler , I
                     player.isSkill02CD = OriginalSkillisCDList[0];
                     player._Skill02Timer = OriginalSkillCDList[0];
                     player.Skill02 = OriginalSkillOrderList[0];
+                    player.Is02imprison = OriginalSkillOrderList[0];
+                    player.imprisonTime02 = OriginalImprisonTimerList[0];
                     break;
                 case "SkillPanelBar02":
                     //player.Skill02 = OriginalSkillOrderList[1];
@@ -256,12 +272,20 @@ public class DragSkillBar : MonoBehaviour , IBeginDragHandler , IDragHandler , I
                     player.isSkill02CD = OriginalSkillisCDList[2];
                     player._Skill02Timer = OriginalSkillCDList[2];
                     player.Skill02 = OriginalSkillOrderList[2];
+                    player.Is02imprison = OriginalSkillOrderList[2];
+                    player.imprisonTime02 = OriginalImprisonTimerList[2];
                     break;
                 case "SkillPanelBar04":
                     player.isSkill02CD = OriginalSkillisCDList[3];
                     player._Skill02Timer = OriginalSkillCDList[3];
                     player.Skill02 = OriginalSkillOrderList[3];
+                    player.Is02imprison = OriginalSkillOrderList[3];
+                    player.imprisonTime02 = OriginalImprisonTimerList[3];
                     break;
+            }
+            if (player.Is02imprison)
+            {
+                player.SetZeroSkillCDTime(2);
             }
         }
 
@@ -272,11 +296,15 @@ public class DragSkillBar : MonoBehaviour , IBeginDragHandler , IDragHandler , I
                     player.isSkill03CD = OriginalSkillisCDList[0];
                     player._Skill03Timer = OriginalSkillCDList[0];
                     player.Skill03 = OriginalSkillOrderList[0];
+                    player.Is03imprison = OriginalSkillOrderList[0];
+                    player.imprisonTime03 = OriginalImprisonTimerList[0];
                     break;
                 case "SkillPanelBar02":
                     player.isSkill03CD = OriginalSkillisCDList[1];
                     player._Skill03Timer = OriginalSkillCDList[1];
                     player.Skill03 = OriginalSkillOrderList[1];
+                    player.Is03imprison = OriginalSkillOrderList[1];
+                    player.imprisonTime03 = OriginalImprisonTimerList[1];
                     break;
                 case "SkillPanelBar03":
                     //  player.Skill03 = OriginalSkillOrderList[2];
@@ -285,7 +313,13 @@ public class DragSkillBar : MonoBehaviour , IBeginDragHandler , IDragHandler , I
                     player.isSkill03CD = OriginalSkillisCDList[3];
                     player._Skill03Timer = OriginalSkillCDList[3];
                     player.Skill03 = OriginalSkillOrderList[3];
+                    player.Is03imprison = OriginalSkillOrderList[3];
+                    player.imprisonTime03 = OriginalImprisonTimerList[3];
                     break;
+            }
+            if (player.Is03imprison)
+            {
+                player.SetZeroSkillCDTime(3);
             }
         }
 
@@ -296,20 +330,30 @@ public class DragSkillBar : MonoBehaviour , IBeginDragHandler , IDragHandler , I
                     player.isSkill04CD = OriginalSkillisCDList[0];
                     player._Skill04Timer = OriginalSkillCDList[0];
                     player.Skill04 = OriginalSkillOrderList[0];
+                    player.Is04imprison = OriginalSkillOrderList[0];
+                    player.imprisonTime04 = OriginalImprisonTimerList[0];
                     break;
                 case "SkillPanelBar02":
                     player.isSkill04CD = OriginalSkillisCDList[1];
                     player._Skill04Timer = OriginalSkillCDList[1];
                     player.Skill04 = OriginalSkillOrderList[1];
+                    player.Is04imprison = OriginalSkillOrderList[1];
+                    player.imprisonTime04 = OriginalImprisonTimerList[1];
                     break;
                 case "SkillPanelBar03":
                     player.isSkill04CD = OriginalSkillisCDList[2];
                     player._Skill04Timer = OriginalSkillCDList[2];
                     player.Skill04 = OriginalSkillOrderList[2];
+                    player.Is04imprison = OriginalSkillOrderList[2];
+                    player.imprisonTime04 = OriginalImprisonTimerList[2];
                     break;
                 case "SkillPanelBar04":
                     //player.Skill04 = OriginalSkillOrderList[3];
                     break;
+            }
+            if (player.Is04imprison)
+            {
+                player.SetZeroSkillCDTime(4);
             }
         }
 

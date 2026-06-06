@@ -409,7 +409,9 @@ public class Empty : Pokemon
         if (saveLevel != -1) { OutPut = saveLevel; }
 
         //boss≤‚ ‘≥°æ∞
-        if (FloorNum.GlobalFloorNum == null && MapCreater.StaticMap.isBossTestMap) { return 50; }
+        if (FloorNum.GlobalFloorNum == null && MapCreater.StaticMap.NowTestType == MapCreater.TestType.BossTest) { return 50; }
+        //µ–»À≤‚ ‘≥°æ∞
+        if (FloorNum.GlobalFloorNum == null && MapCreater.StaticMap.NowTestType == MapCreater.TestType.EmptyTest) { return 50; }
         return OutPut;
     }
 

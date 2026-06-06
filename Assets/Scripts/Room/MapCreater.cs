@@ -97,9 +97,26 @@ public class MapCreater : MonoBehaviour
 
 
     //是否为boss测试地图
-    public bool isBossTestMap = false;
+    //public bool isBossTestMap = false;
+
+
+    /// <summary>
+    /// 测试模式
+    /// </summary>
+    public enum TestType
+    {
+        NotTestMode, //非测试模式
+        BossTest,    //boss测试模式
+        EmptyTest,   //敌人测试
+    }
+    /// <summary>
+    /// 当前测试模式
+    /// </summary>
+    public TestType NowTestType;
+
     //boos测试地图boss房位置
     int BossTest_BossDoorTestIndex = 0;
+
 
     //========================一些控制根据道具特性等生成地图的变量==============================
 
@@ -171,7 +188,7 @@ public class MapCreater : MonoBehaviour
         else
         {
             //boss测试地图
-            if (isBossTestMap)
+            if (NowTestType == TestType.BossTest || NowTestType == TestType.EmptyTest)
             {
                 isBornMewRoom = false;
                 isBornBabyCenterRoom = false;
@@ -359,7 +376,14 @@ public class MapCreater : MonoBehaviour
         if (!VRoom.ContainsKey(NowChechPoint)) { VRoom.Add(NowChechPoint, 0); }
 
         //boss测试模式只要一个房间
-        if (isBossTestMap) { return; }
+        if (NowTestType == TestType.BossTest) { return; }
+        //敌人测试模式要上下左右中五个房间
+        if (NowTestType == TestType.EmptyTest) {
+            VRoom.Add(NowChechPoint + Vector3Int.up, 0);
+            VRoom.Add(NowChechPoint + Vector3Int.down, 0);
+            VRoom.Add(NowChechPoint + Vector3Int.left, 0);
+            VRoom.Add(NowChechPoint + Vector3Int.right, 0);
+            return; }
 
         //当当前虚拟房间数大于需要生成的最小房间数时，房间生成概率降低10%
         if (RoomCount > StepMin) { per -= DecaySpeed; }
@@ -443,7 +467,7 @@ public class MapCreater : MonoBehaviour
     {
         if (!isPCRoomSpawn) {
             //●Boss测试房间
-            if (isBossTestMap)
+            if (NowTestType == TestType.BossTest)
             {
                 Vector3Int BossTestPoint = Vector3Int.down;
                 switch (BossTest_BossDoorTestIndex%4)
@@ -452,6 +476,27 @@ public class MapCreater : MonoBehaviour
                     case 1: BossTestPoint = Vector3Int.down; break;
                     case 2: BossTestPoint = Vector3Int.left; break;
                     case 3: BossTestPoint = Vector3Int.right; break;
+                }
+                string Testroomname = BossTestPoint.ToString();
+                VRoom.Add(BossTestPoint, 0);
+                PCRoomPoint = BossTestPoint;
+                isPCRoomSpawn = true;
+                Room room = Instantiate(PCRoomUp, new Vector3(BossTestPoint.x * 30, BossTestPoint.y * 24, 0), Quaternion.identity);
+                room.RoomIndex = BossTestPoint;
+                room.transform.name = "PC" + Testroomname;
+                RRoom.Add(BossTestPoint, room);
+                return;
+            }
+            //●敌人测试房间
+            if (NowTestType == TestType.EmptyTest)
+            {
+                Vector3Int BossTestPoint = Vector3Int.down*2;
+                switch (BossTest_BossDoorTestIndex % 4)
+                {
+                    case 0: BossTestPoint = Vector3Int.up * 2; break;
+                    case 1: BossTestPoint = Vector3Int.down * 2; break;
+                    case 2: BossTestPoint = Vector3Int.left * 2; break;
+                    case 3: BossTestPoint = Vector3Int.right * 2; break;
                 }
                 string Testroomname = BossTestPoint.ToString();
                 VRoom.Add(BossTestPoint, 0);
@@ -547,7 +592,7 @@ public class MapCreater : MonoBehaviour
     {
         if (!isStoreRoomSpawn) {
             //●Boss测试房间
-            if (isBossTestMap)
+            if (NowTestType == TestType.BossTest)
             {
                 Vector3Int BossTestPoint = Vector3Int.down;
                 switch (BossTest_BossDoorTestIndex % 4)
@@ -556,6 +601,27 @@ public class MapCreater : MonoBehaviour
                     case 1: BossTestPoint = Vector3Int.left; break;
                     case 2: BossTestPoint = Vector3Int.right; break;
                     case 3: BossTestPoint = Vector3Int.up; break;
+                }
+                string Testroomname = BossTestPoint.ToString();
+                VRoom.Add(BossTestPoint, 0);
+                StoreRoomPoint = BossTestPoint;
+                isStoreRoomSpawn = true;
+                Room room = Instantiate(StoreRoomUp, new Vector3(BossTestPoint.x * 30, BossTestPoint.y * 24, 0), Quaternion.identity);
+                room.RoomIndex = BossTestPoint;
+                room.transform.name = "Store" + Testroomname;
+                RRoom.Add(BossTestPoint, room);
+                return;
+            }
+            //●敌人测试房间
+            if (NowTestType == TestType.EmptyTest)
+            {
+                Vector3Int BossTestPoint = Vector3Int.down * 2;
+                switch (BossTest_BossDoorTestIndex % 4)
+                {
+                    case 0: BossTestPoint = Vector3Int.down * 2; break;
+                    case 1: BossTestPoint = Vector3Int.left * 2; break;
+                    case 2: BossTestPoint = Vector3Int.right * 2; break;
+                    case 3: BossTestPoint = Vector3Int.up * 2; break;
                 }
                 string Testroomname = BossTestPoint.ToString();
                 VRoom.Add(BossTestPoint, 0);
@@ -651,7 +717,7 @@ public class MapCreater : MonoBehaviour
     {
         if (!isBossRoomSpawn) {
             //●Boss测试房间
-            if (isBossTestMap)
+            if (NowTestType == TestType.BossTest)
             {
                 Vector3Int BossTestPoint = Vector3Int.down;
                 switch (BossTest_BossDoorTestIndex % 4)
@@ -672,6 +738,31 @@ public class MapCreater : MonoBehaviour
                 RRoom.Add(BossTestPoint, room);
                 return;
             }
+            //●敌人测试房间
+            if (NowTestType == TestType.EmptyTest)
+            {
+                Vector3Int BossTestPoint = Vector3Int.down * 2;
+                switch (BossTest_BossDoorTestIndex % 4)
+                {
+                    case 0: BossTestPoint = Vector3Int.left * 2; break;
+                    case 1: BossTestPoint = Vector3Int.right * 2; break;
+                    case 2: BossTestPoint = Vector3Int.up * 2; break;
+                    case 3: BossTestPoint = Vector3Int.down * 2; break;
+                }
+                string Testroomname = BossTestPoint.ToString();
+                VRoom.Add(BossTestPoint, 0);
+                BossRoomPoint = BossTestPoint;
+                isBossRoomSpawn = true;
+                Room room = Instantiate(BossRoom, new Vector3(BossTestPoint.x * 30, BossTestPoint.y * 24, 0), Quaternion.identity);
+                room.RoomIndex = BossTestPoint;
+                room.transform.name = "Boss" + Testroomname;
+                room.CreatNextFloorWall();
+                RRoom.Add(BossTestPoint, room);
+                return;
+            }
+
+
+
             //●遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方初一生成半径，且该房间不是boss房间或者商店房间，有概率在刚房间周围生成PC房间
             foreach (Vector3Int item in VRoom.Keys)
             {
@@ -780,7 +871,7 @@ public class MapCreater : MonoBehaviour
         if (!isSkillShopRoomSpawn)
         {
             //●Boss测试房间
-            if (isBossTestMap)
+            if (NowTestType == TestType.BossTest)
             {
                 Vector3Int BossTestPoint = Vector3Int.down;
                 switch (BossTest_BossDoorTestIndex % 4)
@@ -789,6 +880,28 @@ public class MapCreater : MonoBehaviour
                     case 1: BossTestPoint = Vector3Int.up; break;
                     case 2: BossTestPoint = Vector3Int.down; break;
                     case 3: BossTestPoint = Vector3Int.left; break;
+                }
+                string Testroomname = BossTestPoint.ToString();
+                VRoom.Add(BossTestPoint, 0);
+                SkillShopRoomPoint = BossTestPoint;
+                isSkillShopRoomSpawn = true;
+                Room room = Instantiate(SkillShopRoom, new Vector3(BossTestPoint.x * 30, BossTestPoint.y * 24, 0), Quaternion.identity);
+                room.RoomIndex = BossTestPoint;
+                room.transform.name = "SkillShop" + Testroomname;
+                RRoom.Add(BossTestPoint, room);
+                room.CreatWall();
+                return;
+            }
+            //●敌人测试房间
+            if (NowTestType == TestType.EmptyTest)
+            {
+                Vector3Int BossTestPoint = Vector3Int.down * 2;
+                switch (BossTest_BossDoorTestIndex % 4)
+                {
+                    case 0: BossTestPoint = Vector3Int.right * 2; break;
+                    case 1: BossTestPoint = Vector3Int.up * 2; break;
+                    case 2: BossTestPoint = Vector3Int.down * 2; break;
+                    case 3: BossTestPoint = Vector3Int.left * 2; break;
                 }
                 string Testroomname = BossTestPoint.ToString();
                 VRoom.Add(BossTestPoint, 0);

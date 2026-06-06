@@ -19,6 +19,10 @@ public class SkillBar01 : MonoBehaviour
 
     public bool isCDStart = false;
 
+    public bool isImprison = false;
+
+    public Image ImprisonMark;
+
 
     // Start is called before the first frame update
     void Start()
@@ -54,11 +58,18 @@ public class SkillBar01 : MonoBehaviour
     void Update()
     {
         
-        if (isCDStart && skill != null)
+        if (!isImprison && isCDStart && skill != null)
         {
             Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalsize - originalsize * (1/ player.GetSkillCD(skill) ) * Timer);
             Timer += Time.deltaTime;
             if (Timer > player.GetSkillCD(skill) ) { isCDStart = false;Timer = 0; }
+        }
+
+        //设置被无效标志
+        if (ImprisonMark != null)
+        {
+            if (!isImprison && ImprisonMark.gameObject.activeInHierarchy) { ImprisonMark.gameObject.SetActive(false); }
+            if (isImprison && !ImprisonMark.gameObject.activeInHierarchy) { ImprisonMark.gameObject.SetActive(true); }
         }
     }
     public void CDPlus(float CDPlusPoint)
