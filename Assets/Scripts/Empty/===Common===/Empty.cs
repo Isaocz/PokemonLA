@@ -1739,13 +1739,18 @@ public class Empty : Pokemon
     /// <summary>
     /// 生成愤怒特效
     /// </summary>
-    protected static void AngryEffect(Vector2 offset , GameObject empty , Vector3 Scale)
+    protected static void AngryEffect(Vector2 offset , GameObject empty , Vector3 Scale ,bool isChild = false)
     {
         GameObject AngryEffect = PublicEffect.StaticPublicEffectList.ReturnAPublicEffect(2);
         GameObject a = Instantiate(AngryEffect, empty.transform.position + (Vector3)offset, Quaternion.identity);
         a.SetActive(true);
         a.transform.localScale = Scale;
+        if (isChild)
+        {
+            a.transform.parent = empty.transform;
+        }
     }
+
 
     //===================================生成愤怒特效===========================================
 

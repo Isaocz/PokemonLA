@@ -457,7 +457,7 @@ public class Electrode : Empty
     //À×µçÇò±¬Õ¨
     public override void EmptyEcplosionEvent()
     {
-        //base.EmptyEcplosionEvent();
+        base.EmptyEcplosionEvent();
         animator.SetTrigger("Explosion");
         //AI.isCanNotMove = true;
         //AI.SetSpeed(speed, SpeedAlphaList[i]);

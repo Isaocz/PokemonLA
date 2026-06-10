@@ -420,7 +420,7 @@ public class Voltorb : Empty
     //雷电球爆炸
     public override void EmptyEcplosionEvent()
     {
-        //base.EmptyEcplosionEvent();
+        base.EmptyEcplosionEvent();
         animator.SetTrigger("Explosion");
         //AI.isCanNotMove = true;
         //AI.SetSpeed(speed, SpeedAlphaList[i]);
