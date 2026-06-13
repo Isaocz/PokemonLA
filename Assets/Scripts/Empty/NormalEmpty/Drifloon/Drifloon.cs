@@ -20,6 +20,7 @@ public class Drifloon : Empty
 
     bool isAngry = false;
     bool isExploson = false;
+    bool isExplosonOBJBorn = false;
 
     public static float SPEEDALPHA_ANGRY = 2.7f;
 
@@ -292,7 +293,8 @@ public class Drifloon : Empty
 
     public void Explosion()
     {
-        if (IsDeadrattle) {
+        if (IsDeadrattle && !isExplosonOBJBorn) {
+            isExplosonOBJBorn = true;
             GameObject boom = Instantiate(explosion, transform.position, Quaternion.identity);
             DrifloonExplosion e = boom.transform.GetChild(0).GetComponent<DrifloonExplosion>();
             e.empty = this;

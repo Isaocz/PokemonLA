@@ -4,12 +4,21 @@ using UnityEngine;
 
 public class DrifblimShadowBall : Projectile
 {
-    public float moveSpeed = 5f;
     public Vector2 direction;
-    public float MaxRange = 20f; // 最大移动距离
+    public float MaxRange; // 最大移动距离
     private Animator animator;
     bool isCanNotMove;
     Vector3 StartPostion;
+
+    bool isDestory;
+
+
+    private void Awake()
+    {
+        AwakeProjectile();
+        Timer.Start(this, 10.0f, () => { if (!isDestory) { isDestory = true; } });
+    }
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -17,60 +26,72 @@ public class DrifblimShadowBall : Projectile
         StartPostion = transform.position;
     }
 
-    void FixedUpdate()
+    private void Update()
     {
+        //this.transform.localScale += new Vector3(Time.deltaTime * 2, 0, 0);
         if (!isCanNotMove)
         {
-            Vector3 postion = transform.position;
-            postion.x += direction.x * moveSpeed * Time.deltaTime;
-            postion.y += direction.y * moveSpeed * Time.deltaTime;
-            transform.position = postion;
-            if ((StartPostion - transform.position).magnitude > MaxRange)
+            DestoryByRange(MaxRange);
+            if (isDestory)
             {
                 BallBreak();
             }
+            else
+            {
+                MoveNotForce();
+            }
         }
     }
+
+    public override void DestoryByRange(float ProjectileRange)
+    {
+        if ((transform.position - BornPosition).magnitude >= ProjectileRange)
+        {
+            BallBreak();
+        }
+    }
+
 
     void BallBreak()
     {
         if (!isCanNotMove)
         {
             transform.GetComponent<Collider2D>().enabled = false;
+            Destroy(transform.GetChild(1).gameObject);
             animator.SetTrigger("Over");
             isCanNotMove = true;
+
+            _mTool.RemoveAllPSChild(gameObject);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Player"||collision.tag == "Room" || collision.tag == "Enviroment"|| (empty.isEmptyInfatuationDone && collision.tag == "Empty" && collision.gameObject != empty.gameObject ))
+        if (collision.tag == "Player" || collision.tag == "Room" || (empty.isEmptyInfatuationDone && collision.tag == "Empty" && collision.gameObject != empty.gameObject))
         {
             BallBreak();
-            if (collision.tag == "Player")
+            if (empty != null)
             {
-                PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, 80, 0, PokemonType.TypeEnum.Ghost);
-                if(playerControler != null)
+                if (!empty.isEmptyInfatuationDone && collision.tag == "Player")
                 {
-                    playerControler.KnockOutPoint = 5;
-                    playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+                    PlayerControler playerControler = collision.GetComponent<PlayerControler>();
+                    Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, 80, 0, PokemonType.TypeEnum.Ghost);
+                    if (playerControler != null)
+                    {
+                        playerControler.KnockOutPoint = 5;
+                        playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
+                    }
                 }
-            }
-            else if (empty.isEmptyInfatuationDone && collision.tag == "Empty" && collision.gameObject != empty.gameObject)
-            {
-                Empty e = collision.GetComponent<Empty>();
-                Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, 80, 0, PokemonType.TypeEnum.Ghost);
-                if (e != null)
+                else if (empty.isEmptyInfatuationDone && collision.tag == "Empty" && collision.gameObject != empty.gameObject)
                 {
+                    Empty e = collision.GetComponent<Empty>();
+                    if (e != null)
+                    {
+                        Pokemon.PokemonHpChange(empty.gameObject, e.gameObject, 0, 80, 0, PokemonType.TypeEnum.Ghost);
 
+                    }
                 }
             }
         }
-    }
-
-    public void DestroySelf()
-    {
-        Destroy(gameObject);
     }
 }
