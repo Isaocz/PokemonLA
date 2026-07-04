@@ -34,7 +34,7 @@ public class MisdreavusSing : MonoBehaviour
     {
         skillCollider.SkillCircleOver();
         skillRange.SkillCircleOver();
-        _mTool.RemoveAllPSChild(this.gameObject);
+        _mTool.RemoveAllPSChild(this.gameObject , 2.5f);
         Destroy(gameObject, 1.0f);
     }
 

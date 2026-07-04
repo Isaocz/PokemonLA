@@ -473,7 +473,6 @@ public class Empty : Pokemon
     /// </summary>
     public virtual void StartOverEvent()
     {
-        //GetShield((int)(maxHP / 3.0f));
         //添加敌人至房间敌人列表
         ParentPokemonRoom.AddEmptyList(this);
 
@@ -513,6 +512,10 @@ public class Empty : Pokemon
         SaveLevel = e.Emptylevel;
         SaveHp = e.EmptyHp;
         SaveShield = e.EmptyShield;
+
+        //继承伙伴系统
+
+        //继承父子系统
     }
 
 
@@ -1619,11 +1622,11 @@ public class Empty : Pokemon
     }
 
     /// <summary>
-    /// 多用于确定敌人是否处于当前房间的范围内
+    /// (仅音响蟀使用 不明原因添加了绝对值判断)多用于确定敌人是否处于当前房间的范围内
     /// </summary>
     /// <param name="P"></param>
     /// <returns></returns>
-    public bool isThisPointInRoom(Vector3 P)
+    public bool isThisPointInRoomKricketunr(Vector3 P)
     {
         if (Mathf.Abs(P.x) >= parentRoom.EmptyFile().transform.position.x + parentRoom.RoomSize[2] &&
             Mathf.Abs(P.x) <= parentRoom.EmptyFile().transform.position.x + parentRoom.RoomSize[3] &&
@@ -1639,6 +1642,27 @@ public class Empty : Pokemon
 
     }
 
+
+    /// <summary>
+    /// 多用于确定敌人是否处于当前房间的范围内
+    /// </summary>
+    /// <param name="P"></param>
+    /// <returns></returns>
+    public bool isThisPointInRoom(Vector3 P)
+    {
+        if (P.x >= parentRoom.EmptyFile().transform.position.x + parentRoom.RoomSize[2] &&
+            P.x <= parentRoom.EmptyFile().transform.position.x + parentRoom.RoomSize[3] &&
+            P.y >= parentRoom.EmptyFile().transform.position.y + parentRoom.RoomSize[1] &&
+            P.y <= parentRoom.EmptyFile().transform.position.y + parentRoom.RoomSize[0])
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
 
 
 

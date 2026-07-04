@@ -249,7 +249,12 @@ public partial class Eiscue : Empty
     }
 
 
-
+    public override void StartOverEvent()
+    {
+        //获得护盾
+        GetShield((int)(maxHP / 3.0f));
+        base.StartOverEvent();
+    }
 
 
 
@@ -481,7 +486,7 @@ public partial class Eiscue : Empty
                     Vector2 LunchRotation = (Quaternion.AngleAxis(startRotation + i * 90.0f, Vector3.forward) * Vector2.right).normalized;
                     EiscueIceShard iS = Instantiate(eiscueIceShard, transform.position + (Vector3)LunchRotation, Quaternion.Euler(0, 0, startRotation + i * 90.0f));
                     iS.empty = this;
-                    iS.LaunchNotForce(LunchRotation, 2.2f);
+                    iS.LaunchNotForce(LunchRotation, 3.2f);
                     //iS.isSplit = false;
                     //iS.isMist = false;
                     iS.SetMaxDistence(10.6f);

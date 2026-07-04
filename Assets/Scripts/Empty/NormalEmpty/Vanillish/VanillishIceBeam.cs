@@ -106,14 +106,16 @@ public class VanillishIceBeam : MonoBehaviour
                     if (ParentVanillish.positionInPartnership == Empty.PositionInPartnershipEnum.BigBrother) { rotationSpeed *= (ParentVanillish.isReverseBeam ? -1.0f : 2.0f); }
                     else { rotationSpeed *= (ParentVanillish.isReverseBeam ? 2.0f : -1.0f); }
                 }
+                //跟随双倍多多冰模式
                 else if (ParentVanillish.havePartnerState == Vanillish.HavePartnerState.Father && ParentVanillish.ParentEmptyByChild != null)
                 {
                     float TargetRotation = _mTool.Angle_360Y((Vector3)(ParentVanillish.transform.position - ParentVanillish.ParentEmptyByChild.transform.position).normalized, Vector3.right);
                     float NowRotation = transform.rotation.eulerAngles.z;
-                    float delta = (TargetRotation - NowRotation + 360) % 360;
+                    float delta = Mathf.DeltaAngle(NowRotation, TargetRotation);
                     if (delta > 5) { rotationSpeed = 100; }
                     else if (delta < -5) { rotationSpeed = -100; }
                     else { rotationSpeed = 0; }
+                    Debug.Log(TargetRotation + "+" + NowRotation + "+" + delta);
                     //Debug.Log(delta);
                 }
                 rotationSpeed *= (ParentVanillish.isEmptyConfusionDone ? 0.4f : 1.0f) * ((Weather.GlobalWeather.isHail || Weather.GlobalWeather.isHailPlus) ? 2.0f : 1.0f);

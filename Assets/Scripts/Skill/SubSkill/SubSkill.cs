@@ -194,6 +194,8 @@ public class SubSkill : MonoBehaviour
                         if (emptyTarget.Abillity == Empty.EmptyAbillity.RoughSkin && _mTool.ContainsSkillTag(SkillTag, Skill.SkillTagEnum.接触类))
                         {
                             Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHPandSHIELD - (emptyTarget.EmptyHp + emptyTarget.EmptyShield)) / 4, 1, 10000), 0, 0, PokemonType.TypeEnum.IgnoreType);
+                            player.KnockOutPoint = 3.5f;
+                            player.KnockOutDirection = (player.transform.position - emptyTarget.transform.position).normalized;
                         }
                         //冰冻之躯
                         if (emptyTarget.Abillity == Empty.EmptyAbillity.IceBody && _mTool.ContainsSkillTag(SkillTag, Skill.SkillTagEnum.接触类))
@@ -244,6 +246,8 @@ public class SubSkill : MonoBehaviour
                         if (emptyTarget.Abillity == Empty.EmptyAbillity.RoughSkin && _mTool.ContainsSkillTag(SkillTag, Skill.SkillTagEnum.接触类))
                         {
                             Pokemon.PokemonHpChange(null, player.gameObject, Mathf.Clamp((EmptyBeforeHPandSHIELD - (emptyTarget.EmptyHp + emptyTarget.EmptyShield)) / 4, 1, 10000), 0, 0, PokemonType.TypeEnum.IgnoreType);
+                            player.KnockOutPoint = 3.5f;
+                            player.KnockOutDirection = (player.transform.position - emptyTarget.transform.position).normalized;
                         }
                         //冰冻之躯
                         if (emptyTarget.Abillity == Empty.EmptyAbillity.IceBody && _mTool.ContainsSkillTag(SkillTag, Skill.SkillTagEnum.接触类))

@@ -12,6 +12,23 @@ public class EmptyTeamEchoedVoiceManger : EmptyTeamManger
     // Start is called before the first frame update
     void Start()
     {
+        //EmptyTeamStart();
+    }
+
+    private void OnDisable()
+    {
+        EmptyTeamDisable();
+    }
+
+    private void OnEnable()
+    {
+        Debug.Log("Enable");
+        StartCoroutine(DelayEnable());
+    }
+
+    IEnumerator DelayEnable()
+    {
+        yield return new WaitForSeconds(StartDelay);
         EmptyTeamStart();
     }
 
@@ -27,6 +44,12 @@ public class EmptyTeamEchoedVoiceManger : EmptyTeamManger
         if (empty.isUseEchoedVoice ) { output = true; }
         else { output = false; }
         return (base.EmptyTeamEnqueueCondition(empty)) && output;
+    }
+
+    public override void EmptyTeamDisable()
+    {
+        base.EmptyTeamDisable();
+        EchoedVoiceLevel = 0;
     }
 
     protected override bool EmptyTeamActCondition(Empty empty)

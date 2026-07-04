@@ -309,8 +309,9 @@ public class _mTool : MonoBehaviour
 
     /// <summary>
     /// 解除某一对象旗下所有的粒子特效，将这些粒子特效放置于最外场景，并且使他们不再循环并播放完毕后删除
+    /// SpeedUp=加速粒子效果 1.0f时不加速
     /// </summary>
-    public static void RemoveAllPSChild(GameObject Parent)
+    public static void RemoveAllPSChild(GameObject Parent , float SpeedUp = 1.0f)
     {
         if (Parent.transform.childCount != 0)
         {
@@ -333,6 +334,10 @@ public class _mTool : MonoBehaviour
                     var psmain = ps.main;
                     psmain.loop = false;
                     psmain.stopAction = ParticleSystemStopAction.Destroy;
+                    if(SpeedUp != 1.0f)
+                    {
+                        psmain.simulationSpeed = SpeedUp;
+                    }
                     // 安全 detach
                     children[i].SetParent(null);
                 }

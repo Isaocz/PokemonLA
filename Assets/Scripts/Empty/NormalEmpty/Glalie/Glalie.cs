@@ -45,6 +45,10 @@ public class Glalie : Empty
     public float IdleTimer;
 
 
+    public SkillArrow BiteArrowPrefabs;
+    SkillArrow BiteArrowObj;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -160,6 +164,7 @@ public class Glalie : Empty
             }
             if ((isSleepDone || isFearDone) && NowState != State.Idle)
             {
+                OverChargePunchArrow();
                 IdleState(3.0f);
                 animator.SetInteger("isRushOver", 2);
                 animator.SetTrigger("BiteOver");
@@ -234,6 +239,7 @@ public class Glalie : Empty
     /// </summary>
     public void IdleState(float Idletime)
     {
+        OverChargePunchArrow();
         NowState = State.Idle;
         isBiteMove = false;
         BiteRushCount = 0;
@@ -281,7 +287,7 @@ public class Glalie : Empty
     {
         NowState = State.Bite;
         isBiteMove = false;
-        
+        SetChargePunchArrow((Vector2)transform.position + Director * speed * 5.5f * RUSHTIME);
     }
 
     public void BiteRushStart()
@@ -289,9 +295,30 @@ public class Glalie : Empty
         NowState = State.Bite;
         animator.SetInteger("isRushOver", 0);
         isBiteMove = true;
-        
+        OverChargePunchArrow();
     }
 
+
+
+    void SetChargePunchArrow(Vector2 p)
+    {
+        if (BiteArrowObj != null)
+        {
+            Destroy(BiteArrowObj.gameObject);
+        }
+        BiteArrowObj = Instantiate(BiteArrowPrefabs, transform.position, Quaternion.identity, transform);
+        BiteArrowObj.SetTarget(p);
+
+    }
+
+    void OverChargePunchArrow()
+    {
+        if (BiteArrowObj != null)
+        {
+            BiteArrowObj.transform.parent = null;
+            BiteArrowObj.ArrowOver();
+        }
+    }
 
 
 
@@ -333,6 +360,7 @@ public class Glalie : Empty
     /// </summary>
     void DieBlest()
     {
+        OverChargePunchArrow();
         if (IsDeadrattle) {
             GlalieIceShard i1 = Instantiate(iceShard, transform.position, Quaternion.Euler(0, 0, 90), ParentPokemonRoom.transform);
             i1.SetNewIceShard(0, this);

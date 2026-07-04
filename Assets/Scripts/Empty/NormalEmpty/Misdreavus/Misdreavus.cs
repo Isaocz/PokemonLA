@@ -65,6 +65,26 @@ public class Misdreavus : Empty
     /// </summary>
     public float ImpoisonTime = 20.0f;
 
+
+    //唱歌（轮唱）时的技能圈
+    public EmptyEchoedVoice echoedVoiceCircle;
+    EmptyEchoedVoice echoedVoiceCircleObj;
+
+    /// <summary>
+    /// 是否处于唱歌状态
+    /// </summary>
+    bool isEchoedVoice = false;
+    /// <summary>
+    /// 唱歌（轮唱）cd计时器
+    /// </summary>
+    float EchoedVoiceCDTimer = 0.0f;
+    /// <summary>
+    /// 唱歌（轮唱）CD时间
+    /// </summary>
+    public float TIME_CD_ECHOEDVOICE = 2.0f;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -106,20 +126,51 @@ public class Misdreavus : Empty
                 //唱歌
                 if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isFearDone)
                 {
-                    //开始唱歌
-                    if (SingObj == null)
+                    if (EchoedVoiceCDTimer > 0.0f)
                     {
-                        SingStart();
+                        EchoedVoiceCDTimer -= Time.deltaTime;
+                        if (EchoedVoiceCDTimer <= 0.0f)
+                        {
+                            EchoedVoiceCDTimer = 0.0f;
+
+                        }
                     }
+                    else{
+                        if (!isEchoedVoice)
+                        {
+                            //开始唱歌
+                            if (SingObj == null)
+                            {
+                                SingStart();
+                            }
+                        }
+                        else
+                        {
+
+                        }
+                    }
+
                 }
                 else
                 {
-                    //结束唱歌
-                    if (SingObj != null)
+                    if (!isEchoedVoice)
                     {
-                        SingOver();
+                        //结束唱歌
+                        if (SingObj != null)
+                        {
+                            SingOver();
+                        }
                     }
+                    else
+                    {
+                        //结束唱歌轮唱
+                        SetSingOver();
+                        Destroy(echoedVoiceCircleObj.gameObject);
+                        if (isFearDone) { EchoedVoiceCDTimer = 0.0f; }
+                    }
+
                 }
+                
             }
 
             
@@ -170,64 +221,51 @@ public class Misdreavus : Empty
                 }
                 else { TargetPosition = InfatuationTarget.transform.position; }
 
-                //不恐惧时
-                if (!isFearDone)
+                if (!isEchoedVoice && EchoedVoiceCDTimer <= 0.0f)
                 {
-                    //接近目标
-                    //距离小于1 速度为1f 调整速度倍率为0.25
-                    if ((TargetPosition - transform.position).magnitude <= 1.0f)
+                    //不恐惧时
+                    if (!isFearDone)
                     {
-                        SpeedAlpha = 0.25f;
+                        //接近目标
+                        //距离小于1 速度为1f 调整速度倍率为0.25
+                        if ((TargetPosition - transform.position).magnitude <= 1.0f)
+                        {
+                            SpeedAlpha = 0.25f;
+                        }
+                        //距离小于3大于1 速度为2f 调整速度倍率为0.5
+                        else if ((TargetPosition - transform.position).magnitude > 1.0f && (TargetPosition - transform.position).magnitude <= 3.0f)
+                        {
+                            SpeedAlpha = 0.5f; ;
+                        }
+                        //常态 速度为4f 调整速度倍率为1
+                        else
+                        {
+                            SpeedAlpha = 1.0f;
+                        }
+                        direction = (TargetPosition - transform.position).normalized;
+                        direction = (Quaternion.AngleAxis(isEmptyConfusionDone ? 30 : 0, Vector3.forward) * direction).normalized;
+                        animator.SetFloat("LookX", (direction.x >= 0 ? 1 : -1));
+                        animator.SetFloat("LookY", (direction.y >= 0 ? 1 : -1));
+                        //rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)direction.x * Time.deltaTime * speed, -15f + transform.parent.position.x, 15f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)direction.y * Time.deltaTime * speed, -10f + transform.parent.position.y, 10f + transform.parent.position.y));
+                        MoveBySpeedAndDir(direction, speed, SpeedAlpha, 0.0f, 0.0f, 0.0f, 0.0f);
                     }
-                    //距离小于3大于1 速度为2f 调整速度倍率为0.5
-                    else if ((TargetPosition - transform.position).magnitude > 1.0f && (TargetPosition - transform.position).magnitude <= 3.0f)
-                    {
-                        SpeedAlpha = 0.5f; ;
-                    }
-                    //常态 速度为4f 调整速度倍率为1
+                    //恐惧时 远离目标
                     else
                     {
-                        SpeedAlpha = 1.0f;
-                    }
-                    direction = (TargetPosition - transform.position).normalized;
-                    direction = (Quaternion.AngleAxis(isEmptyConfusionDone ? 30 : 0, Vector3.forward) * direction).normalized;
-                    animator.SetFloat("LookX", (direction.x >= 0 ? 1 : -1));
-                    animator.SetFloat("LookY", (direction.y >= 0 ? 1 : -1));
-                    //rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)direction.x * Time.deltaTime * speed, -15f + transform.parent.position.x, 15f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)direction.y * Time.deltaTime * speed, -10f + transform.parent.position.y, 10f + transform.parent.position.y));
-                    MoveBySpeedAndDir(direction , speed, SpeedAlpha ,0.0f, 0.0f, 0.0f, 0.0f);
-                }
-                //恐惧时 远离目标
-                else
-                {
-                    SpeedAlpha = 1.5f;
-                    direction = (TargetPosition - transform.position).normalized;
-                    direction = (Quaternion.AngleAxis(isEmptyConfusionDone ? 150 : 180, Vector3.forward) * direction).normalized;
-                    animator.SetFloat("LookX", (direction.x >= 0 ? 1 : -1));
-                    animator.SetFloat("LookY", (direction.y >= 0 ? 1 : -1));
-                    if ((TargetPosition - transform.position).magnitude <= 4.0f)
-                    {
-                        MoveBySpeedAndDir(direction, speed, SpeedAlpha, 0.0f, 0.0f, 0.0f, 0.0f);
-                        //rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)direction.x * Time.deltaTime * speed, -15f + transform.parent.position.x, 15f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)direction.y * Time.deltaTime * speed, -10f + transform.parent.position.y, 10f + transform.parent.position.y));
+                        SpeedAlpha = 1.5f;
+                        direction = (TargetPosition - transform.position).normalized;
+                        direction = (Quaternion.AngleAxis(isEmptyConfusionDone ? 150 : 180, Vector3.forward) * direction).normalized;
+                        animator.SetFloat("LookX", (direction.x >= 0 ? 1 : -1));
+                        animator.SetFloat("LookY", (direction.y >= 0 ? 1 : -1));
+                        if ((TargetPosition - transform.position).magnitude <= 4.0f)
+                        {
+                            MoveBySpeedAndDir(direction, speed, SpeedAlpha, 0.0f, 0.0f, 0.0f, 0.0f);
+                            //rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)direction.x * Time.deltaTime * speed, -15f + transform.parent.position.x, 15f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)direction.y * Time.deltaTime * speed, -10f + transform.parent.position.y, 10f + transform.parent.position.y));
+                        }
                     }
                 }
 
-                /**
-                if (!isFearDone)
-                {
-                    direction = (targetPosition - transform.position).normalized;
-                    rigidbody2D.position = new Vector2(Mathf.Clamp(rigidbody2D.position.x + (float)direction.x * Time.deltaTime * speed, -15f + transform.parent.position.x, 15f + transform.parent.position.x), Mathf.Clamp(rigidbody2D.position.y + (float)direction.y * Time.deltaTime * speed, -10f + transform.parent.position.y, 10f + transform.parent.position.y));
-                    if(direction.x > 0)
-                    {
-                        if (direction.y > 0) ChangeAnimationState("MisdreavusMoveNE");
-                        else ChangeAnimationState("MisdreavusMoveSE");
-                    }
-                    else
-                    {
-                        if(direction.y > 0) ChangeAnimationState("MisdreavusMoveNW");
-                        else ChangeAnimationState("MisdreavusMoveSW");
-                    }
-                }
-                **/
+
             }
 
 
@@ -256,13 +294,15 @@ public class Misdreavus : Empty
     //开始唱歌
     void SingStart()
     {
-        if (SingObj != null)
-        {
-            Destroy(SingObj.gameObject);
-            SingObj = null;
+        if (!isEmptyFrozenDone && !isSleepDone && !isSilence && !isFearDone) {
+            if (SingObj != null)
+            {
+                Destroy(SingObj.gameObject);
+                SingObj = null;
+            }
+            SingObj = Instantiate(SingPrefab, transform.position + (Vector3)SingOffset, Quaternion.identity, transform);
+            SingObj.ParentMisdreavus = this;
         }
-        SingObj = Instantiate(SingPrefab, transform.position + (Vector3)SingOffset, Quaternion.identity, transform);
-        SingObj.ParentMisdreavus = this;
     }
 
     //结束唱歌
@@ -352,5 +392,56 @@ public class Misdreavus : Empty
             ParentPokemonRoom.RoomSize[1] - RoomDownAlpha + transform.parent.position.y,  //最小值
             ParentPokemonRoom.RoomSize[0] + RoomUpAlpha + transform.parent.position.y));//最大值
     }
+
+
+
+
+
+    //=========================唱歌回声相关=============================
+
+    /// <summary>
+    /// 使用回声
+    /// </summary>
+    public override void UseEchoedVoice(int echoedVoiceLevel)
+    {
+        Debug.Log(name + "+" + transform.position + "+" + echoedVoiceLevel);
+        animator.SetBool("Sing", true);
+        isEchoedVoice = true;
+        animator.SetFloat("Speed", 0);
+        animator.SetFloat("LookY", -1);
+
+
+        if (SingObj != null)
+        {
+            SingOver();
+        }
+
+        echoedVoiceCircleObj = Instantiate(echoedVoiceCircle, this.transform.position, Quaternion.identity, transform);
+        echoedVoiceCircleObj.SetEchoedVoiceLevel(echoedVoiceLevel);
+        echoedVoiceCircleObj.ParentEmpty = this;
+    }
+
+    public void SetSingOver()
+    {
+        if (isEchoedVoice)
+        {
+            animator.SetBool("Sing", false);
+            EchoedVoiceCDTimer = TIME_CD_ECHOEDVOICE;
+            
+            isEchoedVoice = false;
+        }
+    }
+
+
+    /// <summary>
+    /// 判定当前敌人是否可以回声
+    /// </summary>
+    public override bool isEchoedVoiceisReady()
+    {
+        if (!isEchoedVoice && !isDie && !isBorn && !isSleepDone && !isEmptyFrozenDone && !isSilence && !isCanNotMoveWhenParalysis && !isFearDone) { return true; }
+        else { return false; }
+    }
+
+    //=========================唱歌回声相关=============================
 }
 

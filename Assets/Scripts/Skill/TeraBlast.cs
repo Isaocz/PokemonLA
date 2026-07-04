@@ -19,9 +19,15 @@ public class TeraBlast : Skill
     bool RingPSSpeedDown;
 
 
+    //激光中部的子激光
+    private LineRenderer SonlineRenderer;
+
+
     private void Awake()
     {
         lineRenderer = GetComponentInChildren<LineRenderer>();
+        SonlineRenderer = lineRenderer.transform.GetChild(0).GetComponent<LineRenderer>();
+
     }
     // Start is called before the first frame update
     void Start()
@@ -57,7 +63,7 @@ public class TeraBlast : Skill
         Debug.Log(lineRenderer.GetPosition(0));
         Debug.Log(lineRenderer.GetPosition(1));
         SetRayColor();
-
+        SetSonBeam();
 
     }
 
@@ -102,6 +108,7 @@ public class TeraBlast : Skill
             //RingPSVofL.orbitalZ = 39*(LeserLength/8);
 
         }
+        SetSonBeam();
     }
 
 
@@ -134,6 +141,18 @@ public class TeraBlast : Skill
 
     }
 
+
+
+    void SetSonBeam()
+    {
+        if (SonlineRenderer != null)
+        {
+            SonlineRenderer.startWidth = lineRenderer.startWidth * 0.18f;
+            SonlineRenderer.endWidth = lineRenderer.endWidth * 0.18f;
+            SonlineRenderer.SetPosition(0, lineRenderer.GetPosition(0));
+            SonlineRenderer.SetPosition(1, lineRenderer.GetPosition(1));
+        }
+    }
 
     private void rayPosition()
     {

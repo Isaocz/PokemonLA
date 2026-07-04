@@ -318,7 +318,8 @@ public class Froslass : Empty
         LightTurnOFF();
         foreach (FroslassCloneBody b in CloneBodyList)
         {
-            b.animator.SetTrigger("Over");
+            if (b != null && b.gameObject != null && b.animator != null) { b.animator.SetTrigger("Over"); }
+            
         }
     }
 
@@ -593,6 +594,7 @@ public class Froslass : Empty
                 Vector2 v2 = TargetPosition + (Vector2)(Quaternion.AngleAxis(90.0f, Vector3.forward) * (TargetPosition - NowPosition).normalized * alpha);
                 Vector2 v3 = TargetPosition + (Vector2)(Quaternion.AngleAxis(180.0f, Vector3.forward) * (TargetPosition - NowPosition).normalized * alpha);
                 Vector2 v4 = TargetPosition + (Vector2)(Quaternion.AngleAxis(270.0f, Vector3.forward) * (TargetPosition - NowPosition).normalized * alpha);
+                Debug.Log(v1+"+"+v2 + "+" + v3 + "+" + v4);
                 if (!isThisPointInRoom(v1) && !isThisPointInRoom(v2) && !isThisPointInRoom(v3) && !isThisPointInRoom(v4))
                 {
                     Vector2 v5 = AuroraCenter + (Vector2)(Quaternion.AngleAxis(30.0f, Vector3.forward) * Vector2.right * 1.5f);
@@ -618,6 +620,8 @@ public class Froslass : Empty
                 Vector2 v2 = AuroraCenter + (Vector2)(Quaternion.AngleAxis(PlayerNotInAuroraDeflectionAngle * -1.0f, Vector3.forward) * (TargetPosition - AuroraCenter).normalized * AuroraRadius);
                 Vector2 v3 = AuroraCenter + (Vector2)(Quaternion.AngleAxis(PlayerNotInAuroraDeflectionAngle * 3.0f, Vector3.forward) * (TargetPosition - AuroraCenter).normalized * AuroraRadius);
                 Vector2 v4 = AuroraCenter + (Vector2)(Quaternion.AngleAxis(PlayerNotInAuroraDeflectionAngle * -3.0f, Vector3.forward) * (TargetPosition - AuroraCenter).normalized * AuroraRadius);
+                //Debug.Log(v1 + "+" + v2 + "+" + v3 + "+" + v4);
+                //Debug.Log(!isThisPointInRoom(v1) + "+" + !isThisPointInRoom(v2) + "+" + !isThisPointInRoom(v3) + "+" + !isThisPointInRoom(v4));
                 if (!isThisPointInRoom(v1) && !isThisPointInRoom(v2) && !isThisPointInRoom(v3) && !isThisPointInRoom(v4))
                 {
                     Vector2 v5 = AuroraCenter + (Vector2)(Quaternion.AngleAxis(30.0f, Vector3.forward) * Vector2.right * 1.5f);
@@ -645,7 +649,7 @@ public class Froslass : Empty
             {
                 MoveTarget[i] = new Vector2(
                         Mathf.Clamp(MoveTarget[i].x, ParentPokemonRoom.EmptyFile().transform.position.x + ParentPokemonRoom.RoomSize[2], ParentPokemonRoom.EmptyFile().transform.position.x + ParentPokemonRoom.RoomSize[3]),
-                        Mathf.Clamp(MoveTarget[i].y, ParentPokemonRoom.EmptyFile().transform.position.x + ParentPokemonRoom.RoomSize[1], ParentPokemonRoom.EmptyFile().transform.position.x + ParentPokemonRoom.RoomSize[0])
+                        Mathf.Clamp(MoveTarget[i].y, ParentPokemonRoom.EmptyFile().transform.position.y + ParentPokemonRoom.RoomSize[1], ParentPokemonRoom.EmptyFile().transform.position.y + ParentPokemonRoom.RoomSize[0])
                     );
                 Vector2 dir = _mTool.TiltMainVector2((TargetPosition - MoveTarget[i]).normalized);
                 if (i == m)

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -63,12 +64,23 @@ public class EmptyTeamManger : MonoBehaviour
         //Debug.Log("start");
         NowState = MangerState.StartDelay;
         GetTeamQueue();
+        Debug.Log(TeamQueue.Count);
         if (TeamQueue.Count != 0)//如果队列为空，不启动管理器
         {
             StartCoroutine(StartDelayOver(StartDelay));
         }
-        
-        
+    }
+
+
+    /// <summary>
+    /// 在小队管理器Start时调用
+    /// </summary>
+    public virtual void EmptyTeamDisable()
+    {
+        NowState = MangerState.StartDelay;
+        TeamQueue.Clear();
+        CheckFaildTimer = 0.0f;
+        LastActEmpty = null;
     }
 
 
@@ -96,7 +108,6 @@ public class EmptyTeamManger : MonoBehaviour
             }
             //反之清零
             else { CheckFaildTimer = 0.0f; }
-
             //如果连续检查失败 则跳过排头
             if (CheckFaildTimer >= TIMECheckFaild)
             {
@@ -168,13 +179,18 @@ public class EmptyTeamManger : MonoBehaviour
             //排空
             //Debug.Log(TeamQueue.Count);
             //Debug.Log((string.Join(", ", TeamQueue)));
-            Empty e = null;
-            while (TeamQueue.Count > 0 && TeamQueue.TryPeek(out e) && e == null)
-            {
-                TeamQueue.Dequeue();
-            }
-            if (TeamQueue.Count == 0) { return 0; }
-
+            //Empty e = null;
+            //while (TeamQueue.Count > 0 && TeamQueue.TryPeek(out e) && e == null)
+            //{
+            //    Debug.Log(e.name);
+            //    TeamQueue.Dequeue();
+            //}
+            TeamQueue = new Queue<Empty>(TeamQueue.Where(e => e != null));
+            //if (TeamQueue.Count == 0) { return 0; }
+            //小队成员小于2 不符合小队条件 检测未进行
+            if (TeamQueue.Count < 2) { return 0; }
+            Debug.Log(TeamQueue.Count);
+            
 
 
             //如果排头符合启动小队操作的条件
