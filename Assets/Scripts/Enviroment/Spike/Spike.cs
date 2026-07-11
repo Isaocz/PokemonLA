@@ -62,6 +62,15 @@ public class Spike : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ´ÌÏûÊ§
+    /// </summary>
+    public virtual void SpikeOver()
+    {
+        Debug.Log("Spike");
+        //Destroy(gameObject);
+    }
+
 
     public void SpikeHIt(Empty target)
     {

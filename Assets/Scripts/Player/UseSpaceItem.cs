@@ -366,7 +366,7 @@ public class UseSpaceItem : MonoBehaviour
             case 65:
                 player.SleepRemove();
                 Room NowRoom =  MapCreater.StaticMap.RRoom[player.NowRoom];
-                if (NowRoom.RoomTag == 0)
+                if (NowRoom.RoomTag == Room.RoomTagClass.NormalEmptyRoom)
                 {
                     for (int i = 0; i < NowRoom.transform.GetChild(3).childCount; i++ )
                     {
@@ -377,7 +377,7 @@ public class UseSpaceItem : MonoBehaviour
                         }
                     }
                 }
-                else if(NowRoom.RoomTag == 1)
+                else if(NowRoom.RoomTag == Room.RoomTagClass.PC)
                 {
                     Blissey b = NowRoom.transform.GetChild(7).GetComponent<Blissey>();
                     if (b != null)

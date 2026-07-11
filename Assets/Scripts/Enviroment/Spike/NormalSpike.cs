@@ -15,4 +15,11 @@ public class NormalSpike : Spike
     {
         SpikeOnTriggerStay2D(other);
     }
+
+
+    public override void SpikeOver()
+    {
+        base.SpikeOver();
+        GetComponent<Animator>().SetTrigger("Over");
+    }
 }

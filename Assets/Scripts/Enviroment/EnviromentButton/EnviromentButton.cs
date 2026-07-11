@@ -23,4 +23,29 @@ public class EnviromentButton : EnviromentSwitch
 
     }
 
+
+    /// <summary>
+    /// —∞’“∏∏∑øº‰
+    /// </summary>
+    /// <returns></returns>
+    protected Room FindParentRoom()
+    {
+        Transform parent = transform.parent;
+        int count = 0;
+
+        while (parent != null && count < 10)
+        {
+            Room r = parent.GetComponent<Room>();
+            if (r != null)
+            {
+                return r;
+            }
+
+            parent = parent.parent;
+            count++;
+        }
+
+        return null;
+    }
+
 }

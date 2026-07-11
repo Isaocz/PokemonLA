@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class EnviromentSwitch : MonoBehaviour
 {
+
+    protected Room ParentRoom;
+
+
+
     //按钮切换时动画帧间隔
     public static float pading = 0.05f;
 

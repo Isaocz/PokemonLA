@@ -55,7 +55,16 @@ public class Room : MonoBehaviour
     public int isClear;
     protected GameObject Empty;
 
-    public int RoomTag;
+    public RoomTagClass RoomTag;
+    public enum RoomTagClass
+    {
+        NormalEmptyRoom = 0,
+        PC = 1,
+        Shop = 2,
+        BossRoom = 3,
+        SpecialRoom = 4,
+    }
+
     protected GameObject Player;
     protected PlayerControler playerControler;
 
@@ -114,14 +123,14 @@ public class Room : MonoBehaviour
 
 
 
-        if (RoomTag == 0 || RoomTag == 3) {
+        if (RoomTag == Room.RoomTagClass.NormalEmptyRoom || RoomTag == Room.RoomTagClass.BossRoom) {
             Empty = gameObject.transform.GetChild(3).gameObject;
         }
 
         ;
         Player = GameObject.FindObjectOfType<PlayerControler>().gameObject;
         playerControler = Player.GetComponent<PlayerControler>();
-        if (RoomTag == 0 || RoomTag == -1 || RoomTag == 3)
+        if (RoomTag == Room.RoomTagClass.NormalEmptyRoom || RoomTag == Room.RoomTagClass.SpecialRoom || RoomTag == Room.RoomTagClass.BossRoom)
         {
             SetFloor();
         }
@@ -154,7 +163,7 @@ public class Room : MonoBehaviour
                 }
             }
 
-            if (RoomTag == 0 || RoomTag == 3)
+            if (RoomTag == Room.RoomTagClass.NormalEmptyRoom || RoomTag == Room.RoomTagClass.BossRoom)
             {
                 transform.GetChild(3).gameObject.SetActive(true);
                 transform.GetChild(4).gameObject.SetActive(true);
@@ -175,7 +184,7 @@ public class Room : MonoBehaviour
         if (isVisit && isClear > 0 && new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f), 0) != playerControler.NowRoom)
         {
             isVisit = false;
-            if (RoomTag == 0 || RoomTag == 3)
+            if (RoomTag == Room.RoomTagClass.NormalEmptyRoom || RoomTag == Room.RoomTagClass.BossRoom)
             {
                 //重置所有敌人
                 List<Empty> eList = _mTool.GetAllFromTransform<Empty>(transform.GetChild(3).transform);
@@ -260,7 +269,7 @@ public class Room : MonoBehaviour
             isMapCreated = true;
         }
 
-        if (isVisit && (RoomTag == 0 || RoomTag == 3) && !isItemDrop && isClear <= 0 && RandomDropItem != null)
+        if (isVisit && (RoomTag == Room.RoomTagClass.NormalEmptyRoom || RoomTag == Room.RoomTagClass.BossRoom) && !isItemDrop && isClear <= 0 && RandomDropItem != null)
         {
             isItemDrop = true;
             Debug.Log(1);
@@ -272,7 +281,7 @@ public class Room : MonoBehaviour
             {
                 playerControler.ClearThisRoomEvent(playerControler);
             }
-            if (RoomTag == 3) { BackGroundMusic.StaticBGM.ChangeBGMToBossWin(); }
+            if (RoomTag == Room.RoomTagClass.BossRoom) { BackGroundMusic.StaticBGM.ChangeBGMToBossWin(); }
         }
     }
 
@@ -702,7 +711,7 @@ public class Room : MonoBehaviour
     public void GetAllItem()
     {
         ItemList.Clear();
-        if (RoomTag != 1 && RoomTag != 2) {
+        if (RoomTag != Room.RoomTagClass.PC && RoomTag != Room.RoomTagClass.Shop) {
             if (transform.GetChild(4).gameObject.activeInHierarchy && transform.GetChild(4).childCount > 0)
             {
                 for (int i = 0; i < transform.GetChild(4).childCount; i++)

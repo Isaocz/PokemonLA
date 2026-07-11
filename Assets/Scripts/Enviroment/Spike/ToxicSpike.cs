@@ -40,4 +40,10 @@ public class ToxicSpike : Spike
     {
         SpikeOnTriggerStay2D(other);
     }
+
+    public override void SpikeOver()
+    {
+        base.SpikeOver();
+        GetComponent<Animator>().SetTrigger("Over");
+    }
 }

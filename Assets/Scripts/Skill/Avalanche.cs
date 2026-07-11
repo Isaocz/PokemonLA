@@ -15,7 +15,7 @@ public class Avalanche : Skill
         StartPlayerHP = player.Hp;
 
         if (SkillFrom == 2) {
-            if (MapCreater.StaticMap.RRoom[player.NowRoom].RoomTag != 1 && MapCreater.StaticMap.RRoom[player.NowRoom].RoomTag != 2)
+            if (MapCreater.StaticMap.RRoom[player.NowRoom].RoomTag != Room.RoomTagClass.PC && MapCreater.StaticMap.RRoom[player.NowRoom].RoomTag != Room.RoomTagClass.Shop)
             {
                 GameObject NowRoomEmptyFile = MapCreater.StaticMap.RRoom[player.NowRoom].transform.GetChild(3).gameObject;
                 for (int i = 0; i < NowRoomEmptyFile.transform.childCount; i++)

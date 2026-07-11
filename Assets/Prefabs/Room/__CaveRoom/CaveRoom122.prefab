@@ -23,13 +23,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 841184915808300237}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6650919922618254993}
   m_Father: {fileID: 8577438572036312338}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &903107281433186119
 GameObject:
@@ -55,12 +56,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 903107281433186119}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6629941479644245170}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6408189612697152809
 BoxCollider2D:
@@ -72,6 +74,25 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 1
@@ -113,16 +134,17 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 946055192585932507}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5278793883804714145}
   - {fileID: 1768591519220892986}
   - {fileID: 2593278622059422098}
   - {fileID: 6629941479644245170}
   m_Father: {fileID: 8577438572036312338}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &3889509011387975193
 Rigidbody2D:
@@ -141,6 +163,12 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -155,6 +183,25 @@ CompositeCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -279,6 +326,8 @@ CompositeCollider2D:
       - {x: 3.6267695, y: -10.28664}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
+  m_UseDelaunayMesh: 0
+  m_CompositeGameObject: {fileID: 946055192585932507}
 --- !u!1 &1464714372628622980
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,14 +352,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1464714372628622980}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 12.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 640803939442136330}
   - {fileID: 3537226977575135409}
   m_Father: {fileID: 1900171256060537186}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4015516821717982022
 SpriteRenderer:
@@ -387,13 +437,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1474334287133018187}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2169017983683587949}
   m_Father: {fileID: 8577438572036312338}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2169017983683587951
 GameObject:
@@ -419,12 +470,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2169017983683587951}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2003137476464601620}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2169017983683587948
 SpriteRenderer:
@@ -502,14 +554,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2192672624108951536}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 12.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8461891709659362479}
   - {fileID: 4653922553847812669}
   m_Father: {fileID: 1900171256060537186}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2778794379728617164
 SpriteRenderer:
@@ -587,14 +640,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2253359360460047291}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 12.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5740076942696192214}
   - {fileID: 18463091817290045}
   m_Father: {fileID: 1900171256060537186}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8177723513800292542
 SpriteRenderer:
@@ -672,12 +726,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2655118371460865216}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6629941479644245170}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &362106394442252128
 BoxCollider2D:
@@ -689,6 +744,25 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 1
@@ -728,12 +802,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3485348805972731561}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8577438572036312338}
-  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3748159183162916512
 GameObject:
@@ -759,12 +834,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3748159183162916512}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5278793883804714145}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1757206206843679530
 BoxCollider2D:
@@ -776,6 +852,25 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 1
@@ -815,12 +910,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4710700873751456905}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8577438572036312338}
-  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4759292268484208929
 GameObject:
@@ -846,12 +942,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4759292268484208929}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2593278622059422098}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &5873764437747373334
 BoxCollider2D:
@@ -863,6 +960,25 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 1
@@ -903,12 +1019,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5862954741841990399}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1768591519220892986}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6928743208702993744
 BoxCollider2D:
@@ -920,6 +1037,25 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 1
@@ -960,14 +1096,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5946806143616954423}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 12.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6545330638191123508}
   - {fileID: 3555374555156590704}
   m_Father: {fileID: 1900171256060537186}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &213839959467733162
 SpriteRenderer:
@@ -1044,12 +1181,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6875251329435973628}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8577438572036312338}
-  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6925935417535640309
 GameObject:
@@ -1075,12 +1213,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6925935417535640309}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2593278622059422098}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &4864306087199675014
 BoxCollider2D:
@@ -1092,6 +1231,25 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 1
@@ -1132,9 +1290,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7133537541405789795}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2003137476464601620}
   - {fileID: 1900171256060537186}
@@ -1145,7 +1305,6 @@ Transform:
   - {fileID: 8657769086785940594}
   - {fileID: 5821255965631265432}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3413297302646320903
 MonoBehaviour:
@@ -1159,7 +1318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aa8b1a2bab09c84cb3e61eff6241c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoomNum: 322
+  RoomNum: 20122
   WallU: {fileID: -5011987578995900259, guid: 1cbdb47e6b2b8b047bda28bb8c02caed, type: 3}
   WallD: {fileID: 7025303702013328552, guid: b708315c9041c484baca45344abc87d7, type: 3}
   WallL: {fileID: -8840114983161224984, guid: 3e99662a2f336074e995dd14e3320e91, type: 3}
@@ -1197,7 +1356,10 @@ MonoBehaviour:
   - -7.3
   - -5.1
   - 5.1
+  RoomIndex: {x: 0, y: 0, z: 0}
   ItemList: []
+  EmptyList: []
+  EmptyCloneList: []
 --- !u!1 &7534398961232894882
 GameObject:
   m_ObjectHideFlags: 0
@@ -1222,12 +1384,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7534398961232894882}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5278793883804714145}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &4923913394322243011
 BoxCollider2D:
@@ -1239,6 +1402,25 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 1
@@ -1278,12 +1460,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7576215481714345455}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8577438572036312338}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7945738619387770619
 GameObject:
@@ -1309,12 +1492,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7945738619387770619}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1768591519220892986}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &7192508220214190284
 BoxCollider2D:
@@ -1326,6 +1510,25 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 1
@@ -1367,9 +1570,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8239655418002823684}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5620143481459269732}
   - {fileID: 3464822393801057270}
@@ -1512,7 +1717,6 @@ Transform:
   - {fileID: 1564128856584467559}
   - {fileID: 7679476121485253625}
   m_Father: {fileID: 8577438572036312338}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &3889099446246024686
 Rigidbody2D:
@@ -1531,6 +1735,12 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -1545,6 +1755,25 @@ CompositeCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -1557,11 +1786,14 @@ CompositeCollider2D:
     m_Paths: []
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
+  m_UseDelaunayMesh: 0
+  m_CompositeGameObject: {fileID: 8239655418002823684}
 --- !u!1001 &39690318409640678
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -1617,6 +1849,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &5160730440414177790 stripped
 Transform:
@@ -1628,6 +1863,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -1683,6 +1919,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (29)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &3666200800665003935 stripped
 Transform:
@@ -1694,6 +1933,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -1749,6 +1989,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &5099823494681168447 stripped
 Transform:
@@ -1760,6 +2003,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -1815,6 +2059,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &5000783525857397276 stripped
 Transform:
@@ -1826,6 +2073,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -1885,6 +2133,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (9)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &2625251157931310527 stripped
 Transform:
@@ -1896,6 +2147,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -1955,6 +2207,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &4848751998496307926 stripped
 Transform:
@@ -1966,6 +2221,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3789760255217174132, guid: 44f30790a96d0724ba5103c7eeec0c42, type: 3}
@@ -2017,6 +2273,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44f30790a96d0724ba5103c7eeec0c42, type: 3}
 --- !u!4 &3464822393801057270 stripped
 Transform:
@@ -2028,6 +2287,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -2087,6 +2347,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (25)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &2538129466122857685 stripped
 Transform:
@@ -2098,6 +2361,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -2153,6 +2417,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (19)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &3877316386900284392 stripped
 Transform:
@@ -2164,6 +2431,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -2219,6 +2487,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (20)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &3838653299721045927 stripped
 Transform:
@@ -2230,6 +2501,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -2285,6 +2557,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (45)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &4301788257859445144 stripped
 Transform:
@@ -2296,6 +2571,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -2355,6 +2631,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &5708513608879563827 stripped
 Transform:
@@ -2366,6 +2645,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -2425,6 +2705,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (23)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &3412263179129471385 stripped
 Transform:
@@ -2436,6 +2719,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -2491,6 +2775,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &5614962539624469652 stripped
 Transform:
@@ -2502,6 +2789,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -2561,6 +2849,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &5504367478199073757 stripped
 Transform:
@@ -2572,6 +2863,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -2627,6 +2919,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &5431505853174631820 stripped
 Transform:
@@ -2638,6 +2933,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -2693,6 +2989,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (27)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &3056842625630076849 stripped
 Transform:
@@ -2704,6 +3003,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -2763,6 +3063,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (14)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &4410693756245049739 stripped
 Transform:
@@ -2774,6 +3077,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -2829,6 +3133,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &4369988614087302225 stripped
 Transform:
@@ -2840,6 +3147,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -2895,6 +3203,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (18)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &2956489147416734552 stripped
 Transform:
@@ -2906,6 +3217,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -2965,6 +3277,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &5259875751805152066 stripped
 Transform:
@@ -2976,6 +3291,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -3035,6 +3351,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &6320880189830297083 stripped
 Transform:
@@ -3046,6 +3365,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -3101,6 +3421,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &6207103602133712311 stripped
 Transform:
@@ -3112,6 +3435,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -3167,6 +3491,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &6267955088111561196 stripped
 Transform:
@@ -3178,6 +3505,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -3233,6 +3561,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (28)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &2384277861068928135 stripped
 Transform:
@@ -3244,6 +3575,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -3299,6 +3631,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &2344301107164086973 stripped
 Transform:
@@ -3310,6 +3645,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -3365,6 +3701,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &3508128085871899793 stripped
 Transform:
@@ -3376,6 +3715,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -3435,6 +3775,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &2649299488716181854 stripped
 Transform:
@@ -3446,6 +3789,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -3505,6 +3849,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &5834882462894114455 stripped
 Transform:
@@ -3516,6 +3863,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -3571,6 +3919,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (8)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &3092997133791387413 stripped
 Transform:
@@ -3582,6 +3933,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -3637,6 +3989,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &6656373708380776736 stripped
 Transform:
@@ -3648,6 +4003,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -3703,6 +4059,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &6565936817082654701 stripped
 Transform:
@@ -3714,6 +4073,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -3773,6 +4133,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (30)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &3330465902925535627 stripped
 Transform:
@@ -3784,6 +4147,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -3839,6 +4203,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (31)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &3339509019643190814 stripped
 Transform:
@@ -3850,6 +4217,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -3909,6 +4277,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (13)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &4068622025552846631 stripped
 Transform:
@@ -3920,6 +4291,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -3979,6 +4351,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (15)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &4153612471630366206 stripped
 Transform:
@@ -3990,6 +4365,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -4045,6 +4421,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (8)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &4132860529570079398 stripped
 Transform:
@@ -4056,6 +4435,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -4115,6 +4495,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (5)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &1421033869615322667 stripped
 Transform:
@@ -4126,6 +4509,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -4185,6 +4569,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &7488480261517484889 stripped
 Transform:
@@ -4196,6 +4583,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -4251,6 +4639,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (16)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &1217918381694337138 stripped
 Transform:
@@ -4262,6 +4653,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -4317,6 +4709,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (4)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &389259919209668767 stripped
 Transform:
@@ -4328,6 +4723,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -4383,6 +4779,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (16)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &373135122715778115 stripped
 Transform:
@@ -4394,6 +4793,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -4453,6 +4853,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &7065928709487397449 stripped
 Transform:
@@ -4464,6 +4867,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -4523,6 +4927,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (13)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &1552831450004776323 stripped
 Transform:
@@ -4534,6 +4941,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -4589,6 +4997,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &6940978516825422377 stripped
 Transform:
@@ -4600,6 +5011,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -4655,6 +5067,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &6956678500382555030 stripped
 Transform:
@@ -4666,6 +5081,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -4725,6 +5141,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &7888065787649730356 stripped
 Transform:
@@ -4736,6 +5155,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -4791,6 +5211,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &7890929306761695326 stripped
 Transform:
@@ -4802,6 +5225,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -4861,6 +5285,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &7917229479103611163 stripped
 Transform:
@@ -4872,6 +5299,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -4931,6 +5359,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (38)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &1743612087831501002 stripped
 Transform:
@@ -4942,6 +5373,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -4997,6 +5429,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (51)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &1748845771887042768 stripped
 Transform:
@@ -5008,6 +5443,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -5067,6 +5503,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &7726790895592068382 stripped
 Transform:
@@ -5078,6 +5517,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3789760255217174132, guid: 44f30790a96d0724ba5103c7eeec0c42, type: 3}
@@ -5129,6 +5569,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44f30790a96d0724ba5103c7eeec0c42, type: 3}
 --- !u!4 &1793636228916607846 stripped
 Transform:
@@ -5140,6 +5583,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -5195,6 +5639,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &7679476121485253625 stripped
 Transform:
@@ -5206,6 +5653,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -5261,6 +5709,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &7695790425297287497 stripped
 Transform:
@@ -5272,6 +5723,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -5331,6 +5783,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &8595856897029805053 stripped
 Transform:
@@ -5342,6 +5797,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -5401,6 +5857,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (18)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &250620221075600917 stripped
 Transform:
@@ -5412,6 +5871,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -5467,6 +5927,9 @@ PrefabInstance:
       value: SpikesStealthRock0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &1667235214590079512 stripped
 Transform:
@@ -5478,6 +5941,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -5537,6 +6001,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (32)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &130455065752372629 stripped
 Transform:
@@ -5548,6 +6015,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -5607,6 +6075,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (43)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &101591925386739340 stripped
 Transform:
@@ -5618,6 +6089,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -5677,6 +6149,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &8398507019149777751 stripped
 Transform:
@@ -5688,6 +6163,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -5747,6 +6223,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (22)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &493463125999845 stripped
 Transform:
@@ -5758,6 +6237,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -5813,6 +6293,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &8093673071185891411 stripped
 Transform:
@@ -5824,6 +6307,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -5879,6 +6363,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &8104009261048734380 stripped
 Transform:
@@ -5890,6 +6377,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -5945,6 +6433,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (12)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &299354421064177338 stripped
 Transform:
@@ -5956,6 +6447,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -6011,6 +6503,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &9020426727362079289 stripped
 Transform:
@@ -6022,6 +6517,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -6077,6 +6573,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (20)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &2025389892586940465 stripped
 Transform:
@@ -6088,6 +6587,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3789760255217174132, guid: 44f30790a96d0724ba5103c7eeec0c42, type: 3}
@@ -6139,6 +6639,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44f30790a96d0724ba5103c7eeec0c42, type: 3}
 --- !u!4 &1089094201479725722 stripped
 Transform:
@@ -6150,6 +6653,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -6205,6 +6709,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &8979794396342743996 stripped
 Transform:
@@ -6216,6 +6723,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -6275,6 +6783,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &1970452776045864092 stripped
 Transform:
@@ -6286,6 +6797,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -6341,6 +6853,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (23)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &948641795811214235 stripped
 Transform:
@@ -6352,6 +6867,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -6411,6 +6927,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (46)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &8287094644777459319 stripped
 Transform:
@@ -6422,6 +6941,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -6477,6 +6997,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (49)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &8270220895346412656 stripped
 Transform:
@@ -6488,6 +7011,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -6547,6 +7071,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (5)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &7218799515772286413 stripped
 Transform:
@@ -6558,6 +7085,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -6617,6 +7145,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &340115941714593183 stripped
 Transform:
@@ -6628,6 +7159,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -6687,6 +7219,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &7281403959301576039 stripped
 Transform:
@@ -6698,6 +7233,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -6757,6 +7293,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &349807345947662806 stripped
 Transform:
@@ -6768,6 +7307,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -6827,6 +7367,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (26)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &8591447872503820300 stripped
 Transform:
@@ -6838,6 +7381,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -6893,6 +7437,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (6)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &7151104517742781327 stripped
 Transform:
@@ -6904,6 +7451,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -6963,6 +7511,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &74553156835880476 stripped
 Transform:
@@ -6974,6 +7525,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -7029,6 +7581,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (48)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &8928575742024322708 stripped
 Transform:
@@ -7040,6 +7595,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -7099,6 +7655,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (25)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &8866299893320361611 stripped
 Transform:
@@ -7110,6 +7669,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -7165,6 +7725,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &1039456833483634295 stripped
 Transform:
@@ -7176,6 +7739,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -7235,6 +7799,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (42)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &8801062818653152379 stripped
 Transform:
@@ -7246,6 +7813,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -7301,6 +7869,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (33)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &8689301700566296580 stripped
 Transform:
@@ -7312,6 +7883,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -7367,6 +7939,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (37)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &8649544990027465213 stripped
 Transform:
@@ -7378,6 +7953,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -7437,6 +8013,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (39)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &9194576500188515630 stripped
 Transform:
@@ -7448,6 +8027,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -7507,6 +8087,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (11)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &8960088254826691587 stripped
 Transform:
@@ -7518,6 +8101,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -7577,6 +8161,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &643388505229653993 stripped
 Transform:
@@ -7588,6 +8175,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -7647,6 +8235,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (27)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &7179950954508989179 stripped
 Transform:
@@ -7658,6 +8249,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -7713,6 +8305,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &1681722518252983372 stripped
 Transform:
@@ -7724,6 +8319,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -7783,6 +8379,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &1545941334531201676 stripped
 Transform:
@@ -7794,6 +8393,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -7849,6 +8449,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &1564128856584467559 stripped
 Transform:
@@ -7860,6 +8463,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -7919,6 +8523,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (7)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &8450108933769174874 stripped
 Transform:
@@ -7930,6 +8537,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -7985,6 +8593,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (10)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &8269185679691164493 stripped
 Transform:
@@ -7996,6 +8607,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -8051,6 +8663,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &1398501547869877166 stripped
 Transform:
@@ -8062,6 +8677,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -8121,6 +8737,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (26)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &8321926573699811361 stripped
 Transform:
@@ -8132,6 +8751,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -8187,6 +8807,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (14)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &8074586934764856887 stripped
 Transform:
@@ -8198,6 +8821,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -8257,6 +8881,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (21)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &8199718676193828828 stripped
 Transform:
@@ -8268,6 +8895,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -8327,6 +8955,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (17)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &7249037818986369878 stripped
 Transform:
@@ -8338,6 +8969,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -8397,6 +9029,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (4)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &7220305504984214080 stripped
 Transform:
@@ -8408,6 +9043,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -8463,6 +9099,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (44)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &7726651781694962524 stripped
 Transform:
@@ -8474,6 +9113,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -8529,6 +9169,9 @@ PrefabInstance:
       value: SpikesStealthRock2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &7531761093286623217 stripped
 Transform:
@@ -8540,6 +9183,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -8599,6 +9243,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (21)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &7938158633828468394 stripped
 Transform:
@@ -8610,6 +9257,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -8669,6 +9317,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &1941260334633127099 stripped
 Transform:
@@ -8680,6 +9331,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -8739,6 +9391,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (9)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &7816572881230351126 stripped
 Transform:
@@ -8750,6 +9405,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -8805,6 +9461,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (40)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &6012193039169964796 stripped
 Transform:
@@ -8816,6 +9475,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -8875,6 +9535,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (17)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &5143042297271068893 stripped
 Transform:
@@ -8886,6 +9549,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -8941,6 +9605,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (12)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &5139197267956019521 stripped
 Transform:
@@ -8952,6 +9619,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -9007,6 +9675,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (22)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &5150718139647182888 stripped
 Transform:
@@ -9018,6 +9689,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -9077,6 +9749,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (7)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &6205015828573600998 stripped
 Transform:
@@ -9088,6 +9763,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -9143,6 +9819,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &2496746996956183948 stripped
 Transform:
@@ -9154,6 +9833,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -9209,6 +9889,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (15)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &6153565611770770271 stripped
 Transform:
@@ -9220,6 +9903,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -9279,6 +9963,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &2366731277421783793 stripped
 Transform:
@@ -9290,6 +9977,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 3507951169278408337}
     m_Modifications:
     - target: {fileID: 3774247760392204312, guid: 059c67773ccbf194eaa5ae6caa52b9c1, type: 3}
@@ -9341,6 +10029,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 059c67773ccbf194eaa5ae6caa52b9c1, type: 3}
 --- !u!4 &6650919922618254993 stripped
 Transform:
@@ -9352,6 +10043,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -9411,6 +10103,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &3455912224098393713 stripped
 Transform:
@@ -9422,6 +10117,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -9477,6 +10173,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (41)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &6576014919505689548 stripped
 Transform:
@@ -9488,6 +10187,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -9547,6 +10247,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (19)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &5747710488848799931 stripped
 Transform:
@@ -9558,6 +10261,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -9617,6 +10321,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (47)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &6515249061809910375 stripped
 Transform:
@@ -9628,6 +10335,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -9683,6 +10391,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &3298755681041381360 stripped
 Transform:
@@ -9694,6 +10405,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -9753,6 +10465,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &2956506384953462962 stripped
 Transform:
@@ -9764,6 +10479,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -9823,6 +10539,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (11)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &5263592658694891561 stripped
 Transform:
@@ -9834,6 +10553,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -9893,6 +10613,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (35)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &4875821346896871544 stripped
 Transform:
@@ -9904,6 +10627,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -9959,6 +10683,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &3979595208656381106 stripped
 Transform:
@@ -9970,6 +10697,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -10029,6 +10757,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (34)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &4865123078548766632 stripped
 Transform:
@@ -10040,6 +10771,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -10099,6 +10831,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (50)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &4823126337448497754 stripped
 Transform:
@@ -10110,6 +10845,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -10165,6 +10901,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &3921579078250691114 stripped
 Transform:
@@ -10176,6 +10915,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -10231,6 +10971,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (24)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &4751671354962024755 stripped
 Transform:
@@ -10242,6 +10985,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -10297,6 +11041,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (10)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &4694767689438180537 stripped
 Transform:
@@ -10308,6 +11055,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -10363,6 +11111,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &3806940072072400104 stripped
 Transform:
@@ -10374,6 +11125,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1092292615188352594, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
@@ -10429,6 +11181,9 @@ PrefabInstance:
       value: SpikesStealthRock0 (24)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33b7f870ad4354544a71fe63806e2235, type: 3}
 --- !u!4 &6052360207051325364 stripped
 Transform:
@@ -10440,6 +11195,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -10499,6 +11255,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &3649406672912922103 stripped
 Transform:
@@ -10510,6 +11269,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -10565,6 +11325,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (36)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &5025412736807348099 stripped
 Transform:
@@ -10576,6 +11339,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -10635,6 +11399,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &3465944509584026267 stripped
 Transform:
@@ -10646,6 +11413,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 1899757822426209958, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
@@ -10701,6 +11469,9 @@ PrefabInstance:
       value: SpikesStealthRock2 (6)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d6710e9f989394695e9142c25e46ec, type: 3}
 --- !u!4 &4948753036980288069 stripped
 Transform:
@@ -10712,6 +11483,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -10767,6 +11539,9 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &3481775267819167789 stripped
 Transform:
@@ -10778,6 +11553,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -10837,6 +11613,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &3521010693061900462 stripped
 Transform:
@@ -10848,6 +11627,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -10907,6 +11687,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &4577981213382677423 stripped
 Transform:
@@ -10918,6 +11701,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3789760255217174132, guid: 44f30790a96d0724ba5103c7eeec0c42, type: 3}
@@ -10969,6 +11753,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44f30790a96d0724ba5103c7eeec0c42, type: 3}
 --- !u!4 &5620143481459269732 stripped
 Transform:
@@ -10980,6 +11767,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -11039,6 +11827,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &4311910880123375380 stripped
 Transform:
@@ -11050,6 +11841,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2167039314328133920}
     m_Modifications:
     - target: {fileID: 3295215869942051567, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
@@ -11109,6 +11901,9 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a6ce4684f34204eb891d69487f0f11, type: 3}
 --- !u!4 &4311435993010531291 stripped
 Transform:
