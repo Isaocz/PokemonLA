@@ -86,6 +86,29 @@ public class Bergmite : Empty
 
 
         StartOverEvent();
+
+
+        StartCoroutine(CheckParent());
+    }
+
+
+
+    IEnumerator CheckParent()
+    {
+        if (ParentAvalugg == null && ParentPokemonRoom != null)
+        {
+            List<Empty> el = ParentPokemonRoom.EmptyList;
+            for (int i = 0; i < el.Count; i++)
+            {
+                Avalugg a = el[i].GetComponent<Avalugg>();
+                if (a != null)
+                {
+                    ParentAvalugg = a;
+                    if (!a.BergmiteList.Contains(this)) { a.BergmiteList.Add(this); }
+                }
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
     }
 
 

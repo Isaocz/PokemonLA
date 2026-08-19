@@ -564,7 +564,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.5}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.4
 --- !u!114 &1648913215129390943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -677,6 +677,7 @@ MonoBehaviour:
   rigidbody2D: {fileID: 0}
   isSilence: 0
   EmptyBossLevel: 0
+  EmptySize: 0
   DropItem: {fileID: 4105738363260018122, guid: 02a6150d5c2829c43b819e23af26888a, type: 3}
   FloatingDmg: {fileID: 5488019280297236010, guid: 62105184a53386a48aeaf894c8692299, type: 3}
   isHailDef: 0
@@ -708,9 +709,10 @@ MonoBehaviour:
   StaticTimer: 0
   targetPosition: {fileID: 0}
   speed: 2
-  nextWaypointDistance: 0.05
+  nextWaypointDistance: 0.2
   reachedEndOfPath: 0
   isCanNotMove: 0
+  PathFindInterval: 10
   isAutoSetSpeed: 0
   StopLimitDistence: 0
   isSearchTargetByRayCast: 0
@@ -757,7 +759,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1
   smoothType: 1
-  subdivisions: 2
+  subdivisions: 3
   iterations: 2
   strength: 0.25
   uniformLength: 1

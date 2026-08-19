@@ -176,6 +176,12 @@ public class Electrode : Empty
                                 AI.SetSpeed(speed, SpeedAlphaList[i]);
                             }
                         }
+                        if ((Vector2.Distance(TargetPosition, transform.position) < 1.8f))
+                        {
+                            MoveOver();
+                            ExplosionStart();
+                            EmptyEcplosionEvent();
+                        }
                         if (MoveTimer <= 0)         //计时器时间到时间，结束移动状态, 爆炸
                         {
                             MoveOver();
@@ -497,7 +503,7 @@ public class Electrode : Empty
 
 
     //开始后的冷却时间
-    static float TIME_IDLE_START = 0.5f; //TODO需修改时间
+    static float TIME_IDLE_START = 0.0f; //TODO需修改时间
 
     //状态结束后的冷却时间
     static float TIME_IDLE_STATE = 0.15f; //TODO需修改时间

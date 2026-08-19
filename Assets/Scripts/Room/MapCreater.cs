@@ -19,6 +19,8 @@ public class MapCreater : MonoBehaviour
     public Room StarRoom;
     Room BaseRoom;
     public RoomFile BaseRoomList;
+
+
     //声明一个房间变量，表示宝可梦中心房间,一个坐标变量，用来存储PC房间的虚拟坐标，一个布尔型变量，表示是否生成过PC房间。
     //声明一个房间变量，表示商店房间,一个坐标变量，用来存储商店房间的虚拟坐标，一个布尔型变量，表示是否生成过商店房间。
     //声明一个房间变量，表示boss房间,一个坐标变量，用来存储boss房间的虚拟坐标，一个布尔型变量，表示是否生成过boss房间。
@@ -35,6 +37,17 @@ public class MapCreater : MonoBehaviour
     public Vector3Int StoreRoomPoint = new Vector3Int(10000, 10000, 0);
     bool isStoreRoomSpawn;
     int StoreCreatCount;
+
+
+    /// <summary>
+    /// 小boss房间列表
+    /// </summary>
+    public bool isNeedMiniBossRoom = false;
+    public RoomFile MiniBossRoomList;
+    public Vector3Int MiniBossRoomRoomPoint = new Vector3Int(10000, 10000, 0);
+    bool isMiniBossRoomRoomSpawn;
+    int MiniBossCreatCount;
+    
 
 
     public List<Room> BossRoomList;
@@ -247,10 +260,12 @@ public class MapCreater : MonoBehaviour
         if (!isReset) { BuiledStoreRoom(); }
         if (!isReset) { BuiledBossRoom(); }
         if (!isReset) { BuiledBossRoom(); }
-        if (isReset && isBornMewRoom) { BuiledMewRoom(); }
-        if (isReset && isBornBabyCenterRoom) { BuiledBabyCenterRoom(); }
-        if (isReset && isBornMintRoom) { BuiledMintRoom(); }
-        if (isReset && isBornBerryTreeRoom) { BuiledBerryTreeRoom(); }
+        if (!isReset && isBornMewRoom) { BuiledMewRoom(); }
+        if (!isReset && isBornBabyCenterRoom) { BuiledBabyCenterRoom(); }
+        if (!isReset && isBornMintRoom) { BuiledMintRoom(); }
+        if (!isReset && isBornBerryTreeRoom) { BuiledBerryTreeRoom(); }
+        if (isNeedMiniBossRoom && !isReset) { BuiledMiniBossroom(); }
+        Debug.Log("isBornMewRoom" + "+" + isBornMewRoom + "+" + "isBornBabyCenterRoom" + "+" + isBornBabyCenterRoom + "+" + "isBornMintRoom" + "+" + isBornMintRoom + "+" + "isBornBerryTreeRoom" + "+" + isBornBerryTreeRoom);
 
         while ( !isPCRoomSpawn || !isStoreRoomSpawn || !isBossRoomSpawn  )
         {
@@ -272,7 +287,7 @@ public class MapCreater : MonoBehaviour
             else
             {
 
-                if (item != PCRoomPoint && item != StoreRoomPoint && item != BossRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
+                if (item != PCRoomPoint && item != StoreRoomPoint && item != BossRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint && item != MiniBossRoomRoomPoint)
                 {
                     
                     BaseRoom = SwithABaseRoom(item);
@@ -335,6 +350,10 @@ public class MapCreater : MonoBehaviour
             SkillShopRoomPoint = new Vector3Int(10000, 10000, 0);
             SkillShopRoomCreatCount = 0;
             isSkillShopRoomSpawn = false;
+
+            MiniBossRoomRoomPoint = new Vector3Int(10000, 10000, 0);
+            MiniBossCreatCount = 0;
+            isMiniBossRoomRoomSpawn = false;
         }
 
 
@@ -349,6 +368,8 @@ public class MapCreater : MonoBehaviour
         if (isBornBabyCenterRoom) { BuiledBabyCenterRoom(); }
         if (isBornMintRoom) { BuiledMintRoom(); }
         if (isBornBerryTreeRoom) { BuiledBerryTreeRoom(); }
+        if (isNeedMiniBossRoom) { BuiledMiniBossroom(); }
+        Debug.Log("isBornMewRoom" +"+"+ isBornMewRoom + "+" + "isBornBabyCenterRoom" + "+" + isBornBabyCenterRoom + "+" + "isBornMintRoom" + "+" + isBornMintRoom + "+" + "isBornBerryTreeRoom" + "+" + isBornBerryTreeRoom);
     }
 
     //=======================================如果生成的地图无法生成特殊房间时使用，重置所有地图============================================
@@ -383,6 +404,11 @@ public class MapCreater : MonoBehaviour
             VRoom.Add(NowChechPoint + Vector3Int.down, 0);
             VRoom.Add(NowChechPoint + Vector3Int.left, 0);
             VRoom.Add(NowChechPoint + Vector3Int.right, 0);
+
+            VRoom.Add(NowChechPoint + Vector3Int.right + Vector3Int.down, 0);
+            VRoom.Add(NowChechPoint + Vector3Int.right + Vector3Int.up, 0);
+            VRoom.Add(NowChechPoint + Vector3Int.left + Vector3Int.down, 0);
+            VRoom.Add(NowChechPoint + Vector3Int.left + Vector3Int.up, 0);
             return; }
 
         //当当前虚拟房间数大于需要生成的最小房间数时，房间生成概率降低10%
@@ -458,10 +484,66 @@ public class MapCreater : MonoBehaviour
             }
         }
 
-       
+
 
     }
 
+    /// <summary>
+    /// 生成小Boss房（将一个普通房间转化为小boss房间）
+    /// </summary>
+    void BuiledMiniBossroom()
+    {
+        if (!isMiniBossRoomRoomSpawn)
+        {
+            List<Vector3Int> Waitlist = new List<Vector3Int> { };
+            //需要生成小Boss 且小Boss房间列表不为空
+            if (isNeedMiniBossRoom && MiniBossRoomList.RoomList.Count != 0)
+            {
+                //●遍历所有虚拟房间，如果该房间距离初始房间的距离大于房间最小数字的平方除以生成半径，且该房间不是boss房间或者商店房间，把该房间添加入候补列表
+                foreach (Vector3Int item in VRoom.Keys)
+                {
+                    //Debug.Log(item +"+"+ Vector3Int.Distance(item, Vector3Int.zero) + "+" + (Mathf.Sqrt(StepMin)) + "+" + SpawnR);
+                    if (Vector3Int.Distance(item, Vector3Int.zero) > (Mathf.Sqrt(StepMin)) / SpawnR && item != Vector3Int.zero && item != BossRoomPoint && item != StoreRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
+                    {
+                        if (!Waitlist.Contains(item)) { Waitlist.Add(item); }
+                    }
+                }
+                if (Waitlist.Count == 0) { Debug.Log("没有可以被转化为小boss房间的候补房间");}
+                else
+                {
+                    //●随机候补一虚拟房间
+                    int random = Random.Range(0, Waitlist.Count);
+                    if (VRoom.ContainsKey(Waitlist[random]))
+                    {
+                        string roomname = Waitlist[random].ToString();
+                        Vector3Int NowPCRoomPoint = Waitlist[random];
+                        MiniBossRoomRoomPoint = NowPCRoomPoint;
+                        isMiniBossRoomRoomSpawn = true;
+                        Room MiniBossRoom = SwithAMiniBossRoom(Waitlist[random]);
+                        Room room = Instantiate(MiniBossRoom, new Vector3(NowPCRoomPoint.x * 30, NowPCRoomPoint.y * 24, 0), Quaternion.identity);
+                        room.RoomIndex = NowPCRoomPoint;
+                        room.CreatWall();
+                        room.transform.name = "MiniBossRoom" + roomname;
+                        if (!RRoom.ContainsKey(Waitlist[random])) { RRoom.Add(Waitlist[random], room); }
+                        else { RRoom[Waitlist[random]] = room; }
+                        Debug.Log("MiniBoss"+"+"+Waitlist[random]);
+                        return;
+                    }
+                }
+                //●如果本轮没有生成小boss房，增加生成半径并递归，如果生成半径过大重置生成半径
+                if (!isMiniBossRoomRoomSpawn)
+                {
+                    Debug.Log(MiniBossCreatCount);
+                    SpawnR += 0.2f;
+                    if (SpawnR >= 8.0f) { SpawnR = 1.0f; }
+                    MiniBossCreatCount++;
+                    if (MiniBossCreatCount >= 20) { ResetMap(); }
+                    else { BuiledMiniBossroom(); }
+                }
+            }
+            SpawnR = 1.0f;
+        }
+    }
 
     void BuiledPCroom()
     {
@@ -1608,6 +1690,42 @@ public class MapCreater : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 根据房间形状，在当前房间白名单内选择一个小Boss房间生成
+    /// </summary>
+    /// <returns></returns>
+    Room SwithAMiniBossRoom(Vector3Int RoomVector)
+    {
+
+        //当前房间周围是否有房间的情况 ， 如某一个房间上下右有房间 ， 则该房间Blocked = true ，true ， false ，true
+        //对于某一房间在所有方向，如果某方向有相邻的房间，则该方向被房间内环境物体堵住的房间不可被采用
+        //既当某一方向没有相邻房间时 ， 该方向是否被环境物阻挡皆可 ， 当有相邻房间时，该房间的该方向必须不被阻挡
+        //也就是 i=0,1,2,3时，满足(!Blcoked[i] || (Blocked && !Room.isBlockerIN[i])的房间才可被采用
+
+
+        bool[] Bolcked = new bool[] { VRoom.ContainsKey(RoomVector + Vector3Int.up), VRoom.ContainsKey(RoomVector + Vector3Int.down), VRoom.ContainsKey(RoomVector + Vector3Int.left), VRoom.ContainsKey(RoomVector + Vector3Int.right) };
+
+        int x = SwitchMiniBossRoomByWeight();
+        int count = 0;
+        while (!JudgeRoomBlacked(Bolcked, MiniBossRoomList.RoomList[x].GetComponent<Room>()))
+        {
+            x = SwitchMiniBossRoomByWeight();
+            count += 1;
+            if (count >= 50)
+            {
+                return StarRoom;
+            }
+        }
+        Room OutPut = MiniBossRoomList.RoomList[x].GetComponent<Room>();
+        return OutPut;
+    }
+
+
+    /// <summary>
+    /// 根据权重随机获得一般房间
+    /// </summary>
+    /// <param name="WhiteList"></param>
+    /// <returns></returns>
     int SwitchRoomByWeight( List<int> WhiteList )
     {
         int Output = Random.Range(0, WhiteList.Count);
@@ -1623,6 +1741,34 @@ public class MapCreater : MonoBehaviour
         {
             if (W >= test && W < test + BaseRoomList.RoomList[WhiteList[i]].RoomWeight ) { Output = WhiteList[i]; break; }
             test += BaseRoomList.RoomList[WhiteList[i]].RoomWeight;
+        }
+        //Debug.Log("TotalWeight:" + TotalWeight + " Switch:" + W + " WhiteList:" + WhiteList.Count + "Room:" + Output);
+        return Output;
+    }
+
+    /// <summary>
+    /// 根据权重随机获得小Boss房间
+    /// </summary>
+    /// <param name="WhiteList"></param>
+    /// <returns></returns>
+    int SwitchMiniBossRoomByWeight()
+    {
+        int Output = Random.Range(0, MiniBossRoomList.RoomList.Count);
+        float TotalWeight = 0;
+
+        for (int i = 0; i < MiniBossRoomList.RoomList.Count; i++)
+        {
+            TotalWeight += MiniBossRoomList.RoomList[i].RoomWeight;
+            //Debug.Log(MiniBossRoomList.RoomList[i].RoomNum + "+" + MiniBossRoomList.RoomList[i].RoomWeight);
+        }
+        
+        float W = Random.Range(0.0f, TotalWeight);
+        float test = 0;
+        //Debug.Log(TotalWeight +"+"+ W);
+        for (int i = 0; i < MiniBossRoomList.RoomList.Count; i++)
+        {
+            if (W >= test && W < test + MiniBossRoomList.RoomList[i].RoomWeight) { Output = i; break; }
+            test += MiniBossRoomList.RoomList[i].RoomWeight;
         }
         //Debug.Log("TotalWeight:" + TotalWeight + " Switch:" + W + " WhiteList:" + WhiteList.Count + "Room:" + Output);
         return Output;

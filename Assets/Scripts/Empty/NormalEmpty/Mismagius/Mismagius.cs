@@ -843,7 +843,8 @@ public class Mismagius : Empty
         //CloneShadowTimer = Timer;
         NowState = MainState.CloneShadow;
         
-        CloneBodyCenter = new Vector2((TargetPosition - (Vector2)ParentPokemonRoom.transform.position).x, ParentPokemonRoom.transform.position.y);
+        CloneBodyCenter = new Vector2(TargetPosition.x, ParentPokemonRoom.transform.position.y);
+        Debug.Log(CloneBodyCenter);
         CloneBodyRadius = 7.0f;
         RealIndex = 0;
         RushTarget = Vector2.zero;

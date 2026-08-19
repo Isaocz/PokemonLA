@@ -5,7 +5,7 @@ using UnityEngine;
 public class RedomBallButton : EnviromentButton
 {
 
-    static float PERCENT_Ball = 0.0f;
+    static float PERCENT_Ball = 0.5f;
 
     /// <summary>
     /// µôÂä¾«ÁéÇò

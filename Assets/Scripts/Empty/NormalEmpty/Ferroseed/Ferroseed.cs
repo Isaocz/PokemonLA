@@ -79,7 +79,7 @@ public class Ferroseed : Empty
 
         RollTimer = 8.0f;
 
-
+        Director = new Vector2Int(Random.Range(0.0f, 1.0f) > 0.5 ? -1 : 1, Random.Range(0.0f, 1.0f) > 0.5 ? -1 : 1);
 
         StartOverEvent();
     }

@@ -9,7 +9,7 @@ public class ItemButton : EnviromentButton
 
 
     //随机概率 道具 敌人 TP
-    static List<float> Percent = new List<float> { 0.0f, 0.0f, 0.25f };
+    static List<float> Percent = new List<float> { 0.4f, 0.4f, 0.25f };
 
     /// <summary>
     /// 随机掉落物

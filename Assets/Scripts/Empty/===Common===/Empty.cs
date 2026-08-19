@@ -198,6 +198,16 @@ public class Empty : Pokemon
     public emptyBossLevel EmptyBossLevel;
 
 
+    public enum EmptySizeClass
+    {
+        Normal,//一般敌人 例 可达鸭
+        Big,   //大型敌人 例 卡比兽
+        Huge,  //巨型敌人 例 暂无 体型占据整个地图
+        Special//特殊体型
+    }
+    public EmptySizeClass EmptySize;
+
+
     /// <summary>
     /// 敌人被打死后掉落的道具
     /// </summary>
@@ -1677,40 +1687,40 @@ public class Empty : Pokemon
 
 
         bool isOnixSubsititue = false;
-        bool isOnixInGrassyTerrain = false;
-        bool isOnixInPsychicTerrain = false;
-        bool isOnixInElectricTerrain = false;
-        bool isOnixInMistyTerrain = false;
-        bool isOnixSuperInGrassyTerrain = false;
-        bool isOnixSuperInPsychicTerrain = false;
-        bool isOnixSuperInElectricTerrain = false;
-        bool isOnixSuperInMistyTerrain = false;
+        int isOnixInGrassyTerrain = 0;
+        int isOnixInPsychicTerrain = 0;
+        int isOnixInElectricTerrain = 0;
+        int isOnixInMistyTerrain = 0;
+        int isOnixSuperInGrassyTerrain = 0;
+        int isOnixSuperInPsychicTerrain = 0;
+        int isOnixSuperInElectricTerrain = 0;
+        int isOnixSuperInMistyTerrain = 0;
         bool isOnixSpeedChange = false;
 
 
         foreach (SubEmptyBody b in SubEmptyBodyList)
         {
             if (b.isSubsititue) { isOnixSubsititue = true; SubsititueTarget = b.SubsititueTarget; }
-            if (b.isInGrassyTerrain) { isOnixInGrassyTerrain = true; }
-            if (b.isInPsychicTerrain) { isOnixInPsychicTerrain = true; }
-            if (b.isInElectricTerrain) { isOnixInElectricTerrain = true; }
-            if (b.isInMistyTerrain) { isOnixInMistyTerrain = true; }
-            if (b.isInSuperGrassyTerrain) { isOnixSuperInGrassyTerrain = true; }
-            if (b.isInSuperPsychicTerrain) { isOnixSuperInPsychicTerrain = true; }
-            if (b.isInSuperElectricTerrain) { isOnixSuperInElectricTerrain = true; }
-            if (b.isInSuperMistyTerrain) { isOnixSuperInMistyTerrain = true; }
+            if (b.GrassyTerrainCount        > isOnixInGrassyTerrain)        { isOnixInGrassyTerrain        = b.GrassyTerrainCount; }
+            if (b.PsychicTerrainCount       > isOnixInPsychicTerrain)       { isOnixInPsychicTerrain       = b.PsychicTerrainCount; }
+            if (b.ElectricTerrainCount      > isOnixInElectricTerrain)      { isOnixInElectricTerrain      = b.ElectricTerrainCount; }
+            if (b.MistyTerrainCount         > isOnixInMistyTerrain)         { isOnixInMistyTerrain         = b.MistyTerrainCount; }
+            if (b.SuperGrassyTerrainCount   > isOnixSuperInGrassyTerrain)   { isOnixSuperInGrassyTerrain   = b.SuperGrassyTerrainCount; }
+            if (b.SuperPsychicTerrainCount  > isOnixSuperInPsychicTerrain)  { isOnixSuperInPsychicTerrain  = b.SuperPsychicTerrainCount; }
+            if (b.SuperElectricTerrainCount > isOnixSuperInElectricTerrain) { isOnixSuperInElectricTerrain = b.SuperElectricTerrainCount; }
+            if (b.SuperMistyTerrainCount    > isOnixSuperInMistyTerrain)    { isOnixSuperInMistyTerrain    = b.SuperMistyTerrainCount; }
             if (b.isSpeedChange) { isOnixSpeedChange = true; }
         }
 
         if (isOnixSubsititue) { isSubsititue = true; } else { isSubsititue = false; SubsititueTarget = null; }
-        if (isOnixInGrassyTerrain) { isInGrassyTerrain = true; } else { isInGrassyTerrain = false; }
-        if (isOnixInPsychicTerrain) { isInPsychicTerrain = true; } else { isInPsychicTerrain = false; }
-        if (isOnixInElectricTerrain) { isInElectricTerrain = true; } else { isInElectricTerrain = false; }
-        if (isOnixInMistyTerrain) { isInMistyTerrain = true; } else { isInMistyTerrain = false; }
-        if (isOnixSuperInGrassyTerrain) { isInSuperGrassyTerrain = true; } else { isInSuperGrassyTerrain = false; }
-        if (isOnixSuperInPsychicTerrain) { isInSuperPsychicTerrain = true; } else { isInSuperPsychicTerrain = false; }
-        if (isOnixSuperInElectricTerrain) { isInSuperElectricTerrain = true; } else { isInSuperElectricTerrain = false; }
-        if (isOnixSuperInMistyTerrain) { isInSuperMistyTerrain = true; } else { isInSuperMistyTerrain = false; }
+        GrassyTerrainCount = isOnixInGrassyTerrain;
+        PsychicTerrainCount = isOnixInPsychicTerrain;
+        ElectricTerrainCount = isOnixInElectricTerrain;
+        MistyTerrainCount = isOnixInMistyTerrain;
+        SuperGrassyTerrainCount = isOnixSuperInGrassyTerrain;
+        SuperPsychicTerrainCount = isOnixSuperInPsychicTerrain;
+        SuperElectricTerrainCount = isOnixSuperInElectricTerrain;
+        SuperMistyTerrainCount = isOnixSuperInMistyTerrain;
         if (isOnixSpeedChange) { SpeedChange(); } else { SpeedRemove01(0); }
 
     }

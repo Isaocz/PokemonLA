@@ -11,7 +11,7 @@ public class Golbat : Empty
         Normal,  //一般巡逻状态
         Sonic,  //释放超音波状态
         Rush,   //冲刺状态
-        CDIdle, //技能冷却发呆期间
+        CDIdle, //技能冷却发呆期间 
     }
     State NowState;
 

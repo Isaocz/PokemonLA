@@ -1307,6 +1307,8 @@ public class PlayerControler : PlayerPokemon
         }
         else
         {
+            // ‹ª˜∆¡…¡TODO
+            if (FlashScreen.instance != null) { FlashScreen.instance.PlayFlash(FlashScreen.instance.smallHit); }
 
             PokemonType.TypeEnum enumVaue = (PokemonType.TypeEnum)SkillType;
             if ((int)SkillType != 19) {

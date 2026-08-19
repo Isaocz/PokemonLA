@@ -95,7 +95,7 @@ public class MazeRoom : MonoBehaviour
             ErrorCounte++;
             if (ErrorCounte >= 10000) { Error = true; return; }
         }
-        if (dir == Vector2Int.zero && ItemPos == new Vector2Int(-1, -1)) { ItemPos = new Vector2Int(i, j); Debug.Log(ItemPos); }
+        if (dir == Vector2Int.zero && ItemPos == new Vector2Int(-1, -1)) { ItemPos = new Vector2Int(i, j); /*Debug.Log(ItemPos);*/ }
     }
 
     //生成真实地图
@@ -113,7 +113,7 @@ public class MazeRoom : MonoBehaviour
 
                 if ((i == StartPoint.x && j == StartPoint.y))
                 {
-                    Debug.Log(StartPoint);
+                    //Debug.Log(StartPoint);
                     if ((!VMaze[i, j].isEmptyUp || j == Mazehight - 1) && StartPoint.z != 0) { Instantiate(Wall, new Vector3(i * 2, j * 2 + 1.0f, 0) + WallOffset, Quaternion.identity, transform); }
                     if ((!VMaze[i, j].isEmptyRight || i == MazeWeight - 1) && StartPoint.z != 3) { Instantiate(Wall, new Vector3(i * 2 + 1.0f, j * 2, 0) + WallOffset, Quaternion.identity, transform);}
                     if ((j == 0) && StartPoint.z != 1) { Instantiate(Wall, new Vector3(i * 2, j * 2 - 1.0f, 0) + WallOffset, Quaternion.identity, transform);  }
@@ -121,7 +121,7 @@ public class MazeRoom : MonoBehaviour
                 }
                 else if ((i == GoalPoint.x && j == GoalPoint.y))
                 {
-                    Debug.Log(GoalPoint);
+                    //Debug.Log(GoalPoint);
                     if ((!VMaze[i, j].isEmptyUp || j == Mazehight - 1) && GoalPoint.z != 0) { Instantiate(Wall, new Vector3(i * 2, j * 2 + 1.0f, 0) + WallOffset, Quaternion.identity, transform);  }
                     if ((!VMaze[i, j].isEmptyRight || i == MazeWeight - 1) && GoalPoint.z != 3) { Instantiate(Wall, new Vector3(i * 2 + 1.0f, j * 2, 0) + WallOffset, Quaternion.identity, transform); }
                     if ((j == 0) && GoalPoint.z != 1) { Instantiate(Wall, new Vector3(i * 2, j * 2 - 1.0f, 0) + WallOffset, Quaternion.identity, transform);  }
@@ -138,12 +138,15 @@ public class MazeRoom : MonoBehaviour
 
                 if (ItemPos == new Vector2Int(i, j))
                 {
-                    Instantiate(DropItem, new Vector3(i * 2, j * 2 + 0.25f, 0) + WallOffset, Quaternion.identity, transform.parent.transform.GetChild(4));
-                    if (VMaze[i, j].isEmptyUp) { Instantiate(ItemSpike, new Vector3(i * 2, j * 2 + 0.4f + 1.0f, 0) + WallOffset, Quaternion.identity, transform); }
-                    else if (VMaze[i, j].isEmptyDown) { Instantiate(ItemSpike, new Vector3(i * 2, j * 2 + 0.4f - 1.0f, 0) + WallOffset, Quaternion.identity, transform); }
-                    else if (VMaze[i, j].isEmptyLeft) { Instantiate(ItemSpike, new Vector3(i * 2 - 1.0f, j * 2 + 0.4f, 0) + WallOffset, Quaternion.identity, transform); }
-                    else if (VMaze[i, j].isEmptyRight){Instantiate(ItemSpike, new Vector3(i * 2 + 1.0f, j * 2 + 0.4f, 0) + WallOffset, Quaternion.identity, transform);                }
-
+                    if (DropItem != null) {
+                        Instantiate(DropItem, new Vector3(i * 2, j * 2 + 0.25f, 0) + WallOffset, Quaternion.identity, transform.parent.transform.GetChild(4));
+                    }
+                    if (ItemSpike != null) {
+                        if (VMaze[i, j].isEmptyUp) { Instantiate(ItemSpike, new Vector3(i * 2, j * 2 + 0.4f + 1.0f, 0) + WallOffset, Quaternion.identity, transform); }
+                        else if (VMaze[i, j].isEmptyDown) { Instantiate(ItemSpike, new Vector3(i * 2, j * 2 + 0.4f - 1.0f, 0) + WallOffset, Quaternion.identity, transform); }
+                        else if (VMaze[i, j].isEmptyLeft) { Instantiate(ItemSpike, new Vector3(i * 2 - 1.0f, j * 2 + 0.4f, 0) + WallOffset, Quaternion.identity, transform); }
+                        else if (VMaze[i, j].isEmptyRight) { Instantiate(ItemSpike, new Vector3(i * 2 + 1.0f, j * 2 + 0.4f, 0) + WallOffset, Quaternion.identity, transform); }
+                    }
                 }
 
             }
