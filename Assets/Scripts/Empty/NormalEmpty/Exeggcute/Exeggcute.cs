@@ -248,6 +248,8 @@ public class Exeggcute : Empty
 
             GameObject effect = Instantiate(effectExplosion, eggobj.transform.position, Quaternion.identity);
             ExeggcuteExploreCB exploreCB = effect.transform.GetChild(0).GetChild(0).GetComponent<ExeggcuteExploreCB>();
+
+
             exploreCB.SetEmptyInfo(this);
             exploreCB.SetAimTag(isEmptyInfatuationDone ? "Empty" : "Player");
             exploreCB.SetType(PokemonType.TypeEnum.Grass);

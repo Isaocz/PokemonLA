@@ -1307,9 +1307,6 @@ public class PlayerControler : PlayerPokemon
         }
         else
         {
-            //受击屏闪TODO
-            if (FlashScreen.instance != null) { FlashScreen.instance.PlayFlash(FlashScreen.instance.smallHit); }
-
             PokemonType.TypeEnum enumVaue = (PokemonType.TypeEnum)SkillType;
             if ((int)SkillType != 19) {
                 ChangePoint = ChangePoint * (playerData.IsPassiveGetList[118] ? 1 : (((Weather.GlobalWeather.isRain && enumVaue == PokemonType.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
@@ -1333,24 +1330,17 @@ public class PlayerControler : PlayerPokemon
             else
             {
                 int ChangeHP = Hp;
-
-                if((int)SkillType != 19)
+                if ((int)SkillType != 19)
                 {
                     if (!isInPsychicTerrain)
                     {
-                        int startHp = nowHp;
                         nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (PokemonType.TYPE[(int)SkillType][PlayerType01] * PokemonType.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? PokemonType.TYPE[(int)SkillType][PlayerTeraType] : PokemonType.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
-                        int allDmg = startHp - nowHp;
-                        DmgShow(allDmg, false, Crit);
                     }
                     else
                     {
                         if (Mathf.Abs((int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (PokemonType.TYPE[(int)SkillType][PlayerType01] * PokemonType.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? PokemonType.TYPE[(int)SkillType][PlayerTeraType] : PokemonType.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]))))) > (int)(maxHp / 16))
                         {
-                            int startHp = nowHp;
                             nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (PokemonType.TYPE[(int)SkillType][PlayerType01] * PokemonType.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? PokemonType.TYPE[(int)SkillType][PlayerTeraType] : PokemonType.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
-                            int allDmg = startHp - nowHp;
-                            DmgShow(allDmg, false, Crit);
                         }
                     }
                 }
@@ -1358,52 +1348,59 @@ public class PlayerControler : PlayerPokemon
                 {
                     if (!isInPsychicTerrain)
                     {
-                        int startHp = nowHp;
                         nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
-                        int allDmg = startHp - nowHp;
-                        DmgShow(allDmg, false, Crit);
                     }
                     else
                     {
                         if (Mathf.Abs(Mathf.Clamp((int)ChangePoint, -100000, -1)) > (int)(maxHp / 16))
                         {
-                            int startHp = nowHp;
                             nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
-                            int allDmg = startHp - nowHp;
-                            DmgShow(allDmg, false, Crit);
                         }
                     }
                 }
-                isInvincible = true;
-                InvincileTimer = TimeInvincible;
 
+                //确实收到伤害
                 ChangeHP = ChangeHP - Hp;
                 if (ChangeHP > 0)
-                {                
+                {
+                    //无敌时间
+                    isInvincible = true;
+                    InvincileTimer = TimeInvincible;
+
                     //给AP
                     if (FloorNum.GlobalFloorNum != null && ScoreCounter.Instance != null)
                     {
                         ScoreCounter.Instance.DmagePunishAP += APBounsPoint.DmagePunish(ChangeHP);
                     }
+
+                    //血量下降时对血条UI输出当前血量，并调用血条下降的函数
+                    if (UIHealthBar.Instance != null)
+                    {
+                        UIHealthBar.Instance.Per = (float)nowHp / (float)maxHp;
+                        UIHealthBar.Instance.ChangeHpDown();
+                        UIHealthBar.Instance.NowHpText.text = string.Format("{000}", nowHp);
+                    }
+
+                    //解除睡眠
+                    if (isSleepDone) { SleepRemove(); }
+
+                    //受击后事件
+                    HitEvent(ChangePoint, ChangePointSp, SkillType, Crit);
+
+                    //受击屏闪
+                    HitFlash(ChangeHP);
+
+                    //受击伤害数字
+                    DmgShow(ChangeHP, false, Crit);
+
+                    //受击音效
+                    AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.Damage , transform.position);
+
+                    //受击动画
+                    animator.SetTrigger("Hit");
                 }
-
-
-                if (isSleepDone) { SleepRemove(); }
-                if (UIHealthBar.Instance != null) {
-                    UIHealthBar.Instance.Per = (float)nowHp / (float)maxHp;
-                    UIHealthBar.Instance.ChangeHpDown();
-                    UIHealthBar.Instance.NowHpText.text = string.Format("{000}", nowHp);
-                }
-
-                if(nowHp <= 0) { PlayerDie(); }
-                //血量上升时对血条UI输出当前血量，并调用血条上升的函数
-
-
-
-                HitEvent(ChangePoint , ChangePointSp , SkillType , Crit);
-
-                //输出被击打的动画管理器参数
-                animator.SetTrigger("Hit");
+                //判定是否死亡
+                if(nowHp <= 0) { PlayerDie(); }                
             }
         }
     }
@@ -1439,6 +1436,27 @@ public class PlayerControler : PlayerPokemon
         if (Skill03 != null && Skill03.SkillIndex == 164 ) { MinusSkillCDTime(3 , 1 , false); }
         if (Skill04 != null && Skill04.SkillIndex == 164 ) { MinusSkillCDTime(4 , 1 , false); }
 
+    }
+
+    /// <summary>
+    /// //受击屏闪
+    /// </summary>
+    /// <param name="allDmg"></param>
+    void HitFlash(int allDmg)
+    {
+        if (FlashScreen.instance != null) {
+            //单次受伤超过总血量的1/6 大屏闪
+            if (allDmg >= maxHp/6)
+            {
+                FlashScreen.instance.PlayFlash(FlashScreen.instance.bigHit);
+            }
+            //单次受伤不超过总血量的1/6 小屏闪
+            else
+            {
+                FlashScreen.instance.PlayFlash(FlashScreen.instance.smallHit);
+            }
+            
+        }
     }
 
     /// <summary>
@@ -2643,6 +2661,8 @@ public class PlayerControler : PlayerPokemon
         animator.SetTrigger("TP");
         isTP = true;
         isTPMove = true;
+        //传送开始音效
+        AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.TPStart , transform.position );
     }
 
     /// <summary>
@@ -2677,6 +2697,9 @@ public class PlayerControler : PlayerPokemon
         NowRoom = TpVector3;
         InANewRoom = true;
         UiMiniMap.Instance.SeeMapOver();
+
+        //传送结束音效
+        AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.TPOver, transform.position);
     }
 
     /// <summary>
@@ -2687,6 +2710,8 @@ public class PlayerControler : PlayerPokemon
         isTP = false;
         isTPMove = false;
     }
+
+
 
 
     //====================================================TP====================================================

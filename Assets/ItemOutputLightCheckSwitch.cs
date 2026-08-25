@@ -17,6 +17,12 @@ public class ItemOutputLightCheckSwitch : LightCheckSwitch
     public override void SucessEvent()
     {
         base.SucessEvent();
-        Instantiate(OutputItem, transform.position + OutputPosition, Quaternion.identity  );
+
+        GameObject g = Instantiate(OutputItem, transform.position + OutputPosition, Quaternion.identity );
+        Room r = transform.parent.parent.GetComponent<Room>();
+        if (r != null)
+        {
+            g.transform.parent = r.transform;
+        }
     }
 }

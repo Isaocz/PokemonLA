@@ -784,6 +784,7 @@ public class Electrode : Empty
         //ExplosionTimer = Timer;
         NowState = MainState.Explosion;
         ElectrodeExplosion e = Instantiate(ExplosionPerfab, transform.position, Quaternion.identity, transform);
+
         e.empty = this;
         IsDefStateByExplosion = true;
         Invincible = true;

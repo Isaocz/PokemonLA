@@ -1,10 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MiniMapBlock : MonoBehaviour
 {
+    //父房间
+    public Room ParentRoom;
+
+    //坐标
+    public Vector3Int MiniMapBlockIndex;
+
+    //玩家
+    public PlayerControler player;
+
 
     public enum MiniMapBlockMarkType
     {
@@ -52,15 +62,72 @@ public class MiniMapBlock : MonoBehaviour
     public Sprite BossRoomMark;
     public Sprite StartRoomMark;
 
+    public Transform ItemMarkParent;
+
+
+    /// <summary>
+    /// tp选择按钮
+    /// </summary>
+    public Button TPSelectButton;
+
+    //该小地图区块对应的房间是否被访问
+    public bool isThisRoomBeVisit;
+
+    //该小地图区块对应的房间是否被清理
+    public bool isThisRoomClear;
+
+    //该小地图区块对应的房间内是否有玩家
+    public bool isPlayerInThisRoom;
+
+
+
+
+
 
     private void Start()
     {
         Block = transform.GetComponent<Image>();
-        i1 = transform.GetChild(0).GetComponent<Image>();
-        i2 = transform.GetChild(1).GetComponent<Image>();
-        i3 = transform.GetChild(2).GetComponent<Image>();
-        i4 = transform.GetChild(3).GetComponent<Image>();
+        i1 = ItemMarkParent.GetChild(0).GetComponent<Image>();
+        i2 = ItemMarkParent.GetChild(1).GetComponent<Image>();
+        i3 = ItemMarkParent.GetChild(2).GetComponent<Image>();
+        i4 = ItemMarkParent.GetChild(3).GetComponent<Image>();
+        EnsurePlayerAndRoom();
     }
+
+
+    private void FixedUpdate()
+    {
+        //确保父房间
+        EnsurePlayerAndRoom();
+        //无父房间时结束
+        if (ParentRoom == null) { return; }
+        //有父房间时确定传送按钮活性化
+        isThisRoomBeVisit = ParentRoom.isVisit;
+        isThisRoomClear = (ParentRoom.isClear <= 0);
+        isPlayerInThisRoom = ParentRoom.isInThisRoom;
+
+        if (isThisRoomBeVisit) {
+            //传送选择按钮非活性化
+            if (!TPSelectButton.gameObject.activeInHierarchy)
+            {
+                //房间已经被清空 且 玩家不在当前房间内 活性化
+                if (isThisRoomClear && !isPlayerInThisRoom)
+                {
+                    TPSelectButton.gameObject.SetActive(true);
+                }
+            }
+            //传送选择按钮活性化
+            else
+            {
+                //房间已经被清空 或 玩家在当前房间 非活性化
+                if (!isThisRoomClear || isPlayerInThisRoom)
+                {
+                    TPSelectButton.gameObject.SetActive(false);
+                }
+            }
+        }
+    }
+
 
     public void ChangeImageMark(MiniMapBlockMarkType type)
     {
@@ -183,6 +250,50 @@ public class MiniMapBlock : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 确保房间和玩家
+    /// </summary>
+    void EnsurePlayerAndRoom()
+    {
+        //获取关联父房间
+        if (ParentRoom == null) {
+            MapCreater map = MapCreater.StaticMap;
+            ParentRoom = map.RRoom[MiniMapBlockIndex];
+        }
+        //获取玩家
+        if (player == null)
+        {
+            player = GameObject.FindObjectOfType<PlayerControler>();
+        }
+    }
+
+
+    /// <summary>
+    /// 传送按钮事件
+    /// </summary>
+    public void TPButtonEvent()
+    {
+        //点击后取消选择状态
+        EventSystem.current.SetSelectedGameObject(null);
+        //确保父房间和玩家
+        EnsurePlayerAndRoom();
+        //玩家或房间为空时结束
+        if (ParentRoom == null || player == null) { return; }
+
+        //确认玩家是否处于战斗状态
+        MapCreater map = MapCreater.StaticMap;
+        if (map.RRoom[player.NowRoom].isClear > 0)
+        {
+            UIGetANewItem.UI.JustSaySth("正在对战呢！", "不可以分心传送！");
+            return;
+        }
+        //正在传送时不可以传送
+        if (player.isTP) {
+            return; 
+        }
+        //传送
+        player.TP(MiniMapBlockIndex);
+    }
 
 
 }

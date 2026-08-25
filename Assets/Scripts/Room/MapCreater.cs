@@ -167,6 +167,15 @@ public class MapCreater : MonoBehaviour
 
 
 
+        //========================测定所有房间的isClear==============================
+        //for (int i = 0; i < BaseRoomList.RoomList.Count; i++)
+        //{
+        //    if ((BaseRoomList.RoomList[i].isClear != BaseRoomList.RoomList[i].EmptyFile().childCount) || (BaseRoomList.RoomList[i].isClear != BaseRoomList.RoomList[i].transform.GetChild(3).childCount)) {
+        //        Debug.LogError("房间"+ BaseRoomList.RoomList[i].RoomNum + "的isClear数量错误");
+        //    }
+        //}
+        //========================测定所有房间的isClear==============================
+
 
 
 
@@ -503,7 +512,7 @@ public class MapCreater : MonoBehaviour
                 foreach (Vector3Int item in VRoom.Keys)
                 {
                     //Debug.Log(item +"+"+ Vector3Int.Distance(item, Vector3Int.zero) + "+" + (Mathf.Sqrt(StepMin)) + "+" + SpawnR);
-                    if (Vector3Int.Distance(item, Vector3Int.zero) > (Mathf.Sqrt(StepMin)) / SpawnR && item != Vector3Int.zero && item != BossRoomPoint && item != StoreRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
+                    if (Vector3Int.Distance(item, Vector3Int.zero) > (Mathf.Sqrt(StepMin)) / SpawnR && item != Vector3Int.zero && item != PCRoomPoint && item != BossRoomPoint && item != StoreRoomPoint && item != SkillShopRoomPoint && item != MewRoomPoint && item != BabyCenterRoomPoint && item != MintRoomPoint && item != BerryTreeRoomPoint)
                     {
                         if (!Waitlist.Contains(item)) { Waitlist.Add(item); }
                     }
