@@ -40,10 +40,10 @@ public class CameraController : MonoBehaviour
             {
                 cameraPolygon.CameraPolygonPoints(new Vector2[]
                 {
-                    new Vector2(3045, 2436),
-                    new Vector2(2985, 2436),
-                    new Vector2(2985, 2388),
-                    new Vector2(3045, 2388)
+                    new Vector2(3030, 2424),
+                    new Vector2(2970, 2424),
+                    new Vector2(2970, 2376),
+                    new Vector2(3030, 2376)
                 });
             }
             else

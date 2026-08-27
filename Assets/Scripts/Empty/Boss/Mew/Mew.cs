@@ -1,130 +1,151 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Cinemachine;
 
 public class Mew : Empty
 {
-    [Header("¼¼ÄÜ")]
-    public GameObject StarScatterPref;//¼¼ÄÜ1
-    public GameObject StarShootPref;//¼¼ÄÜ2
-    public GameObject StampStarPref;//¼¼ÄÜ3
-    public GameObject StarSlashPref;//¼¼ÄÜ4
-    public GameObject StarChargePref;//¼¼ÄÜ5
-    public GameObject dashReticle;//¼¼ÄÜ6
-    public GameObject PouncePrefab;
-    public GameObject MagicalFirePrefab;//¼¼ÄÜ7
-    public GameObject IcicleSpearPrefab;//¼¼ÄÜ8
-    public float summonRadius = 5f;
-    public float delayBetweenExecutions = 1f;
-    public GameObject HeartStampPrefab;//¼¼ÄÜ9
-    public int heartStampCount = 8;
-    public GameObject reticlePrefab; //ReticleÔ¤ÖÆÌå
-    public GameObject ScaleShotPrefab; //¼¼ÄÜ10
-    public int scaleShotCount;
-    public GameObject MeanLookSE;//ºÚÉ«Ä¿¹âÌØĞ§
-    public GameObject MeanLookPrefab;//¼¼ÄÜ11
-    public GameObject DazzlingGleamPrefab;//¼¼ÄÜ12
-    public GameObject LeafBladePrefab; // ¼¼ÄÜ13
-    public GameObject stoneEdgePrefab;//¼¼ÄÜ14
-    private Vector3 mapCenter;  // µØÍ¼ÖĞĞÄµã
-    private Vector3 reticleSpawnPosition; // ReticleÉú³ÉÎ»ÖÃ
-    public GameObject AirSlashPrefab;//¼¼ÄÜ15
-    public GameObject MakeItRainPrefab;//¼¼ÄÜ16
-    public GameObject StickyWebPrefab;//¼¼ÄÜ17
-    public GameObject CrossPoisonPrefab;//¼¼ÄÜ18
-    public GameObject SecredFirePrefab;//¼¼ÄÜ19
-    public GameObject SecredFireVertexPrefab;
-    public GameObject reticle2Prefab;//Reticle2Ô¤ÖÆÌå
-    public GameObject SecredSwordPrefab;//¼¼ÄÜ20
+    #region Inspector é…ç½®
+
+    [Header("ç¬¬ä¸€ã€äºŒé˜¶æ®µåŸºç¡€æŠ€èƒ½ 1-6")]
+    public GameObject StarScatterPref; // æŠ€èƒ½1
+    public GameObject StarShootPref; // æŠ€èƒ½2
+    public GameObject StampStarPref; // æŠ€èƒ½3ï¼šæ—‹è½¬æ˜Ÿå…‰
+    public GameObject StarChargePref; // æŠ€èƒ½4ï¼šæ˜Ÿä¹‹å†²åˆº
+    public GameObject StarSlashPref; // æŠ€èƒ½5ï¼šæ˜Ÿä¹‹åˆƒ
+    public GameObject StarRingReturnPref; // æŠ€èƒ½6ï¼šæ˜Ÿç¯æŠ˜è¿”
+
+    [Header("ç¬¬äºŒé˜¶æ®µå¼ºæŠ€èƒ½")]
+    [Tooltip("å¼ºæŠ€èƒ½1ï¼šé•œåƒæ˜Ÿå…‰ã€‚Prefab æ ¹å¯¹è±¡å¿…é¡»æŒ‚è½½ MirrorStarLightã€‚")]
+    public GameObject MirrorStarLightPref;
+    [Tooltip("å¼ºæŠ€èƒ½2ï¼šå¤©è±¡æ—¶é’Ÿã€‚Prefab æ ¹å¯¹è±¡å¿…é¡»æŒ‚è½½ CelestialClockã€‚")]
+    public GameObject CelestialClockPref;
+    [Tooltip("å¼ºæŠ€èƒ½3ï¼šæ‹Ÿæ€ç¾¤æ˜Ÿã€‚Prefab æ ¹å¯¹è±¡å¿…é¡»æŒ‚è½½ MimicStarsã€‚")]
+    public GameObject MimicStarsPref;
+    [Tooltip("å¼ºæŠ€èƒ½4ï¼šæ˜Ÿè¾‰æ³¢åŠ¨ã€‚Prefab æ ¹å¯¹è±¡å¿…é¡»æŒ‚è½½ StarWaveã€‚")]
+    public GameObject StarWavePref;
+
+    [Header("ç¬¬äºŒé˜¶æ®µå¼ºæŠ€èƒ½é™åˆ¶åœˆ")]
+    [Tooltip("å¯ç•™ç©ºï¼›ç•™ç©ºæ—¶ä¼˜å…ˆå¤ç”¨ ArenaBoundaryPrefabï¼Œå†ä¸è¡Œåˆ™è¿è¡Œæ—¶åˆ›å»ºã€‚")]
+    public MewArenaBoundary Phase2ArenaBoundaryPrefab;
+    [Min(4f)] public float Phase2StrongArenaRadius = 18f;
+    [Min(0f)] public float Phase2ArenaIntroDuration = 0.85f;
+    [Min(0f)] public float Phase2ArenaFadeDuration = 0.65f;
+
+    [Header("ç¬¬äºŒé˜¶æ®µæŠ€èƒ½èŠ‚å¥")]
+    [Tooltip("äºŒé˜¶æ®µåŸºç¡€æŠ€èƒ½ä¼ é€æ¶ˆå¤±ç­‰å¾…ï¼Œä¸å±äºæŠ€èƒ½è‡ªèº«å‰æ‘‡ã€‚")]
+    [Min(0f)] public float Phase2TeleportOutTime = 0.42f;
+    [Tooltip("ä¼ é€åˆ°æ–°ä½ç½®åçš„æ˜¾ç°ç­‰å¾…ï¼Œä¸å±äºæŠ€èƒ½è‡ªèº«å‰æ‘‡ã€‚")]
+    [Min(0f)] public float Phase2TeleportInTime = 0.38f;
+    [Min(0f)] public float Phase2BasicSkillInterval = 0.35f;
+    [Min(0f)] public float Phase2StrongSkillInterval = 0.8f;
+
+    [Header("ç¬¬äºŒé˜¶æ®µæˆ¿é—´è¾¹ç•Œ")]
+    [Tooltip("ä»¥ mapCenter ä¸ºä¸­å¿ƒçš„æˆ¿é—´åŠå°ºå¯¸ï¼Œæ›¿ä»£æ—§ç‰ˆç¡¬ç¼–ç ä¸–ç•Œåæ ‡ã€‚")]
+    public Vector2 Phase2RoomHalfExtents = new Vector2(30f, 24f);
+    [Min(0f)] public float Phase2RoomEdgePadding = 2f;
+
+
+    [Header("é˜¶æ®µè½¬åœºä¸é€šç”¨ç‰¹æ•ˆ")]
     public GameObject Phase2Mask;
     public GameObject TeleportEndPrefab;
-    public GameObject EdgePar;//Íæ¼ÒÔ½¹ı±ß½çµÄÊ±ºòÏÔÊ¾µÄÁ£×Ó
-    public GameObject Phase3OrbRotate;
-    public GameObject ElectricBallPrefab;//¼¼ÄÜ21
-    public GameObject TimeStopEffect;
-    public GameObject TrailEffect;
-    public GameObject TrailEffect2;
-    public GameObject TrailEffect3;
-    public GameObject IceBeamPrefab;//¼¼ÄÜ22
+    public GameObject EdgePar;
 
-    public GameObject FakePotionPrefab;//¼ÙÉËÒ©
-    public GameObject FakeAntidote;//¼Ù½âÂéÒ©
-    public GameObject FakeBurnHeal;//¼Ù×ÆÉËÒ©
-    public GameObject FakeAwakening;//¼Ù½âÃßÒ©
-    public GameObject FakeIceHeal;//¼Ù½â¶³Ò©
-    public GameObject FakeParalyzeHeal;//¼Ù½âÂéÒ©
-    public GameObject FakeLovePrefab;//¼ÙĞÄ
+    [Header("ç¬¬ä¸‰é˜¶æ®µé™åˆ¶åœˆ")]
+    [Tooltip("å¯é€‰ã€‚ç•™ç©ºæ—¶ä¼šåœ¨è¿è¡Œæ—¶è‡ªåŠ¨åˆ›å»ºé™åˆ¶åœˆå¯¹è±¡ã€‚")]
+    public MewArenaBoundary ArenaBoundaryPrefab;
+    [Min(1f)] public float ArenaRadius = 22f;
+    [Min(1f)] public float FinalArenaRadius = 16f;
+    [Min(0f)] public float ArenaIntroDuration = 1.25f;
+    [Tooltip("é™åˆ¶åœˆåªåœ¨ç»ˆå¹•å‡†å¤‡å‰å­˜åœ¨ï¼›é»˜è®¤åœ¨å‰ 45 ç§’ä» 22 ç¼©åˆ° 16ã€‚")]
+    [Min(0.1f)] public float ArenaShrinkDuration = 45f;
 
-    //¸÷¸ö¼¼ÄÜµÄÀäÈ´Ê±¼ä
-    [System.Serializable]
-    public struct DictionaryData
-    {
-        public int skillIndex;
-        public int stage;
-        public float skillTimer;
-    }
-    public List<DictionaryData> DictionaryDataList;
+    [Header("ç¬¬ä¸‰é˜¶æ®µæœ€ç»ˆæŠ€èƒ½ï¼šç»ˆç¬¦ã€Œæ˜Ÿå°˜å¹»æƒ³ã€Hard")]
+    [Tooltip("æ¨èå¡«å†™æŒ‚æœ‰ StardustFantasy çš„ Hard æŠ€èƒ½ Prefabã€‚ç•™ç©ºæ—¶è¿è¡Œæ—¶è‡ªåŠ¨åˆ›å»ºä¹ä½¿é­”æŠ€èƒ½å¯¹è±¡ã€‚")]
+    public GameObject StardustFantasyPref;
+    [Tooltip("æ™®é€š StarLight Prefabï¼Œå¿…é¡»å¸¦ BarrageProjectile ä¸ Rigidbody2Dã€‚å¯è¦†ç›–æŠ€èƒ½ Prefab å†…çš„ projectilePrefabã€‚")]
+    public GameObject StardustProjectilePrefab;
+    [Min(1f)] public float Phase3Duration = 60f;
+    [Tooltip("ç»ˆå¹•æ€»æ—¶é•¿ã€‚é»˜è®¤ 15 ç§’ï¼š10 ç§’è“„ç§¯ã€2 ç§’æ•£èŠ±ã€3 ç§’æ·¡å‡ºã€‚")]
+    [Min(5f)] public float Phase3FinaleDuration = 15f;
 
-    public Dictionary<int, Dictionary<int, float>> SkillTimer = new Dictionary<int, Dictionary<int, float>>();
-    //´ó×ÖµäµÄintÎª¼¼ÄÜindex£¬Ğ¡×ÖµäµÄintÎªstage£¨µ±Ç°½×¶Î£©£¬Ğ¡×ÖµäµÄfloatÎª¶ÔÓ¦µÄskillTimer
-
-    //ÖÕ½á¼¼
-    public GameObject Swords;
-    public GameObject Meanlookfinal;
-
-    [Header("ÑªÌõUIµ÷Õû")]
+    [Header("è¡€æ¡ UI è°ƒæ•´")]
     public GameObject timeBar1;
     public GameObject timeBar2;
     public GameObject timeBar3;
     public GameObject timeBar4;
+
+    [Header("ç¬¬äºŒé˜¶æ®µç´«è‰²è¡€æ¡")]
+    [Tooltip("åªæ›¿æ¢éç©º Spriteã€‚æŒ‰ç…§å½“å‰ UI å±‚çº§åˆ†åˆ«å¡«å…¥ç´«è‰²æ¡†ã€åº•ã€ç¼“é™æ¡å’Œå½“å‰è¡€é‡æ¡ã€‚")]
+    public Sprite Phase2Bar1;
+    public Sprite Phase2Bar2;
+    public Sprite Phase2Bar3;
+    public Sprite Phase2Bar4;
+
+    [Header("ç¬¬ä¸‰é˜¶æ®µæ—¶é—´æ¡")]
     public Sprite TimeBar1;
     public Sprite TimeBar2;
     public Sprite TimeBar3;
     public Sprite TimeBar4;
 
-    //ÇĞ»»·¿¼ä
-    private float MeanLookTimer = 0f;
-    private bool UsedMeanLook = false;
-    private bool turningPhase = false;
-
-    //Audio
-    public BackGroundMusic bgmScript;
-
-    [Header("µôÂä")]
-    public PokemonBall[] pbList;
-
-    [Header("ÆäËû")]
-    public int currentPhase = 1; // µ±Ç°½×¶Î
-    public bool LaserChange = false;
-    private List<int> skillList;
-    private int currentSkillIndex = 0;
-    private float skillTimer = 0f; // ¼¼ÄÜ¼ÆÊ±Æ÷
-    private bool isReset;
-    private bool isTeleport;
-    public float teleportTime;
-    public bool testing;
-
-    private float teleportTimer = 0f;
-    private int playerHpinP3;
-    Vector3 targetPosition;
-    Vector3 currentPosition;
-    private bool isPhase3 = false;
-    private int[] Phase3Skills = new int[]
-    {
-        1,3,5,6,7,8,9,10,13,15,16,17,18,19
-    };
-    private bool isSkillFin;
-    private bool isDying = false;//½áËã
-    private bool isFinal;
-
-    //Ëæ»ú´«ËÍ
-    private int teleportAttempts = 0;//Ëæ»ú´«ËÍ¼ÆÊıÆ÷
-
-    //·¿¼ä
+    [Header("æˆ¿é—´ä¸æ‰è½")]
     public GameObject MewBossRoomPrefab;
     public Vector3 MewBossRoomPosition = new Vector3(60f, 60f, 0f);
+    public PokemonBall[] pbList;
+
+    [Header("éŸ³é¢‘")]
+    public BackGroundMusic bgmScript;
+
+    [Header("ç¬¬ä¸€é˜¶æ®µå…¨å±€æ—¶é—´")]
+    [Tooltip("æŠ€èƒ½å‰ï¼šä¼ é€æ¶ˆå¤±åŠ¨ç”»ç­‰å¾…ã€‚å®ƒä¸æ˜¯æŠ€èƒ½å‰æ‘‡ã€‚")]
+    [Min(0f)] public float Phase1TeleportOutTime = 0.5f;
+
+    [Tooltip("æŠ€èƒ½å‰ï¼šåˆ°è¾¾æ–°ä½ç½®åçš„æ˜¾ç°ç­‰å¾…ã€‚éšåæ‰åˆ›å»ºæŠ€èƒ½å¯¹è±¡ã€‚å®ƒä¸æ˜¯æŠ€èƒ½å‰æ‘‡ã€‚")]
+    [Min(0f)] public float Phase1TeleportInTime = 0.5f;
+    [Tooltip("æŠ€èƒ½å®Œæˆåã€ä¸‹ä¸€æ¬¡ä¼ é€å¼€å§‹å‰çš„é¢å¤–åœé¡¿ã€‚é»˜è®¤ 0ï¼›ä¼ é€æœ¬èº«å·²æœ‰æ·¡å‡ºå’Œæ·¡å…¥æ—¶é—´ã€‚")]
+    [Min(0f)] public float Phase1ExtraInterval = 0f;
+
+    [Header("è¿è¡Œä¸è°ƒè¯•")]
+    public int currentPhase = 1;
+    public float teleportTime;
+    public bool testing;
+    [Range(1, 6)] public int Phase1TestingSkillIndex = 1;
+    public PokemonType.TypeEnum SkillType;
+
+    #endregion
+
+    #region è¿è¡Œæ—¶çŠ¶æ€
+
+    private Vector3 mapCenter;
+    private bool turningPhase;
+
+    // ç¬¬ä¸€é˜¶æ®µä¸¥æ ¼æŒ‰ 1 -> 6 é¡ºåºé‡Šæ”¾ï¼Œå¹¶ç­‰å¾…å½“å‰æŠ€èƒ½å®Œæ•´ç»“æŸã€‚
+    private int phaseOneSkillIndex = 1;
+    private bool phaseOneSkillRunning;
+    private bool phaseOneEnvironmentCleared;
+    private Coroutine phaseOneSkillRoutine;
+    private MewBaseSkill activeBasicSkill;
+
+    // ç¬¬äºŒé˜¶æ®µï¼šéšæœº3æ¬¡åŸºç¡€æŠ€èƒ½ï¼Œç„¶åé¡ºåºé‡Šæ”¾1æ¬¡å·²é…ç½®çš„å¼ºæŠ€èƒ½ã€‚
+    private Coroutine phaseTwoRoutine;
+    private MewBaseSkill activePhaseTwoSkill;
+    private MewArenaBoundary phaseTwoArenaBoundary;
+    private readonly List<int> phaseTwoBasicBag = new List<int>(6);
+    private int phaseTwoBasicBagCursor;
+    private int phaseTwoStrongSkillIndex;
+
+    private int playerHpinP3;
+    private bool isPhase3;
+
+    private bool isDying = false;
+    private bool isFinal;
+    private bool phaseThreeTimerRunning;
+    private bool phaseThreeArenaReady;
+    private bool phaseThreeFinaleReleased;
+    private Coroutine phaseThreeRoutine;
+    private StardustFantasy activePhaseThreeSkill;
+    private MewArenaBoundary arenaBoundary;
+
     private GameObject Camera;
     private bool roomCreated = false;
     private Vector3Int GetnowRoom;
@@ -132,21 +153,17 @@ public class Mew : Empty
     private Vector3 GetMewPosition;
     private Vector3 GetCameraPostion;
 
-    //ÉãÏñ¸úËæ
     private CameraController cinemachineController;
     private CameraAdapt cameraAdapt;
     private GameObject AtkTarget;
 
-    //Ê±¼äÑªÁ¿
     private float HpTimer = 60f;
     private float HpTiming = 60f;
-    
-    //ËÀÍöÅĞ¶¨
+
     public static bool MewBossKilled = false;
 
-    //ÑÕÉ«
-    private Color[] colors = new Color[]
-{
+    private Color[] colors =
+    {
         new Color(0.7294118f, 0.7333333f, 0.6627451f, 1f), // Normal
         new Color(0.7333333f, 0.3372549f, 0.2666667f, 1f), // Fighting
         new Color(0.6588235f, 0.5647059f, 0.9333334f, 1f), // Flying
@@ -156,7 +173,7 @@ public class Mew : Empty
         new Color(0.6666667f, 0.7333333f, 0.1215686f, 1f), // Bug
         new Color(0.4431373f, 0.345098f, 0.6f, 1f), // Ghost
         new Color(0.6705883f, 0.6666667f, 0.7294118f, 1f), // Steel
-        new Color(1, 0.2666667f, 0.1294118f, 1f), // Fire
+        new Color(1f, 0.2666667f, 0.1294118f, 1f), // Fire
         new Color(0.2f, 0.6f, 0.9960785f, 1f), // Water
         new Color(0.4666667f, 0.8f, 0.3333333f, 1f), // Grass
         new Color(0.9725491f, 0.8156863f, 0.1882353f, 1f), // Electric
@@ -165,1301 +182,1091 @@ public class Mew : Empty
         new Color(0.4470589f, 0.2313726f, 0.9764706f, 1f), // Dragon
         new Color(0.4470589f, 0.345098f, 0.2862745f, 1f), // Dark
         new Color(0.9333334f, 0.6078432f, 0.6784314f, 1f), // Fairy
-};
-    public PokemonType.TypeEnum SkillType;
-    public float intensity = 1f;
-    void Start()
+    };
+
+    #endregion
+
+    #region Unity ç”Ÿå‘½å‘¨æœŸ
+
+    private void Start()
     {
-        //Audio
         bgmScript = BackGroundMusic.StaticBGM;
 
-        //ÃÎ»ÃµÄ»ù´¡ÊôĞÔ
-        EmptyType01 = PokemonType.TypeEnum.Psychic;//ÃÎ»ÃµÄÊôĞÔÎª³¬ÄÜ
-        EmptyType02 = 0;
-        player = GameObject.FindObjectOfType<PlayerControler>();//»ñÈ¡Íæ¼Ò
-        Emptylevel = SetLevel(player.Level, MaxLevel);//ÉÏÏŞµÈ¼¶100
-        EmptyHpForLevel(Emptylevel);//ÉèÖÃ³õÊ¼ÑªÁ¿
+        InitializeBossStats();
+        CacheComponents();
+        CacheBattleSceneState();
+        PrepareBattle();
+        StartOverEvent();
+        StartCoroutine(ClearEnvironmentAfterIntro());
+    }
 
-        //ÄÜÁ¦µÈ¼¶
+    private void Update()
+    {
+        ResetPlayer();
+
+        if (isBorn || isDying)
+        {
+            return;
+        }
+
+        if (currentPhase == 3)
+        {
+            UpdatePhaseThree();
+        }
+        else
+        {
+            UpdateNormalPhase();
+        }
+
+    }
+
+    #endregion
+
+    #region åˆå§‹åŒ–
+
+    private void InitializeBossStats()
+    {
+        EmptyType01 = PokemonType.TypeEnum.Psychic;
+        EmptyType02 = 0;
+
+        player = GameObject.FindObjectOfType<PlayerControler>();
+        Emptylevel = SetLevel(player.Level, MaxLevel);
+        EmptyHpForLevel(Emptylevel);
+
         AtkAbilityPoint = AbilityForLevel(Emptylevel, AtkEmptyPoint);
         SpAAbilityPoint = AbilityForLevel(Emptylevel, SpAEmptyPoint);
         DefAbilityPoint = AbilityForLevel(Emptylevel, DefEmptyPoint);
         SpdAbilityPoint = AbilityForLevel(Emptylevel, SpdEmptyPoint);
         SpeedAbilityPoint = AbilityForLevel(Emptylevel, SpeedEmptyPoint);
-        Exp = BaseExp * Emptylevel / 7;//¾­ÑéÖµ
+        Exp = BaseExp * Emptylevel / 7;
+    }
 
+    private void CacheComponents()
+    {
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
         cameraAdapt = FindObjectOfType<CameraAdapt>();
+    }
 
-        //µØÍ¼
+    private void CacheBattleSceneState()
+    {
         Camera = GameObject.FindGameObjectWithTag("MainCamera");
         mapCenter = transform.parent.position;
         GetnowRoom = player.NowRoom;
         GetMewPosition = transform.position;
         GetPlayerPosition = player.transform.position;
         GetCameraPostion = Camera.transform.position;
+
         transform.parent.parent.GetComponent<Room>().isClear += 1;
-
-        //Èë³¡
-        ClearProjectile();
-        InitializeSkillList();
-        isReset = false;
-
-        //½«ÁĞ±íÖĞµÄ¼¼ÄÜÀäÈ´Ê±¼äÉè¶¨Èë×ÖµäÖĞ
-        foreach (DictionaryData data in DictionaryDataList)
-        {
-            if (!SkillTimer.ContainsKey(data.skillIndex))
-            {
-                SkillTimer[data.skillIndex] = new Dictionary<int, float>();
-            }
-            SkillTimer[data.skillIndex][data.stage] = data.skillTimer;
-        }
-
-        //É¾³ıËùÓĞ»·¾³¶ÔÏó
-        Transform grandParent = transform.parent.parent;
-        Transform enviroment = grandParent.Find("Enviroment");
-
-        if (enviroment != null)
-        {
-            for (int i = 0; i < enviroment.childCount; i++)
-            {
-                if (enviroment.tag == "Grass")
-                {
-                    NormalGress grass = enviroment.GetComponent<NormalGress>();
-                    if (grass != null)
-                    {
-                        grass.GrassDie();
-                    }
-                }
-                else
-                {
-                    Destroy(enviroment.GetChild(i).gameObject);
-                }
-            }
-        }
-
-
-
-        StartOverEvent();
     }
 
-    void Update()
+    private void PrepareBattle()
     {
-        ResetPlayer();
-        if (!isBorn && !isDying)
+        ClearProjectile();
+        phaseOneSkillIndex = 1;
+        phaseOneSkillRunning = false;
+        phaseOneEnvironmentCleared = false;
+        phaseOneSkillRoutine = null;
+        activeBasicSkill = null;
+
+        phaseTwoRoutine = null;
+        activePhaseTwoSkill = null;
+        phaseTwoArenaBoundary = null;
+        phaseTwoBasicBag.Clear();
+        phaseTwoBasicBagCursor = 0;
+        phaseTwoStrongSkillIndex = 0;
+
+        phaseThreeRoutine = null;
+        activePhaseThreeSkill = null;
+        phaseThreeTimerRunning = false;
+        phaseThreeArenaReady = false;
+        phaseThreeFinaleReleased = false;
+        isFinal = false;
+        HpTimer = Mathf.Max(1f, Phase3Duration);
+        HpTiming = HpTimer;
+    }
+
+
+    private IEnumerator ClearEnvironmentAfterIntro()
+    {
+        // æ–‡æ¡£è¦æ±‚å¼€å§‹åŠ¨ç”»ç»“æŸåå†æ¸…é™¤ç¯å¢ƒéšœç¢ç‰©ã€‚
+        while (isBorn && !isDying)
         {
-            if (currentPhase == 3)//Èı½×¶ÎÅĞ¶¨
+            yield return null;
+        }
+
+        if (!isDying)
+        {
+            ClearEnvironmentObjects();
+            // Destroy ä¼šåœ¨å¸§æœ«çœŸæ­£æ‰§è¡Œï¼Œç­‰å¾…ä¸€å¸§åå†å…è®¸ç¬¬ä¸€é˜¶æ®µå¼€å§‹æ–½æ³•ã€‚
+            yield return null;
+            phaseOneEnvironmentCleared = true;
+        }
+    }
+
+    private void ClearEnvironmentObjects()
+    {
+        if (transform.parent == null || transform.parent.parent == null)
+        {
+            return;
+        }
+
+        Transform roomRoot = transform.parent.parent;
+        Transform enviroment = roomRoot.Find("Enviroment");
+
+        if (enviroment == null)
+        {
+            return;
+        }
+
+        // å¿…é¡»å€’åºåˆ é™¤ï¼›æ­£åºåˆ é™¤ä¼šå› ä¸º childCount å˜åŒ–è€Œè·³è¿‡ä¸€åŠå¯¹è±¡ã€‚
+        for (int i = enviroment.childCount - 1; i >= 0; i--)
+        {
+            Transform child = enviroment.GetChild(i);
+            NormalGress grass = child.GetComponent<NormalGress>();
+
+            if (child.CompareTag("Grass") && grass != null)
             {
-                Phase3();
-                HpTiming -= Time.deltaTime;
-                EmptyHp = (int)(HpTiming / HpTimer * maxHP);
-                uIHealth.Per = HpTiming / HpTimer;
-                uIHealth.ChangeHpDown();
-                UISkillButton.Instance.isEscEnable = false;
-                //ÏŞÖÆÍæ¼ÒµÄÒÆ¶¯°ë¾¶
-                float distance = Vector2.Distance(player.transform.position, transform.position);
-                if (!isFinal)
-                {
-                    if (distance > 19f)
-                    {
-                        Vector3 direction = (player.transform.position - transform.position).normalized;
-                        Vector3 targetPosition = transform.position + direction * 19f;
-                        player.transform.position = Vector3.MoveTowards(player.transform.position, targetPosition, 7f * Time.deltaTime);
-                        GameObject edgePar = Instantiate(EdgePar, player.transform.position, Quaternion.identity);
-                        Destroy(edgePar, 0.4f);
-                    }
-                }
-                else
-                {
-                    if (distance > 14f)
-                    {
-                        Vector3 direction = (player.transform.position - transform.position).normalized;
-                        Vector3 targetPosition = transform.position + direction * 14f;
-                        player.transform.position = Vector3.MoveTowards(player.transform.position, targetPosition, 7f * Time.deltaTime);
-                        GameObject edgePar = Instantiate(EdgePar, player.transform.position, Quaternion.identity);
-                        Destroy(edgePar, 0.4f);
-                    }
-                }
-                if (HpTiming <= 0f)
-                {
-                    if (!isDying)
-                    {
-                        isDying = true;
-                        ClearProjectile();
-                        StartCoroutine(Phase3End());
-                    }
-                }
-                if (Vector3.Distance(player.transform.position, transform.position) > 200f)
-                {
-                    Destroy(this);
-                }
+                grass.GrassDie();
             }
             else
             {
-                AtkTarget = FindAtkTarget(40f);
-                UpdateEmptyChangeHP();
-                StateMaterialChange();
-                bgmScript.ChangeBGMToMew(currentPhase);
-                if (!turningPhase)
-                {
-                    switch (currentPhase)
-                    {
-                        case 1:
-                            if (EmptyHp < maxHP / 2)
-                            {
-                                Invincible = true;
-                                player.isInvincible = true;
-                                StopAllCoroutines();
-                                if (!UsedMeanLook)
-                                {
-                                    if (!roomCreated && currentPhase == 1)
-                                    {
-                                        isReset = false;
-                                        turningPhase = true;
-                                        ClearStatusEffects();
-                                        EmptyHp = maxHP;
-                                        player.ChangeHp(player.maxHp - player.Hp, 0, 0);
-                                        uIHealth.Per = EmptyHp / maxHP;
-                                        StartCoroutine(Phase2Start());
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
-                                {
-                                    //ÆäÊµ¾ÍÊÇÈç¹û²»ĞèÒª×ª½×¶Î»òÕßÃ»ÓĞÒì³£×´Ì¬£¬½øĞĞ¼¼ÄÜ¼ÆÊ±Æ÷£¬¼¼ÄÜÒ»µ©¿ªÊ¼±ãÎŞ·¨Í£Ö¹¡£Òì³£×´Ì¬Ö»ÊÇÍ£Ö¹¼¼ÄÜ¼ÆÊ±Æ÷
-                                    Phase1();
-                                }
-                            }
-                            break;
-                        case 2:
-                            if (EmptyHp <= 0 && currentPhase == 2)
-                            {
-                                isReset = false;
-                                ClearStatusEffects();
-                                StopAllCoroutines();
-                                player.ChangeHp((player.Hp < (player.maxHp * 3 / 4)) ? player.maxHp / 4 : (player.maxHp - player.Hp), 0, 0);
-                                EmptyHp = maxHP;
-                                uIHealth.Per = EmptyHp / maxHP;
-                                uIHealth.ChangeHpUp();
-                                currentPhase++;
-                                isPhase3 = true;
-                            }
-                            else if (!isEmptyFrozenDone && !isSleepDone && !isCanNotMoveWhenParalysis && !isSilence)
-                            {
-                                Phase2();
-                            }
-                            break;
-                    }
-                }
-            }
-            if (UsedMeanLook)
-            {
-                MeanLookTimer += Time.deltaTime;
-                if(MeanLookTimer >= 3.5f)
-                {
-                    UsedMeanLook = false;
-                    MeanLookTimer = 0f;
-                }
+                Destroy(child.gameObject);
             }
         }
     }
 
-    #region ½×¶Îui
-    void Phase1()
+    #endregion
+
+    #region æ¯å¸§é˜¶æ®µæ§åˆ¶
+
+    private void UpdatePhaseThree()
     {
-        ResetSkillTimer();
-        if (skillTimer <= 0f)
+        Phase3();
+        LockPhaseThreeHealing();
+
+        if (phaseThreeTimerRunning)
         {
-            if (currentSkillIndex >= skillList.Count)
-            {
-                InitializeSkillList();
-                currentSkillIndex = 0;
-            }
-            int randomSkillIndex = skillList[currentSkillIndex];
-            StartCoroutine(Phase1Skill(randomSkillIndex));
-            SkillTimerUpdate(randomSkillIndex, 1);
-            currentSkillIndex++;
+            HpTiming = Mathf.Max(0f, HpTiming - Time.deltaTime);
+            float timeRatio = HpTimer > 0f
+                ? Mathf.Clamp01(HpTiming / HpTimer)
+                : 0f;
+
+            EmptyHp = Mathf.RoundToInt(timeRatio * maxHP);
+            uIHealth.Per = timeRatio;
+            uIHealth.ChangeHpDown();
         }
-        // ¼¼ÄÜ¼ÆÊ±Æ÷µİ¼õ
-        skillTimer -= Time.deltaTime;
+
+        if (phaseThreeTimerRunning &&
+            !phaseThreeFinaleReleased &&
+            HpTiming <= Phase3FinaleDuration)
+        {
+            // æ­£å¸¸æƒ…å†µä¸‹ StardustFantasy ä¼šåœ¨åŒä¸€æ—¶åˆ»è°ƒç”¨æ­¤æ–¹æ³•ï¼›
+            // è¿™é‡Œä½œä¸ºæŠ€èƒ½ Prefab é…ç½®å¤±è´¥æ—¶çš„ä¿é™©ï¼Œç¡®ä¿é™åˆ¶åœˆä¸ä¼šé”åˆ°ç»“å°¾ã€‚
+            ReleasePhaseThreeArenaBoundary(0.45f);
+        }
+
+        UISkillButton.Instance.isEscEnable = false;
+        UpdateArenaBoundary();
+
+        if (phaseThreeTimerRunning && HpTiming <= 0f && !isDying)
+        {
+            phaseThreeTimerRunning = false;
+            isDying = true;
+            StopPhaseThreeFinalSkill();
+            ClearProjectile();
+            StartCoroutine(Phase3End());
+        }
+
+        if (player != null &&
+            Vector3.Distance(player.transform.position, transform.position) > 200f)
+        {
+            Destroy(this);
+        }
     }
-    void Phase2()
+
+    private void UpdateArenaBoundary()
     {
-        ResetSkillTimer();
-        if (skillTimer <= 0f)
+        if (!phaseThreeArenaReady)
         {
-            if (currentSkillIndex >= skillList.Count)
-            {
-                InitializeSkillList();
-                currentSkillIndex = 0;
-            }
-
-            int randomSkillIndex = skillList[currentSkillIndex];
-
-            StartCoroutine(Phase2Skill(randomSkillIndex));
-            targetPosition = RamdomTeleport();
-            currentPosition = transform.position;
-            SkillTimerUpdate(randomSkillIndex, 2);
-            currentSkillIndex++;
-        }
-        if (isTeleport)
-        {
-            teleportTimer += Time.deltaTime;
-            float t = Mathf.Clamp01(Mathf.Sin(teleportTimer / teleportTime * Mathf.PI * 0.5f));
-            transform.position = Vector3.Lerp(currentPosition, targetPosition, t);
-            if(teleportTimer >= teleportTime)
-            {
-                isTeleport = false;
-                teleportTimer = 0f;
-            }
+            return;
         }
 
-        // ¼¼ÄÜ¼ÆÊ±Æ÷µİ¼õ
-        skillTimer -= Time.deltaTime;
+        if (arenaBoundary == null)
+        {
+            CreateArenaBoundary();
+        }
+
+        if (arenaBoundary == null)
+        {
+            return;
+        }
+
+        // åœ†å¿ƒå›ºå®šåœ¨ä¸‰é˜¶æ®µæˆ¿é—´ä¸­å¿ƒï¼Œä¸èƒ½ä½¿ç”¨ transform.positionï¼Œ
+        // å¦åˆ™é™åˆ¶åœˆä¼šåœ¨ Mew ä¼ é€æ—¶è·Ÿç€ç§»åŠ¨ã€‚
+        // ç¼©åœˆå‘½ä»¤åªåœ¨ Phase3Start ä¸­å‘é€ä¸€æ¬¡ï¼›æ¯å¸§é‡å¤ SetTargetRadius
+        // ä¼šè®©éƒ¨åˆ† MewArenaBoundary å®ç°ä¸æ–­é‡ç½®æ’å€¼è®¡æ—¶ã€‚
+        arenaBoundary.SetCenter(mapCenter);
     }
-    void Phase3()
-    {
-        ResetSkillTimer();
 
-        if (isPhase3)
+    private void CreateArenaBoundary()
+    {
+        if (arenaBoundary != null || player == null)
+        {
+            return;
+        }
+
+        if (ArenaBoundaryPrefab != null)
+        {
+            arenaBoundary = Instantiate(
+                ArenaBoundaryPrefab,
+                mapCenter,
+                Quaternion.identity);
+        }
+        else
+        {
+            GameObject boundaryObject = new GameObject("Mew Arena Boundary");
+            boundaryObject.transform.position = mapCenter;
+            arenaBoundary = boundaryObject.AddComponent<MewArenaBoundary>();
+        }
+
+        arenaBoundary.SetContactEffect(EdgePar);
+        arenaBoundary.Activate(
+            mapCenter,
+            player.transform,
+            ArenaRadius,
+            ArenaIntroDuration);
+    }
+
+    private void CloseArenaBoundary(float fadeDuration = 0.65f)
+    {
+        if (arenaBoundary == null)
+        {
+            return;
+        }
+
+        arenaBoundary.Deactivate(fadeDuration, true);
+        arenaBoundary = null;
+    }
+
+    /// <summary>
+    /// ç”±ç¬¬ä¸‰é˜¶æ®µç»ˆç¬¦åœ¨ç»ˆå¹•å¼€å§‹æ—¶è°ƒç”¨ã€‚
+    /// åœæ­¢ UpdateArenaBoundary é‡æ–°åˆ›å»ºé™åˆ¶åœˆå¹¶æ·¡å‡ºè¾¹ç•Œã€‚
+    /// ç»ˆå¹•ç©ºé—´æç¤ºç”±æŠ€èƒ½åœˆæœ¬èº«æ‰¿æ‹…ï¼Œä¸å†æ˜¾ç¤ºæ–‡å­—ã€‚
+    /// </summary>
+    public void ReleasePhaseThreeArenaBoundary(
+        float fadeDuration = 0.35f)
+    {
+        phaseThreeFinaleReleased = true;
+        phaseThreeArenaReady = false;
+        isFinal = false;
+        CloseArenaBoundary(Mathf.Max(0f, fadeDuration));
+    }
+
+    private void SetPhaseThreeInstruction(string message)
+    {
+        if (player == null || player.transform.childCount <= 2)
+        {
+            return;
+        }
+
+        Transform uiRoot = player.transform.GetChild(2);
+        if (uiRoot.childCount <= 3)
+        {
+            return;
+        }
+
+        PlayerUIText playerText =
+            uiRoot.GetChild(3).GetComponent<PlayerUIText>();
+        if (playerText != null)
+        {
+            playerText.SetText(message);
+        }
+    }
+
+    private void UpdateNormalPhase()
+    {
+        AtkTarget = FindAtkTarget(40f);
+        UpdateEmptyChangeHP();
+        StateMaterialChange();
+        bgmScript.ChangeBGMToMew(currentPhase);
+
+        if (turningPhase)
+        {
+            return;
+        }
+
+        switch (currentPhase)
+        {
+            case 1:
+                UpdatePhaseOne();
+                break;
+
+            case 2:
+                UpdatePhaseTwo();
+                break;
+        }
+    }
+
+    private void UpdatePhaseOne()
+    {
+        if (EmptyHp < maxHP / 2)
         {
             Invincible = true;
-            isPhase3 = false;
-            playerHpinP3 = player.Hp;
-            StartCoroutine(Phase3Start());
+            player.isInvincible = true;
+
+            CancelActiveBasicSkill();
+            if (phaseOneSkillRoutine != null)
+            {
+                StopCoroutine(phaseOneSkillRoutine);
+                phaseOneSkillRoutine = null;
+            }
+            phaseOneSkillRunning = false;
+            StopAllCoroutines();
+
+            if (!roomCreated && currentPhase == 1)
+            {
+                turningPhase = true;
+                ClearStatusEffects();
+                EmptyHp = maxHP;
+                player.ChangeHp(player.maxHp - player.Hp, 0, 0);
+                uIHealth.Per = EmptyHp / maxHP;
+                StartCoroutine(Phase2Start());
+            }
+
+            return;
         }
 
-        //ËøÑª½ûÓÃ»Ö¸´
-        if(player.Hp > playerHpinP3)
+        if (!isEmptyFrozenDone &&
+            !isSleepDone &&
+            !isCanNotMoveWhenParalysis &&
+            !isSilence)
+        {
+            Phase1();
+        }
+    }
+
+    private void UpdatePhaseTwo()
+    {
+        if (EmptyHp <= 0 && currentPhase == 2)
+        {
+            StopPhaseTwoCombat();
+            ClearStatusEffects();
+            StopAllCoroutines();
+
+            player.ChangeHp(
+                player.Hp < player.maxHp * 3 / 4
+                    ? player.maxHp / 4
+                    : player.maxHp - player.Hp,
+                0,
+                0);
+
+            EmptyHp = maxHP;
+            HpTimer = Mathf.Max(1f, Phase3Duration);
+            HpTiming = HpTimer;
+            phaseThreeTimerRunning = false;
+            phaseThreeArenaReady = false;
+            phaseThreeFinaleReleased = false;
+            isFinal = false;
+            uIHealth.Per = 1f;
+            uIHealth.ChangeHpUp();
+            currentPhase++;
+            isPhase3 = true;
+            return;
+        }
+
+        if (!isEmptyFrozenDone &&
+            !isSleepDone &&
+            !isCanNotMoveWhenParalysis &&
+            !isSilence)
+        {
+            Phase2();
+        }
+    }
+
+
+    #endregion
+
+    #region æŠ€èƒ½è°ƒåº¦
+
+    private void Phase1()
+    {
+        if (!phaseOneEnvironmentCleared ||
+            phaseOneSkillRunning ||
+            turningPhase ||
+            currentPhase != 1)
+        {
+            return;
+        }
+
+        int nextSkillIndex = testing
+            ? Mathf.Clamp(Phase1TestingSkillIndex, 1, 6)
+            : phaseOneSkillIndex;
+
+        phaseOneSkillRoutine = StartCoroutine(
+            Phase1Skill(nextSkillIndex));
+    }
+
+    private void Phase2()
+    {
+        if (phaseTwoRoutine != null ||
+            currentPhase != 2 ||
+            turningPhase ||
+            isDying)
+        {
+            return;
+        }
+
+        phaseTwoRoutine = StartCoroutine(PhaseTwoCombatLoop());
+    }
+
+    private void Phase3()
+    {
+        if (!isPhase3)
+        {
+            return;
+        }
+
+        Invincible = true;
+        isPhase3 = false;
+        playerHpinP3 = player != null ? player.Hp : 0;
+        phaseThreeRoutine = StartCoroutine(Phase3Start());
+    }
+
+    private void LockPhaseThreeHealing()
+    {
+        if (player == null)
+        {
+            return;
+        }
+
+        if (player.Hp > playerHpinP3)
         {
             player.ChangeHp(playerHpinP3 - player.Hp);
         }
-        else if(player.Hp < playerHpinP3)
+        else if (player.Hp < playerHpinP3)
         {
             playerHpinP3 = player.Hp;
         }
-
-        if (!isSkillFin)
-        {
-            isSkillFin = true;
-            StartCoroutine(Phase3Middle());
-        }
     }
 
-    void InitializeSkillList()
-    { // ³õÊ¼»¯¼¼ÄÜ±í£º½«Ä³½×¶Î»á´¥·¢µÄ¼¼ÄÜ·Å½øÈ¥
-        skillList = new List<int>();
-        for (int i = 1; i <= (currentPhase == 1 ? 18 : 20); i++)
-        {
-            skillList.Add(i);
-        }
-        ShuffleSkillList();
-    }
-
-    void ShuffleSkillList()
-    { // ´òÂÒ¼¼ÄÜ±í
-        for (int i = 0; i < skillList.Count; i++)
-        {
-            int temp = skillList[i];
-            int randomIndex = Random.Range(0, skillList.Count);
-            skillList[i] = skillList[randomIndex];
-            skillList[randomIndex] = temp;
-        }
-    }
 
     #endregion
 
-    #region ¼¼ÄÜÏà¹Ø
+    #region ç¬¬ä¸€ã€äºŒé˜¶æ®µåŸºç¡€æŠ€èƒ½ 1-6
 
-    void UseSkill(int skillIndex)
+    private MewBaseSkill UseBasicSkill(int skillIndex)
     {
-        Debug.Log("Boss used skill: " + skillIndex);
         switch (skillIndex)
         {
             case 1:
-                GameObject StarScatter = Instantiate(StarScatterPref, transform.position, Quaternion.identity);
-                StarScatter.GetComponent<StarScatter>().SetEmpty(this);
-                break;
-                ////¼¼ÄÜ1£ºÄ§·¨Ò¶
-                //StartCoroutine(ReleaseLeaves());
-                //IEnumerator ReleaseLeaves()
-                //{
-                //    for (int i = 0; i < (currentPhase == 3 ? 2 : 1); i++) 
-                //    {//Ä§·¨Ò¶ÊıÁ¿
-                //        for (int j = 0; j < (currentPhase == 1 ? 3 : currentPhase == 2 ? 5 : 8); j++)
-                //        {
-                //            Vector2 spawnPosition;
-                //            //ÊµÀı»¯Ä§·¨Ò¶
-                //            if (currentPhase == 3)
-                //            {
-                //                float angle = j * (360f / 8);
-                //                spawnPosition = transform.position + (Quaternion.Euler(0f, 0f, angle) * Vector2.right * 2f);
-                //            }
-                //            else
-                //            {
-                //                spawnPosition = transform.position;
-                //            }
-                //            GameObject magicalLeaf = ObjectPoolManager.SpawnObject(magicalLeafPrefab, spawnPosition, Quaternion.identity);
-                //            magicalLeaf.GetComponent<MagicalLeafEmpty>().empty = this;
-                //        }
-                //        yield return new WaitForSeconds(currentPhase == 3 ? 2f : 0f);//ÖØ¸´ÊÍ·ÅÄ§·¨Ò¶µÄÑÓ³Ù
-                //    }
-                //}
+                return SpawnBasicSkill<StarScatter>(StarScatterPref, skillIndex);
             case 2:
-                //¼¼ÄÜ2£º±©·çÑ©
-                //if(currentPhase!= 1)
-                //{
-                //    return;
-                //}
-                //GameObject blizzard = Instantiate(blizzardPrefab, transform.position, Quaternion.identity);
-                //blizzard.GetComponent<BlizzardEmpty>().empty = this;
-                //Destroy(blizzard, 6f);//6ÃëºóÏú»Ù±©·çÑ©¶ÔÏó
-                GameObject StarShoot = Instantiate(StarShootPref, transform.position, Quaternion.identity);
-                StarShoot.GetComponent<StarShoot>().SetEmpty(this);
-                break;
+                return SpawnBasicSkill<StarShoot>(StarShootPref, skillIndex);
             case 3:
-                GameObject StampStar = Instantiate(StampStarPref, transform.position, Quaternion.identity);
-                StampStar.GetComponent<StampStar>().SetEmpty(this);
-                //¼¼ÄÜ3£ºÁ×»ğ
-                //float WaitingWillOWisp;
-                //float numWillOWisp;
-                //float WillOWispDegree;
-                //StartCoroutine(ReleaseWillOWisp());
-                //IEnumerator ReleaseWillOWisp()
-                //{
-                //    if(currentPhase == 1)
-                //    {
-                //        numWillOWisp = 16;
-                //        WillOWispDegree = 2;
-                //        WaitingWillOWisp = 1f;
-                //    }
-                //    else if (currentPhase == 2)
-                //    {
-                //        numWillOWisp = 20;
-                //        WillOWispDegree = 5;
-                //        WaitingWillOWisp = 0.8f;
-                //    }
-                //    else
-                //    {
-                //        numWillOWisp = 20;
-                //        WillOWispDegree = 10;
-                //        WaitingWillOWisp = 0.4f;
-                //    }
-                //    for (int j = 0; j < WillOWispDegree; j++)
-                //    {
-                //        float increaseAngle = (currentPhase == 3 ? (Random.Range(0f, 14f)): 10f);
-                //        float angleStep = 360f / numWillOWisp; // ¼ÆËãÃ¿¸öWillOWispÖ®¼äµÄ½Ç¶È¼ä¸ô
-                //        for (int i = 0; i < numWillOWisp; i++)
-                //        {
-                //            float angle = j * increaseAngle + i * angleStep; // ¼ÆËãµ±Ç°WillOWispµÄ½Ç¶È
-                //            Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * WillOWispRadius; // ¼ÆËãµ±Ç°WillOWispµÄÉú³ÉÎ»ÖÃ
-                //            WillOWispEmpty willOWisp = Instantiate(WillOWispPrefab, spawnPos, Quaternion.identity).GetComponent<WillOWispEmpty>();
-                //            Vector3 direction = (spawnPos - transform.position).normalized;
-                //            willOWisp.Initialize(currentPhase == 3 ? 8f : 4f, direction); // ÉèÖÃWillOWispµÄÒÆ¶¯ËÙ¶È
-                //            willOWisp.empty = this;
-                //        }
-                //        yield return new WaitForSeconds(WaitingWillOWisp);
-                //    }
-                //}
-                break;
+                return SpawnBasicSkill<StampStar>(StampStarPref, skillIndex);
             case 4:
-                GameObject StarSlash = Instantiate(StarSlashPref, transform.position, Quaternion.identity);
-                StarSlash.GetComponent<StarSlash>().SetEmpty(this);
-                //¼¼ÄÜ4£ººÍÄÀÏà´¦
-                //GameObject PlayNice = ObjectPoolManager.SpawnObject(PlayNicePrefab, transform.position, Quaternion.identity);
-                //ClearStatusEffects();
-                //ObjectPoolManager.ReturnObjectToPool(PlayNice, 5f);
-                break;
+                return SpawnBasicSkill<StarCharge>(StarChargePref, skillIndex);
             case 5:
-                GameObject StarCharge = Instantiate(StarChargePref, transform.position, Quaternion.identity);
-                StarCharge.GetComponent<StarCharge>().SetEmpty(this);
-                //¼¼ÄÜ5£ºÌ«¾§±¬·¢
-                //ÊÍ·Å3µÀ¼¤¹â£¬·Ö±ğÎ»ÓÚ90¶È¡¢210¶È¡¢330¶ÈµÄÎ»ÖÃ
-                //StartCoroutine(ReleaseTeraBlast());
-                //IEnumerator ReleaseTeraBlast()
-                //{
-                //    if (currentPhase == 1)
-                //    {
-                //        float[] angles = { 0f, 120f, 240f };
-                //        for (int i = 0; i < 3; i++)
-                //        {
-                //            float angleoffset = Random.Range(0f, 120f);
-                //            for (int j = 0; j < angles.Length; j++)
-                //            {
-                //                //¼ÆËã¼¤¹âµÄÆğÊ¼µãºÍÖÕµã
-                //                float angle = angles[j] + angleoffset;
-                //                Vector3 startPoint = transform.position + new Vector3(1.5f * Mathf.Cos(Mathf.Deg2Rad * angle), 1.5f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
-                //                Vector3 endPoint = transform.position + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
-                //                TeraBlastEmpty Terablast = Instantiate(TeraBlastPrefab, startPoint, Quaternion.identity).GetComponent<TeraBlastEmpty>();
-                //                Terablast.SetEndpoints(startPoint, endPoint, angle);
-                //                Terablast.empty = this;
-
-                //            }
-                //            yield return new WaitForSeconds(1.5f);
-                //        }
-                    
-                //    }
-                //    else
-                //    {
-                //        float[] angles = { 0f, 60f, 120f, 180f, 240f, 300f };
-                //        for (int i = 0; i < 6; i++)
-                //        {
-                //            float angleoffset = Random.Range(0f, 60f);
-                //            for (int j = 0; j < angles.Length; j++)
-                //            {
-                //                //¼ÆËã¼¤¹âµÄÆğÊ¼µãºÍÖÕµã
-                //                float angle = angles[j] + angleoffset;
-                //                Vector3 startPoint = transform.position + new Vector3(1.5f * Mathf.Cos(Mathf.Deg2Rad * angle), 1.5f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
-                //                Vector3 endPoint = transform.position + new Vector3(40f * Mathf.Cos(Mathf.Deg2Rad * angle), 40f * Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
-                //                TeraBlastEmpty Terablast = Instantiate(TeraBlastPrefab, startPoint, Quaternion.identity).GetComponent<TeraBlastEmpty>();
-                //                Terablast.SetEndpoints(startPoint, endPoint, angle);
-                //                Terablast.empty = this;
-                //            }
-                //            yield return new WaitForSeconds(1.5f);
-                //        }
-                //    }
-                //}
-                break;
-            case 6://¼¼ÄÜ6£º³æÆË
-                GameObject pounce = Instantiate(PouncePrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-                var poc = pounce.GetComponent<PounceMew>();
-                poc.empty = this;
-
-                GameObject DashReticle = Instantiate(dashReticle, transform.position, Quaternion.identity);
-                var dr = DashReticle.GetComponent<MewDashReticle>();
-                dr.skillTimes = 2;
-                
-                break;
-            case 7://¼¼ÄÜ7£ºÄ§·¨»ğÑæ
-                StartCoroutine(ReleaseMagicalFire());
-                IEnumerator ReleaseMagicalFire()
-                {
-                    float intervalTime= 1f;
-                    int Times = 3;
-                    if (currentPhase != 1)
-                    {
-                        intervalTime = 0.8f;
-                        Times = 4;
-                    }
-                    float angleIncrement = 360f / 8;
-                    float rotationSpeed = 30f;
-                    for (int j = 0; j < Times; j++) 
-                    {
-                        if (j % 2 == 0 && currentPhase == 3)
-                        {
-                            rotationSpeed = rotationSpeed * -1;
-                        }
-                        for (int i = 0; i < 8; i++)
-                        {
-                            float angle = i * angleIncrement;
-                            Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
-
-                            MagicalFireEmpty magicalFire = ObjectPoolManager.SpawnObject(MagicalFirePrefab, transform.position, rotation).GetComponent<MagicalFireEmpty>();
-                            magicalFire.ps(transform.position, rotationSpeed, currentPhase);
-                            magicalFire.empty = this;
-                            ObjectPoolManager.ReturnObjectToPool(magicalFire.gameObject, 7f);
-
-                        }
-                        yield return new WaitForSeconds(intervalTime);
-                    }
-                }
-                break;
-
-            case 8://¼¼ÄÜ8£º±ù×¶
-                StartCoroutine(SummonIcicleSpears());
-                IEnumerator SummonIcicleSpears()
-                {
-                    if (currentPhase != 3)
-                    {
-                        yield return new WaitForSeconds(1f);
-                        int numExecutions = 3;
-                        int icicleCount = 8;
-                        float delayBetweenExecutions = 1f;
-                        if (currentPhase != 1)
-                        {
-                            delayBetweenExecutions = 0.8f;
-                        }
-                        for (int j = 0; j < numExecutions; j++)
-                        {
-                            for (int i = 0; i < icicleCount; i++)
-                            {
-                                float angle = i * (360f / icicleCount);
-                                Vector2 spawnPosition = AtkTarget.transform.position + (Quaternion.Euler(0f, 0f, angle) * Vector2.right * summonRadius);
-                                IcicleSpearEmpty IcicleSpear = Instantiate(IcicleSpearPrefab, spawnPosition, Quaternion.identity).GetComponent<IcicleSpearEmpty>();
-                                IcicleSpear.sf(AtkTarget.transform.position);
-                                IcicleSpear.empty = this;
-                            }
-                            yield return new WaitForSeconds(delayBetweenExecutions);
-                        }
-                    }
-                    else
-                    {
-                        Time.timeScale = 0;
-                        GameObject timestopEffect = ObjectPoolManager.SpawnObject(TimeStopEffect, player.transform.position, Quaternion.identity);
-                        int icicleCount = 8;
-                        int realIcicleCount = 8;
-                        float radius = 7f;
-                        for (int j = 0; j < 5; j++)
-                        {
-                            switch (j)
-                            {
-                                case 0: realIcicleCount = 8; icicleCount = 8; radius = 8f; break;
-                                case 1: realIcicleCount = 24; icicleCount = 32; radius = 14f; break;
-                                case 2: realIcicleCount = 12; icicleCount = 12; radius = 20f; break;
-                                case 3: realIcicleCount = 36; icicleCount = 48; radius = 26f; break;
-                                case 4: realIcicleCount = 16; icicleCount = 16; radius = 32f; break;
-                            }
-                            int randomangle = Random.Range(0, 360);
-                            for (int i = 0; i < realIcicleCount; i++)
-                            {
-                                float angle = i * (360f / icicleCount);
-                                switch (j)
-                                {
-                                    case 0: case 2: case 4: break;
-                                    case 1: case 3: angle = angle + randomangle; break;
-                                }
-                                Vector2 spawnPosition = player.transform.position + (Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius);
-                                IcicleSpearEmpty IcicleSpear = Instantiate(IcicleSpearPrefab, spawnPosition, Quaternion.identity).GetComponent<IcicleSpearEmpty>();
-                                IcicleSpear.sf(player.transform.position);
-                                IcicleSpear.empty = this;
-                            }
-                            yield return null;
-                        }
-                        yield return new WaitForSecondsRealtime(3f);
-                        Destroy(timestopEffect);
-                        Time.timeScale = 1;
-                        yield return new WaitForSeconds(4f);
-                    }
-                }
-                break;
-            case 9://¼¼ÄÜ9£º°®ĞÄÓ¡ÕÂ
-                //SkillType = PokemonType.TypeEnum.Fairy;
-                //StartCoroutine(ReleaseHeartStamp());
-                //IEnumerator ReleaseHeartStamp()
-                //{
-                //    float intervalTime = 1.5f;
-                //    int Times = 2;
-                //    if (currentPhase == 2)
-                //    {
-                //        intervalTime = 1.2f;
-                //        Times = 2;
-                //    }
-
-                //    for (int i = 0; i < Times; i++) {
-                //        float angleIncrement = 360f / heartStampCount;
-                //        for (int j = 0; j < heartStampCount; j++)
-                //        {
-                //            float radius = 2f;
-                //            float angle = j * angleIncrement;
-                //            Vector3 heartStampPosition = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
-                //            //Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
-                //            HeartStampEmpty heartStamp = ObjectPoolManager.SpawnObject(HeartStampPrefab, heartStampPosition, Quaternion.identity).GetComponent<HeartStampEmpty>();
-                //            heartStamp.empty = this;
-                //            yield return new WaitForSeconds(0.05f);
-                //        }
-
-                //        if(currentPhase == 3)
-                //        {
-                //            for (int j = 0; j < 16; j++)
-                //            {
-                //                float radius = 2.5f;
-                //                float angle = j * 360f / 16;
-                //                Vector3 heartStampPosition = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
-                //                //Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
-                //                HeartStampEmpty heartStamp = ObjectPoolManager.SpawnObject(HeartStampPrefab, heartStampPosition, Quaternion.identity).GetComponent<HeartStampEmpty>();
-                //                heartStamp.empty = this;
-                //                yield return new WaitForSeconds(0.03f);
-                //            }
-                //        }
-
-                //        yield return new WaitForSeconds(intervalTime);
-                //    }
-                //}
-                break;
-            case 10://¼¼ÄÜ10£ºÁÛÉä
-                SkillType = PokemonType.TypeEnum.Dragon;
-                StartCoroutine(ReleaseScaleShoot());
-                IEnumerator ReleaseScaleShoot()
-                {
-                    if (currentPhase != 3)
-                    {
-                        int Times = 3;
-                        if (currentPhase == 2)
-                        {
-                            Times = 5;
-                        }
-                        for (int j = 0; j < Times; j++)
-                        {
-                            Vector3 randomPoint = (Vector2)AtkTarget.transform.position + Random.insideUnitCircle.normalized * 3f;
-                            // ´´½¨Reticle²¢ÉèÖÃÎ»ÖÃ
-                            GameObject reticle = ObjectPoolManager.SpawnObject(reticlePrefab, randomPoint, Quaternion.identity);
-                            ObjectPoolManager.ReturnObjectToPool(reticle, 2f);
-                            yield return new WaitForSeconds(1.5f);
-                            for (int k = 0; k < scaleShotCount; k++)
-                            {
-                                // ¼ÆËãScaleShotÉú³ÉµÄÎ»ÖÃºÍ·½Ïò
-                                Vector3 scaleShotPosition = randomPoint;
-                                float angleIncrement = 360f / scaleShotCount;
-                                float angle = k * angleIncrement;
-                                Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
-
-                                // ´´½¨ScaleShot
-                                GameObject scaleShot = ObjectPoolManager.SpawnObject(ScaleShotPrefab, scaleShotPosition, rotation);
-                                GameObject trail3 = ObjectPoolManager.SpawnObject(TrailEffect3, scaleShotPosition, Quaternion.Euler(0, 0, angle));
-                                ObjectPoolManager.ReturnObjectToPool(trail3, 1f);
-                                scaleShot.GetComponent<ScaleShotEmpty>().empty = this;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < 4; i++) 
-                        {
-                            Vector3[] SpawnPoints;
-                            float offset = 7f;
-                            if (i % 2 == 1)
-                            {
-                                SpawnPoints = new Vector3[]
-                                {
-                                    mapCenter,
-                                    new Vector3(mapCenter.x + offset, mapCenter.y + offset),
-                                    new Vector3(mapCenter.x + offset, mapCenter.y - offset),
-                                    new Vector3(mapCenter.x - offset, mapCenter.y + offset),
-                                    new Vector3(mapCenter.x - offset, mapCenter.y - offset),
-                                    new Vector3(mapCenter.x, mapCenter.y + 2 * offset),
-                                    new Vector3(mapCenter.x, mapCenter.y - 2 * offset),
-                                    new Vector3(mapCenter.x + 2 * offset, mapCenter.y),
-                                    new Vector3(mapCenter.x + 2 * offset, mapCenter.y),
-                                };
-                            }
-                            else
-                            {
-                                SpawnPoints = new Vector3[]
-                                {
-                                    new Vector3(mapCenter.x, mapCenter.y + offset),
-                                    new Vector3(mapCenter.x, mapCenter.y - offset),
-                                    new Vector3(mapCenter.x + offset, mapCenter.y),
-                                    new Vector3(mapCenter.x - offset, mapCenter.y),
-                                    new Vector3(mapCenter.x + 2 * offset, mapCenter.y + offset),
-                                    new Vector3(mapCenter.x - 2 * offset, mapCenter.y + offset),
-                                    new Vector3(mapCenter.x + 2 * offset, mapCenter.y - offset),
-                                    new Vector3(mapCenter.x - 2 * offset, mapCenter.y - offset),
-                                    new Vector3(mapCenter.x + offset, mapCenter.y + 2 * offset),
-                                    new Vector3(mapCenter.x + offset, mapCenter.y - 2 * offset),
-                                    new Vector3(mapCenter.x - offset, mapCenter.y + 2 * offset),
-                                    new Vector3(mapCenter.x - offset, mapCenter.y - 2 * offset),
-                                };
-                            }
-                            for (int j = 0; j < SpawnPoints.Length; j++)
-                            {
-                                Vector3 scaleShotPosition = SpawnPoints[j];
-                                GameObject reticle = ObjectPoolManager.SpawnObject(reticlePrefab, SpawnPoints[j], Quaternion.identity);
-                                ObjectPoolManager.ReturnObjectToPool(reticle, 2f);
-                                Timer.Start(this, 1.5f, () =>
-                                {
-                                    for (int k = 0; k < scaleShotCount; k++)
-                                    {
-                                        float angleIncrement = 360f / scaleShotCount;
-                                        float angle = k * angleIncrement;
-                                        Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
-
-                                        // ´´½¨ScaleShot
-                                        GameObject scaleShot = ObjectPoolManager.SpawnObject(ScaleShotPrefab, scaleShotPosition, rotation);
-                                        GameObject trail3 = ObjectPoolManager.SpawnObject(TrailEffect3, scaleShotPosition, Quaternion.Euler(0, 0, angle));
-                                        ObjectPoolManager.ReturnObjectToPool(trail3, 1f);
-                                        scaleShot.GetComponent<ScaleShotEmpty>().empty = this;
-                                    }
-                                });
-                            }
-                            yield return new WaitForSeconds(1.75f);
-                        }
-                    }
-                }
-                break;
-            case 11: //¼¼ÄÜ11£ººÚÉ«Ä¿¹â
-                if (UsedMeanLook)
-                {
-                    //·ÀÖ¹Á¬ĞøÊ¹ÓÃÁ½´ÎºÚÉ«Ä¿¹â
-                    return;
-                }
-                SkillType = PokemonType.TypeEnum.Dark;
-                GameObject MeanLookse = Instantiate(MeanLookSE, transform.position, Quaternion.identity);
-                Destroy(MeanLookse, 1f);
-                StartCoroutine(ReleaseMeanLook());
-                IEnumerator ReleaseMeanLook()
-                {
-                    yield return new WaitForSeconds(1f);
-                    GameObject blackCircle = Instantiate(MeanLookPrefab, player.transform.position, Quaternion.identity);
-                    UsedMeanLook = true;
-                    
-                }
-                break;
-            case 12://¼¼ÄÜ12£ºÄ§·¨ÉÁÒ«
-                SkillType = PokemonType.TypeEnum.Fairy;
-                GameObject dazzlingGleam = ObjectPoolManager.SpawnObject(DazzlingGleamPrefab, transform.position, Quaternion.identity);
-                ObjectPoolManager.ReturnObjectToPool(dazzlingGleam, 5f);
-                // ÔÚ3.5Ãëºó¶ÔÈ¦ÄÚµÄÍæ¼ÒÔì³ÉÉËº¦
-                StartCoroutine(DamagePlayersWithDelay());
-                IEnumerator DamagePlayersWithDelay()
-                {
-                    yield return new WaitForSeconds(3.5f);
-
-                    // »ñÈ¡È¦ÄÚµÄÍæ¼Ò²¢¶ÔÆäÔì³ÉÉËº¦
-                    Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 5.85f);
-                    foreach (Collider2D collider in colliders)
-                    {
-                        // ÅĞ¶ÏÅö×²ÌåÊÇ·ñÊôÓÚÍæ¼Ò
-                        PlayerControler playerinside = collider.GetComponent<PlayerControler>();
-                        if (playerinside != null)
-                        {
-                            Pokemon.PokemonHpChange(this.gameObject, collider.gameObject, 0, 120, 0, PokemonType.TypeEnum.Fairy);
-                            playerinside.KnockOutPoint = 5f;
-                            playerinside.KnockOutDirection = (playerinside.transform.position - transform.position).normalized;
-                        }
-                    }
-                }
-                break;
-            case 13://¼¼ÄÜ13£ºÒ¶ÈĞ
-                SkillType = PokemonType.TypeEnum.Grass;
-                StartCoroutine(ReleaseLeafBlade());
-                IEnumerator ReleaseLeafBlade()
-                {
-                    int shootCount = 10; // ·¢Éä´ÎÊı
-                    float shootInterval = 0.3f; // ·¢Éä¼ä¸ô
-                    if(currentPhase == 2)
-                    {
-                        shootCount = 15;
-                        shootInterval = 0.2f;
-                    }
-                    else if(currentPhase == 3)
-                    {
-                        shootCount = 80;
-                        shootInterval = 0.1f;
-                    }
-                    for (int i = 0; i < shootCount; i++)
-                    {
-
-                        // ÊµÀı»¯LeafBlade
-                        GameObject LeafBlade = ObjectPoolManager.SpawnObject(LeafBladePrefab, transform.position, Quaternion.identity);
-                        int LFmode = Random.Range(0, 3);
-                        LeafBlade.GetComponent<LeafBladeEmpty>().Initialize(AtkTarget.transform, currentPhase, currentPhase == 3 ? LFmode : 0);
-                        LeafBlade.GetComponent<LeafBladeEmpty>().empty = this;
-
-                        // µÈ´ı·¢Éä¼ä¸ô
-                        yield return new WaitForSeconds(shootInterval);
-                    }
-                }
-                break;
-            case 14://¼¼ÄÜ14£º¼âÊ¯¹¥»÷
-                if (currentPhase != 1)
-                {
-                    return;
-                }
-                SkillType = PokemonType.TypeEnum.Rock;
-                StartCoroutine(ReleaseStoneEdge());
-                IEnumerator ReleaseStoneEdge()
-                {
-                    int Times = 2;
-                    float mapLength = 26f;
-                    for (int i = 0; i< Times; i++)
-                    {
-                        //Ñ¡ÔñÒ»¸ö²»Éú³ÉStoneEdgeµÄÎ»ÖÃ
-                        int emptyPosition = Random.Range(1, 14);
-                        for (int j = 1; j <= 13; j++)
-                        {
-                            if (j != emptyPosition)
-                            {
-                                // Éú³ÉReticleµÄÎ»ÖÃ
-                                float spaceLength = mapLength / 13f;
-                                float startX = mapCenter.x + (j - 7) * spaceLength;
-                                reticleSpawnPosition = new Vector3(startX, mapCenter.y, mapCenter.z);
-                                // Éú³ÉReticle
-                                GameObject reticle = Instantiate(reticlePrefab, reticleSpawnPosition, Quaternion.identity);
-                                Destroy(reticle, 2f);
-                                //Éú³É¼âÊ¯
-                                Vector3 StoneEdgeSpawnPosition = new Vector3(reticleSpawnPosition.x, reticleSpawnPosition.y + 14f, reticleSpawnPosition.z);
-                                GameObject stoneEdge = Instantiate(stoneEdgePrefab, StoneEdgeSpawnPosition, Quaternion.identity);
-                                stoneEdge.GetComponent<StoneEdgeEmpty>().empty = this;
-                            }
-                        }
-                        yield return new WaitForSeconds(5f);
-                    }
-                }
-                break;
-            case 15://¼¼ÄÜ15£º¿ÕÆøÖ®ÈĞ
-                //SkillType = PokemonType.TypeEnum.Flying;
-                //StartCoroutine(ReleaseAirSlash());
-                //IEnumerator ReleaseAirSlash()
-                //{
-                //    float intervalTime = 1.3f;
-                //    int Times = 3;
-                //    if (currentPhase == 2)
-                //    {
-                //        AirSlashPrefab.GetComponent<AirSlashMew>().numSplitAirSlashes = 8;
-                //        intervalTime = 0.8f;
-                //        Times = 5;
-                //    }
-                //    else if(currentPhase ==3)
-                //    {
-                //        AirSlashPrefab.GetComponent<AirSlashMew>().numSplitAirSlashes = 10;
-                //        intervalTime = 0.3f;
-                //        Times = 13;
-                //    }
-                //    for(int i = 0;i< Times;i++)
-                //    {
-                //        GameObject airSlash = Instantiate(AirSlashPrefab, transform.position, Quaternion.identity);
-                //        airSlash.GetComponent<AirSlashMew>().empty = this;
-                //        yield return new WaitForSeconds(intervalTime);
-                //    }
-                //}
-                break;
-            case 16://¼¼ÄÜ16£ºÌÔ½ğ³±
-                SkillType = PokemonType.TypeEnum.Steel;
-                StartCoroutine(ReleaseMakeItRain());
-                IEnumerator ReleaseMakeItRain()
-                {
-                    float angle = 0f;
-                    float angleIncrement = currentPhase != 2 ? 11f : 8f;//ÊıÖµÔ½Ğ¡£¬µ¯Ä»Ô½ÃÜ¼¯
-                    int Degree = 50;
-                    int Times = 2;
-                    if (currentPhase == 2)
-                    {
-                        Degree = 80;
-                        Times = 3;
-                    }
-                    if(currentPhase == 3)
-                    {
-                        Degree = 180;
-                        Times = 6;
-                    }
-                    for (int i = 0; i < Degree; i++) 
-                    {
-                        for (int j = 0; j < Times; j++)
-                        {
-                            float currentAngle = angle + j * (360f / Times);
-                            Vector3 direction = Quaternion.Euler(0f, 0f, currentAngle) * Vector3.up;
-                            MakeItRainEmpty makeitrain = ObjectPoolManager.SpawnObject(MakeItRainPrefab, transform.position, Quaternion.identity).GetComponent<MakeItRainEmpty>();
-                            makeitrain.MIRrotate(direction);
-                            makeitrain.empty = this;
-                        }
-                        if (currentPhase == 3) 
-                        {
-                            float decreasedAngle = (i - 50) / 100f * Mathf.PI;
-                            angleIncrement = Random.Range(15f, 30f) * Mathf.Cos(decreasedAngle);
-                        }
-                        angle += angleIncrement;
-                        yield return new WaitForSeconds(0.07f);
-                    }
-                }
-                break;
-            case 17://¼¼ÄÜ17£ºğ¤ğ¤Íø
-                SkillType = PokemonType.TypeEnum.Bug;
-                if (currentPhase == 1)
-                {
-                    for (int i = 0; i < 5; i++)
-                    {
-                        Vector3 randomPosition = mapCenter + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
-                        GameObject stickyweb = Instantiate(StickyWebPrefab, transform.position, Quaternion.identity);
-                        stickyweb.GetComponent<MewStringShot>().SetTarget(randomPosition);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < (currentPhase == 3 ? 25 : 14); i++) 
-                    {
-                        Vector3 randomPosition = mapCenter + new Vector3(Random.Range(-24.0f, 24.0f), Random.Range(-14.0f, 14.0f), 0);
-                        GameObject stickyweb = Instantiate(StickyWebPrefab, transform.position, Quaternion.identity);
-                        stickyweb.GetComponent<MewStringShot>().SetTarget(randomPosition);
-                    }
-                }
-                break;
-            case 18://¼¼ÄÜ18£ºÊ®×Ö¶¾ÈĞ
-                SkillType = PokemonType.TypeEnum.Poison;
-                StartCoroutine(ReleaseCrossPoison());
-                IEnumerator ReleaseCrossPoison()
-                {
-                    float angle = 0f;
-                    float angleIncrement = 45f;
-                    int Degree = 4;
-                    int Times = 4;
-                    float intervalTime = 1f;
-                    if (currentPhase == 2)
-                    {
-                        Degree = 5;
-                        Times = 4;
-                        angleIncrement = 60f;
-                        intervalTime = 0.8f;
-                    }
-                    else if (currentPhase == 3)
-                    {
-                        Degree = 5;
-                        Times = 8;
-                        angleIncrement = 0f;
-                        intervalTime = 0.8f;
-                    }
-                    for (int i= 0; i < Degree; i++)
-                    {
-                        for (int j = 0; j < Times; j++)
-                        {
-                            float currentAngle = angle + j * (360f / Times);
-                            Vector3 direction = Quaternion.Euler(0f, 0f, currentAngle) * Vector3.up;
-                            CrossPoisonEmpty crossPoison = Instantiate(CrossPoisonPrefab, transform.position, Quaternion.identity).GetComponent<CrossPoisonEmpty>();
-                            crossPoison.Initialize(direction, currentPhase);
-                            crossPoison.empty = this;
-                        }
-                        //¼¼ÄÜ¼ä¸ôµÈ´ıÊ±¼ä
-                        angle += angleIncrement;
-                        yield return new WaitForSeconds(intervalTime);
-                    }
-                }
-                break;
-            case 19://¼¼ÄÜ19£ºÉñÊ¥Ö®»ğ
-                SkillType = PokemonType.TypeEnum.Fire;
-                StartCoroutine(ReleaseScaredFire());
-                IEnumerator ReleaseScaredFire()
-                {
-                    Vector3 PlayerPosition = player.transform.position;
-                    if (currentPhase != 3)
-                    {
-                        int numPoints = 6; // ĞÇÉÏµÄµãÊı
-                        float radius = 15f; // ĞÇµÄ¶¥µãµ½ÖĞĞÄµÄ¾àÀë
-
-                        Vector3[] starVertices = new Vector3[numPoints];
-                        GameObject[] secredFireSum = new GameObject[200];
-
-                        // ´´½¨Îå½ÇĞÇµÄ¶¥µã×ø±ê
-                        for (int i = 0; i < numPoints; i++)
-                        {
-                            float angle = i * 2f * Mathf.PI / numPoints;
-                            float x = radius * Mathf.Sin(angle) + PlayerPosition.x;
-                            float y = radius * Mathf.Cos(angle) + PlayerPosition.y;
-                            starVertices[i] = new Vector3(x, y, PlayerPosition.z);
-                        }
-                        // ÔÚÃ¿¸öÎå½ÇĞÇ¶¥µãÉú³ÉSecredFire
-                        for (int i = 0; i < numPoints; i++)
-                        {
-                            GameObject secredFireVertex = ObjectPoolManager.SpawnObject(SecredFireVertexPrefab, starVertices[i], Quaternion.identity);
-                            secredFireVertex.GetComponent<SecredFireEmptyVertex>().empty = this;
-                            secredFireSum[i] = secredFireVertex;
-                            yield return null;
-                        }
-
-                        // ÔÚÃ¿ÌõÏßÉÏ¾ùÔÈ·Ö²¼Éú³ÉSecredFire
-                        int currentSecredFireIndex = numPoints;
-                        for (int i = 0; i < numPoints; i++)
-                        {
-                            Vector3 startPoint = starVertices[i];
-                            Vector3 endPoint = starVertices[(i + 2) % numPoints];
-
-                            float dist = Vector3.Distance(startPoint, endPoint);
-                            float step = dist / 12f; // Éú³ÉµãµÄ¾àÀë¼ä¸ô
-
-                            Vector3 direction = (endPoint - startPoint).normalized;
-
-                            for (int j = 0; j < 12; j++)
-                            {
-                                Vector3 secredFirePosition = startPoint + direction * (j * step);
-                                GameObject secredFire = ObjectPoolManager.SpawnObject(SecredFirePrefab, secredFirePosition, Quaternion.identity);
-                                SecredFireEmpty secredFireEmpty = secredFire.GetComponent<SecredFireEmpty>();
-                                secredFireEmpty.empty = this;
-                                secredFireEmpty.Initialize(PlayerPosition, 2.5f);
-                                secredFireSum[currentSecredFireIndex] = secredFire;
-                                currentSecredFireIndex++;
-                                yield return null;
-                            }
-                        }
-                        int k = 0;
-                        yield return new WaitForSeconds(1.5f);
-                        for(; k < numPoints; k++)
-                        {
-                            secredFireSum[k].GetComponent<SecredFireEmptyVertex>().startMoving = true;
-                        }
-                        yield return new WaitForSeconds(1.5f);
-                        for(; k < currentSecredFireIndex; k++)
-                        {
-                            secredFireSum[k].GetComponent<SecredFireEmpty>().startMoving = true;
-                        }
-
-                    }
-                    else
-                    {
-                        int numPoints = 8; // Îå½ÇĞÇÉÏµÄµãÊı
-                        float radius = 12f; // Îå½ÇĞÇµÄ¶¥µãµ½ÖĞĞÄµÄ¾àÀë
-                        Vector3[] starVertices = new Vector3[numPoints];
-
-                        // ´´½¨Îå½ÇĞÇµÄ¶¥µã×ø±ê
-                        for (int i = 0; i < numPoints; i++)
-                        {
-                            float angle = i * 2f * Mathf.PI / numPoints;
-                            float x = radius * Mathf.Sin(angle) + player.transform.position.x;
-                            float y = radius * Mathf.Cos(angle) + player.transform.position.y;
-                            starVertices[i] = new Vector3(x, y, player.transform.position.z);
-                        }
-                        // ÔÚÃ¿¸öÎå½ÇĞÇ¶¥µãÉú³ÉSecredFire
-                        for (int i = 0; i < numPoints; i++)
-                        {
-                            GameObject secredFireVertex = ObjectPoolManager.SpawnObject(SecredFireVertexPrefab, starVertices[i], Quaternion.identity);
-                            secredFireVertex.GetComponent<SecredFireEmptyVertex>().empty = this;
-                        }
-
-                        // ÔÚÃ¿ÌõÏßÉÏ¾ùÔÈ·Ö²¼Éú³ÉSecredFire
-                        for (int i = 0; i < numPoints; i++)
-                        {
-                            Vector3 startPoint = starVertices[i];
-                            Vector3 endPoint = starVertices[(i + 3) % numPoints];
-
-                            float dist = Vector3.Distance(startPoint, endPoint);
-                            float step = dist / 12f; // Éú³ÉµãµÄ¾àÀë¼ä¸ô
-
-                            Vector3 direction = (endPoint - startPoint).normalized;
-
-                            for (int j = 0; j < 12; j++)
-                            {
-                                Vector3 secredFirePosition = startPoint + direction * (j * step);
-                                SecredFireEmpty secredFire = ObjectPoolManager.SpawnObject(SecredFirePrefab, secredFirePosition, Quaternion.identity).GetComponent<SecredFireEmpty>();
-                                secredFire.empty = this;
-                                secredFire.Initialize(player.transform.position, 3f);
-                            }
-                        }
-                    }
-                }
-                break;
-            case 20://¼¼ÄÜ20£ºÊ¥½£
-                SkillType = PokemonType.TypeEnum.Fighting;
-                int Times;
-                if(currentPhase == 3)
-                {
-                    Times = 4;
-                }
-                else
-                {
-                    Times = 3;
-                }
-                StartCoroutine(ReleaseSecredSword());
-                IEnumerator ReleaseSecredSword()
-                {   
-                    for(int i = 0;i<Times; i++)  
-                    {
-                        Instantiate(reticle2Prefab, AtkTarget.transform.position, Quaternion.identity);
-                        float randomAngle = Random.Range(180f, 480f);
-                        for(int j = 0; j < 6; j++)
-                        {
-                            float angle = j * 60;
-                            float radius = 10f;
-                            Vector3 spawnPos = AtkTarget.transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.right * radius;
-                            SecredSwordEmpty secredSword = Instantiate(SecredSwordPrefab, spawnPos, Quaternion.identity).GetComponent<SecredSwordEmpty>();
-                            secredSword.empty = this;
-                            secredSword.Initialize(angle, radius, AtkTarget, randomAngle);
-                            
-                        }
-                        yield return new WaitForSeconds(3f);
-                    }
-
-                }
-                break;
+                return SpawnBasicSkill<StarSlash>(StarSlashPref, skillIndex);
+            case 6:
+                return SpawnBasicSkill<StarRingReturn>(StarRingReturnPref, skillIndex);
+            default:
+                Debug.LogError("åŸºç¡€æŠ€èƒ½ç´¢å¼•æ— æ•ˆï¼š" + skillIndex, this);
+                return null;
         }
-        //¶ş½×¶Î×Ü¹²ÒÆ³ıµÄ¼¼ÄÜ£º±©·çÑ©£¨2£©¡¢ºÍ¼âÊ¯¹¥»÷£¨14£©
     }
-    void SkillTimerUpdate(int skillindex, int stage)//¼¼ÄÜÖØÖÃÊ±¼äµ÷Õû
+
+    private T SpawnBasicSkill<T>(GameObject prefab, int skillIndex)
+        where T : MewBaseSkill
     {
-        skillTimer = SkillTimer[skillindex][stage];
-    }
-    void ResetSkillTimer()
-    {//ÎªÁËÈÃÈë³¡ºÍ×ª½×¶ÎÃ»ÕâÃ´Í»È»
-        if (!isReset)
+        if (prefab == null)
         {
-            skillTimer = 3f;
-            isReset = true;
+            Debug.LogError(
+                "æŠ€èƒ½ " + skillIndex + " æ²¡æœ‰è®¾ç½® Prefabã€‚",
+                this);
+            return null;
         }
+
+        GameObject skillObject = Instantiate(
+            prefab,
+            transform.position,
+            Quaternion.identity);
+
+        T skill = skillObject.GetComponent<T>();
+        if (skill == null)
+        {
+            Debug.LogError(
+                prefab.name + " ç¼ºå°‘ " + typeof(T).Name + " ç»„ä»¶ã€‚",
+                skillObject);
+            Destroy(skillObject);
+            return null;
+        }
+
+        MewSkillContext context = new MewSkillContext(
+            this,
+            (MewSkillPhase)Mathf.Clamp(currentPhase, 1, 3),
+            player != null ? player.transform : null,
+            skillObject.transform,
+            mapCenter,
+            currentPhase >= 2 ? ArenaRadius : 0f,
+            arenaBoundary != null ? arenaBoundary.transform : null);
+
+        skill.Initialize(context, true);
+        return skill;
+    }
+
+    private void CancelActiveBasicSkill()
+    {
+        if (activeBasicSkill != null && !activeBasicSkill.IsFinished)
+        {
+            activeBasicSkill.Cancel(true);
+        }
+
+        activeBasicSkill = null;
     }
 
     #endregion
 
-    Vector3 RamdomTeleport()
+    #region ä¼ é€ä¸åœ°å›¾è¾¹ç•Œ
+
+    private Vector3 RamdomTeleport()
     {
-        bool collided = false;
-        Vector3 randomPosition;
-        teleportAttempts++;
-        if (teleportAttempts > 150)
-        {
-            // Èç¹û³¢ÊÔ´ÎÊı³¬¹ı150´Î£¬ÔòÈ¡ÏûËæ»ú´«ËÍ
-            Debug.LogWarning("Ã»ÓĞ³É¹¦ÕÒµ½ºÏÊÊµÄ´«ËÍÎ»ÖÃ");
-            return Vector3.zero;
-        }
-        //Ò»½×¶ÎËæ»ú´«ËÍ£ºµØÍ¼ÄÚËæ»úÎ»ÖÃ
-        if (currentPhase == 1)
-        {
-            // ÔÚ·¿¼äÄÚËæ»úÑ¡ÔñÒ»¸öÎ»ÖÃw
-            randomPosition = transform.parent.position + new Vector3(Random.Range(-12.0f, 12.0f), Random.Range(-7.0f, 7.0f), 0);
+        const int maximumAttempts = 150;
 
-            // ¼ì²éÓë"Wall"ºÍ"Environment"±êÇ©µÄ¶ÔÏóÊÇ·ñÏà×²
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(randomPosition, 1f);
-            foreach (Collider2D collider in colliders)
+        for (int attempt = 0; attempt < maximumAttempts; attempt++)
+        {
+            Vector3 randomPosition;
+            float minimumPlayerDistance;
+            bool requireMapBounds;
+
+            if (currentPhase == 1)
             {
-                if (collider.CompareTag("Room") || collider.CompareTag("Enviroment"))
+                randomPosition = transform.parent.position + new Vector3(
+                    Random.Range(-12f, 12f),
+                    Random.Range(-7f, 7f),
+                    0f);
+                minimumPlayerDistance = 3f;
+                requireMapBounds = false;
+            }
+            else if (currentPhase == 2)
+            {
+                Transform target = AtkTarget != null
+                    ? AtkTarget.transform
+                    : player.transform;
+
+                Vector2 randomDirection = Random.insideUnitCircle;
+                if (randomDirection.sqrMagnitude < 0.0001f)
                 {
-                    collided = true;
-                    break;
+                    randomDirection = Vector2.right;
                 }
-            }
-            float playerRadius = 3f;
-            float distanceToPlayer = Vector3.Distance(randomPosition, player.transform.position);
+                randomDirection.Normalize();
 
-            if (distanceToPlayer <= playerRadius)
-            {
-                collided = true;
+                randomPosition = target.position +
+                    (Vector3)(randomDirection * Random.Range(7f, 10f));
+                minimumPlayerDistance = 1.5f;
+                requireMapBounds = true;
             }
-            if (collided)
+            else
             {
-                //Èç¹ûÏà×²ÖØĞÂÑ°ÕÒÎ»ÖÃ
-                return RamdomTeleport();
+                return transform.position;
             }
-            teleportAttempts = 0;
-            return randomPosition;
-        }
-        //¶ş½×¶Î¸ßËÙÒÆ¶¯£ºÍæ¼ÒÖÜÎ§£¨ÊÜÌæÉíÓ°Ïì£©
-        else if (currentPhase == 2)
-        {
-            float minDistance = 7f;
-            float maxDistance = 10f;
-            Vector3 randomDirection = Random.insideUnitCircle.normalized;
-            float randomDistance = Random.Range(minDistance, maxDistance);
-            randomPosition = AtkTarget.transform.position + randomDirection * randomDistance;
-            // ¼ì²éÓë"Room"ºÍ"Environment"±êÇ©µÄ¶ÔÏóÊÇ·ñÏà×²
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(randomPosition, 1f);
-            foreach (Collider2D collider in colliders)
-            {
-                if (collider.CompareTag("Room") || collider.CompareTag("Enviroment"))
-                {
-                    collided = true;
-                    break;
-                }
-            }
-            //¼ì²éÊÇ·ñµØÍ¼±ß½çÄÚ
-            if (!IsInMapBounds(randomPosition))
-                collided = true;
-            if (collided)
-            {
-                //Èç¹ûÏà×²ÖØĞÂÑ°ÕÒÎ»ÖÃ
-                return RamdomTeleport();
-            }
-            teleportAttempts = 0;
-            //·´Ö®½øĞĞ¸ßËÙÒÆ¶¯
-            return randomPosition;
-        }
-        return Vector3.zero;
-    }
-    bool IsInMapBounds(Vector3 position)
-    {
-        // ¸ù¾İµØÍ¼±ß½çµÄ×ø±ê·¶Î§£¬ÅĞ¶ÏÎ»ÖÃÊÇ·ñÔÚµØÍ¼ÄÚ
-        float minX = 2985f;
-        float maxX = 3045f;
-        float minY = 2388f;
-        float maxY = 2436f;
 
-        bool isInBounds = position.x >= minX && position.x <= maxX && position.y >= minY && position.y <= maxY;
-        return isInBounds;
+            if (IsTeleportPositionValid(
+                    randomPosition,
+                    minimumPlayerDistance,
+                    requireMapBounds))
+            {
+                return randomPosition;
+            }
+        }
+
+        Debug.LogWarning(
+            "è¿ç»­150æ¬¡æœªæ‰¾åˆ°å®‰å…¨ä¼ é€ç‚¹ï¼Œæœ¬æ¬¡ä¿ç•™å½“å‰ä½ç½®ã€‚",
+            this);
+        return transform.position;
     }
 
-    #region µÚÒ»½×¶Î
-    private IEnumerator Phase1Skill(int randomSkillIndex)
+    private bool IsTeleportPositionValid(
+        Vector3 position,
+        float minimumPlayerDistance,
+        bool requireMapBounds)
+    {
+        if (requireMapBounds && !IsInMapBounds(position))
+        {
+            return false;
+        }
+
+        if (player != null &&
+            Vector3.Distance(position, player.transform.position) <= minimumPlayerDistance)
+        {
+            return false;
+        }
+
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(position, 1f);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Collider2D collider = colliders[i];
+            if (collider.CompareTag("Room") || collider.CompareTag("Enviroment"))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    private bool IsInMapBounds(Vector3 position)
+    {
+        // äºŒé˜¶æ®µæˆ¿é—´å¯èƒ½æ”¾åœ¨ä»»æ„ä¸–ç•Œåæ ‡ï¼Œå› æ­¤ä¸èƒ½ç»§ç»­ä½¿ç”¨æ—§ç‰ˆå›ºå®šåæ ‡ã€‚
+        float halfX = Mathf.Max(
+            1f,
+            Mathf.Abs(Phase2RoomHalfExtents.x) - Phase2RoomEdgePadding);
+        float halfY = Mathf.Max(
+            1f,
+            Mathf.Abs(Phase2RoomHalfExtents.y) - Phase2RoomEdgePadding);
+
+        return Mathf.Abs(position.x - mapCenter.x) <= halfX &&
+               Mathf.Abs(position.y - mapCenter.y) <= halfY;
+    }
+
+    #endregion
+
+    #region ç¬¬ä¸€é˜¶æ®µ
+    private IEnumerator Phase1Skill(int skillIndex)
+    {
+        phaseOneSkillRunning = true;
+
+        animator.SetTrigger("Teleport");
+        if (Phase1TeleportOutTime > 0f)
+        {
+            yield return new WaitForSeconds(Phase1TeleportOutTime);
+        }
+
+        // æ–‡æ¡£è¦æ±‚ï¼šä¸€é˜¶æ®µæ¯æ¬¡é‡Šæ”¾æŠ€èƒ½å‰éšæœºä¼ é€åˆ°å½“å‰æˆ¿é—´ä¸­çš„ä¸€ç‚¹ã€‚
+        transform.position = RamdomTeleport();
+        SkillType = PokemonType.TypeEnum.Psychic;
+
+        if (Phase1TeleportInTime > 0f)
+        {
+            yield return new WaitForSeconds(Phase1TeleportInTime);
+        }
+
+        TeleportEnd();
+        activeBasicSkill = UseBasicSkill(skillIndex);
+
+        if (activeBasicSkill != null)
+        {
+            yield return activeBasicSkill.WaitForCompletion();
+        }
+
+        activeBasicSkill = null;
+
+        if (currentPhase == 1 && !turningPhase && Phase1ExtraInterval > 0f)
+        {
+            yield return new WaitForSeconds(Phase1ExtraInterval);
+        }
+
+        if (!testing)
+        {
+            phaseOneSkillIndex = skillIndex >= 6 ? 1 : skillIndex + 1;
+        }
+
+        phaseOneSkillRunning = false;
+        phaseOneSkillRoutine = null;
+    }
+    #endregion
+
+    #region ç¬¬äºŒé˜¶æ®µ
+
+    #region ç¬¬äºŒé˜¶æ®µå¾ªç¯ä¸åŸºç¡€æŠ€èƒ½
+
+    private IEnumerator PhaseTwoCombatLoop()
+    {
+        while (currentPhase == 2 && !turningPhase && !isDying)
+        {
+            RefillPhaseTwoBasicBag();
+
+            // æ–‡æ¡£é€»è¾‘ï¼šæ¯è½®éšæœºé‡Šæ”¾3æ¬¡åŸºç¡€æŠ€èƒ½ã€‚
+            for (int i = 0; i < 3; i++)
+            {
+                while (IsPhaseTwoActionLocked() &&
+                       currentPhase == 2 &&
+                       !isDying)
+                {
+                    yield return null;
+                }
+
+                if (currentPhase != 2 || turningPhase || isDying)
+                {
+                    break;
+                }
+
+                int basicSkillIndex = DrawPhaseTwoBasicSkill();
+                yield return CastPhaseTwoBasicSkill(basicSkillIndex);
+
+                if (currentPhase == 2 && Phase2BasicSkillInterval > 0f)
+                {
+                    yield return new WaitForSeconds(Phase2BasicSkillInterval);
+                }
+            }
+
+            if (currentPhase != 2 || turningPhase || isDying)
+            {
+                break;
+            }
+
+            // å¼ºæŠ€èƒ½æŒ‰ 1 -> 2 -> 3 -> 4 é¡ºåºã€‚æœªé…ç½®çš„ Prefab ä¼šè‡ªåŠ¨è·³è¿‡ã€‚
+            int strongSkillIndex = FindNextAvailableStrongSkillIndex();
+            if (strongSkillIndex >= 0)
+            {
+                yield return CastPhaseTwoStrongSkill(strongSkillIndex);
+                phaseTwoStrongSkillIndex = (strongSkillIndex + 1) % 4;
+            }
+            else
+            {
+                Debug.LogWarning(
+                    "ç¬¬äºŒé˜¶æ®µæ²¡æœ‰é…ç½®ä»»ä½•å¼ºæŠ€èƒ½ Prefabï¼›æœ¬è½®åªæ‰§è¡Œ3æ¬¡åŸºç¡€æŠ€èƒ½ã€‚",
+                    this);
+            }
+
+            if (currentPhase == 2 && Phase2StrongSkillInterval > 0f)
+            {
+                yield return new WaitForSeconds(Phase2StrongSkillInterval);
+            }
+        }
+
+        phaseTwoRoutine = null;
+    }
+
+    private bool IsPhaseTwoActionLocked()
+    {
+        return isEmptyFrozenDone ||
+               isSleepDone ||
+               isCanNotMoveWhenParalysis ||
+               isSilence;
+    }
+
+    private void RefillPhaseTwoBasicBag()
+    {
+        phaseTwoBasicBag.Clear();
+        for (int i = 1; i <= 6; i++)
+        {
+            phaseTwoBasicBag.Add(i);
+        }
+
+        // Fisher-Yatesã€‚æ¯è½®å‰ä¸‰ä¸ªæŠ€èƒ½äº’ä¸é‡å¤ã€‚
+        for (int i = phaseTwoBasicBag.Count - 1; i > 0; i--)
+        {
+            int randomIndex = Random.Range(0, i + 1);
+            int temp = phaseTwoBasicBag[i];
+            phaseTwoBasicBag[i] = phaseTwoBasicBag[randomIndex];
+            phaseTwoBasicBag[randomIndex] = temp;
+        }
+
+        phaseTwoBasicBagCursor = 0;
+    }
+
+    private int DrawPhaseTwoBasicSkill()
+    {
+        if (phaseTwoBasicBag.Count != 6 ||
+            phaseTwoBasicBagCursor >= phaseTwoBasicBag.Count)
+        {
+            RefillPhaseTwoBasicBag();
+        }
+
+        return phaseTwoBasicBag[phaseTwoBasicBagCursor++];
+    }
+
+    private IEnumerator CastPhaseTwoBasicSkill(int skillIndex)
     {
         animator.SetTrigger("Teleport");
-        yield return new WaitForSeconds(0.5f);
 
-        //Ëæ»úÑ¡Ôñ¼¼ÄÜÊÍ·Å
-        if(randomSkillIndex == 5||randomSkillIndex == 16)
+        if (Phase2TeleportOutTime > 0f)
         {
-            transform.position = mapCenter;//µ±¼¼ÄÜÎªÌÔ½ğ³±»òÕßÌ«¾§±¬·¢Ê±´«ËÍµ½ÕıÖĞ¼ä
+            yield return new WaitForSeconds(Phase2TeleportOutTime);
         }
-        else
+
+        Vector3 destination = RamdomTeleport();
+        yield return MoveBossDuringTeleport(destination, teleportTime);
+
+        SkillType = PokemonType.TypeEnum.Psychic;
+
+        if (Phase2TeleportInTime > 0f)
         {
-            transform.position = RamdomTeleport();
+            yield return new WaitForSeconds(Phase2TeleportInTime);
         }
-        ChangeType(randomSkillIndex);
-        yield return new WaitForSeconds(0.5f);
+
         TeleportEnd();
-        if (testing)
+
+        activePhaseTwoSkill = UseBasicSkill(skillIndex);
+        activeBasicSkill = activePhaseTwoSkill;
+
+        if (activePhaseTwoSkill != null)
         {
-            int random = Random.Range(1, 6);
-            UseSkill(random);
-            SkillTimerUpdate(random, 1);
+            yield return activePhaseTwoSkill.WaitForCompletion();
         }
-        else
-        {
-            UseSkill(randomSkillIndex);
-            SkillTimerUpdate(randomSkillIndex, 1);
-        }
+
+        activePhaseTwoSkill = null;
+        activeBasicSkill = null;
     }
+
+    private IEnumerator MoveBossDuringTeleport(
+        Vector3 destination,
+        float duration)
+    {
+        Vector3 startPosition = transform.position;
+        duration = Mathf.Max(0f, duration);
+
+        if (duration <= 0.001f)
+        {
+            transform.position = destination;
+            yield break;
+        }
+
+        float timer = 0f;
+        while (timer < duration && currentPhase == 2)
+        {
+            timer += Time.deltaTime;
+            float t = Mathf.Clamp01(timer / duration);
+            t = t * t * (3f - 2f * t);
+            transform.position = Vector3.Lerp(startPosition, destination, t);
+            yield return null;
+        }
+
+        transform.position = destination;
+    }
+
     #endregion
 
-    #region µÚ¶ş½×¶Î
-    private IEnumerator Phase2Skill(int randomSkillIndex)
+    #region ç¬¬äºŒé˜¶æ®µå¼ºæŠ€èƒ½ï¼ˆâ‘ é•œåƒæ˜Ÿå…‰ â‘¡å¤©è±¡æ—¶é’Ÿ â‘¢æ‹Ÿæ€ç¾¤æ˜Ÿ â‘£æ˜Ÿè¾‰æ³¢åŠ¨ï¼‰
+
+    private IEnumerator CastPhaseTwoStrongSkill(int strongSkillIndex)
     {
-        if (randomSkillIndex == 2 || randomSkillIndex == 14)
+        GameObject prefab = GetPhaseTwoStrongSkillPrefab(strongSkillIndex);
+        if (prefab == null)
         {
             yield break;
         }
-        animator.SetTrigger("Teleport");
-        yield return new WaitForSeconds(0.5f);
-        isTeleport = true;
-        ChangeType(randomSkillIndex);
-        yield return new WaitForSeconds(0.5f);
+
+        Invincible = true;
+        SkillType = PokemonType.TypeEnum.Psychic;
+
+        CreatePhaseTwoArenaBoundary();
+
+        if (Phase2ArenaIntroDuration > 0f)
+        {
+            yield return new WaitForSeconds(Phase2ArenaIntroDuration);
+        }
+
         TeleportEnd();
-        UseSkill(randomSkillIndex);
-        SkillTimerUpdate(randomSkillIndex, 2);
+        activePhaseTwoSkill = SpawnPhaseTwoStrongSkill(
+            prefab,
+            strongSkillIndex);
+
+        if (activePhaseTwoSkill != null)
+        {
+            yield return activePhaseTwoSkill.WaitForCompletion();
+        }
+
+        activePhaseTwoSkill = null;
+
+        // å¤©è±¡æ—¶é’Ÿä¼šåœ¨æœ€ç»ˆ3åœˆå¼¹å¹•å‰ä¸»åŠ¨å…³é—­é™åˆ¶åœˆã€‚
+        // å…¶ä½™å¼ºæŠ€èƒ½ä»ç”±è¿™é‡Œç»Ÿä¸€å…³é—­ï¼Œé¿å…é‡å¤ç­‰å¾…æ·¡å‡ºæ—¶é—´ã€‚
+        bool boundaryStillActive = phaseTwoArenaBoundary != null;
+        ClosePhaseTwoArenaBoundary();
+
+        if (boundaryStillActive && Phase2ArenaFadeDuration > 0f)
+        {
+            yield return new WaitForSeconds(Phase2ArenaFadeDuration);
+        }
+
+        if (currentPhase == 2 && !turningPhase && !isDying)
+        {
+            Invincible = false;
+        }
+    }
+
+    private MewBaseSkill SpawnPhaseTwoStrongSkill(
+        GameObject prefab,
+        int strongSkillIndex)
+    {
+        GameObject skillObject = Instantiate(
+            prefab,
+            transform.position,
+            Quaternion.identity);
+
+        MewBaseSkill skill = skillObject.GetComponent<MewBaseSkill>();
+        if (skill == null)
+        {
+            Debug.LogError(
+                prefab.name +
+                " ç¼ºå°‘ MewBaseSkill æ´¾ç”Ÿç»„ä»¶ã€‚å¼ºæŠ€èƒ½ç´¢å¼•ï¼š" +
+                (strongSkillIndex + 1),
+                skillObject);
+            Destroy(skillObject);
+            return null;
+        }
+
+        MewSkillContext context = new MewSkillContext(
+            this,
+            MewSkillPhase.Phase2,
+            player != null ? player.transform : null,
+            skillObject.transform,
+            mapCenter,
+            Phase2StrongArenaRadius,
+            phaseTwoArenaBoundary != null
+                ? phaseTwoArenaBoundary.transform
+                : null);
+
+        skill.Initialize(context, true);
+        return skill;
+    }
+
+    private int FindNextAvailableStrongSkillIndex()
+    {
+        for (int offset = 0; offset < 4; offset++)
+        {
+            int index = (phaseTwoStrongSkillIndex + offset) % 4;
+            if (GetPhaseTwoStrongSkillPrefab(index) != null)
+            {
+                return index;
+            }
+        }
+
+        return -1;
+    }
+
+    private GameObject GetPhaseTwoStrongSkillPrefab(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                return MirrorStarLightPref;
+            case 1:
+                return CelestialClockPref;
+            case 2:
+                return MimicStarsPref;
+            case 3:
+                return StarWavePref;
+            default:
+                return null;
+        }
+    }
+
+    private void CreatePhaseTwoArenaBoundary()
+    {
+        if (phaseTwoArenaBoundary != null || player == null)
+        {
+            return;
+        }
+
+        MewArenaBoundary prefab = Phase2ArenaBoundaryPrefab != null
+            ? Phase2ArenaBoundaryPrefab
+            : ArenaBoundaryPrefab;
+
+        if (prefab != null)
+        {
+            phaseTwoArenaBoundary = Instantiate(
+                prefab,
+                mapCenter,
+                Quaternion.identity);
+        }
+        else
+        {
+            GameObject boundaryObject =
+                new GameObject("Mew Phase 2 Arena Boundary");
+            boundaryObject.transform.position = mapCenter;
+            phaseTwoArenaBoundary =
+                boundaryObject.AddComponent<MewArenaBoundary>();
+        }
+
+        phaseTwoArenaBoundary.SetContactEffect(EdgePar);
+        phaseTwoArenaBoundary.Activate(
+            mapCenter,
+            player.transform,
+            Phase2StrongArenaRadius,
+            Phase2ArenaIntroDuration);
+    }
+
+    /// <summary>
+    /// å…è®¸å¼ºæŠ€èƒ½åœ¨è‡ªèº«æµç¨‹ä¸­æå‰å…³é—­äºŒé˜¶æ®µé™åˆ¶åœˆã€‚
+    /// å¤©è±¡æ—¶é’Ÿä¼šåœ¨æ—‹è½¬ä¸€åœˆåè°ƒç”¨ï¼Œå¹¶åœ¨é™åˆ¶åœˆæ·¡å‡ºåé‡Šæ”¾æœ€ç»ˆ3åœˆå¼¹å¹•ã€‚
+    /// </summary>
+    public void ReleasePhaseTwoArenaBoundary(float fadeDuration = -1f)
+    {
+        ClosePhaseTwoArenaBoundary(fadeDuration);
+    }
+
+    private void ClosePhaseTwoArenaBoundary(float fadeDuration = -1f)
+    {
+        if (phaseTwoArenaBoundary == null)
+        {
+            return;
+        }
+
+        float usedFadeDuration = fadeDuration >= 0f
+            ? fadeDuration
+            : Phase2ArenaFadeDuration;
+
+        phaseTwoArenaBoundary.Deactivate(
+            usedFadeDuration,
+            true);
+        phaseTwoArenaBoundary = null;
+    }
+
+    #endregion
+
+    #region ç¬¬äºŒé˜¶æ®µæ¸…ç†ä¸è½¬åœº
+
+    private void StopPhaseTwoCombat()
+    {
+        if (activePhaseTwoSkill != null &&
+            !activePhaseTwoSkill.IsFinished)
+        {
+            activePhaseTwoSkill.Cancel(true);
+        }
+
+        activePhaseTwoSkill = null;
+        activeBasicSkill = null;
+
+        if (phaseTwoRoutine != null)
+        {
+            StopCoroutine(phaseTwoRoutine);
+            phaseTwoRoutine = null;
+        }
+
+        ClosePhaseTwoArenaBoundary();
+    }
+
+    private void ResetPhaseTwoCombatState()
+    {
+        phaseTwoRoutine = null;
+        activePhaseTwoSkill = null;
+        activeBasicSkill = null;
+        phaseTwoBasicBag.Clear();
+        phaseTwoBasicBagCursor = 0;
+        phaseTwoStrongSkillIndex = 0;
+        ClosePhaseTwoArenaBoundary();
     }
 
     private IEnumerator Phase2Start()
     {
-        //Çå³ıËùÓĞµÄ×Óµ¯
+        // æ¸…é™¤å¼¹å¹•å¹¶è®©æ—§çº¢è‰²è¡€æ¡æ·¡å‡ºã€‚
         uIHealth.ChangeHpUp();
         ClearProjectile();
 
-        //ÖÆ×÷Ò»¸öºÚÉ«Îå½ÇĞÇ
-        int numPoints = 5; // Îå½ÇĞÇÉÏµÄµãÊı
-        float radius = 12f; // Îå½ÇĞÇµÄ¶¥µãµ½ÖĞĞÄµÄ¾àÀë
-
-        Vector3[] starVertices = new Vector3[numPoints];
-
-        // ´´½¨Îå½ÇĞÇµÄ¶¥µã×ø±ê
-        for (int i = 0; i < numPoints; i++)
-        {
-            float angle = i * 2f * Mathf.PI / numPoints;
-            float x = radius * Mathf.Sin(angle) + player.transform.position.x;
-            float y = radius * Mathf.Cos(angle) + player.transform.position.y;
-            starVertices[i] = new Vector3(x, y, player.transform.position.z);
-        }
-        for (int i = 0; i < numPoints; i++)
-        {
-            Vector3 startPoint = starVertices[i];
-            Vector3 endPoint = starVertices[(i + 2) % numPoints];
-
-            float dist = Vector3.Distance(startPoint, endPoint);
-            float step = dist / 12f; // Éú³ÉµãµÄ¾àÀë¼ä¸ô
-
-            Vector3 direction = (endPoint - startPoint).normalized;
-
-            for (int j = 0; j < 12; j++)
-            {
-                Vector3 secredFirePosition = startPoint + direction * (j * step);
-                //GameObject willowispprefab = Instantiate(WillOWispPrefab, secredFirePosition, Quaternion.identity);
-                //willowispprefab.GetComponent<WillOWispEmpty>().isStage = true;
-                yield return null;
-            }
-        }
+        // ä¿ç•™ä¸€ç§’é˜¶æ®µåˆ‡æ¢åœé¡¿ã€‚æ—§ç‰ˆæ­¤å¤„åªè®¡ç®—äº”è§’æ˜Ÿåæ ‡ï¼Œ
+        // æ²¡æœ‰ç”Ÿæˆä»»ä½•å¯¹è±¡ï¼Œå±äºæ— æ•ˆé—ç•™é€»è¾‘ï¼Œç°å·²åˆ é™¤ã€‚
         yield return new WaitForSeconds(1f);
+
         GameObject phase2mask = Instantiate(Phase2Mask, transform.position, Quaternion.identity);
         Destroy(phase2mask, 2.2f);
         yield return new WaitForSeconds(1.1f);
 
-        //´´½¨ĞÂµÄ·¿¼ä
+        //åˆ›å»ºæ–°çš„æˆ¿é—´
         GameObject newRoom = Instantiate(MewBossRoomPrefab, MewBossRoomPosition, Quaternion.identity);
-        mapCenter = MewBossRoomPosition + new Vector3(15f, 12f, 0f);
-        transform.position = MewBossRoomPosition + new Vector3(15f, 12f, 0f);
+        mapCenter = MewBossRoomPosition;
+        transform.position = MewBossRoomPosition + new Vector3(0f, 5f, 0f);
         player.transform.position = MewBossRoomPosition;
         transform.parent.parent.GetComponent<Room>().isClear = 0;
         player.NowRoom = new Vector3Int(100, 100, 0);
@@ -1467,22 +1274,31 @@ public class Mew : Empty
         player.NewRoomTimer = 0f;
         player.isInvincible = false;
         currentPhase++;
-        MapCreater.StaticMap.RRoom.Add(new Vector3Int(100, 100, 0), newRoom.GetComponent<Room>());
-        InitializeSkillList();
+        roomCreated = true;
+        ResetPhaseTwoCombatState();
+
+        // äºŒé˜¶æ®µè¡€æ¡ç”±çº¢è‰²åˆ‡æ¢ä¸ºç´«è‰²ã€‚
+        ApplyPhase2HealthBarStyle();
+        uIHealth.Per = 1f;
+        uIHealth.ChangeHpUp();
+
+        MapCreater.StaticMap.RRoom.Add(
+            new Vector3Int(100, 100, 0),
+            newRoom.GetComponent<Room>());
 
         Transform mewTransform = newRoom.transform.Find("Empty");
         if (mewTransform != null)
         {
-            //½«ÃÎ»ÃÒÆ¶¯µ½Empty×Ó¶ÔÏóÏÂ
+            //å°†æ¢¦å¹»ç§»åŠ¨åˆ°Emptyå­å¯¹è±¡ä¸‹
             transform.SetParent(mewTransform);
         }
-        //É«ÏàÍ·£¬Æô¶¯£¡
+        //è‰²ç›¸å¤´ï¼Œå¯åŠ¨ï¼
         cameraAdapt.ActivateVcam();
         cinemachineController = FindObjectOfType<CameraController>();
         cinemachineController.MewCameraFollow();
         cameraAdapt.HideCameraMasks();
 
-        //ËÄ¸öÎ§ÈÆ×ÅµÄÇò
+        //å››ä¸ªå›´ç»•ç€çš„çƒ
         for (int i = 0; i < 4; i++)
         {
             transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
@@ -1495,212 +1311,177 @@ public class Mew : Empty
 
     #endregion
 
-    #region µÚÈı½×¶Î
+    #endregion
+
+    #region ç¬¬ä¸‰é˜¶æ®µ
+
     private IEnumerator Phase3Start()
-    {//µÚÈı½×¶Î²»ÊÜÌæÉíÓ°Ïì£¡
+    {
+        // ç¬¬ä¸‰é˜¶æ®µä¸å—æ›¿èº«å½±å“ï¼Œä¸”æ•´ä¸ªé˜¶æ®µåªé‡Šæ”¾æœ€ç»ˆç¬¦å¡ã€‚
         animator.SetTrigger("Teleport");
         uIHealth.Fade(1f, false);
         yield return new WaitForSeconds(1f);
+
         transform.position = mapCenter;
-        Transform uitext = player.transform.GetChild(2).GetChild(3);
-        if (uitext)
+        if (rigidbody2D != null)
         {
-            uitext.GetComponent<PlayerUIText>().SetText("½ûÖ¹Ê¹ÓÃµÀ¾ß\n½ûÓÃËùÓĞ»Ø¸´");
+            rigidbody2D.velocity = Vector2.zero;
         }
-        player.CanNotUseSpaceItem = true;//²»ÔÊĞíÍæ¼ÒÊ¹ÓÃÖ÷¶¯µÀ¾ß
-        MewOrbRotate mewOrbRotate = Phase3OrbRotate.GetComponent<MewOrbRotate>();
-        StartCoroutine(mewOrbRotate.ActivatePhase3Effect(1, 30, 20f));
-        //ĞŞ¸Äui
-        Image timebar1 = timeBar1.GetComponent<Image>();
-        timebar1.sprite = TimeBar1;
-        Image timebar2 = timeBar2.GetComponent<Image>();
-        timebar2.sprite = TimeBar2;
-        Image timebar3 = timeBar3.GetComponent<Image>();
-        timebar3.sprite = TimeBar3;
-        Image timebar4 = timeBar4.GetComponent<Image>();
-        timebar4.sprite = TimeBar4;
+
+        SetPhaseThreeInstruction(
+            "ç¦æ­¢ä½¿ç”¨é“å…·\nç¦ç”¨æ‰€æœ‰å›å¤");
+
+        if (player != null)
+        {
+            player.CanNotUseSpaceItem = true;
+            playerHpinP3 = player.Hp;
+        }
+
+        HpTimer = Mathf.Max(1f, Phase3Duration);
+        HpTiming = HpTimer;
+        Phase3FinaleDuration = Mathf.Clamp(
+            Phase3FinaleDuration,
+            5f,
+            Mathf.Max(5f, HpTimer - 0.5f));
+        ArenaRadius = 22f;
+        FinalArenaRadius = 16f;
+        ArenaShrinkDuration = Mathf.Max(
+            0.1f,
+            HpTimer - Phase3FinaleDuration);
+
+        ApplyTimeBarStyle();
+        uIHealth.Per = 1f;
         uIHealth.Fade(1f, true);
-        //Çå³ı×Óµ¯
         ClearProjectile();
-    }
 
-    //Èı½×¶Î-µÚ¶ş²¿·Ö
-    private IEnumerator Phase3Middle() 
-    {
-        yield return new WaitForSeconds(1f);
-        yield return new WaitForSeconds(1.5f);
-        //Ê×ÏÈÏÈÔ²ĞÎÊÍ·Å»á¸øÍæ¼ÒÔì³ÉÉËº¦µÄ¼ÙĞÄ
-        SkillType = PokemonType.TypeEnum.Fighting;
-        TeleportEnd();
-        UseSkill(20);
-        for (int j = 0; j < 4; j++)
+        // é™åˆ¶åœˆå…ˆä»¥åŠå¾„ 22 æ˜¾å½¢ï¼›æ˜¾å½¢ç»“æŸåï¼Œ
+        // åœ¨ç»ˆå¹•å‰çš„ 45 ç§’å†…ç¼©åˆ° 16ã€‚æœ€å 15 ç§’ç”±æŠ€èƒ½ä¸»åŠ¨è§£é™¤ï¼Œ
+        // å¹¶ä½¿ç”¨æŠ€èƒ½åœˆè¡¨ç°ä¸­å¿ƒè“„åŠ›ã€‚
+        isFinal = false;
+        phaseThreeFinaleReleased = false;
+        phaseThreeArenaReady = true;
+        CreateArenaBoundary();
+
+        if (ArenaIntroDuration > 0f)
         {
-            float increaseAngle = 9f;
-            float angleStep = 360f / 16;
-            for (int i = 0; i < 16; i++)
-            {
-                float angle = j * increaseAngle + i * angleStep;
-                GameObject trail = ObjectPoolManager.SpawnObject(TrailEffect2, transform.position, Quaternion.Euler(0, 0, angle));
-                ObjectPoolManager.ReturnObjectToPool(trail, 1f);
-                Vector3 spawnPos = transform.position + Quaternion.Euler(0f, 0f, angle) * Vector2.up * 1f;
-                FakeLove fakelove = Instantiate(FakeLovePrefab, spawnPos, Quaternion.identity).GetComponent<FakeLove>();
-                Vector3 direction = (spawnPos - transform.position).normalized;
-                fakelove.Initialize(4f, direction);
-                fakelove.mew = gameObject;
-            }
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(ArenaIntroDuration);
         }
 
-        //Æä´ÎÊÍ·ÅµçÇò£¬ÊÍ·Å±ù¶³¹âÊø
-        StartCoroutine(ElectricBall());
-        yield return new WaitForSeconds(4f);
-        //ÊÍ·Å¼ÙÒ©
-        for (int i = 0; i < 50; i++)
-        {
-            Vector2 randomPosition = RandomPosition();
-            int randomIndex = Random.Range(1, 7);
-            GameObject RandomFake = null;
-            switch (randomIndex)
-            {
-                case 1: RandomFake = FakePotionPrefab; break;
-                case 2: RandomFake = FakeAntidote; break;
-                case 3: RandomFake = FakeAwakening; break;
-                case 4: RandomFake = FakeBurnHeal; break;
-                case 5: RandomFake = FakeIceHeal; break;
-                case 6: RandomFake = FakeParalyzeHeal; break;
-            }
-            GameObject fakepotion = Instantiate(RandomFake, randomPosition, Quaternion.identity);
-            Destroy(fakepotion, 11f);
-        }
-        SkillType = PokemonType.TypeEnum.Ice;
-        TeleportEnd();
-        yield return new WaitForSeconds(1f);
-        for (int i = 0; i < 250; i++)
-        {
-            float angle = i * 11f;
-            GameObject trail = ObjectPoolManager.SpawnObject(TrailEffect, transform.position, Quaternion.Euler(0, 0, angle));
-            StartCoroutine(IceBeam(i));
-            ObjectPoolManager.ReturnObjectToPool(trail, 2f);
-            yield return new WaitForSeconds(0.04f);
-        }
-        yield return new WaitForSeconds(2f);
-        //×îÖÕ¼¼ÄÜ
-        GameObject MeanLookse = ObjectPoolManager.SpawnObject(MeanLookSE, transform.position, Quaternion.identity);
-        ObjectPoolManager.ReturnObjectToPool(MeanLookse, 1f);
-        yield return new WaitForSeconds(1f);
         isFinal = true;
-        GameObject meanlookfinal = Instantiate(Meanlookfinal, transform.position, Quaternion.identity);
-        StartCoroutine(ShootSwords(230, 3, 0.1f, false));
-        yield return new WaitForSeconds(10f);
-        StartCoroutine(ShootSwords(4, 6, 3f, true));
-        yield return new WaitForSeconds(19f);
-        Destroy(meanlookfinal, 1f);
-    }
-
-    //µÚÈı½×¶ÎµçÇò
-    private IEnumerator ElectricBall()
-    {
-        for(int i = 0; i < 4; i++)
+        if (arenaBoundary != null)
         {
-            for (int j = 0; j < 12; j++)
-            {
-                float angle = 10f * i + j * 30f;
-                Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
-                float speed = (j % 2 == 0) ? 15f : -15f;
-                ElectroBallEmpty electricBall = Instantiate(ElectricBallPrefab, transform.position, rotation).GetComponent<ElectroBallEmpty>();
-                electricBall.Initialize(transform.position, speed);
-                electricBall.empty = this;
-            }
-            yield return new WaitForSeconds(4f);
-        }
-    }
-    //µÚÈı½×¶ÎµÄ±ù¶³¹âÊø
-    private IEnumerator IceBeam(int i)
-    {
-        yield return new WaitForSeconds(2f);
-        float angle = i * 11f;
-        GameObject icebeam = ObjectPoolManager.SpawnObject(IceBeamPrefab, transform.position, Quaternion.Euler(0, 0, angle));
-        icebeam.GetComponent<IceBeamEmpty>().empty = this;
-    }
-
-    private IEnumerator ShootSwords(int shootTimes, int shootAmounts, float intervalTime, bool needTrail)
-    {
-        float angleIncreasement = 6f;
-        float angle = 0f;
-        for (int i = 0; i < shootTimes; i++)
-        {
-            for (int j = 0; j < shootAmounts; j++)
-            {
-                float currentAngle = j * 360 / shootAmounts + angle;
-                Vector2 spawnPosition = mapCenter + (Quaternion.Euler(0f, 0f, currentAngle) * Vector2.right * 20f);
-                if (needTrail)
-                {
-                    GameObject trail = ObjectPoolManager.SpawnObject(TrailEffect2, transform.position, Quaternion.Euler(0, 0, currentAngle));
-                    ObjectPoolManager.ReturnObjectToPool(trail, 1f);
-                }
-                GameObject swords = Instantiate(Swords, spawnPosition, Quaternion.identity);
-                SwordsMew swordsmew = swords.GetComponent<SwordsMew>();
-                swordsmew.Initialize(mapCenter, i % 18, i);
-                swordsmew.empty = this;
-                
-            }
-            angle += angleIncreasement;
-            yield return new WaitForSeconds(intervalTime);
-        }
-    }
-    //µÚÈı½×¶ÎËæ»úÑ°ÕÒÎ»ÖÃ£ºÔÚÃÎ»ÃµÄ·¶Î§ÄÚµ«ÊÇ²»ÔÚÍæ¼Ò·¶Î§ÄÚ
-    Vector2 RandomPosition()
-    {
-        float mewRadius = 20f;
-        float playerRadius = 4f;
-        Vector2 randomPos = transform.position;
-
-        bool isValid = false;
-        while (!isValid)
-        {
-            randomPos = (Vector2)transform.position + Random.insideUnitCircle * mewRadius;
-
-            // ¼ì²éÎ»ÖÃÊÇ·ñÔÚÍæ¼Ò°ë¾¶·¶Î§ÄÚ
-            float distanceToPlayer = Vector2.Distance(randomPos, player.transform.position);
-            if (distanceToPlayer > playerRadius)
-            {
-                isValid = true;
-            }
+            arenaBoundary.SetTargetRadius(
+                FinalArenaRadius,
+                ArenaShrinkDuration);
         }
 
-        return randomPos;
+        SkillType = PokemonType.TypeEnum.Psychic;
+        TeleportEnd();
+        activePhaseThreeSkill = SpawnStardustFantasy();
+        phaseThreeTimerRunning = true;
+        phaseThreeRoutine = null;
+    }
+
+    private StardustFantasy SpawnStardustFantasy()
+    {
+        GameObject skillObject;
+        if (StardustFantasyPref != null)
+        {
+            skillObject = Instantiate(
+                StardustFantasyPref,
+                mapCenter,
+                Quaternion.identity);
+        }
+        else
+        {
+            skillObject = new GameObject("Stardust Fantasy Hard");
+            skillObject.transform.position = mapCenter;
+        }
+
+        StardustFantasy skill =
+            skillObject.GetComponent<StardustFantasy>();
+        if (skill == null)
+        {
+            skill = skillObject.AddComponent<StardustFantasy>();
+        }
+
+        skill.ConfigureRuntime(
+            HpTimer,
+            FinalArenaRadius,
+            Phase3FinaleDuration,
+            Phase2RoomHalfExtents,
+            StardustProjectilePrefab);
+
+        MewSkillContext context = new MewSkillContext(
+            this,
+            MewSkillPhase.Phase3,
+            player != null ? player.transform : null,
+            skillObject.transform,
+            mapCenter,
+            ArenaRadius,
+            arenaBoundary != null ? arenaBoundary.transform : null);
+
+        skill.Initialize(context, true);
+        return skill;
+    }
+
+    private void StopPhaseThreeFinalSkill()
+    {
+        if (activePhaseThreeSkill != null &&
+            !activePhaseThreeSkill.IsFinished)
+        {
+            activePhaseThreeSkill.Cancel(true);
+        }
+
+        activePhaseThreeSkill = null;
+
+        if (phaseThreeRoutine != null)
+        {
+            StopCoroutine(phaseThreeRoutine);
+            phaseThreeRoutine = null;
+        }
     }
 
     private IEnumerator Phase3End()
     {
+        phaseThreeTimerRunning = false;
+        StopPhaseThreeFinalSkill();
         animator.SetTrigger("Die");
+        phaseThreeArenaReady = false;
+        CloseArenaBoundary();
         yield return new WaitForSeconds(0.4f);
+
         isFinal = false;
         MewBossKilled = true;
-        //½«Íæ¼Ò´«ËÍ»ØÔ­À´·¿¼ä
-        GameObject mask = Instantiate(Phase2Mask, transform.position, Quaternion.identity);
+
+        GameObject mask = Instantiate(
+            Phase2Mask,
+            transform.position,
+            Quaternion.identity);
         Destroy(mask, 2.2f);
         yield return new WaitForSeconds(1.1f);
+
         player.NowRoom = GetnowRoom;
         player.transform.position = GetPlayerPosition;
         player.InANewRoom = true;
         player.NewRoomTimer = 0f;
-        Debug.Log("ÒÑ´«ËÍ");
 
-        //É«ÏàÍ·£¬¹Ø±Õ£¡
         cameraAdapt.DeactivateVcam();
         cameraAdapt.ShowCameraMasks();
         Camera.transform.position = GetCameraPostion;
         UISkillButton.Instance.isEscEnable = true;
 
-        //Çå³ı¶ÔÏó³ØÄÚËùÓĞ¶ÔÏó
         ObjectPoolManager.DestoryObjectInPool(true);
 
-        //»ñµÃµÀ¾ß
-        int pbIndex = Random.Range(0, pbList.Length);
-        PokemonBall pb = Instantiate(pbList[pbIndex],GetMewPosition, Quaternion.identity);
+        if (pbList != null && pbList.Length > 0)
+        {
+            int pbIndex = Random.Range(0, pbList.Length);
+            Instantiate(
+                pbList[pbIndex],
+                GetMewPosition,
+                Quaternion.identity);
+        }
 
-        //¸Âµô
         player.CanNotUseSpaceItem = false;
         Invincible = false;
         EmptyHp = 0;
@@ -1709,32 +1490,8 @@ public class Mew : Empty
 
     #endregion
 
-    private void ChangeType(int randomIndex)
-    {
-        switch(randomIndex)
-        {
-            case 1: SkillType = PokemonType.TypeEnum.Grass; break;
-            case 2: SkillType = PokemonType.TypeEnum.Ice; break;
-            case 3: SkillType = PokemonType.TypeEnum.Fire; break;
-            case 4: SkillType = PokemonType.TypeEnum.Normal; break;
-            case 5: SkillType = PokemonType.TypeEnum.Normal; break;
-            case 6: SkillType = PokemonType.TypeEnum.Bug; break;
-            case 7: SkillType = PokemonType.TypeEnum.Fire; break;
-            case 8: SkillType = PokemonType.TypeEnum.Ice; break;
-            case 9: SkillType = PokemonType.TypeEnum.Fairy; break;
-            case 10: SkillType = PokemonType.TypeEnum.Dragon;break;
-            case 11: SkillType = PokemonType.TypeEnum.Dark;break;
-            case 12: SkillType = PokemonType.TypeEnum.Fairy;break;
-            case 13: SkillType = PokemonType.TypeEnum.Grass; break;
-            case 14: SkillType = PokemonType.TypeEnum.Rock; break;
-            case 15: SkillType = PokemonType.TypeEnum.Flying; break;
-            case 16: SkillType = PokemonType.TypeEnum.Steel; break;
-            case 17: SkillType = PokemonType.TypeEnum.Bug; break;
-            case 18: SkillType = PokemonType.TypeEnum.Poison;break;
-            case 19: SkillType = PokemonType.TypeEnum.Fire;break;
-            case 20: SkillType = PokemonType.TypeEnum.Fighting;break;
-        }
-    }
+    #region é€šç”¨è¾…åŠ©æ–¹æ³•
+
 
     private void TeleportEnd()
     {
@@ -1762,9 +1519,55 @@ public class Mew : Empty
             case PokemonType.TypeEnum.Fairy: useskillmask.startColor = colors[17]; break;
         }
     }
-    void ClearStatusEffects()
+    private void ApplyPhase2HealthBarStyle()
     {
-        //Çå³ıËùÓĞdebuff£¬°üÀ¨Òì³£×´Ì¬ÀÛ¼ÆÊı
+        ApplyHealthBarSprites(
+            Phase2Bar1,
+            Phase2Bar2,
+            Phase2Bar3,
+            Phase2Bar4);
+    }
+
+    private void ApplyTimeBarStyle()
+    {
+        ApplyHealthBarSprites(
+            TimeBar1,
+            TimeBar2,
+            TimeBar3,
+            TimeBar4);
+    }
+
+    private void ApplyHealthBarSprites(
+        Sprite bar1,
+        Sprite bar2,
+        Sprite bar3,
+        Sprite bar4)
+    {
+        SetImageSprite(timeBar1, bar1);
+        SetImageSprite(timeBar2, bar2);
+        SetImageSprite(timeBar3, bar3);
+        SetImageSprite(timeBar4, bar4);
+    }
+
+    private static void SetImageSprite(
+        GameObject target,
+        Sprite sprite)
+    {
+        if (target == null || sprite == null)
+        {
+            return;
+        }
+
+        Image image = target.GetComponent<Image>();
+        if (image != null)
+        {
+            image.sprite = sprite;
+        }
+    }
+
+    private void ClearStatusEffects()
+    {
+        //æ¸…é™¤æ‰€æœ‰debuffï¼ŒåŒ…æ‹¬å¼‚å¸¸çŠ¶æ€ç´¯è®¡æ•°
         EmptyCurseRemove();
         EmptyCursePoint = 0;
         ColdRemove();
@@ -1787,7 +1590,7 @@ public class Mew : Empty
         GetEmptyFrozenPointFloat = 0;
     }
 
-    void ClearProjectile()
+    private void ClearProjectile()
     {
         GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectel");
         foreach (GameObject projectile in projectiles)
@@ -1795,4 +1598,30 @@ public class Mew : Empty
             Destroy(projectile);
         }
     }
+
+    private void OnDestroy()
+    {
+        CancelActiveBasicSkill();
+        StopPhaseThreeFinalSkill();
+
+        if (activePhaseTwoSkill != null &&
+            !activePhaseTwoSkill.IsFinished)
+        {
+            activePhaseTwoSkill.Cancel(true);
+        }
+
+        if (phaseTwoArenaBoundary != null)
+        {
+            Destroy(phaseTwoArenaBoundary.gameObject);
+            phaseTwoArenaBoundary = null;
+        }
+
+        if (arenaBoundary != null)
+        {
+            Destroy(arenaBoundary.gameObject);
+            arenaBoundary = null;
+        }
+    }
+
+    #endregion
 }

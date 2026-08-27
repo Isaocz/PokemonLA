@@ -1,71 +1,128 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 星之刃的分裂行为：碰到玩家或 Blocktags 中的障碍物后，生成8方向星光。
+/// </summary>
 public class SplitStarSlash : BarrageProjectile
 {
     public float SplitAirSlashSpeed = 10f;
     public GameObject SplitStarSlashPref;
-    public int SplitStarSlashNum = 8;
+    [Min(1)] public int SplitStarSlashNum = 8;
+    public bool randomizeSplitRotation;
 
-    private bool hasSplit = false;
+    private bool hasSplit;
 
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        if (hasSplit) return;
-
-        if (Blocktags != null)
+        if (hasSplit || collision == null)
         {
-            foreach (var blocktag in Blocktags)
-            {
-                if (collision.tag == blocktag)
-                {
-                    moveBehavior = projectileBehavior.Idle;
-                    SplitSlash();
-                    hasSplit = true;
-                    Destroy(this.gameObject);
-                    return;
-                }
-            }
-        }
-
-        if (collision.CompareTag("Player"))
-        {
-            PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, ProType);
-            if (playerControler != null)
-            {
-                playerControler.KnockOutPoint = 2.5f;
-                playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
-            }
-            SplitSlash();
-            hasSplit = true;
-            Destroy(this.gameObject);
             return;
         }
+
+        if (IsBlockedBy(collision))
+        {
+            SplitSlash();
+            return;
+        }
+
+        if (!collision.CompareTag("Player"))
+        {
+            return;
+        }
+
+        if (empty != null)
+        {
+            PlayerControler playerControler = collision.GetComponent<PlayerControler>();
+            Pokemon.PokemonHpChange(
+                empty.gameObject,
+                collision.gameObject,
+                0,
+                SpDmage,
+                0,
+                ProType);
+
+            if (playerControler != null)
+            {
+                playerControler.KnockOutPoint = knockPoint > 0f ? knockPoint : 2.5f;
+                playerControler.KnockOutDirection =
+                    (playerControler.transform.position - transform.position).normalized;
+            }
+        }
+
+        SplitSlash();
+    }
+
+    private bool IsBlockedBy(Collider2D collision)
+    {
+        if (collision.CompareTag("Room") || collision.CompareTag("Enviroment"))
+        {
+            return true;
+        }
+
+        if (Blocktags == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < Blocktags.Length; i++)
+        {
+            string blockTag = Blocktags[i];
+            if (!string.IsNullOrEmpty(blockTag) && collision.CompareTag(blockTag))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void SplitSlash()
     {
-        if (hasSplit || SplitStarSlashPref == null) return;
+        if (hasSplit)
+        {
+            return;
+        }
+
+        hasSplit = true;
+        StopMovement();
 
         if (SplitStarSlashPref != null)
         {
-            float angle = Random.Range(0f, 360f);
-            for (int i = 0; i < SplitStarSlashNum; i++)
+            int splitCount = Mathf.Max(1, SplitStarSlashNum);
+            float baseAngle = randomizeSplitRotation
+                ? Random.Range(0f, 360f)
+                : 0f;
+
+            for (int i = 0; i < splitCount; i++)
             {
-                float splitangle = angle + i * (360f / SplitStarSlashNum);
-                Vector2 direction2 = Quaternion.Euler(0, 0, splitangle) * Vector2.right;
-                GameObject splitAirSlash = Instantiate(SplitStarSlashPref, transform.position, Quaternion.identity);
-                BarrageProjectile bp = splitAirSlash.GetComponent<BarrageProjectile>();
-                bp.empty = this.empty;
-                if (bp != null)
+                float angle = baseAngle + i * (360f / splitCount);
+                Vector2 direction =
+                    Quaternion.Euler(0f, 0f, angle) * Vector2.right;
+
+                GameObject splitObject = Instantiate(
+                    SplitStarSlashPref,
+                    transform.position,
+                    Quaternion.identity);
+
+                BarrageProjectile splitProjectile =
+                    splitObject.GetComponent<BarrageProjectile>();
+
+                if (splitProjectile == null)
                 {
-                    bp.SetBehavior(projectileBehavior.Straight);
-                    bp.SetDirection(direction2);
-                    bp.SetSpeed(SplitAirSlashSpeed);
+                    Debug.LogError(
+                        SplitStarSlashPref.name + " 缺少 BarrageProjectile。",
+                        splitObject);
+                    Destroy(splitObject);
+                    continue;
                 }
+
+                splitProjectile.empty = empty;
+                splitProjectile.SetBehavior(projectileBehavior.Straight);
+                splitProjectile.SetDirection(direction);
+                splitProjectile.SetSpeed(SplitAirSlashSpeed);
             }
         }
+
+        Destroy(gameObject);
     }
 }

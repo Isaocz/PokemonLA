@@ -27,16 +27,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 652061373597603823}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4419023594838040468}
+  m_Father: {fileID: 2809799570323209970}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 435.3, y: 95}
+  m_AnchoredPosition: {x: 0.000061035156, y: 21.299988}
   m_SizeDelta: {x: 240, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2645784489805921071
@@ -781,7 +781,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 396c696e6d8ac844690f59970789a9d9, type: 2}
+  - {fileID: 2100000, guid: 9f0adbb65a2c487ca4be5e76ca724dea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1093,7 +1093,7 @@ MonoBehaviour:
   isDie: 0
   isHit: 0
   Exp: 0
-  BaseExp: 2500
+  BaseExp: 500
   HWP: {x: 1, y: 10}
   player: {fileID: 0}
   rigidbody2D: {fileID: 0}
@@ -1107,6 +1107,7 @@ MonoBehaviour:
   isCanNotMoveWhenParalysis: 0
   isUseEchoedVoice: 0
   emptyShadow: {fileID: 0}
+  isShadowMove: 0
   ChildHome: {fileID: 0}
   ChildrenList: []
   ParentEmptyByChild: {fileID: 0}
@@ -1115,254 +1116,63 @@ MonoBehaviour:
   StarScatterPref: {fileID: 3403048614843164946, guid: 4ba657687f6101945838b255f8a63f66, type: 3}
   StarShootPref: {fileID: 3691014132035109891, guid: 77346b50c70e4744aa078d98e6738a2d, type: 3}
   StampStarPref: {fileID: 3859456277557636887, guid: 68abbf709bbb29e499916ce697bd17a2, type: 3}
-  StarSlashPref: {fileID: 6429479693416901095, guid: 2f10f7521ab3e6d48996c2855c648554, type: 3}
   StarChargePref: {fileID: 1701130948821726218, guid: 3a8574b25a53fc24386ea998d6e66f67, type: 3}
-  dashReticle: {fileID: 3149466630664417625, guid: 736cad72150328e46ad8ba96151819d5, type: 3}
-  PouncePrefab: {fileID: 8004557703460691832, guid: 2ef86160ba78a0f4cb8041590ad52536, type: 3}
-  MagicalFirePrefab: {fileID: 5306743494499668827, guid: 5cf88a7354b30844abbec6abfbb83a6e, type: 3}
-  IcicleSpearPrefab: {fileID: 7971307191182469350, guid: 83ac42d1c81f3594e9eafe21f9d1c833, type: 3}
-  summonRadius: 7
-  delayBetweenExecutions: 1
-  HeartStampPrefab: {fileID: 2131620167936913869, guid: c70d4c83505af0343b651a1f8ccb1fd5, type: 3}
-  heartStampCount: 12
-  reticlePrefab: {fileID: 3725591114184852910, guid: 37b3ff89b9c11b94cb762f055d6f137a, type: 3}
-  ScaleShotPrefab: {fileID: 5544817596536917874, guid: b7b2320442291b141a625fd43eb14c65, type: 3}
-  scaleShotCount: 8
-  MeanLookSE: {fileID: 4039193664094572504, guid: c8a997ab9e64d4d4c9e8c04d6d9ae128, type: 3}
-  MeanLookPrefab: {fileID: 2689224416121092436, guid: 793046cf20f87a9439fc5264eb82eec4, type: 3}
-  DazzlingGleamPrefab: {fileID: 6616271755158368967, guid: 408ad66c215f0584dafdfefb61a27963, type: 3}
-  LeafBladePrefab: {fileID: 8395964902700641522, guid: 1c5aa82c03843c643a094b3c57fc8476, type: 3}
-  stoneEdgePrefab: {fileID: 7053655029781099858, guid: f6c1fffeff69fed4683b8c78b91e5c8d, type: 3}
-  AirSlashPrefab: {fileID: 6952725548088470692, guid: 318de4b2b622f7f4386ed83651fbb006, type: 3}
-  MakeItRainPrefab: {fileID: 3090742378755460755, guid: e5e0a8718641b4644bcb51ec1080bceb, type: 3}
-  StickyWebPrefab: {fileID: 4638213708679333707, guid: 139f3adb2bbe1ed41beb41df12b8aaff, type: 3}
-  CrossPoisonPrefab: {fileID: 2590962624674015638, guid: e7a9e0f800aef674ba1dbab28b705a68, type: 3}
-  SecredFirePrefab: {fileID: 5897127321133702869, guid: df1151e51a0f21444b1919e76e269e1a, type: 3}
-  SecredFireVertexPrefab: {fileID: 943071815611965037, guid: 4347c662e012d9a47921c16b84f7ee25, type: 3}
-  reticle2Prefab: {fileID: 3477420194869128330, guid: 16dfea239daec824791704682298b991, type: 3}
-  SecredSwordPrefab: {fileID: 1086502600127375006, guid: b001ea0ce09b0d14594fa50d83f2fad2, type: 3}
+  StarSlashPref: {fileID: 6429479693416901095, guid: 2f10f7521ab3e6d48996c2855c648554, type: 3}
+  StarRingReturnPref: {fileID: 320831595595604023, guid: b96213ceffc38634da0a6b29f205e964, type: 3}
+  MirrorStarLightPref: {fileID: 4216360452575853372, guid: b51139154475c3540b311ab2e61d6a37, type: 3}
+  CelestialClockPref: {fileID: 5981806836103027693, guid: 056b45ad9b8da1642be55851d9bb010f, type: 3}
+  MimicStarsPref: {fileID: 8744420789918677574, guid: 1a61727e441952d4ba4fe4174a3d80e3, type: 3}
+  StarWavePref: {fileID: 8937163699437685951, guid: 4343b7d2d68aba242815d06ae809ed50, type: 3}
+  Phase2ArenaBoundaryPrefab: {fileID: 9031680613206017387, guid: 5e6338a9d60c43a49901f5089cc58b78, type: 3}
+  Phase2StrongArenaRadius: 18
+  Phase2ArenaIntroDuration: 0.85
+  Phase2ArenaFadeDuration: 0.65
+  Phase2TeleportOutTime: 0.42
+  Phase2TeleportInTime: 0.38
+  Phase2BasicSkillInterval: 0.35
+  Phase2StrongSkillInterval: 0.8
+  Phase2RoomHalfExtents: {x: 48, y: 22}
+  Phase2RoomEdgePadding: 2
   Phase2Mask: {fileID: 6057410316402037426, guid: 7ecb85381b4eb124eacee6f68d34d8e9, type: 3}
   TeleportEndPrefab: {fileID: 6181688378047006272, guid: e40d146792163934ab0e8d970d0bb998, type: 3}
   EdgePar: {fileID: 7520056590216981674, guid: f5984bae64ec343418e45ac04d02b3a9, type: 3}
-  Phase3OrbRotate: {fileID: 1286201656879028948}
-  ElectricBallPrefab: {fileID: 7027899758838974584, guid: 1af19aa6d05631d46a85249ed23316d3, type: 3}
-  TimeStopEffect: {fileID: 978235333085611334, guid: 35b724f98aed75b4c9e9e39ad128101b, type: 3}
-  TrailEffect: {fileID: 4254263861014007369, guid: 18d69b4288201d441b91f1a391869652, type: 3}
-  TrailEffect2: {fileID: 8492973077092796001, guid: 96243f709a3d8b84289e8c33adb6596f, type: 3}
-  TrailEffect3: {fileID: 6921914788178357845, guid: 282be6e522e1b5f4faf3fe2b56cb5563, type: 3}
-  IceBeamPrefab: {fileID: 2193759874819442424, guid: 7ac3364693986d7439a16e07c3fe86b7, type: 3}
-  FakePotionPrefab: {fileID: 7025429324419389877, guid: 03094aa32eb59c84fbf4c7cf638e34fe, type: 3}
-  FakeAntidote: {fileID: 5628681377187633895, guid: 78ca517e4a2a4e048b33e3dcfc7ccf32, type: 3}
-  FakeBurnHeal: {fileID: 2984883845854223293, guid: a0b455e01696fc145907a7faefe1f21f, type: 3}
-  FakeAwakening: {fileID: 7491411927681461895, guid: bb3a711e88350fd48873d63c6ec2cce1, type: 3}
-  FakeIceHeal: {fileID: 394652073006348937, guid: 3d8520e7a785dd941ba483b22cf089ea, type: 3}
-  FakeParalyzeHeal: {fileID: 1358173745429161359, guid: ed766c71c78b87041b4a8ff14f177ec1, type: 3}
-  FakeLovePrefab: {fileID: 1949139755938856843, guid: abe3a713d25bbcd4db5028773ca970ba, type: 3}
-  DictionaryDataList:
-  - skillIndex: 1
-    stage: 1
-    skillTimer: 4
-  - skillIndex: 1
-    stage: 2
-    skillTimer: 4
-  - skillIndex: 1
-    stage: 3
-    skillTimer: 4
-  - skillIndex: 2
-    stage: 1
-    skillTimer: 2.5
-  - skillIndex: 2
-    stage: 2
-    skillTimer: 2.5
-  - skillIndex: 2
-    stage: 3
-    skillTimer: 2.5
-  - skillIndex: 3
-    stage: 1
-    skillTimer: 3
-  - skillIndex: 3
-    stage: 2
-    skillTimer: 3
-  - skillIndex: 3
-    stage: 3
-    skillTimer: 3
-  - skillIndex: 4
-    stage: 1
-    skillTimer: 3
-  - skillIndex: 4
-    stage: 2
-    skillTimer: 3
-  - skillIndex: 4
-    stage: 3
-    skillTimer: 3
-  - skillIndex: 5
-    stage: 1
-    skillTimer: 4.7
-  - skillIndex: 5
-    stage: 2
-    skillTimer: 9.2
-  - skillIndex: 5
-    stage: 3
-    skillTimer: 7.5
-  - skillIndex: 6
-    stage: 1
-    skillTimer: 5.7
-  - skillIndex: 6
-    stage: 2
-    skillTimer: 5.4
-  - skillIndex: 6
-    stage: 3
-    skillTimer: 6
-  - skillIndex: 7
-    stage: 1
-    skillTimer: 2.6
-  - skillIndex: 7
-    stage: 2
-    skillTimer: 3.6
-  - skillIndex: 7
-    stage: 3
-    skillTimer: 7.4
-  - skillIndex: 8
-    stage: 1
-    skillTimer: 5.5
-  - skillIndex: 8
-    stage: 2
-    skillTimer: 4.4
-  - skillIndex: 8
-    stage: 3
-    skillTimer: 4
-  - skillIndex: 9
-    stage: 1
-    skillTimer: 4.8
-  - skillIndex: 9
-    stage: 2
-    skillTimer: 4.8
-  - skillIndex: 9
-    stage: 3
-    skillTimer: 5.5
-  - skillIndex: 10
-    stage: 1
-    skillTimer: 4.3
-  - skillIndex: 10
-    stage: 2
-    skillTimer: 3.5
-  - skillIndex: 10
-    stage: 3
-    skillTimer: 9
-  - skillIndex: 11
-    stage: 1
-    skillTimer: 2
-  - skillIndex: 11
-    stage: 2
-    skillTimer: 1.7
-  - skillIndex: 11
-    stage: 3
-    skillTimer: 1.7
-  - skillIndex: 12
-    stage: 1
-    skillTimer: 3.7
-  - skillIndex: 12
-    stage: 2
-    skillTimer: 3.7
-  - skillIndex: 12
-    stage: 3
-    skillTimer: 3.7
-  - skillIndex: 13
-    stage: 1
-    skillTimer: 3.3
-  - skillIndex: 13
-    stage: 2
-    skillTimer: 3.2
-  - skillIndex: 13
-    stage: 3
-    skillTimer: 8.19
-  - skillIndex: 14
-    stage: 1
-    skillTimer: 10
-  - skillIndex: 14
-    stage: 2
-    skillTimer: 0
-  - skillIndex: 14
-    stage: 3
-    skillTimer: 0
-  - skillIndex: 15
-    stage: 1
-    skillTimer: 4.2
-  - skillIndex: 15
-    stage: 2
-    skillTimer: 5
-  - skillIndex: 15
-    stage: 3
-    skillTimer: 4.6
-  - skillIndex: 16
-    stage: 1
-    skillTimer: 5.5
-  - skillIndex: 16
-    stage: 2
-    skillTimer: 7.6
-  - skillIndex: 16
-    stage: 3
-    skillTimer: 16
-  - skillIndex: 17
-    stage: 1
-    skillTimer: 1.8
-  - skillIndex: 17
-    stage: 2
-    skillTimer: 1.8
-  - skillIndex: 17
-    stage: 3
-    skillTimer: 1
-  - skillIndex: 18
-    stage: 1
-    skillTimer: 10
-  - skillIndex: 18
-    stage: 2
-    skillTimer: 6.5
-  - skillIndex: 18
-    stage: 3
-    skillTimer: 11.2
-  - skillIndex: 19
-    stage: 1
-    skillTimer: 6
-  - skillIndex: 19
-    stage: 2
-    skillTimer: 6
-  - skillIndex: 19
-    stage: 3
-    skillTimer: 6
-  - skillIndex: 20
-    stage: 1
-    skillTimer: 6
-  - skillIndex: 20
-    stage: 2
-    skillTimer: 6
-  - skillIndex: 20
-    stage: 3
-    skillTimer: 6
-  Swords: {fileID: 4882851846148990281, guid: 39d86a9e4e143c4478ca73fabe4d2122, type: 3}
-  Meanlookfinal: {fileID: 5002102329920002190, guid: 7010c1be620ca8443bc085d5dddce216, type: 3}
+  ArenaBoundaryPrefab: {fileID: 9031680613206017387, guid: 5e6338a9d60c43a49901f5089cc58b78, type: 3}
+  ArenaRadius: 19
+  FinalArenaRadius: 14
+  ArenaIntroDuration: 1.25
+  ArenaShrinkDuration: 1.25
+  StardustFantasyPref: {fileID: 6942658144827576446, guid: bd1098d60e770f44bbb219a8ffb4ed62, type: 3}
+  StardustProjectilePrefab: {fileID: 6986079038040258243, guid: 27b5f0bb14994bfba19810d596a6a63e, type: 3}
+  Phase3Duration: 60
+  Phase3FinaleDuration: 10
   timeBar1: {fileID: 4288322206925397586}
   timeBar2: {fileID: 7315325133561382924}
-  timeBar3: {fileID: 3235852703671108440}
+  timeBar3: {fileID: 1295497343241280683}
   timeBar4: {fileID: 3390435370525027024}
+  Phase2Bar1: {fileID: 21300000, guid: b99e6557af0c711458c0eaa8e9e7be2d, type: 3}
+  Phase2Bar2: {fileID: 21300000, guid: a6c73b20500a6f649b97f2552debab7a, type: 3}
+  Phase2Bar3: {fileID: 0}
+  Phase2Bar4: {fileID: 0}
   TimeBar1: {fileID: 21300000, guid: ccef5cbd79ff807488e1ec1ed60ef755, type: 3}
   TimeBar2: {fileID: 21300000, guid: d76d5032b305e5a4b88810407994375e, type: 3}
   TimeBar3: {fileID: 21300000, guid: c5c5355e267707d498f507ff850cb185, type: 3}
   TimeBar4: {fileID: 21300000, guid: 4b2475ae2ef08924489d2f79efb22f69, type: 3}
-  bgmScript: {fileID: 0}
+  MewBossRoomPrefab: {fileID: 3520086324356193059, guid: 3785cdf64b3deec4e8151656569a422c, type: 3}
+  MewBossRoomPosition: {x: 3000, y: 2400, z: 0}
   pbList:
   - {fileID: 6963255724690423077, guid: df1ec508d12b49144a0080ded58e58bf, type: 3}
   - {fileID: 517730479858538264, guid: 6ac5884715cd3eb4b8c4944f968ed281, type: 3}
   - {fileID: 3361791577087670327, guid: bb8828c86c534e44b9a1b24d3e90f04f, type: 3}
   - {fileID: 4926576206565972604, guid: 681dd8ae269c9f94f9fcc10cacd0ed10, type: 3}
+  bgmScript: {fileID: 0}
+  Phase1TeleportOutTime: 0.5
+  Phase1TeleportInTime: 0.5
+  Phase1ExtraInterval: 0
   currentPhase: 1
-  LaserChange: 0
   teleportTime: 0.35
   testing: 0
-  MewBossRoomPrefab: {fileID: 3520086324356193059, guid: 3785cdf64b3deec4e8151656569a422c, type: 3}
-  MewBossRoomPosition: {x: 3000, y: 2400, z: 0}
+  Phase1TestingSkillIndex: 1
   SkillType: 0
-  intensity: 0
 --- !u!58 &8279931956915673792
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1545,14 +1355,19 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 4392254425719300258, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
-      insertIndex: -1
+    - targetCorrespondingSourceObject: {fileID: 2835441994500538820, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
+      insertIndex: 5
       addedObject: {fileID: 7279622150194229238}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
---- !u!1 &3235852703671108440 stripped
+--- !u!1 &1295497343241280683 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 3265079257646972014, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1179218879199388573, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
+  m_PrefabInstance: {fileID: 119321934776696630}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &2809799570323209970 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2835441994500538820, guid: 01923825f1caf8842957d74c1f55cfa1, type: 3}
   m_PrefabInstance: {fileID: 119321934776696630}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &3390435370525027024 stripped

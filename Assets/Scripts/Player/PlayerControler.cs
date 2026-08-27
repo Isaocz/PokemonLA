@@ -726,53 +726,20 @@ public class PlayerControler : PlayerPokemon
                 {
                     InvincileTimer -= Time.deltaTime;
 
-                    //在无敌时间计时器运行的前0。15秒内被击退
-                    if (InvincileTimer > TimeInvincible - 0.15f)
+                    // 仅在受伤无敌开始后的前 0.15 秒执行击退。
+                    if (InvincileTimer > TimeInvincible - KnockbackDuration)
                     {
-                        float CollidorOffset = 0;
-                        float CollidorRadiusH = 0;
-                        float CollidorRadiusV = 0;
-                        BoxCollider2D boxc = GetComponent<BoxCollider2D>();
-                        CollidorOffset = boxc.offset.y; CollidorRadiusH = (boxc.size.x / 2) + boxc.edgeRadius; CollidorRadiusV = (boxc.size.y / 2) + boxc.edgeRadius;
-
-
-                        RaycastHit2D SearchED = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.down, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
-                        RaycastHit2D SearchEU = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.up, CollidorRadiusV + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
-                        RaycastHit2D SearchER = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.right, CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
-                        RaycastHit2D SearchEL = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + CollidorOffset), Vector2.left, CollidorRadiusH + koDirection.x * 3.5f * konckout * Time.deltaTime, LayerMask.GetMask("Enviroment", "Room", "Water"));
-
-
-                        if ((SearchED.collider != null && (SearchED.transform.tag == "Enviroment" || SearchED.transform.tag == "Room" || SearchED.transform.tag == "Water"))
-                            || (SearchEU.collider != null && (SearchEU.transform.tag == "Enviroment" || SearchEU.transform.tag == "Room" || SearchEU.transform.tag == "Water"))
-                            || (SearchER.collider != null && (SearchER.transform.tag == "Enviroment" || SearchER.transform.tag == "Room" || SearchER.transform.tag == "Water"))
-                            || (SearchEL.collider != null && (SearchEL.transform.tag == "Enviroment" || SearchEL.transform.tag == "Room" || SearchEL.transform.tag == "Water"))) { }
-                        else
-                        {
-                            Vector2 position = rigidbody2D.position;
-                            position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.x * 30 + MapCreater.StaticMap.RRoom[NowRoom].RoomSize[2], NowRoom.x * 30 + MapCreater.StaticMap.RRoom[NowRoom].RoomSize[3]);
-                            position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.y * 24 + MapCreater.StaticMap.RRoom[NowRoom].RoomSize[1], NowRoom.y * 24 + MapCreater.StaticMap.RRoom[NowRoom].RoomSize[0]);
-                            /*
-                            if (NowRoom != new Vector3Int(100, 100, 0))
-                            {
-                                position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.x * 30 - 12 , NowRoom.x * 30 + 12);
-                                position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 7.3f);
-                            }
-                            else
-                            {
-                                position.x = Mathf.Clamp(position.x + koDirection.x * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.x * 30 - 12, NowRoom.x * 30 + 41.5f);
-                                position.y = Mathf.Clamp(position.y + koDirection.y * 2.2f * konckout * (playerData.IsPassiveGetList[98] ? 2 : 1) * Time.deltaTime, NowRoom.y * 24 - 7.3f, NowRoom.y * 24 + 33.5f);
-                            }
-                            */
-                            rigidbody2D.position = position;
-                        }
+                        ApplyKnockbackStep(Time.deltaTime);
                     }
-                    if (InvincileTimer <= 0)
+
+                    if (InvincileTimer <= 0f)
                     {
                         isInvincible = false;
+                        konckout = 0f;
+                        koDirection = Vector2.zero;
                     }
                 }
             }
-
 
 
 
@@ -1040,7 +1007,11 @@ public class PlayerControler : PlayerPokemon
 
                         Camera MainCamera = null;
                         if (CameraAdapt.MainCamera != null) { MainCamera = CameraAdapt.MainCamera.GetComponent<Camera>(); }
-                        if  (MainCamera != null &&
+                        bool isMewLargeRoom =
+                            NowRoom == new Vector3Int(100, 100, 0) &&
+                            MapCreater.StaticMap.RRoom.ContainsKey(NowRoom);
+
+                        if  (MainCamera != null && !isMewLargeRoom &&
                             (!MapCreater.StaticMap.RRoom.ContainsKey(NowRoom) || 
                             !(transform.position.x >= (float)NowRoom.x*30.0f-15.0f && transform.position.x <= (float)NowRoom.x * 30.0f + 15.0f && transform.position.y >= (float)NowRoom.y * 24.0f - 12.0f && transform.position.y <= (float)NowRoom.y * 24.0f + 12.0f) ||
                             !(MainCamera.transform.position.x >= (float)NowRoom.x * 30.0f - 15.0f && MainCamera.transform.position.x <= (float)NowRoom.x * 30.0f + 15.0f && MainCamera.transform.position.y >= (float)NowRoom.y * 24.0f - 12.0f && MainCamera.transform.position.y <= (float)NowRoom.y * 24.0f + 12.0f)
@@ -1188,6 +1159,105 @@ public class PlayerControler : PlayerPokemon
         }
     }
 
+
+    private const float KnockbackDuration = 0.15f;
+    private const float KnockbackSpeedScale = 2.2f;
+    private const float KnockbackCollisionSkin = 0.03f;
+
+    /// <summary>
+    /// 执行单帧击退。房间编号只用于查找 Room，实际边界以 Room.transform.position 为准。
+    /// 这样可以兼容 Mew 大地图等“逻辑房间编号 != 世界坐标”的特殊房间。
+    /// </summary>
+    private void ApplyKnockbackStep(float deltaTime)
+    {
+        if (rigidbody2D == null || konckout <= 0f || koDirection.sqrMagnitude <= 0.000001f)
+        {
+            return;
+        }
+
+        Vector2 direction = koDirection.normalized;
+        float passiveMultiplier = playerData.IsPassiveGetList[98] ? 2f : 1f;
+        float requestedDistance = KnockbackSpeedScale * konckout * passiveMultiplier * deltaTime;
+
+        if (requestedDistance <= 0f)
+        {
+            return;
+        }
+
+        Collider2D bodyCollider = GetComponent<Collider2D>();
+        float allowedDistance = requestedDistance;
+
+        // 只沿真实击退方向检测，而不是同时检测上下左右四个方向。
+        // 使用角色碰撞体进行 BoxCast，避免高速击退穿过薄墙。
+        if (bodyCollider != null)
+        {
+            Bounds bounds = bodyCollider.bounds;
+            Vector2 castSize = new Vector2(
+                Mathf.Max(0.01f, bounds.size.x - KnockbackCollisionSkin * 2f),
+                Mathf.Max(0.01f, bounds.size.y - KnockbackCollisionSkin * 2f));
+
+            RaycastHit2D hit = Physics2D.BoxCast(
+                bounds.center,
+                castSize,
+                transform.eulerAngles.z,
+                direction,
+                requestedDistance + KnockbackCollisionSkin,
+                LayerMask.GetMask("Enviroment", "Room", "Water"));
+
+            if (hit.collider != null)
+            {
+                allowedDistance = Mathf.Min(
+                    requestedDistance,
+                    Mathf.Max(0f, hit.distance - KnockbackCollisionSkin));
+            }
+        }
+
+        Vector2 targetPosition = rigidbody2D.position + direction * allowedDistance;
+        targetPosition = ClampKnockbackToCurrentRoom(targetPosition, bodyCollider);
+        rigidbody2D.position = targetPosition;
+    }
+
+    /// <summary>
+    /// 将击退目标位置限制在当前 Room 的真实世界边界内。
+    /// 不再使用 NowRoom.x * 30 / NowRoom.y * 24 推算世界坐标。
+    /// </summary>
+    private Vector2 ClampKnockbackToCurrentRoom(Vector2 targetPosition, Collider2D bodyCollider)
+    {
+        if (MapCreater.StaticMap == null ||
+            MapCreater.StaticMap.RRoom == null ||
+            !MapCreater.StaticMap.RRoom.ContainsKey(NowRoom))
+        {
+            return targetPosition;
+        }
+
+        Room currentRoom = MapCreater.StaticMap.RRoom[NowRoom];
+        if (currentRoom == null || currentRoom.RoomSize == null || currentRoom.RoomSize.Length < 4)
+        {
+            return targetPosition;
+        }
+
+        Vector2 extents = bodyCollider != null
+            ? new Vector2(bodyCollider.bounds.extents.x, bodyCollider.bounds.extents.y)
+            : Vector2.zero;
+
+        float minX = currentRoom.transform.position.x + currentRoom.RoomSize[2] + extents.x;
+        float maxX = currentRoom.transform.position.x + currentRoom.RoomSize[3] - extents.x;
+        float minY = currentRoom.transform.position.y + currentRoom.RoomSize[1] + extents.y;
+        float maxY = currentRoom.transform.position.y + currentRoom.RoomSize[0] - extents.y;
+
+        // 防止错误的 RoomSize 或过大的碰撞体导致 Clamp 的最小值大于最大值。
+        if (minX <= maxX)
+        {
+            targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);
+        }
+
+        if (minY <= maxY)
+        {
+            targetPosition.y = Mathf.Clamp(targetPosition.y, minY, maxY);
+        }
+
+        return targetPosition;
+    }
 
     protected void FixedUpdatePlayer()
     {

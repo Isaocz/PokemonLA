@@ -1,8 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
+/// <summary>
+/// Ê¢¶ÂπªËøëÊàò/ÂÜ≤Âà∫ÂëΩ‰∏≠ÂØπË±°„ÄÇ
+/// ÂÜ≤Âà∫ÂºÄÂßãÊó∂ÈîÅÂÆöÁõÆÊ†á‰ΩçÁΩÆÔºåÁßªÂä®ÂØπË±°ÂêåÊó∂Â∏¶Âä® Empty Êú¨‰Ωì„ÄÇ
+/// </summary>
 public class MeleeProjectile : Projectile
 {
     public enum projectileBehavior
@@ -47,98 +50,128 @@ public class MeleeProjectile : Projectile
         public float confusionPoint;
     }
 
-    [Header("ª˘¥°…Ë÷√")]
+    [Header("Âü∫Á°ÄËÆæÁΩÆ")]
     public float KnockPoint;
-    public float HitRadius;
+    public float HitRadius = 1f;
 
-    [Header("ª˘¥°≤Œ ˝…Ë÷√")]
+    [Header("Âü∫Á°ÄÂèÇÊï∞ËÆæÁΩÆ")]
     public float ExistTime = 7f;
+    [Tooltip("ÈªòËÆ§ÂÖ≥Èó≠„ÄÇÊòü‰πãÂÜ≤Âà∫‰ºöËá™Ë°åÁÆ°ÁêÜÂÜ≤Âà∫ÂØπË±°ÁîüÂëΩÂë®ÊúüÔºõÊóß PounceMew ÁöÑ ExistTime=0.7 Â∞è‰∫éÂâçÊëá 0.8„ÄÇ")]
+    public bool AutoDestroyByExistTime;
     public List<EffectData> effects = new List<EffectData>();
-    public Vector3 TransformOffset = new Vector3(0, 0.5f, 0);
+    public Vector3 TransformOffset = new Vector3(0f, 0.5f, 0f);
 
-    [Header("“∆∂Ø…Ë÷√")]
+    [Header("ÁßªÂä®ËÆæÁΩÆ")]
     public projectileBehavior moveBehavior = projectileBehavior.Straight;
     public float moveTime = 1f;
     public Vector2 direction = Vector2.right;
 
-    [Header("Ãÿ ‚“∆∂Ø…Ë÷√")]
-    public float HitInterval;
+    [Header("ÁâπÊÆäÁßªÂä®ËÆæÁΩÆ")]
+    public float HitInterval = 0.5f;
     public MeleeWay meleeWay = MeleeWay.Sine;
     public Transform Target;
-    public float SurpassRate = 0f;//≥Â¥Ãƒø±ÍÕÊº“ª·≥¨‘Ω“ª∂®æ‡¿Î£¨∏˘æ›ÀŸ∂»”Î≥¨‘Ω±»¿˝º∆À„≥¨‘Ωæ‡¿Î
+    public float SurpassRate;
     public LayerMask obstacleLayerMask;
 
-    private float timer;
-    private float MoveTimer = 0f;
-    
-    private bool IsSetPosition = false;
+    public bool IsMovementFinished { get; private set; }
+
+    private float hitTimer;
+    private float moveTimer;
+    private bool hasLockedPosition;
     private Vector2 endPosition;
     private Vector2 startPosition;
 
     private void Start()
     {
-        MoveTimer = 0f;
-        timer = 0f;
-        IsSetPosition = false;
+        hitTimer = 0f;
+        moveTimer = 0f;
+        hasLockedPosition = false;
+        IsMovementFinished = false;
+        if (AutoDestroyByExistTime && ExistTime > 0f)
+        {
+            Destroy(gameObject, ExistTime);
+        }
     }
 
     private void Update()
     {
-        timer += Time.deltaTime;
-        ChargeMovement();
+        hitTimer += Time.deltaTime;
+        UpdateMovement();
         CheckHit();
     }
 
     protected virtual void CheckHit()
     {
-        if(timer > HitInterval)
+        if (hitTimer < Mathf.Max(0.01f, HitInterval) || empty == null)
         {
-            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, HitRadius);
-            foreach (var hit in hits)
+            return;
+        }
+
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, HitRadius);
+        for (int i = 0; i < hits.Length; i++)
+        {
+            Collider2D hit = hits[i];
+            if (!hit.CompareTag("Player"))
             {
-                if (hit.CompareTag("Player"))
+                continue;
+            }
+
+            PlayerControler playerControler = hit.GetComponent<PlayerControler>();
+            Pokemon.PokemonHpChange(
+                empty.gameObject,
+                hit.gameObject,
+                0,
+                SpDmage,
+                0,
+                ProType);
+
+            hitTimer = 0f;
+
+            if (playerControler == null)
+            {
+                continue;
+            }
+
+            playerControler.KnockOutPoint = KnockPoint;
+            playerControler.KnockOutDirection =
+                (playerControler.transform.position - transform.position).normalized;
+
+            if (effects == null)
+            {
+                continue;
+            }
+
+            for (int effectIndex = 0; effectIndex < effects.Count; effectIndex++)
+            {
+                EffectData effect = effects[effectIndex];
+                switch (effect.projectileEffect)
                 {
-                    PlayerControler playerControler = hit.GetComponent<PlayerControler>();
-                    Pokemon.PokemonHpChange(empty.gameObject, hit.gameObject, 0, SpDmage, 0, ProType);
-                    timer = 0f;
-                    if (playerControler != null)
-                    {
-                        playerControler.KnockOutPoint = KnockPoint;
-                        playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
-                        foreach (var effect in effects)
-                        {
-                            switch (effect.projectileEffect)
-                            {
-                                case ProjectileEffect.None:
-                                    break;
-                                case ProjectileEffect.Freeze:
-                                    playerControler.PlayerFrozenFloatPlus(effect.frozenPoint.x, effect.frozenPoint.y);
-                                    break;
-                                case ProjectileEffect.Toxic:
-                                    playerControler.ToxicFloatPlus(effect.toxicPoint);
-                                    break;
-                                case ProjectileEffect.Paralysis:
-                                    playerControler.ParalysisFloatPlus(effect.paralysisPoint);
-                                    break;
-                                case ProjectileEffect.Burn:
-                                    playerControler.BurnFloatPlus(effect.burnPoint);
-                                    break;
-                                case ProjectileEffect.Sleep:
-                                    playerControler.SleepFloatPlus(effect.sleepPoint);
-                                    break;
-                                case ProjectileEffect.Confusion:
-                                    playerControler.ConfusionFloatPlus(effect.confusionPoint);
-                                    break;
-                            }
-                        }
-                    }
+                    case ProjectileEffect.Freeze:
+                        playerControler.PlayerFrozenFloatPlus(
+                            effect.frozenPoint.x,
+                            effect.frozenPoint.y);
+                        break;
+                    case ProjectileEffect.Toxic:
+                        playerControler.ToxicFloatPlus(effect.toxicPoint);
+                        break;
+                    case ProjectileEffect.Paralysis:
+                        playerControler.ParalysisFloatPlus(effect.paralysisPoint);
+                        break;
+                    case ProjectileEffect.Burn:
+                        playerControler.BurnFloatPlus(effect.burnPoint);
+                        break;
+                    case ProjectileEffect.Sleep:
+                        playerControler.SleepFloatPlus(effect.sleepPoint);
+                        break;
+                    case ProjectileEffect.Confusion:
+                        playerControler.ConfusionFloatPlus(effect.confusionPoint);
+                        break;
                 }
             }
         }
-
     }
 
-    private void ChargeMovement()
+    private void UpdateMovement()
     {
         switch (moveBehavior)
         {
@@ -156,128 +189,148 @@ public class MeleeProjectile : Projectile
                 break;
         }
     }
+
     private void MoveNone()
     {
-        transform.position = empty.transform.position + TransformOffset;
+        if (empty != null)
+        {
+            transform.position = empty.transform.position + TransformOffset;
+        }
     }
 
     private void MoveStraight()
     {
-
+        transform.position += (Vector3)(direction.normalized * Time.deltaTime);
     }
 
     private void MoveCurse()
     {
-
+        // ‰øùÁïôÂÖ•Âè£ÔºåÂΩìÂâçÊ¢¶ÂπªÁ¨¨‰∏ÄÈò∂ÊÆµÊú™‰ΩøÁî®„ÄÇ
     }
 
     private void MoveTargetStraight()
     {
-        float t;
-        if (Target != null && empty != null && !IsSetPosition)
+        if (!hasLockedPosition)
         {
-            setPosition();
-            t = 0;
+            if (Target == null || empty == null)
+            {
+                return;
+            }
+
+            LockDashPosition();
         }
-        else if (IsSetPosition)
+
+        if (IsMovementFinished)
         {
-            if(MoveTimer < moveTime)
-            {
-                MoveTimer += Time.deltaTime;
-            }
+            return;
+        }
 
-            float normalizedTime = Mathf.Clamp01(MoveTimer / moveTime);
+        moveTimer += Time.deltaTime;
+        float normalizedTime = Mathf.Clamp01(moveTimer / Mathf.Max(0.01f, moveTime));
+        float evaluatedTime = EvaluateMovement(normalizedTime);
+        Vector2 nextPosition = Vector2.Lerp(startPosition, endPosition, evaluatedTime);
 
-            switch (meleeWay)
-            {
-                case MeleeWay.Linear:
-                    t = normalizedTime;
-                    transform.position = Vector2.Lerp(startPosition, endPosition, t);
-                    break;
-                case MeleeWay.Quadratic:
-                    t = normalizedTime * normalizedTime; // y = x^2
-                    transform.position = Vector2.Lerp(startPosition, endPosition, t);
-                    break;
-                case MeleeWay.Cubic:
-                    t = normalizedTime * normalizedTime * normalizedTime; // y = x^3
-                    transform.position = Vector2.Lerp(startPosition, endPosition, t);
-                    break;
-                case MeleeWay.Exponential:
-                    t = (Mathf.Pow(2, normalizedTime) - 1) / 1f; // 2^1 - 1 = 1£¨À˘“‘∑÷ƒ∏Œ™1
-                    transform.position = Vector2.Lerp(startPosition, endPosition, t);
-                    break;
-                case MeleeWay.Sine:
-                    t = Mathf.Sin(MoveTimer * Mathf.PI / (2f * moveTime));
-                    transform.position = Vector2.Lerp(startPosition, endPosition, t);
-                    break;
-                case MeleeWay.Tangent:
-                    float maxTan = Mathf.Tan(Mathf.PI / 4f); // tan(¶–/4) = 1
-                    t = Mathf.Tan(normalizedTime * Mathf.PI / 4f) / maxTan;
-                    transform.position = Vector2.Lerp(startPosition, endPosition, t);
-                    break;
-                case MeleeWay.TangentHyperbola:
-                    t = (float)System.Math.Tanh(normalizedTime * 3f); // ≥À“‘3 «Œ™¡À»√«˙œﬂ‘⁄[0,1]«¯º‰ƒ⁄∏¸√˜œ‘
-                    transform.position = Vector2.Lerp(startPosition, endPosition, t);
-                    break;
+        transform.position = nextPosition;
 
-            }
+        if (empty != null)
+        {
+            empty.transform.position = transform.position - TransformOffset;
+        }
 
-            if(MoveTimer <= moveTime)
-            {
-                empty.transform.position = transform.position - TransformOffset;
-            }
+        if (normalizedTime >= 1f)
+        {
+            IsMovementFinished = true;
         }
     }
 
-    private void setPosition()
+    private float EvaluateMovement(float normalizedTime)
+    {
+        switch (meleeWay)
+        {
+            case MeleeWay.Quadratic:
+                return normalizedTime * normalizedTime;
+            case MeleeWay.Cubic:
+                return normalizedTime * normalizedTime * normalizedTime;
+            case MeleeWay.Exponential:
+                return Mathf.Pow(2f, normalizedTime) - 1f;
+            case MeleeWay.Sine:
+                return Mathf.Sin(normalizedTime * Mathf.PI * 0.5f);
+            case MeleeWay.Tangent:
+                return Mathf.Tan(normalizedTime * Mathf.PI * 0.25f);
+            case MeleeWay.TangentHyperbola:
+                return (float)System.Math.Tanh(normalizedTime * 3f) /
+                       (float)System.Math.Tanh(3f);
+            default:
+                return normalizedTime;
+        }
+    }
+
+    private void LockDashPosition()
     {
         transform.position = empty.transform.position + TransformOffset;
-        direction = (Target.position - transform.position).normalized;
-        Vector2 desiredEndPosition = (Vector2)(Target.position + TransformOffset) + SurpassRate * direction;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction,
-        Vector2.Distance(transform.position, desiredEndPosition), obstacleLayerMask);
-
-        if (hit.collider != null)
-        {
-            endPosition = hit.point - (direction * 0.3f);
-        }
-        else
-        {
-            endPosition = desiredEndPosition;
-        }
-
         startPosition = transform.position;
-        IsSetPosition = true;
+
+        Vector2 targetWithOffset = (Vector2)Target.position + (Vector2)TransformOffset;
+        direction = targetWithOffset - startPosition;
+        if (direction.sqrMagnitude < 0.0001f)
+        {
+            direction = Vector2.right;
+        }
+        direction.Normalize();
+
+        Vector2 desiredEndPosition = targetWithOffset + direction * SurpassRate;
+        float castDistance = Vector2.Distance(startPosition, desiredEndPosition);
+
+        RaycastHit2D hit = Physics2D.Raycast(
+            startPosition,
+            direction,
+            castDistance,
+            obstacleLayerMask);
+
+        endPosition = hit.collider != null
+            ? hit.point - direction * 0.3f
+            : desiredEndPosition;
+
+        moveTimer = 0f;
+        hasLockedPosition = true;
+        IsMovementFinished = false;
     }
 
-    /// <summary>
-    /// …Ë÷√≥Â¥Ãƒ£ Ω
-    /// </summary>
-    /// <param name="behavior">≥Â¥Ã––Œ™</param>
-    /// <param name="meleeWay">≥Â¥Ã∑Ω Ω</param>
-    public void SetBehavior(projectileBehavior behavior, MeleeWay meleeWay = MeleeWay.Linear)
+    public void SetBehavior(
+        projectileBehavior behavior,
+        MeleeWay movementWay = MeleeWay.Linear)
     {
-        this.moveBehavior = behavior;
-        this.meleeWay = meleeWay;
-    }
-    public void SetDirection(Vector2 diretion)
-    {
-        this.direction = diretion;
+        moveBehavior = behavior;
+        meleeWay = movementWay;
     }
 
-    public void SetTime(float movetime)
+    public void SetDirection(Vector2 newDirection)
     {
-        this.moveTime = movetime;
+        if (newDirection.sqrMagnitude > 0.0001f)
+        {
+            direction = newDirection.normalized;
+        }
+    }
+
+    public void SetTime(float movementTime)
+    {
+        moveTime = Mathf.Max(0.01f, movementTime);
     }
 
     public void SetTarget(Transform target)
     {
-        this.Target = target;
+        Target = target;
     }
 
     public void ResetAttack()
     {
-        this.MoveTimer = 0f;
+        moveTimer = 0f;
+        hasLockedPosition = false;
+        IsMovementFinished = false;
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(transform.position, HitRadius);
+    }
 }

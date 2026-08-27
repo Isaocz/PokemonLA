@@ -2573,4 +2573,16 @@ public class Empty : Pokemon
 
     //■■■■■■■■■■■■■■■■■■■■有关连携伙伴■■■■■■■■■■■■■■■■■■■■■■
 
+    //===============一些方法==================
+    //释放技能
+    public void skillRelease(GameObject projectile, Vector3 position, Vector2 direction)
+    {
+        GameObject pj = Instantiate(projectile, position, Quaternion.identity);
+        Projectile pjcom = pj.GetComponent<Projectile>();
+        if (pjcom != null)
+        {
+            pjcom.empty = this;
+        }
+    }
+
 }

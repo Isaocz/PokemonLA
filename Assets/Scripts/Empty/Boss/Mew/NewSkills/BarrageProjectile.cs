@@ -1,17 +1,20 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
+/// <summary>
+/// æ¢¦å¹»å¼¹å¹•é€šç”¨è¿åŠ¨ä¸å‘½ä¸­ç»„ä»¶ã€‚
+/// ä¿ç•™åŸé¡¹ç›®å…¬å¼€å­—æ®µä¸æ–¹æ³•ï¼Œä¿®æ­£åˆå§‹åŒ–ã€ç©ºå¼•ç”¨ã€æ—‹è½¬å¸§ç‡ç›¸å…³å’Œæ¸éšè®¡æ—¶é—®é¢˜ã€‚
+/// </summary>
 public class BarrageProjectile : Projectile
 {
     public enum projectileBehavior
     {
-        Idle,           //Í£Ö¹ÒÆ¶¯
-        Straight,       //Ö±ÏßÒÆ¶¯
-        Target,         //×·×ÙÄ¿±ê
-        Spiral,          //Ğı×ªÒÆ¶¯
-        CloseTarget      //¿¿½ü×·×Ù
+        Idle,
+        Straight,
+        Target,
+        Spiral,
+        CloseTarget
     }
 
     public enum ProjectileEffect
@@ -37,283 +40,301 @@ public class BarrageProjectile : Projectile
         public float confusionPoint;
     }
 
-    [Header("µ¯Ä»»ù´¡ÉèÖÃ")]
+    [Header("å¼¹å¹•åŸºç¡€è®¾ç½®")]
     public float knockPoint;
     public string[] Blocktags;
 
-    [Header("µ¯Ä»²ÎÊıÉèÖÃ")]
+    [Header("å¼¹å¹•å‚æ•°è®¾ç½®")]
     public float ExistTime = 7f;
-    public List<EffectData> effects = new List<EffectData>(); // Ö§³Ö¶à¸öĞ§¹û
+    public List<EffectData> effects = new List<EffectData>();
 
-    [Header("ÒÆ¶¯ÉèÖÃ")]
+    [Header("ç§»åŠ¨è®¾ç½®")]
     public projectileBehavior moveBehavior = projectileBehavior.Idle;
     public float moveSpeed = 5f;
     public Vector2 direction = Vector2.right;
 
-    [Header("ÌØÊâÒÆ¶¯²ÎÊı")]
-    public float accerate = 0f;
+    [Header("ç‰¹æ®Šç§»åŠ¨å‚æ•°")]
+    public float accerate;
     public Transform Target;
-    public bool NoInterval = false;                //ÇĞ»»×´Ì¬²»»á¸Ä±ä×´Ì¬¼ÆÊ±
-    public float TargetStrength;                    //×·×ÙÇ¿¶È
-    public float CloseTargetDistance;               //×·×ÙÅĞ¶¨¾àÀë
-    public float CloseTargetLeaveDistance;          //È¡Ïû×·×ÙÅĞ¶¨¾àÀë
+    public bool NoInterval;
+    public float TargetStrength = 2f;
+    public float CloseTargetDistance = 5f;
+    public float CloseTargetLeaveDistance = 2f;
 
-    [Header("ĞĞÎªÉèÖÃ")]
-    public bool IsSpin;                             //µ¯Ä»ÈÆ×ÔÉíĞı×ª
+    [Header("è¡Œä¸ºè®¾ç½®")]
+    public bool IsSpin;
 
-    [Header("ĞĞÎª²ÎÊı")]
-    public float SpinSpeed;                         //Ğı×ªËÙ¶È
-    public bool isTargeting = false;
-    public int FadeMode = 0;                        //ÏûÊ§½¥±ä£¨0ÎªÎ´ÏûÊ§£¬2Îª¼´½«ÏûÊ§£©
+    [Header("è¡Œä¸ºå‚æ•°")]
+    [Tooltip("è‡ªè½¬é€Ÿåº¦ï¼Œå•ä½ä¸ºåº¦/ç§’ã€‚60=æ¯ç§’å…­åˆ†ä¹‹ä¸€åœˆï¼Œ180=æ¯ç§’åŠåœˆã€‚")]
+    public float SpinSpeed = 180f;
+    public bool isTargeting;
+    public int FadeMode;
 
-    private bool isStopping = false;
-    private float timer = 0f;
-    private SpriteRenderer sr;
+    private float fadeTimer;
+    private SpriteRenderer spriteRenderer;
+
+    private void Awake()
+    {
+        rigidbody2D = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     private void Start()
     {
-        Destroy(gameObject, ExistTime);
-        rigidbody2D = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
+        Destroy(gameObject, Mathf.Max(0.05f, ExistTime));
     }
 
     private void Update()
     {
-        Spin();
-        Fade();
+        UpdateSpin();
+        UpdateFade();
 
         switch (moveBehavior)
         {
             case projectileBehavior.Idle:
-                moveIdle();
+                MoveIdle();
                 break;
             case projectileBehavior.Straight:
-                moveStaight();
+                MoveStraight();
                 break;
             case projectileBehavior.Target:
-                moveTarget();
+                MoveTarget();
                 break;
             case projectileBehavior.Spiral:
-                moveSpiral();
+                MoveSpiral();
                 break;
             case projectileBehavior.CloseTarget:
-                moveCloseTarget();
+                MoveCloseTarget();
                 break;
         }
     }
-    //Ê¹µ¯Ä»Í£Ö¹ÒÆ¶¯
-    private void moveIdle()
+
+    private void MoveIdle()
     {
-        isStopping = false;
         if (rigidbody2D != null)
         {
-            rigidbody2D.velocity = Vector3.zero;
+            rigidbody2D.velocity = Vector2.zero;
         }
     }
-    //Ê¹µ¯Ä»±äËÙÖ±ÏßÒÆ¶¯
-    private void moveStaight()
+
+    private void MoveStraight()
     {
-        if (isStopping)
-        {
-            timer += Time.deltaTime;
-            if (moveSpeed != 0) { moveSpeed = Mathf.Lerp(moveSpeed, 0, Mathf.Clamp01(timer)); }
-            else { isStopping = false; }
-        }
-        else
-        {
-            if (accerate != 0)
-            {
-                moveSpeed += accerate * Time.deltaTime;
-            }
+        moveSpeed += accerate * Time.deltaTime;
 
-            if(rigidbody2D!= null)
-            {
-                rigidbody2D.velocity = moveSpeed * direction;
-            }
-
-        }
-    }
-    //Ê¹µ¯Ä»×·×ÙÄ¿±ê
-    private void moveTarget()
-    {
-        if (Target != null)
-        {
-            direction = (Target.position - transform.position).normalized;
-        }
-
-        if (accerate != 0)
-        {
-            moveSpeed += accerate * Time.deltaTime;
-        }
-
-        if(rigidbody2D != null)
+        if (rigidbody2D != null)
         {
             rigidbody2D.velocity = moveSpeed * direction;
         }
     }
 
-    private void moveSpiral()
+    private void MoveTarget()
     {
-
-    }
-
-    private void moveCloseTarget()
-    {
-        if (accerate != 0)
-        {
-            moveSpeed += accerate * Time.deltaTime;
-        }
-
-        //transform.Translate(direction * moveSpeed * Time.deltaTime, Space.World);
-
         if (Target != null)
         {
-            
-            float distance = Vector2.Distance(transform.position, Target.position);
-            if(distance < CloseTargetDistance && distance > CloseTargetLeaveDistance && !isTargeting)
+            Vector2 targetDirection = Target.position - transform.position;
+            if (targetDirection.sqrMagnitude > 0.0001f)
             {
-                //¼ÆËãÖ¸ÏòÄ¿±êµÄ·½Ïò
-                Vector2 targetDirection = (Target.position - transform.position).normalized;
-                float interpolationFactor = Mathf.Clamp01(TargetStrength * Time.deltaTime);
-                direction = Vector2.Lerp(direction, targetDirection, interpolationFactor).normalized;
-
-                //×î´ó×ªÏò½Ç¶ÈÏŞÖÆ
-                float maxTurnAngle = 30f * Time.deltaTime; //Ã¿Ãë×î¶à×ªÏò30¶È
-                float currentAngle = Vector2.Angle(direction, targetDirection);
-                if (currentAngle > maxTurnAngle)
-                {
-                    float t = maxTurnAngle / currentAngle;
-                    direction = Vector2.Lerp(direction, targetDirection, t).normalized;
-                }
-
+                direction = targetDirection.normalized;
             }
-            else if (distance < CloseTargetLeaveDistance)
+        }
+
+        moveSpeed += accerate * Time.deltaTime;
+
+        if (rigidbody2D != null)
+        {
+            rigidbody2D.velocity = moveSpeed * direction;
+        }
+    }
+
+    private void MoveSpiral()
+    {
+        // å½“å‰ç¬¬ä¸€é˜¶æ®µæŠ€èƒ½æœªä½¿ç”¨ Spiralã€‚
+        // ä¿ç•™æšä¸¾å…¥å£ï¼Œé¿å…ç ´åé¡¹ç›®ä¸­å·²æœ‰ Prefab åºåˆ—åŒ–æ•°æ®ã€‚
+        MoveStraight();
+    }
+
+    private void MoveCloseTarget()
+    {
+        moveSpeed += accerate * Time.deltaTime;
+
+        if (Target != null && !isTargeting)
+        {
+            float distance = Vector2.Distance(transform.position, Target.position);
+
+            if (distance <= CloseTargetLeaveDistance)
             {
                 isTargeting = true;
             }
+            else if (distance <= CloseTargetDistance)
+            {
+                Vector2 targetDirection =
+                    ((Vector2)Target.position - (Vector2)transform.position).normalized;
+
+                float maxTurnAngle = Mathf.Max(0f, TargetStrength) * 30f * Time.deltaTime;
+                Vector3 rotatedDirection = Vector3.RotateTowards(
+                    direction.normalized,
+                    targetDirection,
+                    maxTurnAngle * Mathf.Deg2Rad,
+                    0f);
+                direction = ((Vector2)rotatedDirection).normalized;
+            }
         }
 
-        if(rigidbody2D != null)
+        if (rigidbody2D != null)
         {
             rigidbody2D.velocity = moveSpeed * direction;
         }
-
     }
 
-    private void Spin()
+    private void UpdateSpin()
     {
         if (IsSpin)
         {
-            transform.Rotate(0, 0, SpinSpeed);
+            // SpinSpeed ç»Ÿä¸€ä½¿ç”¨â€œåº¦/ç§’â€ï¼Œä¸å†æ··ç”¨â€œåº¦/å¸§â€ã€‚
+            transform.Rotate(0f, 0f, SpinSpeed * Time.deltaTime);
         }
-
     }
 
-    private void Fade()
+    private void UpdateFade()
     {
-        if (FadeMode == 1 && sr != null)
+        if (FadeMode == 1)
         {
-            timer = 0f;
+            fadeTimer = 0f;
             FadeMode = 2;
         }
-        else if(FadeMode == 2)
+
+        if (FadeMode != 2 || spriteRenderer == null)
         {
-            timer += Time.deltaTime;
-            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, Mathf.Lerp(1, 0, (timer / 0.5f)));
+            return;
+        }
+
+        fadeTimer += Time.deltaTime;
+        Color color = spriteRenderer.color;
+        color.a = Mathf.Lerp(color.a, 0f, Mathf.Clamp01(fadeTimer / 0.5f));
+        spriteRenderer.color = color;
+    }
+
+    public void SetBehavior(projectileBehavior behavior)
+    {
+        moveBehavior = behavior;
+    }
+
+    public void SetSpeed(float speed, float acceleration = 0f)
+    {
+        moveSpeed = speed;
+        accerate = acceleration;
+    }
+
+    public void SetDirection(Vector2 newDirection)
+    {
+        if (newDirection.sqrMagnitude > 0.0001f)
+        {
+            direction = newDirection.normalized;
         }
     }
 
-    /// <summary>
-    /// ÉèÖÃÒÆ¶¯Ä£Ê½
-    /// </summary>
-    /// <param name="behavior">ÒÆ¶¯Âß¼­</param>
-    public void SetBehavior(projectileBehavior behavior)
+    public void SetTarget(
+        Transform target,
+        float targetStrength = 2f,
+        float closeTargetDistance = 5f,
+        float closeTargetLeaveDistance = 2f)
     {
-        this.moveBehavior = behavior;
-    }
-    /// <summary>
-    /// ÉèÖÃµ¯Ä»ËÙ¶È
-    /// </summary>
-    /// <param name="speed">µ¯Ä»ËÙ¶È</param>
-    /// <param name="accerate">µ¯Ä»¼ÓËÙ¶È</param>
-    public void SetSpeed(float speed, float accerate = 0f)
-    {
-        this.moveSpeed = speed;
-        this.accerate = accerate;
-    }
-    /// <summary>
-    /// ÉèÖÃµ¯Ä»·½Ïò
-    /// </summary>
-    /// <param name="direction">µ¯Ä»·½Ïò</param>
-    public void SetDirection(Vector2 direction)
-    {
-        this.direction = direction.normalized;
-    }
-    /// <summary>
-    /// ÉèÖÃµ¯Ä»Ä¿±ê£¨ÓÃÓÚ×·×Ù£©
-    /// </summary>
-    /// <param name="target">µ¯Ä»Ä¿±ê</param>
-    public void SetTarget(Transform target, float targetStrength = 2f, float closeTargetDistance = 5f, float closeTargetLeaveDistance = 2f)
-    {
-        this.Target = target;
-        this.TargetStrength = targetStrength;
-        this.CloseTargetDistance = closeTargetDistance;
-        this.CloseTargetLeaveDistance = closeTargetLeaveDistance;
+        Target = target;
+        TargetStrength = Mathf.Max(0f, targetStrength);
+        CloseTargetDistance = Mathf.Max(0f, closeTargetDistance);
+        CloseTargetLeaveDistance = Mathf.Clamp(
+            closeTargetLeaveDistance,
+            0f,
+            CloseTargetDistance);
+        isTargeting = false;
     }
 
+    public void StopMovement()
+    {
+        SetBehavior(projectileBehavior.Idle);
+        if (rigidbody2D != null)
+        {
+            rigidbody2D.velocity = Vector2.zero;
+            rigidbody2D.angularVelocity = 0f;
+        }
+    }
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision == null)
+        {
+            return;
+        }
+
         if (Blocktags != null)
         {
-            foreach (var blocktag in Blocktags)
+            for (int i = 0; i < Blocktags.Length; i++)
             {
-                if (collision.tag == blocktag)
+                string blockTag = Blocktags[i];
+                if (!string.IsNullOrEmpty(blockTag) && collision.CompareTag(blockTag))
                 {
-                    moveBehavior = projectileBehavior.Idle;
+                    StopMovement();
                     FadeMode = 1;
-                    Destroy(this.gameObject, 0.5f);
+                    Destroy(gameObject, 0.5f);
                     return;
                 }
             }
         }
 
-        if (collision.tag == "Player" && empty.gameObject && FadeMode == 0)
+        if (!collision.CompareTag("Player") || FadeMode != 0 || empty == null)
         {
-            PlayerControler playerControler = collision.GetComponent<PlayerControler>();
-            Pokemon.PokemonHpChange(empty.gameObject, collision.gameObject, 0, SpDmage, 0, ProType);
-            if (playerControler != null)
-            {
-                playerControler.KnockOutPoint = knockPoint;
-                playerControler.KnockOutDirection = (playerControler.transform.position - transform.position).normalized;
-                foreach (var effect in effects)
-                {
-                    switch (effect.projectileEffect)
-                    {
-                        case ProjectileEffect.None:
-                            break;
-                        case ProjectileEffect.Freeze:
-                            playerControler.PlayerFrozenFloatPlus(effect.frozenPoint.x, effect.frozenPoint.y);
-                            break;
-                        case ProjectileEffect.Toxic:
-                            playerControler.ToxicFloatPlus(effect.toxicPoint);
-                            break;
-                        case ProjectileEffect.Paralysis:
-                            playerControler.ParalysisFloatPlus(effect.paralysisPoint);
-                            break;
-                        case ProjectileEffect.Burn:
-                            playerControler.BurnFloatPlus(effect.burnPoint);
-                            break;
-                        case ProjectileEffect.Sleep:
-                            playerControler.SleepFloatPlus(effect.sleepPoint);
-                            break;
-                        case ProjectileEffect.Confusion:
-                            playerControler.ConfusionFloatPlus(effect.confusionPoint);
-                            break;
-                    }
-                }
-            }
+            return;
+        }
 
+        PlayerControler playerControler = collision.GetComponent<PlayerControler>();
+        Pokemon.PokemonHpChange(
+            empty.gameObject,
+            collision.gameObject,
+            0,
+            SpDmage,
+            0,
+            ProType);
+
+        if (playerControler == null)
+        {
+            return;
+        }
+
+        playerControler.KnockOutPoint = knockPoint;
+        playerControler.KnockOutDirection =
+            (playerControler.transform.position - transform.position).normalized;
+
+        if (effects == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < effects.Count; i++)
+        {
+            EffectData effect = effects[i];
+            switch (effect.projectileEffect)
+            {
+                case ProjectileEffect.Freeze:
+                    playerControler.PlayerFrozenFloatPlus(
+                        effect.frozenPoint.x,
+                        effect.frozenPoint.y);
+                    break;
+                case ProjectileEffect.Toxic:
+                    playerControler.ToxicFloatPlus(effect.toxicPoint);
+                    break;
+                case ProjectileEffect.Paralysis:
+                    playerControler.ParalysisFloatPlus(effect.paralysisPoint);
+                    break;
+                case ProjectileEffect.Burn:
+                    playerControler.BurnFloatPlus(effect.burnPoint);
+                    break;
+                case ProjectileEffect.Sleep:
+                    playerControler.SleepFloatPlus(effect.sleepPoint);
+                    break;
+                case ProjectileEffect.Confusion:
+                    playerControler.ConfusionFloatPlus(effect.confusionPoint);
+                    break;
+            }
         }
     }
 }

@@ -1,54 +1,100 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 技能2：星光漫射。
+/// 一阶段向玩家连续发射3轮、每轮3颗弱追踪星光；中央弹始终朝向玩家。
+/// 二阶段每轮增加为5颗。
+/// </summary>
 public class StarShoot : MewBaseSkill
 {
+    [Header("弹幕")]
     public GameObject projectilePref;
-    public int repeatSkill;
-    public float repeatInterval = 0.3f;
-    public int projectileNum;
-    public float spreadAngle = 60f;
+    [Min(1)] public int repeatSkill = 3;
+    [Min(0f)] public float repeatInterval = 0.3f;
+    [Min(1)] public int projectileNum = 3;
+    [Min(0f)] public float spreadAngle = 40f;
     public float projectileSpeed = 8f;
+
+    [Header("弱追踪")]
+    [Min(0f)] public float targetStrength = 1.25f;
+    [Min(0f)] public float targetStartDistance = 7f;
+    [Min(0f)] public float targetStopDistance = 2f;
 
     public override IEnumerator CoreLogic()
     {
-        // ��ȡ�������
-        Transform playerTransform = null;
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null) playerTransform = player.transform;
-
-        for (int i = 0; i < repeatSkill; i++) 
+        if (projectilePref == null)
         {
-            Vector2 baseDirection = (playerTransform.position - transform.position).normalized;
-            float baseAngle = Mathf.Atan2(baseDirection.y, baseDirection.x) * Mathf.Rad2Deg;
-
-            for (int j = 0; j < projectileNum; j++) 
-            {
-                float angleOffset = (j - (projectileNum - 1) / 2f) * (spreadAngle / projectileNum);
-
-                // Ӧ�ýǶ�ƫ�Ʋ�ת��Ϊ��������
-                float currentAngle = baseAngle + angleOffset;
-                Vector2 direction = new Vector2(
-                    Mathf.Cos(currentAngle * Mathf.Deg2Rad),
-                    Mathf.Sin(currentAngle * Mathf.Deg2Rad)
-                ).normalized;
-
-                GameObject Projectile = Instantiate(projectilePref, transform.position, Quaternion.identity);
-                BarrageProjectile msl = Projectile.GetComponent<BarrageProjectile>();
-                msl.empty = this.empty;
-
-                if (msl != null)
-                {
-                    msl.SetBehavior(BarrageProjectile.projectileBehavior.CloseTarget);
-                    msl.SetDirection(direction);
-                    msl.SetSpeed(projectileSpeed);
-                    msl.SetTarget(playerTransform, 2f, 4f, 2f);
-                }
-            }
-
-            yield return new WaitForSeconds(repeatInterval);
+            Debug.LogError(name + "：StarShoot 未设置 projectilePref。", this);
+            yield break;
         }
 
+        int volleyCount = Mathf.Max(1, repeatSkill);
+        int shotCount = IsPhase2OrLater
+            ? Mathf.Max(1, projectileNum + 2)
+            : Mathf.Max(1, projectileNum);
+
+        for (int volleyIndex = 0; volleyIndex < volleyCount; volleyIndex++)
+        {
+            Transform target = GetPlayerTransform();
+            if (target == null)
+            {
+                Debug.LogWarning(name + "：StarShoot 找不到玩家，终止技能。", this);
+                yield break;
+            }
+
+            Vector2 baseDirection =
+                ((Vector2)target.position - (Vector2)SkillOrigin).normalized;
+            float baseAngle = Mathf.Atan2(baseDirection.y, baseDirection.x) * Mathf.Rad2Deg;
+
+            for (int shotIndex = 0; shotIndex < shotCount; shotIndex++)
+            {
+                float normalizedOffset = shotCount <= 1
+                    ? 0f
+                    : shotIndex / (float)(shotCount - 1) - 0.5f;
+
+                float currentAngle = baseAngle + normalizedOffset * spreadAngle;
+                Vector2 direction =
+                    Quaternion.Euler(0f, 0f, currentAngle) * Vector2.right;
+
+                GameObject projectileObject = Instantiate(
+                    projectilePref,
+                    SkillOrigin,
+                    Quaternion.Euler(0f, 0f, currentAngle));
+
+                BarrageProjectile projectile =
+                    projectileObject.GetComponent<BarrageProjectile>();
+
+                if (projectile == null)
+                {
+                    Debug.LogError(
+                        projectilePref.name + " 缺少 BarrageProjectile。",
+                        projectileObject);
+                    Destroy(projectileObject);
+                    continue;
+                }
+
+                projectile.empty = empty;
+                projectile.SetBehavior(BarrageProjectile.projectileBehavior.CloseTarget);
+                projectile.SetDirection(direction);
+                projectile.SetSpeed(projectileSpeed);
+                projectile.SetTarget(
+                    target,
+                    targetStrength,
+                    targetStartDistance,
+                    targetStopDistance);
+            }
+
+            if (volleyIndex < volleyCount - 1 && repeatInterval > 0f)
+            {
+                yield return new WaitForSeconds(repeatInterval);
+            }
+        }
+    }
+
+    protected override int GetExecutionCount()
+    {
+        // 本技能的轮次已经由脚本内部管理，避免 Prefab 上旧 repeat 数值重复整套技能。
+        return 1;
     }
 }

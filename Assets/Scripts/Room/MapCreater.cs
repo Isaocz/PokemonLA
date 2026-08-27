@@ -108,6 +108,7 @@ public class MapCreater : MonoBehaviour
         NotTestMode, //非测试模式
         BossTest,    //boss测试模式
         EmptyTest,   //敌人测试
+        MewTest,     //梦幻测试
     }
     /// <summary>
     /// 当前测试模式
@@ -191,6 +192,13 @@ public class MapCreater : MonoBehaviour
             if (NowTestType == TestType.BossTest || NowTestType == TestType.EmptyTest)
             {
                 isBornMewRoom = false;
+                isBornBabyCenterRoom = false;
+                isBornMintRoom = false;
+                isBornBerryTreeRoom = false;
+            }
+            else if (NowTestType == TestType.MewTest)
+            {
+                isBornMewRoom = true;
                 isBornBabyCenterRoom = false;
                 isBornMintRoom = false;
                 isBornBerryTreeRoom = false;

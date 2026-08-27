@@ -293,9 +293,12 @@ public class Room : MonoBehaviour
             for (int j = 0; j < 24; j++)
             {
                 float x = Random.Range(0.0f, 1.0f);
-                if (FloorFile.OutPutWeightIndex(x) != -1)
+                if (FloorFile != null)
                 {
-                    Instantiate(FloorFile.transform.GetChild(FloorFile.OutPutWeightIndex(x)), transform.position + new Vector3(i - 14.5f, j - 11.5f, 0), Quaternion.identity, transform.GetChild(0));
+                    if (FloorFile.OutPutWeightIndex(x) != -1)
+                    {
+                        Instantiate(FloorFile.transform.GetChild(FloorFile.OutPutWeightIndex(x)), transform.position + new Vector3(i - 14.5f, j - 11.5f, 0), Quaternion.identity, transform.GetChild(0));
+                    }
                 }
             }
         }
