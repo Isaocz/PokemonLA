@@ -45,7 +45,7 @@ public class Mist : Skill
     {
         if (other.tag == "Empty") {
             Empty Target = other.GetComponent<Empty>();
-            if (SkillFrom == 2) {
+            if (Target != null && SkillFrom == 2) {
                 if (!MistPlusList.Contains(Target))
                 {
                     Target.Cold(15);

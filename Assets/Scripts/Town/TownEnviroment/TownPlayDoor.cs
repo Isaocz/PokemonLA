@@ -33,7 +33,7 @@ public class TownPlayDoor : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (SelectRolePanel.gameObject.activeInHierarchy && other.tag == "Player")
+        if (SelectRolePanel != null && SelectRolePanel.gameObject.activeInHierarchy && other.tag == "Player")
         {
             Debug.Log("exit");
             if (Player == null) { Player = other.gameObject.GetComponent<TownPlayer>(); } 

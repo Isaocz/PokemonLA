@@ -28,11 +28,11 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 458192351332092004}
   - {fileID: 7408664919384059164}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 1127258289740344188}
   - component: {fileID: 7787567726313441402}
   - component: {fileID: 5486735832324297496}
+  - component: {fileID: 5452350215169521868}
   m_Layer: 5
   m_Name: SwitchButton
   m_TagString: Untagged
@@ -113,9 +114,9 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6349240919170575382}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -216,6 +217,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 5452350215169521868}
+        m_TargetAssemblyTypeName: ButtonClickSE, Assembly-CSharp
+        m_MethodName: CallClickSE
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5486735832324297496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,11 +242,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isIngore: 0
+--- !u!114 &5452350215169521868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6551019774555804353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b1cf706ddbf00442af38e20e92e21fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonClickSEType: 0
 --- !u!1001 &4633330136892068238
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 6349240919170575382}
     m_Modifications:
     - target: {fileID: 5050565645710858730, guid: 8d230ad676c468b41a1dd5dfb13ece07, type: 3}
@@ -337,12 +364,10 @@ PrefabInstance:
       value: 0.7830189
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d230ad676c468b41a1dd5dfb13ece07, type: 3}
---- !u!224 &458192351332092004 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5050565645710858730, guid: 8d230ad676c468b41a1dd5dfb13ece07, type: 3}
-  m_PrefabInstance: {fileID: 4633330136892068238}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &353938747389370426 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4946522890053071284, guid: 8d230ad676c468b41a1dd5dfb13ece07, type: 3}
@@ -354,3 +379,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78ae8612ef50498499c0d930ca6d8317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &458192351332092004 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5050565645710858730, guid: 8d230ad676c468b41a1dd5dfb13ece07, type: 3}
+  m_PrefabInstance: {fileID: 4633330136892068238}
+  m_PrefabAsset: {fileID: 0}

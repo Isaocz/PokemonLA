@@ -45,9 +45,12 @@ public class EnviromentToogle : EnviromentSwitch
         if (other.gameObject.tag == "Empty" || other.gameObject.tag == "Enviroment" || other.gameObject.tag == "Player")
         {
             if (GameObjectList.Contains(other.gameObject)) { GameObjectList.Remove(other.gameObject); }
-            if (GameObjectList.Count <= 0 && ChangeState == changeState.idle && isON)
+            if ( GameObjectList.Count <= 0 && ChangeState == changeState.idle && isON)
             {
-                StartCoroutine(SwitchOFF());
+                if (gameObject != null && gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(SwitchOFF());
+                }
             }
         }
 

@@ -35,6 +35,7 @@ public class PPUp : IteamPickUp
             playerControler.ChangePPUp(ChangePoint);
             animator.SetTrigger("Eat");
             UIGetANewItem.UI.GetANewItem(ItemTag, ItemName);
+            PickUpEvent();
             Destroy(gameObject);
         }
     }

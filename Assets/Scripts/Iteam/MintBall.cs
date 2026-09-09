@@ -34,7 +34,6 @@ public class MintBall : MonoBehaviour
                 break;
         }
         GetComponent<PokemonBall>().PassiveDropIndex = output;
-        GetComponent<PokemonBall>().OpenBall();
     }
 
 }

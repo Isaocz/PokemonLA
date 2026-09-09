@@ -648,8 +648,21 @@ public class Empty : Pokemon
                         fd.transform.GetComponent<damageShow>().SetText(allDmg, Crit, false, true);
                     }
                 }
+
+                //被弄醒
                 EmptySleepRemove();
+
+                //受击事件
                 HitEvent();
+
+                //受击音效
+                if(AudioManager.Instance != null)
+                {
+                    //暴击音效
+                    if (Crit) AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.EmptyCTDamage, transform.position);
+                    //一般音效
+                    else AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.EmptyDamage, transform.position);
+                }
             }
             //回血
             else
@@ -988,6 +1001,8 @@ public class Empty : Pokemon
                 isDie = true;
                 //死亡事件
                 DieEvent();
+                //死亡音效
+                if (AudioManager.Instance != null) { AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.EmptyDie, transform.position); }
             }
 
             animator.SetTrigger("Die");

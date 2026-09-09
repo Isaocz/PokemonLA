@@ -80,7 +80,13 @@ public class SkillBall : IteamPickUp
                     playerControler.SetTerablast(GetSkill);
                     playerControler.LearnNewSkillByOtherWay(GetSkill);
                     playerControler.PassiveItemGetUI.GetComponent<Image>().sprite = SkillMachineItemObj.GetComponent<SpriteRenderer>().sprite;
+
                     Destroy(SkillMachineItemObj);
+                }
+                //ø™∆Ù ±“Ù–ß
+                else
+                {
+                    PickUpEvent();
                 }
             }
         }

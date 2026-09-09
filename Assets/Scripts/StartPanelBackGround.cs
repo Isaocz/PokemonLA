@@ -8,13 +8,14 @@ public class StartPanelBackGround : MonoBehaviour
 {
 
     Canvas c;
+
+
     // Start is called before the first frame update
     void Start()
     {
         Time.timeScale = 1;
         DontDestroyOnLoad(this);
         c = transform.GetChild(0).GetComponent<Canvas>();
-
     }
     private void Update()
     {
@@ -32,4 +33,6 @@ public class StartPanelBackGround : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+
 }

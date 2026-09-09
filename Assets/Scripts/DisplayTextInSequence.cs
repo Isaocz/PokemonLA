@@ -10,6 +10,9 @@ public class DisplayTextInSequence : MonoBehaviour
     /// </summary>
     public GameObject GameObjectNextText;
 
+    /// <summary>
+    /// 下一个播放的延迟时间
+    /// </summary>
     public float NextTime;
 
     public float Waittime;
@@ -31,12 +34,21 @@ public class DisplayTextInSequence : MonoBehaviour
     public int TargetScore = -1;
     public int DisplayScore = 0;
 
-    //技术是否结束
+    //计数是否结束
     bool isCounterOver;
 
 
     public ScrollRect ParentScrollRect;
 
+
+    /// <summary>
+    /// 循环音效
+    /// </summary>
+    //LoopingSEAudioPlayer LoopSEPlayer;
+    /// <summary>
+    /// 得分音效片段
+    /// </summary>
+    //public AudioClip ScoreClip;
 
 
     public void DisplayNextText()
@@ -56,7 +68,9 @@ public class DisplayTextInSequence : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// 计数类型
+    /// </summary>
     public enum ScoreType
     {
         无计数,
@@ -77,12 +91,37 @@ public class DisplayTextInSequence : MonoBehaviour
     }
     public ScoreType scoreType;
 
+
+    /// <summary>
+    /// 计数完毕音效
+    /// </summary>
+    public enum ScoreOverSEType
+    {
+        NormalSE,
+        BigSE,
+        Line,
+        ScorePunish,
+    }
+    public ScoreOverSEType scoreOverSEType;
+
+
+
     private void Start()
     {
         if (StartPanelPlayerData.PlayerData != null && StartPanelPlayerData.PlayerData.Player != null && scoreType == ScoreType.糖果)
         {
             transform.GetChild(0).GetComponent<Image>().sprite = StartPanelPlayerData.PlayerData.Player.PlayerCandyHD;
         }
+
+        //分割线音效
+        if (scoreType == ScoreType.无计数 && scoreOverSEType == ScoreOverSEType.Line)
+        {
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonUISFXList.Line, Vector2.zero, true);
+            }
+        }
+        //LoopSEPlayer = transform.GetComponent<LoopingSEAudioPlayer>();
     }
 
     public bool isThisTextIngore()
@@ -187,6 +226,7 @@ public class DisplayTextInSequence : MonoBehaviour
         if ((scoreType == ScoreType.完成本次冒险 || scoreType == ScoreType.跃跃欲试的冒险家 )) {
             isCounterOver = true;
             ScoreText.GetComponent<Animator>().SetTrigger("Shine");
+            ScoreCountOverSE();
             DisplayOver();
         }
         else if (scoreType == ScoreType.冒险团经验条)
@@ -194,12 +234,18 @@ public class DisplayTextInSequence : MonoBehaviour
             GroupLevelBar g = GetComponent<GroupLevelBar>();
             if (g != null)
             {
+                //有存档
                 if (SaveLoader.saveLoader != null)
                 {
+                    //Debug.Log("scorecountBefore" + "+" + g.per + "+" + g.Per);
                     SaveData save = SaveLoader.saveLoader.saveData;
                     g.SetLevelBar(save.GroupLevel);
-                    g.Per += Mathf.Clamp((float)((float)ScoreCounter.Instance.TotalAP() - GroupLevelBar.ExpRequired[save.GroupLevel]) / (float)(GroupLevelBar.ExpRequired[save.GroupLevel + 1] - GroupLevelBar.ExpRequired[save.GroupLevel]), 0.0f, 1.0f);
+                    g.Per += Mathf.Clamp((float)((float)ScoreCounter.Instance.TotalAP()) / (float)(GroupLevelBar.ExpRequired[save.GroupLevel + 1] - GroupLevelBar.ExpRequired[save.GroupLevel]), 0.0f, 1.0f);
+                    //Debug.Log("float" + "+" + Mathf.Clamp((float)((float)ScoreCounter.Instance.TotalAP() - GroupLevelBar.ExpRequired[save.GroupLevel]) / (float)(GroupLevelBar.ExpRequired[save.GroupLevel + 1] - GroupLevelBar.ExpRequired[save.GroupLevel]), 0.0f, 1.0f));
+                    //Debug.Log(ScoreCounter.Instance.TotalAP() + "+" + GroupLevelBar.ExpRequired[save.GroupLevel] + "+" + GroupLevelBar.ExpRequired[save.GroupLevel + 1] + "+" + GroupLevelBar.ExpRequired[save.GroupLevel]);
+                    //Debug.Log("scorecount" + "+" + g.per + "+" + g.Per);
                 }
+                // 无存档时 示例用
                 else
                 {
                     g.Per = Mathf.Clamp(g.Per + ((float)(ScoreCounter.Instance.TotalAP() / (float)(GroupLevelBar.ExpRequired[0 + 1] - GroupLevelBar.ExpRequired[0]))), 0.0f, 1.0f);
@@ -212,6 +258,11 @@ public class DisplayTextInSequence : MonoBehaviour
             if (TargetScore > 0) {
                 PlusScore = Mathf.Clamp(TargetScore / 10, 1, TargetScore);
                 StartCoroutine(Score(Waittime));
+                //计分循环音效
+                //if (LoopSEPlayer != null)
+                //{
+                //    LoopSEPlayer.PlayLoop(ScoreClip);
+                //}
             }
             else if (TargetScore == 0 && !isCounterOver) 
             {
@@ -219,11 +270,13 @@ public class DisplayTextInSequence : MonoBehaviour
                 ScoreText.text = DisplayScore.ToString();
                 isCounterOver = true;
                 ScoreText.GetComponent<Animator>().SetTrigger("Shine");
+                ScoreCountOverSE();
                 DisplayOver();
             }
 
         }
     }
+
 
 
 
@@ -248,11 +301,27 @@ public class DisplayTextInSequence : MonoBehaviour
                 }
             }
             DisplayScore += PlusScore;
+
+
+
             if (TargetScore >= 0 && DisplayScore >= TargetScore && !isCounterOver)
             {
                 isCounterOver = true;
                 ScoreText.GetComponent<Animator>().SetTrigger("Shine");
+                ScoreCountOverSE();
                 DisplayOver();
+            }
+            else
+            {
+                //循环得分音效
+                if (scoreType == ScoreType.糖果)
+                {
+                    AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonUISFXList.ScoreLoop, Vector2.zero, true, Mathf.Lerp(0.2f, 0.6f, (float)DisplayScore / (float)TargetScore));
+                }
+                else
+                {
+                    AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonUISFXList.ScoreLoop, Vector2.zero, true, 0.55f);
+                }
             }
         }
     }
@@ -298,4 +367,26 @@ public class DisplayTextInSequence : MonoBehaviour
         //DisplayNextText();
     }
 
+
+
+    /// <summary>
+    /// 计数完后音效
+    /// </summary>
+    public void ScoreCountOverSE()
+    {
+        if (AudioManager.Instance != null) {
+            switch (scoreOverSEType)
+            {
+                case ScoreOverSEType.NormalSE:
+                    AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonUISFXList.GetScore, Vector2.zero, true);
+                    break;
+                case ScoreOverSEType.BigSE:
+                    AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonUISFXList.GetBigScore, Vector2.zero, true);
+                    break;
+                case ScoreOverSEType.ScorePunish:
+                    AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonUISFXList.ScorePunish, Vector2.zero, true);
+                    break;
+            } 
+        }
+    }
 }

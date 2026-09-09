@@ -8,14 +8,25 @@ public class BackGroundMusic : MonoBehaviour
     public AudioSource BGM;
     public static BackGroundMusic StaticBGM;
 
+    //地图层级音乐
     public AudioClip MiSiRoTown;
+    public AudioClip ForestMusic2;
     public AudioClip CaveMusic;
+    public AudioClip CaveMusic2;
+    public AudioClip SnowMusic;
+    public AudioClip SnowMusic2;
+
+
+
+    //地图共通音乐
     public AudioClip PC;
     public AudioClip Store;
     public AudioClip Boss;
     public AudioClip BossWin;
     public AudioClip MewPhase1;
     public AudioClip MewPhase2;
+
+
 
     public float transitionSpeed = 1.0f; // 淡入淡出的速度
     private float currentVolume = 0.0f; // 当前音量
@@ -44,40 +55,8 @@ public class BackGroundMusic : MonoBehaviour
         BGM.Pause();
     }
 
-    public void ChangeBGMToTown()
-    {
-        if (BGM.clip != TownMusic()) { BGM.clip = TownMusic(); BGM.Play(); }
-    }
 
-    public void ChangeBGMToPC()
-    {
-        if (BGM.clip != PC) { BGM.clip = PC; BGM.Play(); }
-    }
 
-    public void ChangeBGMToStore()
-    {
-        if (BGM.clip != Store) { BGM.clip = Store; BGM.Play(); }
-    }
-
-    public void ChangeBGMToBoss()
-    {
-        if (BGM.clip != Boss) { BGM.clip = Boss; BGM.Play(); }
-    }
-
-    public void ChangeBGMToBossWin()
-    {
-        if (BGM.clip != BossWin) { BGM.clip = BossWin; BGM.Play(); }
-    }
-    public void ChangeBGMToMew(int phase)
-    {
-        switch (phase)
-        {
-            case 1: if (BGM.clip != MewPhase1) { BGM.clip = MewPhase1; BGM.Play(); } break;
-            case 2: if (BGM.clip != MewPhase2) { BGM.clip = MewPhase2; BGM.Play(); } break;
-            default:break;
-        }
-    
-    }
     void Update()
     {
         // 如果目标音量与当前音量不同，则进行渐变
@@ -145,20 +124,112 @@ public class BackGroundMusic : MonoBehaviour
 
 
 
+
+
+
+
+
+    /// <summary>
+    /// 根据地图获取基本音乐
+    /// </summary>
+    /// <returns></returns>
     AudioClip TownMusic()
     {
         AudioClip OutPut = MiSiRoTown;
-        switch (MapCreater.StaticMap.NowMapType)
+        switch (MapCreater.StaticMap.NowMapBgmType)
         {
-            case MapCreater.MapType.Forest:
+            case MapCreater.MapBgmType.FirstForest:
                 OutPut = MiSiRoTown;
                 break;
-            case MapCreater.MapType.Cave:
+            case MapCreater.MapBgmType.Forest:
+                OutPut = ForestMusic2;
+                break;
+            case MapCreater.MapBgmType.Cave:
                 OutPut = CaveMusic;
+                break;
+            case MapCreater.MapBgmType.Cave2:
+                OutPut = CaveMusic2;
+                break;
+            case MapCreater.MapBgmType.Snow:
+                OutPut = SnowMusic;
+                break;
+            case MapCreater.MapBgmType.Snow2:
+                OutPut = SnowMusic2;
                 break;
         }
         return OutPut;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ///================================Bgm切换部分=====================================
+    ///================================Bgm切换部分=====================================
+    ///================================Bgm切换部分=====================================
+    public void ChangeBGMToTown()
+    {
+        if (BGM.clip != TownMusic()) { BGM.clip = TownMusic(); BGM.Play(); }
+    }
+
+    public void ChangeBGMToPC()
+    {
+        if (BGM.clip != PC) { BGM.clip = PC; BGM.Play(); }
+    }
+
+    public void ChangeBGMToStore()
+    {
+        if (BGM.clip != Store) { BGM.clip = Store; BGM.Play(); }
+    }
+
+    public void ChangeBGMToBoss()
+    {
+        if (BGM.clip != Boss) { BGM.clip = Boss; BGM.Play(); }
+    }
+
+    public void ChangeBGMToBossWin()
+    {
+        if (BGM.clip != BossWin) { BGM.clip = BossWin; BGM.Play(); }
+    }
+    public void ChangeBGMToMew(int phase)
+    {
+        switch (phase)
+        {
+            case 1: if (BGM.clip != MewPhase1) { BGM.clip = MewPhase1; BGM.Play(); } break;
+            case 2: if (BGM.clip != MewPhase2) { BGM.clip = MewPhase2; BGM.Play(); } break;
+            default: break;
+        }
+
+    }
+    ///================================Bgm切换部分=====================================
+    ///================================Bgm切换部分=====================================
+    ///================================Bgm切换部分=====================================
+
 
 
 }

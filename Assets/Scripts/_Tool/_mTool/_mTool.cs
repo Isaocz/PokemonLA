@@ -8,6 +8,23 @@ using System.Linq;
 public class _mTool : MonoBehaviour
 {
 
+    /**
+     * ！！！！！！！！添加新工具前确定有无重复！！！！！！！！
+     * 
+     * =================00通用工具目录=====================
+     * =================01数学类=====================
+     * =================02Transfrom类=====================
+     * =================03List类=====================
+     * =================04点判断类=====================
+     * =================05技能类=====================
+     * =================06文本类=====================
+     * =================99杂项类=====================
+    **/
+
+
+    //======================================01数学类==========================================
+    //======================================01数学类==========================================
+    //======================================01数学类==========================================
 
     static public List<Vector2> StepCircle_8 = new List<Vector2>
     { new Vector2(1,0) , new Vector2(0.7071067f ,0.7071067f ) ,
@@ -40,12 +57,6 @@ public class _mTool : MonoBehaviour
         return Output;
     }
 
-
-
-
-
-
-
     public static float Angle_360(Vector3 from_, Vector3 to_)
     {
         if (from_.x <= 0)
@@ -62,27 +73,13 @@ public class _mTool : MonoBehaviour
             return 360 - Vector3.Angle(from_, to_);
     }
 
-
-    /// <summary>
-    /// 检查某个技能的技能标签中是否含有某个标签（如检查某个技能的所有标签中是否含有接触性标签）
-    /// </summary>
-    public static bool ContainsSkillTag( Skill.SkillTagEnum[] TagList , Skill.SkillTagEnum TargetTag)
-    {
-        bool OutPut = false;
-        foreach (Skill.SkillTagEnum t in TagList)
-        {
-            if (t == TargetTag) { OutPut = true; break; }
-        }
-        return OutPut;
-    }
-
     /// <summary>
     /// 输出目标向量的正规方向
     /// </summary>
     /// <returns></returns>
-    public static Vector2 MainVector2( Vector2 Input )
+    public static Vector2 MainVector2(Vector2 Input)
     {
-        Vector2 OutPut = new Vector2(1,0);
+        Vector2 OutPut = new Vector2(1, 0);
         float a = _mTool.Angle_360Y(Input, Vector2.right);
         if (a >= 45 && a < 135)
         {
@@ -102,7 +99,7 @@ public class _mTool : MonoBehaviour
         }
         return OutPut;
 
-        
+
     }
 
     /// <summary>
@@ -146,63 +143,47 @@ public class _mTool : MonoBehaviour
         return P + D * t;
     }
 
-
-
-
-
-
-
-
+    /// <summary>
+    /// 输出目标向量到斜交方向
+    /// </summary>
+    /// <param name="Input"></param>
+    /// <returns></returns>
     public static Vector2 TiltMainVector2(Vector2 Input)
     {
         return new Vector2(((Input.x < 0) ? -1 : 1), ((Input.y < 0) ? -1 : 1));
     }
 
-    public static string[] Tips = new string[]
+    /// <summary>
+    /// 能力随提升段衰减的函数，可用于其他衰减 , isClearBody为是否有特性恒净之躯，有的话减算幅度降低
+    /// </summary>
+    /// <param name="Level"></param>
+    /// <returns></returns>
+    public static float AbllityChangeFunction(int Level, bool isClearBody = false)
     {
-        "某一属性的抵抗力每提升一级，受到该属性的伤害就会减少为原本的80%",
-        "某一属性的抵抗力每下降一级，受到该属性的伤害就会增加为原本的120%",
-        "每个区域都会有精灵中心，友好商店，技能商店",
-        "不要忘了在精灵中心查看邮件",
-        "烧伤会让攻击下降，中毒会让特攻下降",
-        "灵感爆发时会想到新的技能",
-        "注意攒钱，不能做小偷！",
-        "野生的草丛中可能有遗失的道具，注意检查",
-        "打败头目宝可梦获得的奖励可以用于在技能商店学习技能",
-        "一次性道具在使用后会消失",
-        "携带被动道具后就会自动触发这个被动道具的效果",
-        "能力变化和属性抵抗力可以在菜单界面查看",
-        "被动道具的效果可以在背包界面查看",
-        "离开当前区域前往下一区域时注意看路牌！以便准备下一区域需要的道具",
-        "同属性招式间存在一些连携效果",
-        "有些适合植物生长的区域会出现果树，注意检查",
-        "注意地菱和毒菱",
-        "大体型的宝可梦可以直接踏扁一些障碍物，但是也会变得不可避免地无法通过一些陷阱",
-        "小体型的宝可梦可以轻松的通过复杂的迷宫，但是对巨大的障碍物毫无办法",
-        "可以在精灵中心的杂志架处查看更多提示",
-        "可以使用零花钱刷新友好商店的商品，但是会越来越贵，商品也会越来越少",
-        "因为太晶能量稀疏，本地区的太晶化与其他地区不太相同。本地区太晶化的效果更像是获得了一个额外的属性。",
-        "头目宝可梦有强大的生命力，在受到过高伤害时可以抵御一部分",
-        "可以在Skill界面通过拖动技能改变技能的顺序，搭配出更易于操作的组合",
-        "不要在梦幻旁边释放技能，否则后果自负！",
-        "如果被障碍物困住，可以在原地等待，使用紧急逃脱按钮脱离困境"
-    };
+        float Output = 1.0f;
+        int AbllityLevel = Mathf.Clamp(Level, -30, 30);
+        if (AbllityLevel >= 0) { Output = Mathf.Pow(Mathf.Log10(4.0f * (float)AbllityLevel + 1.0f), 2.85f) + 1.0f; }
+        else { Output = Mathf.Pow((isClearBody ? 1.1f : 1.3f), AbllityLevel); }
 
-
-    public static void SetSeed()
-    {
-        if (InitializePlayerSetting.GlobalPlayerSetting != null) { Random.InitState(InitializePlayerSetting.GlobalPlayerSetting.RoundSeed); }
+        return Output;
     }
 
-    [DllImport("user32.dll", EntryPoint = "keybd_event")]
+    //======================================01数学类==========================================
+    //======================================01数学类==========================================
+    //======================================01数学类==========================================
 
-    public static extern void Keybd_event(
-        byte bvk,//虚拟键值 ESC键对应的是27
-        byte bScan,//0
-        int dwFlags,//0为按下，1按住，2释放
-        int dwExtraInfo//
-    );
 
+
+
+
+
+
+
+
+
+    //======================================02Transfrom类==========================================
+    //======================================02Transfrom类==========================================
+    //======================================02Transfrom类==========================================
 
     /// <summary>
     /// 获得某一Transform的最后一个未被禁用的孙对象
@@ -275,29 +256,13 @@ public class _mTool : MonoBehaviour
         }
     }
 
-
-
-    /// <summary>
-    /// 能力随提升段衰减的函数，可用于其他衰减 , isClearBody为是否有特性恒净之躯，有的话减算幅度降低
-    /// </summary>
-    /// <param name="Level"></param>
-    /// <returns></returns>
-    public static float AbllityChangeFunction(int Level , bool isClearBody = false )
-    {
-        float Output = 1.0f;
-        int AbllityLevel = Mathf.Clamp(Level , -30 , 30);
-        if (AbllityLevel >= 0) { Output = Mathf.Pow(Mathf.Log10(4.0f * (float)AbllityLevel + 1.0f), 2.85f) + 1.0f; }
-        else            { Output = Mathf.Pow((isClearBody?1.1f: 1.3f) , AbllityLevel); }
-        
-        return Output;
-    }
-
     /// <summary>
     /// 删除某一对象所有的子对象
     /// </summary>
     public static void RemoveAllChild(GameObject Parent)
     {
-        if (Parent.transform.childCount != 0) {
+        if (Parent.transform.childCount != 0)
+        {
             for (int i = 0; i < Parent.transform.childCount; i++)
             {
                 //Debug.Log("Destroy");
@@ -306,12 +271,11 @@ public class _mTool : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// 解除某一对象旗下所有的粒子特效，将这些粒子特效放置于最外场景，并且使他们不再循环并播放完毕后删除
     /// SpeedUp=加速粒子效果 1.0f时不加速
     /// </summary>
-    public static void RemoveAllPSChild(GameObject Parent , float SpeedUp = 1.0f)
+    public static void RemoveAllPSChild(GameObject Parent, float SpeedUp = 1.0f)
     {
         if (Parent.transform.childCount != 0)
         {
@@ -334,7 +298,7 @@ public class _mTool : MonoBehaviour
                     var psmain = ps.main;
                     psmain.loop = false;
                     psmain.stopAction = ParticleSystemStopAction.Destroy;
-                    if(SpeedUp != 1.0f)
+                    if (SpeedUp != 1.0f)
                     {
                         psmain.simulationSpeed = SpeedUp;
                     }
@@ -345,8 +309,6 @@ public class _mTool : MonoBehaviour
             }
         }
     }
-
-
 
     /// <summary>
     /// 获取某个Transform旗下的的所有T
@@ -368,7 +330,6 @@ public class _mTool : MonoBehaviour
         return Output;
     }
 
-
     /// <summary>
     /// 获取某个Transform第一层子对象中的T
     /// </summary>
@@ -388,11 +349,26 @@ public class _mTool : MonoBehaviour
         return Output;
     }
 
+    //======================================02Transfrom类==========================================
+    //======================================02Transfrom类==========================================
+    //======================================02Transfrom类==========================================
+
+
+
+
+
+
+
+
+
+    //======================================03List类==========================================
+    //======================================03List类==========================================
+    //======================================03List类==========================================
 
     /// <summary>
     /// 给字符串的每个字符间插入一个空格
     /// </summary>
-    public static string AddSpaceInString( string s )
+    public static string AddSpaceInString(string s)
     {
         StringBuilder spacedString = new StringBuilder();
 
@@ -417,9 +393,8 @@ public class _mTool : MonoBehaviour
     /// <param name="logList"></param>
     public static void DebugLogList<T>(List<T> logList)
     {
-        Debug.Log(string.Join("," , logList ));
+        Debug.Log(string.Join(",", logList));
     }
-
 
     /// <summary>
     /// 排空某个List
@@ -428,7 +403,6 @@ public class _mTool : MonoBehaviour
     {
         list.RemoveAll(item => item == null);
     }
-
 
     /// <summary>
     /// 乱序洗牌List
@@ -444,6 +418,9 @@ public class _mTool : MonoBehaviour
         }
     }
 
+    //======================================03List类==========================================
+    //======================================03List类==========================================
+    //======================================03List类==========================================
 
 
 
@@ -451,6 +428,157 @@ public class _mTool : MonoBehaviour
 
 
 
+
+
+    //======================================04点判断类==========================================
+    //======================================04点判断类==========================================
+    //======================================04点判断类==========================================
+
+    /// <summary>
+    /// 多用于检测敌人传送后检测传送的点有没有障碍物
+    /// </summary>
+    /// <returns></returns>
+    static public bool isThisPointEmpty(Vector3 P)
+    {
+        RaycastHit2D SearchEmpty01 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.left + Vector2.up, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
+        RaycastHit2D SearchEmpty02 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.left + Vector2.down, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
+        RaycastHit2D SearchEmpty03 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.right + Vector2.up, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
+        RaycastHit2D SearchEmpty04 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.right + Vector2.down, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
+        RaycastHit2D SearchEmpty05 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.left, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
+        RaycastHit2D SearchEmpty06 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.down, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
+        RaycastHit2D SearchEmpty07 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.right, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
+        RaycastHit2D SearchEmpty08 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.down, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
+        return !SearchEmpty01 && !SearchEmpty02 && !SearchEmpty03 && !SearchEmpty04 && !SearchEmpty05 && !SearchEmpty06 && !SearchEmpty07 && !SearchEmpty08;
+    }
+
+    /// <summary>
+    /// 判断某点是否在摄像机内
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
+    static public bool IsInCameraView(Vector3 pos)
+    {
+        Camera cam = Camera.main;
+        if (cam == null) return true; // 没有摄像机就默认播放
+
+        Plane[] planes = GeometryUtility.CalculateFrustumPlanes(cam);
+
+        // 用一个极小的包围盒来测试点是否在视野内
+        Bounds bounds = new Bounds(pos, Vector3.one * 0.1f);
+
+        return GeometryUtility.TestPlanesAABB(planes, bounds);
+    }
+
+    //======================================04点判断类==========================================
+    //======================================04点判断类==========================================
+    //======================================04点判断类==========================================
+
+
+
+
+
+
+
+
+
+    //======================================05技能类==========================================
+    //======================================05技能类==========================================
+    //======================================05技能类==========================================
+
+    /// <summary>
+    /// 检查某个技能的技能标签中是否含有某个标签（如检查某个技能的所有标签中是否含有接触性标签）
+    /// </summary>
+    public static bool ContainsSkillTag(Skill.SkillTagEnum[] TagList, Skill.SkillTagEnum TargetTag)
+    {
+        bool OutPut = false;
+        foreach (Skill.SkillTagEnum t in TagList)
+        {
+            if (t == TargetTag) { OutPut = true; break; }
+        }
+        return OutPut;
+    }
+
+    //======================================05技能类==========================================
+    //======================================05技能类==========================================
+    //======================================05技能类==========================================
+
+
+
+
+
+
+
+
+
+
+    //======================================06文本类==========================================
+    //======================================06文本类==========================================
+    //======================================06文本类==========================================
+
+    /// <summary>
+    /// 提示词
+    /// </summary>
+    public static string[] Tips = new string[]
+    {
+        "某一属性的抵抗力每提升一级，受到该属性的伤害就会减少为原本的80%",
+        "某一属性的抵抗力每下降一级，受到该属性的伤害就会增加为原本的120%",
+        "每个区域都会有精灵中心，友好商店，技能商店",
+        "不要忘了在精灵中心查看邮件",
+        "烧伤会让攻击下降，中毒会让特攻下降",
+        "灵感爆发时会想到新的技能",
+        "注意攒钱，不能做小偷！",
+        "野生的草丛中可能有遗失的道具，注意检查",
+        "打败头目宝可梦获得的奖励可以用于在技能商店学习技能",
+        "一次性道具在使用后会消失",
+        "携带被动道具后就会自动触发这个被动道具的效果",
+        "能力变化和属性抵抗力可以在菜单界面查看",
+        "被动道具的效果可以在背包界面查看",
+        "离开当前区域前往下一区域时注意看路牌！以便准备下一区域需要的道具",
+        "同属性招式间存在一些连携效果",
+        "有些适合植物生长的区域会出现果树，注意检查",
+        "注意地菱和毒菱",
+        "大体型的宝可梦可以直接踏扁一些障碍物，但是也会变得不可避免地无法通过一些陷阱",
+        "小体型的宝可梦可以轻松的通过复杂的迷宫，但是对巨大的障碍物毫无办法",
+        "可以在精灵中心的杂志架处查看更多提示",
+        "可以使用零花钱刷新友好商店的商品，但是会越来越贵，商品也会越来越少",
+        "因为太晶能量稀疏，本地区的太晶化与其他地区不太相同。本地区太晶化的效果更像是获得了一个额外的属性。",
+        "头目宝可梦有强大的生命力，在受到过高伤害时可以抵御一部分",
+        "可以在Skill界面通过拖动技能改变技能的顺序，搭配出更易于操作的组合",
+        "不要在梦幻旁边释放技能，否则后果自负！",
+        "如果被障碍物困住，可以在原地等待，使用紧急逃脱按钮脱离困境"
+    };
+
+    //======================================06文本类==========================================
+    //======================================06文本类==========================================
+    //======================================06文本类==========================================
+
+
+
+
+
+
+
+
+
+
+
+    //======================================99杂项类==========================================
+    //======================================99杂项类==========================================
+    //======================================99杂项类==========================================
+
+    public static void SetSeed()
+    {
+        if (InitializePlayerSetting.GlobalPlayerSetting != null) { Random.InitState(InitializePlayerSetting.GlobalPlayerSetting.RoundSeed); }
+    }
+
+    [DllImport("user32.dll", EntryPoint = "keybd_event")]
+
+    public static extern void Keybd_event(
+        byte bvk,//虚拟键值 ESC键对应的是27
+        byte bScan,//0
+        int dwFlags,//0为按下，1按住，2释放
+        int dwExtraInfo//
+    );
 
     /// <summary>
     /// 忽略某个特定碰撞箱的射线检测
@@ -483,23 +611,24 @@ public class _mTool : MonoBehaviour
         return closest;
     }
 
+    //======================================99杂项类==========================================
+    //======================================99杂项类==========================================
+    //======================================99杂项类==========================================
 
 
-    /// <summary>
-    /// 多用于检测敌人传送后检测传送的点有没有障碍物
-    /// </summary>
-    /// <returns></returns>
-    static public bool isThisPointEmpty(Vector3 P)
-    {
-        RaycastHit2D SearchEmpty01 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.left + Vector2.up, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
-        RaycastHit2D SearchEmpty02 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.left + Vector2.down, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
-        RaycastHit2D SearchEmpty03 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.right + Vector2.up, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
-        RaycastHit2D SearchEmpty04 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.right + Vector2.down, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
-        RaycastHit2D SearchEmpty05 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.left, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
-        RaycastHit2D SearchEmpty06 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.down, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
-        RaycastHit2D SearchEmpty07 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.right, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
-        RaycastHit2D SearchEmpty08 = Physics2D.Raycast(new Vector2(P.x, P.y + 0.25f), Vector2.down, 0.6f, LayerMask.GetMask("Enviroment", "Water"));
-        return !SearchEmpty01 && !SearchEmpty02 && !SearchEmpty03 && !SearchEmpty04 && !SearchEmpty05 && !SearchEmpty06 && !SearchEmpty07 && !SearchEmpty08;
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

@@ -12,7 +12,7 @@ public class Drifblim : Empty
     public Vector3 InitialDirection;
     public DrifloonExplosion ExplosionMega;
     public DrifloonExplosion ExplosionSmall;
-    public DrifblimShadowBall ShadowBallPrefab;
+    public DrifblimShadowBall2 ShadowBallPrefab;
 
 
     private Vector3 direction;
@@ -308,10 +308,10 @@ public class Drifblim : Empty
             Timer_CD_ShadowBall = 0;
             float startp = 1.5f;
             List<Vector2> dir = new List<Vector2> { new Vector2(1, 1), new Vector2(-1, 1), new Vector2(1, -1), new Vector2(-1, -1), };
-            DrifblimShadowBall s0 = Instantiate(ShadowBallPrefab, ParentPokemonRoom.EnsurePointReachesRoom((Vector2)transform.position + startp * dir[0]), Quaternion.identity);
-            DrifblimShadowBall s1 = Instantiate(ShadowBallPrefab, ParentPokemonRoom.EnsurePointReachesRoom((Vector2)transform.position + startp * dir[1]), Quaternion.identity);
-            DrifblimShadowBall s2 = Instantiate(ShadowBallPrefab, ParentPokemonRoom.EnsurePointReachesRoom((Vector2)transform.position + startp * dir[2]), Quaternion.identity);
-            DrifblimShadowBall s3 = Instantiate(ShadowBallPrefab, ParentPokemonRoom.EnsurePointReachesRoom((Vector2)transform.position + startp * dir[3]), Quaternion.identity);
+            DrifblimShadowBall2 s0 = Instantiate(ShadowBallPrefab, ParentPokemonRoom.EnsurePointReachesRoom((Vector2)transform.position + startp * dir[0]), Quaternion.identity);
+            DrifblimShadowBall2 s1 = Instantiate(ShadowBallPrefab, ParentPokemonRoom.EnsurePointReachesRoom((Vector2)transform.position + startp * dir[1]), Quaternion.identity);
+            DrifblimShadowBall2 s2 = Instantiate(ShadowBallPrefab, ParentPokemonRoom.EnsurePointReachesRoom((Vector2)transform.position + startp * dir[2]), Quaternion.identity);
+            DrifblimShadowBall2 s3 = Instantiate(ShadowBallPrefab, ParentPokemonRoom.EnsurePointReachesRoom((Vector2)transform.position + startp * dir[3]), Quaternion.identity);
             s0.empty = this; s0.LaunchNotForce(dir[0], SHADOWBALL_SPEED);
             s1.empty = this; s1.LaunchNotForce(dir[1], SHADOWBALL_SPEED);
             s2.empty = this; s2.LaunchNotForce(dir[2], SHADOWBALL_SPEED);
@@ -394,7 +394,8 @@ public class Drifblim : Empty
     {
         DrifloonExplosion boom = Instantiate(ExplosionSmall, p, Quaternion.identity);
         //±¨’®“Ù–ß
-        AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.Explosion, transform.position);
+        if (AudioManager.Instance != null) { AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.Explosion, transform.position); }
+        
         boom.empty = this;
         Destroy(boom.gameObject, 5f);
     }

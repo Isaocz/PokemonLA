@@ -167,6 +167,10 @@ public class PlayerData : MonoBehaviour
             ScoreCounter.Instance.itemBounsAP += APBounsPoint.ItemBouns;
         }
 
+        //音效
+        if (AudioManager.Instance != null) { AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.GetPassiveItem, transform.position); }
+
+        //获取道具
         int ItemIndex = GetPassiveItem.PassiveItemIndex;
         switch (ItemIndex)
         {
@@ -968,24 +972,28 @@ public class PlayerData : MonoBehaviour
 
         }
 
+        //刷新能力
         player.ReFreshAbllityPoint();
         GetPassiveItemList.Add(ItemIndex);
         IsPassiveGetList[ItemIndex] = true;
 
-        //道具28 树果烹饪指南
-        if (IsPassiveGetList[28] && GetPassiveItem.ItemTypeTag != null)
+        //拾取后立即生效
         {
-            foreach (int i in GetPassiveItem.ItemTypeTag)
+            //道具28 树果烹饪指南
+            if (IsPassiveGetList[28] && GetPassiveItem.ItemTypeTag != null)
             {
-                if (i == 1) { player.ChangeHp(Mathf.Clamp(player.maxHp / 16, 1, 10), 0, 19); }
+                foreach (int i in GetPassiveItem.ItemTypeTag)
+                {
+                    if (i == 1) { player.ChangeHp(Mathf.Clamp(player.maxHp / 16, 1, 10), 0, 19); }
+                }
             }
-        }
-        //道具100 宝可方块套装
-        if (IsPassiveGetList[100] && GetPassiveItem.ItemTypeTag != null)
-        {
-            foreach (int i in GetPassiveItem.ItemTypeTag)
+            //道具100 宝可方块套装
+            if (IsPassiveGetList[100] && GetPassiveItem.ItemTypeTag != null)
             {
-                if (i == 1) { player.ChangeHPW(new Vector2Int(Random.Range(1, 7), 3)); }
+                foreach (int i in GetPassiveItem.ItemTypeTag)
+                {
+                    if (i == 1) { player.ChangeHPW(new Vector2Int(Random.Range(1, 7), 3)); }
+                }
             }
         }
     }

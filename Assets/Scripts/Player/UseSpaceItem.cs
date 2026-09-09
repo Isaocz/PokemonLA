@@ -443,6 +443,9 @@ public class UseSpaceItem : MonoBehaviour
 
         }
 
+        //道具使用音效
+        if (AudioManager.Instance != null && spaceItem.UseItemSEClip != null) { AudioManager.Instance.CommonBasicSFXPlayer.PlayClip(spaceItem.UseItemSEClip, player.transform.position); }
+
         player.spaceItem = null;
         player.SpaceItemImage.color = new Color(0, 0, 0, 0);
         player.SpaceItemImage.sprite = null;

@@ -30,10 +30,18 @@ public class PokemonBall : IteamPickUp
     public PassiveItemPool.PoolType ItemPoolType;
 
 
+    /// <summary>
+    /// 球预打开
+    /// </summary>
+    public bool PreOpen = false;
+
+
     private void Start()
     {
         animator = GetComponent<Animator>();
         PassiveItemObj = transform.GetChild(3).gameObject;
+        //预打开
+        if (PreOpen) { OpenBall(); };
     }
 
     // Start is called before the first frame update
@@ -95,6 +103,10 @@ public class PokemonBall : IteamPickUp
                 Destroy(PassiveItemObj);
                 isEmpty = true;
             }
+            else
+            {
+                PickUpEvent();
+            }
         }
     }
 
@@ -133,6 +145,7 @@ public class PokemonBall : IteamPickUp
     public void OpenBall()
     {
         isPickUp = true;
+        PickUpEvent();
     }
 
 

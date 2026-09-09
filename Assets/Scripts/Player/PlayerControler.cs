@@ -1293,18 +1293,36 @@ public class PlayerControler : PlayerPokemon
     /// <param name="SkillType"></param>
     public void ChangeHp(float ChangePoint , float ChangePointSp , int SkillType, bool Crit = false)
     {
-
+        //回血
         if (ChangePoint > 0 || ChangePointSp > 0)
         {
+            //回血前血量
+            int ChangeHP = Hp;
+
+            //执行回血
             int Recover = (int)(ChangePoint + ChangePointSp);
             nowHp = Mathf.Clamp(nowHp + (int)(ChangePoint+ChangePointSp), 0, maxHp);
-            DmgShow(Recover, true, Crit);
 
             //血量上升时对血条UI输出当前血量，并调用血条上升的函数
-            UIHealthBar.Instance.Per = (float)nowHp / (float)maxHp;
-            UIHealthBar.Instance.NowHpText.text = string.Format("{000}", nowHp);
-            UIHealthBar.Instance.ChangeHpUp();
+            {
+                UIHealthBar.Instance.Per = (float)nowHp / (float)maxHp;
+                UIHealthBar.Instance.NowHpText.text = string.Format("{000}", nowHp);
+                UIHealthBar.Instance.ChangeHpUp();
+            }
+
+            //确实回血了
+            ChangeHP = ChangeHP - Hp;
+
+            if (ChangeHP < 0)
+            {
+                //回血数字显示
+                DmgShow(Recover, true, Crit);
+
+                //回血音效
+                if (AudioManager.Instance != null) { AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.HealUp, transform.position); }
+            }
         }
+        //扣血
         else
         {
             PokemonType.TypeEnum enumVaue = (PokemonType.TypeEnum)SkillType;
@@ -1394,7 +1412,7 @@ public class PlayerControler : PlayerPokemon
                     DmgShow(ChangeHP, false, Crit);
 
                     //受击音效
-                    AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.Damage , transform.position);
+                    if (AudioManager.Instance != null){AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.Damage, transform.position);}
 
                     //受击动画
                     animator.SetTrigger("Hit");
@@ -1975,6 +1993,10 @@ public class PlayerControler : PlayerPokemon
             ScoreCounter.Instance.SkillBounsAP += APBounsPoint.SkillBouns;
         }
 
+        //学技能音效
+        if (AudioManager.Instance != null) { AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.GetNewSkill, transform.position); }
+
+        //学习新技能
         switch (SkillNumber)
         {
             case 1:
@@ -2032,12 +2054,16 @@ public class PlayerControler : PlayerPokemon
                 }
                 break;
         }
+
+        //清除旧技能
         if (OldSkill != null)
         {
             if (OldSkill.isPPUP == true && OldSkill.PlusSkill != null && OldSkill.PlusSkill == NewSkill) { NewSkill.isPPUP = true; }
             OldSkill.isPPUP = false;
         }
         playerSkillList.RemoveSkillInList(NewSkill, OldSkill);
+
+        //判断是否学习了进化技能
         if (!isEvolution && EvolutionSkill != null && (NewSkill.SkillIndex == EvolutionSkill.SkillIndex || NewSkill.SkillIndex == EvolutionSkill.SkillIndex+1) )
         {
             isCanEvolution = true;
@@ -2662,7 +2688,7 @@ public class PlayerControler : PlayerPokemon
         isTP = true;
         isTPMove = true;
         //传送开始音效
-        AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.TPStart , transform.position );
+        if (AudioManager.Instance != null){AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.TPStart, transform.position);}
     }
 
     /// <summary>
@@ -2699,7 +2725,7 @@ public class PlayerControler : PlayerPokemon
         UiMiniMap.Instance.SeeMapOver();
 
         //传送结束音效
-        AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.TPOver, transform.position);
+        if (AudioManager.Instance != null){AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.TPOver, transform.position);}
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 public class IteamPickUp : Item
 {
@@ -24,6 +25,7 @@ public class IteamPickUp : Item
     int BanCount;
 
     public MiniMapBlock.MiniMapBlockMarkType MiniMapBlockMark;
+
 
 
     // Start is called before the first frame update
@@ -85,4 +87,79 @@ public class IteamPickUp : Item
         }
     }
 
+    /// <summary>
+    /// 道具被拾取事件
+    /// </summary>
+    protected virtual void PickUpEvent()
+    {
+        ItemPickUpSE();
+    }
+
+    /// <summary>
+    /// 可拾取道具的音效
+    /// </summary>
+    protected void ItemPickUpSE()
+    {
+        //判空
+        if (AudioManager.Instance == null) { return; }
+        
+        //薄荷球会预打开
+        {
+            MintBall mb = transform.GetComponent<MintBall>();
+        }
+        AudioManager.CommonBasicSFXList c = AudioManager.CommonBasicSFXList.GetNormalItem;
+        //树果道具音效 树果类可拾取道具
+        if (ItemTypeTag.Contains(ItemTagEunm.树果类))
+        {
+            c = AudioManager.CommonBasicSFXList.GetBerryItem;
+        }
+        //宝宝道具音效 宝宝类可拾取道具（暂时不存在）
+        else if (ItemTypeTag.Contains(ItemTagEunm.宝宝类))
+        {
+            c = AudioManager.CommonBasicSFXList.GetBabyItem;
+        }
+        //大道具音效/精灵球打开音效 技能类道具或一次性道具或精灵球
+        else
+        {
+            HeartScale hs = transform.GetComponent<HeartScale>();
+            PPUp pp = transform.GetComponent<PPUp>(); ;
+            SeedofMastery sm = transform.GetComponent<SeedofMastery>(); ;
+            SpaceItem si = transform.GetComponent<SpaceItem>();
+            PokemonBall pb = transform.GetComponent<PokemonBall>();
+            SkillBall sb = transform.GetComponent<SkillBall>();
+            if (new Component[] { hs, pp, sm, si }.Any(x => x != null))
+            {
+                c = AudioManager.CommonBasicSFXList.GetSpeaceItem;
+            }
+            else if (new Component[] { pb, sb }.Any(x => x != null))
+            {
+                c = AudioManager.CommonBasicSFXList.NULL;
+            }
+        }
+        if (c == AudioManager.CommonBasicSFXList.NULL) { return; }
+
+        if (AudioManager.Instance != null){ AudioManager.Instance.CommonBasicSFXPlayer.Play( c , transform.position); }
+    }
+
+    /// <summary>
+    /// 可拾取道具的音效
+    /// </summary>
+    protected void ItemDropSE()
+    {
+        //判空
+        if (AudioManager.Instance == null) { return; }
+        AudioManager.CommonBasicSFXList c = AudioManager.CommonBasicSFXList.ItemDrop;
+        AudioManager.Instance.CommonBasicSFXPlayer.Play(c, transform.position); 
+    }
+
+    /// <summary>
+    /// 精灵球开启的音效
+    /// </summary>
+    protected void BallOpenSE()
+    {
+        //判空
+        if (AudioManager.Instance == null) { return; }
+        AudioManager.CommonBasicSFXList c = AudioManager.CommonBasicSFXList.BallOpen;
+        AudioManager.Instance.CommonBasicSFXPlayer.Play(c, transform.position);
+    }
 }

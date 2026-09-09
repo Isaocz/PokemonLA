@@ -14,6 +14,18 @@ public class MapCreater : MonoBehaviour
     }
     public MapType NowMapType;
 
+    //地图背景音乐的
+    public enum MapBgmType
+    {
+        FirstForest,
+        Forest,
+        Cave,
+        Cave2,
+        Snow,
+        Snow2,
+    }
+    public MapBgmType NowMapBgmType;
+
     public static MapCreater StaticMap; 
     //声明一个房间变量，表示基础的房间
     public Room StarRoom;
@@ -166,16 +178,70 @@ public class MapCreater : MonoBehaviour
 
 
 
+        //========================横向测试所有房间==============================
+        {
+            //========================测定所有房间的isClear==============================
+            //for (int i = 0; i < BaseRoomList.RoomList.Count; i++)
+            //{
+            //    if ((BaseRoomList.RoomList[i].isClear != BaseRoomList.RoomList[i].EmptyFile().childCount) || (BaseRoomList.RoomList[i].isClear != BaseRoomList.RoomList[i].transform.GetChild(3).childCount)) {
+            //        Debug.LogError("房间"+ BaseRoomList.RoomList[i].RoomNum + "的isClear数量错误");
+            //    }
+            //}
+            //========================测定所有房间的isClear==============================
 
-        //========================测定所有房间的isClear==============================
-        //for (int i = 0; i < BaseRoomList.RoomList.Count; i++)
-        //{
-        //    if ((BaseRoomList.RoomList[i].isClear != BaseRoomList.RoomList[i].EmptyFile().childCount) || (BaseRoomList.RoomList[i].isClear != BaseRoomList.RoomList[i].transform.GetChild(3).childCount)) {
-        //        Debug.LogError("房间"+ BaseRoomList.RoomList[i].RoomNum + "的isClear数量错误");
-        //    }
-        //}
-        //========================测定所有房间的isClear==============================
 
+            //========================测定所有无敌人房间掉落物是否为空==============================
+            /**
+            for (int i = 0; i < BaseRoomList.RoomList.Count; i++)
+            {
+                if (BaseRoomList.RoomList[i].isClear == 0 || BaseRoomList.RoomList[i].EmptyFile().childCount == 0) {
+                    if (BaseRoomList.RoomList[i].RandomDropItem != null) { 
+                        Debug.LogError("无敌人房间"+ BaseRoomList.RoomList[i].RoomNum + "的掉落物不为空");
+                    }
+                }
+            }
+            **/
+            //========================测定所有无敌人房间掉落物是否为空==============================
+
+
+            //========================测定所有房间的权重是否正确==============================
+            /**
+            for (int i = 0; i < BaseRoomList.RoomList.Count; i++)
+            {
+                Room r = BaseRoomList.RoomList[i];
+                int count = 0;
+                for (int j = 0; j < r.isBlockerIn.Length ; j++) {
+                    if (r.isBlockerIn[j]) { count++; }
+                }
+                if (r.RoomNum == 10013)
+                {
+                    Debug.Log("============================" + count + "+" + r.RoomWeight);
+                }
+                switch (count)
+                {
+                    case 0:
+                        if (r.RoomWeight != 1.0f) { Debug.LogError("房间" + BaseRoomList.RoomList[i].RoomNum + "生成权重不正确"); }
+                        break;
+                    case 1:
+                        if (r.RoomWeight != 1.5f) { Debug.LogError("房间" + BaseRoomList.RoomList[i].RoomNum + "生成权重不正确"); }
+                        break;
+                    case 2:
+                        if (r.RoomWeight != 2.0f) { Debug.LogError("房间" + BaseRoomList.RoomList[i].RoomNum + "生成权重不正确"); }
+                        break;
+                    case 3:
+                        if (r.RoomWeight != 3.0f) { Debug.LogError("房间" + BaseRoomList.RoomList[i].RoomNum + "生成权重不正确"); }
+                        break;
+                    case 4:
+                        Debug.LogError("房间" + BaseRoomList.RoomList[i].RoomNum + "四面都被封锁");
+                        break;
+                }
+            }
+            **/
+            //========================测定所有房间的的权重是否正确==============================
+
+
+        }
+        //========================横向测试所有房间==============================
 
 
 
