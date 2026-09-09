@@ -6,6 +6,8 @@ public class Bellibolt : Empty
 {
 
     public Projectile BelliboltThunder;
+    public Projectile BelliboltThunderRain;
+
     public SpriteRenderer ThunderMask;
     public bool isInJump;
     Animator MaskAnimator;
@@ -209,7 +211,15 @@ public class Bellibolt : Empty
 
     public void Thunder()
     {
-        Projectile ThunderOdj = Instantiate(BelliboltThunder, transform.position + 0.3f * Vector3.up, Quaternion.identity);
+        Projectile ThunderOdj = null;
+        if (Weather.GlobalWeather.isRain || Weather.GlobalWeather.isRainPlus)
+        {
+            ThunderOdj = Instantiate(BelliboltThunderRain, transform.position + 0.3f * Vector3.up, Quaternion.identity);
+        }
+        else
+        {
+            ThunderOdj = Instantiate(BelliboltThunder, transform.position + 0.3f * Vector3.up, Quaternion.identity);
+        }
         ThunderOdj.empty = this;
         MaskAnimator.SetTrigger("ChargeOver"); MaskAnimator.ResetTrigger("Charge"); ThunderMask.color = new Color(1, 1, 1, 0.6f); speed = 3; ChargeCount = 0;
     }

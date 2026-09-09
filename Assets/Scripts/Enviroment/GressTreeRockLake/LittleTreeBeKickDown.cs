@@ -19,6 +19,14 @@ public class LittleTreeBeKickDown : ObjectBeKickDown
                 BeKickDown();
             }
         }
+        if (other.gameObject.tag == "Empty")
+        {
+            Empty e = other.gameObject.GetComponent<Empty>();
+            if (e != null && e.EmptySize == Empty.EmptySizeClass.Big)
+            {
+                BeKickDown();
+            }
+        }
     }
 
     public void DestroySelf()

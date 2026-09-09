@@ -160,7 +160,18 @@ public class Voltorb : Empty
                                 AI.SetSpeed(speed, SpeedAlphaList[i]);
                             }
                         }
-                        if ( MoveTimer <= 0 )         //计时器时间到时间，结束移动状态
+                        if ((Vector2.Distance(TargetPosition, transform.position) < 1.8f) && MoveTimer < ExplosionMaskAlpha[0].z -0.5f && MoveTimer > ExplosionMaskAlpha[4].z)
+                        {
+                            MoveTimer = ExplosionMaskAlpha[4].z;
+                        }
+                        if ((Vector2.Distance(TargetPosition, transform.position) < 1.4f))
+                        {
+                            MoveOver();
+                            ExplosionStart();
+                            EmptyEcplosionEvent();
+                        }
+                        //计时器时间到时间，结束移动状态 或者在第二阶段后足够接近目标
+                        if ( MoveTimer <= 0)         
                         {
                             MoveOver();
                             ExplosionStart();
@@ -455,7 +466,7 @@ public class Voltorb : Empty
 
 
     //开始后的冷却时间
-    static float TIME_IDLE_START = 0.5f; //TODO需修改时间
+    static float TIME_IDLE_START = 0.0f; //TODO需修改时间
 
     //状态结束后的冷却时间
     static float TIME_IDLE_STATE = 0.15f; //TODO需修改时间

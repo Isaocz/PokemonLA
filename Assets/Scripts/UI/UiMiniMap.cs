@@ -63,22 +63,29 @@ public class UiMiniMap : MonoBehaviour
             {
                 string roomname = item.ToString();
                 Image roomblock = Instantiate(MiniMapPcBlock, new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
-                roomblock.rectTransform.anchoredPosition = new Vector3(item.x * 8.2f, item.y * 8.2f, 0);
+                roomblock.rectTransform.anchoredPosition = new Vector3(item.x * 9.2f, item.y * 9.2f, 0);
                 roomblock.color = new Vector4(255, 255, 255, 0);
                 roomblock.transform.name = roomname;
-            }else if(item == map.StoreRoomPoint)
+                MiniMapBlock b = roomblock.GetComponent<MiniMapBlock>();
+                b.ParentRoom = map.RRoom[item];
+                b.MiniMapBlockIndex = item;
+            }
+            else if(item == map.StoreRoomPoint)
             {
                 string roomname = item.ToString();
                 Image roomblock = Instantiate(MiniMapStoreBlock, new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
-                roomblock.rectTransform.anchoredPosition = new Vector3(item.x * 8.2f, item.y * 8.2f, 0);
+                roomblock.rectTransform.anchoredPosition = new Vector3(item.x * 9.2f, item.y * 9.2f, 0);
                 roomblock.color = new Vector4(255, 255, 255, 0);
                 roomblock.transform.name = roomname;
+                MiniMapBlock b = roomblock.GetComponent<MiniMapBlock>();
+                b.ParentRoom = map.RRoom[item];
+                b.MiniMapBlockIndex = item;
             }
             else
             {
                 string roomname = item.ToString();
                 Image roomblock = Instantiate(MiniMapBlock, new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
-                roomblock.rectTransform.anchoredPosition = new Vector3(item.x * 8.2f, item.y * 8.2f, 0);
+                roomblock.rectTransform.anchoredPosition = new Vector3(item.x * 9.2f, item.y * 9.2f, 0);
                 roomblock.color = new Vector4(255, 255, 255, 0);
                 roomblock.transform.name = roomname;
                 if (map.SkillShopRoom != null && item == map.SkillShopRoomPoint)
@@ -109,6 +116,9 @@ public class UiMiniMap : MonoBehaviour
                 {
                     roomblock.GetComponent<MiniMapBlock>().ChangeRoomMark(4);
                 }
+                MiniMapBlock b = roomblock.GetComponent<MiniMapBlock>();
+                b.ParentRoom = map.RRoom[item];
+                b.MiniMapBlockIndex = item;
             }
         }
         NowMark = Instantiate(MiniMapMark, new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform);
@@ -122,7 +132,7 @@ public class UiMiniMap : MonoBehaviour
         foreach(Transform i in transform)
         {
             Image I = i.GetComponent<Image>();
-            I.rectTransform.anchoredPosition = new Vector3((float)(I.rectTransform.anchoredPosition.x + 8.2 * direction.x), (float)(I.rectTransform.anchoredPosition.y + 8.2 * direction.y), 0);
+            I.rectTransform.anchoredPosition = new Vector3((float)(I.rectTransform.anchoredPosition.x + 9.2f * direction.x), (float)(I.rectTransform.anchoredPosition.y + 9.2f * direction.y), 0);
         }
         NowMark.rectTransform.anchoredPosition = new Vector3(0, 0, 0);
     }
@@ -197,16 +207,29 @@ public class UiMiniMap : MonoBehaviour
     }
 
 
+
+    /// <summary>
+    /// 为小地图区块添加道具标志
+    /// </summary>
+    /// <param name="RoomName"></param>
+    /// <param name="ItemList"></param>
     public void MiniMapItemMark(Vector3Int RoomName, List<IteamPickUp> ItemList)
     {
         MiniMapBlock b = transform.Find(RoomName.ToString()).GetComponent<MiniMapBlock>();
-        b.ClearAllItem();
-        for (int i = 0; i < Mathf.Min(4 , ItemList.Count); i++)
+        if (b != null)
         {
-            Debug.Log(ItemList[i]);
-            b.ChangeImageMark(ItemList[i].MiniMapBlockMark);
+            b.ClearAllItem();
+            for (int i = 0; i < Mathf.Min(4, ItemList.Count); i++)
+            {
+                Debug.Log(ItemList[i]);
+                b.ChangeImageMark(ItemList[i].MiniMapBlockMark);
+            }
         }
+
     }
+
+
+
 
     public void LightUpAllRooms()
     {

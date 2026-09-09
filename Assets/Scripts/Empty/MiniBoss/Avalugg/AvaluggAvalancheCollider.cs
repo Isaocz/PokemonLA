@@ -27,6 +27,7 @@ public class AvaluggAvalancheCollider : Projectile
             {
                 Empty e = other.GetComponent<Empty>();
                 Pokemon.PokemonHpChange(empty.gameObject, other.gameObject, Dmage, 0, 0, PokemonType.TypeEnum.Ice);
+                Debug.Log("1111111111111111111111");
                 if (e != null)
                 {
 

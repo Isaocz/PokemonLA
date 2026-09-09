@@ -9,6 +9,9 @@ public class Pincurchin : Empty
     public bool isMove;
     public PincurchinSpikeMove Spike;
 
+    //µç³¡
+    public GrassyTerrain electricTerrain;
+
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +35,9 @@ public class Pincurchin : Empty
 
 
         StartOverEvent();
+
+        if (electricTerrain != null) { Instantiate(electricTerrain, transform.position, Quaternion.identity); }
+        
     }
 
 

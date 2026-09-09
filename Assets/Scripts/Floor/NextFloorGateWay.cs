@@ -28,7 +28,7 @@ public class NextFloorGateWay : GateWay
         {
             if (transform.parent.parent.GetComponent<Room>().isClear <= 0)
             {
-                if (FloorNum.GlobalFloorNum.MaxFloor > FloorNum.GlobalFloorNum.FloorNumber)
+                if (FloorNum.GlobalFloorNum.MaxFloor > FloorNum.GlobalFloorNum.FloorNumber + 1)
                 {
                     GetComponent<BoxCollider2D>().isTrigger = true;
                     animator.SetTrigger("Enable");

@@ -63,25 +63,28 @@ public class SkillBall : IteamPickUp
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        playerControler = other.gameObject.GetComponent<PlayerControler>();
-        if (playerControler != null)
-        {
-            isPickUp = true;
-            if (isThereAreSkillMechine)
+        if (other.gameObject.tag == "Player") {
+            playerControler = other.gameObject.GetComponent<PlayerControler>();
+            if (playerControler != null)
             {
-                isEmpty = true;
-                string SkillMachineName = "";
-                if (GetSkill.SkillIndex % 10 < 10) { SkillMachineName += "0"; }
-                SkillMachineName += (GetSkill.SkillIndex).ToString() + (GetSkill.SkillChineseName).ToString() + "";
-                UIGetANewItem.UI.GetANewItem(3, SkillMachineName);
-                isThereAreSkillMechine = false;
-                playerControler.animator.SetTrigger("Happy");
-                playerControler.SetTerablast(GetSkill);
-                playerControler.LearnNewSkillByOtherWay(GetSkill);
-                playerControler.PassiveItemGetUI.GetComponent<Image>().sprite = SkillMachineItemObj.GetComponent<SpriteRenderer>().sprite;
-                Destroy(SkillMachineItemObj);
+                isPickUp = true;
+                if (isThereAreSkillMechine)
+                {
+                    isEmpty = true;
+                    string SkillMachineName = "";
+                    if (GetSkill.SkillIndex % 10 < 10) { SkillMachineName += "0"; }
+                    SkillMachineName += (GetSkill.SkillIndex).ToString() + (GetSkill.SkillChineseName).ToString() + "";
+                    UIGetANewItem.UI.GetANewItem(3, SkillMachineName);
+                    isThereAreSkillMechine = false;
+                    playerControler.animator.SetTrigger("Happy");
+                    playerControler.SetTerablast(GetSkill);
+                    playerControler.LearnNewSkillByOtherWay(GetSkill);
+                    playerControler.PassiveItemGetUI.GetComponent<Image>().sprite = SkillMachineItemObj.GetComponent<SpriteRenderer>().sprite;
+                    Destroy(SkillMachineItemObj);
+                }
             }
         }
+        
     }
 
     /// <summary>

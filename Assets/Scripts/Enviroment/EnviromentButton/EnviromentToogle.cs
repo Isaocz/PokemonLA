@@ -10,6 +10,15 @@ public class EnviromentToogle : EnviromentSwitch
     /// </summary>
     public List<GameObject> GameObjectList = new List<GameObject> { };
 
+
+    private void FixedUpdate()
+    {
+        if (GameObjectList.Count <= 0 && ChangeState == changeState.idle && isON)
+        {
+            StartCoroutine(SwitchOFF());
+        }
+    }
+
     /// <summary>
     /// 有人踩住按钮
     /// </summary>

@@ -195,7 +195,15 @@ public class SpikesStealthRock : Spike
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!isInviciable && isColliderEnable) {
+        //if (!isInviciable && isColliderEnable) {
+        //    SpikeOnTriggerStay2D(other);
+        //}
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (!isInviciable && isColliderEnable)
+        {
             SpikeOnTriggerStay2D(other);
         }
     }
@@ -206,7 +214,7 @@ public class SpikesStealthRock : Spike
 
         freezeState = true; // 后续不再切换状态
 
-        if (SpikeState == State.Normal)
+        if (SpikeState == State.Normal || SpikeState == State.I2N)
         {
             // Normal 时强制进入 N2I
             forceN2I = true;

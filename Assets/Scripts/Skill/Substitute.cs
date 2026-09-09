@@ -19,68 +19,120 @@ public class Substitute : MonoBehaviour
     //当前宝可梦处于青草场地中
     public bool isInGrassyTerrain
     {
-        get { return isinGrassyTerrain; }
-        set { isinGrassyTerrain = value; }
+        get { return (GrassyTerrainCount > 0); }
     }
-    bool isinGrassyTerrain = false;
+    //bool isinGrassyTerrain = false;
+    public int GrassyTerrainCount
+    {
+        get { return grassyTerrainCount; }
+        set { grassyTerrainCount = value; }
+    }
+    int grassyTerrainCount = 0;
+
+
 
     //当前宝可梦处于精神场地中Psychic Terrain
     public bool isInPsychicTerrain
     {
-        get { return isinPsychicTerrain; }
-        set { isinPsychicTerrain = value; }
+        get { return (PsychicTerrainCount > 0); }
     }
-    bool isinPsychicTerrain = false;
+    //bool isinPsychicTerrain = false;
+    public int PsychicTerrainCount
+    {
+        get { return psychicTerrainCount; }
+        set { psychicTerrainCount = value; }
+    }
+    int psychicTerrainCount = 0;
+
+
 
     //当前宝可梦处于电气场地中Electric Terrain
     public bool isInElectricTerrain
     {
-        get { return isinElectricTerrain; }
-        set { isinElectricTerrain = value; }
+        get { return (ElectricTerrainCount > 0); }
     }
-    bool isinElectricTerrain = false;
+    //bool isinElectricTerrain = false;
+    public int ElectricTerrainCount
+    {
+        get { return electricTerrainCount; }
+        set { electricTerrainCount = value; }
+    }
+    int electricTerrainCount = 0;
+
+
 
     //当前宝可梦处于薄雾场地中Misty Terrain
     public bool isInMistyTerrain
     {
-        get { return isinMistyTerrain; }
-        set { isinMistyTerrain = value; }
+        get { return (MistyTerrainCount > 0); }
     }
-    bool isinMistyTerrain = false;
+    //bool isinMistyTerrain = false;
+    public int MistyTerrainCount
+    {
+        get { return mistyTerrainCount; }
+        set { mistyTerrainCount = value; }
+    }
+    int mistyTerrainCount = 0;
 
 
 
     //当前宝可梦处超级于青草场地中
     public bool isInSuperGrassyTerrain
     {
-        get { return isinSuperGrassyTerrain; }
-        set { isinSuperGrassyTerrain = value; }
+        get { return (SuperGrassyTerrainCount > 0); }
     }
     bool isinSuperGrassyTerrain = false;
+    public int SuperGrassyTerrainCount
+    {
+        get { return superGrassyTerrainCount; }
+        set { superGrassyTerrainCount = value; }
+    }
+    int superGrassyTerrainCount = 0;
+
+
 
     //当前宝可梦处于超级精神场地中Psychic Terrain
     public bool isInSuperPsychicTerrain
     {
-        get { return isinSuperPsychicTerrain; }
-        set { isinSuperPsychicTerrain = value; }
+        get { return (SuperPsychicTerrainCount > 0); }
     }
     bool isinSuperPsychicTerrain = false;
+    public int SuperPsychicTerrainCount
+    {
+        get { return superPsychicTerrainCount; }
+        set { superPsychicTerrainCount = value; }
+    }
+    int superPsychicTerrainCount = 0;
+
+
 
     //当前宝可梦处于超级电气场地中Electric Terrain
     public bool isInSuperElectricTerrain
     {
-        get { return isinSuperElectricTerrain; }
-        set { isinSuperElectricTerrain = value; }
+        get { return (SuperElectricTerrainCount > 0); }
     }
     bool isinSuperElectricTerrain = false;
+    public int SuperElectricTerrainCount
+    {
+        get { return superElectricTerrainCount; }
+        set { superElectricTerrainCount = value; }
+    }
+    int superElectricTerrainCount = 0;
+
+
 
     //当前宝可梦处于超级薄雾场地中Misty Terrain
     public bool isInSuperMistyTerrain
     {
-        get { return isinSuperMistyTerrain; }
-        set { isinSuperMistyTerrain = value; }
+        get { return (SuperMistyTerrainCount > 0); }
     }
     bool isinSuperMistyTerrain = false;
+    public int SuperMistyTerrainCount
+    {
+        get { return superMistyTerrainCount; }
+        set { superMistyTerrainCount = value; }
+    }
+    int superMistyTerrainCount = 0;
 
 
 

@@ -141,11 +141,13 @@ public class Room : MonoBehaviour
 
     private void Update()
     {
+        //获取玩家
         if (playerControler == null)
         {
             Player = GameObject.FindObjectOfType<PlayerControler>().gameObject;
             playerControler = Player.GetComponent<PlayerControler>();
         }
+        //玩家进入房间，活性化敌人
         if (new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f), 0) == playerControler.NowRoom)
         {
             isVisit = true;
@@ -175,12 +177,14 @@ public class Room : MonoBehaviour
                 GraphUpdateTimer = 0;
                 _PathFinder.StaticPathFinder.UpdateGraph(RoomGraph, new Vector3Int((int)(transform.position.x), (int)(transform.position.y), 0));
             }
-
+  
         }
+        //玩家离开房间
         else
         {
             isInThisRoom = false;
         }
+        //进入房间后，没有清完所有怪就离开房间
         if (isVisit && isClear > 0 && new Vector3Int((int)(transform.position.x / 30.0f), (int)(transform.position.y / 24.0f), 0) != playerControler.NowRoom)
         {
             isVisit = false;
@@ -200,6 +204,7 @@ public class Room : MonoBehaviour
                 transform.GetChild(3).gameObject.SetActive(false);
             }
         }
+        //进入房间后，点亮小地图中该房间周围的房间
         if (isVisit && !isMapCreated)
         {
 
@@ -268,11 +273,11 @@ public class Room : MonoBehaviour
 
             isMapCreated = true;
         }
-
+        //玩家清理完房间
         if (isVisit && (RoomTag == Room.RoomTagClass.NormalEmptyRoom || RoomTag == Room.RoomTagClass.BossRoom) && !isItemDrop && isClear <= 0 && RandomDropItem != null)
         {
             isItemDrop = true;
-            Debug.Log(1);
+            //Debug.Log(1);
             Instantiate(RandomDropItem, transform.position + DropItemPosion, Quaternion.identity, transform);
             if (playerControler.playerData.IsPassiveGetList[134] && transform.GetComponent<BossRoom>() == null) {
                 if (Random.Range(0.0f, 1.0f) + ((float)playerControler.LuckPoint / 30) >= 0.65f) { Instantiate(RandomDropItem, transform.position + DropItemPosion + Vector3.up * 0.2f, Quaternion.identity, transform); }

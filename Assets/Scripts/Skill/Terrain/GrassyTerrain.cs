@@ -41,20 +41,20 @@ public class GrassyTerrain : MonoBehaviour
                 switch (TType)
                 {
                     case TerrainType.青草场地:
-                        p.isInGrassyTerrain = true;
-                        if (isSuperMode) { p.isInSuperGrassyTerrain = true; }
+                        p.GrassyTerrainCount += 1;
+                        if (isSuperMode) { p.SuperGrassyTerrainCount += 1; }
                         break;
                     case TerrainType.精神场地:
-                        p.isInPsychicTerrain = true;
-                        if (isSuperMode) { p.isInSuperPsychicTerrain = true; }
+                        p.PsychicTerrainCount += 1;
+                        if (isSuperMode) { p.SuperPsychicTerrainCount += 1; }
                         break;
                     case TerrainType.电气场地:
-                        p.isInElectricTerrain = true;
-                        if (isSuperMode) { p.isInSuperElectricTerrain = true; }
+                        p.ElectricTerrainCount += 1;
+                        if (isSuperMode) { p.SuperElectricTerrainCount += 1; }
                         break;
                     case TerrainType.薄雾场地:
-                        p.isInMistyTerrain = true;
-                        if (isSuperMode) { p.isInSuperMistyTerrain = true; }
+                        p.MistyTerrainCount += 1;
+                        if (isSuperMode) { p.SuperMistyTerrainCount += 1; }
                         break;
                 }
             }
@@ -63,20 +63,20 @@ public class GrassyTerrain : MonoBehaviour
                 switch (TType)
                 {
                     case TerrainType.青草场地:
-                        s.isInGrassyTerrain = true;
-                        if (isSuperMode) { s.isInSuperGrassyTerrain = true; }
+                        p.GrassyTerrainCount += 1;
+                        if (isSuperMode) { p.SuperGrassyTerrainCount += 1; }
                         break;
                     case TerrainType.精神场地:
-                        s.isInPsychicTerrain = true;
-                        if (isSuperMode) { s.isInSuperPsychicTerrain = true; }
+                        p.PsychicTerrainCount += 1;
+                        if (isSuperMode) { p.SuperPsychicTerrainCount += 1; }
                         break;
                     case TerrainType.电气场地:
-                        s.isInElectricTerrain = true;
-                        if (isSuperMode) { s.isInSuperElectricTerrain = true; }
+                        p.ElectricTerrainCount += 1;
+                        if (isSuperMode) { p.SuperElectricTerrainCount += 1; }
                         break;
                     case TerrainType.薄雾场地:
-                        s.isInMistyTerrain = true;
-                        if (isSuperMode) { s.isInSuperMistyTerrain = true; }
+                        p.MistyTerrainCount += 1;
+                        if (isSuperMode) { p.SuperMistyTerrainCount += 1; }
                         break;
                 }
             }
@@ -94,20 +94,20 @@ public class GrassyTerrain : MonoBehaviour
                 switch (TType)
                 {
                     case TerrainType.青草场地:
-                        p.isInGrassyTerrain = false;
-                        if (isSuperMode) { p.isInSuperGrassyTerrain = false; }
+                        p.GrassyTerrainCount -= 1;
+                        if (isSuperMode) { p.SuperGrassyTerrainCount += 1; }
                         break;
                     case TerrainType.精神场地:
-                        p.isInPsychicTerrain = false;
-                        if (isSuperMode) { p.isInSuperPsychicTerrain = false; }
+                        p.PsychicTerrainCount -= 1;
+                        if (isSuperMode) { p.SuperPsychicTerrainCount += 1; }
                         break;
                     case TerrainType.电气场地:
-                        p.isInElectricTerrain = false;
-                        if (isSuperMode) { p.isInSuperElectricTerrain = false; }
+                        p.ElectricTerrainCount -= 1;
+                        if (isSuperMode) { p.SuperElectricTerrainCount += 1; }
                         break;
                     case TerrainType.薄雾场地:
-                        p.isInMistyTerrain = false;
-                        if (isSuperMode) { p.isInSuperMistyTerrain = false; }
+                        p.MistyTerrainCount -= 1;
+                        if (isSuperMode) { p.SuperMistyTerrainCount += 1; }
                         break;
                 }
             }
@@ -116,20 +116,20 @@ public class GrassyTerrain : MonoBehaviour
                 switch (TType)
                 {
                     case TerrainType.青草场地:
-                        s.isInGrassyTerrain = false;
-                        if (isSuperMode) { s.isInSuperGrassyTerrain = false; }
+                        p.GrassyTerrainCount -= 1;
+                        if (isSuperMode) { p.SuperGrassyTerrainCount += 1; }
                         break;
                     case TerrainType.精神场地:
-                        s.isInPsychicTerrain = false;
-                        if (isSuperMode) { s.isInSuperPsychicTerrain = false; }
+                        p.PsychicTerrainCount -= 1;
+                        if (isSuperMode) { p.SuperPsychicTerrainCount += 1; }
                         break;
                     case TerrainType.电气场地:
-                        s.isInElectricTerrain = false;
-                        if (isSuperMode) { s.isInSuperElectricTerrain = false; }
+                        p.ElectricTerrainCount -= 1;
+                        if (isSuperMode) { p.SuperElectricTerrainCount += 1; }
                         break;
                     case TerrainType.薄雾场地:
-                        s.isInMistyTerrain = false;
-                        if (isSuperMode) { s.isInSuperMistyTerrain = false; }
+                        p.MistyTerrainCount -= 1;
+                        if (isSuperMode) { p.SuperMistyTerrainCount += 1; }
                         break;
                 }
             }

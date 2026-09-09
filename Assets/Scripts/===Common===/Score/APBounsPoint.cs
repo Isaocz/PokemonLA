@@ -13,7 +13,7 @@ public static class APBounsPoint
     /// <summary>
     /// 通关某一层后的AP奖励值列表
     /// </summary>
-    public static int[] FloorBounsList = new int[] {300 , 600 , 1200 , 2500 , 5000 };
+    public static int[] FloorBounsList = new int[] {300 , 600 , 1200 , 2500 , 5000 , 6000 , 6000 };
     /// <summary>
     /// 根据楼层返回AP奖励
     /// </summary>
@@ -88,7 +88,7 @@ public static class APBounsPoint
     /// <summary>
     /// 通关某一层后的糖果奖励值列表
     /// </summary>
-    public static int[] FloorCandyBounsList = new int[] { 1, 2, 2, 3, 3 };
+    public static int[] FloorCandyBounsList = new int[] { 1, 2, 2, 3, 3 , 3 , 3 };
     /// <summary>
     /// 根据楼层返回糖果奖励
     /// </summary>

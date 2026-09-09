@@ -393,6 +393,8 @@ public class Drifblim : Empty
     void InstantiateSmallExplosionSingel( Vector2 p )
     {
         DrifloonExplosion boom = Instantiate(ExplosionSmall, p, Quaternion.identity);
+        //±¨’®“Ù–ß
+        AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.Explosion, transform.position);
         boom.empty = this;
         Destroy(boom.gameObject, 5f);
     }

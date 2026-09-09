@@ -11,12 +11,31 @@ public class AudioManager : MonoBehaviour
     private List<AudioSource> pool;
 
     [Header("SFX Settings")]
-    public int maxSimultaneousSameClip = 3;   // 同一音效最多同时播放数量
-    public float randomPitchRange = 0.05f;    // 随机音高
-    public float randomVolumeRange = 0.1f;    // 随机音量
-    public float multiPlayVolumeScale = 0.7f; // 多音效叠加时自动降低音量
+    public int maxSimultaneousSameClip = 3;   // 同一音效最多同时开始数量（已修改含义）
+    public float sameClipInterval = 0.1f;     // 新增：限制时间窗口（秒）
+    public float randomPitchRange = 0.05f;
+    public float randomVolumeRange = 0.1f;
+    public float multiPlayVolumeScale = 0.7f;
+
+    //==== 修改开始 ==== 新增：记录每个音效的播放时间戳
+    private Dictionary<AudioClip, Queue<float>> clipPlayTimestamps = new Dictionary<AudioClip, Queue<float>>();
+    //==== 修改结束 ====
 
     private Dictionary<AudioClip, int> clipPlayCount = new Dictionary<AudioClip, int>();
+
+    //============================共通基本音效==================================
+    public EnemyAudioPlayer CommonBasicSFXPlayer;
+
+    public enum CommonBasicSFXList
+    {
+        Damage,
+        Explosion,
+        ExplosionNoTail,
+        LightningStrike,
+        TPStart,
+        TPOver
+    }
+    //============================共通基本音效==================================
 
     void Awake()
     {
@@ -44,19 +63,32 @@ public class AudioManager : MonoBehaviour
             if (!src.isPlaying)
                 return src;
         }
-        return null; // 全部占用时不播放
+        return null;
     }
 
     public void PlaySFX(AudioClip clip, Vector3 position)
     {
         if (clip == null) return;
 
-        // 限制同一音效的最大同时播放数量
-        if (!clipPlayCount.ContainsKey(clip))
-            clipPlayCount[clip] = 0;
+        //======== 使用时间戳限制，而不是同时播放数量 ====
+        if (!clipPlayTimestamps.ContainsKey(clip))
+            clipPlayTimestamps[clip] = new Queue<float>();
 
-        if (clipPlayCount[clip] >= maxSimultaneousSameClip)
+        float now = Time.time;
+
+        // 移除过期的时间戳
+        while (clipPlayTimestamps[clip].Count > 0 &&
+               now - clipPlayTimestamps[clip].Peek() > sameClipInterval)
+        {
+            clipPlayTimestamps[clip].Dequeue();
+        }
+
+        // 如果时间窗口内触发次数过多 → 不播放
+        if (clipPlayTimestamps[clip].Count >= maxSimultaneousSameClip)
             return;
+
+        // 记录新的播放时间
+        clipPlayTimestamps[clip].Enqueue(now);
 
         AudioSource src = GetFreeSource();
         if (src == null) return;
@@ -66,18 +98,18 @@ public class AudioManager : MonoBehaviour
 
     private System.Collections.IEnumerator PlayClipRoutine(AudioSource src, AudioClip clip, Vector3 pos)
     {
+        if (!clipPlayCount.ContainsKey(clip))
+            clipPlayCount[clip] = 0;
+
         clipPlayCount[clip]++;
 
         src.transform.position = pos;
         src.clip = clip;
 
-        // 随机 Pitch
         src.pitch = 1f + Random.Range(-randomPitchRange, randomPitchRange);
 
-        // 随机 Volume
         float volume = 1f + Random.Range(-randomVolumeRange, randomVolumeRange);
 
-        // 多音效叠加自动降噪
         if (clipPlayCount[clip] > 1)
             volume *= multiPlayVolumeScale;
 

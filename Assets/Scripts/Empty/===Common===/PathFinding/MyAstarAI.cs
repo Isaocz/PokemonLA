@@ -21,6 +21,8 @@ public class MyAstarAI : MonoBehaviour
     Vector3 LastPosition;
     bool isEscape;
 
+    public int PathFindInterval = 40;
+
     /// <summary>
     /// 是否自动设置速度
     /// </summary>
@@ -100,7 +102,7 @@ public class MyAstarAI : MonoBehaviour
                 RePathFind++;
                 if (!ParentEmpty.isFearDone)
                 {
-                    if (RePathFind >= 40)
+                    if (RePathFind >= PathFindInterval)
                     {
                         RunTargetPosition = targetPosition.position;
                         //if (ParentEmpty.isEmptyConfusionDone) { RunTargetPosition = (RunTargetPosition + new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3), 0)).normalized; }
@@ -170,6 +172,7 @@ public class MyAstarAI : MonoBehaviour
                 {
                     isEscape = false;
                 }
+                Debug.Log(targetPosition);
             }
         }
     }

@@ -52,6 +52,11 @@ public class EnviromentSwitch : MonoBehaviour
     protected AudioSource SE;
 
 
+    /// <summary>
+    /// 检查灯开关
+    /// </summary>
+    public LightCheckSwitch CheckerLight;
+
 
     /// <summary>
     /// 开关摁下
@@ -129,7 +134,7 @@ public class EnviromentSwitch : MonoBehaviour
     /// </summary>
     public virtual void SwitchONEvent()
     {
-
+        if (CheckerLight != null) { CheckerLight.CountPlus(1); }
     }
 
     /// <summary>
@@ -137,7 +142,7 @@ public class EnviromentSwitch : MonoBehaviour
     /// </summary>
     public virtual void SwitchOFFEvent()
     {
-
+        if (CheckerLight != null) { CheckerLight.CountMinus(1); }
     }
 
 }

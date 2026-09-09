@@ -401,7 +401,7 @@ private static Dictionary<MainState, SubState[]> StateMap = new()
     /// <summary>
     /// 是否沿水平方向移动
     /// </summary>
-    bool MoveIsHorizontal = true;
+    public bool MoveIsHorizontal = true;
 
     /// <summary>
     /// 移动计时器
