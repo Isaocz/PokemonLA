@@ -36,7 +36,9 @@ public class SkillShopStrengthenBlock : MonoBehaviour
         UICallDescribe PPUPButtonDescribe = PPUPButton.GetComponent<UICallDescribe>();
         if (BlockSkill.SkillFrom == 2) { MSButtonDescribe.TwoMode = false; MSButtonDescribe.DescribeText = "该技能已经精通"; }
         else {
-            MSButtonDescribe.TwoMode = true; MSButtonDescribe.FirstText = "花费一个精通种子可以精通此技能"; MSButtonDescribe.DescribeText = "精通效果：" + BlockSkill.PlusSkill.PlusSkillDiscribe;
+            if (BlockSkill != null && BlockSkill.PlusSkill != null && BlockSkill.PlusSkill.PlusSkillDiscribe != null) {
+                MSButtonDescribe.TwoMode = true; MSButtonDescribe.FirstText = "花费一个精通种子可以精通此技能"; MSButtonDescribe.DescribeText = "精通效果：" + BlockSkill.PlusSkill.PlusSkillDiscribe;
+            }
         }
 
         if (BlockSkill.isPPUP) { PPUPButtonDescribe.TwoMode = false; PPUPButtonDescribe.DescribeText = "该技能的冷却时间已经被强化"; }

@@ -18,6 +18,8 @@ public class NormalGress : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (animator == null) { animator = gameObject.GetComponent<Animator>(); }
+        if (animator == null) { return; }
         if (other.transform.tag == "Player")
         {
             if (other.GetComponent<PlayerControler>() != null)

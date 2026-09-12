@@ -63,6 +63,8 @@ public class Room : MonoBehaviour
         Shop = 2,
         BossRoom = 3,
         SpecialRoom = 4,
+        StartRoom = 5,
+        MewNPCRoom = 6,
     }
 
     protected GameObject Player;
@@ -165,7 +167,8 @@ public class Room : MonoBehaviour
                 }
             }
 
-            if (RoomTag == Room.RoomTagClass.NormalEmptyRoom || RoomTag == Room.RoomTagClass.BossRoom)
+            //敌人房 boss房 开始房 梦幻npc房 初始活性化敌人和参观道具
+            if (RoomTag == Room.RoomTagClass.NormalEmptyRoom || RoomTag == Room.RoomTagClass.BossRoom || RoomTag == Room.RoomTagClass.StartRoom || RoomTag == Room.RoomTagClass.MewNPCRoom)
             {
                 transform.GetChild(3).gameObject.SetActive(true);
                 transform.GetChild(4).gameObject.SetActive(true);

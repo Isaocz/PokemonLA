@@ -51,6 +51,38 @@ public class Weather : MonoBehaviour
     public float WeatherTimer;
 
 
+
+
+    /// <summary>
+    /// 开始音效枚举
+    /// </summary>
+    public enum WeatherSE
+    {
+        Hail,
+        Rain,
+        Sandstorm,
+        SunnyDay
+    }
+
+    /// <summary>
+    /// 循环音效播放器
+    /// </summary>
+    public LoopingSEAudioPlayer LoopAudioPlayer;
+
+    /// <summary>
+    /// 音效列表
+    /// </summary>
+    public EnemySFXTable sfxTable;
+
+
+
+
+
+
+
+
+
+
     private void Awake()
     {
         GlobalWeather = this;
@@ -63,7 +95,7 @@ public class Weather : MonoBehaviour
         SandstormPS = transform.GetChild(4).GetComponent<ParticleSystem>();
 
         NormalColor = new Color(1, 1, 1, 0);
-        RainColor = new Color(0.8246584f, 0.7688679f, 1, 0.1490196f);
+        RainColor = new Color(0.6246584f, 0.6688679f, 1, 0.1490196f);
         SunColor = new Color(1, 0.9974519f, 0.8632076f, 0.1490196f);
         HailColor = new Color(0.6084906f, 0.9791504f, 1, 0.2f);
         SandStormColor = new Color(0.6226415f, 0.6002588f, 0.2261481f, 0.28f);
@@ -83,6 +115,11 @@ public class Weather : MonoBehaviour
                 if (i == 3) { transform.GetChild(i).GetChild(0).gameObject.SetActive(false); transform.GetChild(i).GetChild(1).gameObject.SetActive(false); }
                 else { transform.GetChild(i).gameObject.SetActive(false); }
 
+            }
+            //结束音效
+            if (LoopAudioPlayer != null)
+            {
+                LoopAudioPlayer.StopLoop(0.5f);
             }
         }
     }
@@ -112,6 +149,7 @@ public class Weather : MonoBehaviour
                             else { transform.GetChild(i).gameObject.SetActive(true); }
                         }
                     }
+                    SetSEStart();
 
                     if (!isSunny && !isSunnyPlus) { SunShinePS.gameObject.SetActive(false); }
                     if (!isRain && !isRainPlus) { RainPS.Stop(); }
@@ -219,6 +257,8 @@ public class Weather : MonoBehaviour
             RainPS.gameObject.SetActive(true);
             RainPS.Play();
             WeatherTimer = Time;
+            //开始音效
+            SetSEStart();
             ChangeWeatherSkillType();
         }
         InPC();
@@ -235,12 +275,12 @@ public class Weather : MonoBehaviour
             SunShinePS.gameObject.SetActive(true);
             SunShinePS.Play();
             WeatherTimer = Time;
+            //开始音效
+            SetSEStart();
             ChangeWeatherSkillType();
         }
         InPC();
     }
-
-
 
     public void ChangeWeatherHail(float Time, bool isPlus)
     {
@@ -261,6 +301,8 @@ public class Weather : MonoBehaviour
                 isPlayerDefUP = true;
             }
             WeatherTimer = Time;
+            //开始音效
+            SetSEStart();
             ChangeWeatherSkillType();
         }
         InPC();
@@ -283,10 +325,14 @@ public class Weather : MonoBehaviour
                 player.ReFreshAbllityPoint();
                 isPlayerSpDUP = true;
             }
+            //开始音效
+            SetSEStart();
             ChangeWeatherSkillType();
         }
         InPC();
     }
+
+
 
     void CheckPlayer()
     {
@@ -296,6 +342,8 @@ public class Weather : MonoBehaviour
         }
     }
 
+
+
     public void ChangeWeatherNormal()
     {
         RemoveAllWeather();
@@ -303,6 +351,8 @@ public class Weather : MonoBehaviour
         isNormal = true;
         ChangeWeatherSkillType();
         InPC();
+        //结束音效
+        SetSEStart();
     }
 
     void RemoveAllWeather()
@@ -330,6 +380,8 @@ public class Weather : MonoBehaviour
         HailPS2.Stop();
         SandstormPS.Stop();
         ChangeWeatherSkillType();
+        //结束音效
+        SetSEStart();
     }
 
 
@@ -373,6 +425,52 @@ public class Weather : MonoBehaviour
             else if (isSandstorm || isSandstormPlus) { player.Skill04.SkillType = 6; player.Skill04.SpDamage = 100; player.skillBar04.GetSkill(player.Skill04); }
         }
 
+    }
+
+
+
+    void SetSEStart()
+    {
+        if      (isSunny || isSunnyPlus)
+        {
+            if (LoopAudioPlayer != null)
+            {
+                var clip = sfxTable.GetClip(WeatherSE.SunnyDay.ToString());
+                LoopAudioPlayer.PlayLoop(clip, 1);
+            }
+        }
+        else if (isRain || isRainPlus)
+        {
+            if (LoopAudioPlayer != null)
+            {
+                var clip = sfxTable.GetClip(WeatherSE.Rain.ToString());
+                LoopAudioPlayer.PlayLoop(clip, 1);
+            }
+        }
+        else if (isHail || isHail)
+        {
+            if (LoopAudioPlayer != null)
+            {
+                var clip = sfxTable.GetClip(WeatherSE.Hail.ToString());
+                LoopAudioPlayer.PlayLoop(clip, 1);
+            }
+        }
+        else if (isSandstorm || isSandstormPlus)
+        {
+            if (LoopAudioPlayer != null)
+            {
+                var clip = sfxTable.GetClip(WeatherSE.Sandstorm.ToString());
+                LoopAudioPlayer.PlayLoop(clip, 1);
+            }
+        }
+        //结束音效
+        else
+        {
+            if (LoopAudioPlayer != null)
+            {
+                LoopAudioPlayer.StopLoop(0.5f);
+            }
+        }
     }
 
 }

@@ -28,12 +28,38 @@ public class AudioManager : MonoBehaviour
 
     public enum CommonBasicSFXList
     {
+        NULL,
         Damage,
+        HealUp,
+        LevelUp,
         Explosion,
         ExplosionNoTail,
         LightningStrike,
         TPStart,
-        TPOver
+        TPOver,
+        GetNormalItem,
+        GetSpeaceItem,
+        GetBerryItem,
+        GetPassiveItem,
+        GetNewSkill,
+        GetBabyItem,
+        BallOpen,
+        ItemDrop,
+        EmptyDamage,
+        EmptyCTDamage,
+        EmptyDie,
+        
+    }
+
+    public enum CommonUISFXList
+    {
+        ButtonClick,
+        GetScore,
+        GetBigScore,
+        Line,
+        ScoreLoop,
+        ScorePunish,
+        ScorePanelFlower,
     }
     //============================共通基本音效==================================
 
@@ -66,15 +92,31 @@ public class AudioManager : MonoBehaviour
         return null;
     }
 
-    public void PlaySFX(AudioClip clip, Vector3 position)
+    /// <summary>
+    /// 播放音效 ， 
+    /// </summary>
+    /// <param name="clip"></param>
+    /// <param name="position"></param>
+    /// <param name="isPosFree">不受位置限制</param>
+    public void PlaySFX(AudioClip clip, Vector3 position , bool isPosFree = false , float Pitch = 1.0f)
     {
+        //Debug.Log(clip);
+        //Debug.Log(position);
+        //判空片段
         if (clip == null) return;
+
+        //判断点是否在摄像机内
+        if (!isPosFree) {
+            if (!_mTool.IsInCameraView(position)) return; }
+
+        //Debug.Log(clip);
+        //Debug.Log(position);
 
         //======== 使用时间戳限制，而不是同时播放数量 ====
         if (!clipPlayTimestamps.ContainsKey(clip))
             clipPlayTimestamps[clip] = new Queue<float>();
 
-        float now = Time.time;
+        float now = Time.unscaledTime;
 
         // 移除过期的时间戳
         while (clipPlayTimestamps[clip].Count > 0 &&
@@ -93,10 +135,10 @@ public class AudioManager : MonoBehaviour
         AudioSource src = GetFreeSource();
         if (src == null) return;
 
-        StartCoroutine(PlayClipRoutine(src, clip, position));
+        StartCoroutine(PlayClipRoutine(src, clip, position , Pitch));
     }
 
-    private System.Collections.IEnumerator PlayClipRoutine(AudioSource src, AudioClip clip, Vector3 pos)
+    private System.Collections.IEnumerator PlayClipRoutine(AudioSource src, AudioClip clip, Vector3 pos , float Pitch)
     {
         if (!clipPlayCount.ContainsKey(clip))
             clipPlayCount[clip] = 0;
@@ -106,7 +148,7 @@ public class AudioManager : MonoBehaviour
         src.transform.position = pos;
         src.clip = clip;
 
-        src.pitch = 1f + Random.Range(-randomPitchRange, randomPitchRange);
+        src.pitch = Pitch;
 
         float volume = 1f + Random.Range(-randomVolumeRange, randomVolumeRange);
 

@@ -63,6 +63,7 @@ public class HealthUpCCg : IteamPickUp
             }
             animator.SetTrigger("Eat");
             UIGetANewItem.UI.GetANewItem(ItemTag, ItemName);
+            PickUpEvent();
             Destroy(gameObject);
         }
     }

@@ -87,6 +87,7 @@ public class MismagiusCloneBody : NormalEmptyCloneBody
         if (ParentMismagius == null)
         {
             ParentMismagius = ParentEmpty.GetComponent<Mismagius>();
+            if (ParentMismagius == null) { return; }
         }
         if (!isDespear && !ParentMismagius.isDie && !ParentMismagius.isBorn && !ParentMismagius.isEmptyFrozenDone && !ParentMismagius.isSleepDone && !ParentMismagius.isSilence && !ParentMismagius.isCanNotMoveWhenParalysis) {
             switch (NowState)
@@ -204,7 +205,7 @@ public class MismagiusCloneBody : NormalEmptyCloneBody
     public void SetCloneShadowOver(bool UseHypnosis)
     {
         //Debug.Log(NowState);
-        if (ParentMismagius.CloneBodyList.Contains(this))
+        if (ParentMismagius != null && ParentMismagius.CloneBodyList.Contains(this))
         {
             ParentMismagius.CloneBodyList.Remove(this);
         }
@@ -373,7 +374,9 @@ public class MismagiusCloneBody : NormalEmptyCloneBody
     {
         TakeTurnsLaunchTimer = 0;
         NowState = MainState.TakeTurnsLaunch;
-        SetDirector(_mTool.TiltMainVector2((ParentMismagius.CloneBodyCenter - (Vector2)transform.position).normalized));
+        if (ParentMismagius != null) {
+            SetDirector(_mTool.TiltMainVector2((ParentMismagius.CloneBodyCenter - (Vector2)transform.position).normalized));
+        }
         Timer.Start(this, DispearTime, () => {
             SetCloneShadowOver(false);
         });

@@ -35,6 +35,7 @@ public class HPWUpFeather : IteamPickUp
             playerControler.ChangeHPW(HPWChangePoint);
             animator.SetTrigger("Eat");
             UIGetANewItem.UI.GetANewItem(ItemTag, ItemName);
+            PickUpEvent();
             Destroy(gameObject);
         }
     }

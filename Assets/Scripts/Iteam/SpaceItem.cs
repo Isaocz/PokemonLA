@@ -11,6 +11,9 @@ public class SpaceItem : IteamPickUp
     public int FlingDamage;
 
 
+    public AudioClip UseItemSEClip;
+
+
     private void FixedUpdate()
     {
         if (!CanBePickUp)
@@ -47,6 +50,7 @@ public class SpaceItem : IteamPickUp
             playerControler.SpaceItemImage.color = new Color(1, 1, 1, 1);
             playerControler.SpaceItemImage.sprite = UIImage;
             UIGetANewItem.UI.GetANewItem(ItemTag, ItemName);
+            PickUpEvent();
             Destroy(gameObject);
         }
     }

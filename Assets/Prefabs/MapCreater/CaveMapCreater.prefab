@@ -24,12 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4063320557583779698}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4063320557583779701
 MonoBehaviour:
@@ -44,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NowMapType: 1
+  NowMapBgmType: 2
   StarRoom: {fileID: 7203049885625818395, guid: 700cd0a62d3c0c84891430071d051fd0, type: 3}
   BaseRoomList: {fileID: 6724291333352301316, guid: ead726b5673d1e641a78d393ca9d9c08, type: 3}
   PCRoomUp: {fileID: 785649456140901396, guid: 2d57f89e5609a87468359714a31eb2f4, type: 3}
@@ -54,6 +56,9 @@ MonoBehaviour:
   StoreRoomLeft: {fileID: 4356065065093536371, guid: ec11daabfffe8de459ebca48fd573540, type: 3}
   StoreRoomRight: {fileID: 4356065065093536371, guid: 9e3a1684693ed1b48b4f9920f1cb0c8e, type: 3}
   StoreRoomPoint: {x: 0, y: 0, z: 0}
+  isNeedMiniBossRoom: 0
+  MiniBossRoomList: {fileID: 0}
+  MiniBossRoomRoomPoint: {x: 10000, y: 10000, z: 0}
   BossRoomList:
   - {fileID: 3609287222172793487, guid: 227165652e5d771458aad06da7dea2aa, type: 3}
   - {fileID: 5146691791641471303, guid: fc4e2fb39b3f4754fa5ef597d0f856a8, type: 3}
@@ -71,3 +76,5 @@ MonoBehaviour:
   BerryTreeRoom: {fileID: 7203049885625818395, guid: 0fbce8b1503714b448cc7730642e1571, type: 3}
   BerryTreeRoomPoint: {x: 0, y: 0, z: 0}
   StepMin: 8
+  DecaySpeed: 0.2
+  NowTestType: 0

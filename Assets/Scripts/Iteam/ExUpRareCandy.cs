@@ -42,6 +42,7 @@ public class ExUpRareCandy : IteamPickUp
             playerControler.ChangeEx(playerControler.maxEx - playerControler.Ex + 1);
             animator.SetTrigger("Eat");
             UIGetANewItem.UI.GetANewItem(ItemTag, ItemName);
+            PickUpEvent();
             Destroy(gameObject);
         }
     }

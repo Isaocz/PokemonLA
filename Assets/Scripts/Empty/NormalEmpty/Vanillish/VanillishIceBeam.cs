@@ -156,20 +156,23 @@ public class VanillishIceBeam : MonoBehaviour
 
     public void StopBeam()
     {
-        //ParentVanillish.NowLunchIceBeam = null;
-        transform.GetChild(0).gameObject.SetActive(false);
-        isPSStop = true;
-        StartVFX.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
-        StartVFX.transform.GetChild(1).GetComponent<ParticleSystem>().Stop();
-        StartVFX.transform.GetChild(2).GetComponent<ParticleSystem>().Stop();
-        StartVFX.transform.GetChild(3).GetComponent<ParticleSystem>().Stop();
-        StartVFX.transform.GetChild(4).GetComponent<ParticleSystem>().Stop();
-        EndVFX.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
-        EndVFX.transform.GetChild(1).GetComponent<ParticleSystem>().Stop();
-        EndVFX.transform.GetChild(2).GetComponent<ParticleSystem>().Stop();
-        _mTool.RemoveAllPSChild(transform.gameObject);
-        ParentVanillish = null;
-        Destroy(this.gameObject);
+        if (!isPSStop) {
+            //ParentVanillish.NowLunchIceBeam = null;
+            transform.GetChild(0).gameObject.SetActive(false);
+            isPSStop = true;
+            Debug.Log(StartVFX.transform.GetChild(0));
+            StartVFX.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+            StartVFX.transform.GetChild(1).GetComponent<ParticleSystem>().Stop();
+            StartVFX.transform.GetChild(2).GetComponent<ParticleSystem>().Stop();
+            StartVFX.transform.GetChild(3).GetComponent<ParticleSystem>().Stop();
+            StartVFX.transform.GetChild(4).GetComponent<ParticleSystem>().Stop();
+            EndVFX.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+            EndVFX.transform.GetChild(1).GetComponent<ParticleSystem>().Stop();
+            EndVFX.transform.GetChild(2).GetComponent<ParticleSystem>().Stop();
+            _mTool.RemoveAllPSChild(transform.gameObject);
+            ParentVanillish = null;
+            Destroy(this.gameObject);
+        }
     }
 
     void SetSonBeam()

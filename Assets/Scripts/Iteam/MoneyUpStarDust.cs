@@ -41,6 +41,7 @@ public class MoneyUpStarDust : IteamPickUp
             playerControler.ChangeMoney(ChangePoint);
             animator.SetTrigger("Eat");
             UIGetANewItem.UI.GetANewItem(ItemTag,ItemName);
+            PickUpEvent();
             Destroy(gameObject);
         }
     }

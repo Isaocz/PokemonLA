@@ -59,4 +59,84 @@ public class LoopingSEAudioPlayer : MonoBehaviour
         source.Stop();
         source.volume = startVolume; // 重置音量
     }
+
+
+
+
+    // 在销毁前提前缓存
+    private AudioClip cachedClip;
+    private float cachedVolume;
+    private bool cachedIsPlaying;
+
+
+    /**
+    // -----------------------------
+    // 销毁前缓存音效状态
+    // -----------------------------
+    private void OnDisable()
+    {
+        if (source != null)
+        {
+            cachedClip = source.clip;
+            cachedVolume = source.volume;
+            cachedIsPlaying = source.isPlaying;
+        }
+    }
+
+    // -----------------------------
+    // 对象销毁时独立音效并淡出
+    // -----------------------------
+    private void OnDestroy()
+    {
+        Debug.Log("Destory");
+        if (source == null)
+            return;
+
+        // 1. 创建新的临时对象
+        GameObject tempObj = new GameObject("DetachedLoopSE");
+        DontDestroyOnLoad(tempObj); // 可选：跨场景淡出
+
+        // 2. 复制 AudioSource
+        AudioSource tempSource = tempObj.AddComponent<AudioSource>();
+        tempSource.clip = source.clip;
+        tempSource.volume = source.volume;
+        tempSource.loop = false; // 不再循环
+        tempSource.spatialBlend = source.spatialBlend;
+        tempSource.outputAudioMixerGroup = source.outputAudioMixerGroup;
+
+        tempSource.Play();
+
+        // 3. 在新对象上执行淡出
+        tempObj.AddComponent<DetachedFadeOut>().BeginFade(tempSource, 0.5f);
+    }
+}
+
+
+// --------------------------------------
+// 独立淡出组件（自动销毁）
+// --------------------------------------
+public class DetachedFadeOut : MonoBehaviour
+{
+    public void BeginFade(AudioSource src, float fadeTime)
+    {
+        StartCoroutine(FadeOutAndDestroy(src, fadeTime));
+    }
+
+    private IEnumerator FadeOutAndDestroy(AudioSource src, float fadeTime)
+    {
+        float startVolume = src.volume;
+        float t = 0f;
+
+        while (t < fadeTime)
+        {
+            t += Time.deltaTime;
+            src.volume = Mathf.Lerp(startVolume, 0f, t / fadeTime);
+            yield return null;
+        }
+
+        src.Stop();
+        Destroy(gameObject); // ★ 自动销毁临时对象
+    }
+
+    **/
 }

@@ -152,6 +152,7 @@ public class Substitute : MonoBehaviour
         if (NowHp > 0) {
             if (ChangePoint < 0 || ChangePointSp < 0)
             {
+                
                 PokemonType.TypeEnum enumVaue = (PokemonType.TypeEnum)SkillType;
                 ChangePoint = ChangePoint * (((Weather.GlobalWeather.isRain && enumVaue == PokemonType.TypeEnum.Water) ? (Weather.GlobalWeather.isRainPlus ? 1.8f : 1.3f) : 1)
                     * ((Weather.GlobalWeather.isRain && enumVaue == PokemonType.TypeEnum.Fire) ? 0.5f : 1)
@@ -170,6 +171,7 @@ public class Substitute : MonoBehaviour
                 }
                 else
                 {
+                    //Debug.Log("Before" + "+" + NowHp);
 
                     if ((int)SkillType != 19)
                     {
@@ -186,6 +188,7 @@ public class Substitute : MonoBehaviour
                     }
                     else
                     {
+                        
                         if (!isInPsychicTerrain)
                         {
                             NowHp = Mathf.Clamp(NowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (NowHp > 1) ? (ParentPlayer.playerData.isEndure ? 1 : 0) : 0, MaxHP);
@@ -201,6 +204,8 @@ public class Substitute : MonoBehaviour
                     uIHealth.Per = (float)NowHp / (float)MaxHP;
                     uIHealth.ChangeHpDown();
                     isSubstituteInvincible = true;
+
+                    //Debug.Log("After" + "+" + NowHp);
 
                     if (NowHp <= 0) {
                         animator.SetTrigger("Die");

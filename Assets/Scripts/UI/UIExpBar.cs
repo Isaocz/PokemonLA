@@ -123,6 +123,9 @@ public class UIExpBar : MonoBehaviour
     {
         if (isZero)
         {
+            //清零时也代表升级 此时呼出升级音效
+            if (AudioManager.Instance != null && player != null) { AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.LevelUp , player.transform.position); }
+
             Mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
             timer = 0;
             isZero = false;

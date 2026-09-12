@@ -40,6 +40,7 @@ public class ExpCandy : IteamPickUp
             playerControler.ChangeEx(ChangePoint + (int)(playerControler.maxEx * ChangePer));
             animator.SetTrigger("Eat");
             UIGetANewItem.UI.GetANewItem(ItemTag, ItemName);
+            PickUpEvent();
             Destroy(gameObject);
         }
     }

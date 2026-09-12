@@ -35,6 +35,7 @@ public class SeedofMastery : IteamPickUp
             playerControler.ChangeMSeed(ChangePoint);
             animator.SetTrigger("Eat");
             UIGetANewItem.UI.GetANewItem(ItemTag, ItemName);
+            PickUpEvent();
             Destroy(gameObject);
         }
     }

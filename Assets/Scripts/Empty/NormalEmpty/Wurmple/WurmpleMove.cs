@@ -177,9 +177,12 @@ public class WurmpleMove : Empty
         }
     }
 
+    /// <summary>
+    /// ∑¢…‰Àø
+    /// </summary>
     public void LaunchStringShot()
     {
-        if ( !isFearDone) {
+        if (!isDie && !isBorn && !isHit && !isSilence && !isEmptyInfatuationDone &&!isFearDone) {
             Projectile ProjectileObject;
             if (PlayerPosition.y - position.y >= 0)
             {

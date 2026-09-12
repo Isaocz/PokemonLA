@@ -35,6 +35,7 @@ public class StoneUPSharpStone : IteamPickUp
             playerControler.ChangeStone(ChangePoint);
             animator.SetTrigger("Eat");
             UIGetANewItem.UI.GetANewItem(ItemTag, ItemName);
+            PickUpEvent();
             Destroy(gameObject);
         }
     }

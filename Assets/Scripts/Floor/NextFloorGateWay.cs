@@ -8,12 +8,16 @@ public class NextFloorGateWay : GateWay
 {
     //声明一个布尔型变量，摄像机是否移动。一个计时器
 
+
+    Room ParentRoom;
+
     
     private void Start()
     {
         if (FloorNum.GlobalFloorNum != null) {
             transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = FloorNum.GlobalFloorNum.NextFloorText[FloorNum.GlobalFloorNum.FloorNumber+1];
         }
+        ParentRoom = transform.parent.GetComponent<Room>();
     }
 
     public GameObject GameOverPanel;
@@ -24,10 +28,17 @@ public class NextFloorGateWay : GateWay
     //每帧检测一次，当发生碰撞后摄像机开始移动，110代表速度，当移动到大位置后不允许摄像机移动，并修正一次摄像机位置
     private void Update()
     {
-        if (transform.parent.GetComponent<Room>() == null)
+
+        if (ParentRoom == null) { ParentRoom = transform.parent.GetComponent<Room>(); }
+
+        //无房间时（不明使用场景）
+        if (ParentRoom == null)
         {
-            if (transform.parent.parent.GetComponent<Room>().isClear <= 0)
+            //清除完所有敌人
+            if (ParentRoom.isClear <= 0)
             {
+                // 最大层数(7) > 当前层数(012345) + 1
+                // 可以到达下一层
                 if (FloorNum.GlobalFloorNum.MaxFloor > FloorNum.GlobalFloorNum.FloorNumber + 1)
                 {
                     GetComponent<BoxCollider2D>().isTrigger = true;
@@ -36,13 +47,14 @@ public class NextFloorGateWay : GateWay
 
             }
         }
-        else if (transform.parent.GetComponent<Room>().isClear <= 0 && GetComponent<BoxCollider2D>().isTrigger == false)
-        {
-            GetComponent<BoxCollider2D>().isTrigger = true;
-            animator.SetTrigger("Enable");
-
+        //有房间时（地图冒险）
+        else {
+            if (ParentRoom.isClear <= 0 && GetComponent<BoxCollider2D>().isTrigger == false)
+            {
+                GetComponent<BoxCollider2D>().isTrigger = true;
+                animator.SetTrigger("Enable");
+            }
         }
-
     }
 
 
@@ -52,6 +64,8 @@ public class NextFloorGateWay : GateWay
     {
         if (Player.tag == ("Player") && Player.GetComponent<PlayerControler>() != null)
         {
+            // 最大层数(7) > 当前层数(012345) + 1
+            // 进入下一层
             if (FloorNum.GlobalFloorNum.MaxFloor > FloorNum.GlobalFloorNum.FloorNumber + 1)
             {
 
@@ -68,25 +82,37 @@ public class NextFloorGateWay : GateWay
                 }
                 SceneLoadManger.sceneLoadManger.LoadGame();
             }
+            // 最大层数(7) <= 当前层数(6) + 1
+            // 呼出游戏结束界面
             else
             {
-                TPMask.In.transform.GetChild(1).gameObject.SetActive(true);
+                if (TPMask.In != null )
+                {
+                    TPMask.In.transform.GetChild(1).gameObject.SetActive(true);
+                }
             }
-
         }
     }
 
+
+    // FloorNumber = 0 第一层
+    // FloorNumber = 1 第二层
+    // MaxFloor = 7 (最大层数为第七层)
     private void OnTriggerExit2D(Collider2D Player)
     {
         if (Player.tag == ("Player") && Player.GetComponent<PlayerControler>() != null)
         {
+            // 最大层数(7) > 当前层数(012345) + 1
+            // 无反应
             if (FloorNum.GlobalFloorNum.MaxFloor > FloorNum.GlobalFloorNum.FloorNumber + 1)
             {
 
             }
+            // 最大层数(7) <= 当前层数(6) + 1
+            // 关闭游戏结束界面
             else
             {
-                if (TPMask.In.transform.GetChild(1).gameObject.activeInHierarchy)
+                if (TPMask.In != null && TPMask.In.transform.GetChild(1).gameObject.activeInHierarchy)
                 {
                     TPMask.In.transform.GetChild(1).gameObject.SetActive(false);
                 }
