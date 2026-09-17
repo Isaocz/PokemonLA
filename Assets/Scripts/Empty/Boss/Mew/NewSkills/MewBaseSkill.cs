@@ -588,6 +588,7 @@ public abstract class MewBaseSkill : MonoBehaviour, IMewSkill
             GameObject target = temporaryObjects[i];
             if (target != null)
             {
+                if (empty is Mew boss && boss.IsEnding && target.GetComponent<Projectile>() != null) continue;
                 Destroy(target);
             }
         }

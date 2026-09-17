@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5981806836103027693
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1161102490445389878}
+  - component: {fileID: 8984915103685745446}
+  m_Layer: 0
+  m_Name: CelestialClock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1161102490445389878
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5981806836103027693}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8984915103685745446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5981806836103027693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18e43ff6709c2a479f8449f072f705f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillName: "\u5929\u8C61\u65F6\u949F"
+  skillStartup: 0.35
+  skillEndup: 0.4
+  existTime: 0
+  repeatTime: 0
+  repeat: 1
+  executeImmediatelyWhenSetEmpty: 1
+  destroyOnFinish: 1
+  cleanupTemporaryObjectsOnFinish: 0
+  useUnscaledLifecycleTime: 0
+  projectilePrefab: {fileID: 6986079038040258243, guid: 27b5f0bb14994bfba19810d596a6a63e, type: 3}
+  projectileRotationOffset: 0
+  rotationDuration: 7.2
+  hourCount: 12
+  hourRingProjectileCount: 10
+  hourRingStartSpeed: 5.2
+  hourRingAcceleration: 0.55
+  hourRingAngleShift: 7.5
+  laserHandPrefab: {fileID: 0}
+  laserPrefabRotationOffset: 0
+  handLengthRatio: 0.92
+  fallbackHandWidth: 0.18
+  fallbackHandColor: {r: 0.95, g: 0.45, b: 1, a: 0.92}
+  fallbackSortingOrder: 95
+  hourMarkerPrefab: {fileID: 0}
+  tickEffectPrefab: {fileID: 0}
+  markerRadiusRatio: 0.82
+  tickEffectLifetime: 0.7
+  arenaFadeDuration: 0.65
+  finalRingCount: 3
+  finalRingProjectileCount: 18
+  finalRingInterval: 0.42
+  finalRingStartSpeed: 9.5
+  finalRingAcceleration: -1.15
+  finalRingMinimumSpeed: 2.2
+  finalRingAngleShift: 10

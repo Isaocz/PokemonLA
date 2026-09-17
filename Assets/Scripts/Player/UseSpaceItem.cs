@@ -239,6 +239,15 @@ public class UseSpaceItem : MonoBehaviour
                 player.PlayerFrozenRemove();
                 break;
             case 50:
+                player.ConfusionRemove();
+                player.FearRemove();
+                player.BlindRemove();
+                player.FrozenRemove();
+                player.EmptyInfatuationRemove();
+                player.EmptyCurseRemove();
+                player.EmptyConfusionRemove();
+                player.SpeedRemove01(0f);
+                player.ColdRemove();
                 player.PlayerFrozenRemove();
                 player.ToxicRemove();
                 player.ParalysisRemove();

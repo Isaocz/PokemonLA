@@ -12,6 +12,14 @@ public class StarParticalController : MonoBehaviour
 
     private bool isPlaying;
 
+    public void ResetForReuse()
+    {
+        isPlaying = false;
+        if (particleSystemComponent != null)
+            particleSystemComponent.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        if (Child != null) Child.SetActive(false);
+    }
+
     private void Awake()
     {
         particleSystemComponent = GetComponent<ParticleSystem>();
@@ -19,9 +27,14 @@ public class StarParticalController : MonoBehaviour
 
         if (particleSystemComponent != null)
         {
+            var main = particleSystemComponent.main;
+            main.playOnAwake = false;
             particleSystemComponent.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
     }
+
+    private void OnEnable() { ResetForReuse(); }
+    private void OnDisable() { ResetForReuse(); }
 
     private void Update()
     {
@@ -33,7 +46,7 @@ public class StarParticalController : MonoBehaviour
         bool shouldPlay =
             (barrageProjectile.moveBehavior == BarrageProjectile.projectileBehavior.Target ||
              barrageProjectile.moveBehavior == BarrageProjectile.projectileBehavior.CloseTarget) &&
-            !barrageProjectile.isTargeting;
+            !barrageProjectile.isTargeting && barrageProjectile.Target != null && barrageProjectile.FadeMode == 0;
 
         if (particleSystemComponent != null)
         {
@@ -42,9 +55,9 @@ public class StarParticalController : MonoBehaviour
                 particleSystemComponent.Play();
                 isPlaying = true;
             }
-            else if (!shouldPlay && isPlaying)
+            else if (!shouldPlay && (isPlaying || particleSystemComponent.isPlaying || particleSystemComponent.particleCount > 0))
             {
-                particleSystemComponent.Stop();
+                particleSystemComponent.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
                 isPlaying = false;
             }
         }

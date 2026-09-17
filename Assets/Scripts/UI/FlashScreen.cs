@@ -53,6 +53,10 @@ public class FlashScreen : MonoBehaviour
 
     public SpriteRenderer img;
 
+    private CameraAdapt maskCamera;
+    private Camera viewCamera;
+    private Vector3 normalPosition, normalScale;
+    private bool fittedToScreen;
     private FlashEffect currentEffect;
     private bool isFlashing = false;
 
@@ -63,9 +67,37 @@ public class FlashScreen : MonoBehaviour
     void Awake()
     {
         instance = this;
+        normalPosition = img.transform.localPosition;
+        normalScale = img.transform.localScale;
+        maskCamera = FindObjectOfType<CameraAdapt>();
+        viewCamera = Camera.main;
         img.color = new Color(0, 0, 0, 0);
     }
 
+    void LateUpdate()
+    {
+        bool fullScreen = Mew.ActiveEncounter != null && Mew.ActiveEncounter.currentPhase >= 2 &&
+            maskCamera != null && maskCamera.cameraMaskLeft != null &&
+            !maskCamera.cameraMaskLeft.activeInHierarchy;
+        if (fullScreen && viewCamera != null && viewCamera.orthographic && img.sprite != null)
+        {
+            float height = viewCamera.orthographicSize * 2f;
+            Vector3 center = viewCamera.transform.position;
+            center.z = img.transform.position.z;
+            img.transform.position = center;
+            Vector3 parentScale = img.transform.parent != null ? img.transform.parent.lossyScale : Vector3.one;
+            Vector2 size = img.sprite.bounds.size;
+            img.transform.localScale = new Vector3(height * viewCamera.aspect / Mathf.Max(0.001f, size.x * Mathf.Abs(parentScale.x)),
+                height / Mathf.Max(0.001f, size.y * Mathf.Abs(parentScale.y)), normalScale.z);
+            fittedToScreen = true;
+        }
+        else if (fittedToScreen)
+        {
+            img.transform.localPosition = normalPosition;
+            img.transform.localScale = normalScale;
+            fittedToScreen = false;
+        }
+    }
     void Update()
     {
         if (!isFlashing) return;

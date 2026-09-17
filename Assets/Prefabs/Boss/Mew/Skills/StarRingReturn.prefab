@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &320831595595604023
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5687733613758278320}
+  - component: {fileID: 2549118700845168304}
+  m_Layer: 0
+  m_Name: StarRingReturn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5687733613758278320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320831595595604023}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.6027862, y: -0.55473137, z: -0.024146808}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2549118700845168304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320831595595604023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1044499064504934f90c9861b131b767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillName: 星之使徒
+  skillStartup: 0.45
+  skillEndup: 0.3
+  existTime: 0
+  repeatTime: 0
+  repeat: 1
+  executeImmediatelyWhenSetEmpty: 1
+  destroyOnFinish: 1
+  cleanupTemporaryObjectsOnFinish: 0
+  useUnscaledLifecycleTime: 0
+  projectilePrefab: {fileID: 6986079038040258243, guid: 27b5f0bb14994bfba19810d596a6a63e, type: 3}
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  phase1:
+    waveCount: 2
+    bulletCount: 32
+    waveInterval: 1
+    rotationPerWave: 6
+    safeCorridorWidth: 4.2
+    minimumCorridorAngle: 24
+    maximumCorridorAngle: 58
+    corridorOffsetPerWave: 14
+    useOppositeCorridor: 1
+    spawnRadius: 0.7
+    maximumRayDistance: 30
+    wallPadding: 0.55
+    minimumTravelDistance: 3
+    previewOutDuration: 1.05
+    warningHoldDuration: 0.65
+    previewAlpha: 0.28
+    warningBlinkSpeed: 7
+    returnDuration: 1.6
+    despawnRadius: 0.45
+  phase2:
+    waveCount: 3
+    bulletCount: 24
+    waveInterval: 0.52
+    rotationPerWave: 15
+    safeCorridorWidth: 4.5
+    minimumCorridorAngle: 22
+    maximumCorridorAngle: 54
+    corridorOffsetPerWave: 18
+    useOppositeCorridor: 1
+    spawnRadius: 0.65
+    maximumRayDistance: 50
+    wallPadding: 0.5
+    minimumTravelDistance: 1.2
+    previewOutDuration: 0.9
+    warningHoldDuration: 0.55
+    previewAlpha: 0.25
+    warningBlinkSpeed: 6
+    returnDuration: 1.7
+    despawnRadius: 0.45
+
+  phaseTwoSpread: 11

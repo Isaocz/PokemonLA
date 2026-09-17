@@ -66,7 +66,7 @@ public class PokemonBall : IteamPickUp
         if ( !isOpen && isPickUp && CanBePickUp)
         {
             if (PassiveDropPer == -1) { PassiveDropPer = 0.1f; }
-            if (Random.Range(0.0f, 1.0f) <= (1-PassiveDropPer))
+            if (PassiveDropPer < 1f && (PassiveDropPer <= 0f || Random.Range(0.0f, 1.0f) <= (1-PassiveDropPer)))
             {
                 animator.SetTrigger("Normal");
                 PokemonNormalOpen();

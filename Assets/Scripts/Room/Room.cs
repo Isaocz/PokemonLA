@@ -137,7 +137,8 @@ public class Room : MonoBehaviour
             SetFloor();
         }
         RoomGraph = _PathFinder.StaticPathFinder.CreatNewGrid(new Vector3Int((int)(transform.position.x), (int)(transform.position.y), 0));
-        StartCoroutine(DeleteObjectsCoroutine());
+        // 057 is now Mew Sanctuary; the former automatic grass removal is retired.
+        // StartCoroutine(DeleteObjectsCoroutine());
     }
 
 
@@ -555,19 +556,6 @@ public class Room : MonoBehaviour
 
 
 
-
-    private IEnumerator DeleteObjectsCoroutine()
-    {
-        for (; ; )
-        {
-            if (playerControler != null && playerControler.playerData.IsPassiveGetList[57])
-            {
-                DeleteGrass(transform);
-            }
-            yield return new WaitForSeconds(4f);
-            //Debug.Log("clear the grass complete");
-        }
-    }
 
     private void DeleteGrass(Transform parent)
     {

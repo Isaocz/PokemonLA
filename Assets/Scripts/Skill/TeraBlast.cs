@@ -39,10 +39,7 @@ public class TeraBlast : Skill
             SpDamage = 0;
         }
         //如果在本房间内太晶化过，则招式属性变为太晶属性
-        if (0 != player.PlayerTeraTypeJOR)
-        {
-            SkillType = player.PlayerTeraTypeJOR;
-        }
+        player.SetTerablast(this);
 
         if (transform.rotation.eulerAngles == new Vector3(0, 0, 0) || transform.rotation.eulerAngles == new Vector3(0, 0, 180)) { DirectionRight = true; }
         else if (transform.rotation.eulerAngles == new Vector3(0, 0, 90) || transform.rotation.eulerAngles == new Vector3(0, 0, 270)) { DirectionRight = false; }

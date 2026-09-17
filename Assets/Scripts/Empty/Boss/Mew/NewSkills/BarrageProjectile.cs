@@ -71,28 +71,77 @@ public class BarrageProjectile : Projectile
     public int FadeMode;
 
     private float fadeTimer;
+    private float lifetime;
+    private bool rescueFrozen;
+    private bool cullOutsideArena;
+    private Vector2 cullCenter;
+    private float cullRadiusSquared;
+    public System.Action<BarrageProjectile> ReturnToPool;
     private SpriteRenderer spriteRenderer;
+
+    private AudioClip spawnClip;
+    private float spawnVolume = 1f;
+    private bool spawnSoundPending = true;
+    private bool evolutionScaleApplied;
+    public void ApplyEvolutionScale(Empty owner)
+    {
+        if (evolutionScaleApplied || !(owner is Mew boss)) return;
+        transform.localScale *= boss.StarScaleForPlayer;
+        evolutionScaleApplied = true;
+    }
 
     private void Awake()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        // Previous prefab AudioSource.playOnAwake emitted once per bullet.
+        foreach (var source in GetComponentsInChildren<AudioSource>(true))
+        {
+            if (spawnClip == null && !source.loop) { spawnClip = source.clip; spawnVolume = source.volume; }
+            if (!source.loop) { source.playOnAwake = false; source.Stop(); source.enabled = false; }
+        }
     }
 
-    private void Start()
+    public void ResetLifetime()
     {
-        Destroy(gameObject, Mathf.Max(0.05f, ExistTime));
+        spawnSoundPending = true;
+        evolutionScaleApplied = false;
+        lifetime = fadeTimer = 0f;
+        rescueFrozen = false;
+        cullOutsideArena = false;
     }
 
     private void Update()
     {
+        if (spawnSoundPending && empty != null)
+        {
+            spawnSoundPending = false;
+            if (empty is Mew && AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFXGrouped(spawnClip, transform.position, 0.08f, false, spawnVolume);
+        }
+        ApplyEvolutionScale(empty);
+        if (rescueFrozen) return;
+        lifetime += Time.deltaTime;
+        if (lifetime >= Mathf.Max(0.05f, ExistTime))
+        {
+            Despawn();
+            return;
+        }
         UpdateSpin();
         UpdateFade();
+        if (cullOutsideArena && moveBehavior == projectileBehavior.Straight && accerate >= 0f && moveSpeed >= 0f)
+        {
+            Vector2 delta = (Vector2)transform.position - cullCenter;
+            if (delta.sqrMagnitude > cullRadiusSquared && Vector2.Dot(delta, direction) > 0f)
+            {
+                Despawn();
+                return;
+            }
+        }
 
         switch (moveBehavior)
         {
             case projectileBehavior.Idle:
-                MoveIdle();
                 break;
             case projectileBehavior.Straight:
                 MoveStraight();
@@ -107,6 +156,33 @@ public class BarrageProjectile : Projectile
                 MoveCloseTarget();
                 break;
         }
+    }
+
+    public void FreezeForRescue()
+    {
+        rescueFrozen = true;
+        StopMovement();
+        foreach (Collider2D hitbox in GetComponentsInChildren<Collider2D>()) hitbox.enabled = false;
+        foreach (MonoBehaviour behaviour in GetComponentsInChildren<MonoBehaviour>())
+            if (behaviour != this) { behaviour.StopAllCoroutines(); behaviour.enabled = false; }
+    }
+
+    public void Despawn()
+    {
+        if (ReturnToPool != null) ReturnToPool(this);
+        else Destroy(gameObject);
+    }
+
+    public void ScheduleDespawn(float delay)
+    {
+        ExistTime = Mathf.Min(ExistTime, lifetime + Mathf.Max(0.01f, delay));
+    }
+
+    public void SetArenaCull(Vector2 center, float radius)
+    {
+        cullOutsideArena = true;
+        cullCenter = center;
+        cullRadiusSquared = radius * radius;
     }
 
     private void MoveIdle()
@@ -217,6 +293,7 @@ public class BarrageProjectile : Projectile
     public void SetBehavior(projectileBehavior behavior)
     {
         moveBehavior = behavior;
+        if (behavior == projectileBehavior.Idle) MoveIdle();
     }
 
     public void SetSpeed(float speed, float acceleration = 0f)
@@ -275,7 +352,7 @@ public class BarrageProjectile : Projectile
                 {
                     StopMovement();
                     FadeMode = 1;
-                    Destroy(gameObject, 0.5f);
+                    ExistTime = Mathf.Min(ExistTime, lifetime + 0.5f);
                     return;
                 }
             }
@@ -294,6 +371,9 @@ public class BarrageProjectile : Projectile
             SpDmage,
             0,
             ProType);
+
+        ApplyEvolutionScale(empty);
+        if (rescueFrozen) return;
 
         if (playerControler == null)
         {

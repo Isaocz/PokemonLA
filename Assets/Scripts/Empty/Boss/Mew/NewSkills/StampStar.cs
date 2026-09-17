@@ -23,7 +23,7 @@ public class StampStar : MewBaseSkill
     public float rotationPerBurst = 15f;
     public bool randomizeFirstBurst = true;
 
-    private GameObject stamp;
+
 
     public override IEnumerator CoreLogic()
     {
@@ -45,7 +45,20 @@ public class StampStar : MewBaseSkill
         Vector2 direction =
             ((Vector2)target.position - (Vector2)SkillOrigin).normalized;
 
-        stamp = Instantiate(
+        if (direction.sqrMagnitude < 0.001f) direction = Vector2.up;
+        if (IsPhase2OrLater)
+        {
+            Coroutine left = StartCoroutine(FireMain(Quaternion.Euler(0, 0, -45f) * direction));
+            Coroutine right = StartCoroutine(FireMain(Quaternion.Euler(0, 0, 45f) * direction));
+            yield return left;
+            yield return right;
+        }
+        else yield return FireMain(direction);
+    }
+
+    private IEnumerator FireMain(Vector2 direction)
+    {
+        GameObject stamp = Instantiate(
             projectilePref,
             SkillOrigin,
             Quaternion.identity);
@@ -89,7 +102,7 @@ public class StampStar : MewBaseSkill
                 break;
             }
 
-            SpawnBurst(currentStarCount, burstRotation);
+            SpawnBurst(stamp.transform.position, currentStarCount, burstRotation);
             burstRotation += rotationPerBurst;
         }
 
@@ -106,7 +119,7 @@ public class StampStar : MewBaseSkill
         }
     }
 
-    private void SpawnBurst(int count, float rotation)
+    private void SpawnBurst(Vector3 origin, int count, float rotation)
     {
         float angleStep = 360f / count;
 
@@ -120,7 +133,7 @@ public class StampStar : MewBaseSkill
             // 保持 Prefab 原始旋转，避免贴图/子物体被额外旋转。
             GameObject starObject = Instantiate(
                 starsPref,
-                stamp.transform.position,
+                origin,
                 Quaternion.identity);
 
             BarrageProjectile star =

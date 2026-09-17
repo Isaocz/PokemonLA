@@ -1,214 +1,131 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// 技能4：星之冲刺。
-/// 每次冲刺前以 MeleePref 显示环绕音符预警，随后锁定玩家位置冲刺；
-/// 冲刺中持续释放沿冲刺方向缓慢加速的星光，共冲刺3次。
-/// </summary>
+/// <summary>Three telegraphed dashes with star emissions measured along actual travelled distance.</summary>
 public class StarCharge : MewBaseSkill
 {
-    [Header("冲刺对象与弹幕")]
+    [SerializeField] private GameObject dashArrowPrefab;
     public GameObject MeleePref;
     public GameObject BarragePref;
     public GameObject LingeringNotePrefab;
-
-    [Header("冲刺")]
     [Min(1)] public int dashCount = 3;
-    [Tooltip("星之冲刺专用预警：只在第一次冲刺前等待。它属于 CoreLogic 内部，不要再叠加 skillStartup。")]
-    [Min(0f)] public float StartCharge = 0.5f;
-    [Tooltip("每一段冲刺本身持续的时间。")]
+    [Min(0f)] public float StartCharge = 0.8f;
+    [Min(0.35f)] public float followupWarningTime = 0.55f;
     [Min(0.05f)] public float ChargeTime = 1f;
-    [Tooltip("三段冲刺之间的间隔，不是技能后摇。")]
     [Min(0f)] public float dashInterval = 0.35f;
     public Vector3 TransformOffset = new Vector3(0f, 0.5f, 0f);
     public MeleeProjectile.MeleeWay movementCurve = MeleeProjectile.MeleeWay.Sine;
-
-    [Header("冲刺弹幕")]
-    [Min(0.02f)] public float BarrageInterval = 0.1f;
+    [HideInInspector] public float BarrageInterval = 0.1f; // Legacy prefab value; emission now uses distance.
+    [Min(0.25f)] public float barrageSpacing = 1.5f;
     public float barrageStartSpeed = 1f;
     public float barrageAcceleration = 4f;
-
-    [Header("滞留音符圈")]
     [Min(0f)] public float lingeringNoteDuration = 2.5f;
-
 
     public override IEnumerator CoreLogic()
     {
-        if (MeleePref == null)
+        if (MeleePref == null || BarragePref == null)
         {
-            Debug.LogError(name + "：StarCharge 未设置 MeleePref。", this);
+            Debug.LogError(name + ": missing dash or star prefab.", this);
             yield break;
         }
-
-        if (BarragePref == null)
-        {
-            Debug.LogError(name + "：StarCharge 未设置 BarragePref。", this);
-            yield break;
-        }
-
-        int totalDashes = Mathf.Max(1, dashCount);
-
-        for (int dashIndex = 0; dashIndex < totalDashes; dashIndex++)
+        for (int dash = 0; dash < Mathf.Max(1, dashCount); dash++)
         {
             Transform target = GetPlayerTransform();
-            if (target == null || empty == null)
-            {
-                yield break;
-            }
-
-            GameObject dashObject = Instantiate(
-                MeleePref,
-                empty.transform.position + TransformOffset,
-                Quaternion.identity);
-            RegisterTemporaryObject(dashObject);
-
-            MeleeProjectile melee = dashObject.GetComponent<MeleeProjectile>();
-            if (melee == null)
-            {
-                Debug.LogError(
-                    MeleePref.name + " 缺少 MeleeProjectile。",
-                    dashObject);
-                Destroy(dashObject);
-                UnregisterTemporaryObject(dashObject);
-                yield break;
-            }
-
+            if (target == null || empty == null) yield break;
+            GameObject obj = Instantiate(MeleePref, empty.transform.position + TransformOffset, Quaternion.identity);
+            RegisterTemporaryObject(obj);
+            MeleeProjectile melee = obj.GetComponent<MeleeProjectile>();
+            if (melee == null) { Destroy(obj); yield break; }
             melee.empty = empty;
             melee.TransformOffset = TransformOffset;
+            melee.DamageEnabled = false;
             melee.SetBehavior(MeleeProjectile.projectileBehavior.None);
-
-            // 文档描述是“音符环绕后连续冲刺 3 次”，前摇只在第一段冲刺前执行一次。
-            if (dashIndex == 0 && StartCharge > 0f)
+            MewDashPreview preview = MewDashPreview.Create(dashArrowPrefab);
+            RegisterTemporaryObject(preview.gameObject);
+            float warning = Mathf.Max(0.35f, dash == 0 ? Mathf.Max(0.55f, StartCharge) : followupWarningTime);
+            Vector2 end = melee.PrepareDash(target);
+            for (float t = 0f; t < warning; t += Time.deltaTime)
             {
-                yield return new WaitForSeconds(StartCharge);
+                if (empty == null || target == null || melee == null) yield break;
+                if (t < warning - 0.25f) end = melee.PrepareDash(target);
+                preview.Show(empty.transform.position + TransformOffset, end,
+                    Mathf.Clamp01(t / (warning * 0.65f)), false, Mathf.Max(0.5f, melee.HitRadius * 2f));
+                yield return null;
             }
-
-            Vector2 dashDirection =
-                ((Vector2)target.position - (Vector2)empty.transform.position).normalized;
-
-            melee.ResetAttack();
-            melee.SetTarget(target);
             melee.SetTime(ChargeTime);
-            melee.SetBehavior(
-                MeleeProjectile.projectileBehavior.TargetStraight,
-                movementCurve);
-
-            Coroutine emitter = StartCoroutine(
-                EmitBarrageDuringDash(melee, dashDirection));
-
-            float timeout = ChargeTime + 0.5f;
+            melee.SetBehavior(MeleeProjectile.projectileBehavior.TargetStraight, movementCurve);
+            melee.DamageEnabled = true;
+            Vector2 previous = empty.transform.position + TransformOffset;
+            Vector2 direction = (end - previous).normalized;
+            var spacing = new MewDashSpacing(barrageSpacing);
+            SpawnDashBarrage(previous, direction);
             float elapsed = 0f;
-            while (melee != null && !melee.IsMovementFinished && elapsed < timeout)
+            while (melee != null && !melee.IsMovementFinished && elapsed < ChargeTime + 0.5f)
             {
+                Vector2 current = empty.transform.position + TransformOffset;
+                EmitSegment(previous, current, direction, ref spacing);
+                previous = current;
+                preview.Show(current, end, 1f, true, Mathf.Max(0.5f, melee.HitRadius * 2f));
                 elapsed += Time.deltaTime;
                 yield return null;
             }
-
-            if (emitter != null)
-            {
-                StopCoroutine(emitter);
-            }
-
-            Vector3 dashEndPosition = empty.transform.position;
-            SpawnLingeringNote(dashEndPosition);
-
-            if (dashObject != null)
-            {
-                UnregisterTemporaryObject(dashObject);
-                Destroy(dashObject);
-            }
-
-            if (dashIndex < totalDashes - 1 && dashInterval > 0f)
-            {
-                yield return new WaitForSeconds(dashInterval);
-            }
+            if (empty == null) yield break;
+            // Include the final movement sample regardless of Update/coroutine ordering.
+            EmitSegment(previous, empty.transform.position + TransformOffset, direction, ref spacing);
+            SpawnLingeringNote(empty.transform.position);
+            UnregisterTemporaryObject(preview.gameObject);
+            Destroy(preview.gameObject);
+            UnregisterTemporaryObject(obj);
+            if (obj != null) Destroy(obj);
+            if (dash < dashCount - 1 && dashInterval > 0f) yield return new WaitForSeconds(dashInterval);
         }
     }
 
-    private IEnumerator EmitBarrageDuringDash(
-        MeleeProjectile melee,
-        Vector2 dashDirection)
+    private void EmitSegment(Vector2 from, Vector2 to, Vector2 direction, ref MewDashSpacing spacing)
     {
-        while (melee != null && !melee.IsMovementFinished)
+        Vector2 delta = to - from;
+        float length = delta.magnitude;
+        if (length < 0.00001f) return;
+        Vector2 along = delta / length;
+        float travelled = 0f;
+        while (spacing.TryTake(length, ref travelled, out float offset))
         {
-            SpawnDashBarrage(dashDirection);
-            yield return new WaitForSeconds(BarrageInterval);
+            SpawnDashBarrage(from + along * offset, direction);
         }
     }
 
-    private void SpawnDashBarrage(Vector2 dashDirection)
+    private void SpawnDashBarrage(Vector2 position, Vector2 direction)
     {
-        if (empty == null)
+        if (empty == null || (empty is Mew boss && boss.IsEnding)) return;
+        if (!IsPhase2OrLater) SpawnSingle(position, direction);
+        else
         {
-            return;
+            Vector2 side = new Vector2(-direction.y, direction.x);
+            SpawnSingle(position, side);
+            SpawnSingle(position, -side);
         }
-
-        if (!IsPhase2OrLater)
-        {
-            SpawnSingleBarrage(dashDirection);
-            return;
-        }
-
-        // 文档中的二阶段强化：每次生成2颗，分别向冲刺方向的两侧移动。
-        Vector2 perpendicular = new Vector2(-dashDirection.y, dashDirection.x);
-        SpawnSingleBarrage(perpendicular);
-        SpawnSingleBarrage(-perpendicular);
     }
 
-    private void SpawnSingleBarrage(Vector2 direction)
+    private void SpawnSingle(Vector2 position, Vector2 direction)
     {
-        Vector3 spawnPosition = empty.transform.position + TransformOffset;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-        GameObject barrageObject = Instantiate(
-            BarragePref,
-            spawnPosition,
-            Quaternion.Euler(0f, 0f, angle));
-
-        BarrageProjectile barrage =
-            barrageObject.GetComponent<BarrageProjectile>();
-
-        if (barrage == null)
-        {
-            Debug.LogError(
-                BarragePref.name + " 缺少 BarrageProjectile。",
-                barrageObject);
-            Destroy(barrageObject);
-            return;
-        }
-
-        barrage.empty = empty;
-        barrage.SetBehavior(BarrageProjectile.projectileBehavior.Straight);
-        barrage.SetDirection(direction);
-        barrage.SetSpeed(barrageStartSpeed, barrageAcceleration);
+        GameObject obj = MewStarPool.Spawn(BarragePref, position,
+            Quaternion.Euler(0f, 0f, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg), empty);
+        BarrageProjectile bullet = obj.GetComponent<BarrageProjectile>();
+        if (bullet == null) { Destroy(obj); return; }
+        bullet.empty = empty;
+        bullet.SetBehavior(BarrageProjectile.projectileBehavior.Straight);
+        bullet.SetDirection(direction);
+        bullet.SetSpeed(barrageStartSpeed, barrageAcceleration);
     }
 
     private void SpawnLingeringNote(Vector3 position)
     {
-        if (LingeringNotePrefab == null)
-        {
-            return;
-        }
-
-        GameObject noteCircle = Instantiate(
-            LingeringNotePrefab,
-            position,
-            Quaternion.identity);
-
-        Projectile projectile = noteCircle.GetComponent<Projectile>();
-        if (projectile != null)
-        {
-            projectile.empty = empty;
-        }
-
-        Destroy(noteCircle, Mathf.Max(0.05f, lingeringNoteDuration));
+        if (LingeringNotePrefab == null) return;
+        GameObject obj = Instantiate(LingeringNotePrefab, position, Quaternion.identity);
+        if (obj.TryGetComponent(out Projectile projectile)) projectile.empty = empty;
+        Destroy(obj, Mathf.Max(0.05f, lingeringNoteDuration));
     }
 
-
-    protected override int GetExecutionCount()
-    {
-        // 本技能的轮次已经由脚本内部管理，避免 Prefab 上旧 repeat 数值重复整套技能。
-        return 1;
-    }
+    protected override void OnSkillFinished(MewSkillFinishReason reason) { CleanupTemporaryObjects(); }
+    protected override int GetExecutionCount() { return 1; }
 }

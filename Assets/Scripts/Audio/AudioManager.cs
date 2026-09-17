@@ -98,7 +98,17 @@ public class AudioManager : MonoBehaviour
     /// <param name="clip"></param>
     /// <param name="position"></param>
     /// <param name="isPosFree">不受位置限制</param>
-    public void PlaySFX(AudioClip clip, Vector3 position , bool isPosFree = false , float Pitch = 1.0f)
+    // Opt-in burst coalescing. Other callers retain the existing pool concurrency policy.
+    private readonly Dictionary<AudioClip, float> groupedUntil = new Dictionary<AudioClip, float>();
+    public void PlaySFXGrouped(AudioClip clip, Vector3 position, float interval = 0.08f, bool positionFree = false, float volumeScale = 1f)
+    {
+        if (clip == null || (!positionFree && !_mTool.IsInCameraView(position))) return;
+        float now = Time.unscaledTime;
+        if (groupedUntil.TryGetValue(clip, out float until) && now < until) return;
+        groupedUntil[clip] = now + Mathf.Max(0.01f, interval);
+        PlaySFX(clip, position, positionFree, 1f, volumeScale);
+    }
+    public void PlaySFX(AudioClip clip, Vector3 position , bool isPosFree = false , float Pitch = 1.0f, float volumeScale = 1f)
     {
         //Debug.Log(clip);
         //Debug.Log(position);
@@ -135,10 +145,10 @@ public class AudioManager : MonoBehaviour
         AudioSource src = GetFreeSource();
         if (src == null) return;
 
-        StartCoroutine(PlayClipRoutine(src, clip, position , Pitch));
+        StartCoroutine(PlayClipRoutine(src, clip, position , Pitch, volumeScale));
     }
 
-    private System.Collections.IEnumerator PlayClipRoutine(AudioSource src, AudioClip clip, Vector3 pos , float Pitch)
+    private System.Collections.IEnumerator PlayClipRoutine(AudioSource src, AudioClip clip, Vector3 pos , float Pitch, float volumeScale)
     {
         if (!clipPlayCount.ContainsKey(clip))
             clipPlayCount[clip] = 0;
@@ -155,7 +165,9 @@ public class AudioManager : MonoBehaviour
         if (clipPlayCount[clip] > 1)
             volume *= multiPlayVolumeScale;
 
-        src.volume = Mathf.Clamp01(volume);
+        // Preserve each emitter original loudness when routing through the pool.
+        // Previous: src.volume = Mathf.Clamp01(volume);
+        src.volume = Mathf.Clamp01(volume * volumeScale);
 
         src.Play();
 

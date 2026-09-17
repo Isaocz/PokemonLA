@@ -9,10 +9,12 @@ public class MewHpLeftUI : MonoBehaviour
     private Empty ParentEmpty;
     private Mew mew;
     private Outline outline;
+    private int displayedSeconds = -1;
     void Start()
     {
-        ParentEmpty = transform.parent.parent.GetComponent<Empty>();
-        mew = transform.parent.parent.GetComponent<Mew>();
+        // Find the owner through the nested BossUI/EmptyHPBar hierarchy.
+        mew = GetComponentInParent<Mew>();
+        ParentEmpty = mew;
         healthText = GetComponent<Text>();
         outline = GetComponent<Outline>();
     }
@@ -61,9 +63,13 @@ public class MewHpLeftUI : MonoBehaviour
             }
             else
             {
-                float healthPercentage = ParentEmpty.uIHealth.Per * 100f;
                 healthText.color = new Color(Mathf.PingPong(Time.time, 1), Mathf.PingPong(Time.time + 0.5f, 1), Mathf.PingPong(Time.time + 1f, 1));
-                healthText.text = "(Invincible) " + healthPercentage.ToString("F1") + "%";
+                int seconds = Mathf.CeilToInt(mew.TrialRemainingSeconds);
+                if (seconds != displayedSeconds)
+                {
+                    displayedSeconds = seconds;
+                    healthText.text = seconds.ToString() + "s";
+                }
             }
         }
     }

@@ -82,6 +82,7 @@ public class StarSlash : MewBaseSkill
                 if (splitter != null)
                 {
                     splitter.SplitStarSlashNum = 8;
+                    splitter.randomizeSplitRotation = true;
                 }
             }
 

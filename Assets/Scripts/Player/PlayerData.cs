@@ -544,7 +544,7 @@ public class PlayerData : MonoBehaviour
                 break;
             case 56:
                 //梦幻道具：旋转光球
-                Instantiate(aGameObjectByPassiveItem(5), player.transform.position + new Vector3(0f, 0.5f, 0f), Quaternion.identity, player.NotFollowBaby.transform);
+                MewRewardPassives.Ensure(player); // 056 now summons skill-triggered apostles.
                 break;
             case 57:
                 //梦幻道具：禁草

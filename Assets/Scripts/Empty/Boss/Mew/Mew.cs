@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +13,7 @@ public class Mew : Empty
     public GameObject StampStarPref; // 技能3：旋转星光
     public GameObject StarChargePref; // 技能4：星之冲刺
     public GameObject StarSlashPref; // 技能5：星之刃
-    public GameObject StarRingReturnPref; // 技能6：星环折返
+    public GameObject StarRingReturnPref; // 技能6：星之使徒（保留旧 Prefab 字段名）
 
     [Header("第二阶段强技能")]
     [Tooltip("强技能1：镜像星光。Prefab 根对象必须挂载 MirrorStarLight。")]
@@ -60,14 +60,14 @@ public class Mew : Empty
     [Tooltip("限制圈只在终幕准备前存在；默认在前 45 秒从 22 缩到 16。")]
     [Min(0.1f)] public float ArenaShrinkDuration = 45f;
 
-    [Header("第三阶段最终技能：终符「星尘幻想」Hard")]
-    [Tooltip("推荐填写挂有 StardustFantasy 的 Hard 技能 Prefab。留空时运行时自动创建九使魔技能对象。")]
+    [Header("第三阶段：星海归还")]
+    [Tooltip("保留旧星尘幻想资源引用；新尾杀由 MewFinale 自动创建。")]
     public GameObject StardustFantasyPref;
     [Tooltip("普通 StarLight Prefab，必须带 BarrageProjectile 与 Rigidbody2D。可覆盖技能 Prefab 内的 projectilePrefab。")]
     public GameObject StardustProjectilePrefab;
-    [Min(1f)] public float Phase3Duration = 60f;
-    [Tooltip("终幕总时长。默认 15 秒：10 秒蓄积、2 秒散花、3 秒淡出。")]
-    [Min(5f)] public float Phase3FinaleDuration = 15f;
+    [HideInInspector] public float Phase3Duration = 42f; // Legacy scale; completion follows the skill sequence.
+    [Tooltip("最后一幕的缩圈准备时长。42 秒预设使用 8 秒；第 38 秒解除限制圈。")]
+    [Min(5f)] public float Phase3FinaleDuration = 8f;
 
     [Header("血条 UI 调整")]
     public GameObject timeBar1;
@@ -92,6 +92,25 @@ public class Mew : Empty
     public GameObject MewBossRoomPrefab;
     public Vector3 MewBossRoomPosition = new Vector3(60f, 60f, 0f);
     public PokemonBall[] pbList;
+    public PokemonBall OrdinaryRewardPrefab;
+    public GameObject MaxPotionRewardPrefab;
+    public GameObject FullHealRewardPrefab;
+
+    public enum EncounterResult { NormalBattleFailed, FinalTrialFailed, FinalTrialCleared }
+    public static Mew ActiveEncounter { get; private set; }
+    public bool IsEnding => isDying;
+    public float StarScaleForPlayer => player != null ? player.MewStarScale : 1f;
+    private EncounterResult encounterResult;
+    private Room encounterRoom;
+    private Transform originalParent;
+    private bool savedInvincible, savedMovementLock, savedItemLock, savedEscape;
+    private bool phaseThreeInputCaptured;
+    private bool protectionHeld;
+    private GameObject temporaryBattleRoom;
+    private AudioClip previousMusic;
+    private float previousMusicVolume;
+    private Rigidbody2D protectedPlayerBody;
+    private RigidbodyConstraints2D savedPlayerConstraints;
 
     [Header("音频")]
     public BackGroundMusic bgmScript;
@@ -117,6 +136,8 @@ public class Mew : Empty
     #region 运行时状态
 
     private Vector3 mapCenter;
+    public Vector2 BattleCenter => mapCenter;
+    private Bounds? phaseTwoFloorBounds;
     private bool turningPhase;
 
     // 第一阶段严格按 1 -> 6 顺序释放，并等待当前技能完整结束。
@@ -143,7 +164,9 @@ public class Mew : Empty
     private bool phaseThreeArenaReady;
     private bool phaseThreeFinaleReleased;
     private Coroutine phaseThreeRoutine;
-    private StardustFantasy activePhaseThreeSkill;
+    private MewFinale activePhaseThreeSkill;
+    private bool phaseThreeTrialFinished;
+    private bool phaseThreeTrialCleared;
     private MewArenaBoundary arenaBoundary;
 
     private GameObject Camera;
@@ -159,6 +182,7 @@ public class Mew : Empty
 
     private float HpTimer = 60f;
     private float HpTiming = 60f;
+    public float TrialRemainingSeconds => activePhaseThreeSkill != null ? activePhaseThreeSkill.RemainingSeconds : HpTiming;
 
     public static bool MewBossKilled = false;
 
@@ -203,6 +227,8 @@ public class Mew : Empty
     private void Update()
     {
         ResetPlayer();
+        if (!isDying && player != null && player.Hp <= 0)
+            TryProtectPlayer(player);
 
         if (isBorn || isDying)
         {
@@ -256,6 +282,16 @@ public class Mew : Empty
         GetMewPosition = transform.position;
         GetPlayerPosition = player.transform.position;
         GetCameraPostion = Camera.transform.position;
+        originalParent = transform.parent;
+        encounterRoom = transform.parent.parent.GetComponent<Room>();
+        savedItemLock = player.CanNotUseSpaceItem;
+        savedEscape = UISkillButton.Instance == null || UISkillButton.Instance.isEscEnable;
+        if (bgmScript != null && bgmScript.BGM != null)
+        {
+            previousMusic = bgmScript.BGM.clip;
+            previousMusicVolume = bgmScript.BGM.volume;
+        }
+        ActiveEncounter = this;
 
         transform.parent.parent.GetComponent<Room>().isClear += 1;
     }
@@ -282,7 +318,7 @@ public class Mew : Empty
         phaseThreeArenaReady = false;
         phaseThreeFinaleReleased = false;
         isFinal = false;
-        HpTimer = Mathf.Max(1f, Phase3Duration);
+        HpTimer = Mathf.Max(1f, MewFinale.GetTrialSeconds(this));
         HpTiming = HpTimer;
     }
 
@@ -342,12 +378,19 @@ public class Mew : Empty
 
     private void UpdatePhaseThree()
     {
+        if (!phaseThreeInputCaptured)
+        {
+            savedEscape = UISkillButton.Instance == null || UISkillButton.Instance.isEscEnable;
+            savedItemLock = player != null && player.CanNotUseSpaceItem;
+            phaseThreeInputCaptured = true;
+        }
         Phase3();
         LockPhaseThreeHealing();
 
         if (phaseThreeTimerRunning)
         {
-            HpTiming = Mathf.Max(0f, HpTiming - Time.deltaTime);
+            if (activePhaseThreeSkill != null) HpTimer = activePhaseThreeSkill.TotalSeconds;
+            HpTiming = activePhaseThreeSkill != null ? activePhaseThreeSkill.RemainingSeconds : phaseThreeTrialFinished ? 0f : HpTimer;
             float timeRatio = HpTimer > 0f
                 ? Mathf.Clamp01(HpTiming / HpTimer)
                 : 0f;
@@ -357,25 +400,13 @@ public class Mew : Empty
             uIHealth.ChangeHpDown();
         }
 
-        if (phaseThreeTimerRunning &&
-            !phaseThreeFinaleReleased &&
-            HpTiming <= Phase3FinaleDuration)
-        {
-            // 正常情况下 StardustFantasy 会在同一时刻调用此方法；
-            // 这里作为技能 Prefab 配置失败时的保险，确保限制圈不会锁到结尾。
-            ReleasePhaseThreeArenaBoundary(0.45f);
-        }
-
         UISkillButton.Instance.isEscEnable = false;
         UpdateArenaBoundary();
 
-        if (phaseThreeTimerRunning && HpTiming <= 0f && !isDying)
+        if (phaseThreeTimerRunning && phaseThreeTrialFinished && !isDying)
         {
             phaseThreeTimerRunning = false;
-            isDying = true;
-            StopPhaseThreeFinalSkill();
-            ClearProjectile();
-            StartCoroutine(Phase3End());
+            BeginEncounterEnd(phaseThreeTrialCleared ? EncounterResult.FinalTrialCleared : EncounterResult.FinalTrialFailed);
         }
 
         if (player != null &&
@@ -554,15 +585,13 @@ public class Mew : Empty
             ClearStatusEffects();
             StopAllCoroutines();
 
-            player.ChangeHp(
-                player.Hp < player.maxHp * 3 / 4
-                    ? player.maxHp / 4
-                    : player.maxHp - player.Hp,
-                0,
-                0);
+            int phaseThreeRecovery = player.Hp < player.maxHp * 3 / 4
+                ? player.maxHp / 4 : player.maxHp - player.Hp;
+            // ChangeHp(0, 0, 0) enters the damage branch, not the healing branch.
+            if (phaseThreeRecovery > 0) player.ChangeHp(phaseThreeRecovery, 0, 0);
 
             EmptyHp = maxHP;
-            HpTimer = Mathf.Max(1f, Phase3Duration);
+            HpTimer = Mathf.Max(1f, MewFinale.GetTrialSeconds(this));
             HpTiming = HpTimer;
             phaseThreeTimerRunning = false;
             phaseThreeArenaReady = false;
@@ -781,6 +810,20 @@ public class Mew : Empty
             }
         }
 
+        if (currentPhase == 2)
+        {
+            // A strong skill may leave the caster outside. Never use that position as the fallback.
+            for (float radius = 3f; radius <= 18f; radius += 2f)
+                for (int i = 0; i < 24; i++)
+                {
+                    float angle = i * Mathf.PI / 12f;
+                    Vector3 candidate = mapCenter + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius;
+                    if (IsTeleportPositionValid(candidate, 1.5f, true)) return candidate;
+                }
+            if (IsTeleportPositionValid(mapCenter, 0f, true)) return mapCenter;
+            // Caller cancels the teleport instead of blindly accepting an invalid candidate.
+            return new Vector3(float.NaN, float.NaN, float.NaN);
+        }
         Debug.LogWarning(
             "连续150次未找到安全传送点，本次保留当前位置。",
             this);
@@ -795,6 +838,13 @@ public class Mew : Empty
         if (requireMapBounds && !IsInMapBounds(position))
         {
             return false;
+        }
+
+        if (requireMapBounds)
+        {
+            // An empty point beyond a wall passes an overlap test. Also require a wall-free connection to the room center.
+            foreach (RaycastHit2D hit in Physics2D.LinecastAll(mapCenter, position))
+                if (hit.collider != null && (hit.collider.CompareTag("Room") || hit.collider.CompareTag("Enviroment"))) return false;
         }
 
         if (player != null &&
@@ -817,6 +867,13 @@ public class Mew : Empty
     }
     private bool IsInMapBounds(Vector3 position)
     {
+        if (phaseTwoFloorBounds.HasValue)
+        {
+            Bounds floor = phaseTwoFloorBounds.Value;
+            float padding = Mathf.Max(1f, Phase2RoomEdgePadding);
+            if (position.x < floor.min.x + padding || position.x > floor.max.x - padding ||
+                position.y < floor.min.y + padding || position.y > floor.max.y - padding) return false;
+        }
         // 二阶段房间可能放在任意世界坐标，因此不能继续使用旧版固定坐标。
         float halfX = Mathf.Max(
             1f,
@@ -836,7 +893,7 @@ public class Mew : Empty
     {
         phaseOneSkillRunning = true;
 
-        animator.SetTrigger("Teleport");
+        BeginTeleportAnimation();
         if (Phase1TeleportOutTime > 0f)
         {
             yield return new WaitForSeconds(Phase1TeleportOutTime);
@@ -979,7 +1036,7 @@ public class Mew : Empty
 
     private IEnumerator CastPhaseTwoBasicSkill(int skillIndex)
     {
-        animator.SetTrigger("Teleport");
+        BeginTeleportAnimation();
 
         if (Phase2TeleportOutTime > 0f)
         {
@@ -987,6 +1044,12 @@ public class Mew : Empty
         }
 
         Vector3 destination = RamdomTeleport();
+        if (float.IsNaN(destination.x))
+        {
+            animator.ResetTrigger("Teleport");
+            animator.Play("BossMewIdle", 0, 0f);
+            yield break;
+        }
         yield return MoveBossDuringTeleport(destination, teleportTime);
 
         SkillType = PokemonType.TypeEnum.Psychic;
@@ -1024,7 +1087,7 @@ public class Mew : Empty
         }
 
         float timer = 0f;
-        while (timer < duration && currentPhase == 2)
+        while (timer < duration && !isDying)
         {
             timer += Time.deltaTime;
             float t = Mathf.Clamp01(timer / duration);
@@ -1033,7 +1096,44 @@ public class Mew : Empty
             yield return null;
         }
 
-        transform.position = destination;
+        if (!isDying) transform.position = destination;
+    }
+
+    private void BeginTeleportAnimation()
+    {
+        // Hit -> Teleport has exit time/blending in the controller. Start the clip now
+        // so all existing relocation delays measure the actual teleport animation.
+        if (animator == null || isDying) return;
+        animator.ResetTrigger("Hit");
+        animator.ResetTrigger("Teleport");
+        animator.Play("BossMewTeleport", 0, 0f);
+    }
+    public IEnumerator TeleportForSkill(Vector3 destination)
+    {
+        if (isDying) yield break;
+        BeginTeleportAnimation();
+        yield return new WaitForSeconds(Mathf.Max(0.5f, Phase2TeleportOutTime));
+        if (isDying) yield break;
+        transform.position = new Vector3(destination.x, destination.y, transform.position.z);
+        if (rigidbody2D != null) rigidbody2D.velocity = Vector2.zero;
+        yield return new WaitForSeconds(Mathf.Max(0.38f, Phase2TeleportInTime));
+        if (!isDying) TeleportEnd();
+    }
+
+    public IEnumerator ReturnFromSkill(Vector3 destination)
+    {
+        if (isDying) yield break;
+        animator.ResetTrigger("Teleport");
+        animator.Play("BossMewIdle", 0, 0f);
+        if (rigidbody2D != null) rigidbody2D.velocity = Vector2.zero;
+        yield return MoveBossDuringTeleport(destination, 0.7f);
+    }
+    public IEnumerator MoveToFinaleCenter(float duration)
+    {
+        if (rigidbody2D != null) rigidbody2D.velocity = Vector2.zero;
+        animator.ResetTrigger("Teleport");
+        animator.Play("BossMewIdle", 0, 0f);
+        yield return MoveBossDuringTeleport(mapCenter, duration);
     }
 
     #endregion
@@ -1254,6 +1354,8 @@ public class Mew : Empty
         // 清除弹幕并让旧红色血条淡出。
         uIHealth.ChangeHpUp();
         ClearProjectile();
+        MirrorStarLight mirrorTemplate = MirrorStarLightPref != null ? MirrorStarLightPref.GetComponent<MirrorStarLight>() : null;
+        if (mirrorTemplate != null) StartCoroutine(MewStarPool.Prewarm(this, mirrorTemplate.ProjectileTemplate, 256));
 
         // 保留一秒阶段切换停顿。旧版此处只计算五角星坐标，
         // 没有生成任何对象，属于无效遗留逻辑，现已删除。
@@ -1265,6 +1367,16 @@ public class Mew : Empty
 
         //创建新的房间
         GameObject newRoom = Instantiate(MewBossRoomPrefab, MewBossRoomPosition, Quaternion.identity);
+        temporaryBattleRoom = newRoom;
+        Transform floor = newRoom.transform.Find("Floor");
+        phaseTwoFloorBounds = null;
+        if (floor != null)
+            foreach (Renderer renderer in floor.GetComponentsInChildren<Renderer>())
+            {
+                Bounds bounds = phaseTwoFloorBounds ?? renderer.bounds;
+                bounds.Encapsulate(renderer.bounds);
+                phaseTwoFloorBounds = bounds;
+            }
         mapCenter = MewBossRoomPosition;
         transform.position = MewBossRoomPosition + new Vector3(0f, 5f, 0f);
         player.transform.position = MewBossRoomPosition;
@@ -1282,9 +1394,7 @@ public class Mew : Empty
         uIHealth.Per = 1f;
         uIHealth.ChangeHpUp();
 
-        MapCreater.StaticMap.RRoom.Add(
-            new Vector3Int(100, 100, 0),
-            newRoom.GetComponent<Room>());
+        MapCreater.StaticMap.RRoom[new Vector3Int(100, 100, 0)] = newRoom.GetComponent<Room>();
 
         Transform mewTransform = newRoom.transform.Find("Empty");
         if (mewTransform != null)
@@ -1318,7 +1428,7 @@ public class Mew : Empty
     private IEnumerator Phase3Start()
     {
         // 第三阶段不受替身影响，且整个阶段只释放最终符卡。
-        animator.SetTrigger("Teleport");
+        BeginTeleportAnimation();
         uIHealth.Fade(1f, false);
         yield return new WaitForSeconds(1f);
 
@@ -1337,14 +1447,14 @@ public class Mew : Empty
             playerHpinP3 = player.Hp;
         }
 
-        HpTimer = Mathf.Max(1f, Phase3Duration);
+        HpTimer = Mathf.Max(1f, MewFinale.GetTrialSeconds(this));
         HpTiming = HpTimer;
         Phase3FinaleDuration = Mathf.Clamp(
             Phase3FinaleDuration,
             5f,
             Mathf.Max(5f, HpTimer - 0.5f));
-        ArenaRadius = 22f;
-        FinalArenaRadius = 16f;
+        ArenaRadius = Mathf.Max(12f, Phase2StrongArenaRadius);
+        FinalArenaRadius = ArenaRadius;
         ArenaShrinkDuration = Mathf.Max(
             0.1f,
             HpTimer - Phase3FinaleDuration);
@@ -1377,40 +1487,24 @@ public class Mew : Empty
 
         SkillType = PokemonType.TypeEnum.Psychic;
         TeleportEnd();
-        activePhaseThreeSkill = SpawnStardustFantasy();
+        activePhaseThreeSkill = SpawnFinale();
         phaseThreeTimerRunning = true;
         phaseThreeRoutine = null;
     }
 
-    private StardustFantasy SpawnStardustFantasy()
+    private MewFinale SpawnFinale()
     {
-        GameObject skillObject;
-        if (StardustFantasyPref != null)
+        GameObject skillObject = new GameObject("Mew Finale - The Stars Return");
+        skillObject.transform.position = mapCenter;
+        MewFinale skill = skillObject.AddComponent<MewFinale>();
+        skill.Configure(StardustProjectilePrefab, this);
+        phaseThreeTrialFinished = false;
+        phaseThreeTrialCleared = false;
+        skill.Finished += (finishedSkill, reason) =>
         {
-            skillObject = Instantiate(
-                StardustFantasyPref,
-                mapCenter,
-                Quaternion.identity);
-        }
-        else
-        {
-            skillObject = new GameObject("Stardust Fantasy Hard");
-            skillObject.transform.position = mapCenter;
-        }
-
-        StardustFantasy skill =
-            skillObject.GetComponent<StardustFantasy>();
-        if (skill == null)
-        {
-            skill = skillObject.AddComponent<StardustFantasy>();
-        }
-
-        skill.ConfigureRuntime(
-            HpTimer,
-            FinalArenaRadius,
-            Phase3FinaleDuration,
-            Phase2RoomHalfExtents,
-            StardustProjectilePrefab);
+            phaseThreeTrialFinished = true;
+            phaseThreeTrialCleared = reason == MewSkillFinishReason.Completed && skill.TrialCleared;
+        };
 
         MewSkillContext context = new MewSkillContext(
             this,
@@ -1442,50 +1536,215 @@ public class Mew : Empty
         }
     }
 
-    private IEnumerator Phase3End()
+    public bool TryProtectPlayer(PlayerControler target)
     {
+        if (target == null || target != player || ActiveEncounter != this) return false;
+        target.Hp = 1;
+        if (!isDying)
+            BeginEncounterEnd(currentPhase >= 3 ? EncounterResult.FinalTrialFailed : EncounterResult.NormalBattleFailed);
+        return true;
+    }
+
+    private void BeginEncounterEnd(EncounterResult result)
+    {
+        if (isDying) return;
+        isDying = true;
+        encounterResult = result;
+        savedInvincible = player.isInvincibleAlways;
+        savedMovementLock = player.isCanNotMove;
+        if (currentPhase < 3)
+        {
+            savedItemLock = player.CanNotUseSpaceItem;
+            savedEscape = UISkillButton.Instance == null || UISkillButton.Instance.isEscEnable;
+        }
+        protectionHeld = true;
+        if (result != EncounterResult.FinalTrialCleared) player.BeginMewFaint();
+        player.isInvincibleAlways = true;
+        player.isCanNotMove = true;
+        player.CanNotUseSpaceItem = true;
+        protectedPlayerBody = player.GetComponent<Rigidbody2D>();
+        if (protectedPlayerBody != null)
+        {
+            savedPlayerConstraints = protectedPlayerBody.constraints;
+            protectedPlayerBody.velocity = Vector2.zero;
+            protectedPlayerBody.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+        Invincible = true;
+        if (result != EncounterResult.FinalTrialCleared) FreezeRescueProjectiles();
+        StopAllCoroutines();
+        CancelActiveBasicSkill();
+        StopPhaseTwoCombat();
         phaseThreeTimerRunning = false;
         StopPhaseThreeFinalSkill();
-        animator.SetTrigger("Die");
         phaseThreeArenaReady = false;
-        CloseArenaBoundary();
-        yield return new WaitForSeconds(0.4f);
+        CloseArenaBoundary(0f);
+        if (result == EncounterResult.FinalTrialCleared) ClearProjectile();
+        if (rigidbody2D != null) rigidbody2D.velocity = Vector2.zero;
+        foreach (Collider2D hitbox in GetComponentsInChildren<Collider2D>()) hitbox.enabled = false;
+        if (uIHealth != null) uIHealth.Fade(0.4f, false);
+        if (UISkillButton.Instance != null) UISkillButton.Instance.isEscEnable = false;
+        if (bgmScript != null) bgmScript.FadeOut(0.12f, 1.5f);
+        StartCoroutine(EndEncounter());
+    }
 
-        isFinal = false;
-        MewBossKilled = true;
-
-        GameObject mask = Instantiate(
-            Phase2Mask,
-            transform.position,
-            Quaternion.identity);
-        Destroy(mask, 2.2f);
-        yield return new WaitForSeconds(1.1f);
-
-        player.NowRoom = GetnowRoom;
-        player.transform.position = GetPlayerPosition;
-        player.InANewRoom = true;
-        player.NewRoomTimer = 0f;
-
-        cameraAdapt.DeactivateVcam();
-        cameraAdapt.ShowCameraMasks();
-        Camera.transform.position = GetCameraPostion;
-        UISkillButton.Instance.isEscEnable = true;
-
-        ObjectPoolManager.DestoryObjectInPool(true);
-
-        if (pbList != null && pbList.Length > 0)
+    private IEnumerator EndEncounter()
+    {
+        bool failed = encounterResult != EncounterResult.FinalTrialCleared;
+        if (failed)
         {
-            int pbIndex = Random.Range(0, pbList.Length);
-            Instantiate(
-                pbList[pbIndex],
-                GetMewPosition,
-                Quaternion.identity);
+            player.Hp = 1;
+            if (UIHealthBar.Instance != null)
+            {
+                UIHealthBar.Instance.Per = 1f / Mathf.Max(1, player.maxHp);
+                UIHealthBar.Instance.NowHpText.text = "1";
+                UIHealthBar.Instance.ChangeHpDown();
+            }
+            MewMercyEffect effect = gameObject.AddComponent<MewMercyEffect>();
+            yield return effect.Play(player.transform, true, () => StartCoroutine(DissolveRescueProjectiles()));
+            Destroy(effect);
+        }
+        else yield return new WaitForSeconds(0.6f);
+
+        if (roomCreated)
+        {
+            MewMercyEffect returnWhite = null;
+            if (encounterResult != EncounterResult.NormalBattleFailed)
+            {
+                returnWhite = gameObject.AddComponent<MewMercyEffect>();
+                yield return returnWhite.WhiteScreen(true);
+            }
+            if (encounterResult == EncounterResult.NormalBattleFailed)
+            {
+                if (Phase2Mask != null) Destroy(Instantiate(Phase2Mask, transform.position, Quaternion.identity), 2.2f);
+                yield return new WaitForSeconds(1.1f);
+            }
+            player.NowRoom = GetnowRoom;
+            player.transform.position = GetPlayerPosition;
+            player.InANewRoom = true;
+            player.NewRoomTimer = 0f;
+            if (cameraAdapt != null)
+            {
+                cameraAdapt.DeactivateVcam();
+                cameraAdapt.ShowCameraMasks();
+            }
+            if (Camera != null) Camera.transform.position = GetCameraPostion;
+            transform.SetParent(originalParent, true);
+            transform.position = GetMewPosition;
+            if (returnWhite != null)
+            {
+                yield return new WaitForSecondsRealtime(0.15f);
+                yield return returnWhite.WhiteScreen(false);
+                Destroy(returnWhite);
+            }
         }
 
-        player.CanNotUseSpaceItem = false;
-        Invincible = false;
-        EmptyHp = 0;
-        EmptyDie();
+        // A gentle approach replaces the combat teleports; gifts remain in the original room.
+        Vector3 from = transform.position;
+        Vector3 besidePlayer = player.transform.position + Vector3.up * 2.5f;
+        animator.ResetTrigger("Teleport");
+        animator.Play("BossMewIdle", 0, 0f);
+        for (float t = 0f; t < 1.5f; t += Time.deltaTime)
+        {
+            transform.position = Vector3.Lerp(from, besidePlayer, Mathf.SmoothStep(0f, 1f, t / 1.5f));
+            yield return null;
+        }
+        transform.position = besidePlayer;
+        yield return FloatGift(MaxPotionRewardPrefab, player.transform.position + Vector3.left * 1.3f);
+        yield return FloatGift(FullHealRewardPrefab, player.transform.position + Vector3.right * 1.3f);
+        if (encounterResult != EncounterResult.NormalBattleFailed)
+        {
+            MewBossKilled = true;
+            PokemonBall reward = OrdinaryRewardPrefab;
+            if (encounterResult == EncounterResult.FinalTrialCleared && pbList != null && pbList.Length > 0)
+                reward = pbList[Random.Range(0, pbList.Length)];
+            if (reward != null)
+            {
+                PokemonBall ball = Instantiate(reward, player.transform.position + Vector3.up * 1.2f, Quaternion.identity);
+                ball.PassiveDropPer = encounterResult == EncounterResult.FinalTrialCleared ? 1f : 0f;
+            }
+            player.ChangeEx((int)(Exp * 1.8f));
+            player.ChangeHPW(HWP);
+            if (FloorNum.GlobalFloorNum != null && ScoreCounter.Instance != null)
+                ScoreCounter.Instance.EmptyBounsAP += APBounsPoint.EmptyBouns(this, FloorNum.GlobalFloorNum.FloorNumber);
+            if (DestoryEvent != null) DestoryEvent();
+        }
+        if (encounterRoom != null)
+        {
+            if (!roomCreated) encounterRoom.isClear = Mathf.Max(0, encounterRoom.isClear - 1);
+            encounterRoom.RemoveEmptyList(this);
+        }
+        yield return new WaitForSeconds(1.8f);
+        RestoreEncounterProtection();
+        isFinal = false;
+        DropItem = null;
+        animator.SetTrigger("Die"); // Existing farewell clip; do not invoke enemy death rewards.
+        yield return FadeDepartureShadows();
+        yield return new WaitForSeconds(2.6f);
+        Destroy(gameObject);
+    }
+
+    private IEnumerator FadeDepartureShadows()
+    {
+        // BossMewBye scales the visible Mew to zero over its first 0.5 seconds,
+        // but only keys the shadows' scale. Fade their alpha over the same interval.
+        var shadows = new List<SpriteRenderer>();
+        var colors = new List<Color>();
+        foreach (string path in new[] { "Shadow", "Shadow (1)" })
+        {
+            Transform shadow = transform.Find(path);
+            if (shadow == null) continue;
+            SpriteRenderer renderer = shadow.GetComponent<SpriteRenderer>();
+            if (renderer == null) continue;
+            shadows.Add(renderer);
+            colors.Add(renderer.color);
+        }
+        for (float t = 0f; t < 0.5f; t += Time.deltaTime)
+        {
+            float opacity = 1f - Mathf.SmoothStep(0f, 1f, t / 0.5f);
+            for (int i = 0; i < shadows.Count; i++)
+                if (shadows[i] != null)
+                    shadows[i].color = new Color(colors[i].r, colors[i].g, colors[i].b, colors[i].a * opacity);
+            yield return null;
+        }
+        foreach (SpriteRenderer shadow in shadows) if (shadow != null) shadow.enabled = false;
+    }
+
+    private IEnumerator FloatGift(GameObject prefab, Vector3 destination)
+    {
+        if (prefab == null) yield break;
+        GameObject gift = Instantiate(prefab, transform.position, Quaternion.identity);
+        Collider2D[] colliders = gift.GetComponentsInChildren<Collider2D>();
+        bool[] enabledStates = new bool[colliders.Length];
+        for (int i = 0; i < colliders.Length; i++) { enabledStates[i] = colliders[i].enabled; colliders[i].enabled = false; }
+        Rigidbody2D body = gift.GetComponent<Rigidbody2D>();
+        bool simulated = body != null && body.simulated;
+        if (body != null) body.simulated = false;
+        Vector3 start = gift.transform.position;
+        for (float t = 0f; t < 0.65f; t += Time.deltaTime)
+        {
+            if (gift == null) yield break;
+            gift.transform.position = Vector3.Lerp(start, destination, Mathf.SmoothStep(0f, 1f, t / 0.65f));
+            yield return null;
+        }
+        if (gift == null) yield break;
+        gift.transform.position = destination;
+        if (body != null) body.simulated = simulated;
+        for (int i = 0; i < colliders.Length; i++) if (colliders[i] != null) colliders[i].enabled = enabledStates[i];
+    }
+
+    private void RestoreEncounterProtection()
+    {
+        if (!protectionHeld) return;
+        protectionHeld = false;
+        if (protectedPlayerBody != null) protectedPlayerBody.constraints = savedPlayerConstraints;
+        if (player != null)
+        {
+            player.isInvincibleAlways = savedInvincible;
+            player.isCanNotMove = savedMovementLock;
+            player.CanNotUseSpaceItem = savedItemLock;
+            player.GrantMewRecoveryGrace();
+        }
+        if (UISkillButton.Instance != null) UISkillButton.Instance.isEscEnable = savedEscape;
     }
 
     #endregion
@@ -1590,17 +1849,100 @@ public class Mew : Empty
         GetEmptyFrozenPointFloat = 0;
     }
 
+    private GameObject[] rescueProjectiles;
+
+    private void FreezeRescueProjectiles()
+    {
+        rescueProjectiles = GameObject.FindGameObjectsWithTag("Projectel");
+        foreach (GameObject obj in rescueProjectiles)
+        {
+            BarrageProjectile barrage = obj.GetComponent<BarrageProjectile>();
+            if (barrage != null) barrage.FreezeForRescue();
+            foreach (Collider2D collider in obj.GetComponentsInChildren<Collider2D>()) collider.enabled = false;
+            foreach (Rigidbody2D body in obj.GetComponentsInChildren<Rigidbody2D>()) body.simulated = false;
+            foreach (MonoBehaviour behaviour in obj.GetComponentsInChildren<MonoBehaviour>())
+            { behaviour.StopAllCoroutines(); behaviour.enabled = false; }
+        }
+    }
+
+    private IEnumerator DissolveRescueProjectiles()
+    {
+        if (rescueProjectiles == null) yield break;
+        Vector2 center = player.transform.position;
+        float maxDistance = 1f;
+        var sprites = new SpriteRenderer[rescueProjectiles.Length][];
+        var colors = new Color[rescueProjectiles.Length][];
+        var distances = new float[rescueProjectiles.Length];
+        for (int i = 0; i < rescueProjectiles.Length; i++)
+        {
+            GameObject obj = rescueProjectiles[i];
+            if (obj == null) continue;
+            distances[i] = Vector2.Distance(center, obj.transform.position);
+            maxDistance = Mathf.Max(maxDistance, distances[i]);
+            sprites[i] = obj.GetComponentsInChildren<SpriteRenderer>();
+            colors[i] = new Color[sprites[i].Length];
+            for (int j = 0; j < sprites[i].Length; j++) colors[i][j] = sprites[i][j].color;
+        }
+        for (float t = 0f; t < 1.7f; t += Time.unscaledDeltaTime)
+        {
+            for (int i = 0; i < rescueProjectiles.Length; i++)
+            {
+                GameObject obj = rescueProjectiles[i];
+                if (obj == null || !obj.activeSelf || sprites[i] == null) continue;
+                float fade = Mathf.Clamp01((t - distances[i] / maxDistance * 1.2f) / 0.4f);
+                for (int j = 0; j < sprites[i].Length; j++)
+                    if (sprites[i][j] != null)
+                    {
+                        Color color = Color.Lerp(colors[i][j], Color.white, fade);
+                        color.a = colors[i][j].a * (1f - fade);
+                        sprites[i][j].color = color;
+                    }
+                if (fade >= 1f) obj.SetActive(false);
+            }
+            yield return null;
+        }
+        foreach (GameObject obj in rescueProjectiles)
+            if (obj != null)
+            {
+                BarrageProjectile barrage = obj.GetComponent<BarrageProjectile>();
+                if (barrage != null) barrage.Despawn();
+                else Destroy(obj);
+            }
+        rescueProjectiles = null;
+    }
+
     private void ClearProjectile()
     {
         GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectel");
         foreach (GameObject projectile in projectiles)
         {
-            Destroy(projectile);
+            BarrageProjectile barrage = projectile.GetComponent<BarrageProjectile>();
+            if (barrage != null) barrage.Despawn();
+            else Destroy(projectile);
         }
     }
 
     private void OnDestroy()
     {
+        if (ActiveEncounter == this) ActiveEncounter = null;
+        if (currentPhase == 3 && !protectionHeld)
+        {
+            if (player != null) player.CanNotUseSpaceItem = savedItemLock;
+            if (UISkillButton.Instance != null) UISkillButton.Instance.isEscEnable = savedEscape;
+        }
+        RestoreEncounterProtection();
+        if (isDying && cameraAdapt != null && roomCreated) cameraAdapt.ShowCameraMasks();
+        if (isDying && bgmScript != null && bgmScript.BGM != null)
+        {
+            bgmScript.BGM.clip = previousMusic;
+            if (previousMusic != null) bgmScript.BGM.Play();
+            bgmScript.FadeIn(previousMusicVolume, 1f);
+        }
+        if (isDying && temporaryBattleRoom != null && player != null && player.NowRoom == GetnowRoom)
+        {
+            if (MapCreater.StaticMap != null) MapCreater.StaticMap.RRoom.Remove(new Vector3Int(100, 100, 0));
+            Destroy(temporaryBattleRoom);
+        }
         CancelActiveBasicSkill();
         StopPhaseThreeFinalSkill();
 

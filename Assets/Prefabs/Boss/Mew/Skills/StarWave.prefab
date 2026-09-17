@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8937163699437685951
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6817627411941124650}
+  - component: {fileID: 5083836358909058145}
+  m_Layer: 0
+  m_Name: StarWave
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6817627411941124650
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8937163699437685951}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5083836358909058145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8937163699437685951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed05ba1bd0ec87642b7c9e961cadceaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillName: "\u661F\u8F89\u6CE2\u52A8"
+  skillStartup: 0.1
+  skillEndup: 0.2
+  existTime: 0
+  repeatTime: 0
+  repeat: 1
+  executeImmediatelyWhenSetEmpty: 1
+  destroyOnFinish: 1
+  cleanupTemporaryObjectsOnFinish: 0
+  useUnscaledLifecycleTime: 0
+  predictionLinePrefab: {fileID: 1903530688377139865, guid: 46dd995430578f541811c085b6cfd2b6, type: 3}
+  predictionPointPrefab: {fileID: 0}
+  velocitySampleDuration: 0.18
+  predictionLeadTime: 0.85
+  maximumPredictedPlayerSpeed: 11
+  predictionEdgePadding: 1.6
+  predictionWarningDuration: 1.05
+  predictionArrowScale: 1.35
+  predictionArrowColor: {r: 1, g: 0.28, b: 0.82, a: 1}
+  predictionSpriteUsesLocalY: 0
+  configureFallbackPrefabTransform: 1
+  pulsePredictionWarning: 1
+  predictionPulseSpeed: 7
+  fallbackWarningColor: {r: 1, g: 0.24, b: 0.78, a: 0.88}
+  fallbackTargetColor: {r: 0.35, g: 0.95, b: 1, a: 0.95}
+  fallbackWarningWidth: 1.2
+  fallbackTargetSegments: 40
+  warningSortingOrder: 105
+  dashCount: 1
+  placeFirstDashOutsideArena: 1
+  firstDashOutsideOffset: 2.8
+  dashTravelSpeed: 31
+  minimumApproachDuration: 0.16
+  maximumApproachDuration: 0.72
+  brakeDistance: 4.8
+  brakeDuration: 0.36
+  brakePower: 2.45
+  delayBetweenDashes: 0.45
+  minimumDashDistance: 3.2
+  dashHitboxPrefab: {fileID: 8004557703460691832, guid: 2ef86160ba78a0f4cb8041590ad52536, type: 3}
+  dashHitboxOffset: {x: 0, y: 0.5, z: 0}
+  useBuiltInDamageWithoutHitbox: 1
+  builtInHitRadius: 0.85
+  builtInHitCooldown: 0.3
+  builtInSpecialDamage: 115
+  builtInKnockback: 3.5
+  useCasterShadowTrail: 1
+  shadowInterval: 0.045
+  shadowDisappearSpeed: 0.16
+  shadowColor: {r: 1, g: 0.32, b: 0.82, a: 0.58}
+  waveProjectilePrefab: {fileID: 6986079038040258243, guid: 27b5f0bb14994bfba19810d596a6a63e, type: 3}
+  waveReleaseEffectPrefab: {fileID: 0}
+  projectilesPerWave: 14
+  waveInterval: 0.18
+  earlyWaveSpeed: 4.8
+  lateWaveSpeed: 2.4
+  waveAcceleration: 0.7
+  waveAngleStep: 9
+  waveProjectileLifetime: 8
+  spinWaveProjectiles: 1
+  waveProjectileSpinSpeed: 135
+  postDashObservationDuration: 1.25

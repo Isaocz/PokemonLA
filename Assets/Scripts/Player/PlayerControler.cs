@@ -14,6 +14,8 @@ public class PlayerControler : PlayerPokemon
     /// 角色的序列号
     /// </summary>
     public int PlayerIndex;
+    [Range(0, 2)] public int EvolutionStage;
+    public float MewStarScale => EvolutionStage >= 2 ? 0.6f : EvolutionStage == 1 ? 0.8f : 1f;
     
     
 
@@ -102,9 +104,103 @@ public class PlayerControler : PlayerPokemon
     public int Hp
     {
         get { return nowHp; }
-        set { nowHp = value; }
+        set
+        {
+            if (value < nowHp && (IsMewSanctuaryRescuing || Time.time < mewSanctuaryUntil)) return;
+            if (value <= 0 && nowHp > 0)
+            {
+                if (Mew.ActiveEncounter != null && Mew.ActiveEncounter.TryProtectPlayer(this)) return;
+                if (TryMewSanctuary()) return;
+            }
+            nowHp = value;
+        }
     }
     int nowHp;
+    // One-use ward: consume before callbacks; preserve pre-hit HP and add 25% max HP.
+    private float mewSanctuaryUntil;
+    public bool IsMewSanctuaryRescuing { get; private set; }
+    private bool sanctuarySavedMove, sanctuarySavedItems, sanctuarySavedInvincible, sanctuarySavedEscape;
+    private Rigidbody2D sanctuaryBody;
+    private RigidbodyConstraints2D sanctuaryConstraints;
+    private UISkillButton sanctuarySkillUI;
+    private float sanctuarySavedTimeScale;
+    private AnimatorUpdateMode sanctuarySavedAnimatorMode;
+
+    public void BeginMewSanctuaryRescue()
+    {
+        if (IsMewSanctuaryRescuing) return;
+        IsMewSanctuaryRescuing = true;
+        sanctuarySavedTimeScale = Time.timeScale;
+        Time.timeScale = 0f; // Freeze gameplay; the rescue overlay and player animation use real time.
+        sanctuarySavedMove = isCanNotMove;
+        sanctuarySavedItems = CanNotUseSpaceItem;
+        sanctuarySavedInvincible = isInvincibleAlways;
+        sanctuarySkillUI = UISkillButton.Instance;
+        if (sanctuarySkillUI != null)
+        {
+            sanctuarySavedEscape = sanctuarySkillUI.isEscEnable;
+            sanctuarySkillUI.isEscEnable = false;
+        }
+        isCanNotMove = CanNotUseSpaceItem = isInvincibleAlways = true;
+        isSkill01lunch = isSkill02lunch = isSkill03lunch = isSkill04lunch = false;
+        isSkill01ButtonDown = isSkill02ButtonDown = isSkill03ButtonDown = isSkill04ButtonDown = false;
+        isSkill = false;
+        sanctuaryBody = GetComponent<Rigidbody2D>();
+        if (sanctuaryBody != null)
+        {
+            sanctuaryConstraints = sanctuaryBody.constraints;
+            sanctuaryBody.velocity = Vector2.zero;
+            sanctuaryBody.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+        if (animator != null)
+        {
+            sanctuarySavedAnimatorMode = animator.updateMode;
+            animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            BeginMewFaint();
+            animator.speed = 1.8f;
+        }
+    }
+
+    public void EndMewSanctuaryRescue()
+    {
+        if (!IsMewSanctuaryRescuing) return;
+        IsMewSanctuaryRescuing = false;
+        isCanNotMove = sanctuarySavedMove;
+        CanNotUseSpaceItem = sanctuarySavedItems;
+        isInvincibleAlways = sanctuarySavedInvincible;
+        if (sanctuarySkillUI != null) sanctuarySkillUI.isEscEnable = sanctuarySavedEscape;
+        if (sanctuaryBody != null) { sanctuaryBody.velocity = Vector2.zero; sanctuaryBody.constraints = sanctuaryConstraints; }
+        EndMewFaint();
+        if (animator != null)
+        {
+            // Apply the awake pose before returning time to gameplay.
+            if (animator.isActiveAndEnabled) animator.Update(0f);
+            animator.updateMode = sanctuarySavedAnimatorMode;
+        }
+        // Preserve an external scene/time change if another system has already resumed time.
+        if (Time.timeScale == 0f) Time.timeScale = sanctuarySavedTimeScale;
+        konckout = 0f;
+        koDirection = Vector2.zero;
+        mewSanctuaryUntil = Time.time + 1.5f;
+    }
+
+    private bool TryMewSanctuary()
+    {
+        if (isDie || !MewRewardPassives.Owns(this, MewRewardPassives.SanctuaryId)) return false;
+        playerData.IsPassiveGetList[MewRewardPassives.SanctuaryId] = false;
+        playerData.GetPassiveItemList.RemoveAll(id => id == MewRewardPassives.SanctuaryId);
+        nowHp = (int)System.Math.Min((long)maxHp, System.Math.Max(1L, nowHp) + System.Math.Max(1L, (long)maxHp / 4));
+        mewSanctuaryUntil = Time.time + 1.5f;
+        if (UIHealthBar.Instance != null)
+        {
+            UIHealthBar.Instance.Per = (float)nowHp / maxHp;
+            UIHealthBar.Instance.NowHpText.text = UIHealthBar.FormatHealth(nowHp);
+            UIHealthBar.Instance.ChangeHpUp();
+        }
+        MewRewardPassives.Ensure(this).PlaySanctuary();
+        return true;
+    }
+
 
     //声明一个整形变量现在金钱,以及一个整型变量代表现在金钱以用于其他函数
     public int Money
@@ -365,6 +461,7 @@ public class PlayerControler : PlayerPokemon
     public bool isInvincibleAlways;
 
     bool isDie;
+    public bool IsDead => isDie;
 
 
     //处于高速旋转状态
@@ -610,18 +707,26 @@ public class PlayerControler : PlayerPokemon
         skillBar04.GetSkill(Skill04);
     }
 
-    public void SetTerablast(Skill s )
+    public void SetTerablast(Skill s)
     {
-        int NowTeraTypr = (PlayerTeraTypeJOR == 0) ? PlayerTeraType : PlayerTeraTypeJOR;
-        if (NowTeraTypr != 0)
+        if (s == null || s.GetComponent<TeraBlast>() == null)
         {
-            if (s != null && s.GetComponent<TeraBlast>() != null) { s.SkillType = NowTeraTypr == 0 ? 1 : NowTeraTypr;  }
+            return;
         }
+
+        int teraType = PlayerTeraTypeJOR != 0 ? PlayerTeraTypeJOR : PlayerTeraType;
+        s.SkillType = teraType != 0 ? teraType : (int)PokemonType.TypeEnum.Normal;
     }
 
     // Update is called once per frame
     protected void UpdatePlayer()
     {
+        if (MewRewardPassives.Owns(this, 56)) MewRewardPassives.Ensure(this);
+        if (IsMewSanctuaryRescuing || (Mew.ActiveEncounter != null && Mew.ActiveEncounter.IsEnding))
+        {
+            rigidbody2D.velocity = Vector2.zero;
+            return;
+        }
         if (!isDie)
         {
             //技能虚拟按钮
@@ -1411,7 +1516,7 @@ public class PlayerControler : PlayerPokemon
                 ChangePointSp = ChangePointSp * (isLightScreen ? 0.75f : 1);
             }
             //如果无敌结束，不无敌的话变为不无敌状态，无敌时间计时器时间设置为无敌时间
-            if (isInvincible || isInvincibleAlways)
+            if (isInvincible || isInvincibleAlways || IsMewSanctuaryRescuing || Time.time < mewSanctuaryUntil)
             {
                 return;
             }
@@ -1422,13 +1527,13 @@ public class PlayerControler : PlayerPokemon
                 {
                     if (!isInPsychicTerrain)
                     {
-                        nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (PokemonType.TYPE[(int)SkillType][PlayerType01] * PokemonType.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? PokemonType.TYPE[(int)SkillType][PlayerTeraType] : PokemonType.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                        Hp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (PokemonType.TYPE[(int)SkillType][PlayerType01] * PokemonType.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? PokemonType.TYPE[(int)SkillType][PlayerTeraType] : PokemonType.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                     }
                     else
                     {
                         if (Mathf.Abs((int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (PokemonType.TYPE[(int)SkillType][PlayerType01] * PokemonType.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? PokemonType.TYPE[(int)SkillType][PlayerTeraType] : PokemonType.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]))))) > (int)(maxHp / 16))
                         {
-                            nowHp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (PokemonType.TYPE[(int)SkillType][PlayerType01] * PokemonType.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? PokemonType.TYPE[(int)SkillType][PlayerTeraType] : PokemonType.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                            Hp = Mathf.Clamp(nowHp + (int)((ChangePoint / DefAbilityPoint + ChangePointSp / SpdAbilityPoint - 2) * (PokemonType.TYPE[(int)SkillType][PlayerType01] * PokemonType.TYPE[(int)SkillType][PlayerType02] * (PlayerTeraTypeJOR == 0 ? PokemonType.TYPE[(int)SkillType][PlayerTeraType] : PokemonType.TYPE[(int)SkillType][PlayerTeraTypeJOR])) * ((playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType]) > 0 ? Mathf.Pow(1.2f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])) : Mathf.Pow(0.8f, (playerData.TypeDefAlways[(int)SkillType] + playerData.TypeDefJustOneRoom[(int)SkillType])))), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                         }
                     }
                 }
@@ -1436,18 +1541,19 @@ public class PlayerControler : PlayerPokemon
                 {
                     if (!isInPsychicTerrain)
                     {
-                        nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                        Hp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                     }
                     else
                     {
                         if (Mathf.Abs(Mathf.Clamp((int)ChangePoint, -100000, -1)) > (int)(maxHp / 16))
                         {
-                            nowHp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
+                            Hp = Mathf.Clamp(nowHp + Mathf.Clamp((int)ChangePoint, -100000, -1), (nowHp > 1) ? (playerData.isEndure ? 1 : 0) : 0, maxHp);
                         }
                     }
                 }
 
                 //确实收到伤害
+                if (nowHp <= 0 && Mew.ActiveEncounter != null) Mew.ActiveEncounter.TryProtectPlayer(this);
                 ChangeHP = ChangeHP - Hp;
                 if (ChangeHP > 0)
                 {
@@ -1485,7 +1591,7 @@ public class PlayerControler : PlayerPokemon
                     if (AudioManager.Instance != null){AudioManager.Instance.CommonBasicSFXPlayer.Play(AudioManager.CommonBasicSFXList.Damage, transform.position);}
 
                     //受击动画
-                    animator.SetTrigger("Hit");
+                    if (!mewFainting) animator.SetTrigger("Hit");
                 }
                 //判定是否死亡
                 if(nowHp <= 0) { PlayerDie(); }                
@@ -1553,7 +1659,12 @@ public class PlayerControler : PlayerPokemon
     /// <param name="ChangePoint">改变量</param>
     public void ChangeHp(int ChangePoint)
     {
-        nowHp = Mathf.Clamp(nowHp + ChangePoint, 0, maxHp);
+        if (ChangePoint < 0 && (IsMewSanctuaryRescuing || Time.time < mewSanctuaryUntil)) return;
+        int previousHp = nowHp;
+        if (ChangePoint < 0 && Mew.ActiveEncounter != null && Mew.ActiveEncounter.IsEnding) return;
+        Hp = (int)System.Math.Max(0L, System.Math.Min((long)maxHp, (long)nowHp + ChangePoint));
+        if (ChangePoint < 0 && nowHp >= previousHp) return;
+        if (nowHp <= 0 && Mew.ActiveEncounter != null) Mew.ActiveEncounter.TryProtectPlayer(this);
         if (ChangePoint > 0)
         {
             //血量上升时对血条UI输出当前血量，并调用血条上升的函数
@@ -1583,8 +1694,47 @@ public class PlayerControler : PlayerPokemon
     /// <summary>
     /// 角色死亡
     /// </summary>
+    private bool mewFainting;
+    private float mewSavedAnimatorSpeed;
+
+    public void BeginMewFaint()
+    {
+        if (mewFainting) return;
+        mewFainting = true;
+        horizontal = vertical = 0f;
+        animator.SetFloat("Speed", 0f);
+        foreach (AnimatorControllerParameter parameter in animator.parameters)
+            if (parameter.type == AnimatorControllerParameterType.Trigger) animator.ResetTrigger(parameter.nameHash);
+        mewSavedAnimatorSpeed = animator.speed;
+        animator.speed = 1f;
+        animator.ResetTrigger("Hit");
+        animator.ResetTrigger("Die");
+        animator.Play("Die", 0, 0f);
+    }
+    private void EndMewFaint()
+    {
+        if (mewFainting)
+        {
+            mewFainting = false;
+            animator.ResetTrigger("Die");
+            animator.ResetTrigger("Hit");
+            animator.Play("Idle", 0, 0f);
+            animator.speed = mewSavedAnimatorSpeed;
+        }
+    }
+    public void GrantMewRecoveryGrace()
+    {
+        EndMewFaint();
+        isInvincible = true;
+        InvincileTimer = Mathf.Max(TimeInvincible, 3f);
+        konckout = 0f;
+        koDirection = Vector2.zero;
+    }
+
     public void PlayerDie()
     {
+        if (Mew.ActiveEncounter != null && Mew.ActiveEncounter.TryProtectPlayer(this)) return;
+        if (nowHp <= 0 && TryMewSanctuary()) return;
         isDie = true; 
         animator.SetTrigger("Die");
         rigidbody2D.bodyType = RigidbodyType2D.Static;
@@ -1598,6 +1748,7 @@ public class PlayerControler : PlayerPokemon
     /// </summary>
     public void CallDieMask()
     {
+        if (mewFainting || (Mew.ActiveEncounter != null && Mew.ActiveEncounter.IsEnding)) return;
         if (isDie) {
             //道具072 复活化石
             if (playerData.IsPassiveGetList[72])
@@ -2199,6 +2350,7 @@ public class PlayerControler : PlayerPokemon
         Time.timeScale = 1;
         UISkillButton.Instance.isEscEnable = true;
         e.isSpaceItemCanBeUse = true;
+        e.EvolutionStage = Mathf.Min(2, EvolutionStage + 1);
 
         if (playerAbility == playerAbility01) { e.playerAbility = (e.playerAbility01 == PlayerAbilityList.无特性)? e.playerAbility02 : e.playerAbility01; }
         else if (playerAbility == playerAbility02) { e.playerAbility = (e.playerAbility02 == PlayerAbilityList.无特性) ? e.playerAbility01 : e.playerAbility02; }
@@ -2596,6 +2748,7 @@ public class PlayerControler : PlayerPokemon
     /// <param name="Direction"></param>
     protected void LaunchSkill01(Vector2 Direction)
     {
+        if (IsMewSanctuaryRescuing) return;
         Skill skillObj = null;
         FollowBabyLunch(new Vector2Int((int)Direction.x , (int)Direction.y)) ;
         if (!Skill01.isNotDirection) {
@@ -2620,6 +2773,7 @@ public class PlayerControler : PlayerPokemon
         }
         playerSubSkillList.CallSubSkill(skillObj);
         skillObj.player = this;
+        MewRewardPassives.OnSkillReleased(this, Direction);
     }
 
 
@@ -2629,6 +2783,7 @@ public class PlayerControler : PlayerPokemon
     /// <param name="Direction"></param>
     protected void LaunchSkill02(Vector2 Direction)
     {
+        if (IsMewSanctuaryRescuing) return;
         Skill skillObj = null;
         FollowBabyLunch(new Vector2Int((int)Direction.x, (int)Direction.y));
         if (!Skill02.isNotDirection) {
@@ -2655,6 +2810,7 @@ public class PlayerControler : PlayerPokemon
         }
         playerSubSkillList.CallSubSkill(skillObj);
         skillObj.player = this;
+        MewRewardPassives.OnSkillReleased(this, Direction);
     }
 
 
@@ -2664,6 +2820,7 @@ public class PlayerControler : PlayerPokemon
     /// <param name="Direction"></param>
     protected void LaunchSkill03(Vector2 Direction)
     {
+        if (IsMewSanctuaryRescuing) return;
         Skill skillObj = null;
         FollowBabyLunch(new Vector2Int((int)Direction.x, (int)Direction.y));
         if (!Skill03.isNotDirection)
@@ -2691,6 +2848,7 @@ public class PlayerControler : PlayerPokemon
         }
         playerSubSkillList.CallSubSkill(skillObj);
         skillObj.player = this;
+        MewRewardPassives.OnSkillReleased(this, Direction);
     }
 
 
@@ -2700,6 +2858,7 @@ public class PlayerControler : PlayerPokemon
     /// <param name="Direction"></param>
     protected void LaunchSkill04(Vector2 Direction)
     {
+        if (IsMewSanctuaryRescuing) return;
         Skill skillObj = null;
         FollowBabyLunch(new Vector2Int((int)Direction.x, (int)Direction.y));
         if (!Skill04.isNotDirection)
@@ -2727,6 +2886,7 @@ public class PlayerControler : PlayerPokemon
         }
         playerSubSkillList.CallSubSkill(skillObj);
         skillObj.player = this;
+        MewRewardPassives.OnSkillReleased(this, Direction);
     }
 
 

@@ -74,6 +74,15 @@ public class MeleeProjectile : Projectile
     public LayerMask obstacleLayerMask;
 
     public bool IsMovementFinished { get; private set; }
+    public bool DamageEnabled = true;
+    public Vector2 DashEndPosition => endPosition;
+
+    public Vector2 PrepareDash(Transform target)
+    {
+        Target = target;
+        if (Target != null && empty != null) LockDashPosition();
+        return endPosition;
+    }
 
     private float hitTimer;
     private float moveTimer;
@@ -102,7 +111,7 @@ public class MeleeProjectile : Projectile
 
     protected virtual void CheckHit()
     {
-        if (hitTimer < Mathf.Max(0.01f, HitInterval) || empty == null)
+        if (!DamageEnabled || hitTimer < Mathf.Max(0.01f, HitInterval) || empty == null)
         {
             return;
         }
@@ -124,6 +133,8 @@ public class MeleeProjectile : Projectile
                 SpDmage,
                 0,
                 ProType);
+
+            if (empty is Mew boss && boss.IsEnding) return;
 
             hitTimer = 0f;
 
